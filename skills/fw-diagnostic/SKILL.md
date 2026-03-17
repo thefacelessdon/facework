@@ -1,10 +1,10 @@
 ---
 name: fw-diagnostic
-version: 1.0.0
+version: 2.0.0
 description: |
-  Build Retrospective. Run after completing a project to capture learnings,
-  update the build methodology, and log changes. Feeds back into the living
-  methodology document and evolves the phase agents over time.
+  Diagnostic: Measure and evolve. Post-project retrospective that captures
+  learnings, updates the Facework methodology, and logs changes. The mechanism
+  that makes the practice self-reinforcing across projects.
 allowed-tools:
   - Read
   - Write
@@ -16,73 +16,100 @@ allowed-tools:
   - Agent
 ---
 
-# Build Retrospective
+# /fw-diagnostic — Measure and Evolve
 
-You are facilitating a project retrospective that feeds back into the build
-methodology. This is how the methodology evolves.
+You are facilitating a retrospective that feeds back into the Facework practice.
+This is the mechanism that makes the methodology self-reinforcing.
 
-## Process
+## Step 1: Gather Context
 
-### 1. Gather Context
-Read the project's key artifacts:
-- Git log (commits, timeline, scope)
-- All specs, playbooks, and decision records produced
-- Any TODOs or tracker showing what's done vs pending
-- The methodology document itself
+Read the project's artifacts:
+- Git log (commits, timeline, scope of work)
+- All specs, playbooks, decision records produced
+- Project tracker (what's done vs pending)
+- The Facework methodology doc (to compare against)
 
-### 2. Walk Through Each Phase
-For each of the 7 phases, ask the user:
+## Step 2: Walk Each Primitive
 
-Using AskUserQuestion for each phase:
-- "What worked in Phase [N]?" (keep doing)
-- "What didn't work?" (stop doing)
-- "What was missing?" (add to methodology)
-- "How long did it actually take vs expected?"
+For each of the 7 primitives, ask the user (one at a time via AskUserQuestion):
 
-### 3. Fill Retro Template
-Create a retro file at:
-`[project]-ops/documents/methodology/retros/[NNN]-[project]-retro.md`
+**Frequency:** "Did the governing truth hold? Were the economics right?
+Did any number change during the build? Were the gates useful?"
 
-Use the template structure from RETRO-TEMPLATE.md if it exists in the
-methodology directory. If not, create one.
+**Current:** "Did the decisions hold? Were any revisited? Were there dilemmas
+you wish you'd surfaced earlier?"
 
-### 4. Update the Methodology
-Based on retro findings, propose specific changes to the methodology:
+**Stability:** "Were the specs accurate? Which ones matched reality? Which
+needed rework? What should have been specified but wasn't?"
 
-For each proposed change, use AskUserQuestion:
+**Flow:** "Did the playbooks match reality? Did the automation mapping hold?
+What workflows played out differently than documented?"
+
+**Resonance:** "Was demo mode useful? Did the prototype survive to production?
+What was prototyped but thrown away?"
+
+**Entropy:** "What did the review catch that would have been a production
+incident? What was over-engineered? What was missed?"
+
+**Coherence:** "Could the builder start from the handoff? What questions did
+they still have? What was missing from the packaging?"
+
+## Step 3: Write Retro
+
+Look for a retro template. If one exists in the project's methodology
+directory, use it. If not, create a retro file with:
+
+- Project name, date, duration, phases completed
+- Per-primitive learnings (what worked, what didn't, what was missing)
+- Methodology updates proposed
+- Phase timing (expected vs actual)
+- Top 3 things to carry forward
+
+Save to the project's methodology/retros/ directory.
+
+## Step 4: Update Methodology
+
+Based on retro findings, propose specific changes. For each, use AskUserQuestion:
+
 - "Add to methodology: [new pattern]. Should we add this?"
 - "Remove from methodology: [unnecessary step]. Should we remove this?"
 - "Modify in methodology: [adjusted step]. Should we update this?"
 
-Then apply approved changes to `stedmon-build-methodology.md`.
+Apply approved changes to the Facework methodology doc
+(either in the project repo or in the Facework repo if accessible).
 
-### 5. Update the Changelog
-Add an entry to `methodology/CHANGELOG.md`:
+## Step 5: Update Changelog
+
+Add entry to methodology/CHANGELOG.md:
 ```
 ## vX.Y — [Date] ([Project Name])
 **What changed:**
-- [List changes made to methodology]
-**Triggered by:** Retro [NNN] finding: [which learning]
+- [List each change]
+**Triggered by:** Retro finding: [which learning drove the change]
 ```
 
-### 6. Update Phase Skills
-If any phase skill needs adjustment based on learnings:
-- Read the current skill at `~/.claude/skills/build-phase-[N]/SKILL.md`
-- Propose the change
-- Apply if approved
+## Step 6: Update Skills (if needed)
 
-### 7. Summary
+If any /fw- skill needs adjustment:
+- Propose the specific change
+- Apply if approved
+- Note in changelog
+
+## Step 7: Summary
+
 Tell the user:
 - How many methodology changes were made
-- Which phases were updated
+- Which primitives were updated
 - What the next project should do differently
 - Cumulative project count and methodology version
 
-## Living Document Loop
+## The Loop
+
 ```
-Project → Retro → Methodology Update → Changelog Entry
-   ↑                                         |
-   └──── Next project uses updated methodology ←──┘
+Project → /fw-diagnostic → Methodology Update → Changelog
+   ↑                                                |
+   └──── Next project uses updated practice ←───────┘
 ```
 
-Every project makes the methodology better. Every retro is a version bump.
+Every project makes the practice better. Every retro is a version bump.
+Every learning compounds.

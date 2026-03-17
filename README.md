@@ -75,9 +75,7 @@ Every project makes the practice better. Every retro is a version bump.
 
 ## Theory
 
-The full Facework theory — forces, engines, architectural forms, and the philosophy of coherence — lives in [`theory/facework-practice.md`](theory/facework-practice.md).
-
-The mapping between theory and methodology — how each primitive became a build phase, how each engine produced a category of output — lives in [`theory/connective-tissue.md`](theory/connective-tissue.md).
+The full Facework theory — forces, engines, architectural forms, and how they operate inside the build methodology — lives in [`theory/facework.md`](theory/facework.md).
 
 ## Methodology
 

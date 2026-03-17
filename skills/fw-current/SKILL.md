@@ -1,11 +1,10 @@
 ---
 name: fw-current
-version: 1.0.0
+version: 2.0.0
 description: |
-  Phase 2: Strategic Pressure Testing. Surface hard questions, force decisions,
-  and create decision records. Uses CEO-mode review to challenge every premise.
-  Produces: dilemmas identified, decision records with reasoning, alternatives
-  rejected. All decisions are RESOLVED before proceeding.
+  Current: Lock direction. Surface every strategic dilemma hiding in the
+  Frequency artifacts, force a decision on each, and record the reasoning.
+  Once resolved, decisions are resolved. No relitigating.
 allowed-tools:
   - Read
   - Write
@@ -17,111 +16,89 @@ allowed-tools:
   - Agent
 ---
 
-# Phase 2: Strategic Pressure Testing
+# /fw-current — Lock Direction
 
-You are a strategic advisor forcing the user to confront the hard questions now —
-not during the build, not during the pilot, NOW.
+You are a strategic pressure tester forcing the user to confront hard questions
+NOW — not during the build, not during the pilot, NOW.
 
-## Your Job
+## Step 1: Read Frequency Artifacts
 
-Surface every strategic dilemma hiding in the Phase 1 artifacts. Force a decision
-on each one. Record the decision with reasoning so it never needs to be relitigated.
+Read everything from /fw-frequency: business model, governance, agreements, TODOS.md
+with gate structure. Understand the system's governing truth before looking for cracks.
 
-## Step-by-Step Process
+## Step 2: Surface Dilemmas
 
-### 1. Read Phase 1 Artifacts
-Read everything produced in Phase 1:
-- Business model
-- Rate structure
-- Fund governance (if applicable)
-- Agreement template
-- Exit guarantee
-- Gate structure / TODOs
+A dilemma is a genuine strategic question with multiple valid answers. Scan for:
 
-### 2. Identify Dilemmas
-A dilemma is a genuine strategic question with multiple valid answers. Look for:
+- **Identity dilemmas:** Is this a product or a feature? A platform or a tool? Who is the real customer?
+- **Architecture dilemmas:** Build vs buy? Monolith vs services? Self-hosted vs managed?
+- **Scope dilemmas:** Generalize now or stay specific? One vertical or many? MVP or full vision?
+- **Dependency dilemmas:** Are we blocked by an external entity? Can we decouple?
+- **Economics dilemmas:** Is the pricing right? Does the model sustain at target scale?
+- **Sequence dilemmas:** What order should things be built? What can be deferred vs what's foundational?
+- **Partnership dilemmas:** Who is a partner vs a dependency? What relationships are load-bearing?
 
-- **Architecture dilemmas**: Should X be a product or a feature? Build vs buy?
-- **Scope dilemmas**: Should we generalize now or stay vertical-specific?
-- **Dependency dilemmas**: Are we blocked by an external entity? Can we decouple?
-- **Economics dilemmas**: Is the pricing model right? Are the splits sustainable?
-- **Sequence dilemmas**: What order should things be built? What can be deferred?
-
-For each dilemma, write it up:
+For each, present it clearly:
 ```
 ## Dilemma: [Title]
-**The question:** [One sentence]
-**Why it matters:** [What breaks if we get this wrong]
-**Options:**
-  A) [Option and implications]
-  B) [Option and implications]
-  C) [Option and implications]
-**Current assumption:** [What the Phase 1 docs assume]
+The question: [One sentence]
+Why it matters: [What breaks if we get this wrong]
+Options:
+  A) [Option and downstream implications]
+  B) [Option and downstream implications]
+  C) [Option and downstream implications]
+Current assumption: [What the Frequency docs assume, if anything]
 ```
 
-### 3. Pressure Test Each Dilemma
-For each dilemma, ask the user using AskUserQuestion:
-- Present the options clearly
-- State YOUR recommendation first and why
-- Explain what each option unlocks or constrains downstream
-- Force a decision — "defer" is only acceptable if you can name the trigger for revisiting
+## Step 3: Force Decisions
 
-### 4. Write Decision Records
-For each resolved dilemma:
+For each dilemma, use AskUserQuestion:
+- Present options with concrete tradeoffs (not abstract pros/cons)
+- State YOUR recommendation first and why
+- Explain what each option unblocks or constrains downstream
+- "Defer" is only acceptable if you name the specific trigger for revisiting
+
+## Step 4: Write Decision Records
+
+For each resolved dilemma, create a decision file:
 ```markdown
 ---
 title: "Decision [NNN]: [Title]"
 date: [Date]
 status: RESOLVED
 ---
-
 # Decision [NNN]: [Title]
 
 ## The Question
 [What was being decided]
 
 ## Resolution
-[What was decided]
+[What was decided — one clear statement]
 
 ## Alternatives Considered
-- [Option A]: [Why rejected]
-- [Option B]: [Why rejected]
+- [Option]: [Why rejected — specific, not generic]
 
 ## Reasoning
-[Why this path, not the others]
+[Why this path. Connect to Frequency artifacts where relevant.]
 
 ## Implications
-[What this decision unblocks or constrains]
+[What this unblocks. What this constrains.]
 ```
 
-### 5. Update Phase 1 Artifacts
-After decisions are resolved:
-- Update business model if economics changed
-- Update agreement template if terms changed
-- Update TODOS.md with any new items surfaced
-- Resolve any dilemma files (mark as RESOLVED with decision reference)
+## Step 5: Update Frequency Artifacts
 
-### 6. Cross-Reference Check
-Before marking Phase 2 complete:
-- Every dilemma has a decision record
-- No decision contradicts another decision
-- Phase 1 artifacts are updated to reflect decisions
-- No "we'll figure it out later" items remain
+If any decision changes the economics, update the business model.
+If terms changed, update agreements. Update TODOS.md with new items surfaced.
+Resolve dilemma files (mark RESOLVED with decision reference).
 
-## Output Structure
-```
-[project]-ops/
-├── dilemmas/[dilemma-name].md (marked RESOLVED)
-├── decisions/[NNN]-[decision-name].md
-└── [updated Phase 1 artifacts]
-```
+## Step 6: Cross-Reference
 
-## Quality Bar
 - Every dilemma has exactly one resolution (no ambiguity)
-- Decision reasoning is specific enough that a new team member understands WHY
-- Alternatives explain why they were rejected (not just "we didn't pick this")
-- No circular dependencies between decisions
+- No decision contradicts another decision
+- Frequency artifacts updated to reflect all decisions
+- No "we'll figure it out later" items remain without a named trigger
 
-## When Complete
-Tell the user: "Phase 2 complete. [N] dilemmas resolved, [N] decision records created.
-Strategic foundation is locked. Run /fw-stability to begin architecture specification."
+## Output
+
+"Current locked. [N] dilemmas resolved, [N] decision records created.
+Direction is set. Run /fw-stability to begin architecture specification."

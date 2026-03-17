@@ -1,11 +1,11 @@
 ---
 name: fw-frequency
-version: 1.0.0
+version: 2.0.0
 description: |
-  Phase 1: Governance & Foundation. Establish business rules, economics,
-  legal boundaries, and security gates before anything gets designed or built.
-  Produces: business model, rate structure, fund governance, agreements, exit
-  guarantees, verification protocol. Uses 3-gate sequencing.
+  Frequency: Extract the irreducible signal. Establish the governing truth
+  of the system — business model, economics, rights, obligations, and
+  security gates — before anything gets designed or built. Adapts to
+  any product type: SaaS, marketplace, hardware, content, services, etc.
 allowed-tools:
   - Read
   - Write
@@ -17,92 +17,153 @@ allowed-tools:
   - Agent
 ---
 
-# Phase 1: Governance & Foundation
+# /fw-frequency — Extract the Irreducible Signal
 
-You are a business architect helping the user establish the governing layer of a new product.
-Nothing gets designed or built until governance is in place.
+You are helping someone establish the governing truth of what they're building.
+Before anything is designed or built, the economics, constraints, rights, and
+obligations must be documented and internally consistent. This is frequency
+extraction — isolating what the system IS when everything performative falls away.
 
-## Your Job
+## Step 1: Discovery
 
-Produce the foundational documents that constrain everything downstream. Every number must be
-defensible. Every agreement must protect both parties. Every gate must prevent premature action.
+Before producing anything, understand what's being built. Ask using AskUserQuestion:
 
-## Step-by-Step Process
+**"What are you building and who is it for?"**
+- What does the customer get?
+- What problem does this solve that they currently can't solve?
 
-### 1. Understand the Product
-Ask the user:
-- What is this product? Who is the customer?
-- How does money flow? (subscription, transaction, marketplace, etc.)
-- Are there multiple parties involved in revenue? (splits, funds, partners)
-- What's the target scale? (number of customers, revenue)
-- Are there compliance or legal considerations?
+**"How does money work?"**
+Discover the business model type. Don't assume — ask. Common patterns:
+- Subscription (SaaS, membership, access)
+- Transaction/marketplace (percentage of GMV, per-transaction fee)
+- Product sales (hardware, physical goods, digital goods)
+- Service/consulting (hourly, project-based, retainer)
+- Freemium (free tier + paid conversion)
+- Platform/network (multi-sided: buyers, sellers, creators, etc.)
+- Hybrid (subscription + transaction, etc.)
 
-### 2. Build the Business Model
-Produce a business model document covering:
-- Platform identity (what it is, what it isn't)
-- Customer types and qualification criteria
-- Revenue streams (subscription, transaction fees, value-added services)
-- Unit economics (cost per customer, margin analysis)
-- Self-sustainability threshold (when does this become viable?)
-- All critical numbers must be DERIVED, not invented
+For each revenue stream identified, ask:
+- Who pays? How much? How often?
+- Are there multiple parties involved in revenue? (splits, funds, partners, royalties)
+- What does the customer own vs rent? What happens when they stop paying?
 
-### 3. Define the Rate Structure
-If there are revenue splits:
-- Define exactly who gets what percentage
-- Ensure splits are transparent and documented
-- Identify any segregated funds (marketing funds, escrow, etc.)
-- Document the canonical source for each rate
+**"What are the hard constraints?"**
+- Regulatory or compliance requirements?
+- Third-party dependencies (platforms, APIs, partners)?
+- Intellectual property considerations?
+- Geographic or jurisdictional limits?
 
-### 4. Governance Documents
-For each applicable area, produce:
-- **Fund governance** (if segregated funds exist): accumulation, permitted uses, prohibited uses, reporting, oversight
-- **Agreement template**: what customers/partners sign, terms, rights, obligations
-- **Exit guarantee**: what happens when someone leaves (voluntarily, involuntarily, platform cessation)
-- **Verification protocol**: who gets access and how identity is confirmed
+**"What scale makes this viable?"**
+- How many customers/users for sustainability?
+- What's the cost basis per customer?
+- Is there a network effect or does it scale linearly?
 
-### 5. Establish Gate Structure
-Define 3 gates tied to business milestones:
+## Step 2: Build the Business Model
+
+Based on discovery, produce a business model document. Adapt the structure
+to what's actually being built — not every product needs every section:
 
 ```
-GATE 1 — Before first conversation with a customer
-  Required: [list items]
+# [Product] Business Model
 
-GATE 2 — Before first agreement signed
-  Required: [list items]
+## Identity
+What this is. What it is NOT. (The negative space matters.)
 
-GATE 3 — Before first transaction processed
-  Required: [list items]
+## Customer
+Who pays. Qualification criteria if applicable. Different customer
+types if applicable (individual, team, enterprise, etc.)
+
+## Revenue
+Every revenue stream with:
+- Who pays, how much, how often
+- Unit economics (cost to serve vs revenue per customer)
+- Sustainability threshold (how many customers to break even)
+
+## Economics at Scale
+Revenue projections at target scale.
+Cost projections at target scale.
+Margin analysis.
+
+## Key Numbers
+Every critical number in one place. These become canonical sources
+that all downstream documents reference. NEVER hardcode these
+numbers elsewhere — always reference this document.
 ```
 
-Each gate blocks advancement. No exceptions.
+All numbers must be DERIVED from calculations, not invented.
 
-### 6. Cross-Reference Check
-Before marking Phase 1 complete:
-- Every rate mentioned in any document traces to one canonical source
-- Agreement terms are consistent with business model
-- Exit guarantee covers all termination scenarios
-- Verification protocol is referenced in onboarding flow
-- Gate items are all actionable and measurable
+## Step 3: Governance Documents
 
-## Output Structure
+Based on what the business model revealed, produce the governance
+documents that apply. Not every product needs all of these — produce
+only what's relevant:
 
-Create files in the project's ops directory:
+**If there are revenue splits or segregated funds:**
+- Fund/pool governance (accumulation, permitted uses, prohibited uses, reporting)
+
+**If there are customer agreements:**
+- Agreement template (terms, rights, obligations, termination)
+- Exit guarantee (what happens to customer data, assets, content when they leave)
+
+**If there are partner/vendor relationships:**
+- Partnership terms document
+- API/integration dependency register (confirmed vs unconfirmed)
+
+**If there are access control requirements:**
+- Verification/identity protocol (who gets access, how identity is confirmed)
+
+**If there's user-generated content or data:**
+- Data ownership policy (who owns what, portability, deletion rights)
+
+## Step 4: Gate Structure
+
+Define security gates tied to business milestones. Adapt the gate
+structure to the product — these are examples, not prescriptions:
+
+```
+GATE 1 — Before first external conversation
+  What must be true before you talk to a customer, partner, or investor?
+
+GATE 2 — Before first binding commitment
+  What must be true before someone signs an agreement or pays?
+
+GATE 3 — Before first real transaction or deployment
+  What must be true before real money, data, or operations flow?
+```
+
+Each gate item must be:
+- Specific (not "have a plan" but "rate structure documented with canonical source")
+- Verifiable (someone can check whether it's done)
+- Blocking (nothing past the gate until everything in the gate is complete)
+
+## Step 5: Cross-Reference Check
+
+Before marking Frequency complete:
+- Every number mentioned in any document traces to one canonical source
+- Agreement terms are consistent with business model economics
+- Exit/termination terms cover all realistic scenarios
+- Gate items are all actionable and verifiable
+- No contradictions between documents
+
+## Step 6: Create Project Structure
+
+Set up the project's ops directory:
 ```
 [project]-ops/
-├── architecture/business-model/business-model.md
-├── documents/governance/[fund-governance].md
-├── documents/governance/[exit-guarantee].md
-├── documents/agreements/[agreement-template].md
-└── TODOS.md (with gate structure)
+├── CLAUDE.md                    (strategic context for AI sessions)
+├── TODOS.md                     (gate structure + tracked items)
+├── architecture/
+│   └── business-model/
+│       └── business-model.md
+├── documents/
+│   ├── governance/              (fund governance, exit guarantee, etc.)
+│   └── agreements/              (agreement templates)
+└── decisions/                   (empty — populated in /fw-current)
 ```
 
-## Quality Bar
-- Every number is derived from a calculation, not assumed
-- Every agreement protects both parties
-- Every gate item is verifiable (not aspirational)
-- A lawyer could review the agreement template and start markup
-- A new team member could read the business model and understand the economics
+## Output
 
-## When Complete
-Tell the user: "Phase 1 complete. Gate 1 items are ready. You can now have your first
-customer conversation. Run /fw-current to pressure test strategic decisions."
+Tell the user what was produced, which gates are established, and:
+
+"Frequency extracted. The governing truth is documented. Run /fw-current
+to pressure test strategic decisions and lock direction before building."

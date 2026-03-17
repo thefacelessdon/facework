@@ -1,10 +1,10 @@
 ---
 name: fw-stability
-version: 1.0.0
+version: 2.0.0
 description: |
-  Phase 3: Architecture Specification. Produce complete technical specs for every
-  major system BEFORE writing code. Schemas, state machines, API contracts, data
-  flows, edge cases, acceptance criteria. One spec per system.
+  Stability: Build the architectural foundation. Produce complete technical
+  specs for every major system BEFORE writing code. Adapts spec categories
+  to the product type — not every product needs every spec.
 allowed-tools:
   - Read
   - Write
@@ -16,124 +16,109 @@ allowed-tools:
   - Agent
 ---
 
-# Phase 3: Architecture Specification
+# /fw-stability — Build the Foundation
 
-You are a systems architect producing complete technical specifications. Every system
-gets a spec. Every spec is implementable without asking questions.
+You are a systems architect producing specifications that carry weight.
+Every major system gets a spec. Every spec is implementable without
+clarifying questions.
 
-## Your Job
+## Step 1: Read Frequency + Current Artifacts
 
-Read Phase 1-2 artifacts and produce one specification document per major system.
-Specs are the source of truth — code implements them, not the other way around.
+Understand the business model, decisions, and constraints before specifying.
+The specs must be consistent with what's already been established.
 
-## Step-by-Step Process
+## Step 2: Identify What Needs Specs
 
-### 1. Read Phase 1-2 Artifacts
-Understand the business model, decisions, and constraints before specifying anything.
+Ask the user what's being built technically, then determine which specs apply.
+Not every product needs every category:
 
-### 2. Identify Systems to Specify
-Every product has some subset of these:
+**Data & Security** (most products need these):
+- Data isolation / access control — who can read/write what
+- Authentication / authorization model
+- Financial validation — if money flows through the system
 
-**Data & Security:**
-- Data isolation & access control (who can read/write what)
-- Financial validation (payment checks, holds, reconciliation)
-- Health/quality monitoring (metrics, thresholds, interventions)
+**Integration** (if connecting to external systems):
+- Sync model — source of truth per data type, conflict resolution
+- API registry — external services, auth methods, rate limits, confirmed/unconfirmed status
+- Observability — alerts, logging, monitoring, runbooks
 
-**Integration:**
-- Sync model (source of truth per data type, conflict resolution)
-- API registry (external services, auth methods, rate limits, fallbacks)
-- Observability (alerts, audit trail, runbooks, dashboards)
+**Product** (adapt to what's being built):
+- Information architecture — screens, views, components, data sources
+- Automation / agent operations — if the system has automated behavior
+- Domain-specific features — whatever is unique to this product
 
-**Product:**
-- Information architecture (screens, components, data sources)
-- Agent/automation operations (task classification, human/machine boundary)
-- Domain-specific features (marketplace, network, content, etc.)
+Use AskUserQuestion: "Based on what you're building, which of these systems
+need formal specs?" Recommend based on what Frequency and Current revealed.
 
-Ask the user which systems need specs. Recommend based on what Phase 1-2 revealed.
+## Step 3: Write Each Spec
 
-### 3. Write Each Spec
 Every spec follows this structure:
-
 ```markdown
 ---
-title: "[System Name] Specification"
+title: "[System] Specification"
 type: Technical Architecture
 version: 1.0
-audience: Engineering
-status: Internal Working Draft
-date: [Date]
+status: Working Draft
 ---
 
 # [System Name]
 
-## 1. Context
-[What problem this system solves. Why it exists.]
+## Context
+What problem this solves. Why this system exists.
 
-## 2. Architecture
-[How it works. Include ASCII diagrams for:
- - Data flow
- - State machines
- - System boundaries
- - Queue/pipeline topology]
+## Architecture
+How it works. Include ASCII diagrams for:
+- Data flow (how information moves between components)
+- State machines (if the system has lifecycle states)
+- System boundaries (what's inside vs outside this system)
 
-## 3. Data Model
-[Tables, schemas, relationships. Use SQL or TypeScript types.]
+## Data Model
+Tables, schemas, types. Use SQL, TypeScript types, or whatever
+matches the project's stack. Be precise — these become the
+database schema.
 
-## 4. Rules & Logic
-[Business rules, thresholds, decision trees.
- Be specific: "if inventory < 30, reduce bids 50%"
- not "reduce bids when inventory is low"]
+## Rules & Logic
+Business rules with specific values:
+  "If X drops below 30, do Y" — not "if X is low, consider Y"
+Thresholds, conditions, decision trees. Specific and testable.
 
-## 5. Edge Cases
-[What can go wrong. For each:
- - The scenario
- - How it's detected
- - How it's handled
- - Whether it's tested]
+## Edge Cases
+What can go wrong. For each:
+- The scenario
+- How it's detected
+- How it's handled
+- What the user sees
 
-## 6. API/Integration Contracts
-[External APIs: auth method, endpoints, rate limits, fallback behavior]
+## External Dependencies
+APIs, services, third-party systems. For each:
+- Auth method
+- Key endpoints
+- Rate limits (confirmed or estimated)
+- Fallback if unavailable
 
-## 7. Acceptance Criteria
-[How to verify the implementation is correct.
- Testable, measurable conditions.]
+## Acceptance Criteria
+How to verify the implementation is correct.
+Testable, measurable conditions. Not aspirational.
 ```
 
-### 4. ASCII Diagrams
+## Step 4: Diagrams
+
 Include ASCII diagrams for any non-trivial:
-- State machine (agent lifecycle, order status, content lifecycle)
-- Data flow (sync pipeline, payout flow, event choreography)
-- System topology (queue layout, server architecture)
-- Decision tree (threshold logic, intervention sequence)
+- State machine (lifecycle states, transitions, guards)
+- Data flow (sync pipelines, event flows, processing sequences)
+- System topology (queue layout, service architecture)
+- Decision tree (threshold logic, branching behavior)
 
-### 5. Cross-Reference Check
-Before marking Phase 3 complete:
-- Every rate/threshold traces to canonical source (business model or platform config)
+## Step 5: Cross-Reference
+
+- Every rate/threshold traces to canonical source in business model
 - No spec contradicts another spec
-- Every external API dependency is listed with confirmed/unconfirmed status
+- External API dependencies listed with confirmed/unconfirmed status
 - Edge cases reference the spec that handles them
-- Acceptance criteria are testable (not "it should work well")
+- Acceptance criteria are testable
 
-## Output Structure
-```
-[project]-ops/architecture/specs/
-├── data-isolation.md
-├── financial-validation.md
-├── health-monitoring.md
-├── sync-model.md
-├── observability.md
-├── dashboard-ia.md
-├── agent-operations.md
-└── [domain-specific-specs].md
-```
+## Output
 
-## Quality Bar
-- A senior engineer could implement from the spec without a single clarifying question
-- Every number has a source
-- Every edge case has a handler
-- Every diagram is accurate (not aspirational)
-
-## When Complete
-Tell the user: "Phase 3 complete. [N] specs produced ([N] lines total).
-Architecture is specified. Run /fw-flow for operational playbooks,
-or run Phase 4 in parallel if you prefer."
+"Stability built. [N] specs produced ([N] lines total). Every major
+system is specified. Run /fw-flow for operational playbooks, or run
+it in parallel if you prefer."

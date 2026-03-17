@@ -1,10 +1,10 @@
 ---
 name: fw-resonance
-version: 1.0.0
+version: 2.0.0
 description: |
-  Phase 5: Platform Prototype. Build a working prototype with demo data that
-  proves the UX without requiring live infrastructure. Uses DataSource adapter
-  pattern, lifecycle-aware rendering, typed schemas, and permanent demo mode.
+  Resonance: Make it transmissible. Build a working prototype that
+  demonstrates the system without requiring live infrastructure.
+  Permanent demo mode. Typed schema. Lifecycle-aware. Testable.
 allowed-tools:
   - Read
   - Write
@@ -16,72 +16,94 @@ allowed-tools:
   - Agent
 ---
 
-# Phase 5: Platform Prototype
+# /fw-resonance — Make It Transmissible
 
-You are a product engineer building a working prototype that demonstrates the
-full UX using demo data. No live credentials required.
+You are building a working prototype that demonstrates the system — not a
+mockup, not a wireframe, a living artifact someone can interact with and
+understand without explanation.
 
 ## Core Principles
 
-1. **DataSource adapter** — demo and live data share the same interface
-2. **Lifecycle-aware** — UI adapts to the user's phase (new → onboarding → active → mature)
-3. **Role-based** — different users see different views
-4. **Schema-first** — typed schema IS the database, even before the database exists
-5. **Demo mode is permanent** — never remove it, it's a feature
+1. **Demo mode is permanent** — not scaffolding, a feature. Demo and live
+   data share the same interface. Toggle with one environment variable.
+2. **Schema-first** — define the typed schema BEFORE the database exists.
+   The schema IS the database definition.
+3. **Lifecycle-aware** — the UI adapts to where the user is in their journey.
+   New users see different content than power users.
+4. **Build against specs** — every page, component, and data query maps to
+   a Stability spec. Contradictions surface as type errors.
 
-## Process
+## Step 1: Determine Stack
 
-### 1. Scaffold the App
-Based on Phase 3 specs (dashboard IA, data model):
-- Set up Next.js (or framework of choice) with TypeScript strict mode
-- Define the typed schema from architecture specs
-- Create DataSource adapter interface
-- Implement DemoDataSource with realistic sample data
-- Scaffold SupabaseDataSource (throws "not implemented" — ready for later)
+Ask the user about technical preferences and constraints:
+- Frontend framework (Next.js, SvelteKit, Remix, static HTML, etc.)
+- Styling approach (Tailwind, CSS modules, styled components, etc.)
+- Database target (Supabase, PlanetScale, Neon, Firebase, etc.)
+- Deployment target (Vercel, Railway, Fly, AWS, etc.)
+- Any existing code or design system to build on?
 
-### 2. Build Core Pages
-From the dashboard IA spec:
-- Auth flow (magic link or appropriate auth)
-- Main dashboard (lifecycle-aware — renders differently per phase)
-- All user-facing pages
-- All operator/admin pages
+If they don't have strong preferences, recommend based on what the Stability
+specs suggest the system needs.
+
+## Step 2: Schema First
+
+From the Stability specs, create a typed schema:
+- Every table/collection defined with types
+- Relationships between entities explicit
+- This schema will be used by BOTH demo mode and live mode
+
+## Step 3: DataSource Adapter
+
+Create an interface that both data sources implement:
+```
+DataSource interface
+├── DemoDataSource (hardcoded realistic data)
+└── LiveDataSource (real database queries — scaffolded, not implemented)
+
+Toggle: environment variable
+Demo mode available permanently.
+```
+
+Populate demo data with realistic content — not "test test test" or
+"Lorem ipsum." Names, numbers, dates that feel real.
+
+## Step 4: Build Pages
+
+From the dashboard IA spec (or equivalent from Stability):
+- Auth flow
+- Main views (adapt to whatever the product is)
+- Admin/operator views (if applicable)
 - Public pages (if applicable)
 
-### 3. Build Components
-- Cards, charts, badges, status indicators
-- Slide-over detail panels
-- Error boundaries (page-level minimum)
+If the product has a lifecycle (onboarding → active → mature), build
+lifecycle-aware rendering — same pages, different content per phase.
+
+## Step 5: Components & Design
+
+- Extract design tokens (colors, typography, spacing) into variables
+- Build reusable components (cards, badges, charts, panels, etc.)
+- Error boundaries at page level minimum
 - Loading states and skeletons
-- Empty states (phase-aware messaging)
+- Empty states with contextual messaging
 
-### 4. Design System
-- Extract tokens from brand/design direction
-- CSS variables for theming
-- Typography scale
-- Color palette with semantic meanings
-- Consistent spacing rhythm
+## Step 6: Tests
 
-### 5. Write Tests
-- Unit tests for business logic (role checks, calculations)
-- Query shape tests (demo data conforms to schema)
-- Component tests where appropriate
-- All tests must pass before Phase 5 is complete
+- Unit tests for business logic
+- Data shape tests (demo data conforms to schema)
+- Component tests where complexity warrants
+- All tests pass before Resonance is complete
 
-### 6. Verify Demo Mode
-- Every page renders with demo data
-- Lifecycle phases can be toggled (dev tool)
-- Roles can be switched (dev tool)
-- No console errors
-- No broken images or layouts
+## Step 7: Engineering Guide
+
+Create a CLAUDE.md in the platform directory:
+- Architecture overview
+- Code conventions
+- Data patterns (adapter, lifecycle, roles)
+- How to add a new page/feature
+- Test expectations
 
 ## Output
-- Working app at localhost
-- Typed schema matching Phase 3 specs
-- DataSource adapter with demo implementation
-- Test suite passing
-- CLAUDE.md engineering guide for the platform directory
 
-## When Complete
-Tell the user: "Phase 5 complete. Prototype runs at localhost with demo data.
-[N] pages, [N] components, [N] tests passing. Run /fw-entropy to harden
-the technical spine with an engineering review."
+"Resonance built. Prototype runs at localhost with demo data.
+[N] pages, [N] components, [N] tests passing. Run /fw-entropy
+to pressure test the architecture."
