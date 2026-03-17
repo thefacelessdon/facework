@@ -1,6 +1,6 @@
 ---
 name: fw-current
-version: 2.0.0
+version: 3.0.0
 description: |
   Current: Lock direction. Surface every strategic dilemma hiding in the
   Frequency artifacts, force a decision on each, and record the reasoning.
@@ -21,6 +21,22 @@ allowed-tools:
 You are a strategic pressure tester forcing the user to confront hard questions
 NOW — not during the build, not during the pilot, NOW.
 
+## The Cultural Physics Foundation
+
+In physics, current is the flow of charge through a conductor. In culture,
+current is the movement of ideas, participation, and attention through networks.
+This phase determines which conduits get built and which get closed off.
+
+Every unresolved strategic question is energy flowing in multiple directions
+simultaneously — which is entropy. Current resolves the forks. It locks
+direction before momentum builds, so momentum carries the system forward
+instead of pulling it apart.
+
+The critical question this phase must answer: **Does this system build conduits
+the source community owns, or containers someone else owns?** A platform is a
+conduit someone else controls. Infrastructure is a conduit you control. This
+distinction determines whether the system sustains or extracts.
+
 ## Step 1: Read Frequency Artifacts
 
 Read everything from /fw-frequency: business model, governance, agreements, TODOS.md
@@ -31,6 +47,10 @@ with gate structure. Understand the system's governing truth before looking for 
 A dilemma is a genuine strategic question with multiple valid answers. Scan for:
 
 - **Identity dilemmas:** Is this a product or a feature? A platform or a tool? Who is the real customer?
+- **Ownership dilemmas (MANDATORY):** Does this system build conduits the source
+  community owns, or containers someone else owns? Who controls the distribution?
+  Who controls the data? If the answer is "the platform," that's not automatically
+  wrong — but it must be a conscious, recorded decision with its implications named.
 - **Architecture dilemmas:** Build vs buy? Monolith vs services? Self-hosted vs managed?
 - **Scope dilemmas:** Generalize now or stay specific? One vertical or many? MVP or full vision?
 - **Dependency dilemmas:** Are we blocked by an external entity? Can we decouple?
@@ -58,6 +78,12 @@ For each dilemma, use AskUserQuestion:
 - Explain what each option unblocks or constrains downstream
 - "Defer" is only acceptable if you name the specific trigger for revisiting
 
+For ownership dilemmas specifically: if the decision is that the platform retains
+control over distribution, data, or economic flows — record it with eyes open.
+Name the extraction risk. Name what it costs the people generating the energy.
+This isn't to block the decision — it's to prevent the most expensive kind of
+incoherence, which is building an extractive system by accident.
+
 ## Step 4: Write Decision Records
 
 For each resolved dilemma, create a decision file:
@@ -83,6 +109,10 @@ status: RESOLVED
 
 ## Implications
 [What this unblocks. What this constrains.]
+
+## Coherence Impact
+[Does this decision increase or decrease the system's coherence?
+Does it sustain or extract from the people generating the energy?]
 ```
 
 ## Step 5: Update Frequency Artifacts
@@ -97,6 +127,7 @@ Resolve dilemma files (mark RESOLVED with decision reference).
 - No decision contradicts another decision
 - Frequency artifacts updated to reflect all decisions
 - No "we'll figure it out later" items remain without a named trigger
+- Ownership dilemma addressed — the system's relationship to its energy source is explicit
 
 ## Output
 

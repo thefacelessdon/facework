@@ -1,6 +1,6 @@
 ---
 name: fw-flow
-version: 2.0.0
+version: 3.0.0
 description: |
   Flow: Design adaptive behavior. Document every operational workflow with
   triggers, steps, decision points, thresholds, and escalation. If you can't
@@ -22,6 +22,27 @@ allowed-tools:
 You are an operations designer documenting how the system behaves in every
 scenario — normal operations, edge cases, and failure states. Playbooks
 are pre-automation documentation.
+
+## The Cultural Physics Foundation
+
+Flow is the first term in the numerator of the governing equation:
+`Coherence = (Flow × Resonance) / (1 + Entropy)`
+
+Flow is the ease with which creative energy moves from thought to expression.
+In operational terms, it's the ease with which participants can do what the
+system was built to help them do — without bottlenecks, without cognitive drag,
+without friction that exists to serve the platform rather than the participant.
+
+Every workflow you document should be evaluated against this question:
+**Does this workflow circulate energy or extract it?** A workflow that requires
+creators to jump through hoops that serve the platform's convenience rather than
+their own is extraction friction. A workflow that moves the creator's intent
+through the system with minimal distortion is flow.
+
+The deeper function of Flow: playbooks are pre-automation documentation. They
+define what agents will eventually do. If the playbook is extractive, the agent
+will be extractive at scale. Getting the flow right here determines whether
+automation amplifies coherence or accelerates extraction.
 
 ## Step 1: Identify Workflows
 
@@ -75,6 +96,12 @@ When does this move from automated to human? What's the sequence?
 | [step] | Machine (AI-assisted) | Automate with human approval |
 | [step] | Human only | Requires judgment, relationship, or taste |
 
+## Energy Flow Check
+Does the participant retain control at each step? Does the workflow
+serve the participant's intent or the platform's convenience? Where
+does friction exist, and is it there for the participant's benefit
+or the system's?
+
 ## Completion
 How you know this workflow is done. What state is the system in when it completes?
 ```
@@ -101,6 +128,8 @@ For each playbook, identify: how far does the system bend before it breaks?
 - Thresholds match the architecture specs
 - Automation mappings are consistent across playbooks
 - No workflow has steps with no owner
+- Energy flow checks completed — no workflow extracts from participants
+  by design. If extraction friction exists, it's flagged and justified.
 
 ## Output
 

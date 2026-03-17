@@ -1,6 +1,6 @@
 ---
 name: fw-frequency
-version: 2.0.0
+version: 3.0.0
 description: |
   Frequency: Extract the irreducible signal. Establish the governing truth
   of the system — business model, economics, rights, obligations, and
@@ -24,6 +24,33 @@ Before anything is designed or built, the economics, constraints, rights, and
 obligations must be documented and internally consistent. This is frequency
 extraction — isolating what the system IS when everything performative falls away.
 
+## The Cultural Physics Foundation
+
+Frequency is the first primitive because it answers the question that determines
+everything downstream: **whose energy powers this system, and who controls
+the infrastructure it flows through?**
+
+Every system has a value source — the people whose participation, creativity, labor,
+or expertise makes the system valuable. For creative infrastructure, these are artists
+and creators. For a developer tool, these are the developers. For a B2B SaaS, these
+are the end users whose workflows depend on it. For a marketplace, these are the
+sellers and buyers. The physics are the same regardless of domain: when the people
+who generate the value don't control the infrastructure it flows through, the system
+extracts from them — and extraction is high-entropy.
+
+This pattern is most visible and most consequential in creative industries — jazz,
+hip hop, fashion, social media — where communities generate the culture and external
+systems capture the current. But it applies universally. Frequency extraction
+prevents it. By establishing the governing truth before anything is built, we ensure
+the system's economics, ownership, and control structures serve the people generating
+the energy.
+
+The governing equation: `Coherence = (Flow × Resonance) / (1 + Entropy)`
+
+Frequency sets the denominator's floor — if the governing truth is unclear or
+extractive, entropy is baked into the foundation and no amount of good architecture
+can overcome it.
+
 ## Step 1: Discovery
 
 Before producing anything, understand what's being built. Ask using AskUserQuestion:
@@ -46,6 +73,19 @@ For each revenue stream identified, ask:
 - Who pays? How much? How often?
 - Are there multiple parties involved in revenue? (splits, funds, partners, royalties)
 - What does the customer own vs rent? What happens when they stop paying?
+
+**"Who generates the energy in this system?"**
+This is the extraction check. Every system has people who generate the value —
+creators, artists, communities, workers, contributors. Identify them explicitly:
+- Who creates the content, culture, product, or service that makes this system valuable?
+- Do they control the infrastructure through which their energy flows?
+- Does the economic model return value to them proportionally?
+- If they left tomorrow, would they take their work, data, and relationships with them?
+
+If the answers reveal an extraction pattern — value generators don't control the
+current, can't leave with their assets, or receive disproportionately low returns —
+flag it. This is not a moral judgment. It is a physics diagnosis: extraction is
+high-entropy, and high-entropy systems collapse.
 
 **"What are the hard constraints?"**
 - Regulatory or compliance requirements?
@@ -73,6 +113,11 @@ What this is. What it is NOT. (The negative space matters.)
 Who pays. Qualification criteria if applicable. Different customer
 types if applicable (individual, team, enterprise, etc.)
 
+## Energy Source
+Who generates the value this system runs on? How does the system
+sustain them rather than extract from them? This section makes explicit
+what most business models leave implicit.
+
 ## Revenue
 Every revenue stream with:
 - Who pays, how much, how often
@@ -83,6 +128,12 @@ Every revenue stream with:
 Revenue projections at target scale.
 Cost projections at target scale.
 Margin analysis.
+
+## Ownership & Control
+What do participants own? What can they take with them?
+Who controls the distribution channels? Who controls the data?
+This section defines whether the system builds conduits (participants
+control their own current) or containers (the platform controls it).
 
 ## Key Numbers
 Every critical number in one place. These become canonical sources
@@ -115,6 +166,12 @@ only what's relevant:
 **If there's user-generated content or data:**
 - Data ownership policy (who owns what, portability, deletion rights)
 
+The exit guarantee deserves special attention. In extractive systems, exit is
+punitive — you lose your data, your audience, your history. In coherent systems,
+exit is clean — you leave with everything you brought and everything you built.
+The exit guarantee is the single clearest signal of whether a system extracts
+or sustains.
+
 ## Step 4: Gate Structure
 
 Define security gates tied to business milestones. Adapt the gate
@@ -136,7 +193,25 @@ Each gate item must be:
 - Verifiable (someone can check whether it's done)
 - Blocking (nothing past the gate until everything in the gate is complete)
 
-## Step 5: Cross-Reference Check
+## Step 5: Extraction Check
+
+Before marking Frequency complete, run the extraction diagnostic:
+
+1. **Energy audit:** Can you name exactly who generates the value in this system?
+   Are they represented in the governance documents as stakeholders, not just users?
+2. **Current ownership:** Does the business model build conduits (participants control
+   their own distribution) or containers (the platform controls distribution)?
+3. **Exit test:** If the primary value generators left, could they take their work,
+   data, audience, and economic history with them?
+4. **Proportionality test:** Does the economic model return value proportionally to
+   who generates it?
+
+If any answer reveals extraction, surface it to the user as a structural concern —
+not a moral one. Extraction is high entropy. High entropy systems require constant
+new energy sources because they degrade the ones they have. Coherent systems are
+self-sustaining because they don't consume their own fuel.
+
+## Step 6: Cross-Reference Check
 
 Before marking Frequency complete:
 - Every number mentioned in any document traces to one canonical source
@@ -144,8 +219,9 @@ Before marking Frequency complete:
 - Exit/termination terms cover all realistic scenarios
 - Gate items are all actionable and verifiable
 - No contradictions between documents
+- Extraction check passed or concerns documented
 
-## Step 6: Create Project Structure
+## Step 7: Create Project Structure
 
 Set up the project's ops directory:
 ```

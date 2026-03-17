@@ -1,8 +1,8 @@
 ---
 title: "Build Methodology: From Idea to Handoff-Ready Architecture"
 type: Internal Reference
-version: 1.0
-author: Stedmon
+version: 2.0
+author: The Faceless Don
 date: March 2026
 status: Living Document
 ---
@@ -19,6 +19,27 @@ GAMUT repo as proof. The methodology is designed to be:
 1. **Reusable** — apply to any new product idea
 2. **Encodable** — the steps can become agent instructions
 3. **Demonstrable** — bring this to any collaboration as your operating system
+
+## The Cultural Physics Foundation
+
+This methodology exists because the default way things get built reproduces extraction.
+
+The history of creative industries — jazz, hip hop, fashion, social media — follows the same
+physics: communities generate the cultural energy, and external systems capture the current.
+The infrastructure was never designed to sustain the source. Products built without coherence
+thinking reproduce this pattern by accident, because the build process never asks: **whose
+energy powers this system, and who controls the infrastructure it flows through?**
+
+Faceworks's build sequence is the counter-architecture. Every phase carries the Cultural Physics
+question forward. Frequency asks who generates the energy. Current decides who controls the
+conduits. Stability builds architecture that implements those ownership decisions. Flow designs
+workflows that circulate energy rather than extract it. Resonance makes the system transmissible
+to the community it serves. Entropy catches extraction patterns alongside technical debt.
+Coherence packages it so the community can operate independently.
+
+The governing equation: `Coherence = (Flow × Resonance) / (1 + Entropy)`
+
+The build sequence IS this equation, executed in order.
 
 ---
 
@@ -46,8 +67,15 @@ the downstream work is built on assumptions instead of decisions.
 **Purpose:** Establish the business rules, economics, and legal boundaries before
 anything gets designed or built. These are the constraints everything else operates within.
 
+**The extraction check:** Before anything else, identify who generates the energy in
+this system and whether the economics serve them or extract from them. This is not a
+moral exercise — extraction is high entropy, and high-entropy foundations collapse
+under downstream weight.
+
 **What you produce:**
 - Business model (revenue structure, pricing, unit economics, qualification criteria)
+- Energy source identification (who generates the value, how the system sustains them)
+- Ownership & control structure (what participants own, what they take when they leave)
 - Rate structure (who gets what percentage of what)
 - Fund governance (if applicable — segregated funds, permitted uses, reporting)
 - Agreement templates (what creators/partners sign)
@@ -72,7 +100,7 @@ gate is complete. This is security-first sequencing.
 
 **Tools used:**
 - Claude Code for document generation and cross-referencing
-- CEO plan review (`/plan-ceo-review`) for challenging assumptions
+- CEO plan review (`/plan-ceo-review` from [gstack](https://github.com/garrytan/gstack)) for challenging assumptions
 
 **GAMUT example artifacts:**
 - Business Model v1.0 (revenue, SOM, qualification)
@@ -97,9 +125,15 @@ Force yourself to make decisions now, not when you're mid-build.
 - Find the questions you're avoiding
 - Force decisions with reasoning, not deferral
 
+**Mandatory ownership dilemma:** Every project must explicitly resolve whether the system
+builds conduits (participants control their own current) or containers (the platform controls
+it). This is not automatically wrong either way — but it must be a conscious decision with
+its implications named and recorded.
+
 **What you produce:**
 - A set of **dilemmas** — genuine strategic questions with multiple valid answers
 - **Decision records** — the answer chosen, alternatives rejected, and reasoning
+- **Coherence impact** per decision — does this sustain or extract?
 
 **Decision record format:**
 ```
@@ -107,6 +141,7 @@ Decision: [What was decided]
 Alternatives considered: [What was rejected and why]
 Reasoning: [Why this path, not the others]
 Implications: [What this decision unblocks or constrains]
+Coherence impact: [Does this sustain or extract from the energy source?]
 Status: RESOLVED
 Date: [When it was locked]
 ```
@@ -117,7 +152,6 @@ New team members read the decision record instead of re-litigating.
 **GAMUT example decisions:**
 - Creator OS is an operations capability (Amplifier Program), not a product
 - Vertical generalization via Platform Narrative + Appendices, not document rewrites
-- HUE is a partner, not a dependency — creative ops are self-contained
 
 **Time:** 1 day (often runs in parallel with Phase 1)
 
@@ -131,6 +165,7 @@ of truth — the code implements it, not the other way around.
 **What you produce:** One spec per major system, each containing:
 - Context (what problem it solves)
 - Complete specification (schemas, state machines, rules, thresholds)
+- Ownership & control (who owns this data, what happens on exit)
 - ASCII diagrams (data flow, state transitions, queue topology)
 - Edge cases (what can go wrong, how it's handled)
 - Acceptance criteria (how to verify the implementation is correct)
@@ -155,11 +190,12 @@ PRODUCT
 
 **Key principle:** Every number in a spec has a canonical source. Rates come from the
 business model. Thresholds come from the ops playbook. Never hardcode values that
-live somewhere else.
+live somewhere else. Ownership structures must implement the decisions from Phase 2 —
+the architecture enforces the ownership model, it doesn't override it.
 
 **Tools used:**
 - Claude Code for spec generation (provide context docs, get structured specs back)
-- Engineering review (`/plan-eng-review`) for pressure testing specs
+- Engineering review (`/plan-eng-review` from [gstack](https://github.com/garrytan/gstack)) for pressure testing specs
 
 **GAMUT example:** 10 architecture specs, 6,500+ lines total
 
@@ -177,6 +213,7 @@ implementation (Phase 5-6).
 - Step-by-step operational playbooks for every workflow
 - Each playbook maps to agent automation (what the agent does vs what the human does)
 - Specific thresholds, timelines, and decision trees
+- Energy flow checks per workflow (does this circulate or extract?)
 
 **Playbook structure:**
 ```
@@ -186,11 +223,13 @@ Steps (numbered, specific, actionable)
 Decision points (if X, do Y; if Z, do W)
 Thresholds (at what numbers do actions change)
 Escalation path (when does a human get involved)
+Energy flow check (does this serve the participant or the platform?)
 Completion criteria (how do you know it's done)
 ```
 
 **Key principle:** If you can't write the playbook, you don't understand the operation
-well enough to automate it. Playbooks are pre-automation documentation.
+well enough to automate it. Playbooks are pre-automation documentation. If the playbook
+is extractive, the agent will be extractive at scale.
 
 **GAMUT example:** 9 operational playbooks (supply chain, onboarding, marketing,
 billing failure, low-velocity response, creative ops, amplifier program, GTM, contingency)
@@ -210,6 +249,7 @@ requiring live infrastructure. Demo mode proves the UX before you connect real d
 3. Build the UI against the interface (components never know if data is real or demo)
 4. Use lifecycle-aware rendering (components adapt to the user's phase)
 5. Write tests against the interface (tests work in both modes)
+6. Carry the frequency (the prototype reflects the community it serves, not generic SaaS)
 
 ```
 DATA SOURCE ADAPTER PATTERN
@@ -228,7 +268,9 @@ Demo mode stays permanently available.
 
 **Key principle:** Demo mode is not a shortcut — it's a permanent feature.
 Sales demos, testing, onboarding walkthroughs, and development all use demo mode.
-You never lose it.
+You never lose it. The prototype should resonate with the community it was built
+for — someone from that community should look at it and say "that's for me"
+before reading any documentation.
 
 **What you produce:**
 - Working dashboard (creator + operator views)
@@ -263,6 +305,10 @@ specs for the engineer who will build it.
 4. Prompt Engineering & Structured Output
 5. Context Management & Reliability
 
+Plus the **extraction review** domain:
+6. Ownership & Control Verification (does the implementation match the ownership
+   decisions? are there lock-in patterns? data portability gaps? exit friction?)
+
 **The eng review process:**
 ```
 Step 0: Scope Challenge
@@ -286,6 +332,10 @@ Section 4: Performance Review
   → Scaling, rate limits, token costs, caching
   → Resolve before moving on
 
+Section 5: Extraction Review
+  → Data portability, exit automation, ownership enforcement
+  → Resolve before moving on
+
 Output: Failure modes, NOT-in-scope, TODOs
 ```
 
@@ -295,6 +345,7 @@ Output: Failure modes, NOT-in-scope, TODOs
 - Prompt & Output Spec (system prompts, Zod schemas, eval framework)
 - Engineering CLAUDE.md (the "Day 1" doc for whoever builds it)
 - Code quality improvements (DRY refactors, adapter patterns)
+- Ownership enforcement spec (if extraction gaps found)
 
 **Key principle:** The eng review is interactive — every issue gets options,
 a recommendation, and your decision. The output reflects YOUR decisions, not
@@ -311,13 +362,15 @@ engineering guide)
 ## Phase 7: Handoff & Packaging
 
 **Purpose:** Make it so someone can clone the repo and start building on Day 1
-without a single meeting.
+without a single meeting. Make it so the community this serves can operate
+independently.
 
 **What you produce:**
-1. **README** — orientation, stack, how to run
-2. **Review Brief** — structured onboarding (read order, what to review, feedback template)
+1. **README** — orientation, stack, who this serves, how to run
+2. **Review Brief** — structured onboarding (read order, what to review, feedback template,
+   ownership model summary so new builders don't accidentally introduce extraction)
 3. **Project Tracker** — every work item with context packets
-4. **Engineering CLAUDE.md** — code conventions, patterns, test expectations
+4. **Engineering CLAUDE.md** — code conventions, patterns, ownership patterns, test expectations
 5. **GitHub repo** — clean commit history, no sensitive files
 
 **Context packets per work item:**
@@ -331,7 +384,9 @@ Note:               Warnings, timing, upstream decisions
 ```
 
 **Key principle:** A TODO without context is worse than no TODO. Every work item
-should be startable without asking questions.
+should be startable without asking questions. And the coherence test is not just
+"can an engineer build from this" — it's "can the community this serves achieve
+independence through this system?"
 
 **GAMUT example:** 75+ work items with full context packets, visual card grid
 dashboard, side panel drill-down, review brief with structured feedback template
@@ -345,6 +400,8 @@ dashboard, side panel drill-down, review brief with structured feedback template
 ```
 Phase 1: Governance
 ├── Business model
+├── Energy source identification
+├── Ownership & control structure
 ├── Rate structure
 ├── Fund governance
 ├── Agreement template
@@ -352,11 +409,12 @@ Phase 1: Governance
 └── Verification protocol
 
 Phase 2: Pressure Testing
-├── Dilemmas identified
-└── Decision records (with reasoning)
+├── Dilemmas identified (including mandatory ownership dilemma)
+├── Decision records (with reasoning and coherence impact)
+└── Extraction risks documented
 
 Phase 3: Architecture
-├── Data isolation spec
+├── Data isolation spec (with ownership enforcement)
 ├── Financial validation spec
 ├── Health monitoring spec
 ├── Sync model spec
@@ -374,11 +432,12 @@ Phase 4: Playbooks
 ├── Low-velocity response playbook
 ├── Creative operations playbook
 └── [Domain-specific playbooks]
+(Each with energy flow check)
 
 Phase 5: Prototype
-├── Typed schema (database types)
+├── Typed schema (database types with ownership fields)
 ├── DataSource adapter
-├── Dashboard UI (lifecycle-aware)
+├── Dashboard UI (lifecycle-aware, frequency-carrying)
 ├── Public pages
 ├── Test suite
 └── Design system
@@ -388,11 +447,12 @@ Phase 6: Technical Spine
 ├── Tool registry (MCP/API schemas)
 ├── Prompt & output spec
 ├── Engineering guide
-└── Code quality fixes
+├── Code quality fixes
+└── Ownership enforcement spec (if needed)
 
 Phase 7: Handoff
-├── README
-├── Review brief
+├── README (including who this serves)
+├── Review brief (including ownership model summary)
 ├── Project tracker + context packets
 └── GitHub repo (clean, push-ready)
 ```
@@ -407,33 +467,33 @@ Each phase can be encoded as an agent workflow:
 ```
 Input:  Product idea + target market + revenue model sketch
 Tools:  Document generation, cross-reference checking
-Output: Business model, rate structure, fund governance,
-        agreement template, exit guarantee
-Guard:  All gate items must be present before proceeding
+Output: Business model, energy source ID, ownership structure,
+        rate structure, fund governance, agreement template, exit guarantee
+Guard:  All gate items present + extraction check passed
 ```
 
 **Phase 2 Agent: Strategic Pressure Tester**
 ```
 Input:  Phase 1 artifacts
 Tools:  CEO review prompts, dilemma identification
-Output: List of dilemmas, decision records with reasoning
-Guard:  All dilemmas resolved before proceeding
+Output: List of dilemmas, decision records with reasoning + coherence impact
+Guard:  All dilemmas resolved, ownership dilemma addressed
 ```
 
 **Phase 3 Agent: Architecture Specifier**
 ```
 Input:  Phase 1-2 artifacts + domain requirements
 Tools:  Spec generation, schema design, state machine design
-Output: Complete architecture specs with diagrams and acceptance criteria
-Guard:  Cross-reference consistency check across all specs
+Output: Complete architecture specs with diagrams, ownership sections, and acceptance criteria
+Guard:  Cross-reference consistency check + ownership model implemented
 ```
 
 **Phase 4 Agent: Playbook Writer**
 ```
 Input:  Phase 1-3 artifacts
 Tools:  Workflow documentation, threshold definition
-Output: Operational playbooks with agent automation mapping
-Guard:  Every workflow maps to either agent or human owner
+Output: Operational playbooks with agent automation mapping + energy flow checks
+Guard:  Every workflow maps to either agent or human owner, no extractive workflows
 ```
 
 **Phase 5 Agent: Prototype Builder**
@@ -441,15 +501,16 @@ Guard:  Every workflow maps to either agent or human owner
 Input:  Phase 3 specs (schemas, IA, component specs)
 Tools:  Code generation, test generation, design system
 Output: Working prototype with demo data, typed schema, test suite
-Guard:  All tests pass, demo mode functional
+Guard:  All tests pass, demo mode functional, frequency carried
 ```
 
 **Phase 6 Agent: Architecture Hardener**
 ```
 Input:  Phase 3 specs + Phase 5 prototype
 Tools:  Eng review prompts, gap analysis, failure mode analysis
-Output: Implementation specs, tool registry, prompt specs, engineering guide
-Guard:  All critical gaps identified and addressed
+Output: Implementation specs, tool registry, prompt specs, engineering guide,
+        ownership enforcement spec
+Guard:  All critical gaps addressed, extraction review complete
 ```
 
 **Phase 7 Agent: Handoff Packager**
@@ -457,7 +518,7 @@ Guard:  All critical gaps identified and addressed
 Input:  All previous phase artifacts
 Tools:  README generation, context packet assembly, project tracking
 Output: Complete handoff package (README, review brief, tracker, repo)
-Guard:  Someone can clone and start building without a meeting
+Guard:  Technical coherence + cultural coherence verified
 ```
 
 ---
@@ -480,6 +541,13 @@ Engineer builds from specs, not meetings
 The difference: by the time anyone writes production code, every decision is
 made, every edge case is documented, every workflow is specified, and a working
 prototype proves the UX. The engineer's job is implementation, not architecture.
+
+**The deeper difference:** most build processes are culturally neutral — which in
+practice means they default to extraction. This methodology carries the Cultural
+Physics question through every phase: whose energy powers this, and who controls
+the current? By the time someone builds from this handoff, the ownership model
+is locked into the architecture, the extraction checks are documented, and
+introducing extraction would require overriding explicit decisions.
 
 **Collaboration value:** When you show up with this methodology, you're not bringing
 an idea. You're bringing a system. The person on the other side of the table sees
@@ -504,6 +572,42 @@ that you've already done the hard thinking — they just need to execute.
 
 ---
 
+## Cultural Physics in Practice: GAMUT
+
+GAMUT is creator commerce infrastructure — a system that gives established creators
+the operational layer to sell physical products at national retail scale. Here's how
+the Cultural Physics concepts map to specific GAMUT artifacts:
+
+**Extraction check → CMAP rate structure (9/3/3 split)**
+The rate structure puts the largest share (9%) with the creator — the person
+generating the energy. The Cultural Marketing Fund (3%) is governed so marketing
+spend benefits the creator's brand, not the platform. The extraction check would
+have surfaced this as the structural mechanism that ensures creators control their
+commerce current.
+
+**Ownership dilemma → "Partner, not a dependency"**
+The most consequential decision in Phase 2 was resolving that creators' operations
+are self-contained. If the platform disappeared, the creator's supply chain, retail
+relationships, and brand would survive. This is the conduit-vs-container question
+answered explicitly: GAMUT builds conduits.
+
+**Exit guarantee → Clean exit as coherence proof**
+The exit guarantee was produced in Phase 1 — creators leave with their data,
+relationships, supplier contacts, and economic history. In extraction systems, exit
+is punitive. In GAMUT, exit is clean. This single artifact is the clearest signal
+of whether the system serves or extracts.
+
+**Energy flow checks → Playbook design**
+The 9 operational playbooks were designed so creators retain control at every step.
+The onboarding playbook doesn't lock creators into proprietary tools. The supply
+chain playbook doesn't create dependencies on GAMUT-only vendors. Each workflow
+circulates energy rather than capturing it.
+
+These mappings validate that the Cultural Physics concepts aren't theoretical —
+they produce specific, testable artifacts that structurally prevent extraction.
+
+---
+
 ## Living Document
 
 This methodology evolves. After each project, update:
@@ -511,3 +615,4 @@ This methodology evolves. After each project, update:
 - Phase timings (what took longer/shorter than expected)
 - Tool effectiveness (which Claude Code skills were most valuable)
 - Agent encoding progress (which phases have been automated)
+- Cultural Physics learnings (did the extraction checks work? what slipped through?)

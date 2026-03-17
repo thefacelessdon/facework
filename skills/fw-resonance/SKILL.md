@@ -1,6 +1,6 @@
 ---
 name: fw-resonance
-version: 2.0.0
+version: 3.0.0
 description: |
   Resonance: Make it transmissible. Build a working prototype that
   demonstrates the system without requiring live infrastructure.
@@ -22,6 +22,28 @@ You are building a working prototype that demonstrates the system — not a
 mockup, not a wireframe, a living artifact someone can interact with and
 understand without explanation.
 
+## The Cultural Physics Foundation
+
+Resonance is the second term in the numerator of the governing equation:
+`Coherence = (Flow × Resonance) / (1 + Entropy)`
+
+In physics, resonance is the amplification that occurs when frequencies align.
+In culture, resonance is the emotional and cultural connection between creators
+and audiences — work that feels "in tune" with its environment. Honest, relevant,
+alive.
+
+A prototype that resonates doesn't just demonstrate features. It carries the
+frequency of the community it was built to serve. The demo data should feel like
+real people with real names and real work — not "Test User" and "Lorem ipsum."
+The interface should reflect the aesthetic values of the people who will use it.
+The interactions should move at the tempo of the community, not the tempo of
+the platform.
+
+Resonance is what makes the system transmissible without explanation. When someone
+from the community sees it and says "that's for me" before reading a single line
+of documentation — that's resonance. It's the difference between a product that
+serves a community and a product that was built about that community by outsiders.
+
 ## Core Principles
 
 1. **Demo mode is permanent** — not scaffolding, a feature. Demo and live
@@ -32,6 +54,8 @@ understand without explanation.
    New users see different content than power users.
 4. **Build against specs** — every page, component, and data query maps to
    a Stability spec. Contradictions surface as type errors.
+5. **Carry the frequency** — the prototype should reflect the identity and
+   aesthetic of the community it serves, not generic SaaS patterns.
 
 ## Step 1: Determine Stack
 
@@ -50,6 +74,7 @@ specs suggest the system needs.
 From the Stability specs, create a typed schema:
 - Every table/collection defined with types
 - Relationships between entities explicit
+- Ownership fields explicit (who owns this record, what happens on exit)
 - This schema will be used by BOTH demo mode and live mode
 
 ## Step 3: DataSource Adapter
@@ -65,7 +90,8 @@ Demo mode available permanently.
 ```
 
 Populate demo data with realistic content — not "test test test" or
-"Lorem ipsum." Names, numbers, dates that feel real.
+"Lorem ipsum." Names, numbers, dates that feel real. If the product serves
+a specific community, the demo data should reflect that community authentically.
 
 ## Step 4: Build Pages
 
@@ -101,6 +127,29 @@ Create a CLAUDE.md in the platform directory:
 - Data patterns (adapter, lifecycle, roles)
 - How to add a new page/feature
 - Test expectations
+
+## Step 8: Five Laws Check
+
+Before marking Resonance complete, evaluate the prototype against the
+five Laws of Design from Cultural Physics:
+
+1. **Energy Must Move.** Does the prototype feel alive? Is there motion,
+   progression, dynamic content — or does it feel static and inert?
+2. **Emotion Leads Form.** Does the design start from how it should feel,
+   not just what it should display? Would a user feel something before
+   they understand the interface?
+3. **Rhythm Over Rules.** Does the system organize by tempo — faster for
+   urgent actions, slower for important decisions — or does everything
+   move at the same pace?
+4. **Friction Reveals Imbalance.** Where is friction in the prototype?
+   Is it intentional (protecting the user) or accidental (serving the
+   platform)? Accidental friction is entropy — fix it.
+5. **Dual Worlds, One Current.** If this system has both physical and
+   digital touchpoints, do they hum at the same frequency? Would the
+   experience feel coherent across both planes?
+
+Flag any law violations. Fix what can be fixed now. Note the rest for
+/fw-entropy.
 
 ## Output
 

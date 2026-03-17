@@ -1,10 +1,20 @@
-# FACEWORK
+# FACEWORKS
 
 A coherence practice for building things.
 
-Facework is a system of forces, engines, and architectural forms that maintain structural alignment inside complex systems. Applied to product creation, it becomes a 7-phase methodology that takes an idea from zero to a fully architected, spec'd, prototyped, and handoff-ready product.
+Faceworks is a system of forces, engines, and architectural forms that maintain structural alignment inside complex systems. Applied to product creation, it becomes a 7-phase methodology that takes an idea from zero to a fully architected, spec'd, prototyped, and handoff-ready product.
 
 The methodology was developed and validated building [GAMUT](https://github.com/thefacelessdon/GAMUT) — creator commerce infrastructure — across 4 days: 10 architecture specs, 9 operational playbooks, 7 strategic decisions, a working prototype, and 75+ tracked work items.
+
+---
+
+## Why
+
+Products collapse because people build surfaces before they build systems. A prototype without governance is a liability. Specs without resolved decisions are built on assumptions. Code without playbooks produces behavior nobody designed.
+
+The conflict at the center of building things is not talent, speed, or funding. The conflict is: systems are asked to carry weight before their coherence is established. Faceworks resolves this by enforcing a build sequence where each layer's coherence is verified before the next layer is added.
+
+The law is simple: anything not coherent will eventually contradict itself. Anything that contradicts itself will eventually collapse. Gates, canonical sources, decision records, and specs make collapse optional.
 
 ---
 
@@ -73,9 +83,23 @@ Every project makes the practice better. Every retro is a version bump.
 
 ---
 
-## Theory
+## Start Here
 
-The full Facework theory — forces, engines, architectural forms, and how they operate inside the build methodology — lives in [`theory/facework.md`](theory/facework.md).
+New to Faceworks? Read in this order:
+
+1. **This README** — what it is, how to install, what the commands do (5 min)
+2. **[The Theory of Cultural Physics](theories/cultural-physics.md)** — why coherence matters, the extraction pattern, the governing equation (15 min)
+3. **[The Coherence Operating System](theories/the-coherence-operating-system.md)** — the 7 forces, engines, and how they operate inside the build (15 min)
+4. **[Build Methodology](methodology/build-methodology.md)** — the 7-phase sequence with artifact maps and GAMUT proof (20 min)
+5. **Install and run `/fw-frequency`** — start building (5 min)
+
+Total: under 1 hour from clone to first skill.
+
+## Theories
+
+The full Faceworks theory — forces, engines, architectural forms, and how they operate inside the build methodology — lives in [`theories/the-coherence-operating-system.md`](theories/the-coherence-operating-system.md).
+
+The theory of Cultural Physics — the paradigm that explains why coherence matters, what happens when creative energy is extracted instead of sustained, and why this matters most for the cultures that have always supplied the energy the world runs on — lives in [`theories/cultural-physics.md`](theories/cultural-physics.md).
 
 ## Methodology
 
@@ -84,6 +108,21 @@ The complete 7-phase build system with artifact maps, agent encoding blueprints,
 Version history: [`methodology/CHANGELOG.md`](methodology/CHANGELOG.md)
 
 Project retros: [`methodology/retros/`](methodology/retros/)
+
+---
+
+## Companion Tooling
+
+Faceworks pairs with [gstack](https://github.com/garrytan/gstack) — Garry Tan's Claude Code skill pack — for strategic review and engineering pressure testing. Two gstack skills surface in the Faceworks workflow:
+
+| gstack Skill | Used In | Role |
+|---|---|---|
+| `/plan-ceo-review` | Phase 1 (Governance), Phase 2 (Strategic Pressure Testing) | Challenges assumptions, finds the 10-star product, forces decisions |
+| `/plan-eng-review` | Phase 3 (Architecture), Phase 6 (Spine Hardening) | Locks architecture, data flow, failure modes, test coverage |
+
+Faceworks's 8 skills handle the build sequence. gstack's review skills handle the pressure testing that keeps each phase honest. Both install as Claude Code skills and work independently — Faceworks doesn't require gstack, but the methodology was developed using both.
+
+See gstack's [README](https://github.com/garrytan/gstack) for install instructions.
 
 ---
 
@@ -97,4 +136,4 @@ Build the architecture, and the identity will make itself known.
 
 ---
 
-*FACEWORK: A Coherence Practice™ — [face.works](https://face.works)*
+*FACEWORKS: A Coherence Practice™ — [face.works](https://face.works)*

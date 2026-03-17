@@ -1,13 +1,15 @@
 ---
-title: "FACEWORK: A Coherence Practice for Building Things"
+title: "FACEWORKS: A Coherence Practice for Building Things"
 version: 1.0
-author: Stedmon
+author: The Faceless Don
 status: Living Document
 ---
 
-# FACEWORK: A Coherence Practice™ for Building Things
+# FACEWORKS: A Coherence Practice™ for Building Things
 
 *Maintaining structural alignment inside systems that would otherwise fracture under pressure.*
+
+*This is the operating system for building with coherence. For the paradigm that explains WHY coherence matters — and why it matters most for the cultures that have always supplied the energy — see [The Theory of Cultural Physics](cultural-physics.md).*
 
 ---
 
@@ -15,7 +17,7 @@ status: Living Document
 
 Every product, company, and system lives or dies by its structural alignment. When coherence is present, the system holds its shape under pressure — across scaling, across handoffs, across the gap between what you intend and what you ship. When coherence is missing, the system drifts, contradicts itself, and eventually collapses.
 
-Most people build products by starting with the surface — a prototype, a pitch, a landing page. Facework starts with the architecture. Not the technical architecture. The structural alignment that makes every technical decision, every operational workflow, and every user-facing moment reinforce the same center.
+Most people build products by starting with the surface — a prototype, a pitch, a landing page. Faceworks starts with the architecture. Not the technical architecture. The structural alignment that makes every technical decision, every operational workflow, and every user-facing moment reinforce the same center.
 
 Identity is not the surface. Identity is the system. Coherence is what makes the system real.
 
@@ -37,7 +39,7 @@ These are not execution problems. These are coherence problems. The system was a
 
 The conflict at the center of building things is not talent, speed, or funding. The conflict is: **systems are asked to carry weight before their coherence is established.**
 
-Facework resolves this by enforcing a build sequence where each layer's coherence is verified before the next layer is added.
+Faceworks resolves this by enforcing a build sequence where each layer's coherence is verified before the next layer is added.
 
 ---
 
@@ -183,7 +185,7 @@ After the build: `/fw-diagnostic` captures what worked, what didn't, and what wa
 
 ## VII. THE PHILOSOPHY
 
-Facework operates from a single principle: **build the architecture, and the identity will make itself known.**
+Faceworks operates from a single principle: **build the architecture, and the identity will make itself known.**
 
 Expression without structure collapses. Narrative without alignment fractures. Growth without foundation destroys coherence. A product without governance, without resolved decisions, without specs, without playbooks — is a surface without a system.
 
@@ -211,4 +213,4 @@ The long game is not growth. The long game is endurance — a system capable of 
 
 ---
 
-*FACEWORK: A Coherence Practice™ — [face.works](https://face.works)*
+*FACEWORKS: A Coherence Practice™ — [face.works](https://face.works)*

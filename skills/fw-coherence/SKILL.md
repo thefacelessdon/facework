@@ -1,6 +1,6 @@
 ---
 name: fw-coherence
-version: 2.0.0
+version: 3.0.0
 description: |
   Coherence: Integrate into a unified whole. Package everything so someone
   can clone the repo and start building on Day 1 without a meeting.
@@ -22,6 +22,27 @@ You are packaging everything from previous phases so a new participant can
 enter the system and build from it without the original builder present.
 If they can — the system is coherent. If they can't — it isn't.
 
+## The Cultural Physics Foundation
+
+Coherence is the output of the governing equation:
+`Coherence = (Flow × Resonance) / (1 + Entropy)`
+
+This is where everything integrates. Flow has been designed, resonance has been
+built, entropy has been reduced. Coherence is the proof that the system holds
+its shape when handed to someone who wasn't there when it was built.
+
+But coherence in Cultural Physics means more than clean documentation. It means
+the system is transmissible to the community it was built for — not just to
+engineers, but to the people whose energy it's designed to sustain. If a creator
+can look at the handoff package and understand what this system does for them,
+how it protects their interests, and how they maintain control — that's coherence.
+
+The deepest test: **can the community this was built for operate this without
+depending on the original builder?** Not just "can an engineer implement from
+these specs" — but can the people this serves achieve true independence through
+this system? That's the difference between technical coherence and cultural coherence.
+This phase demands both.
+
 ## Step 1: Audit What Exists
 
 Read the full project directory. Catalog:
@@ -36,6 +57,7 @@ Read the full project directory. Catalog:
 
 Create README.md at project root:
 - What this is (2-3 sentences — no jargon)
+- Who this serves and how (the energy source, not just "target market")
 - The business model (key numbers only)
 - Architecture overview (directory structure)
 - Technology stack (table)
@@ -49,6 +71,8 @@ Create REVIEW-BRIEF.md:
 - Read order with time estimates (orientation → architecture → code → playbooks)
 - What feedback is needed (provide structured template)
 - Key decisions that are LOCKED (don't relitigate — read the decision records)
+- Ownership model summary (who controls what — so the builder doesn't accidentally
+  introduce extraction patterns the decisions phase explicitly rejected)
 - Repo structure quick reference
 
 ## Step 4: Project Tracker
@@ -69,6 +93,7 @@ Ensure the platform directory has a CLAUDE.md (or equivalent):
 - Architecture overview
 - Code conventions and naming
 - Data patterns (how queries work, how auth works)
+- Ownership patterns (how data portability works, how exit works)
 - How to add a new feature (step by step)
 - Test expectations (what must be tested, how to run)
 - Canonical numbers (where rates/thresholds come from — never hardcode)
@@ -84,11 +109,20 @@ Ensure the platform directory has a CLAUDE.md (or equivalent):
 ## Step 7: Coherence Test
 
 Before marking complete, ask yourself:
+
+**Technical coherence:**
 - Can someone clone this repo and run the prototype in under 5 minutes?
 - Can they find any spec within 30 seconds using the README?
 - Can they understand the business model in one read of the business model doc?
 - Can they start building a feature using only the engineering guide?
 - Are there any numbers that appear in multiple places with different values?
+
+**Cultural coherence:**
+- Can the community this was built for understand what the system does for them?
+- Does the ownership model protect the people generating the energy?
+- Could a new builder accidentally introduce extraction patterns? If so, are there
+  guardrails in the engineering guide and specs to prevent it?
+- Does the system enable independence — or does it create a new dependency?
 
 If any answer is no — fix it before declaring coherence.
 
