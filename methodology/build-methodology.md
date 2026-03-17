@@ -282,7 +282,9 @@ before reading any documentation.
 
 **Tools used:**
 - Claude Code for rapid UI generation
-- Frontend design skill for visual quality
+- Design consultation (`/design-consultation` from [gstack](https://github.com/garrytan/gstack)) for establishing the design system before building — typography, color, spacing, motion. Can run in parallel with early prototype work
+- Design review (`/plan-design-review` from [gstack](https://github.com/garrytan/gstack)) for designer's eye audit of the prototype once it's standing
+- Browser (`/browse` from [gstack](https://github.com/garrytan/gstack)) for visually verifying the prototype as you build
 - Vitest + React Testing Library for test suite
 
 **GAMUT example:** Next.js 15 app with 4 lifecycle phases, role-based views,
@@ -298,7 +300,7 @@ public pages (opportunities board, fund dashboard), 28 passing tests
 from Phase 5. Identify gaps, resolve open questions, and produce implementation-ready
 specs for the engineer who will build it.
 
-**Method:** Use `/plan-eng-review` across 5 domains:
+**Method:** Use `/plan-eng-review` (from [gstack](https://github.com/garrytan/gstack)) across 5 domains:
 1. Agentic Architecture & Orchestration
 2. Tool Design & Integration
 3. Configuration & Workflows
@@ -347,6 +349,11 @@ Output: Failure modes, NOT-in-scope, TODOs
 - Code quality improvements (DRY refactors, adapter patterns)
 - Ownership enforcement spec (if extraction gaps found)
 
+**Additional tools for this phase:**
+- Code review (`/review` from [gstack](https://github.com/garrytan/gstack)) for structural audit of the prototype code — race conditions, trust boundaries, missing invariants
+- QA (`/qa` from [gstack](https://github.com/garrytan/gstack)) for systematic testing of the running prototype — health score, screenshots, repro steps
+- Design QA (`/qa-design-review` from [gstack](https://github.com/garrytan/gstack)) for iteratively fixing visual issues with before/after verification
+
 **Key principle:** The eng review is interactive — every issue gets options,
 a recommendation, and your decision. The output reflects YOUR decisions, not
 generic best practices.
@@ -382,6 +389,11 @@ Dependencies:       What must be done first (done/blocker status)
 Acceptance criteria: How to verify it's complete
 Note:               Warnings, timing, upstream decisions
 ```
+
+**Tools for this phase:**
+- Ship (`/ship` from [gstack](https://github.com/garrytan/gstack)) for the last mile — sync main, run tests, push, open PR
+- Document release (`/document-release` from [gstack](https://github.com/garrytan/gstack)) for syncing README, CHANGELOG, and guides to match what shipped
+- Retro (`/retro` from [gstack](https://github.com/garrytan/gstack)) for engineering retrospective — feeds into `/fw-diagnostic`
 
 **Key principle:** A TODO without context is worse than no TODO. Every work item
 should be startable without asking questions. And the coherence test is not just

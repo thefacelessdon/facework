@@ -16,6 +16,8 @@ The conflict at the center of building things is not talent, speed, or funding. 
 
 The law is simple: anything not coherent will eventually contradict itself. Anything that contradicts itself will eventually collapse. Gates, canonical sources, decision records, and specs make collapse optional.
 
+There is a deeper pattern underneath the structural one. The history of creative industries — jazz, hip hop, fashion, social media — follows the same physics: communities generate the cultural energy, and external systems capture the current. The infrastructure was never designed to sustain the source. Products built without coherence thinking reproduce this pattern by accident, because the build process never asks: whose energy powers this system, and who controls the infrastructure it flows through? Faceworks carries that question through every phase of the build.
+
 ---
 
 ## The Primitive Stack
@@ -113,14 +115,23 @@ Project retros: [`methodology/retros/`](methodology/retros/)
 
 ## Companion Tooling
 
-Faceworks pairs with [gstack](https://github.com/garrytan/gstack) — Garry Tan's Claude Code skill pack — for strategic review and engineering pressure testing. Two gstack skills surface in the Faceworks workflow:
+Faceworks pairs with [gstack](https://github.com/garrytan/gstack) — Garry Tan's Claude Code skill pack — for review, design, QA, and shipping. gstack skills surface throughout the Faceworks workflow:
 
-| gstack Skill | Used In | Role |
+| gstack Skill | Faceworks Phase | Role |
 |---|---|---|
-| `/plan-ceo-review` | Phase 1 (Governance), Phase 2 (Strategic Pressure Testing) | Challenges assumptions, finds the 10-star product, forces decisions |
-| `/plan-eng-review` | Phase 3 (Architecture), Phase 6 (Spine Hardening) | Locks architecture, data flow, failure modes, test coverage |
+| `/plan-ceo-review` | Frequency, Current | Challenges assumptions, finds the 10-star product, forces decisions |
+| `/plan-eng-review` | Stability, Entropy | Locks architecture, data flow, failure modes, test coverage |
+| `/design-consultation` | Resonance | Establishes design system — typography, color, spacing, motion — before building the prototype |
+| `/plan-design-review` | Resonance, Entropy | Designer's eye audit of the prototype — spacing, hierarchy, contrast, AI slop |
+| `/qa-design-review` | Resonance, Entropy | Same audit, but iteratively fixes issues and re-verifies with screenshots |
+| `/review` | Entropy | Pre-landing structural review — race conditions, trust boundaries, missing invariants |
+| `/qa` | Entropy | Systematic QA against the running prototype — health score, screenshots, repro steps |
+| `/browse` | Resonance, Entropy | Gives the agent eyes — navigate, click, screenshot, verify the live prototype |
+| `/retro` | Diagnostic | Engineering retrospective — commit analysis, work patterns, team breakdown |
+| `/ship` | Coherence | Sync main, run tests, push, open PR — the last mile |
+| `/document-release` | Coherence | Post-ship doc update — syncs README, CHANGELOG, and guides to match what shipped |
 
-Faceworks's 8 skills handle the build sequence. gstack's review skills handle the pressure testing that keeps each phase honest. Both install as Claude Code skills and work independently — Faceworks doesn't require gstack, but the methodology was developed using both.
+Faceworks's 8 skills handle the build sequence. gstack handles the pressure testing, design review, QA, and shipping that keep each phase honest. Both install as Claude Code skills and work independently — Faceworks doesn't require gstack, but the methodology was developed using both and they stay in lockstep.
 
 See gstack's [README](https://github.com/garrytan/gstack) for install instructions.
 
