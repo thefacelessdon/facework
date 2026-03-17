@@ -3,294 +3,195 @@ title: "Facework × Build Methodology: The Connective Tissue"
 type: Internal — Methodology Theory
 author: Stedmon
 date: March 2026
+status: Living Document — updated after each project
 ---
 
-# Facework × Build Methodology
+# Facework × Build Methodology: The Connective Tissue
 
-The GAMUT build methodology is not a project management system that happens to be
-well-organized. It is Facework applied to product creation. Every phase of the
-methodology maps to a force in the Primitive Stack. Every output is an architectural
-form from the Facework system.
+This document does the hard work of showing where the Facework theory and the
+GAMUT build methodology are genuinely coherent — and where they aren't yet.
+Retrofitting meaning onto work after the fact is the opposite of coherence.
+So this document is honest about three things:
 
-This document makes the mapping explicit — not to retrofit meaning, but to reveal
-what was already operating beneath the surface.
-
----
-
-## The Primitive Stack as Build Phases
-
-The 7 forces of the Primitive Stack are not metaphors for the build phases.
-They ARE the build phases. Each phase activates a specific force.
-
-```
-PRIMITIVE STACK              BUILD METHODOLOGY               WHAT IT PRODUCES
-─────────────────────────────────────────────────────────────────────────────────
-
-FREQUENCY                    Phase 1: Governance              The irreducible signal.
-The irreducible signal       & Foundation                     Before anything is built,
-of the identity — what                                       extract what this system
-remains when performance,    Business model, rates,           IS at its core. Economics,
-aspiration, and noise        agreements, exit guarantees,     constraints, rights. The
-fall away.                   verification, gates.             truth the system will
-                                                             carry forward.
-
-CURRENT                      Phase 2: Strategic               The directional force.
-The directional force        Pressure Testing                 Surface every question
-that moves the identity                                      that could change the
-through time. Trajectory,    CEO reviews, dilemma             trajectory. Resolve them
-momentum, orientation.       resolution, decision records.    now. Lock direction before
-                                                             momentum builds.
-
-STABILITY                    Phase 3: Architecture            The foundational
-The foundational             Specification                    infrastructure. 10 specs,
-infrastructure that                                          6,500 lines, every system
-supports weight, scale,      Data isolation, payout           defined before a single
-and pressure.                validation, sync models,         line of code. This is the
-                             health monitoring, APIs.         architecture that will
-                                                             carry weight.
-
-FLOW                         Phase 4: Operational             The adaptive intelligence.
-The adaptive intelligence    Playbooks                        9 playbooks that map how
-of the system — how it                                       the system responds to
-responds to change without   Onboarding, marketing,           every scenario without
-losing itself.               billing failure, low-velocity,   losing itself. Thresholds,
-                             creative ops, supply chain.      decision trees, escalation.
-
-RESONANCE                    Phase 5: Platform                The transmission force.
-The force that allows the    Prototype                        A working prototype that
-system to transmit meaning                                   SHOWS what the system is.
-and create movement          Demo mode, lifecycle-aware       Not a pitch. Not a slide.
-outside itself.              rendering, typed schema,         A living artifact that
-                             public pages.                    creates understanding
-                                                             without explanation.
-
-ENTROPY                      Phase 6: Technical               The diagnostic force.
-The breakdown force —        Spine Hardening                  22 issues surfaced.
-friction, contradiction,                                     5 silent failure modes
-misalignment that expose     Eng review across 5 domains,     caught. Every fracture
-structural weakness.         failure mode analysis,           point identified before
-Entropy is diagnostic        critical gap fixes.              it could become a
-truth.                                                       collapse under pressure.
-
-COHERENCE                    Phase 7: Handoff                 The integrating force.
-The structural logic that    & Packaging                      Everything unified into
-integrates every part into                                   a system that holds its
-a unified whole.             README, review brief,            shape when handed to
-                             project tracker, context          someone who wasn't there
-                             packets, engineering guide.       when it was built.
-```
+1. Where the theory and practice are structurally aligned
+2. Where the practice revealed something the theory didn't predict
+3. Where the theory makes claims the practice hasn't yet validated
 
 ---
 
-## The Engines as Architectural Forms
+## I. The Core Alignment That's Real
 
-Facework's engines aren't just theoretical constructs. They're the exact
-combinations that produced each category of GAMUT output.
+Facework's central claim is: **"Most people build surfaces before they build systems."**
 
-### Identity Architecture (Coherence + Frequency)
-**What it is in Facework:** The internal spine — the architecture of truth.
-**What it was in GAMUT:** Phase 1 + Phase 2 combined.
+The GAMUT methodology's central behavior is: **Specs before code. Architecture before prototype. Governance before conversation.**
 
-The business model IS frequency extraction — finding the irreducible economic
-truth ($149/month, 9/3/3 split, 170 accounts = self-sustainability). The
-decision records ARE coherence — ensuring every resolved question strengthens
-the center rather than contradicting it.
+These aren't similar ideas. They're the same idea expressed in two registers — one philosophical, one operational. The theory says identity collapses when you build the surface first. The methodology enforces not building the surface first through gate sequencing.
 
-**Artifacts produced:**
-- Business Model (frequency: what the economics ARE)
-- Fund Governance (coherence: how the system stays aligned)
-- Decision Records (coherence: resolved contradictions documented forever)
-- Creator Agreement (frequency + coherence: the truth the relationship is built on)
+This isn't a metaphor. The 3-gate structure IS Facework's law in action:
 
-### Narrative Architecture (Coherence + Resonance + Flow)
-**What it is in Facework:** How truth becomes communicable.
-**What it was in GAMUT:** Phase 5 + Phase 7 combined.
+> "Anything that is not coherent will eventually contradict itself.
+> Anything that contradicts itself will eventually collapse."
 
-The prototype IS resonance — it transmits understanding without the builder
-present. The review brief IS narrative architecture — it structures how someone
-else enters the system. The handoff package IS flow — the adaptive intelligence
-that allows the system to be inhabited by someone new without losing itself.
+The gates prevent contradiction by ensuring each layer is internally consistent before the next layer is added. Gate 1 (governance) establishes truth. Gate 2 (agreements) commits to that truth contractually. Gate 3 (technical isolation) enforces that truth in infrastructure. Each gate is a coherence check — not a project management milestone.
 
-**Artifacts produced:**
-- Platform prototype (resonance: the system demonstrates itself)
-- Review brief (narrative: structured comprehension for an outsider)
-- Engineering CLAUDE.md (flow: the builder adapts to the system, not vice versa)
-- Platform Narrative (resonance: the pitch that works in any vertical conversation)
-
-### System Architecture (Coherence + Stability + Current)
-**What it is in Facework:** The logic of behavior — workflows, rituals, and
-mechanisms that allow identity to act with integrity.
-**What it was in GAMUT:** Phase 3 + Phase 4 combined.
-
-The architecture specs ARE stability — 6,500 lines of foundational infrastructure.
-The playbooks ARE current — directional workflows that keep the system moving
-with intent. Together, they form the system architecture: the complete logic
-of how GAMUT behaves.
-
-**Artifacts produced:**
-- 10 architecture specs (stability: the foundation)
-- 9 operational playbooks (current: the direction of behavior)
-- Agent operations architecture (stability + current: machines that maintain coherence)
-
-### Ecosystem Architecture (Coherence + Frequency + Resonance + Current)
-**What it is in Facework:** The expansion of identity into a shared logic.
-Multiple participants inhabiting the same system without dilution.
-**What it was in GAMUT:** The handoff to Corey. The review brief. The
-engineering guide. The context packets.
-
-This is the most remarkable mapping. GAMUT's handoff system is explicitly
-designed so that another human can inhabit the same system — build from
-the same specs, follow the same conventions, maintain the same coherence —
-without the original builder present. That IS ecosystem architecture.
-
-**Artifacts produced:**
-- Handoff package (ecosystem: someone else enters the system)
-- Context packets (ecosystem: shared understanding per work item)
-- CLAUDE.md files (ecosystem: Claude Code inhabits the same system coherently)
-
-### Diagnostic Architecture (Coherence + Entropy)
-**What it is in Facework:** The revelation of structural truth. Exposing fractures.
-**What it was in GAMUT:** Phase 6. The eng review.
-
-The eng review IS diagnostic architecture. It exists to surface entropy — the
-friction, contradiction, and misalignment that would otherwise become collapse
-points in production. The 5 critical gaps it found (missed webhooks, stale data,
-hallucination, realtime drops, stuck agents) are textbook entropy: structural
-weaknesses exposed by diagnostic truth.
-
-**Artifacts produced:**
-- 22 resolved issues (entropy identified and addressed)
-- 5 critical gap fixes (entropy that would have been silent failure)
-- Failure mode analysis (diagnostic: every codepath's collapse scenario)
-
-### Scaling Architecture (Coherence + Flow + Current)
-**What it is in Facework:** How the system behaves when accelerated or expanded.
-**What it was in GAMUT:** The agent system itself.
-
-53 agents (18 automated + 35 LLM-assisted) are the scaling architecture.
-They maintain coherence at scale — the same rules, the same thresholds, the
-same quality gates — without requiring proportional human headcount. The
-agent system IS how GAMUT's identity holds its shape under expansion.
-
-The 5-state lifecycle (SHADOW → LIVE → DEGRADED → PAUSED → DISABLED) is
-literally a coherence governor for machine behavior.
-
-**Artifacts produced:**
-- Agent implementation spec (scaling: coherence under expansion)
-- Phase-in sequence (current: ordered growth)
-- Token cost modeling (flow: adaptation within constraints)
+**Where this was proven in GAMUT:** The CMAP rate structure (9/3/3) was resolved in Phase 1 as a Gate 1 item. That single number then propagated through 15+ documents — business model, fund governance, creator agreement, payout validation spec, agent operations. Because it was resolved first and traced to a canonical source, it never contradicted itself across 36,000 lines of specification. That's coherence operating at scale. If the rate had been "we'll figure it out later," every downstream document would have been built on an assumption — and the first real conversation with a creator would have exposed the fracture.
 
 ---
 
-## The Methodology IS Coherence Practice
+## II. Primitive Stack → Build Phases: What's Genuinely True
 
-Here's the core insight: the build methodology doesn't "use" Facework.
-The build methodology IS Facework applied to product creation.
+### Frequency → Phase 1 (Governance & Foundation)
 
-Every principle from the Facework document maps to a methodology behavior:
+Facework defines frequency as "the irreducible signal — what remains when performance, aspiration, and noise fall away."
 
-| Facework Principle | Methodology Behavior |
-|--------------------|---------------------|
-| "Identity is not expression. Identity is architecture." | Specs before code. Architecture before prototype. |
-| "Build the architecture, and the identity will make itself known." | Demo mode: build the system, the UX reveals itself through lifecycle phases. |
-| "Systems are being asked to carry more weight than their coherence allows." | Gate structure: don't advance past a gate until coherence is established. |
-| "Anything not coherent will eventually contradict itself." | Cross-reference checks: every number traces to one canonical source. |
-| "Coherence does not demand sameness. It demands integrity." | Vertical generalization: The Current and Club Volley share infrastructure but differ in expression. |
-| "Entropy is not failure; it is diagnostic truth." | Eng review: entropy is surfaced intentionally, not discovered accidentally. |
-| "Each new layer strengthens the previous one." | Phase sequencing: each phase's output is the next phase's input. |
-| "A coherent identity gains self-reinforcement." | The retro loop: methodology evolves, each project strengthens it. |
+Phase 1 IS frequency extraction. But for a product, not a person. The business model strips away aspiration ("we could be the next Shopify") and isolates the irreducible truth: what this system IS, who pays, how much, what they get, and at what scale it sustains itself. The $149/month price, the 170-account SOM, the 9/3/3 split — these are frequency. They're what remains when the pitch falls away.
 
----
+**Where this holds:** The fund governance document is the clearest frequency artifact. It defines what the Cultural Marketing Fund IS (3% of hub GMV, segregated, creator-benefiting) and what it IS NOT (not operating revenue, not distributable to equity holders, not usable for platform overhead). That negative space — what it is NOT — is pure frequency work. Facework says frequency is what remains when noise falls away. The fund governance achieves this by explicitly naming and removing the noise.
 
-## The Retro as Diagnostic Architecture
+**Where this is incomplete:** Facework's frequency is about identity essence — the deep pattern of a person or system. Phase 1 captures economic frequency but doesn't yet capture the identity frequency of the product itself. GAMUT's identity — "creator commerce infrastructure, not audience building" — was established before Phase 1, in the initial CEO review cycles. The methodology doesn't have a pre-Phase 1 step for identity frequency extraction. It assumes you already know what you're building. That's a gap. Not every project starts with that clarity.
 
-The `/build-retro` skill IS Diagnostic Architecture (Coherence + Entropy)
-applied to the methodology itself.
+### Current → Phase 2 (Strategic Pressure Testing)
 
-After each project:
-1. Surface entropy (what didn't work, what was missing)
-2. Reveal structural truth (which phases need adjustment)
-3. Update the architecture (evolve the methodology)
-4. Log the change (changelog = diagnostic history)
+Facework defines current as "the directional force that moves the identity through time — trajectory, momentum, orientation."
 
-This makes the methodology self-reinforcing — the Facework long game:
-"Each new layer strengthens the previous one."
+Phase 2 is where direction gets locked. The CEO reviews and dilemma resolutions ARE current-setting — they determine which way the system moves. The 3 decisions resolved in GAMUT (Creator OS → Amplifier Program, vertical generalization → Platform Narrative + Appendices, HUE exit → self-contained ops) each eliminated an alternative trajectory. Before the decisions, GAMUT could have gone multiple directions. After, the current was set.
 
----
+**Where this holds:** Decision 005 (Creator OS → Amplifier Program) is the best example. The dilemma was: should we build a separate Creator OS product? The resolution — no, the "Creator OS" is actually the Amplifier Program, an operations capability within existing infrastructure — eliminated an entire product roadmap that would have pulled current in the wrong direction. That's not just a decision. It's current alignment.
 
-## Why This Matters for Collaboration
+**Where this is honest:** Facework says current determines whether the system "advances, stagnates, or regresses." Phase 2 addresses advancing vs stagnating (resolving dilemmas prevents stagnation). But it doesn't yet address regression — what happens when a decision turns out to be wrong mid-build. The methodology says "once resolved, it's resolved." But Facework's own theory implies that current can shift. The methodology needs a mechanism for course-correcting resolved decisions without re-litigating everything. The retro system partially addresses this, but it's post-project, not mid-project.
 
-When you bring this to a collaboration, you're not bringing a project
-management tool. You're bringing a coherence practice.
+### Stability → Phase 3 (Architecture Specification)
 
-**What most people bring to collaboration:**
-- An idea (frequency without stability)
-- A pitch (resonance without architecture)
-- Energy (current without coherence)
+Facework defines stability as "the foundational infrastructure that supports weight, scale, and pressure — not rigidity, but architecture that allows expansion without collapse."
 
-**What you bring:**
-- A system that extracts frequency before building
-- A method that resolves contradictions before they compound
-- Specs that create stability before code
-- Playbooks that design flow before operations
-- Prototypes that demonstrate resonance without explanation
-- Diagnostics that surface entropy before collapse
-- Handoffs that enable ecosystem without dilution
+Phase 3 produces exactly this. 10 specs, 6,500 lines. Every system defined before code. The specs aren't rigid blueprints — they include edge cases, fallbacks, and adaptation mechanisms (API fallback modes, manual-input alternatives, circuit breakers). This IS stability as Facework defines it: architecture that allows expansion without collapse.
 
-This is not a workflow. This is a coherence practice for building things.
-That's the connective tissue. That's why it works.
+**Where this is strongest:** The data isolation spec exemplifies Facework's stability. It doesn't just say "use RLS." It specifies per-creator isolation via Supabase RLS, Stripe Connect scoping per account, Walmart SKU attribution per creator, Shopify store isolation, agent permission scopes, and dashboard role models. Each layer reinforces the others. Remove one and the system still holds because the others compensate. That's stability — not a single wall, but a structural system.
 
----
+**Where the mapping is clean:** Facework says stability "is the architecture that allows expansion without collapse." The GAMUT agent system (53 agents, 5-state lifecycle, 4-queue topology) is literally designed so the platform scales from 10 to 170 creators without adding proportional human headcount. The stability layer carries the weight of scale.
 
-## Command Mapping: Primitives as Build Commands
+### Flow → Phase 4 (Operational Playbooks)
 
-The build methodology commands should use Facework's primitive vocabulary.
-Not "phase-1" through "phase-7" — those are generic. The primitives are specific,
-memorable, and carry the theory's meaning:
+Facework defines flow as "the adaptive intelligence of the system — how it responds to change without losing itself."
 
-```
-/fw-frequency     Phase 1: Extract the irreducible signal
-/fw-current       Phase 2: Establish direction, resolve contradictions
-/fw-stability     Phase 3: Build the architectural foundation
-/fw-flow          Phase 4: Design adaptive behavior
-/fw-resonance     Phase 5: Make it transmissible (prototype)
-/fw-entropy       Phase 6: Reveal structural weakness
-/fw-coherence     Phase 7: Integrate into a unified whole
-/fw-diagnostic    Retro: Measure, evolve, strengthen
-```
+This is the most precise mapping. Every playbook is a flow document — it defines how the system responds to a specific scenario (billing failure, low velocity, onboarding friction, supply chain delay) without losing its coherence. The thresholds, decision trees, and escalation paths ARE flow: adaptive responses that maintain alignment.
 
-The `fw-` prefix marks them as Facework commands. The primitive name
-tells you what force you're activating. The output is the architectural
-form that force produces.
+**Where this is proven:** The billing failure workflow defines a 7-day grace period with escalating notifications. It adapts to the situation (payment failed) without losing the system's coherence (creator gets fair warning, platform protects itself, listings pause gracefully). The low-velocity playbook defines 5 velocity levels and 4 intervention stages, ending with an "honest conversation" — acknowledging when the product-market fit isn't there. That honest conversation is flow in the deepest sense: the system adapts to reality without pretending.
+
+**The important nuance:** Facework says flow "measures elasticity — the capacity to adjust while staying aligned." The playbooks measure this literally — they define how far the system bends (7 days of grace, 4 stages of intervention) before it breaks (listings paused, creator offboarded). Flow isn't infinite. It has limits. The playbooks define those limits.
+
+### Resonance → Phase 5 (Platform Prototype)
+
+Facework defines resonance as "the force that allows the system to transmit meaning and create movement outside itself — not popularity, but consequence."
+
+The prototype IS resonance in the most literal sense. It transmits understanding of what GAMUT is — not through explanation, but through demonstration. A creator opens the dashboard and sees their lifecycle: Day 1 welcome, Day 7 "I'm on Walmart," Day 30 first revenue chart. That progression communicates the platform's identity more effectively than any pitch deck.
+
+**Where this is honest:** The prototype is demo mode — it's resonance with synthetic data. Real resonance happens when a real creator sees real revenue on their dashboard. Phase 5 creates the capacity for resonance. It doesn't yet create resonance itself. The theory and the practice are aligned on mechanism but not yet on outcome. That's fine — it's pre-pilot. But the connective tissue document should be honest: resonance is designed, not yet activated.
+
+**What the practice added to the theory:** The DataSource adapter pattern is a Facework concept the theory didn't articulate. Demo mode is permanent — it allows the system to demonstrate its identity at any time, not just when live data is flowing. This is resonance architecture: building the capacity to transmit meaning into the system's infrastructure, not bolting it on later. The theory talks about resonance as a force. The practice built resonance as a feature.
+
+### Entropy → Phase 6 (Technical Spine Hardening)
+
+Facework defines entropy as "the breakdown force — friction, contradiction, misalignment that expose structural weakness. Entropy is not failure; it is diagnostic truth."
+
+Phase 6 IS entropy, deliberately invited. The eng review's explicit purpose is to surface every fracture point before they become production incidents. The 22 issues found, the 5 critical silent failure modes caught — these are entropy revelations. The practice of running an eng review before build is the practice of inviting entropy on your terms rather than discovering it on the system's terms.
+
+**Where the alignment is deepest:** Facework says entropy "reveals exactly where coherence is missing." The 5 critical gaps from the GAMUT eng review prove this:
+
+1. Missed Stripe webhook — coherence missing between payment system and platform state
+2. Stale WFS data — coherence missing between inventory reality and campaign decisions
+3. Claude hallucination — coherence missing between LLM output and source truth
+4. Realtime subscription drop — coherence missing between agent actions and dashboard visibility
+5. Agent stuck in DEGRADED — coherence missing between agent state and operator awareness
+
+Each gap is a point where two parts of the system could have contradicted each other. Each fix restored coherence at that junction. This is Facework's entropy principle operating at the implementation level.
+
+### Coherence → Phase 7 (Handoff & Packaging)
+
+Facework defines coherence as "the structural logic that integrates every part of the system into a unified whole."
+
+Phase 7 is the test of whether coherence actually holds. If someone can clone the repo, read the review brief, open the engineering guide, browse the project tracker, and start building without a single clarifying meeting — the system is coherent. If they can't, it isn't.
+
+**Where this is the hardest test:** The GAMUT handoff hasn't been tested yet. Corey hasn't reviewed the repo and sent back his response. The connective tissue document was written BEFORE the handoff was validated. That's important to note. Phase 7 claims coherence, but coherence is proven by transmission, not by intention. The first real test of GAMUT's coherence is whether Corey's `review-response.md` comes back with "this is buildable" or "I have 40 questions."
 
 ---
 
-## Repo Structure
+## III. The Engines: Where Practice Refined Theory
 
-This practice should be its own repository:
+### Ecosystem Architecture was the surprise
 
-```
-facework/
-├── README.md                    ← What Facework is, how to install
-├── methodology/
-│   ├── build-methodology.md     ← The 7-phase system (living document)
-│   ├── CHANGELOG.md             ← Version history across projects
-│   └── retros/                  ← Per-project retrospectives
-│       ├── RETRO-TEMPLATE.md
-│       └── 001-gamut-retro.md
-├── theory/
-│   ├── facework-practice.md     ← The full Facework theory document
-│   └── connective-tissue.md     ← This document — theory↔methodology mapping
-└── skills/
-    ├── fw-frequency/SKILL.md
-    ├── fw-current/SKILL.md
-    ├── fw-stability/SKILL.md
-    ├── fw-flow/SKILL.md
-    ├── fw-resonance/SKILL.md
-    ├── fw-entropy/SKILL.md
-    ├── fw-coherence/SKILL.md
-    └── fw-diagnostic/SKILL.md
-```
+Facework defines Ecosystem Architecture as "the expansion of identity into a shared logic — multiple participants inhabiting the same system without dilution."
 
-Install: clone the repo, symlink skills into `~/.claude/skills/`.
-Use: open any project directory, type `/fw-frequency` to begin.
+The GAMUT practice revealed that Ecosystem Architecture isn't just about human collaboration. The CLAUDE.md files — `gamut-ops/CLAUDE.md` (strategic context) and `gamut-platform/CLAUDE.md` (engineering guide) — are ecosystem architecture for AI. They allow Claude Code to inhabit the same system coherently, maintaining the same conventions, referencing the same canonical sources, and producing work that reinforces rather than contradicts the existing architecture.
+
+This is a genuine addition to the theory. Facework's Ecosystem Architecture was conceived for human systems. The practice extended it to human-AI systems. The principle is the same: multiple participants (human AND machine) inhabiting the same structural logic without dilution. But the implementation is new: CLAUDE.md files as ecosystem architecture artifacts.
+
+### Scaling Architecture is the agent system
+
+Facework defines Scaling Architecture as "how the system behaves when accelerated or expanded."
+
+The GAMUT agent system (53 agents, 5-state lifecycle, shadow mode validation) IS Scaling Architecture made operational. The 5-state lifecycle is a coherence governor — it prevents agents from operating at a level of autonomy the system hasn't validated. Shadow mode is the mechanism: run the logic, log the decisions, take no action, until the operator confirms coherence. Only then does the agent go live.
+
+This reframes agents not as automation tools but as coherence maintenance systems. At 170 creators, the same thresholds, the same validation checks, the same quality gates operate through agents. Coherence scales because the agents carry it.
+
+---
+
+## IV. Where the Theory Needs the Practice More
+
+### The theory doesn't address sequencing
+
+Facework describes the Primitive Stack as atomic units — forces that exist simultaneously. The practice revealed they need to be activated in sequence. You can't build stability before extracting frequency. You can't design flow before establishing stability. The theory treats the primitives as coexistent. The methodology proved they're sequential.
+
+This matters because the sequence IS part of the coherence. Running the phases out of order isn't just inefficient — it produces incoherence. Building a prototype (resonance) before writing specs (stability) means the prototype carries no weight. Writing playbooks (flow) before resolving decisions (current) means the playbooks adapt to the wrong direction.
+
+**Proposed theory update:** The Primitive Stack has a natural activation order. Frequency first (know what you are), Current second (know where you're going), Stability third (build what holds), Flow fourth (design how you adapt), Resonance fifth (make it transmissible), Entropy sixth (find what's broken), Coherence seventh (integrate everything). This isn't the only valid order, but it's the default. Deviations from it should be deliberate.
+
+### The theory doesn't address the retro loop
+
+Facework's long game section describes self-reinforcement: "each new layer strengthens the previous one." But it doesn't describe the mechanism. The practice built the mechanism: the `/fw-diagnostic` retro that feeds learnings back into the methodology, updates the changelog, and evolves the skills.
+
+**Proposed theory update:** Self-reinforcement isn't automatic. It requires a diagnostic practice — a regular rhythm of surfacing entropy in the methodology itself, not just in the systems it builds. The retro IS the methodology's coherence check.
+
+### The theory focuses on identity; the practice focuses on product
+
+Facework was written about human identity systems — personal, creative, organizational, cultural. The GAMUT practice applied it to product creation. The principles transferred, but the vocabulary sometimes didn't. "Frequency" as "the irreducible signal of the identity" makes intuitive sense for a person. "Frequency" as "the irreducible economic truth of a product" requires translation.
+
+**Not a problem, but a note:** The practice is a valid application of the theory, not the only one. Facework applied to personal identity work would produce different artifacts than Facework applied to product creation. The primitives are the same. The outputs differ. The connective tissue document should not overfit the theory to the product use case.
+
+---
+
+## V. The Collaboration Argument: What You Actually Show Up With
+
+Facework's conflict statement says: "Systems are being asked to carry more weight than their coherence allows."
+
+Most collaborations fail because people bring fragments: an idea without architecture, a pitch without economics, energy without direction. The collaboration then spends its first months doing the coherence work that should have been done before the collaboration started.
+
+The Facework methodology front-loads that work. When you show up with:
+
+- **Frequency extracted:** The economics are real. The numbers are derived, not invented.
+- **Current set:** The hard decisions are made. The direction is locked.
+- **Stability built:** The architecture exists. Every system is specified.
+- **Flow designed:** The operations are documented. Every workflow has an owner.
+- **Resonance demonstrated:** A working prototype shows what it is. No slides needed.
+- **Entropy surfaced:** The structural weaknesses are found and fixed.
+- **Coherence verified:** The handoff package lets someone enter the system without the builder.
+
+...the collaboration starts from coherence, not toward it. That's the argument. Not "I'm organized." Not "I'm thorough." The argument is: "The hard structural work is done. We can build from here."
+
+The proof is the GAMUT repo: 36,000 lines of specification, a working prototype, 75+ tracked work items with context packets, and a methodology that strengthens itself after every project.
+
+That's not a pitch. That's architecture.
+
+---
+
+## VI. Open Questions (Honest)
+
+1. **Does this methodology work for a project that ISN'T solo-built?** GAMUT was built by one person with Claude Code. Will the phase sequencing hold when multiple humans are working in parallel? Ecosystem Architecture suggests yes, but it's unproven.
+
+2. **Does frequency extraction work when you DON'T already know what you're building?** The methodology assumes you enter Phase 1 with a product concept. What about the exploratory phase before that? Facework's theory might need a Phase 0 — discovery.
+
+3. **How does the retro loop behave across 5+ projects?** The methodology has been validated once. Self-reinforcement is a claim, not yet a pattern. After 3-5 projects, the retro history will either prove or disprove the theory of cumulative evolution.
+
+4. **Can the `/fw-` skills actually execute without the original operator?** If someone else installs the skills and runs `/fw-frequency` on their own project, do they produce coherent output? Or does the methodology require someone who has internalized Facework's theory? If the latter, the skills are tools for the practitioner, not the practice itself.
+
+These are real questions. They'll be answered by doing the work.
