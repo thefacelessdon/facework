@@ -130,7 +130,25 @@ This is why GAMUT exists. Not as a platform that helps creators access retail �
 
 ---
 
-## VI. THE METHOD — FREQUENCY AND CURRENT
+## VI. THE OUTPUT — CULTURAL INTELLIGENCE AND TASTE
+
+Coherence is the structural principle. But what does it produce when it's working?
+
+Two things: cultural intelligence and taste.
+
+**Cultural intelligence** is the capacity to read the room the system was built for — and build accordingly. It's knowing whose energy powers the system, what that community values, how it communicates, and what feels authentic versus extracted. Cultural intelligence is what prevents a coherent system from being coherent *for the wrong people*.
+
+**Taste** is what it looks like when cultural intelligence is embedded in the architecture rather than dependent on one person's presence. Taste is not subjective preference. It is the emergent property of a system where every decision — design, engineering, operations — reinforces the same sensibility without someone standing over it.
+
+Most people think taste doesn't scale. What they mean is that taste doesn't survive extraction. When the person with the vision leaves, or the system grows past their direct control, the coherence degrades and the taste disappears. That's not a taste problem. That's a coherence problem.
+
+Faceworks makes taste scalable because it encodes the structural alignment that produces taste into the build sequence itself. The frequency carries the cultural intelligence. The specs, playbooks, and decision records preserve it. The prototype proves it. The handoff transmits it. Taste survives scaling because coherence survives scaling — and coherence survives scaling because the methodology enforces it at every phase.
+
+**Coherence tells you the system holds together. Cultural intelligence tells you what it holds together and for whom. Taste is the proof that both are working.**
+
+---
+
+## VII. THE METHOD — FREQUENCY AND CURRENT
 
 If coherence is the outcome, Frequency and Current are the tools we use to create it. They are the twin forces of Cultural Physics: perception and propagation, soul and scale.
 
@@ -184,7 +202,7 @@ When Frequency (identity) and Current (infrastructure) vibrate in rhythm, they c
 
 ---
 
-## VII. THE PHILOSOPHY — LAWS OF DESIGN
+## VIII. THE PHILOSOPHY — LAWS OF DESIGN
 
 Faceworks's design language follows five laws drawn from its physics:
 
@@ -200,7 +218,7 @@ When both planes hum at the same frequency, coherence becomes visible — you ca
 
 ---
 
-## VIII. THE AGENT ERA — WHY THIS MATTERS NOW MORE THAN EVER
+## IX. THE AGENT ERA — WHY THIS MATTERS NOW MORE THAN EVER
 
 We are entering the age of AI agents — systems that can ideate, build, and distribute on behalf of humans. This changes the physics of culture in a way that demands coherence thinking.
 
@@ -216,7 +234,7 @@ Cultural Physics provides the evaluation criteria. Faceworks provides the enforc
 
 ---
 
-## IX. THE LONG GAME — THE NORTH STAR
+## X. THE LONG GAME — THE NORTH STAR
 
 **The North Star:** Faceworks is building a self-sustaining current of creative independence — a world where cultural energy can power itself.
 
@@ -234,7 +252,7 @@ That's what we're building.
 
 ---
 
-## X. CLOSING
+## XI. CLOSING
 
 Frequency is identity.
 Current is connection.
