@@ -216,7 +216,7 @@ export function PatternField({
         }
       }
 
-      // Second pass: color mapping
+      // Second pass: color mapping — transparent background
       for (let py = 0; py < h; py++) {
         for (let px = 0; px < w; px++) {
           const idx = (py * w + px) * 4;
@@ -227,10 +227,12 @@ export function PatternField({
             gamma
           );
           const [r, g, b] = lerpColor(normalized);
+          // Alpha from intensity — background is transparent, pattern emerges
+          const alpha = Math.min(255, normalized * 255 * 1.5);
           data[idx] = r;
           data[idx + 1] = g;
           data[idx + 2] = b;
-          data[idx + 3] = 255;
+          data[idx + 3] = alpha;
         }
       }
 
