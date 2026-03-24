@@ -7,10 +7,10 @@ export default function StatusPage() {
     coherenceSnapshot;
 
   return (
-    <div className="mx-auto max-w-5xl px-8 lg:px-20 py-20 space-y-16">
+    <div className="mx-auto max-w-5xl px-6 md:px-8 lg:px-20 py-16 md:py-20 space-y-12">
       <div className="space-y-4">
-        <h1 className="text-3xl font-normal tracking-tight">Status</h1>
-        <p className="text-muted max-w-xl leading-relaxed">
+        <h1 className="text-2xl md:text-3xl font-normal tracking-tight">Status</h1>
+        <p className="text-sm md:text-base text-muted max-w-xl leading-relaxed">
           Facework&apos;s own coherence tracker. If the protocol demands
           transparency and sovereignty from the systems it builds, it must
           practice the same.
@@ -21,21 +21,21 @@ export default function StatusPage() {
       </div>
 
       {/* Progress Metrics */}
-      <section className="space-y-6">
+      <section className="space-y-4">
         <h2 className="text-xs tracking-[0.2em] uppercase text-muted">
           MVP Progress
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-border">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {[
             { label: "Protocol Runs", value: metrics.completedRuns, max: metrics.targetRuns, suffix: "" },
             { label: "Public References", value: metrics.publicReferences, max: metrics.targetReferences, suffix: "" },
             { label: "Revenue Floor", value: metrics.monthsAtFloor, max: metrics.targetMonthsAtFloor, suffix: " mo" },
           ].map((metric) => (
-            <div key={metric.label} className="bg-background p-6 space-y-3">
+            <div key={metric.label} className="border border-border rounded p-5 space-y-3">
               <p className="text-xs tracking-[0.15em] uppercase text-muted">{metric.label}</p>
-              <p className="text-3xl font-normal">
+              <p className="text-2xl md:text-3xl font-normal">
                 {metric.value}
-                <span className="text-muted text-lg">
+                <span className="text-muted text-base md:text-lg">
                   /{metric.max}{metric.suffix}
                 </span>
               </p>
@@ -46,19 +46,21 @@ export default function StatusPage() {
       </section>
 
       {/* Stage Boundaries */}
-      <section className="space-y-6">
+      <section className="space-y-4">
         <h2 className="text-xs tracking-[0.2em] uppercase text-muted">
           Stage Boundaries
         </h2>
-        <div className="space-y-px bg-border">
+        <div className="space-y-3">
           {stages.map((stage) => (
             <div
               key={stage.stage}
-              className={`bg-background p-6 space-y-4 ${
-                stage.status === "active" ? "border-l-2 border-l-coherence" : ""
+              className={`border rounded p-5 space-y-4 ${
+                stage.status === "active"
+                  ? "border-coherence/30 border-l-2 border-l-coherence"
+                  : "border-border"
               }`}
             >
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-4">
                 <h3 className="text-sm font-medium tracking-wide">{stage.label}</h3>
                 <StatusBadge
                   status={
@@ -71,7 +73,7 @@ export default function StatusPage() {
                 />
               </div>
               <p className="text-sm text-muted">{stage.description}</p>
-              <div className="space-y-2 mt-2">
+              <div className="space-y-2">
                 <p className="text-xs tracking-[0.15em] uppercase text-muted">
                   Exit Criteria
                 </p>
@@ -83,22 +85,16 @@ export default function StatusPage() {
                           ? "text-coherence"
                           : item.status === "in-progress"
                             ? "text-resonance"
-                            : "text-muted"
+                            : "text-muted/40"
                       }`}
                       aria-hidden="true"
                     >
-                      {item.status === "complete"
-                        ? "●"
-                        : item.status === "in-progress"
-                          ? "◐"
-                          : "○"}
+                      {item.status === "complete" ? "●" : item.status === "in-progress" ? "◐" : "○"}
                     </span>
                     <div>
                       <p className="text-muted">{item.description}</p>
                       {item.evidence && (
-                        <p className="text-xs text-muted mt-0.5 opacity-60">
-                          {item.evidence}
-                        </p>
+                        <p className="text-xs text-muted/60 mt-0.5">{item.evidence}</p>
                       )}
                     </div>
                   </div>
@@ -110,7 +106,7 @@ export default function StatusPage() {
       </section>
 
       {/* No-Go Lines */}
-      <section className="space-y-6">
+      <section className="space-y-4">
         <h2 className="text-xs tracking-[0.2em] uppercase text-muted">
           No-Go Lines
         </h2>
@@ -118,10 +114,10 @@ export default function StatusPage() {
           {noGoLines.map((line, i) => (
             <div
               key={i}
-              className="flex items-start gap-4 border border-border rounded p-4"
+              className="flex flex-col sm:flex-row sm:items-start gap-3 border border-border rounded p-4"
             >
               <span
-                className={`text-xs tracking-wide px-1.5 py-0.5 rounded border ${
+                className={`text-xs tracking-wide px-1.5 py-0.5 rounded border w-fit ${
                   line.type === "hard"
                     ? "text-entropy border-entropy/30"
                     : "text-resonance border-resonance/30"
@@ -132,7 +128,7 @@ export default function StatusPage() {
               <div className="flex-1">
                 <p className="text-sm text-muted">{line.description}</p>
                 {line.detail && (
-                  <p className="text-xs text-muted mt-1 opacity-60">{line.detail}</p>
+                  <p className="text-xs text-muted/60 mt-1">{line.detail}</p>
                 )}
               </div>
               <span
@@ -152,13 +148,13 @@ export default function StatusPage() {
       </section>
 
       {/* Non-Negotiables */}
-      <section className="space-y-6">
+      <section className="space-y-4">
         <h2 className="text-xs tracking-[0.2em] uppercase text-muted">
           Non-Negotiables
         </h2>
-        <div className="space-y-4">
+        <div className="space-y-3">
           {nonNegotiables.map((item, i) => (
-            <div key={i} className="flex gap-4 items-start">
+            <div key={i} className="flex gap-3 items-start">
               <span className="text-coherence mt-0.5 text-xs" aria-hidden="true">●</span>
               <p className="text-sm text-muted">{item}</p>
             </div>

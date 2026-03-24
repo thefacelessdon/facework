@@ -1,29 +1,29 @@
 export default function EngagePage() {
   return (
-    <div className="mx-auto max-w-5xl px-8 lg:px-20 py-20 space-y-16">
+    <div className="mx-auto max-w-5xl px-6 md:px-8 lg:px-20 py-16 md:py-20 space-y-12">
       <div className="space-y-4">
-        <h1 className="text-3xl font-normal tracking-tight">Work with Facework</h1>
-        <p className="text-muted max-w-xl leading-relaxed">
+        <h1 className="text-2xl md:text-3xl font-normal tracking-tight">Work with Facework</h1>
+        <p className="text-sm md:text-base text-muted max-w-xl leading-relaxed">
           One conversation. If the fit is right, we scope it. If it&apos;s not,
           you leave with useful perspective anyway.
         </p>
       </div>
 
       {/* Pricing Philosophy */}
-      <section className="space-y-6">
+      <section className="space-y-5">
         <h2 className="text-xs tracking-[0.2em] uppercase text-muted">
           How pricing works
         </h2>
-        <div className="space-y-5 max-w-2xl">
-          <p className="text-lg leading-relaxed">
+        <div className="space-y-4 max-w-2xl">
+          <p className="text-base md:text-lg leading-relaxed">
             Facework doesn&apos;t price by deliverable or by hour.
           </p>
-          <p className="leading-relaxed">
+          <p className="text-sm md:text-base leading-relaxed">
             It prices by depth, complexity, and the coherence shift required.
             Some creators need a diagnostic and a realignment. Others need a full
             rebuild of their governance, architecture, and systems.
           </p>
-          <p className="text-muted leading-relaxed">
+          <p className="text-sm md:text-base text-muted leading-relaxed">
             You&apos;re not paying for time. You&apos;re paying for the architecture
             that changes how you operate.
           </p>
@@ -32,14 +32,14 @@ export default function EngagePage() {
 
       <hr />
 
-      {/* Engagement Variants — split 50/50 */}
-      <section className="space-y-6">
+      {/* Engagement Variants */}
+      <section className="space-y-5">
         <h2 className="text-xs tracking-[0.2em] uppercase text-muted">
           Engagement types
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-border">
-          <div className="bg-background p-8 space-y-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="border border-border rounded p-6 space-y-4">
             <div>
               <h3 className="text-sm font-medium tracking-wide">Full Protocol</h3>
               <p className="text-xs text-muted mt-1 tracking-wide">5–8 days</p>
@@ -52,7 +52,7 @@ export default function EngagePage() {
             <p className="text-sm text-muted">$15K – $25K</p>
           </div>
 
-          <div className="bg-background p-8 space-y-5">
+          <div className="border border-border rounded p-6 space-y-4">
             <div>
               <h3 className="text-sm font-medium tracking-wide">Foundation Only</h3>
               <p className="text-xs text-muted mt-1 tracking-wide">3–5 days</p>
@@ -74,12 +74,12 @@ export default function EngagePage() {
 
       <hr />
 
-      {/* How It Works — single-column */}
-      <section className="space-y-6">
+      {/* How It Works */}
+      <section className="space-y-5">
         <h2 className="text-xs tracking-[0.2em] uppercase text-muted">
           How it works
         </h2>
-        <div className="space-y-6 max-w-2xl">
+        <div className="space-y-5 max-w-2xl">
           {[
             {
               step: "01",
@@ -112,13 +112,13 @@ export default function EngagePage() {
                 "Everything transferred to your accounts. Repository, docs, code — all yours. A new builder can start Day 1 without a meeting.",
             },
           ].map((item) => (
-            <div key={item.step} className="flex gap-6 items-start">
-              <span className="text-xs text-muted w-6 shrink-0 mt-0.5">
+            <div key={item.step} className="flex gap-5 items-start">
+              <span className="text-xs text-muted w-5 shrink-0 mt-0.5">
                 {item.step}
               </span>
-              <div className="border-l border-border pl-6">
+              <div className="border-l border-border pl-5">
                 <p className="text-sm font-medium tracking-wide">{item.title}</p>
-                <p className="text-sm text-muted mt-1 leading-relaxed">
+                <p className="text-sm text-muted mt-1.5 leading-relaxed">
                   {item.detail}
                 </p>
               </div>
@@ -130,18 +130,18 @@ export default function EngagePage() {
       <hr />
 
       {/* Qualification */}
-      <section className="space-y-6">
+      <section className="space-y-5">
         <h2 className="text-xs tracking-[0.2em] uppercase text-muted">
           This is for you if
         </h2>
-        <div className="space-y-4">
+        <div className="space-y-3">
           {[
             "You have an existing creative practice or brand with economic activity",
             "You need operational infrastructure you control — not another platform dependency",
             "You're willing to participate in the process, not outsource-and-forget",
             "Your business model doesn't extract from the community it serves",
           ].map((item) => (
-            <div key={item} className="flex gap-4 items-start">
+            <div key={item} className="flex gap-3 items-start">
               <span className="text-coherence mt-0.5 text-xs" aria-hidden="true">●</span>
               <p className="text-sm text-muted">{item}</p>
             </div>
@@ -152,8 +152,8 @@ export default function EngagePage() {
       <hr />
 
       {/* Contact */}
-      <section className="border border-border rounded p-12 text-center space-y-6">
-        <p className="text-xl font-normal tracking-tight">
+      <section className="border border-border rounded p-8 md:p-12 text-center space-y-5">
+        <p className="text-lg md:text-xl font-normal tracking-tight">
           What problem are you trying to make coherent?
         </p>
         <p className="text-sm text-muted max-w-md mx-auto">
