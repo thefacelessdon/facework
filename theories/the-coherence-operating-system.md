@@ -169,15 +169,32 @@ Engines are combinations of primitives that produce specific categories of outpu
 
 ## VI. THE SEQUENCE
 
-```
-/fw-frequency   →  /fw-current    →  /fw-stability  →  /fw-flow
-Extract signal     Lock direction     Build foundation   Design adaptation
+The full build sequence maps 12 primitives across 10 phases (0–9). The
+protocol defines the phases. The methodology implements them. The skills
+execute them. One direction of authority: Theory → Protocol → Methodology → Skills.
 
-/fw-resonance   →  /fw-entropy    →  /fw-coherence  →  /fw-diagnostic
-Make transmissible  Find fractures    Integrate & hand off  Evolve the practice
+```
+Phase 0: Intake           Capture hunch, context, constraints
+
+/fw-semantics   →  /fw-field       →  /fw-taste
+Extract meaning    Map social physics  Set quality bar + DESIGN.md
+
+/fw-frequency   →  /fw-current
+Extract signal     Lock direction
+
+/fw-flow        →  /fw-stability
+Design adaptation  Build foundation
+
+/fw-resonance   →  /fw-entropy + /fw-sovereignty + /fw-consonance
+Make transmissible  Integrity: pressure test + verify ownership + align layers
+
+/fw-coherence   →  /fw-diagnostic
+Integrate & hand off  Evolve the practice
 ```
 
 Each phase produces artifacts the next phase consumes. Skip a phase and the downstream work is built on assumptions. Run them out of order and the system accrues incoherence at the foundation level — the most expensive kind to fix.
+
+The five primitives added in the second generation (Semantics, Field, Taste, Sovereignty, Consonance) are not optional extensions. They were tested against a real project and caught signal the original seven missed: naming contradictions, social adoption dynamics, quality governance gaps, and undocumented sovereignty risks. They are load-bearing.
 
 After the build: `/fw-diagnostic` captures what worked, what didn't, and what was missing. It feeds back into the methodology, updates the changelog, and the next project starts from the evolved system.
 

@@ -1,7 +1,7 @@
-# Facework Protocol v1
+# Facework Protocol v2
 
-Status: Draft  
-Version: 1.0.0
+Status: Draft
+Version: 2.0.0
 
 Facework Protocol is an open standard for turning cultural signal into coherent, ownable business systems for creators and cultural brands.
 
@@ -22,17 +22,21 @@ This spec defines:
 
 ## 2) Canonical Objects
 
-A conforming implementation should produce these objects:
+A conforming implementation MUST produce these objects:
 
+- `IntakeRecord`
 - `SignalThesis`
 - `AudienceFieldMap`
 - `TasteContract`
+- `DesignLanguageSpec`
 - `DecisionLedger`
 - `WedgeSpec`
-- `SystemArchitecture`
 - `WorkflowPlaybooks`
+- `SystemArchitecture`
 - `LaunchPlan`
 - `SovereigntyMap`
+- `ConsonanceCheck`
+- `HandoffPackage`
 - `DiagnosticReport`
 
 ## 3) Lifecycle Phases
@@ -67,14 +71,16 @@ Gate:
 - Initial entry vector selected.
 
 ### Phase 3: Taste
-Goal: Convert intuition into explicit quality governance.
+Goal: Convert intuition into explicit quality governance and design language.
 
-Required output:
+Required outputs:
 - `TasteContract`
+- `DesignLanguageSpec` (delivered as DESIGN.md)
 
 Gate:
 - Testable acceptance/rejection criteria.
 - On-brand and off-brand examples.
+- Design language covers: typography, color (mapped to states), grid, motion, iconography, tone.
 
 ### Phase 4: Strategy Lock (Frequency + Current)
 Goal: Lock direction and governing business logic.
@@ -87,38 +93,55 @@ Gate:
 - No unresolved strategic contradictions.
 - Wedge has audience, offer, channel, and economic logic.
 
-### Phase 5: Architecture and Flow (Stability + Flow)
-Goal: Produce buildable architecture and executable operating workflows.
+### Phase 5: Architecture and Flow (Flow + Stability)
+Goal: Document operational reality, then produce buildable architecture.
 
 Required outputs:
-- `SystemArchitecture`
 - `WorkflowPlaybooks`
+- `SystemArchitecture`
 
 Gate:
-- Build artifacts are implementable without founder context.
 - Workflows include triggers, thresholds, ownership, and escalation paths.
+- Build artifacts are implementable without founder context.
+- Playbooks inform specs (operational reality before architecture).
 
-### Phase 6: Activation (Resonance + Launch Ops)
-Goal: Build transmissible implementation and launch sequencing.
+### Phase 6: Activation (Resonance)
+Goal: Build transmissible implementation from DESIGN.md. Permanent demo mode.
 
-Required output:
+Required outputs:
 - `LaunchPlan`
+- Working prototype with demo data, typed schema, test suite
 
 Gate:
+- Prototype carries the frequency of the community it serves.
+- DESIGN.md applied (not generic SaaS patterns).
 - Launch roles, sequencing, metrics, and rollback conditions defined.
 
-### Phase 7: Integrity (Sovereignty + Consonance)
-Goal: Enforce ownership boundaries and cross-artifact alignment.
+### Phase 7: Integrity (Entropy + Sovereignty + Consonance)
+Goal: Pressure test, enforce ownership boundaries, verify cross-layer alignment.
 
 Required outputs:
 - `SovereigntyMap`
 - `ConsonanceCheck`
+- Resolved issues and critical gap fixes
 
 Gate:
 - Dependencies classified as own/rent/mitigate.
 - No unresolved cross-artifact contradictions.
+- Extraction review passed.
+- All critical gaps addressed.
 
-### Phase 8: Evolution (Diagnostic)
+### Phase 8: Integration (Coherence)
+Goal: Package for handoff. Prove transmission.
+
+Required output:
+- `HandoffPackage` (README, review brief, project tracker, engineering guide)
+
+Gate:
+- New builder can start without the original builder present.
+- Community this serves can understand and operate the system independently.
+
+### Phase 9: Evolution (Diagnostic)
 Goal: Convert outcomes into method upgrades.
 
 Required output:
@@ -126,6 +149,7 @@ Required output:
 
 Gate:
 - Lessons include concrete updates to templates, tests, or rules.
+- Coherence scorecard produced with Flow, Resonance, Entropy scores.
 
 ## 4) Manifest Interoperability
 
@@ -145,7 +169,7 @@ The terms "MUST", "MUST NOT", "SHOULD", and "MAY" in this document are used as d
 
 ## 6) Minimum Conformance
 
-A project is minimally conformant with Facework Protocol v1 only if:
+A project is minimally conformant with Facework Protocol v2 only if:
 - all required primitive artifacts are present,
 - all phase gates are explicitly marked pass/fail with evidence,
 - manifest validates against schema,

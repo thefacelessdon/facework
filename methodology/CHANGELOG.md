@@ -1,3 +1,32 @@
+# v4.0 — 2026-03-24 (Protocol Reconciliation)
+
+**What changed:**
+- Reconciled protocol and methodology into a single 10-phase sequence (0–9).
+  The protocol (PROTOCOL.md) is the source of truth. The methodology implements it.
+  The skills execute the methodology. One direction of authority:
+  Theory → Protocol → Methodology → Skills.
+- All 12 primitives are now load-bearing and part of the canonical sequence.
+  Semantics, Field, and Taste run BEFORE Frequency (meaning before economics).
+  Sovereignty and Consonance join Entropy in the Integrity phase.
+- Protocol bumped to v2.0.0 with reconciled phase structure.
+- README updated: 13 skills, 10-phase loop diagram, reconciled commands table.
+- Coherence OS theory updated with full 12-primitive sequence.
+
+**New canonical objects added to protocol:**
+- `IntakeRecord` (Phase 0)
+- `DesignLanguageSpec` / DESIGN.md (Phase 3: Taste)
+- `ConsonanceCheck` (Phase 7: Integrity)
+- `HandoffPackage` (Phase 8: Integration)
+
+**Triggered by:** Running /fw-current to resolve the structural question of
+where 5 new primitives fit. Discovery: PROTOCOL.md already had a 9-phase
+structure that included all primitives, but the methodology never aligned to it.
+The test evidence from running both against Facework proved the protocol's
+structure was correct — the 5 "missing" primitives caught real signal. The
+coherent response: reconcile into one source of truth.
+
+---
+
 # v3.0 — 2026-03-24 (Facework Self-Application)
 
 **What changed:**

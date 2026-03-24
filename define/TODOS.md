@@ -129,3 +129,4 @@ Everything needed before "Facework Protocol Conformant" means something.
 | 013 | Design Language Spec required in Resonance phase | RESOLVED | 2026-03-24 |
 | 014 | Pricing philosophy leads, ranges visible as secondary | RESOLVED | 2026-03-24 |
 | 015 | New primitives tested: 3 critical fixes, structural integration deferred | RESOLVED | 2026-03-24 |
+| 016 | Protocol is source of truth; 10-phase sequence reconciled across all layers | RESOLVED | 2026-03-24 |

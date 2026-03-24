@@ -25,12 +25,17 @@ There is a deeper pattern underneath the structural one. The history of creative
 Seven forces. Each one activates a phase of the build.
 
 ```
-FREQUENCY       Extract the irreducible signal
+SEMANTICS       Extract meaning, define canonical language
+FIELD           Map social dynamics and adoption physics
+TASTE           Set quality governance + design language
+FREQUENCY       Extract the irreducible economic signal
 CURRENT         Establish direction, resolve contradictions
-STABILITY       Build the architectural foundation
-FLOW            Design adaptive behavior
-RESONANCE       Make it transmissible
+FLOW            Design adaptive behavior (playbooks)
+STABILITY       Build the architectural foundation (specs)
+RESONANCE       Make it transmissible (prototype from DESIGN.md)
 ENTROPY         Reveal structural weakness
+SOVEREIGNTY     Enforce ownership boundaries
+CONSONANCE      Verify cross-layer alignment
 COHERENCE       Integrate into a unified whole
 ```
 
@@ -44,11 +49,11 @@ cd facework
 ./install.sh
 ```
 
-This symlinks 8 skills into your Claude Code environment.
+This symlinks 13 skills into your Claude Code environment.
 
 ## Protocol and Validation
 
-Facework Protocol v1 docs:
+Facework Protocol v2 docs:
 
 - `PROTOCOL.md`
 - `COMPLIANCE.md`
@@ -94,34 +99,53 @@ make protocol-check
 Open Claude Code in any project directory. Type:
 
 ```
-/fw-frequency
+/fw-semantics
 ```
 
-It will ask about your product, build the governance layer (business model, rates, agreements, gates), and tell you when to run `/fw-current`. Chain through all 7 primitives. End with `/fw-diagnostic` to capture learnings and evolve the methodology.
+It will ask about what you're building, extract canonical meaning, and tell you when to run the next phase. Chain through all 10 phases. End with `/fw-diagnostic` to capture learnings and evolve the methodology.
 
 ## Commands
 
-| Command | Primitive | What It Produces |
-|---------|-----------|-----------------|
-| `/fw-frequency` | Frequency | Business model, rate structure, fund governance, agreements, exit guarantees, verification protocol, 3-gate security sequence |
-| `/fw-current` | Current | Dilemmas surfaced, decision records with reasoning, all contradictions resolved |
-| `/fw-stability` | Stability | Architecture specs — one per system. Schemas, state machines, data flows, edge cases, acceptance criteria |
-| `/fw-flow` | Flow | Operational playbooks — every workflow mapped to human/agent ownership with thresholds and escalation |
-| `/fw-resonance` | Resonance | Working prototype with demo data, typed schema, lifecycle-aware rendering, test suite |
-| `/fw-entropy` | Entropy | 5-domain eng review, failure mode analysis, implementation specs, tool registries, prompt specs, critical gap fixes |
-| `/fw-coherence` | Coherence | README, review brief, project tracker with context packets, engineering guide, clean GitHub repo |
-| `/fw-diagnostic` | Diagnostic | Project retrospective — captures learnings, updates methodology, logs changes in changelog |
+| Command | Phase | What It Produces |
+|---------|-------|-----------------|
+| `/fw-semantics` | 1: Semantics | Signal thesis, canonical language, distortion risks, audience interpretation map |
+| `/fw-field` | 2: Field | Field participant map, status/incentive model, adoption dynamics, extraction risk map |
+| `/fw-taste` | 3: Taste | Taste contract, DESIGN.md (design language spec), quality rubric, anti-patterns |
+| `/fw-frequency` | 4: Strategy Lock | Business model, rate structure, governance, agreements, exit guarantees, gates |
+| `/fw-current` | 4: Strategy Lock | Dilemmas surfaced, decision records with reasoning, all contradictions resolved |
+| `/fw-flow` | 5: Architecture+Flow | Operational playbooks — every workflow mapped to human/agent ownership |
+| `/fw-stability` | 5: Architecture+Flow | Architecture specs — schemas, state machines, data flows, edge cases |
+| `/fw-resonance` | 6: Activation | Working prototype from DESIGN.md, demo data, typed schema, test suite |
+| `/fw-entropy` | 7: Integrity | Pressure test, failure mode analysis, implementation specs, critical gap fixes |
+| `/fw-sovereignty` | 7: Integrity | Ownership/control matrix, dependency risk tiers, exit audit, sovereignty requirements |
+| `/fw-consonance` | 7: Integrity | Cross-layer alignment check, contradiction register, stakeholder consonance |
+| `/fw-coherence` | 8: Integration | README, review brief, project tracker, engineering guide, clean repo |
+| `/fw-diagnostic` | 9: Evolution | Project retrospective — captures learnings, updates methodology, logs changes |
 
 ## The Loop
 
 ```
-/fw-frequency → /fw-current → /fw-stability → /fw-flow →
-/fw-resonance → /fw-entropy → /fw-coherence → /fw-diagnostic
-                                                    ↓
-                                          methodology evolves
-                                                    ↓
-                                          next project starts
-                                          from updated system
+Phase 0: Intake
+
+/fw-semantics → /fw-field → /fw-taste
+Extract meaning   Map social physics   Set quality bar + DESIGN.md
+
+/fw-frequency → /fw-current
+Extract signal    Lock direction
+
+/fw-flow → /fw-stability
+Design operations   Build architecture
+
+/fw-resonance → /fw-entropy + /fw-sovereignty + /fw-consonance
+Build prototype    Integrity: pressure test + ownership + alignment
+
+/fw-coherence → /fw-diagnostic
+Package handoff     Evolve the practice
+                         ↓
+               methodology evolves
+                         ↓
+               next project starts
+               from updated system
 ```
 
 Every project makes the practice better. Every retro is a version bump.
