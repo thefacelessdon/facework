@@ -1,10 +1,15 @@
 import Link from "next/link";
+import { PatternField } from "@/components/PatternField";
 
 export default function Home() {
   return (
     <div className="mx-auto max-w-5xl px-6 md:px-8 lg:px-20">
-      {/* Hero */}
-      <section className="pt-16 md:pt-24 pb-16 md:pb-20 space-y-8">
+      {/* Hero with pattern background */}
+      <section className="pt-16 md:pt-24 pb-16 md:pb-20 space-y-8 relative">
+        <div className="absolute inset-0 -mx-6 md:-mx-8 lg:-mx-20 overflow-hidden pointer-events-none">
+          <PatternField opacity={0.15} speed={0.3} />
+        </div>
+        <div className="relative space-y-8">
         <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-normal leading-[1.15] tracking-tight max-w-3xl">
           An open protocol for turning cultural signal into coherent, ownable
           business systems.
@@ -15,12 +20,13 @@ export default function Home() {
           control — not platforms that control them.
         </p>
 
-        <div className="text-sm text-muted border border-border rounded px-5 py-3 inline-block">
+        <div className="text-sm text-muted border border-border bg-background/80 backdrop-blur-sm rounded px-5 py-3 inline-block">
           <span className="text-muted">Coherence</span>{" "}
           <span className="text-foreground">=</span>{" "}
           <span className="text-foreground">(Flow × Resonance)</span>{" "}
           <span className="text-muted">/</span>{" "}
           <span className="text-foreground">(1 + Entropy)</span>
+        </div>
         </div>
       </section>
 

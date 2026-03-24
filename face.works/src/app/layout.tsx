@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { JetBrains_Mono } from "next/font/google";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
+import { PrimitivesBar } from "@/components/PrimitivesBar";
 import "./globals.css";
 
 const jetbrainsMono = JetBrains_Mono({
@@ -25,6 +26,7 @@ export default function RootLayout({
     <html lang="en" className={`${jetbrainsMono.variable} h-full`}>
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <Nav />
+        <PrimitivesBar />
         <main className="flex-1">{children}</main>
         <Footer />
       </body>
