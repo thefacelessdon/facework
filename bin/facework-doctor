@@ -1,0 +1,69 @@
+#!/bin/bash
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+SKILL_DIR="$HOME/.claude/skills"
+
+REQUIRED=(
+  fw-frequency
+  fw-current
+  fw-stability
+  fw-flow
+  fw-resonance
+  fw-entropy
+  fw-coherence
+  fw-diagnostic
+  fw-semantics
+  fw-field
+  fw-taste
+  fw-consonance
+  fw-sovereignty
+)
+
+echo "Facework doctor"
+echo "Repo: $ROOT_DIR"
+echo "Skills dir: $SKILL_DIR"
+echo
+
+missing=0
+noncanonical=0
+for skill in "${REQUIRED[@]}"; do
+  path="$SKILL_DIR/$skill"
+  expected="$ROOT_DIR/skills/$skill"
+
+  if [ ! -e "$path" ]; then
+    echo "[missing] $skill"
+    missing=1
+    continue
+  fi
+
+  if [ ! -L "$path" ]; then
+    echo "[noncanonical] $skill (exists but is not a symlink)"
+    noncanonical=1
+    continue
+  fi
+
+  target="$(readlink "$path" || true)"
+  if [ "$target" != "$expected" ]; then
+    echo "[noncanonical] $skill -> $target (expected $expected)"
+    noncanonical=1
+    continue
+  fi
+
+  echo "[ok] $skill"
+done
+
+echo
+if [ "$missing" -eq 1 ]; then
+  echo "Some required primitives are missing."
+  echo "Run: $ROOT_DIR/bin/install-skills"
+  exit 1
+fi
+
+if [ "$noncanonical" -eq 1 ]; then
+  echo "Some required primitives do not resolve to Facework canonical paths."
+  echo "Run: $ROOT_DIR/bin/install-skills"
+  exit 1
+fi
+
+echo "All required primitives are installed."

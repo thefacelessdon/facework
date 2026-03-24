@@ -1,0 +1,112 @@
+#!/bin/bash
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+SKILL_DIR="$HOME/.claude/skills"
+BACKUP_ROOT="$SKILL_DIR/.facework-backups"
+RUN_ID="$(date +%Y%m%d-%H%M%S)"
+BACKUP_DIR="$BACKUP_ROOT/$RUN_ID"
+
+mkdir -p "$SKILL_DIR"
+mkdir -p "$BACKUP_ROOT"
+
+SKILLS=(
+  fw-frequency
+  fw-current
+  fw-stability
+  fw-flow
+  fw-resonance
+  fw-entropy
+  fw-coherence
+  fw-diagnostic
+  fw-semantics
+  fw-field
+  fw-taste
+  fw-consonance
+  fw-sovereignty
+  mvp-cut
+  beta-hardening
+  scale-readiness
+  contract-sync
+  decision-log
+  weekly-upgrade
+  evidence-debug
+  launch-ops
+)
+
+PRIMITIVES=(
+  fw-frequency
+  fw-current
+  fw-stability
+  fw-flow
+  fw-resonance
+  fw-entropy
+  fw-coherence
+  fw-diagnostic
+  fw-semantics
+  fw-field
+  fw-taste
+  fw-consonance
+  fw-sovereignty
+)
+
+is_primitive() {
+  local candidate="$1"
+  for primitive in "${PRIMITIVES[@]}"; do
+    if [ "$primitive" = "$candidate" ]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
+backup_path() {
+  local dst_path="$1"
+  local skill_name="$2"
+  mkdir -p "$BACKUP_DIR"
+  mv "$dst_path" "$BACKUP_DIR/$skill_name"
+  echo "[backup] $dst_path -> $BACKUP_DIR/$skill_name"
+}
+
+echo "Installing Facework skills to $SKILL_DIR"
+
+for skill in "${SKILLS[@]}"; do
+  src="$ROOT_DIR/skills/$skill"
+  dst="$SKILL_DIR/$skill"
+
+  if [ ! -d "$src" ]; then
+    echo "[warn] missing source: $src"
+    continue
+  fi
+
+  if [ -L "$dst" ]; then
+    target="$(readlink "$dst" || true)"
+    if [ "$target" = "$src" ]; then
+      if is_primitive "$skill"; then
+        echo "[ok] $skill (already canonical)"
+      else
+        echo "[ok] $skill (already linked)"
+      fi
+      continue
+    fi
+    backup_path "$dst" "$skill"
+  elif [ -e "$dst" ]; then
+    backup_path "$dst" "$skill"
+  fi
+
+  ln -s "$src" "$dst"
+  if is_primitive "$skill"; then
+    echo "[ok] $skill (canonicalized)"
+  else
+    echo "[ok] $skill"
+  fi
+done
+
+echo
+if [ -d "$BACKUP_DIR" ]; then
+  echo "Backups stored at: $BACKUP_DIR"
+else
+  echo "No backups were needed."
+fi
+echo "Installed Facework skills."
+echo "Run: $ROOT_DIR/bin/facework-doctor"

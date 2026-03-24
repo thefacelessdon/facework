@@ -9,36 +9,13 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 echo ""
 echo "  FACEWORKS: A Coherence Practice"
-echo "  Installing build primitives..."
+echo "  Installing canonical skills..."
 echo ""
 
-mkdir -p "$SKILL_DIR"
-
-SKILLS=(
-  fw-frequency
-  fw-current
-  fw-stability
-  fw-flow
-  fw-resonance
-  fw-entropy
-  fw-coherence
-  fw-diagnostic
-)
-
-for skill in "${SKILLS[@]}"; do
-  if [ -L "$SKILL_DIR/$skill" ]; then
-    rm "$SKILL_DIR/$skill"
-  fi
-  if [ -d "$SKILL_DIR/$skill" ]; then
-    echo "  [skip] $skill already exists as directory — back up and retry if needed"
-    continue
-  fi
-  ln -s "$SCRIPT_DIR/skills/$skill" "$SKILL_DIR/$skill"
-  echo "  [ok]   $skill"
-done
+"$SCRIPT_DIR/bin/install-skills"
 
 echo ""
-echo "  8 Faceworks skills installed."
+echo "  Facework skill set installed."
 echo ""
 
 # gstack detection
@@ -79,4 +56,13 @@ echo "    /fw-resonance     Make it transmissible"
 echo "    /fw-entropy       Reveal structural weakness"
 echo "    /fw-coherence     Integrate into unified whole"
 echo "    /fw-diagnostic    Measure and evolve"
+echo "    /fw-semantics     Extract meaning"
+echo "    /fw-field         Map cultural physics"
+echo "    /fw-taste         Set quality bar"
+echo "    /fw-consonance    Verify alignment"
+echo "    /fw-sovereignty   Enforce control boundaries"
+echo ""
+
+echo "  Verify install:"
+echo "    $SCRIPT_DIR/bin/facework-doctor"
 echo ""

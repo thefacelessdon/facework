@@ -1,0 +1,138 @@
+#!/bin/bash
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+MANIFEST_PATH="${1:-$ROOT_DIR/facework.manifest.yaml}"
+SCHEMA_PATH="$ROOT_DIR/facework.manifest.schema.json"
+
+if [ ! -f "$MANIFEST_PATH" ]; then
+  echo "[error] manifest not found: $MANIFEST_PATH"
+  exit 1
+fi
+
+if [ ! -f "$SCHEMA_PATH" ]; then
+  echo "[error] schema not found: $SCHEMA_PATH"
+  exit 1
+fi
+
+if ! command -v ruby >/dev/null 2>&1; then
+  echo "[error] ruby is required (uses stdlib YAML parser)."
+  exit 1
+fi
+
+ruby - "$MANIFEST_PATH" "$SCHEMA_PATH" <<'RUBY'
+require "yaml"
+require "json"
+
+manifest_path = ARGV[0]
+schema_path = ARGV[1]
+
+begin
+  manifest = YAML.safe_load(File.read(manifest_path), aliases: false)
+rescue => e
+  warn "[error] could not parse YAML manifest: #{e.message}"
+  exit 1
+end
+
+begin
+  JSON.parse(File.read(schema_path))
+rescue => e
+  warn "[error] schema JSON invalid: #{e.message}"
+  exit 1
+end
+
+def require_hash!(obj, key)
+  value = obj[key]
+  raise "missing required object '#{key}'" unless value.is_a?(Hash)
+  value
+end
+
+def require_string!(obj, key)
+  value = obj[key]
+  raise "missing required string '#{key}'" unless value.is_a?(String) && !value.strip.empty?
+  value
+end
+
+def require_int_range!(obj, key, min, max)
+  value = obj[key]
+  raise "missing required integer '#{key}'" unless value.is_a?(Integer)
+  raise "'#{key}' out of range (#{min}-#{max})" unless value.between?(min, max)
+  value
+end
+
+begin
+  raise "manifest root must be an object" unless manifest.is_a?(Hash)
+
+  protocol_version = require_string!(manifest, "protocol_version")
+  raise "protocol_version must be 1.0.0" unless protocol_version == "1.0.0"
+
+  project = require_hash!(manifest, "project")
+  require_string!(project, "name")
+  require_string!(project, "domain")
+  stage = require_string!(project, "stage")
+  raise "project.stage must be one of mvp|beta|scale" unless %w[mvp beta scale].include?(stage)
+
+  inputs = require_hash!(manifest, "inputs")
+  require_string!(inputs, "hunch")
+
+  artifacts = require_hash!(manifest, "artifacts")
+  %w[
+    signal_thesis
+    audience_field_map
+    taste_contract
+    decision_ledger
+    wedge_spec
+    system_architecture
+    workflow_playbooks
+    launch_plan
+    sovereignty_map
+    diagnostic_report
+  ].each { |k| require_string!(artifacts, k) }
+
+  gates = require_hash!(manifest, "gates")
+  %w[
+    semantics
+    field
+    taste
+    strategy
+    architecture
+    launch
+    sovereignty
+    diagnostic
+  ].each do |k|
+    v = require_string!(gates, k)
+    raise "gates.#{k} must be pass|fail" unless %w[pass fail].include?(v)
+  end
+
+  compliance = require_hash!(manifest, "compliance")
+  dims = %w[
+    signal_integrity
+    taste_fidelity
+    system_coherence
+    operational_readiness
+    infrastructure_sovereignty
+  ]
+  dims.each { |k| require_int_range!(compliance, k, 0, 20) }
+  total = require_int_range!(compliance, "total", 0, 100)
+  level = require_string!(compliance, "level")
+
+  expected_level =
+    case total
+    when 0..39 then "L0 Draft"
+    when 40..59 then "L1 Structured"
+    when 60..74 then "L2 Coherent"
+    when 75..89 then "L3 Launch-Ready"
+    else "L4 Sovereign"
+    end
+
+  raise "compliance.level '#{level}' does not match score band (expected '#{expected_level}')" if level != expected_level
+
+  puts "[ok] manifest valid: #{manifest_path}"
+  puts "[ok] protocol_version: #{protocol_version}"
+  puts "[ok] stage: #{stage}"
+  puts "[ok] compliance: #{total} (#{level})"
+rescue => e
+  warn "[error] #{e.message}"
+  exit 1
+end
+RUBY

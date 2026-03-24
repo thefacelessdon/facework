@@ -1,3 +1,43 @@
+# v2.1 — 2026-03-24
+
+## Added
+- Canonical cultural doctrine layer:
+  - `theory/facework-practice.md`
+  - `theory/cultural-physics.md`
+  - `theory/taste-criteria.md`
+  - `theory/coherence-tests.md`
+  - `theory/infrastructure-sovereignty.md`
+- New cultural primitives:
+  - `/fw-semantics`
+  - `/fw-field`
+  - `/fw-taste`
+  - `/fw-consonance`
+  - `/fw-sovereignty`
+- Orchestration command layer:
+  - `/fw-discovery-loop`
+  - `/fw-product-wedge`
+  - `/fw-governance-lock`
+  - `/fw-launch-loop`
+  - `/fw-evolve`
+- Facework skill extension set:
+  - `/mvp-cut`, `/beta-hardening`, `/scale-readiness`, `/contract-sync`,
+    `/decision-log`, `/weekly-upgrade`, `/evidence-debug`, `/launch-ops`
+- Paired cultural-intelligence agent stack in `agents/`.
+- Installer hardening:
+  - `bin/install-skills`
+  - `bin/facework-doctor`
+  - `install.sh` now delegates to canonical installer and doctor.
+- Validation artifact:
+  - `methodology/retros/002-cultural-hunch-validation.md`
+
+## Updated
+- `/fw-diagnostic` now includes assessments for Semantics, Field, Taste,
+  Consonance, and Sovereignty in addition to the original primitive loop.
+
+## Migration
+- GAMUT-hosted duplicated custom OS skills/agents were removed and replaced
+  with canonical pointer files to the Facework source.
+
 # Methodology Changelog
 
 Track every evolution of the build methodology. After each project retro,
