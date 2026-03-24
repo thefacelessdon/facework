@@ -40,24 +40,13 @@ define/
 │
 ├── documents/
 │   └── governance/
-│       ├── exit-guarantee.md  ← what creators take when they leave
-│       └── protocol-openness.md  ← what's open vs. commercial
+│       ├── exit-guarantee.md          ← what creators take when they leave
+│       ├── protocol-openness.md       ← what's open vs. commercial
+│       └── external-dependencies.md   ← Facework's own sovereignty audit
 │
 ├── decisions/
-│   ├── 001-mvp-stage-boundary.md
-│   ├── 002-creator-first-wedge.md
-│   ├── 003-gamut-counts-if-audited.md
-│   ├── 004-no-go-lines.md
-│   ├── 005-musicgraph-removed.md
-│   ├── 006-identity-shift-at-beta.md
-│   ├── 007-per-studio-flat-rate.md
-│   ├── 008-certification-at-scale.md
-│   ├── 009-capacity-calibration.md
-│   ├── 010-revenue-floor-5k.md
-│   ├── 011-clock-starts-first-payment.md
-│   ├── 012-studios-beta-only.md
-│   ├── 013-design-language-spec.md
-│   └── 014-pricing-philosophy-first.md
+│   ├── 001–016                ← 16 locked strategic decisions
+│   └── (see register in TODOS.md)
 │
 └── playbooks/
     ├── 01-prospect-qualification.md
@@ -70,16 +59,20 @@ define/
 ## Current Status
 
 **Stage:** MVP (Services Phase)
-**14 decisions locked.** No unresolved strategic contradictions.
+**Protocol:** v2.0.0 — 10 phases (0–9), 12 primitives, 13 skills, reconciled
+**Decisions:** 16 locked. No unresolved strategic contradictions.
+**Methodology:** v4.0 — protocol is source of truth, methodology implements it
 
 ### Gate 1 — Before First Conversation
-9 of 12 items complete. Remaining:
+9 of 14 items complete. Remaining:
 - GAMUT conformance audit
 - Engagement scope template
-- face.works live (built, needs deployment + Pattern System + Primitives Bar)
+- face.works deployed
+- face.works Pattern System (Canvas/WebGL)
+- face.works Primitives Bar
 
 ### Gate 2 — Before First Agreement
-0 of 4 items complete. All blocked by Gate 1.
+0 of 4 items complete. Blocked by Gate 1.
 
 ## Read Order
 

@@ -38,6 +38,8 @@ Do not relitigate these. Read the decision record if you want reasoning.
 | Capacity ~2/month, calibrate after first 3 | `decisions/009-*` |
 | Design Language Spec is a protocol artifact | `decisions/013-*` |
 | Pricing philosophy leads, ranges secondary | `decisions/014-*` |
+| All 12 primitives are load-bearing | `decisions/015-*` |
+| Protocol is source of truth; 10-phase sequence | `decisions/016-*` |
 
 ## Ownership Model Summary
 
@@ -86,13 +88,13 @@ If reviewing this system, use this structure:
 ```
 Facework/
 ├── theories/                   ← paradigm (Cultural Physics, Coherence OS)
-├── methodology/                ← build system (7 phases, retros, changelog)
-├── skills/                     ← agent skills (/fw-* commands)
-├── PROTOCOL.md                 ← open protocol spec
+├── methodology/                ← build system (retros, changelog v4.0)
+├── skills/                     ← 13 agent skills (/fw-* commands)
+├── PROTOCOL.md                 ← open protocol spec v2.0.0 (SOURCE OF TRUTH)
 ├── define/                     ← THIS SESSION'S OUTPUT
 │   ├── architecture/           ← specs (business model, delivery, conformance)
-│   ├── decisions/              ← 14 locked strategic decisions
-│   ├── documents/governance/   ← exit guarantee, openness guarantee
+│   ├── decisions/              ← 16 locked strategic decisions
+│   ├── documents/governance/   ← exit guarantee, openness, external dependencies
 │   └── playbooks/              ← 5 operational playbooks
 ├── face.works/                 ← Next.js prototype (protocol site)
 │   └── src/
