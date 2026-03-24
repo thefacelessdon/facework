@@ -83,7 +83,7 @@ You need:                   You also need:               You also need:
 
 | Artifact | Location | Status |
 |----------|----------|--------|
-| GAMUT conformance audit | TBD | **Not started** |
+| GAMUT conformance audit | `define/proof/gamut-audit.md` | Complete — Level 3, score 5.3 |
 | face.works site | `face.works/` (Next.js + Tailwind) | Complete — builds, 10 pages |
 | Case study template | TBD | **Not started** |
 | Portfolio page/deck | TBD | **Not started** |

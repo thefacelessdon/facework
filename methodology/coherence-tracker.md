@@ -35,7 +35,7 @@ See `/fw-diagnostic` for the full rubric and zone definitions.
 
 | # | Project | Date | Flow | Resonance | SI | Entropy | Coherence | Zone | Verdict |
 |---|---------|------|------|-----------|-----|---------|-----------|------|---------|
-| 1 | GAMUT | Mar 2026 | — | — | — | — | — | — | Pre-scoring; audit pending |
+| 1 | GAMUT | Mar 2026 | 4 | 4 | 4 | 2 | 5.3 | DEEP GREEN | Level 3 conformant; Phases 1-3 gap (pre-protocol) |
 | 2 | Facework (self) | Mar 2026 | 3 | 3 | 4 | 2 | 3.0 | GREEN | Structurally sound, culturally incomplete |
 | 3 | Facework (reconciliation) | Mar 2026 | 3 | 3 | 4 | 2 | 3.0 | GREEN | Authority chain resolved, untested against real engagement |
 
