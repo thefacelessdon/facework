@@ -128,3 +128,4 @@ Everything needed before "Facework Protocol Conformant" means something.
 | 012 | Studios removed from MVP scope (Beta-only) | RESOLVED | 2026-03-23 |
 | 013 | Design Language Spec required in Resonance phase | RESOLVED | 2026-03-24 |
 | 014 | Pricing philosophy leads, ranges visible as secondary | RESOLVED | 2026-03-24 |
+| 015 | New primitives tested: 3 critical fixes, structural integration deferred | RESOLVED | 2026-03-24 |

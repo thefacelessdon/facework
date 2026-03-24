@@ -1,8 +1,8 @@
-# FACEWORKS
+# FACEWORK
 
 A coherence practice for building things.
 
-Faceworks is a system of forces, engines, and architectural forms that maintain structural alignment inside complex systems. Applied to product creation, it becomes a 7-phase methodology that takes an idea from zero to a fully architected, spec'd, prototyped, and handoff-ready product.
+Facework is a system of forces, engines, and architectural forms that maintain structural alignment inside complex systems. Applied to product creation, it becomes a 7-phase methodology that takes an idea from zero to a fully architected, spec'd, prototyped, and handoff-ready product.
 
 The methodology was developed and validated building [GAMUT](https://github.com/thefacelessdon/GAMUT) — creator commerce infrastructure — across 4 days: 10 architecture specs, 9 operational playbooks, 7 strategic decisions, a working prototype, and 75+ tracked work items.
 
@@ -12,11 +12,11 @@ The methodology was developed and validated building [GAMUT](https://github.com/
 
 Products collapse because people build surfaces before they build systems. A prototype without governance is a liability. Specs without resolved decisions are built on assumptions. Code without playbooks produces behavior nobody designed.
 
-The conflict at the center of building things is not talent, speed, or funding. The conflict is: systems are asked to carry weight before their coherence is established. Faceworks resolves this by enforcing a build sequence where each layer's coherence is verified before the next layer is added.
+The conflict at the center of building things is not talent, speed, or funding. The conflict is: systems are asked to carry weight before their coherence is established. Facework resolves this by enforcing a build sequence where each layer's coherence is verified before the next layer is added.
 
 The law is simple: anything not coherent will eventually contradict itself. Anything that contradicts itself will eventually collapse. Gates, canonical sources, decision records, and specs make collapse optional.
 
-There is a deeper pattern underneath the structural one. The history of creative industries — jazz, hip hop, fashion, social media — follows the same physics: communities generate the cultural energy, and external systems capture the current. The infrastructure was never designed to sustain the source. Products built without coherence thinking reproduce this pattern by accident, because the build process never asks: whose energy powers this system, and who controls the infrastructure it flows through? Faceworks carries that question through every phase of the build.
+There is a deeper pattern underneath the structural one. The history of creative industries — jazz, hip hop, fashion, social media — follows the same physics: communities generate the cultural energy, and external systems capture the current. The infrastructure was never designed to sustain the source. Products built without coherence thinking reproduce this pattern by accident, because the build process never asks: whose energy powers this system, and who controls the infrastructure it flows through? Facework carries that question through every phase of the build.
 
 ---
 
@@ -130,7 +130,7 @@ Every project makes the practice better. Every retro is a version bump.
 
 ## Start Here
 
-New to Faceworks? Read in this order:
+New to Facework? Read in this order:
 
 1. **This README** — what it is, how to install, what the commands do (5 min)
 2. **[The Theory of Cultural Physics](theories/cultural-physics.md)** — why coherence matters, the extraction pattern, the governing equation (15 min)
@@ -142,7 +142,7 @@ Total: under 1 hour from clone to first skill.
 
 ## Theories
 
-The full Faceworks theory — forces, engines, architectural forms, and how they operate inside the build methodology — lives in [`theories/the-coherence-operating-system.md`](theories/the-coherence-operating-system.md).
+The full Facework theory — forces, engines, architectural forms, and how they operate inside the build methodology — lives in [`theories/the-coherence-operating-system.md`](theories/the-coherence-operating-system.md).
 
 The theory of Cultural Physics — the paradigm that explains why coherence matters, what happens when creative energy is extracted instead of sustained, and why this matters most for the cultures that have always supplied the energy the world runs on — lives in [`theories/cultural-physics.md`](theories/cultural-physics.md).
 
@@ -158,9 +158,9 @@ Project retros: [`methodology/retros/`](methodology/retros/)
 
 ## Companion Tooling
 
-Faceworks pairs with [gstack](https://github.com/garrytan/gstack) — Garry Tan's Claude Code skill pack — for review, design, QA, and shipping. gstack skills surface throughout the Faceworks workflow:
+Facework pairs with [gstack](https://github.com/garrytan/gstack) — Garry Tan's Claude Code skill pack — for review, design, QA, and shipping. gstack skills surface throughout the Facework workflow:
 
-| gstack Skill | Faceworks Phase | Role |
+| gstack Skill | Facework Phase | Role |
 |---|---|---|
 | `/plan-ceo-review` | Frequency, Current | Challenges assumptions, finds the 10-star product, forces decisions |
 | `/plan-eng-review` | Stability, Entropy | Locks architecture, data flow, failure modes, test coverage |
@@ -174,7 +174,7 @@ Faceworks pairs with [gstack](https://github.com/garrytan/gstack) — Garry Tan'
 | `/ship` | Coherence | Sync main, run tests, push, open PR — the last mile |
 | `/document-release` | Coherence | Post-ship doc update — syncs README, CHANGELOG, and guides to match what shipped |
 
-Faceworks's 8 skills handle the build sequence. gstack handles the pressure testing, design review, QA, and shipping that keep each phase honest. Both install as Claude Code skills and work independently — Faceworks doesn't require gstack, but the methodology was developed using both and they stay in lockstep.
+Facework's 8 skills handle the build sequence. gstack handles the pressure testing, design review, QA, and shipping that keep each phase honest. Both install as Claude Code skills and work independently — Facework doesn't require gstack, but the methodology was developed using both and they stay in lockstep.
 
 See gstack's [README](https://github.com/garrytan/gstack) for install instructions.
 
@@ -190,4 +190,4 @@ Build the architecture, and the identity will make itself known.
 
 ---
 
-*FACEWORKS: A Coherence Practice™ — [face.works](https://face.works)*
+*FACEWORK: A Coherence Practice™ — [face.works](https://face.works)*

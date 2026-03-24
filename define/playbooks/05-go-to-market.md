@@ -45,7 +45,28 @@ conversations per month, not 1-2.
 **Human time: ~4-5 hours/week.** Agent handles research, drafting, monitoring,
 tracking. Human handles relationships, taste, and conversations.
 
-### 4. The Conversation (Human only)
+### 4. Trust Transfer Path
+
+A creator goes through 4 sequential trust gates before paying.
+Each gate has a failure mode. Missing any gate stalls the pipeline.
+
+| Gate | What Creates Trust | Failure Mode | Current Status |
+|------|-------------------|--------------|----------------|
+| 1. Protocol credibility | Open spec, clear theory, no lock-in claims | "Show me proof, not frameworks" | OPEN — spec exists, proof pending |
+| 2. Social proof | Case study from a creator they respect | "That person isn't in my space" | BLOCKED — no completed engagements |
+| 3. Operator credibility | Conversation proves domain understanding | "They don't get my world" | UNTESTED — no field conversations yet |
+| 4. Economics clarity | Scope doc, deliverables, ownership terms | "$15K for documentation?" | READY — engagement spec exists |
+
+**Gate 2 is the current bottleneck.** Until a completed engagement exists
+as proof, trust transfer stalls after Gate 1. This is why the GAMUT audit
+and first paid engagement are the highest-priority items.
+
+**Gatekeeper awareness:** Creators don't decide in isolation. Their team
+(engineer, manager, partner) and their economic controllers (label, investors)
+influence the decision. If the creator isn't the sole decision-maker, the
+conversation must address the gatekeeper's concerns too.
+
+### 5. The Conversation (Human only)
 
 Lead with their problem:
 - "What does your operational infrastructure look like?"

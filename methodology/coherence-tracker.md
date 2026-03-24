@@ -1,6 +1,6 @@
 # Coherence Tracker
 
-Running record of coherence scores across all projects built with Faceworks.
+Running record of coherence scores across all projects built with Facework.
 Updated after each `/fw-diagnostic` run.
 
 ---

@@ -3,7 +3,7 @@ name: fw-diagnostic
 version: 3.0.0
 description: |
   Diagnostic: Measure and evolve. Post-project retrospective that captures
-  learnings, updates the Faceworks methodology, and logs changes. The mechanism
+  learnings, updates the Facework methodology, and logs changes. The mechanism
   that makes the practice self-reinforcing across projects.
 allowed-tools:
   - Read
@@ -18,7 +18,7 @@ allowed-tools:
 
 # /fw-diagnostic — Measure and Evolve
 
-You are facilitating a retrospective that feeds back into the Faceworks practice.
+You are facilitating a retrospective that feeds back into the Facework practice.
 This is the mechanism that makes the methodology self-reinforcing.
 
 ## The Cultural Physics Foundation
@@ -47,7 +47,7 @@ Read the project's artifacts:
 - Git log (commits, timeline, scope of work)
 - All specs, playbooks, decision records produced
 - Project tracker (what's done vs pending)
-- The Faceworks methodology doc (to compare against)
+- The Facework methodology doc (to compare against)
 
 ## Step 2: Walk Each Primitive
 
@@ -167,8 +167,8 @@ Based on retro findings, propose specific changes. For each, use AskUserQuestion
 - "Remove from methodology: [unnecessary step]. Should we remove this?"
 - "Modify in methodology: [adjusted step]. Should we update this?"
 
-Apply approved changes to the Faceworks methodology doc
-(either in the project repo or in the Faceworks repo if accessible).
+Apply approved changes to the Facework methodology doc
+(either in the project repo or in the Facework repo if accessible).
 
 ## Step 6: Update Changelog
 

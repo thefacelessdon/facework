@@ -23,7 +23,7 @@ Every sound, color, gesture, or idea is energy taking form. When those vibration
 
 That's the state we're in: a hyperconnected world where attention moves faster than meaning, and creativity is consumed faster than it's created. We've built an economy that harvests energy but doesn't replenish it.
 
-Faceworks exists to change that.
+Facework exists to change that.
 
 We design systems that turn cultural energy into a renewable current — something that can move, evolve, and sustain itself without extraction.
 
@@ -37,7 +37,7 @@ That imbalance is entropy — misalignment, friction, and dependency.
 
 When entropy rises, culture burns out.
 
-Faceworks's mission is to lower entropy by designing coherence — systems where creative energy flows freely between creators, communities, and contexts.
+Facework's mission is to lower entropy by designing coherence — systems where creative energy flows freely between creators, communities, and contexts.
 
 That's what makes it physics, not philosophy.
 
@@ -142,7 +142,7 @@ Two things: cultural intelligence and taste.
 
 Most people think taste doesn't scale. What they mean is that taste doesn't survive extraction. When the person with the vision leaves, or the system grows past their direct control, the coherence degrades and the taste disappears. That's not a taste problem. That's a coherence problem.
 
-Faceworks makes taste scalable because it encodes the structural alignment that produces taste into the build sequence itself. The frequency carries the cultural intelligence. The specs, playbooks, and decision records preserve it. The prototype proves it. The handoff transmits it. Taste survives scaling because coherence survives scaling — and coherence survives scaling because the methodology enforces it at every phase.
+Facework makes taste scalable because it encodes the structural alignment that produces taste into the build sequence itself. The frequency carries the cultural intelligence. The specs, playbooks, and decision records preserve it. The prototype proves it. The handoff transmits it. Taste survives scaling because coherence survives scaling — and coherence survives scaling because the methodology enforces it at every phase.
 
 **Coherence tells you the system holds together. Cultural intelligence tells you what it holds together and for whom. Taste is the proof that both are working.**
 
@@ -167,7 +167,7 @@ It's the field of identity:
 
 Every project begins by establishing frequency — the emotional and aesthetic field it will transmit. Get the frequency right, and everything else finds harmony.
 
-This is why Faceworks treats design as energy calibration more than visual styling. And it's why the Faceworks build sequence starts with `/fw-frequency` — extracting the irreducible signal before anything else moves.
+This is why Facework treats design as energy calibration more than visual styling. And it's why the Facework build sequence starts with `/fw-frequency` — extracting the irreducible signal before anything else moves.
 
 ### Current — The Architecture of Movement
 
@@ -190,7 +190,7 @@ In physics, a conductor is the material through which current flows. Without a c
 
 In culture, stability is the architectural foundation — the specifications, schemas, and infrastructure that give current something to flow through. You can't have flow without something to flow through. You can't have a conduit without building it first.
 
-Stability doesn't appear in the governing equation by name because it's the precondition — the infrastructure that makes Flow possible. In the Faceworks build sequence, it's the phase where architecture gets specified before code gets written.
+Stability doesn't appear in the governing equation by name because it's the precondition — the infrastructure that makes Flow possible. In the Facework build sequence, it's the phase where architecture gets specified before code gets written.
 
 | Concept | Definition | Role |
 |---------|-----------|------|
@@ -204,7 +204,7 @@ When Frequency (identity) and Current (infrastructure) vibrate in rhythm, they c
 
 ## VIII. THE PHILOSOPHY — LAWS OF DESIGN
 
-Faceworks's design language follows five laws drawn from its physics:
+Facework's design language follows five laws drawn from its physics:
 
 1. **Energy Must Move.** Anything static dies. Motion is proof of life.
 2. **Emotion Leads Form.** Design starts with vibration, not metrics.
@@ -228,15 +228,15 @@ But if agents build WITH coherence — tuned to the right frequency, channeling 
 
 This is the opportunity: **agents that carry the frequency of the communities they serve, building infrastructure those communities own.**
 
-Faceworks makes this possible because it encodes coherence into the build process itself. An agent running `/fw-frequency` must establish governing truth before it builds anything. An agent running `/fw-current` must resolve strategic direction and lock it. The methodology is a coherence constraint on agent behavior — it prevents the agent from building extractive systems because the build sequence won't allow it.
+Facework makes this possible because it encodes coherence into the build process itself. An agent running `/fw-frequency` must establish governing truth before it builds anything. An agent running `/fw-current` must resolve strategic direction and lock it. The methodology is a coherence constraint on agent behavior — it prevents the agent from building extractive systems because the build sequence won't allow it.
 
-Cultural Physics provides the evaluation criteria. Faceworks provides the enforcement mechanism. Together, they ensure that what gets built serves the people who generate the energy.
+Cultural Physics provides the evaluation criteria. Facework provides the enforcement mechanism. Together, they ensure that what gets built serves the people who generate the energy.
 
 ---
 
 ## X. THE LONG GAME — THE NORTH STAR
 
-**The North Star:** Faceworks is building a self-sustaining current of creative independence — a world where cultural energy can power itself.
+**The North Star:** Facework is building a self-sustaining current of creative independence — a world where cultural energy can power itself.
 
 **The Thesis:** The long game isn't to own culture — it's to build the systems that let culture sustain itself through independent creative energy.
 
@@ -244,7 +244,7 @@ For the communities that have always generated the energy the world runs on — 
 
 **Control the frequency. Own the current. Coherence follows.**
 
-The history of extraction is not inevitable. It is a design failure. The infrastructure was built to capture, not to sustain. Cultural Physics provides the blueprint for building it differently. Faceworks provides the tools.
+The history of extraction is not inevitable. It is a design failure. The infrastructure was built to capture, not to sustain. Cultural Physics provides the blueprint for building it differently. Facework provides the tools.
 
 The question was never whether these communities had enough energy. They've always had more energy than any system could contain. The question was always whether they would control the infrastructure through which that energy flows.
 
@@ -258,7 +258,7 @@ Frequency is identity.
 Current is connection.
 Coherence is freedom.
 
-Faceworks doesn't extract energy from culture — it designs the systems that keep it alive.
+Facework doesn't extract energy from culture — it designs the systems that keep it alive.
 
 That is The Theory of Cultural Physics™.
 

@@ -30,7 +30,7 @@ The infrastructure was never designed to sustain the source. Products built with
 thinking reproduce this pattern by accident, because the build process never asks: **whose
 energy powers this system, and who controls the infrastructure it flows through?**
 
-Faceworks's build sequence is the counter-architecture. Every phase carries the Cultural Physics
+Facework's build sequence is the counter-architecture. Every phase carries the Cultural Physics
 question forward. Frequency asks who generates the energy. Current decides who controls the
 conduits. Stability builds architecture that implements those ownership decisions. Flow designs
 workflows that circulate energy rather than extract it. Resonance makes the system transmissible

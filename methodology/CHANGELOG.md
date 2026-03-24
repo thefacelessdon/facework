@@ -137,7 +137,7 @@ update the methodology and log what changed here.
 - `methodology/coherence-tracker.md` created for cross-project score tracking
 - Cultural Physics in Practice section added to build methodology (GAMUT case study)
 - `install.sh` updated with gstack detection and optional install
-- Standardized naming to "Faceworks" (with s) across all documents
+- Standardized naming to "Facework" across all documents
 - Universal framing for extraction checks (value source analysis, not culture-specific)
 
 **Validation status:** Cultural Physics integration is theoretically grounded and
