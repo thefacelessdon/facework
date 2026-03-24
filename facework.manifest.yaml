@@ -1,0 +1,44 @@
+protocol_version: "1.0.0"
+
+project:
+  name: "Example Cultural Brand"
+  domain: "creator-commerce"
+  stage: "mvp"
+
+inputs:
+  hunch: "Turn cultural momentum into owned creator commerce infrastructure."
+  audience_context: "Independent creators with active communities and strong identity."
+  constraints:
+    time_weeks: 6
+    budget_usd: 10000
+
+artifacts:
+  signal_thesis: "artifacts/signal-thesis.md"
+  audience_field_map: "artifacts/audience-field-map.md"
+  taste_contract: "artifacts/taste-contract.md"
+  decision_ledger: "artifacts/decision-ledger.md"
+  wedge_spec: "artifacts/wedge-spec.md"
+  system_architecture: "artifacts/system-architecture.md"
+  workflow_playbooks: "artifacts/workflow-playbooks.md"
+  launch_plan: "artifacts/launch-plan.md"
+  sovereignty_map: "artifacts/sovereignty-map.md"
+  diagnostic_report: "artifacts/diagnostic-report.md"
+
+gates:
+  semantics: "pass"
+  field: "pass"
+  taste: "pass"
+  strategy: "pass"
+  architecture: "pass"
+  launch: "pass"
+  sovereignty: "pass"
+  diagnostic: "pass"
+
+compliance:
+  signal_integrity: 15
+  taste_fidelity: 15
+  system_coherence: 15
+  operational_readiness: 15
+  infrastructure_sovereignty: 15
+  total: 75
+  level: "L3 Launch-Ready"

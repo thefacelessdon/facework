@@ -1,0 +1,170 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://facework.dev/schemas/facework.manifest.schema.json",
+  "title": "Facework Manifest",
+  "description": "Schema for Facework Protocol v1 project manifests.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "protocol_version",
+    "project",
+    "inputs",
+    "artifacts",
+    "gates",
+    "compliance"
+  ],
+  "properties": {
+    "protocol_version": {
+      "type": "string",
+      "pattern": "^1\\.0\\.0$"
+    },
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "domain",
+        "stage"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "domain": {
+          "type": "string",
+          "minLength": 1
+        },
+        "stage": {
+          "type": "string",
+          "enum": [
+            "mvp",
+            "beta",
+            "scale"
+          ]
+        }
+      }
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "hunch"
+      ],
+      "properties": {
+        "hunch": {
+          "type": "string",
+          "minLength": 1
+        },
+        "audience_context": {
+          "type": "string"
+        },
+        "constraints": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "signal_thesis",
+        "audience_field_map",
+        "taste_contract",
+        "decision_ledger",
+        "wedge_spec",
+        "system_architecture",
+        "workflow_playbooks",
+        "launch_plan",
+        "sovereignty_map",
+        "diagnostic_report"
+      ],
+      "properties": {
+        "signal_thesis": { "type": "string", "minLength": 1 },
+        "audience_field_map": { "type": "string", "minLength": 1 },
+        "taste_contract": { "type": "string", "minLength": 1 },
+        "decision_ledger": { "type": "string", "minLength": 1 },
+        "wedge_spec": { "type": "string", "minLength": 1 },
+        "system_architecture": { "type": "string", "minLength": 1 },
+        "workflow_playbooks": { "type": "string", "minLength": 1 },
+        "launch_plan": { "type": "string", "minLength": 1 },
+        "sovereignty_map": { "type": "string", "minLength": 1 },
+        "diagnostic_report": { "type": "string", "minLength": 1 }
+      }
+    },
+    "gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "semantics",
+        "field",
+        "taste",
+        "strategy",
+        "architecture",
+        "launch",
+        "sovereignty",
+        "diagnostic"
+      ],
+      "properties": {
+        "semantics": { "$ref": "#/$defs/gateStatus" },
+        "field": { "$ref": "#/$defs/gateStatus" },
+        "taste": { "$ref": "#/$defs/gateStatus" },
+        "strategy": { "$ref": "#/$defs/gateStatus" },
+        "architecture": { "$ref": "#/$defs/gateStatus" },
+        "launch": { "$ref": "#/$defs/gateStatus" },
+        "sovereignty": { "$ref": "#/$defs/gateStatus" },
+        "diagnostic": { "$ref": "#/$defs/gateStatus" }
+      }
+    },
+    "compliance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "signal_integrity",
+        "taste_fidelity",
+        "system_coherence",
+        "operational_readiness",
+        "infrastructure_sovereignty",
+        "total",
+        "level"
+      ],
+      "properties": {
+        "signal_integrity": { "$ref": "#/$defs/score20" },
+        "taste_fidelity": { "$ref": "#/$defs/score20" },
+        "system_coherence": { "$ref": "#/$defs/score20" },
+        "operational_readiness": { "$ref": "#/$defs/score20" },
+        "infrastructure_sovereignty": { "$ref": "#/$defs/score20" },
+        "total": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "level": {
+          "type": "string",
+          "enum": [
+            "L0 Draft",
+            "L1 Structured",
+            "L2 Coherent",
+            "L3 Launch-Ready",
+            "L4 Sovereign"
+          ]
+        }
+      }
+    }
+  },
+  "$defs": {
+    "gateStatus": {
+      "type": "string",
+      "enum": [
+        "pass",
+        "fail"
+      ]
+    },
+    "score20": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 20
+    }
+  }
+}
