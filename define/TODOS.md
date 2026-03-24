@@ -83,7 +83,7 @@ Everything needed to have a credible, honest conversation about working together
 - [x] No-go lines established
 - [x] Strategic decisions locked (8 decisions resolved)
 - [x] GAMUT conformance audit → Level 3 (Sovereignty-Verified), score 5.3 DEEP GREEN
-- [ ] Engagement scope template (what's included, what's not, timeline)
+- [x] Engagement scope template → `documents/agreements/engagement-scope-template.md`
 - [ ] face.works domain live with protocol overview
 - [ ] face.works Pattern System (Canvas/WebGL wave interference visualizations from Field Kernel)
 - [ ] face.works Primitives Bar (interactive horizontal index — one primitive lights up based on context)

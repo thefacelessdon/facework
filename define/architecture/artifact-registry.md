@@ -76,7 +76,7 @@ You need:                   You also need:               You also need:
 | Stage gate monitoring playbook | `define/playbooks/03-stage-gate-monitoring.md` | Complete |
 | Engagement closure playbook | `define/playbooks/04-engagement-closure.md` | Complete |
 | Go-to-market playbook | `define/playbooks/05-go-to-market.md` | Complete |
-| Engagement scope template | TBD | **Not started** |
+| Engagement scope template | `define/documents/agreements/engagement-scope-template.md` | Complete |
 | Creator agreement template | TBD | **Not started** |
 
 ### Category 4: Proof & Go-to-Market
