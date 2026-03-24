@@ -152,3 +152,75 @@ A project is minimally conformant with Facework Protocol v1 only if:
 - compliance score is computed,
 - sovereignty risks are documented with mitigation.
 
+## 7) Stage Gate Profiles (Constrained v1)
+
+This section defines stage content inside the protocol itself to avoid expanding
+spec surface in v1. Each stage is governed by four questions only.
+
+### Stage: MVP
+
+#### 1) What must be true to enter this stage?
+- `/fw-frequency` has defined a clear economic floor and non-negotiables.
+- `/fw-current` has locked direction with explicit no-go lines.
+- The first build slice is bounded to one wedge and one primary user journey.
+
+#### 2) What must be proven to exit this stage?
+- A real user can complete the core journey end-to-end.
+- The wedge can produce repeatable value above the defined economic floor.
+- Stage assumptions are documented with pass/fail evidence and unresolved risks.
+
+#### 3) What metrics are required vs nice-to-have?
+- Required: activation on the core journey, time-to-first-value, cost-to-serve
+  for the wedge, and at least one value/retention signal for initial users.
+- Nice-to-have: referral behavior, secondary feature adoption, qualitative NPS.
+
+#### 4) What can break the stage and force rollback?
+- Core journey fails for representative users.
+- Unit economics fall below the defined floor with no credible recovery path.
+- A locked non-negotiable is violated (rights, obligations, or trust boundary).
+
+### Stage: BETA
+
+#### 1) What must be true to enter this stage?
+- MVP exit proof is complete and reproducible.
+- `/fw-stability` has defined artifact requirements for data, auth, and failure handling.
+- `/fw-flow` has stage-gate playbooks with ownership and escalation paths.
+
+#### 2) What must be proven to exit this stage?
+- The system operates reliably under sustained real usage with known failure modes.
+- Required workflows run from playbooks without founder-only context.
+- Critical dependencies, ownership boundaries, and mitigation paths are explicit.
+
+#### 3) What metrics are required vs nice-to-have?
+- Required: reliability (availability/error budget), incident response time,
+  retention trend on core cohort, and gross margin trend versus beta target.
+- Nice-to-have: expansion behavior, automation coverage, support deflection.
+
+#### 4) What can break the stage and force rollback?
+- Reliability drops below declared thresholds or unresolved high-severity incidents.
+- Playbooks fail in production scenarios and require repeated ad-hoc interventions.
+- Ownership/sovereignty boundaries are breached by a critical dependency.
+
+### Stage: SCALE
+
+#### 1) What must be true to enter this stage?
+- Beta reliability and operations thresholds are met for a sustained period.
+- Governance, architecture, and workflow artifacts remain aligned under load.
+- Team handoff is possible without loss of decision context.
+
+#### 2) What must be proven to exit this stage?
+- Growth can continue without degrading quality, economics, or control boundaries.
+- Operating model supports multi-team execution with predictable outcomes.
+- The system can absorb shocks (traffic, dependency failures, org change) without collapse.
+
+#### 3) What metrics are required vs nice-to-have?
+- Required: contribution margin by segment, SLO adherence at higher load,
+  change failure rate, mean time to recovery, and dependency risk exposure.
+- Nice-to-have: international/localization efficiency, partner ecosystem velocity,
+  advanced predictive health indicators.
+
+#### 4) What can break the stage and force rollback?
+- Growth increases entropy faster than operating capacity (quality or reliability collapse).
+- Economics degrade materially with scale (margin compression without mitigation).
+- Control boundaries erode (vendor lock-in, loss of portability, or unbounded risk concentration).
+
