@@ -57,7 +57,35 @@ serves a community and a product that was built about that community by outsider
 5. **Carry the frequency** — the prototype should reflect the identity and
    aesthetic of the community it serves, not generic SaaS patterns.
 
-## Step 1: Determine Stack
+## Step 1: DESIGN.md — Design Language Spec
+
+**This step runs BEFORE any code is written.** The Design Language Spec is
+the visual implementation of Frequency. Without it, the prototype defaults
+to generic SaaS patterns — structurally correct but culturally incoherent.
+
+Produce `DESIGN.md` at the project root. It must cover:
+
+1. **Typography system** — primary typeface, scale (on 8px baseline grid),
+   weight rules, tracking, size hierarchy (headline → body → caption)
+2. **Color system** — primary palette + accent colors mapped to system states
+   or semantic meaning. Accents are not decoration — they communicate.
+   Rules: when accents appear, how many per section, never as backgrounds.
+3. **Grid + layout rules** — column system, margins, vertical spacing,
+   allowed layout structures. If it feels like improvisation, it's wrong.
+4. **Motion principles** — easing curves, what motion communicates (system
+   stabilizing, not animating), what's prohibited (bounce, elastic, playful).
+5. **Iconography / symbol system** — if applicable. Symbols map to domain
+   concepts, never random icons.
+6. **Tone + textual rules** — voice, sentence structure, allowed/disallowed
+   language patterns. What the copy world feels like.
+
+The spec is derived FROM the creator's frequency and the identity expression
+decisions made in Current. It is not imposed — it emerges from who they are.
+
+Check: if someone from the community saw only the DESIGN.md, would they
+recognize it as built for their world?
+
+## Step 2: Determine Stack
 
 Ask the user about technical preferences and constraints:
 - Frontend framework (Next.js, SvelteKit, Remix, static HTML, etc.)
@@ -69,7 +97,7 @@ Ask the user about technical preferences and constraints:
 If they don't have strong preferences, recommend based on what the Stability
 specs suggest the system needs.
 
-## Step 2: Schema First
+## Step 3: Schema
 
 From the Stability specs, create a typed schema:
 - Every table/collection defined with types
@@ -77,7 +105,7 @@ From the Stability specs, create a typed schema:
 - Ownership fields explicit (who owns this record, what happens on exit)
 - This schema will be used by BOTH demo mode and live mode
 
-## Step 3: DataSource Adapter
+## Step 4: DataSource Adapter
 
 Create an interface that both data sources implement:
 ```
@@ -93,7 +121,7 @@ Populate demo data with realistic content — not "test test test" or
 "Lorem ipsum." Names, numbers, dates that feel real. If the product serves
 a specific community, the demo data should reflect that community authentically.
 
-## Step 4: Build Pages
+## Step 5: Build Pages
 
 From the dashboard IA spec (or equivalent from Stability):
 - Auth flow
@@ -104,22 +132,22 @@ From the dashboard IA spec (or equivalent from Stability):
 If the product has a lifecycle (onboarding → active → mature), build
 lifecycle-aware rendering — same pages, different content per phase.
 
-## Step 5: Components & Design
+## Step 6: Components & Design
 
-- Extract design tokens (colors, typography, spacing) into variables
+- Apply DESIGN.md tokens (colors, typography, spacing) from Step 1
 - Build reusable components (cards, badges, charts, panels, etc.)
 - Error boundaries at page level minimum
 - Loading states and skeletons
 - Empty states with contextual messaging
 
-## Step 6: Tests
+## Step 7: Tests
 
 - Unit tests for business logic
 - Data shape tests (demo data conforms to schema)
 - Component tests where complexity warrants
 - All tests pass before Resonance is complete
 
-## Step 7: Engineering Guide
+## Step 8: Engineering Guide
 
 Create a CLAUDE.md in the platform directory:
 - Architecture overview
@@ -128,7 +156,7 @@ Create a CLAUDE.md in the platform directory:
 - How to add a new page/feature
 - Test expectations
 
-## Step 8: Five Laws Check
+## Step 9: Five Laws Check
 
 Before marking Resonance complete, evaluate the prototype against the
 five Laws of Design from Cultural Physics:

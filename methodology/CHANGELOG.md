@@ -1,3 +1,38 @@
+# v3.0 — 2026-03-24 (Facework Self-Application)
+
+**What changed:**
+- Inverted Stability and Flow phases for services/methodology businesses.
+  Flow (playbooks) now runs before Stability (specs) when the product is
+  operational rather than technical. Context-dependent — pure software
+  products may retain the original order.
+- Added mandatory Identity Expression dilemma to `/fw-current`.
+  Visual language, tone, and brand voice are strategic decisions,
+  not design afterthoughts.
+- Added DESIGN.md as a required artifact in `/fw-resonance`.
+  Produced first, before prototyping. Covers typography, color
+  (mapped to states), grid + layout, motion, iconography, tone.
+  Delivered as `DESIGN.md` in the project root.
+- Updated phase timing estimates to reflect agent-native delivery:
+  full protocol run compresses from days to hours with the human+agent
+  operating model.
+- Confirmed agent-native operating model as the default assumption
+  for playbooks and capacity estimates.
+
+**New patterns established:**
+- DESIGN.md before prototype (no more "build generic, retrofit identity")
+- Identity as a Current dilemma (not a Resonance afterthought)
+- Flow before Stability for services businesses
+- Coherence scorecard validated on a real project (F:3 R:3 E:4 = 1.8)
+
+**Triggered by:** Retro 003 findings:
+1. Playbooks written as traditional consulting were wrong — agent-native rewrite
+   was the pivotal correction (changed economics, capacity, and stage definitions)
+2. Visual identity was never surfaced as a strategic dilemma — caught late in Entropy
+   when original site exploration docs exposed the gap
+3. Prototype built generic-first, retrofitted with VLS — should have been identity-first
+
+---
+
 # v2.1 — 2026-03-24
 
 ## Added

@@ -1,0 +1,128 @@
+﻿FACEWORK WEBSITE INFORMATION ARCHITECTURE
+(The Living System Edition — formally codified)
+________________
+
+
+I. HOME — “THE SYSTEM IN REAL TIME”
+Purpose:
+Introduce Facework not as a brand, but as a coherent system that evolves as you evolve.
+Core elements:
+* Tagline: Clarity by design.
+* Subline: A system for coherent identity.
+* Live Coherence Pattern that updates with system state (time, Lab Notes, Field activity).
+* A one-paragraph articulation of Facework: what it is and why it exists.
+* OS nodes that subtly pulse when updated.
+* A weekly marker (timestamped change) that reinforces the site as a living system.
+Feeling:
+You are stepping into something alive, intentional, and structurally sound.
+________________
+
+
+II. THE SYSTEM — “THE COHERENCE OS”
+Purpose:
+Show the architecture behind Facework. Not case studies. Not branding.
+The kernel itself.
+Core elements:
+* Interactive primitives (Coherence, Frequency, Current, Resonance, Flow, Stability, Entropy)
+* Engines assemble and disassemble when hovered (Identity, Narrative, Infrastructure, Cultural, Diagnostic, Velocity)
+* Motion is functional, never decorative
+* Diagrams update based on system logic
+* CTA: Read the Coherence OS → PDF
+Feeling:
+“This isn’t philosophy — it’s the architecture underneath everything he builds.”
+________________
+
+
+III. THE LAB — “WORKING INSIDE THE OS”
+Purpose:
+Show how you use the system in practice.
+Core elements:
+* Weekly Lab Notes (2–3 sentences max)
+* The diagnostic → architecture → alignment cycle
+* Micro-diagrams showing coherence shifts
+* OS components lighting up when referenced
+* The evergreen prompt:
+
+“What problem are you trying to make coherent?”
+
+* Behind-the-scenes thinking without revealing client secrets
+* Early frameworks, prototypes, signals, experiments
+* Quiet intelligence, not showmanship
+Feeling:
+This is a real lab — not a blog.
+________________
+
+
+IV. OFFERINGS — “THE SYSTEM APPLIED”
+Purpose:
+Translate coherence architecture into engagements.
+Core elements:
+Each offering includes:
+   * What the client arrives with (the “incoherence state”)
+   * What the system diagnoses
+   * What coherence looks like after intervention
+   * What the client receives
+   * Engines used in that engagement
+   * A single sentence summarizing the transformation
+
+Offerings:
+      * Identity Architecture Sessions
+      * Narrative System Design
+      * Infrastructure Mapping
+      * Coherence Diagnostics
+      * Long-Term System Architecture (co-owned IP or retained advisory)
+Feeling:
+Not services — coherence interventions.
+Precise. Structural. No fluff.
+________________
+
+
+V. FIELD / PROJECTS — “OUTPUT OF A COHERENT SYSTEM”
+Purpose:
+Show the results of a functioning coherence engine without relying on traditional case-study tropes.
+Core elements:
+      * Dispatches
+      * Identity maps
+      * Pattern derivatives
+      * Essays
+      * Cultural notes
+      * Experiments
+      * Prototypes
+      * Facework Field updates
+      * System diagrams or OS expansions
+Feeling:
+A research archive that quietly demonstrates depth and capacity.
+________________
+
+
+VI. CONTACT — “THE COHERENCE ENTRY POINT”
+Purpose:
+Invite alignment, not noise.
+Core element:
+“What problem are you trying to make coherent?”
+Inputs:
+      * Name
+      * Email
+      * Message
+Optional:
+      * Timeline
+      * Budget frame
+      * Availability link
+Feeling:
+People who belong here feel it immediately.
+People who don’t self-select out.
+________________
+
+
+VII. MICRO-INTERACTIONS — “ALIVENESS AS DESIGN”
+Not for show.
+For coherence.
+Features:
+      * Patterns shift gently with scroll
+      * Primitive icons highlight when referenced across pages
+      * Weekly “heartbeat” pointer (the site updates even if content doesn’t)
+      * Cross-page coherence cues (engines highlight relevant primitives)
+      * System clock or weekly cycle tied to Facework Field
+      * Motion is minimal, conceptual, quiet, sure of itself
+Feeling:
+The OS breathes.

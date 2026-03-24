@@ -1,0 +1,155 @@
+@import "tailwindcss";
+
+/*
+ * FACEWORK VISUAL LANGUAGE SYSTEM
+ *
+ * Design philosophy: engineered, not decorated.
+ * Colors are states. Motion is system behavior. Grid is architecture.
+ *
+ * Typography: Berkeley Mono (commercial) with JetBrains Mono fallback.
+ * Drop Berkeley Mono files in public/fonts/ and uncomment @font-face below.
+ */
+
+/* @font-face {
+  font-family: 'Berkeley Mono';
+  src: url('/fonts/BerkeleyMono-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Berkeley Mono';
+  src: url('/fonts/BerkeleyMono-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+} */
+
+:root {
+  /* PRIMARY PALETTE — holds, doesn't pop */
+  --ink: #000000;
+  --graphite: #1C1C1E;
+  --stone: #2A2B2E;
+  --ash: #3A3A3D;
+  --dim: #6B6B6F;
+  --soft: #F7F7F5;
+  --white: #FFFFFF;
+
+  /* ACCENT PALETTE — states of coherence, not decoration */
+  --field-blue: #8FAFFF;       /* clarity */
+  --signal-amber: #FFD089;     /* resonance */
+  --pulse-red: #FF7C7C;        /* entropy */
+  --emergence-green: #7AFFC4;  /* flow */
+
+  /* SEMANTIC MAPPING */
+  --background: var(--ink);
+  --foreground: var(--soft);
+  --muted: var(--dim);
+  --border: var(--stone);
+  --surface: var(--graphite);
+  --accent: var(--ash);
+
+  /* SYSTEM STATE COLORS */
+  --state-clarity: var(--field-blue);
+  --state-resonance: var(--signal-amber);
+  --state-entropy: var(--pulse-red);
+  --state-flow: var(--emergence-green);
+  --state-coherence: var(--emergence-green);
+
+  /* TYPOGRAPHY SCALE — 8px baseline grid */
+  --text-xs: 0.75rem;     /* 12px */
+  --text-sm: 0.875rem;    /* 14px */
+  --text-base: 1.125rem;  /* 18px */
+  --text-lg: 1.3125rem;   /* 21px */
+  --text-xl: 1.75rem;     /* 28px */
+  --text-2xl: 2.5rem;     /* 40px */
+  --text-3xl: 3.5rem;     /* 56px — headlines */
+  --text-display: 5rem;   /* 80px — hero */
+
+  /* SPACING — 8px baseline */
+  --space-1: 0.5rem;   /* 8px */
+  --space-2: 1rem;     /* 16px */
+  --space-3: 1.5rem;   /* 24px */
+  --space-4: 2rem;     /* 32px */
+  --space-6: 3rem;     /* 48px */
+  --space-8: 4rem;     /* 64px */
+  --space-9: 4.5rem;   /* 72px */
+  --space-12: 6rem;    /* 96px */
+  --space-15: 7.5rem;  /* 120px */
+
+  /* MOTION — system stabilizing, not animating */
+  --ease-settle: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --duration-fast: 150ms;
+  --duration-base: 300ms;
+  --duration-slow: 600ms;
+  --duration-settle: 1200ms;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-surface: var(--surface);
+  --color-accent: var(--accent);
+  --color-soft: var(--soft);
+  --color-ink: var(--ink);
+  --color-graphite: var(--graphite);
+  --color-stone: var(--stone);
+  --color-clarity: var(--state-clarity);
+  --color-resonance: var(--state-resonance);
+  --color-entropy: var(--state-entropy);
+  --color-flow: var(--state-flow);
+  --color-coherence: var(--state-coherence);
+  --font-mono: var(--font-berkeley);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: 'Berkeley Mono', 'JetBrains Mono', 'Geist Mono', ui-monospace, monospace;
+  font-size: var(--text-base);
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--state-clarity);
+  color: var(--ink);
+}
+
+/* HORIZONTAL DIVIDER — rhythm device */
+hr {
+  border: none;
+  height: 1px;
+  background: var(--border);
+  margin: var(--space-9) 0;
+}
+
+/* ACCENT RULES: never as background, only as indicators */
+/* Never more than one accent per screen section */
+
+/* MOTION: all transitions use settle easing */
+a, button, [role="button"] {
+  transition: color var(--duration-fast) var(--ease-settle),
+              opacity var(--duration-fast) var(--ease-settle),
+              background-color var(--duration-base) var(--ease-settle),
+              border-color var(--duration-base) var(--ease-settle);
+}
+
+/* Scroll reveal — content fades in as system stabilizes */
+@keyframes settle {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.settle-in {
+  animation: settle var(--duration-slow) var(--ease-settle) both;
+}

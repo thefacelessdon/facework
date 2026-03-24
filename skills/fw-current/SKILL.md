@@ -51,6 +51,12 @@ A dilemma is a genuine strategic question with multiple valid answers. Scan for:
   community owns, or containers someone else owns? Who controls the distribution?
   Who controls the data? If the answer is "the platform," that's not automatically
   wrong — but it must be a conscious, recorded decision with its implications named.
+- **Identity Expression dilemmas (MANDATORY):** How does this system present itself?
+  What is the visual language, tone, and brand voice? This is a strategic decision —
+  not a design afterthought resolved during prototyping. The visual identity carries
+  the frequency. If it's decided late, the prototype will be built generic and
+  retrofitted, which produces structural correctness without cultural resonance.
+  Resolve: what does this look like, sound like, and feel like? Record it.
 - **Architecture dilemmas:** Build vs buy? Monolith vs services? Self-hosted vs managed?
 - **Scope dilemmas:** Generalize now or stay specific? One vertical or many? MVP or full vision?
 - **Dependency dilemmas:** Are we blocked by an external entity? Can we decouple?

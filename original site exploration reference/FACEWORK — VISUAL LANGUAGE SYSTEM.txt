@@ -1,0 +1,238 @@
+﻿FACEWORK — VISUAL LANGUAGE SYSTEM
+Clarity by design. A system for coherent identity.
+________________
+
+
+I. DESIGN PHILOSOPHY
+Everything must feel like:
+* a system
+* in real time
+* under control
+* intentional
+* minimal with meaning
+* calm but not flat
+* engineered, not decorated
+The visuals should behave like coherence:
+* stable
+* aligned
+* precise
+* repeatable
+* evolving
+* never chaotic
+If the Coherence OS had a UI, this is it.
+________________
+
+
+II. TYPOGRAPHY SYSTEM (THE SPINE OF THE BRAND)
+Primary Typeface: Berkeley Mono
+Why it works:
+* feels engineered
+* evokes technical documentation
+* holds weight in small phrases
+* ties directly to the OS ethos
+* visually reinforces clarity by design
+
+Rules:
+   * Never force line breaks for style
+   * Keep tracking tight
+   * Use weight sparingly
+   * No italic unless intentional emphasis
+   * Large headline sizes: 80–120px on desktop
+   * Subheads: 28–40px
+   * Body: 18–21px
+Berkeley Mono is not “type.” It’s the grid.
+________________
+
+
+III. COLOR SYSTEM (THE EMOTIONAL CLARITY)
+Facework is not a high-saturation brand.
+It’s not trying to “pop.”
+It’s trying to hold.
+Primary Palette
+   * Ink Black (#000000)
+   * Graphite (#1C1C1E)
+   * Stone (#2A2B2E)
+   * Soft White (#F7F7F5)
+
+Secondary Accents (use sparingly)
+Accents are not “colors.”
+They are states of coherence.
+      * Field Blue (#8FAFFF) — clarity
+      * Signal Amber (#FFD089) — resonance
+      * Pulse Red (#FF7C7C) — entropy
+      * Emergence Green (#7AFFC4) — flow
+Accent rules:
+      * Never use more than one accent per screen
+      * Never use accent as background
+      * Accents only appear in:
+      * diagrams
+      * system states
+      * active elements
+      * hover states
+Accents must always mean something structurally.
+________________
+
+
+IV. GRID + LAYOUT SYSTEM (THE ARCHITECTURE)
+Your grid is the physical manifestation of coherence.
+Grid Rules
+      * 12-column layout, 80–120px margins
+      * Vertical rhythm: 8px baseline grid
+      * Sections separated by 72–120px vertical spacing
+      * Components aligned left or centered — never justified to the right
+      * White space is structural, not decorative
+      * No “floating objects” with no relationship to the grid
+Structure Types
+Use only these:
+      1. Single-column narrative
+      2. Split 50/50 layout
+      3. OS diagram full-width
+      4. Stacked modules
+Nothing else.
+If the layout feels like improvisation, it’s wrong.
+________________
+
+
+V. MOTION SYSTEM (THE BREATHING PART)
+Motion is where the site feels alive.
+Not animated — alive.
+Think in terms of system states, not animations.
+Motion Principles
+      * Slow acceleration
+      * Slow deceleration
+      * No bounce
+      * No elastic easing
+      * No sudden entries
+      * No playful motion
+Everything should move like:
+      * a system stabilizing
+      * a diagram updating
+      * a pattern settling
+
+Motion Examples
+         * primitives glow subtly when referenced
+         * engines assemble and disassemble like modular components
+         * coherence graphs “pulse” when a page loads
+         * butterfly mark stabilizes from fragmented lines into full shape
+         * scroll reveals but never “slides”
+The motion is there to show coherence forming, not to show off.
+________________
+
+
+VI. ICONOGRAPHY + SYMBOL SYSTEM
+Facework should have a modular symbol system tied to the OS.
+Each primitive gets a symbol form:
+         * Coherence: concentric alignment circle
+         * Frequency: repeated vertical signal lines
+         * Current: horizontal directional line
+         * Resonance: expanding rings
+         * Flow: curved line
+         * Stability: square grid
+         * Entropy: broken or offset line
+These become:
+         * UI indicators
+         * section dividers
+         * diagram components
+
+         * merch elements
+         * field identifiers
+Never use random icons.
+Every symbol must map to the OS.
+________________
+
+
+VII. IMAGERY + TEXTURE
+No photography of people.
+No vibes.
+No lifestyle.
+No moodboards.
+Acceptable imagery:
+            * structured diagrams
+            * attractor patterns
+            * the Facework butterfly
+            * coherence maps
+
+            * minimal abstract forms
+            * light grain textures (subtle)
+            * architectural shadows
+            * code-like blocks or patterns
+Imagery must reinforce the idea of identity as a system.
+If it feels like a brand campaign, delete it.
+________________
+
+
+VIII. SIGNATURE ELEMENTS (VISUAL CALLBACKS)
+These become your recurring identity cues.
+1. The Structured Butterfly
+Used sparingly — mostly:
+               * homepage
+               * footer
+               * merch
+               * PDF covers
+               * lab announcements
+The butterfly must always feel like engineered symmetry — never organic or whimsical.
+2. The Horizontal Divider Line
+Appears between sections.
+Subtle.
+Monospaced length.
+A rhythm device.
+3. The Primitives Bar
+A small horizontal index showing the seven primitives.
+One lights up based on context.
+4. The Weekly Pulse
+A small dot or indicator that signals the system’s weekly cycle.
+Ties into Facework Field + Lab Notes.
+5. The Single Prompt
+“What problem are you trying to make coherent?”
+Used as a visual anchor in multiple pages.
+These create familiarity over time.
+________________
+
+
+IX. TONE + TEXTUAL WORLD
+Your copy must follow strict rules:
+               * never speak in metaphors without grounding
+               * no self-help tone
+               * no futurist buzzwords
+               * no brand strategist noise
+               * use short sentences
+               * speak directly
+               * assume the reader is intelligent
+               * no inspirational fluff
+               * no coaching energy
+Your world is:
+calm, precise, grounded clarity.
+________________
+
+
+X. INTERACTIVE SYSTEMS (THE “LIVING” PART)
+To fulfill your vision of the site feeling alive:
+Dynamic elements:
+               * coherence pattern updates on load
+               * primitives react when hovered
+               * OS diagrams assemble
+               * the lab feed updates weekly
+               * the Field updates when new patterns are added
+System state UI:
+Use accent colors only to communicate:
+               * clarity
+               * resonance
+               * entropy
+               * flow
+               * stability
+               * coherence
+               * movement
+This turns the entire site into a visibly functioning OS.
+________________
+
+
+XI. BRAND FEELING (THE THING YOU CAN’T FAKE)
+Facework must feel like:
+               * someone built a system strong enough to live inside
+               * nothing is accidental
+               * nothing drifts
+               * nothing is loud
+               * everything reinforces the core
+               * identity is treated as architecture
+               * the site itself is a coherent organism
+This is the difference between looking designed and looking inevitable.
