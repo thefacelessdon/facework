@@ -46,6 +46,49 @@ cd facework
 
 This symlinks 8 skills into your Claude Code environment.
 
+## Protocol and Validation
+
+Facework Protocol v1 docs:
+
+- `PROTOCOL.md`
+- `COMPLIANCE.md`
+- `CERTIFICATION.md`
+- `facework.manifest.schema.json`
+
+Sample manifest:
+
+- `facework.manifest.yaml`
+
+Validate in one command:
+
+```bash
+./bin/validate-manifest
+```
+
+Standard repo command:
+
+```bash
+make validate
+```
+
+Validate a custom manifest path:
+
+```bash
+./bin/validate-manifest /path/to/facework.manifest.yaml
+```
+
+Or with make:
+
+```bash
+make validate-manifest FILE=/path/to/facework.manifest.yaml
+```
+
+Full protocol check (manifest + required spec files):
+
+```bash
+make protocol-check
+```
+
 ## Use
 
 Open Claude Code in any project directory. Type:
