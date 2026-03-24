@@ -6,7 +6,7 @@ status: RESOLVED
 # Decision 016: Protocol Is Source of Truth, Methodology Aligns
 
 ## The Question
-The protocol (PROTOCOL.md) defined 9 phases with 12 primitives. The
+The protocol (PROTOCOL.md) defined 10 phases (0–9) with 12 primitives. The
 methodology (build-methodology.md) ran 7 phases with 7 primitives.
 The test proved the 5 missing primitives are load-bearing. Which is
 the source of truth and how do they reconcile?
