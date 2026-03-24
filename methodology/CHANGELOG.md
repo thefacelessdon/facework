@@ -1,3 +1,25 @@
+# v4.1 — 2026-03-24 (Scoring System Fix)
+
+**What changed:**
+- Renamed `/fw-diagnostic` rubric dimension from "Entropy" to "Structural Integrity"
+  (1-5, where 5 = strongest). Entropy is now derived: `E = 6 - SI`.
+  Fixes the inversion where the rubric scored entropy as good-is-high but the
+  formula treats entropy as higher-is-worse.
+- Added four interpretation zones to the coherence score:
+  RED (0.2–1.0), AMBER (1.0–2.5), GREEN (2.5–5.0), DEEP GREEN (5.0–12.5).
+  Each zone has a clear action (stop/proceed with caution/ship/self-sustaining).
+- Corrected historical scores: Facework self-application is 3.0 (GREEN),
+  not 1.8 as previously reported with the inverted input.
+- Updated `methodology/coherence-tracker.md` with zones, corrected formula,
+  and computation instructions.
+
+**Triggered by:** The coherence score had no interpretation guide. A number
+without meaning is noise, not signal. The protocol principle "signal before
+scale" requires that any metric used in governance must be legible to someone
+encountering it for the first time.
+
+---
+
 # v4.0 — 2026-03-24 (Protocol Reconciliation)
 
 **What changed:**
