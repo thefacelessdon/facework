@@ -88,13 +88,15 @@ the governing equation. This is not abstract — use the rubric below.
 
 ### Scoring Rubric
 
+Score three dimensions. Each is assessed from evidence, not aspiration.
+
 **Flow (1-5):** How easily does energy move through the system?
 ```
 1 — Participants face constant friction; the system fights them
 2 — Major bottlenecks exist; workarounds are common
 3 — Core paths work smoothly; edge cases create drag
 4 — Energy moves freely through most of the system
-5 — The system feels invisible; participants do what they came to do without thinking about the system
+5 — The system feels invisible; participants do what they came to do
 ```
 
 **Resonance (1-5):** Does the system connect with its intended community?
@@ -103,17 +105,84 @@ the governing equation. This is not abstract — use the rubric below.
 2 — Functional but generic; could be for anyone
 3 — Clear awareness of the community; some authentic touches
 4 — The community would say "this gets us"
-5 — Someone from the community sees it and says "that's for me" before reading any docs
+5 — Someone from the community sees it and says "that's for me" before reading docs
 ```
 
-**Entropy (1-5):** How much structural weakness and extraction remains?
+**Structural Integrity (1-5):** How strong is the system's foundation?
 ```
 1 — Critical extraction patterns; high dependency; silent failures everywhere
 2 — Known extraction friction; several unresolved structural gaps
 3 — Minor extraction risks documented; some structural debt remains
-4 — Low entropy; ownership model enforced; few gaps
+4 — Ownership model enforced; few gaps; dependencies documented
 5 — Self-sustaining; participants control their current; system maintains itself
 ```
+
+### Computing the Score
+
+The governing equation: `Coherence = (Flow × Resonance) / (1 + Entropy)`
+
+Entropy is derived from Structural Integrity (not scored directly):
+```
+Entropy = 6 - Structural Integrity
+```
+
+This preserves the physics: higher entropy → lower coherence. A system with
+strong structural integrity (score 5) has low entropy (1). A system falling
+apart (score 1) has high entropy (5).
+
+### Interpreting the Score
+
+The coherence score ranges from 0.17 (worst) to 12.5 (best).
+
+```
+SCORE RANGE    ZONE        MEANING
+──────────────────────────────────────────────────────────────
+0.2 – 1.0      RED         System is incoherent. Contradictions between
+                            layers. Extraction patterns present. Energy
+                            leaks faster than it's produced. Stop building
+                            and fix the foundation.
+
+1.0 – 2.5      AMBER       System holds but under strain. Core paths work
+                            but edge cases create drag. Community awareness
+                            exists but transmission hasn't happened. Some
+                            structural debt. Operational — but fragile
+                            under pressure.
+
+2.5 – 5.0      GREEN       System is coherent. Energy flows freely.
+                            Community recognizes it as theirs. Structural
+                            integrity is high. Can absorb pressure without
+                            losing shape. Ready for handoff and scaling.
+
+5.0 – 12.5     DEEP GREEN  System is self-reinforcing. Coherence compounds.
+                            The community operates independently. The system
+                            sustains the people generating the energy without
+                            external intervention. Rare — this is the target,
+                            not the baseline.
+```
+
+**What the zones tell you:**
+
+- **RED:** Don't ship. Don't scale. Fix the governing truth first.
+- **AMBER:** Operational for MVP. Proceed with awareness of where it's
+  fragile. Most first-pass projects land here. The goal is to identify
+  what moves it toward GREEN, not to wait for perfection.
+- **GREEN:** Ship with confidence. The system holds its shape under
+  handoff, scaling, and time pressure.
+- **DEEP GREEN:** The system is self-sustaining. This usually requires
+  multiple iterations and real-world validation.
+
+**What moves the score:**
+
+- Flow increases when friction is removed and participants can do what
+  they came to do without fighting the system.
+- Resonance increases when the community validates the output — not when
+  the builder thinks it's good, but when the community says "that's for me."
+- Structural Integrity increases when contradictions are resolved, ownership
+  is enforced, and the system survives pressure testing.
+
+The score is a diagnostic tool, not a grade. A project at 1.8 (AMBER) with
+a clear path to GREEN is healthier than a project at 3.0 (GREEN) that got
+there by skipping the extraction check.
 
 ### The Scorecard
 
@@ -125,17 +194,15 @@ Produce this scorecard in the retro:
 │              [Project Name] — [Date]                    │
 ├─────────────────────────────────────────────────────────┤
 │                                                         │
-│  Flow:       [1-5] ████░  [one-line assessment]        │
-│  Resonance:  [1-5] ████░  [one-line assessment]        │
-│  Entropy:    [1-5] ████░  [one-line assessment]        │
+│  Flow:                [1-5] ████░  [assessment]        │
+│  Resonance:           [1-5] ████░  [assessment]        │
+│  Structural Integrity:[1-5] ████░  [assessment]        │
 │                                                         │
-│  Coherence = (F × R) / (1 + E) = [calculated score]   │
-│                                                         │
-│  Structural coherence:  [PASS/WATCH/FAIL]              │
-│  Cultural coherence:    [PASS/WATCH/FAIL]              │
+│  Entropy = 6 - SI = [value]                            │
+│  Coherence = (F × R) / (1 + E) = [score]              │
+│  Zone: [RED / AMBER / GREEN / DEEP GREEN]              │
 │                                                         │
 │  Verdict: [one sentence]                                │
-│                                                         │
 │  Key finding: [the single most important learning]     │
 │  Carry forward: [what the next project must do]        │
 └─────────────────────────────────────────────────────────┘
