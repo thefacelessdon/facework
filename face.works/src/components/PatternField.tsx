@@ -159,6 +159,9 @@ export function PatternField({
       const t = ((time - startTime) / 1000) * speed;
       const tEff = t * (0.3 + 0.7 * cfg.flow);
 
+      // Clear to transparent
+      ctx.clearRect(0, 0, w, h);
+
       // Recreate imageData if canvas resized
       const currentData = ctx.createImageData(w, h);
       const data = currentData.data;
@@ -226,13 +229,20 @@ export function PatternField({
             Math.min(intensity / maxIntensity, 1),
             gamma
           );
-          const [r, g, b] = lerpColor(normalized);
-          // Alpha from intensity — background is transparent, pattern emerges
-          const alpha = Math.min(255, normalized * 255 * 1.5);
-          data[idx] = r;
-          data[idx + 1] = g;
-          data[idx + 2] = b;
-          data[idx + 3] = alpha;
+          if (normalized < 0.01) {
+            // Fully transparent — no pattern here
+            data[idx] = 0;
+            data[idx + 1] = 0;
+            data[idx + 2] = 0;
+            data[idx + 3] = 0;
+          } else {
+            const [r, g, b] = lerpColor(normalized);
+            const alpha = Math.min(255, Math.round(normalized * 255 * 1.5));
+            data[idx] = r;
+            data[idx + 1] = g;
+            data[idx + 2] = b;
+            data[idx + 3] = alpha;
+          }
         }
       }
 
