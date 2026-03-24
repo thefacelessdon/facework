@@ -1,5 +1,5 @@
 #!/bin/bash
-# Faceworks Installer — symlinks skills into Claude Code
+# Facework Installer — symlinks skills into Claude Code
 # Usage: ./install.sh
 
 set -e
@@ -8,7 +8,7 @@ SKILL_DIR="$HOME/.claude/skills"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 echo ""
-echo "  FACEWORKS: A Coherence Practice"
+echo "  FACEWORK: A Coherence Practice"
 echo "  Installing canonical skills..."
 echo ""
 
