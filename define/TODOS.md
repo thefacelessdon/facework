@@ -84,7 +84,7 @@ Everything needed to have a credible, honest conversation about working together
 - [x] Strategic decisions locked (8 decisions resolved)
 - [x] GAMUT conformance audit → Level 3 (Sovereignty-Verified), score 5.3 DEEP GREEN
 - [x] Engagement scope template → `documents/agreements/engagement-scope-template.md`
-- [ ] face.works domain live with protocol overview
+- [x] face.works deployed → https://faceworks.vercel.app (domain mapping pending)
 - [ ] face.works Pattern System (Canvas/WebGL wave interference visualizations from Field Kernel)
 - [ ] face.works Primitives Bar (interactive horizontal index — one primitive lights up based on context)
 
