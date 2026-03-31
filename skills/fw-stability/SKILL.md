@@ -19,7 +19,7 @@ allowed-tools:
 
 # /fw-stability — Build the Foundation
 
-**Phase 5 of the Facework Protocol (Architecture and Flow — with /fw-flow).**
+**Phase 5 of the Facework Protocol (Architecture & Flow — with /fw-flow).**
 Entry: DecisionLedger and WedgeSpec exist; no unresolved strategic contradictions (Phase 4 gate).
 Exit: SystemArchitecture implementable without founder context.
 Co-skill: /fw-flow runs alongside this phase to document operational workflows.
@@ -51,7 +51,7 @@ whether they build conduits (energy flows through) or containers (energy gets tr
 ## Step 0: Read Existing Artifacts
 
 Before specifying architecture, scan the project for prior work:
-- All artifacts from Phases 0–4 (IntakeRecord through DecisionLedger)
+- All artifacts from Phases 1–4 (SignalThesis through DecisionLedger)
 - Existing architecture docs, system diagrams, or technical specs
 - Existing codebase (if any) — read the structure, not just docs about it
 - API documentation, integration guides, or dependency registries

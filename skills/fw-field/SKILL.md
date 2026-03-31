@@ -37,7 +37,7 @@ Field mapping reduces blind spots that specs and dashboards cannot reveal.
 ## Step 0: Read Existing Artifacts
 
 Before asking questions, scan the project for prior work that informs field mapping:
-- IntakeRecord and SignalThesis from prior phases
+- SignalThesis from Phase 1
 - Existing audience research, user personas, or market analysis
 - Community maps, stakeholder analyses, or ecosystem documentation
 - Competitor analyses or landscape reviews

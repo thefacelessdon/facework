@@ -2,9 +2,9 @@
 
 A coherence practice for building things.
 
-Facework is a system of forces, engines, and architectural forms that maintain structural alignment inside complex systems. Applied to product creation, it becomes a 7-phase methodology that takes an idea from zero to a fully architected, spec'd, prototyped, and handoff-ready product.
+Facework is a system of 12 primitives (forces that govern coherence), engines, and architectural forms that maintain structural alignment inside complex systems. Applied to product creation, it becomes an 8-phase methodology that takes an idea from zero to a fully architected, spec'd, prototyped, and handoff-ready product.
 
-The methodology was developed and validated building [GAMUT](https://github.com/thefacelessdon/GAMUT) — creator commerce infrastructure — across 4 days: 10 architecture specs, 9 operational playbooks, 7 strategic decisions, a working prototype, and 75+ tracked work items.
+The methodology was developed and validated building [GAMUT](https://github.com/thefacelessdon/GAMUT) — creator commerce infrastructure — and refined across multiple protocol runs including [HUE Unlimited](https://github.com/thefacelessdon/hue-unlimited).
 
 ---
 
@@ -22,21 +22,21 @@ There is a deeper pattern underneath the structural one. The history of creative
 
 ## The Primitive Stack
 
-Seven forces. Each one activates a phase of the build.
+Twelve primitives — forces that govern coherence — across eight phases. Every phase begins by reading existing artifacts (intake). The final phase closes with a diagnostic that evolves the practice.
 
 ```
-SEMANTICS       Extract meaning, define canonical language
-FIELD           Map social dynamics and adoption physics
-TASTE           Set quality governance + design language
-FREQUENCY       Extract the irreducible economic signal
-CURRENT         Establish direction, resolve contradictions
-FLOW            Design adaptive behavior (playbooks)
-STABILITY       Build the architectural foundation (specs)
-RESONANCE       Make it transmissible (prototype from DESIGN.md)
-ENTROPY         Reveal structural weakness
-SOVEREIGNTY     Enforce ownership boundaries
-CONSONANCE      Verify cross-layer alignment
-COHERENCE       Integrate into a unified whole
+Phase 1  SEMANTICS      Extract meaning, define canonical language
+Phase 2  FIELD          Map social dynamics and adoption physics
+Phase 3  TASTE          Set quality governance + design language
+Phase 4  FREQUENCY      Extract the irreducible economic signal
+         CURRENT        Establish direction, resolve contradictions
+Phase 5  FLOW           Design adaptive behavior (playbooks)
+         STABILITY      Build the architectural foundation (specs)
+Phase 6  RESONANCE      Make it transmissible (prototype from DESIGN.md)
+Phase 7  ENTROPY        Reveal structural weakness
+         SOVEREIGNTY    Enforce ownership boundaries
+         CONSONANCE     Verify cross-layer alignment
+Phase 8  COHERENCE      Integrate into a unified whole + diagnostic
 ```
 
 ---
@@ -49,7 +49,7 @@ cd facework
 ./install.sh
 ```
 
-This symlinks 13 skills into your Claude Code environment.
+This symlinks 12 protocol skills and 8 operating skills into your Claude Code environment.
 
 ## Protocol and Validation
 
@@ -102,7 +102,7 @@ Open Claude Code in any project directory. Type:
 /fw-semantics
 ```
 
-It will ask about what you're building, extract canonical meaning, and tell you when to run the next phase. Chain through all 10 phases. End with `/fw-diagnostic` to capture learnings and evolve the methodology.
+It will ask about what you're building, extract canonical meaning, and tell you when to run the next phase. Chain through all 8 phases. Coherence closes the loop with a diagnostic that evolves the methodology.
 
 ## Commands
 
@@ -113,20 +113,17 @@ It will ask about what you're building, extract canonical meaning, and tell you 
 | `/fw-taste` | 3: Taste | Taste contract, DESIGN.md (design language spec), quality rubric, anti-patterns |
 | `/fw-frequency` | 4: Strategy Lock | Business model, rate structure, governance, agreements, exit guarantees, gates |
 | `/fw-current` | 4: Strategy Lock | Dilemmas surfaced, decision records with reasoning, all contradictions resolved |
-| `/fw-flow` | 5: Architecture+Flow | Operational playbooks — every workflow mapped to human/agent ownership |
-| `/fw-stability` | 5: Architecture+Flow | Architecture specs — schemas, state machines, data flows, edge cases |
+| `/fw-flow` | 5: Architecture & Flow | Operational playbooks — every workflow mapped to human/agent ownership |
+| `/fw-stability` | 5: Architecture & Flow | Architecture specs — schemas, state machines, data flows, edge cases |
 | `/fw-resonance` | 6: Activation | Working prototype from DESIGN.md, demo data, typed schema, test suite |
 | `/fw-entropy` | 7: Integrity | Pressure test, failure mode analysis, implementation specs, critical gap fixes |
 | `/fw-sovereignty` | 7: Integrity | Ownership/control matrix, dependency risk tiers, exit audit, sovereignty requirements |
 | `/fw-consonance` | 7: Integrity | Cross-layer alignment check, contradiction register, stakeholder consonance |
-| `/fw-coherence` | 8: Integration | README, review brief, project tracker, engineering guide, clean repo |
-| `/fw-diagnostic` | 9: Evolution | Project retrospective — captures learnings, updates methodology, logs changes |
+| `/fw-coherence` | 8: Integration | README, review brief, project tracker, engineering guide, clean repo, coherence scorecard, diagnostic retro |
 
 ## The Loop
 
 ```
-Phase 0: Intake
-
 /fw-semantics → /fw-field → /fw-taste
 Extract meaning   Map social physics   Set quality bar + DESIGN.md
 
@@ -139,13 +136,13 @@ Design operations   Build architecture
 /fw-resonance → /fw-entropy + /fw-sovereignty + /fw-consonance
 Build prototype    Integrity: pressure test + ownership + alignment
 
-/fw-coherence → /fw-diagnostic
-Package handoff     Evolve the practice
-                         ↓
-               methodology evolves
-                         ↓
-               next project starts
-               from updated system
+/fw-coherence
+Package handoff + diagnostic
+         ↓
+methodology evolves
+         ↓
+next project starts
+from updated system
 ```
 
 Every project makes the practice better. Every retro is a version bump.
@@ -158,21 +155,21 @@ New to Facework? Read in this order:
 
 1. **This README** — what it is, how to install, what the commands do (5 min)
 2. **[The Theory of Cultural Physics](theories/cultural-physics.md)** — why coherence matters, the extraction pattern, the governing equation (15 min)
-3. **[The Coherence Operating System](theories/the-coherence-operating-system.md)** — the 7 forces, engines, and how they operate inside the build (15 min)
-4. **[Build Methodology](methodology/build-methodology.md)** — the 7-phase sequence with artifact maps and GAMUT proof (20 min)
-5. **Install and run `/fw-frequency`** — start building (5 min)
+3. **[The Coherence Operating System](theories/the-coherence-operating-system.md)** — the 12 primitives, engines, and how they operate inside the build (15 min)
+4. **[Build Methodology](methodology/build-methodology.md)** — the GAMUT case study that validated the methodology (20 min)
+5. **Install and run `/fw-semantics`** — start building (5 min)
 
 Total: under 1 hour from clone to first skill.
 
 ## Theories
 
-The full Facework theory — forces, engines, architectural forms, and how they operate inside the build methodology — lives in [`theories/the-coherence-operating-system.md`](theories/the-coherence-operating-system.md).
+The full Facework theory — 12 primitives, engines, architectural forms, and how they operate inside the build methodology — lives in [`theories/the-coherence-operating-system.md`](theories/the-coherence-operating-system.md).
 
 The theory of Cultural Physics — the paradigm that explains why coherence matters, what happens when creative energy is extracted instead of sustained, and why this matters most for the cultures that have always supplied the energy the world runs on — lives in [`theories/cultural-physics.md`](theories/cultural-physics.md).
 
 ## Methodology
 
-The complete 7-phase build system with artifact maps, agent encoding blueprints, and reusable patterns lives in [`methodology/build-methodology.md`](methodology/build-methodology.md).
+The GAMUT case study — the first complete protocol run that validated the build methodology — lives in [`methodology/build-methodology.md`](methodology/build-methodology.md). The canonical 8-phase sequence is defined in [`PROTOCOL.md`](PROTOCOL.md).
 
 Version history: [`methodology/CHANGELOG.md`](methodology/CHANGELOG.md)
 
@@ -197,8 +194,9 @@ Facework pairs with [gstack](https://github.com/garrytan/gstack) — Garry Tan's
 | `/retro` | Diagnostic | Engineering retrospective — commit analysis, work patterns, team breakdown |
 | `/ship` | Coherence | Sync main, run tests, push, open PR — the last mile |
 | `/document-release` | Coherence | Post-ship doc update — syncs README, CHANGELOG, and guides to match what shipped |
+| `/gstack-upgrade` | — | Upgrade gstack to the latest version |
 
-Facework's 8 skills handle the build sequence. gstack handles the pressure testing, design review, QA, and shipping that keep each phase honest. Both install as Claude Code skills and work independently — Facework doesn't require gstack, but the methodology was developed using both and they stay in lockstep.
+Facework's 12 protocol skills handle the build sequence. gstack handles the pressure testing, design review, QA, and shipping that keep each phase honest. Both install as Claude Code skills and work independently — Facework doesn't require gstack, but the methodology was developed using both and they stay in lockstep.
 
 See gstack's [README](https://github.com/garrytan/gstack) for install instructions.
 

@@ -12,7 +12,6 @@ REQUIRED=(
   fw-resonance
   fw-entropy
   fw-coherence
-  fw-diagnostic
   fw-semantics
   fw-field
   fw-taste
@@ -55,15 +54,15 @@ done
 
 echo
 if [ "$missing" -eq 1 ]; then
-  echo "Some required primitives are missing."
+  echo "Some required skills are missing."
   echo "Run: $ROOT_DIR/bin/install-skills"
   exit 1
 fi
 
 if [ "$noncanonical" -eq 1 ]; then
-  echo "Some required primitives do not resolve to Facework canonical paths."
+  echo "Some required skills do not resolve to Facework canonical paths."
   echo "Run: $ROOT_DIR/bin/install-skills"
   exit 1
 fi
 
-echo "All required primitives are installed."
+echo "All required skills are installed."

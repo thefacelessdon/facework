@@ -46,7 +46,7 @@ distinction determines whether the system sustains or extracts.
 ## Step 0: Read Existing Artifacts
 
 Before surfacing dilemmas, scan the project for prior work that informs strategy:
-- All artifacts from Phases 0–3 (IntakeRecord, SignalThesis, AudienceFieldMap, TasteContract)
+- All artifacts from Phases 1–3 (SignalThesis, AudienceFieldMap, TasteContract)
 - Existing strategy documents, decision logs, or prior direction-setting work
 - Restructure notes, pivot documentation, or "why we changed" records
 - Competitive positioning or market strategy documents

@@ -19,7 +19,7 @@ allowed-tools:
 
 # /fw-flow — Design Adaptive Behavior
 
-**Phase 5 of the Facework Protocol (Architecture and Flow — with /fw-stability).**
+**Phase 5 of the Facework Protocol (Architecture & Flow — with /fw-stability).**
 Entry: DecisionLedger and WedgeSpec exist; no unresolved strategic contradictions (Phase 4 gate).
 Exit: WorkflowPlaybooks with triggers, thresholds, ownership, and escalation paths.
 Co-skill: /fw-stability runs alongside this phase to produce buildable architecture.
@@ -54,7 +54,7 @@ automation amplifies coherence or accelerates extraction.
 ## Step 0: Read Existing Artifacts
 
 Before asking questions, scan the project for prior work that informs operations:
-- All artifacts from Phases 0–4 (IntakeRecord through DecisionLedger)
+- All artifacts from Phases 1–4 (SignalThesis through DecisionLedger)
 - Existing playbooks, runbooks, or operational documentation
 - SOPs, process docs, or workflow diagrams
 - Incident reports or post-mortems that reveal operational gaps

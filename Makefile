@@ -1,4 +1,4 @@
-.PHONY: help validate validate-manifest protocol-check
+.PHONY: help validate validate-manifest protocol-check update
 
 FILE ?= ./facework.manifest.yaml
 
@@ -7,6 +7,7 @@ help:
 	@echo "  make validate                              Validate default facework.manifest.yaml"
 	@echo "  make validate-manifest FILE=path/to/file  Validate a custom manifest file"
 	@echo "  make protocol-check                        Validate manifest + required protocol files"
+	@echo "  make update                                Check for and install updates"
 
 validate:
 	@./bin/validate-manifest
@@ -23,3 +24,6 @@ protocol-check:
 		fi; \
 		echo "[ok] required file present: $$f"; \
 	done
+
+update:
+	@./bin/facework-update

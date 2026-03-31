@@ -1,0 +1,100 @@
+#!/bin/bash
+# Facework updater — pulls latest from origin and reinstalls skills.
+# Usage: facework-update [--force]
+
+set -euo pipefail
+
+FACEWORK_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+FORCE=false
+
+for arg in "$@"; do
+  case "$arg" in
+    --force) FORCE=true ;;
+    --help|-h)
+      echo "Usage: facework-update [--force]"
+      echo "  --force   Skip confirmation prompt"
+      exit 0
+      ;;
+  esac
+done
+
+echo ""
+echo "  FACEWORK UPDATE"
+echo ""
+
+cd "$FACEWORK_ROOT"
+
+# Read local version
+LOCAL_VERSION="$(cat VERSION 2>/dev/null | tr -d '[:space:]')"
+echo "  Installed: ${LOCAL_VERSION:-unknown}"
+
+# Check for uncommitted changes that would block a pull
+if ! git diff --quiet 2>/dev/null || ! git diff --cached --quiet 2>/dev/null; then
+  echo ""
+  echo "  [warn] You have local changes in $FACEWORK_ROOT"
+  echo "  Stash or commit them before updating."
+  echo ""
+  exit 1
+fi
+
+# Fetch latest from remote
+echo "  Checking for updates..."
+git fetch origin main --quiet 2>/dev/null || {
+  echo "  [error] Could not reach origin. Check your network."
+  exit 1
+}
+
+# Compare
+LOCAL_HEAD="$(git rev-parse HEAD)"
+REMOTE_HEAD="$(git rev-parse origin/main)"
+
+if [ "$LOCAL_HEAD" = "$REMOTE_HEAD" ]; then
+  echo "  Already up to date ($LOCAL_VERSION)."
+  echo ""
+  # Clear the update cache
+  rm -f "$HOME/.cache/facework/update-check"
+  exit 0
+fi
+
+# Show what's new
+REMOTE_VERSION="$(git show origin/main:VERSION 2>/dev/null | tr -d '[:space:]' || echo "unknown")"
+COMMITS_BEHIND="$(git rev-list HEAD..origin/main --count)"
+
+echo "  Available: $REMOTE_VERSION ($COMMITS_BEHIND new commits)"
+echo ""
+echo "  Changes:"
+git log HEAD..origin/main --oneline --no-decorate | sed 's/^/    /'
+echo ""
+
+# Confirm
+if [ "$FORCE" = false ]; then
+  read -p "  Update to $REMOTE_VERSION? [Y/n] " -n 1 -r
+  echo ""
+  if [[ $REPLY =~ ^[Nn]$ ]]; then
+    echo "  Update cancelled."
+    exit 0
+  fi
+fi
+
+# Pull
+echo "  Pulling..."
+git pull --ff-only origin main --quiet 2>/dev/null || {
+  echo "  [error] Fast-forward pull failed. You may have diverged from origin."
+  echo "  Try: cd $FACEWORK_ROOT && git pull --rebase origin main"
+  exit 1
+}
+
+NEW_VERSION="$(cat VERSION 2>/dev/null | tr -d '[:space:]')"
+echo "  Updated to $NEW_VERSION."
+
+# Reinstall skills
+echo ""
+echo "  Reinstalling skills..."
+"$FACEWORK_ROOT/bin/install-skills"
+
+# Clear the update cache
+rm -f "$HOME/.cache/facework/update-check"
+
+echo ""
+echo "  Facework $NEW_VERSION is ready."
+echo ""

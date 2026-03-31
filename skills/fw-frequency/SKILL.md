@@ -58,7 +58,7 @@ can overcome it.
 ## Step 0: Read Existing Artifacts
 
 Before asking questions, scan the project for prior work that informs economics:
-- IntakeRecord, SignalThesis, AudienceFieldMap, TasteContract from prior phases
+- SignalThesis, AudienceFieldMap, TasteContract from prior phases
 - Existing business plans, financial models, or pitch decks
 - Prior pricing decisions, revenue models, or cost analyses
 - Partnership agreements, vendor contracts, or dependency documentation

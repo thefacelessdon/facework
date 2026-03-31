@@ -38,7 +38,7 @@ Consonance is the anti-fragmentation primitive.
 ## Step 0: Read Existing Artifacts
 
 Before running alignment checks, scan the project for all phase outputs:
-- All artifacts from Phases 0–6 — this skill needs the full picture
+- All artifacts from Phases 1–6 — this skill needs the full picture
 - Prior consonance checks or cross-reference audits
 - Known contradictions or watch items from earlier phases
 

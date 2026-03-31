@@ -1,0 +1,16 @@
+#!/bin/bash
+# Claude Code hook — runs before fw-* skills to check for updates.
+# Receives tool input as JSON on stdin. Only acts on fw-* skill invocations.
+# Outputs to stderr so it appears as hook feedback, not tool output.
+
+INPUT="$(cat)"
+SKILL_NAME="$(echo "$INPUT" | grep -o '"skill"[[:space:]]*:[[:space:]]*"[^"]*"' | head -1 | sed 's/.*"skill"[[:space:]]*:[[:space:]]*"//' | sed 's/".*//')"
+
+# Only check on fw-* skills
+case "$SKILL_NAME" in
+  fw-*) ;;
+  *) exit 0 ;;
+esac
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+"$SCRIPT_DIR/facework-check-update" 2>/dev/null || true

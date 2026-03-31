@@ -63,7 +63,11 @@ Gates prevent premature advancement. Canonical sources prevent contradictory num
 
 ## IV. THE PRIMITIVE STACK
 
-Seven forces govern the coherence of any system being built. Each force activates a phase of the build. They have a natural sequence — not because the theory demands it, but because the practice proved it. You cannot build stability before you've extracted frequency. You cannot design flow before stability exists for it to flow through.
+Twelve primitives — forces that govern coherence — operate across eight phases (1–8). Every phase begins by reading existing artifacts (intake is embedded behavior, not a separate phase). The final phase (Coherence) closes with a diagnostic that evolves the practice.
+
+The primitives have a natural sequence — not because the theory demands it, but because the practice proved it. You cannot build stability before you've extracted frequency. You cannot design flow before stability exists for it to flow through.
+
+The original seven (Frequency, Current, Stability, Flow, Resonance, Entropy, Coherence) were validated building GAMUT. Five more (Semantics, Field, Taste, Sovereignty, Consonance) were added after real protocol runs exposed gaps the original seven missed: naming contradictions, social adoption dynamics, quality governance, and undocumented sovereignty risks. They are load-bearing.
 
 ### Frequency
 
@@ -169,34 +173,28 @@ Engines are combinations of primitives that produce specific categories of outpu
 
 ## VI. THE SEQUENCE
 
-The full build sequence maps 12 primitives across 10 phases (0–9). The
-protocol defines the phases. The methodology implements them. The skills
-execute them. One direction of authority: Theory → Protocol → Methodology → Skills.
+The full build sequence maps 12 primitives across 8 phases. The protocol
+defines the phases. The methodology implements them. The skills execute them.
+One direction of authority: Theory → Protocol → Methodology → Skills.
 
-```
-Phase 0: Intake           Capture hunch, context, constraints
+| Phase | Name | Primitive(s) | Skill(s) |
+|-------|------|-------------|----------|
+| 1 | Semantics | Semantics | `/fw-semantics` |
+| 2 | Field | Field | `/fw-field` |
+| 3 | Taste | Taste | `/fw-taste` |
+| 4 | Strategy Lock | Frequency + Current | `/fw-frequency` + `/fw-current` |
+| 5 | Architecture & Flow | Flow + Stability | `/fw-flow` + `/fw-stability` |
+| 6 | Activation | Resonance | `/fw-resonance` |
+| 7 | Integrity | Entropy + Sovereignty + Consonance | `/fw-entropy` + `/fw-sovereignty` + `/fw-consonance` |
+| 8 | Integration | Coherence | `/fw-coherence` |
 
-/fw-semantics   →  /fw-field       →  /fw-taste
-Extract meaning    Map social physics  Set quality bar + DESIGN.md
-
-/fw-frequency   →  /fw-current
-Extract signal     Lock direction
-
-/fw-flow        →  /fw-stability
-Design adaptation  Build foundation
-
-/fw-resonance   →  /fw-entropy + /fw-sovereignty + /fw-consonance
-Make transmissible  Integrity: pressure test + verify ownership + align layers
-
-/fw-coherence   →  /fw-diagnostic
-Integrate & hand off  Evolve the practice
-```
+Every phase begins with intake (reading existing artifacts). Phase 8 closes with
+a diagnostic (coherence scorecard, retro, methodology evolution). These are
+embedded behaviors, not separate phases — because they're not primitives.
 
 Each phase produces artifacts the next phase consumes. Skip a phase and the downstream work is built on assumptions. Run them out of order and the system accrues incoherence at the foundation level — the most expensive kind to fix.
 
-The five primitives added in the second generation (Semantics, Field, Taste, Sovereignty, Consonance) are not optional extensions. They were tested against a real project and caught signal the original seven missed: naming contradictions, social adoption dynamics, quality governance gaps, and undocumented sovereignty risks. They are load-bearing.
-
-After the build: `/fw-diagnostic` captures what worked, what didn't, and what was missing. It feeds back into the methodology, updates the changelog, and the next project starts from the evolved system.
+After the build: `/fw-coherence` closes with a diagnostic that captures what worked, what didn't, and what was missing. It feeds back into the methodology, updates the changelog, and the next project starts from the evolved system.
 
 ---
 

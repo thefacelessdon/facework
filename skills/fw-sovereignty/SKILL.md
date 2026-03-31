@@ -38,7 +38,7 @@ Sovereignty asks: who controls the current, and what survives exit?
 ## Step 0: Read Existing Artifacts
 
 Before auditing sovereignty, scan the project for prior work:
-- All artifacts from Phases 0–6 (IntakeRecord through prototype)
+- All artifacts from Phases 1–6 (SignalThesis through prototype)
 - Ownership decisions from Phase 4 (DecisionLedger)
 - Exit guarantee from Phase 4 (Frequency governance docs)
 - Dependency registers from Phase 5 (SystemArchitecture)

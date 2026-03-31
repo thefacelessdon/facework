@@ -1,7 +1,8 @@
 # Facework Protocol v2
 
 Status: Draft
-Version: 2.0.0
+Spec Version: 2.0.0
+Release: 0.0.3 (see VERSION and ROADMAP.md)
 
 Facework Protocol is an open standard for turning cultural signal into coherent, ownable business systems for creators and cultural brands.
 
@@ -24,7 +25,6 @@ This spec defines:
 
 A conforming implementation MUST produce these objects:
 
-- `IntakeRecord`
 - `SignalThesis`
 - `AudienceFieldMap`
 - `TasteContract`
@@ -40,15 +40,6 @@ A conforming implementation MUST produce these objects:
 - `DiagnosticReport`
 
 ## 3) Lifecycle Phases
-
-### Phase 0: Intake
-Goal: Capture hunch, context, constraints, and assets.
-
-Required output:
-- `IntakeRecord`
-
-Gate:
-- Problem/opportunity statement is explicit and bounded.
 
 ### Phase 1: Semantics
 Goal: Define canonical meaning boundaries and anti-distortion language.
@@ -93,7 +84,7 @@ Gate:
 - No unresolved strategic contradictions.
 - Wedge has audience, offer, channel, and economic logic.
 
-### Phase 5: Architecture and Flow (Flow + Stability)
+### Phase 5: Architecture & Flow (Flow + Stability)
 Goal: Document operational reality, then produce buildable architecture.
 
 Required outputs:
@@ -132,24 +123,17 @@ Gate:
 - All critical gaps addressed.
 
 ### Phase 8: Integration (Coherence)
-Goal: Package for handoff. Prove transmission.
+Goal: Package for handoff. Prove transmission. Evolve the practice.
 
-Required output:
+Required outputs:
 - `HandoffPackage` (README, review brief, project tracker, engineering guide)
+- `DiagnosticReport` (coherence scorecard, per-primitive retro, methodology updates)
 
 Gate:
 - New builder can start without the original builder present.
 - Community this serves can understand and operate the system independently.
-
-### Phase 9: Evolution (Diagnostic)
-Goal: Convert outcomes into method upgrades.
-
-Required output:
-- `DiagnosticReport`
-
-Gate:
+- Coherence scorecard produced with Flow, Resonance, Structural Integrity scores.
 - Lessons include concrete updates to templates, tests, or rules.
-- Coherence scorecard produced with Flow, Resonance, Entropy scores.
 
 ## 4) Manifest Interoperability
 

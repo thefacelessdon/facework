@@ -2,10 +2,11 @@
 name: fw-coherence
 version: 4.0.0
 description: |
-  Coherence: Phase 8 of the Facework Protocol (Integration). Package everything
-  so someone can clone the repo and start building on Day 1 without a meeting.
-  README, review brief, project tracker, engineering guide, clean repo. Runs
-  after Integrity (Phase 7), before Evolution (Phase 9).
+  Coherence: Phase 8 of the Facework Protocol (Integration). Final phase.
+  Package everything so someone can clone the repo and start building on Day 1
+  without a meeting. README, review brief, project tracker, engineering guide,
+  clean repo. Closes with diagnostic — coherence scorecard, retro, and
+  methodology evolution. Runs after Integrity (Phase 7).
 allowed-tools:
   - Read
   - Write
@@ -19,9 +20,9 @@ allowed-tools:
 
 # /fw-coherence — Integrate Into a Unified Whole
 
-**Phase 8 of the Facework Protocol (Integration).**
+**Phase 8 of the Facework Protocol (Integration). Final phase.**
 Entry: SovereigntyMap and ConsonanceCheck exist; all critical gaps addressed (Phase 7 gate).
-Exit: HandoffPackage; new builder can start without the original builder present.
+Exit: HandoffPackage; coherence scorecard; DiagnosticReport; methodology updated.
 
 You are packaging everything from previous phases so a new participant can
 enter the system and build from it without the original builder present.
@@ -51,7 +52,7 @@ This phase demands both.
 ## Step 0: Read Existing Artifacts
 
 Before packaging, scan the project for everything produced across all phases:
-- All artifacts from Phases 0–7 — Coherence needs the complete picture
+- All artifacts from Phases 1–7 — Coherence needs the complete picture
 - Existing README, CLAUDE.md, or orientation documents
 - Prior handoff packages or onboarding docs
 - Git history to understand the build arc
@@ -141,7 +142,130 @@ Before marking complete, ask yourself:
 
 If any answer is no — fix it before declaring coherence.
 
+## Step 8: Diagnostic — Measure and Evolve
+
+The protocol closes by measuring what happened and feeding learnings back into
+the practice. This is the mechanism that makes Facework self-reinforcing.
+
+### Walk Each Primitive
+
+For each of the 12 primitives, ask the user (via AskUserQuestion, one at a time):
+
+**Semantics:** "Did the canonical language hold? Were there naming contradictions?"
+**Field:** "Did the social dynamics play out as mapped? Any surprises?"
+**Taste:** "Did the quality bar hold through the build? Where did it slip?"
+**Frequency:** "Did the governing truth hold? Were the economics right?
+Did any number change during the build? Did the extraction check surface anything?"
+**Current:** "Did the decisions hold? Were any revisited? Were there dilemmas
+you wish you'd surfaced earlier?"
+**Flow:** "Did the playbooks match reality? What workflows played out differently?"
+**Stability:** "Were the specs accurate? Which ones needed rework?"
+**Resonance:** "Was demo mode useful? Did the prototype carry the frequency
+of the community it was built for?"
+**Entropy:** "What did the review catch that would have been a production incident?"
+**Sovereignty:** "Did the ownership model hold? Any lock-in risks that slipped through?"
+**Consonance:** "Were there cross-layer contradictions the review missed?"
+**Coherence:** "Could the builder start from the handoff? What was missing?"
+
+### Produce Coherence Scorecard
+
+Score three dimensions from evidence, not aspiration.
+
+**Flow (1-5):** How easily does energy move through the system?
+```
+1 — Participants face constant friction; the system fights them
+2 — Major bottlenecks exist; workarounds are common
+3 — Core paths work smoothly; edge cases create drag
+4 — Energy moves freely through most of the system
+5 — The system feels invisible; participants do what they came to do
+```
+
+**Resonance (1-5):** Does the system connect with its intended community?
+```
+1 — The community wouldn't recognize this as built for them
+2 — Functional but generic; could be for anyone
+3 — Clear awareness of the community; some authentic touches
+4 — The community would say "this gets us"
+5 — Someone from the community sees it and says "that's for me" before reading docs
+```
+
+**Structural Integrity (1-5):** How strong is the system's foundation?
+```
+1 — Critical extraction patterns; high dependency; silent failures everywhere
+2 — Known extraction friction; several unresolved structural gaps
+3 — Minor extraction risks documented; some structural debt remains
+4 — Ownership model enforced; few gaps; dependencies documented
+5 — Self-sustaining; participants control their current; system maintains itself
+```
+
+**Computing the score:**
+```
+Entropy = 6 - Structural Integrity
+Coherence = (Flow × Resonance) / (1 + Entropy)
+```
+
+**Interpreting the score:**
+```
+0.2 – 1.0   RED          Incoherent. Stop building, fix the foundation.
+1.0 – 2.5   AMBER        Holds but fragile. Operational for MVP.
+2.5 – 5.0   GREEN        Coherent. Ready for handoff and scaling.
+5.0 – 12.5  DEEP GREEN   Self-reinforcing. Rare — the target, not the baseline.
+```
+
+Present recommended scores to the user via AskUserQuestion and let them adjust.
+
+### Scorecard Output
+
+```
+┌─────────────────────────────────────────────────────────┐
+│              COHERENCE SCORECARD                        │
+│              [Project Name] — [Date]                    │
+├─────────────────────────────────────────────────────────┤
+│                                                         │
+│  Flow:                [1-5] ████░  [assessment]        │
+│  Resonance:           [1-5] ████░  [assessment]        │
+│  Structural Integrity:[1-5] ████░  [assessment]        │
+│                                                         │
+│  Entropy = 6 - SI = [value]                            │
+│  Coherence = (F × R) / (1 + E) = [score]              │
+│  Zone: [RED / AMBER / GREEN / DEEP GREEN]              │
+│                                                         │
+│  Verdict: [one sentence]                                │
+│  Key finding: [the single most important learning]     │
+│  Carry forward: [what the next project must do]        │
+└─────────────────────────────────────────────────────────┘
+```
+
+### Write Retro
+
+Save to methodology/retros/:
+- Project name, date, duration, phases completed
+- Per-primitive learnings (what worked, what didn't, what was missing)
+- Coherence scorecard
+- Methodology updates proposed
+- Top 3 things to carry forward
+
+### Update Methodology
+
+Propose specific changes based on retro findings. For each:
+- "Add to methodology: [new pattern]. Should we add this?"
+- "Remove from methodology: [unnecessary step]. Should we remove this?"
+- "Modify in methodology: [adjusted step]. Should we update this?"
+
+Apply approved changes. Update CHANGELOG.md with version bump.
+
 ## Output
 
-"Coherence integrated. Repo is at [URL]. Handoff-ready.
-Run /fw-diagnostic to capture learnings and evolve the practice."
+Tell the user:
+- Handoff status (repo URL, what's ready)
+- Coherence scorecard (score and zone)
+- How many methodology changes were made
+- What the next project should do differently
+
+```
+Project → /fw-coherence → Handoff + Diagnostic → Methodology Update
+   ↑                                                        |
+   └──── Next project uses updated practice ←───────────────┘
+```
+
+Every project makes the practice better. Every run is a version bump.

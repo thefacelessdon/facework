@@ -1,3 +1,31 @@
+# 0.0.3 — 2026-03-31 (Protocol Consolidation)
+
+**What changed:**
+- Consolidated 10 phases → 8 phases. Removed standalone Phase 0 (Intake) and
+  Phase 9 (Diagnostic). Intake folded into Step 0 of every skill. Diagnostic
+  folded into `/fw-coherence` (Phase 8: Integration).
+- Removed `/fw-intake` and `/fw-diagnostic` as standalone skills. 14 skills → 12
+  protocol skills + 8 operating skills.
+- Added versioning system: `VERSION` file, `ROADMAP.md` with progression logic,
+  `bin/facework-update` and `bin/facework-check-update` for automatic update
+  notifications when `/fw-*` skills are invoked.
+- Claude Code hook (`.claude/settings.json`) triggers update check on skill use.
+- Cleaned orphaned directories (`theory/`, `commands/`, `Concepts/`, `.conductor/`).
+- Theory and methodology docs updated for 8-phase model.
+- Build-methodology reframed as GAMUT case study.
+- PROTOCOL.md now distinguishes spec version (2.0.0) from release version (0.0.3).
+
+**Versioning note:** This is the first release tracked under the new versioning
+system. Prior entries below use methodology-internal version numbers (v1.0–v5.0).
+The ROADMAP.md version history table maps old numbers to release versions.
+
+**Triggered by:** Protocol had accumulated structural debt — standalone Intake
+and Diagnostic phases added complexity without adding capability. Intake is
+better as a habit (Step 0 of every phase) than a ceremony. Diagnostic belongs
+with Coherence since handoff and retrospective are the same act.
+
+---
+
 # v5.0 — 2026-03-31 (Protocol Fix Pass — Post-Diagnostic)
 
 **What changed:**
@@ -240,16 +268,15 @@ evaluation criteria that prevents this.
 
 ## Future entries
 
-After each project, add an entry here:
+After each change, add an entry using the release version:
 
 ```
-## vX.Y — [Date] ([Project Name])
+# 0.X.Y — [Date] ([Summary])
 
 **What changed:**
 - [Added/removed/modified step]
 - [New pattern discovered]
 - [Phase timing adjustment]
-- [Agent encoding progress]
 
-**Triggered by:** Retro [number] finding: [which learning drove the change]
+**Triggered by:** [What evidence drove the change]
 ```

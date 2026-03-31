@@ -1,7 +1,7 @@
 # Coherence Tracker
 
 Running record of coherence scores across all projects built with Facework.
-Updated after each `/fw-diagnostic` run.
+Updated after each `/fw-coherence` run (diagnostic is the closing step of Coherence).
 
 ---
 
@@ -18,7 +18,7 @@ Entropy is derived: `Entropy = 6 - Structural Integrity`
 
 This preserves the physics: higher entropy → lower coherence.
 
-See `/fw-diagnostic` for the full rubric and zone definitions.
+See `/fw-coherence` (Step 8: Diagnostic) for the full rubric and zone definitions.
 
 ### Zones
 
@@ -55,7 +55,7 @@ external creator engagements are scored.*
 
 ## How to Update
 
-After running `/fw-diagnostic` on a project:
+After completing `/fw-coherence` (which includes the diagnostic):
 1. Score Flow, Resonance, and Structural Integrity from evidence (not aspiration)
 2. Compute Entropy = 6 - Structural Integrity
 3. Compute Coherence = (Flow × Resonance) / (1 + Entropy)

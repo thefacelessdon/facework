@@ -71,7 +71,7 @@ serves a community and a product that was built about that community by outsider
 ## Step 0: Read Existing Artifacts
 
 Before building anything, scan the project for prior work that informs the prototype:
-- All artifacts from Phases 0–5 (IntakeRecord through SystemArchitecture)
+- All artifacts from Phases 1–5 (SignalThesis through SystemArchitecture)
 - DecisionLedger — especially decisions that constrain prototype scope
 - DesignLanguageSpec / DESIGN.md from Phase 3 (if produced there)
 - Existing prototypes, mockups, or design comps

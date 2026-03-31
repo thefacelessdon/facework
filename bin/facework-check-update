@@ -1,0 +1,52 @@
+#!/bin/bash
+# Lightweight update checker for Facework.
+# Caches the result so it only hits the network once per day.
+# Exit 0 with output if update available, exit 0 silent if up-to-date.
+# Exit 1 on error (silently — never block the user's command).
+
+set -euo pipefail
+
+FACEWORK_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+CACHE_DIR="$HOME/.cache/facework"
+CACHE_FILE="$CACHE_DIR/update-check"
+CHECK_INTERVAL=86400  # 24 hours in seconds
+
+mkdir -p "$CACHE_DIR"
+
+# Read local version
+LOCAL_VERSION="$(cat "$FACEWORK_ROOT/VERSION" 2>/dev/null | tr -d '[:space:]')"
+if [ -z "$LOCAL_VERSION" ]; then
+  exit 0  # No version file — skip silently
+fi
+
+# Check if we already checked recently
+if [ -f "$CACHE_FILE" ]; then
+  last_check="$(head -1 "$CACHE_FILE" 2>/dev/null || echo 0)"
+  now="$(date +%s)"
+  elapsed=$(( now - last_check ))
+  if [ "$elapsed" -lt "$CHECK_INTERVAL" ]; then
+    # Still within cache window — show cached result if any
+    cached_remote="$(sed -n '2p' "$CACHE_FILE" 2>/dev/null || true)"
+    if [ -n "$cached_remote" ] && [ "$cached_remote" != "$LOCAL_VERSION" ]; then
+      echo "  Facework $cached_remote is available (you have $LOCAL_VERSION)."
+      echo "  Run: $FACEWORK_ROOT/bin/facework-update"
+    fi
+    exit 0
+  fi
+fi
+
+# Fetch remote VERSION (timeout 3s so we never block the user)
+REMOTE_URL="https://raw.githubusercontent.com/thefacelessdon/faceworks/main/VERSION"
+REMOTE_VERSION="$(curl -sf --connect-timeout 3 --max-time 5 "$REMOTE_URL" 2>/dev/null | tr -d '[:space:]' || true)"
+
+# Cache the result
+echo "$(date +%s)" > "$CACHE_FILE"
+if [ -n "$REMOTE_VERSION" ]; then
+  echo "$REMOTE_VERSION" >> "$CACHE_FILE"
+fi
+
+# Compare
+if [ -n "$REMOTE_VERSION" ] && [ "$REMOTE_VERSION" != "$LOCAL_VERSION" ]; then
+  echo "  Facework $REMOTE_VERSION is available (you have $LOCAL_VERSION)."
+  echo "  Run: $FACEWORK_ROOT/bin/facework-update"
+fi

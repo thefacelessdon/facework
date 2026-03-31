@@ -1,0 +1,10 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Skill",
+        "command": "./bin/facework-update-hook"
+      }
+    ]
+  }
+}

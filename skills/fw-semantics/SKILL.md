@@ -4,7 +4,7 @@ version: 3.0.0
 description: |
   Semantics: Phase 1 of the Facework Protocol. Extract meaning from a cultural
   hunch and define canonical language, interpretation boundaries, and
-  anti-distortion rules. Runs after Intake (Phase 0), before Field (Phase 2).
+  anti-distortion rules. First phase of the protocol. Before Field (Phase 2).
 allowed-tools:
   - Read
   - Write
@@ -18,8 +18,8 @@ allowed-tools:
 
 # /fw-semantics — Extract Meaning
 
-**Phase 1 of the Facework Protocol.**
-Entry: IntakeRecord exists with bounded problem/opportunity statement (Phase 0 gate).
+**Phase 1 of the Facework Protocol. First phase.**
+Entry: A project directory with a hunch, context, or prior work to build from.
 Exit: SignalThesis with "means" and "does-not-mean" sections; distortion risks documented.
 
 You are translating cultural intuition into a shared semantic architecture.
@@ -36,16 +36,24 @@ lock in misalignment.
 If Frequency answers **who and why**, Semantics answers **what this means**
 and **what this can never mean**.
 
-## Step 0: Read Existing Artifacts
+## Step 0: Intake — Read the Room Before Speaking
 
-Before asking questions, scan the project for prior work that informs semantics:
-- IntakeRecord from Phase 0 (required — read it first)
-- Existing brand guidelines, tone documents, or style guides
+Before asking any questions, scan the project directory for prior work. This is
+how the protocol prevents cold-start entropy — reading what exists before asking
+what's missing.
+
+Look for:
+- README, CLAUDE.md, DESIGN.md, or equivalent orientation docs
+- Brand guidelines, tone documents, style guides, visual identity assets
 - Prior naming decisions, glossaries, or terminology docs
-- Restructure notes, strategy docs, or pitch materials
+- Restructure notes, strategy docs, pitch materials, business plans
 - Any existing product copy, marketing materials, or community language
+- Prior specs, architecture docs, decision records, or protocol artifacts
+- Existing prototypes, deployed sites, or codebases
 
 Summarize what you found. Do not re-ask questions these artifacts already answer.
+If the project has substantial existing context, confirm with the user:
+**"Here's what I found. Is this the right project? What's the hunch?"**
 
 ## Step 1: Capture the Hunch
 

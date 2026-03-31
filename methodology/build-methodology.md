@@ -1,5 +1,5 @@
 ---
-title: "Build Methodology: From Idea to Handoff-Ready Architecture"
+title: "Build Methodology: GAMUT Case Study"
 type: Internal Reference
 version: 2.0
 author: The Faceless Don
@@ -7,7 +7,13 @@ date: March 2026
 status: Living Document
 ---
 
-# Build Methodology
+# Build Methodology: GAMUT Case Study
+
+> **Note:** This document captures the original 7-phase build methodology as validated
+> building GAMUT. The canonical protocol has since evolved to an 8-phase sequence (Phases 1–8)
+> with 12 primitives. See [PROTOCOL.md](../PROTOCOL.md) for the current specification and
+> the `/fw-*` skills for execution. The mapping between this case study and the current
+> protocol is shown below.
 
 How to take an idea from zero to a fully architected, spec'd, prototyped, and handoff-ready
 product using Claude Code as an operating partner. This methodology was developed and validated
@@ -43,7 +49,22 @@ The build sequence IS this equation, executed in order.
 
 ---
 
-## The Seven Phases
+## The Seven Phases (GAMUT)
+
+> **Protocol mapping:** The 7 phases below predate the current 8-phase protocol.
+> The protocol added Phases 1–3 (Semantics, Field, Taste) before Governance
+> and folded Diagnostic into Coherence (Phase 8). The mapping:
+>
+> | GAMUT Phase | Protocol Phase(s) | Skill(s) |
+> |-------------|-------------------|----------|
+> | — (implicit) | 1–3: Semantics, Field, Taste | `/fw-semantics`, `/fw-field`, `/fw-taste` |
+> | 1: Governance & Foundation | 4: Strategy Lock | `/fw-frequency` + `/fw-current` |
+> | 2: Strategic Pressure Testing | 4: Strategy Lock | `/fw-current` |
+> | 3: Architecture Specification | 5: Architecture & Flow | `/fw-stability` |
+> | 4: Operational Playbooks | 5: Architecture & Flow | `/fw-flow` |
+> | 5: Platform Prototype | 6: Activation | `/fw-resonance` |
+> | 6: Technical Spine Hardening | 7: Integrity | `/fw-entropy` + `/fw-sovereignty` + `/fw-consonance` |
+> | 7: Handoff & Packaging | 8: Integration | `/fw-coherence` (includes diagnostic) |
 
 ```
 PHASE 1        PHASE 2          PHASE 3         PHASE 4
@@ -393,7 +414,7 @@ Note:               Warnings, timing, upstream decisions
 **Tools for this phase:**
 - Ship (`/ship` from [gstack](https://github.com/garrytan/gstack)) for the last mile — sync main, run tests, push, open PR
 - Document release (`/document-release` from [gstack](https://github.com/garrytan/gstack)) for syncing README, CHANGELOG, and guides to match what shipped
-- Retro (`/retro` from [gstack](https://github.com/garrytan/gstack)) for engineering retrospective — feeds into `/fw-diagnostic`
+- Retro (`/retro` from [gstack](https://github.com/garrytan/gstack)) for engineering retrospective — feeds into the diagnostic step of `/fw-coherence`
 
 **Key principle:** A TODO without context is worse than no TODO. Every work item
 should be startable without asking questions. And the coherence test is not just

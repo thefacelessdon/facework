@@ -54,7 +54,7 @@ alongside technical entropy.
 ## Step 0: Read Existing Artifacts
 
 Before scoping the review, scan the project for prior work:
-- All artifacts from Phases 0–6 (IntakeRecord through prototype)
+- All artifacts from Phases 1–6 (SignalThesis through prototype)
 - Prior audit reports, security reviews, or code quality assessments
 - Incident logs, bug reports, or known issue trackers
 - Performance benchmarks or load test results
