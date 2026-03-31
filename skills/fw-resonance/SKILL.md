@@ -1,10 +1,11 @@
 ---
 name: fw-resonance
-version: 3.0.0
+version: 4.0.0
 description: |
-  Resonance: Make it transmissible. Build a working prototype that
-  demonstrates the system without requiring live infrastructure.
-  Permanent demo mode. Typed schema. Lifecycle-aware. Testable.
+  Resonance: Phase 6 of the Facework Protocol (Activation). Build a working
+  prototype that demonstrates the system without requiring live infrastructure.
+  Permanent demo mode. Typed schema. Lifecycle-aware. Testable. Runs after
+  Architecture and Flow (Phase 5), before Integrity (Phase 7).
 allowed-tools:
   - Read
   - Write
@@ -18,9 +19,19 @@ allowed-tools:
 
 # /fw-resonance — Make It Transmissible
 
+**Phase 6 of the Facework Protocol (Activation).**
+Entry: WorkflowPlaybooks and SystemArchitecture exist (Phase 5 gate).
+Exit: LaunchPlan and working prototype with DESIGN.md applied; demo data; test suite passing.
+
 You are building a working prototype that demonstrates the system — not a
 mockup, not a wireframe, a living artifact someone can interact with and
 understand without explanation.
+
+**Strategy Lock boundary:** If a decision locked in Phase 4 says "don't build X
+yet," the prototype demonstrates architecture and design language WITHOUT building
+that surface. Resonance proves transmission — it does not override strategy lock
+decisions. The prototype shows what the system IS, not everything it COULD become.
+When in doubt, read the DecisionLedger before scoping prototype features.
 
 ## The Cultural Physics Foundation
 
@@ -56,6 +67,18 @@ serves a community and a product that was built about that community by outsider
    a Stability spec. Contradictions surface as type errors.
 5. **Carry the frequency** — the prototype should reflect the identity and
    aesthetic of the community it serves, not generic SaaS patterns.
+
+## Step 0: Read Existing Artifacts
+
+Before building anything, scan the project for prior work that informs the prototype:
+- All artifacts from Phases 0–5 (IntakeRecord through SystemArchitecture)
+- DecisionLedger — especially decisions that constrain prototype scope
+- DesignLanguageSpec / DESIGN.md from Phase 3 (if produced there)
+- Existing prototypes, mockups, or design comps
+- Existing codebase, component libraries, or design systems
+- Brand assets, logos, icons, or visual materials
+
+Summarize what you found. Do not rebuild what already exists and still holds.
 
 ## Step 1: DESIGN.md — Design Language Spec
 

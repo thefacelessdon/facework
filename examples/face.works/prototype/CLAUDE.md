@@ -86,7 +86,7 @@ Update this object as real metrics change.
 ## How to Run
 
 ```bash
-cd face.works
+cd examples/face.works/prototype
 npm install
 npm run dev        # localhost:3000
 npm run build      # production build

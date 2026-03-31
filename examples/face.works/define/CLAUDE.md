@@ -15,7 +15,7 @@ Theory (why) → Protocol (what) → Methodology (how) → Skills (execute)
 ```
 
 Protocol v2.0.0 is the source of truth. 10 phases (0–9), 12 primitives, 13 skills.
-See `../PROTOCOL.md` for the canonical phase sequence.
+See `../../../PROTOCOL.md` for the canonical phase sequence.
 
 ## Current Stage: MVP (Services Phase)
 

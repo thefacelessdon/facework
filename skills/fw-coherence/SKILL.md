@@ -1,10 +1,11 @@
 ---
 name: fw-coherence
-version: 3.0.0
+version: 4.0.0
 description: |
-  Coherence: Integrate into a unified whole. Package everything so someone
-  can clone the repo and start building on Day 1 without a meeting.
-  README, review brief, project tracker, engineering guide, clean repo.
+  Coherence: Phase 8 of the Facework Protocol (Integration). Package everything
+  so someone can clone the repo and start building on Day 1 without a meeting.
+  README, review brief, project tracker, engineering guide, clean repo. Runs
+  after Integrity (Phase 7), before Evolution (Phase 9).
 allowed-tools:
   - Read
   - Write
@@ -17,6 +18,10 @@ allowed-tools:
 ---
 
 # /fw-coherence — Integrate Into a Unified Whole
+
+**Phase 8 of the Facework Protocol (Integration).**
+Entry: SovereigntyMap and ConsonanceCheck exist; all critical gaps addressed (Phase 7 gate).
+Exit: HandoffPackage; new builder can start without the original builder present.
 
 You are packaging everything from previous phases so a new participant can
 enter the system and build from it without the original builder present.
@@ -42,6 +47,16 @@ depending on the original builder?** Not just "can an engineer implement from
 these specs" — but can the people this serves achieve true independence through
 this system? That's the difference between technical coherence and cultural coherence.
 This phase demands both.
+
+## Step 0: Read Existing Artifacts
+
+Before packaging, scan the project for everything produced across all phases:
+- All artifacts from Phases 0–7 — Coherence needs the complete picture
+- Existing README, CLAUDE.md, or orientation documents
+- Prior handoff packages or onboarding docs
+- Git history to understand the build arc
+
+This step IS the audit — Coherence reads everything. Step 1 structures what you find.
 
 ## Step 1: Audit What Exists
 

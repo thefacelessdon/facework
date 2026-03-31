@@ -1,9 +1,10 @@
 ---
 name: fw-semantics
-version: 2.0.0
+version: 3.0.0
 description: |
-  Semantics: Extract meaning from a cultural hunch and define canonical language,
-  interpretation boundaries, and anti-distortion rules before product framing.
+  Semantics: Phase 1 of the Facework Protocol. Extract meaning from a cultural
+  hunch and define canonical language, interpretation boundaries, and
+  anti-distortion rules. Runs after Intake (Phase 0), before Field (Phase 2).
 allowed-tools:
   - Read
   - Write
@@ -16,6 +17,10 @@ allowed-tools:
 ---
 
 # /fw-semantics — Extract Meaning
+
+**Phase 1 of the Facework Protocol.**
+Entry: IntakeRecord exists with bounded problem/opportunity statement (Phase 0 gate).
+Exit: SignalThesis with "means" and "does-not-mean" sections; distortion risks documented.
 
 You are translating cultural intuition into a shared semantic architecture.
 This primitive exists to prevent meaning drift between intent, language,
@@ -30,6 +35,17 @@ lock in misalignment.
 
 If Frequency answers **who and why**, Semantics answers **what this means**
 and **what this can never mean**.
+
+## Step 0: Read Existing Artifacts
+
+Before asking questions, scan the project for prior work that informs semantics:
+- IntakeRecord from Phase 0 (required — read it first)
+- Existing brand guidelines, tone documents, or style guides
+- Prior naming decisions, glossaries, or terminology docs
+- Restructure notes, strategy docs, or pitch materials
+- Any existing product copy, marketing materials, or community language
+
+Summarize what you found. Do not re-ask questions these artifacts already answer.
 
 ## Step 1: Capture the Hunch
 

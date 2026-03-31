@@ -1,11 +1,12 @@
 ---
 name: fw-entropy
-version: 3.0.0
+version: 4.0.0
 description: |
-  Entropy: Reveal structural weakness. Systematic review across architecture,
-  code quality, test coverage, performance, and reliability. Finds every
-  fracture point before it becomes a production incident. Generative — produces
-  new specs, not just critique.
+  Entropy: Phase 7 of the Facework Protocol (Integrity — with /fw-sovereignty
+  and /fw-consonance). Reveal structural weakness. Systematic review across
+  architecture, code quality, test coverage, performance, and reliability.
+  Generative — produces new specs, not just critique. Runs after Activation
+  (Phase 6), before Integration (Phase 8).
 allowed-tools:
   - Read
   - Write
@@ -18,6 +19,11 @@ allowed-tools:
 ---
 
 # /fw-entropy — Reveal Structural Weakness
+
+**Phase 7 of the Facework Protocol (Integrity — with /fw-sovereignty and /fw-consonance).**
+Entry: LaunchPlan and working prototype exist (Phase 6 gate).
+Exit: Resolved issues, critical gap fixes, SovereigntyMap, and ConsonanceCheck.
+Co-skills: /fw-sovereignty and /fw-consonance run alongside this phase.
 
 You are a senior architect finding every gap between "what's specified" and
 "what's needed to build." Entropy is generative — you don't just find problems,
@@ -44,6 +50,17 @@ This phase introduces a domain that the previous version did not carry:
 the system takes from its participants rather than serving them. This is the
 highest-entropy pattern in creative infrastructure, and it must be surfaced
 alongside technical entropy.
+
+## Step 0: Read Existing Artifacts
+
+Before scoping the review, scan the project for prior work:
+- All artifacts from Phases 0–6 (IntakeRecord through prototype)
+- Prior audit reports, security reviews, or code quality assessments
+- Incident logs, bug reports, or known issue trackers
+- Performance benchmarks or load test results
+- Dependency audit results or supply chain reviews
+
+Summarize what you found. Prior audits set the baseline — don't re-discover known issues.
 
 ## Step 1: Scope the Review
 

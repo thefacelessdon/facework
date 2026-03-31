@@ -1,3 +1,38 @@
+# v5.0 — 2026-03-31 (Protocol Fix Pass — Post-Diagnostic)
+
+**What changed:**
+- Created `/fw-intake` skill (Phase 0). Every phase now has a dedicated skill.
+  Intake confirms the target project, scans for existing artifacts, understands
+  team composition and constraints, produces an IntakeRecord, and gates on an
+  explicit, bounded problem/opportunity statement.
+- Added explicit phase numbering to every `/fw-*` skill description and opening
+  section. Each skill now states "Phase N of the Facework Protocol," names its
+  entry/exit criteria, and identifies co-skills that run alongside it.
+- Fixed overlapping skill descriptions. `/fw-frequency` no longer claims "before
+  anything gets designed or built" (that's Phase 0). `/fw-semantics` no longer
+  claims "before product framing." Each skill positions itself relative to its
+  actual phase number in the 10-phase sequence.
+- Added "Step 0: Read existing artifacts" to every phase skill. Skills now scan
+  the project for prior work before entering discovery questions, preventing
+  redundant re-asking of questions that existing documents already answer.
+- Added strategy lock boundary guidance to `/fw-resonance`. If a Phase 4 decision
+  says "don't build X yet," the prototype demonstrates architecture and design
+  language without building that surface. Resonance proves transmission — it does
+  not override strategy lock decisions.
+- Updated CLAUDE.md and AGENTS.md with the canonical 10-phase table. Skills
+  count updated from 13 to 14.
+- Fixed next-step references in `/fw-field` (now points to `/fw-taste`) and
+  `/fw-taste` (now points to `/fw-frequency` + `/fw-current`).
+- Bumped all skill versions to reflect the changes.
+
+**Triggered by:** HUE Unlimited protocol run (2026-03-29) diagnostic identified
+5 structural issues that caused real friction during execution. Three separate
+sessions logged feedback confirming the same problems. Evidence: retros 003 and
+005, plus session feedback on Phase 0 gap, phase sequence ambiguity, overlapping
+descriptions, redundant discovery questions, and prototype scope overreach.
+
+---
+
 # v4.1 — 2026-03-24 (Scoring System Fix)
 
 **What changed:**

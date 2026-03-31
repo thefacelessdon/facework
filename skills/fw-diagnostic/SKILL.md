@@ -1,10 +1,11 @@
 ---
 name: fw-diagnostic
-version: 3.0.0
+version: 4.0.0
 description: |
-  Diagnostic: Measure and evolve. Post-project retrospective that captures
-  learnings, updates the Facework methodology, and logs changes. The mechanism
-  that makes the practice self-reinforcing across projects.
+  Diagnostic: Phase 9 of the Facework Protocol (Evolution). Post-project
+  retrospective that captures learnings, updates the Facework methodology,
+  and logs changes. The mechanism that makes the practice self-reinforcing
+  across projects. Runs after Integration (Phase 8). Final phase of the loop.
 allowed-tools:
   - Read
   - Write
@@ -17,6 +18,10 @@ allowed-tools:
 ---
 
 # /fw-diagnostic — Measure and Evolve
+
+**Phase 9 of the Facework Protocol (Evolution). Final phase.**
+Entry: HandoffPackage exists; community can operate independently (Phase 8 gate).
+Exit: DiagnosticReport with concrete methodology updates; coherence scorecard produced.
 
 You are facilitating a retrospective that feeds back into the Facework practice.
 This is the mechanism that makes the methodology self-reinforcing.
@@ -40,6 +45,17 @@ prevent extractive patterns, or did they slip through?
 
 The diagnostic is where the practice proves it's not just a build process — it's
 a coherence practice that serves the communities it builds for.
+
+## Step 0: Read Existing Artifacts
+
+Before facilitating the retrospective, scan the project for all outputs:
+- All artifacts from Phases 0–8 — Diagnostic evaluates the full run
+- Prior retros or diagnostic reports (if this is a re-run)
+- The Facework methodology doc (to compare against current practice)
+- Git history and commit timeline (to understand the build arc)
+
+Summarize what you found. The diagnostic evaluates what happened — reading everything first
+prevents re-asking questions the artifacts already answer.
 
 ## Step 1: Gather Context
 

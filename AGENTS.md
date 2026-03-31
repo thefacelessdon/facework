@@ -1,7 +1,46 @@
-# Facework
+# Facework — Protocol Toolkit
 
-A coherence practice for building things. See `theories/` for the theoretical
-foundations and `methodology/` for the executable build system.
+This repo is a **protocol toolkit**, not a project workspace. It contains the
+Facework protocol spec, methodology, theories, and agent skills (`/fw-*` commands)
+for running the protocol on any project.
+
+## Running the protocol on a project
+
+When someone runs `/fw-intake` (or any `/fw-*` skill), they are starting a
+protocol run on **their** project — not on this repo. Every run begins with
+Phase 0 (Intake) to confirm the target project and scan for existing artifacts.
+
+**Do NOT treat `examples/` as the active project.** It contains reference output
+from a completed protocol run (Face.works). It exists to show what the protocol
+produces. Ignore it when running the protocol on a new project.
+
+## Protocol Phases (canonical sequence)
+
+| Phase | Name | Skill(s) | Purpose |
+|-------|------|----------|---------|
+| 0 | Intake | `/fw-intake` | Capture hunch, context, constraints, assets |
+| 1 | Semantics | `/fw-semantics` | Extract meaning and canonical language |
+| 2 | Field | `/fw-field` | Map social dynamics and adoption loops |
+| 3 | Taste | `/fw-taste` | Define quality governance and design language |
+| 4 | Strategy Lock | `/fw-frequency` + `/fw-current` | Lock economics and strategic direction |
+| 5 | Architecture & Flow | `/fw-flow` + `/fw-stability` | Document operations, then specify architecture |
+| 6 | Activation | `/fw-resonance` | Build transmissible prototype from DESIGN.md |
+| 7 | Integrity | `/fw-entropy` + `/fw-sovereignty` + `/fw-consonance` | Pressure test, enforce boundaries, verify alignment |
+| 8 | Integration | `/fw-coherence` | Package for handoff |
+| 9 | Evolution | `/fw-diagnostic` | Retrospective and methodology update |
+
+## Repo structure
+
+```
+Facework/
+├── PROTOCOL.md          ← open protocol spec v2.0.0 (source of truth)
+├── theories/            ← paradigm (Cultural Physics, Coherence OS)
+├── methodology/         ← build system (retros, changelog)
+├── skills/              ← 14 agent skills (/fw-* commands)
+├── examples/            ← reference output from completed runs (NOT active project)
+│   └── face.works/      ← first protocol run (Facework's own infrastructure)
+└── bin/                 ← validation tooling
+```
 
 ## gstack
 

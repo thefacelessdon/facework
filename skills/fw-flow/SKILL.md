@@ -1,11 +1,11 @@
 ---
 name: fw-flow
-version: 3.0.0
+version: 4.0.0
 description: |
-  Flow: Design adaptive behavior. Document every operational workflow with
-  triggers, steps, decision points, thresholds, and escalation. If you can't
-  write the playbook, you can't automate it. Maps each step to human or
-  machine ownership.
+  Flow: Phase 5 of the Facework Protocol (with /fw-stability). Design adaptive
+  behavior. Document every operational workflow with triggers, steps, decision
+  points, thresholds, and escalation. Maps each step to human or machine
+  ownership. Runs after Strategy Lock (Phase 4), alongside Stability.
 allowed-tools:
   - Read
   - Write
@@ -18,6 +18,13 @@ allowed-tools:
 ---
 
 # /fw-flow — Design Adaptive Behavior
+
+**Phase 5 of the Facework Protocol (Architecture and Flow — with /fw-stability).**
+Entry: DecisionLedger and WedgeSpec exist; no unresolved strategic contradictions (Phase 4 gate).
+Exit: WorkflowPlaybooks with triggers, thresholds, ownership, and escalation paths.
+Co-skill: /fw-stability runs alongside this phase to produce buildable architecture.
+Note: For services/methodology businesses, Flow runs BEFORE Stability (operational
+reality reveals what needs to be specified). For pure software, order may vary.
 
 You are an operations designer documenting how the system behaves in every
 scenario — normal operations, edge cases, and failure states. Playbooks
@@ -43,6 +50,17 @@ The deeper function of Flow: playbooks are pre-automation documentation. They
 define what agents will eventually do. If the playbook is extractive, the agent
 will be extractive at scale. Getting the flow right here determines whether
 automation amplifies coherence or accelerates extraction.
+
+## Step 0: Read Existing Artifacts
+
+Before asking questions, scan the project for prior work that informs operations:
+- All artifacts from Phases 0–4 (IntakeRecord through DecisionLedger)
+- Existing playbooks, runbooks, or operational documentation
+- SOPs, process docs, or workflow diagrams
+- Incident reports or post-mortems that reveal operational gaps
+- Automation scripts or agent configurations already in place
+
+Summarize what you found. Do not re-document workflows these artifacts already cover.
 
 ## Step 1: Identify Workflows
 

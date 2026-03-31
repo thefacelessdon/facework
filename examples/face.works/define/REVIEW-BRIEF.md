@@ -91,15 +91,17 @@ Facework/
 ├── methodology/                ← build system (retros, changelog v4.0)
 ├── skills/                     ← 13 agent skills (/fw-* commands)
 ├── PROTOCOL.md                 ← open protocol spec v2.0.0 (SOURCE OF TRUTH)
-├── define/                     ← THIS SESSION'S OUTPUT
-│   ├── architecture/           ← specs (business model, delivery, conformance)
-│   ├── decisions/              ← 16 locked strategic decisions
-│   ├── documents/governance/   ← exit guarantee, openness, external dependencies
-│   └── playbooks/              ← 5 operational playbooks
-├── face.works/                 ← Next.js prototype (protocol site)
-│   └── src/
-│       ├── app/                ← pages (home, protocol, proof, status, engage)
-│       ├── components/         ← Nav, Footer, StatusBadge, ProgressBar
-│       └── data/               ← typed schema + demo data
+├── examples/
+│   └── face.works/             ← this protocol run's output (reference example)
+│       ├── define/             ← governance, specs, decisions, playbooks
+│       │   ├── architecture/   ← specs (business model, delivery, conformance)
+│       │   ├── decisions/      ← 16 locked strategic decisions
+│       │   ├── documents/governance/
+│       │   └── playbooks/      ← 5 operational playbooks
+│       └── prototype/          ← Next.js prototype (protocol site)
+│           └── src/
+│               ├── app/        ← pages (home, protocol, proof, status, engage)
+│               ├── components/ ← Nav, Footer, StatusBadge, ProgressBar
+│               └── data/       ← typed schema + demo data
 └── original site exploration reference/  ← visual language source docs
 ```

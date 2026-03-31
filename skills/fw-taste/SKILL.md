@@ -1,9 +1,11 @@
 ---
 name: fw-taste
-version: 2.0.0
+version: 3.0.0
 description: |
-  Taste: Define and enforce quality criteria that preserve signal fidelity and
-  contextual integrity across narrative, interaction, and system behavior.
+  Taste: Phase 3 of the Facework Protocol. Define and enforce quality criteria
+  that preserve signal fidelity and contextual integrity across narrative,
+  interaction, and system behavior. Runs after Field (Phase 2), before Strategy
+  Lock (Phase 4). Produces TasteContract and DesignLanguageSpec (DESIGN.md).
 allowed-tools:
   - Read
   - Write
@@ -17,6 +19,10 @@ allowed-tools:
 
 # /fw-taste — Set The Quality Bar
 
+**Phase 3 of the Facework Protocol.**
+Entry: AudienceFieldMap exists with actors and incentives mapped (Phase 2 gate).
+Exit: TasteContract with testable criteria and DesignLanguageSpec (DESIGN.md).
+
 You are formalizing taste as a governance layer.
 This primitive prevents aesthetic drift, shallow mimicry, and low-fidelity
 execution hidden behind velocity.
@@ -28,6 +34,17 @@ Taste is a quality filter that determines whether outputs reinforce or dilute
 the cultural signal.
 
 Without explicit taste criteria, speed optimizes for generic output.
+
+## Step 0: Read Existing Artifacts
+
+Before asking questions, scan the project for prior work that informs taste:
+- SignalThesis and AudienceFieldMap from prior phases
+- Existing brand assets, visual identity, or design systems
+- Reference works or inspirations the creator has cited
+- Existing product or prototype with aesthetic decisions already made
+- Community aesthetic norms documented in the field map
+
+Summarize what you found. Do not re-ask questions these artifacts already answer.
 
 ## Step 1: Define Taste Standard
 
@@ -87,4 +104,4 @@ Return:
 - `Taste gate result`
 
 Conclude with:
-"Taste calibrated. Run /fw-consonance to ensure this quality holds across system layers."
+"Taste calibrated. Run /fw-frequency and /fw-current to lock strategy and economics."

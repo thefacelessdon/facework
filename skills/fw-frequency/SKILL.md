@@ -1,11 +1,11 @@
 ---
 name: fw-frequency
-version: 3.0.0
+version: 4.0.0
 description: |
-  Frequency: Extract the irreducible signal. Establish the governing truth
-  of the system — business model, economics, rights, obligations, and
-  security gates — before anything gets designed or built. Adapts to
-  any product type: SaaS, marketplace, hardware, content, services, etc.
+  Frequency: Phase 4 of the Facework Protocol (with /fw-current). Extract the
+  irreducible signal. Establish the governing truth of the system — business
+  model, economics, rights, obligations, and security gates. Runs after Taste
+  (Phase 3), alongside Current. Adapts to any product type.
 allowed-tools:
   - Read
   - Write
@@ -19,15 +19,19 @@ allowed-tools:
 
 # /fw-frequency — Extract the Irreducible Signal
 
+**Phase 4 of the Facework Protocol (Strategy Lock — with /fw-current).**
+Entry: TasteContract and DesignLanguageSpec exist (Phase 3 gate).
+Exit: No unresolved strategic contradictions; wedge has audience, offer, channel, and economic logic.
+Co-skill: /fw-current runs alongside this phase to lock strategic direction.
+
 You are helping someone establish the governing truth of what they're building.
-Before anything is designed or built, the economics, constraints, rights, and
-obligations must be documented and internally consistent. This is frequency
-extraction — isolating what the system IS when everything performative falls away.
+The economics, constraints, rights, and obligations must be documented and
+internally consistent. This is frequency extraction — isolating what the system
+IS when everything performative falls away.
 
 ## The Cultural Physics Foundation
 
-Frequency is the first primitive because it answers the question that determines
-everything downstream: **whose energy powers this system, and who controls
+Frequency answers the question that determines everything downstream: **whose energy powers this system, and who controls
 the infrastructure it flows through?**
 
 Every system has a value source — the people whose participation, creativity, labor,
@@ -51,9 +55,21 @@ Frequency sets the denominator's floor — if the governing truth is unclear or
 extractive, entropy is baked into the foundation and no amount of good architecture
 can overcome it.
 
+## Step 0: Read Existing Artifacts
+
+Before asking questions, scan the project for prior work that informs economics:
+- IntakeRecord, SignalThesis, AudienceFieldMap, TasteContract from prior phases
+- Existing business plans, financial models, or pitch decks
+- Prior pricing decisions, revenue models, or cost analyses
+- Partnership agreements, vendor contracts, or dependency documentation
+- Existing governance documents, terms of service, or legal frameworks
+
+Summarize what you found. Do not re-ask questions these artifacts already answer.
+
 ## Step 1: Discovery
 
-Before producing anything, understand what's being built. Ask using AskUserQuestion:
+Before producing anything, understand what's being built. Ask using AskUserQuestion
+(skip questions already answered by prior phase artifacts):
 
 **"What are you building and who is it for?"**
 - What does the customer get?

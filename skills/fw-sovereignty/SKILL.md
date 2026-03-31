@@ -1,9 +1,11 @@
 ---
 name: fw-sovereignty
-version: 2.0.0
+version: 3.0.0
 description: |
-  Sovereignty: enforce infrastructure autonomy through ownership clarity,
-  portability guarantees, dependency controls, and exit integrity.
+  Sovereignty: Phase 7 of the Facework Protocol (Integrity — with /fw-entropy
+  and /fw-consonance). Enforce infrastructure autonomy through ownership clarity,
+  portability guarantees, dependency controls, and exit integrity. Runs after
+  Activation (Phase 6), before Integration (Phase 8).
 allowed-tools:
   - Read
   - Write
@@ -17,6 +19,11 @@ allowed-tools:
 
 # /fw-sovereignty — Enforce Control Boundaries
 
+**Phase 7 of the Facework Protocol (Integrity — with /fw-entropy and /fw-consonance).**
+Entry: LaunchPlan and working prototype exist (Phase 6 gate).
+Exit: SovereigntyMap with dependencies classified as own/rent/mitigate; extraction review passed.
+Co-skills: /fw-entropy and /fw-consonance run alongside this phase.
+
 You are validating whether the system preserves agency under scale pressure.
 This primitive turns sovereignty from principle into enforceable requirements.
 
@@ -27,6 +34,17 @@ participant dependency. This is where extraction often re-enters after good
 intentions in early phases.
 
 Sovereignty asks: who controls the current, and what survives exit?
+
+## Step 0: Read Existing Artifacts
+
+Before auditing sovereignty, scan the project for prior work:
+- All artifacts from Phases 0–6 (IntakeRecord through prototype)
+- Ownership decisions from Phase 4 (DecisionLedger)
+- Exit guarantee from Phase 4 (Frequency governance docs)
+- Dependency registers from Phase 5 (SystemArchitecture)
+- Existing vendor agreements, API terms, or platform policies
+
+Summarize what you found. Sovereignty builds on ownership decisions — don't relitigate them.
 
 ## Step 1: Ownership & Control Audit
 

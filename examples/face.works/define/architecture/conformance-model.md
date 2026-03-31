@@ -12,8 +12,7 @@ date: 2026-03-23
 
 "Facework Protocol Conformant" must mean something specific and verifiable.
 This spec defines what gets checked, how it's scored, and what passes.
-This is the model GAMUT will be retroactively audited against (Decision 003)
-and the criteria all future engagements must meet.
+This is the model all engagements must meet.
 
 The conformance model maps to the Protocol spec (PROTOCOL.md) lifecycle
 phases and canonical objects, but adds the operational rigor needed to

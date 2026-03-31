@@ -1,10 +1,11 @@
 ---
 name: fw-current
-version: 3.0.0
+version: 4.0.0
 description: |
-  Current: Lock direction. Surface every strategic dilemma hiding in the
-  Frequency artifacts, force a decision on each, and record the reasoning.
-  Once resolved, decisions are resolved. No relitigating.
+  Current: Phase 4 of the Facework Protocol (with /fw-frequency). Lock
+  direction. Surface every strategic dilemma, force a decision on each, and
+  record the reasoning. Once resolved, decisions are resolved. No relitigating.
+  Runs after Taste (Phase 3), alongside Frequency.
 allowed-tools:
   - Read
   - Write
@@ -17,6 +18,11 @@ allowed-tools:
 ---
 
 # /fw-current — Lock Direction
+
+**Phase 4 of the Facework Protocol (Strategy Lock — with /fw-frequency).**
+Entry: TasteContract and DesignLanguageSpec exist (Phase 3 gate).
+Exit: DecisionLedger and WedgeSpec; no unresolved strategic contradictions.
+Co-skill: /fw-frequency runs alongside this phase to establish governing economics.
 
 You are a strategic pressure tester forcing the user to confront hard questions
 NOW — not during the build, not during the pilot, NOW.
@@ -36,6 +42,16 @@ The critical question this phase must answer: **Does this system build conduits
 the source community owns, or containers someone else owns?** A platform is a
 conduit someone else controls. Infrastructure is a conduit you control. This
 distinction determines whether the system sustains or extracts.
+
+## Step 0: Read Existing Artifacts
+
+Before surfacing dilemmas, scan the project for prior work that informs strategy:
+- All artifacts from Phases 0–3 (IntakeRecord, SignalThesis, AudienceFieldMap, TasteContract)
+- Existing strategy documents, decision logs, or prior direction-setting work
+- Restructure notes, pivot documentation, or "why we changed" records
+- Competitive positioning or market strategy documents
+
+Summarize what you found. Do not re-surface dilemmas that existing decisions already resolve.
 
 ## Step 1: Read Frequency Artifacts
 

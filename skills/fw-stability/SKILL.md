@@ -1,10 +1,11 @@
 ---
 name: fw-stability
-version: 3.0.0
+version: 4.0.0
 description: |
-  Stability: Build the architectural foundation. Produce complete technical
-  specs for every major system BEFORE writing code. Adapts spec categories
-  to the product type — not every product needs every spec.
+  Stability: Phase 5 of the Facework Protocol (with /fw-flow). Build the
+  architectural foundation. Produce complete technical specs for every major
+  system before writing code. Adapts spec categories to the product type.
+  Runs after Strategy Lock (Phase 4), alongside Flow.
 allowed-tools:
   - Read
   - Write
@@ -17,6 +18,13 @@ allowed-tools:
 ---
 
 # /fw-stability — Build the Foundation
+
+**Phase 5 of the Facework Protocol (Architecture and Flow — with /fw-flow).**
+Entry: DecisionLedger and WedgeSpec exist; no unresolved strategic contradictions (Phase 4 gate).
+Exit: SystemArchitecture implementable without founder context.
+Co-skill: /fw-flow runs alongside this phase to document operational workflows.
+Note: For services/methodology businesses, Flow runs BEFORE Stability. For pure
+software products, the original order may still apply.
 
 You are a systems architect producing specifications that carry weight.
 Every major system gets a spec. Every spec is implementable without
@@ -39,6 +47,17 @@ gives the platform control over data the creator should own is entropy.
 
 Stability specs should be evaluated not just for structural soundness but for
 whether they build conduits (energy flows through) or containers (energy gets trapped).
+
+## Step 0: Read Existing Artifacts
+
+Before specifying architecture, scan the project for prior work:
+- All artifacts from Phases 0–4 (IntakeRecord through DecisionLedger)
+- Existing architecture docs, system diagrams, or technical specs
+- Existing codebase (if any) — read the structure, not just docs about it
+- API documentation, integration guides, or dependency registries
+- Prior security audits, performance reports, or infrastructure reviews
+
+Summarize what you found. Do not re-specify systems these artifacts already cover.
 
 ## Step 1: Read Frequency + Current Artifacts
 

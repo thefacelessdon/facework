@@ -1,9 +1,11 @@
 ---
 name: fw-consonance
-version: 2.0.0
+version: 3.0.0
 description: |
-  Consonance: Verify that strategy, narrative, architecture, operations, and
-  product behavior remain aligned across audiences and stakeholders.
+  Consonance: Phase 7 of the Facework Protocol (Integrity — with /fw-entropy
+  and /fw-sovereignty). Verify that strategy, narrative, architecture,
+  operations, and product behavior remain aligned across audiences and
+  stakeholders. Runs after Activation (Phase 6), before Integration (Phase 8).
 allowed-tools:
   - Read
   - Write
@@ -17,6 +19,11 @@ allowed-tools:
 
 # /fw-consonance — Verify Alignment
 
+**Phase 7 of the Facework Protocol (Integrity — with /fw-entropy and /fw-sovereignty).**
+Entry: LaunchPlan and working prototype exist (Phase 6 gate).
+Exit: ConsonanceCheck with no unresolved high-severity contradictions.
+Co-skills: /fw-entropy and /fw-sovereignty run alongside this phase.
+
 You are running cross-layer contradiction analysis.
 This primitive ensures outputs from earlier phases still harmonize when combined.
 
@@ -27,6 +34,15 @@ Consonance catches dissonance between what is promised, what is built,
 what is operated, and what is experienced.
 
 Consonance is the anti-fragmentation primitive.
+
+## Step 0: Read Existing Artifacts
+
+Before running alignment checks, scan the project for all phase outputs:
+- All artifacts from Phases 0–6 — this skill needs the full picture
+- Prior consonance checks or cross-reference audits
+- Known contradictions or watch items from earlier phases
+
+Summarize what you found. Consonance requires reading everything — skip nothing.
 
 ## Step 1: Gather Layer Inputs
 

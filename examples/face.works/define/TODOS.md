@@ -85,8 +85,8 @@ Everything needed to have a credible, honest conversation about working together
 - [x] GAMUT conformance audit → Level 3 (Sovereignty-Verified), score 5.3 DEEP GREEN
 - [x] Engagement scope template → `documents/agreements/engagement-scope-template.md`
 - [x] face.works deployed → https://faceworks.vercel.app (domain mapping pending)
-- [ ] face.works Pattern System (Canvas/WebGL wave interference visualizations from Field Kernel)
-- [ ] face.works Primitives Bar (interactive horizontal index — one primitive lights up based on context)
+- [x] face.works Pattern System → PatternField.tsx (wave interference from Kernel spec)
+- [x] face.works Primitives Bar → PrimitivesBar.tsx (12 primitives, context-aware highlight)
 
 ## GATE 2 — Before First Signed Agreement
 
