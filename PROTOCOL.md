@@ -1,8 +1,7 @@
-# Facework Protocol v2
+# Facework Protocol
 
 Status: Draft
-Spec Version: 2.0.0
-Release: 0.0.3 (see VERSION and ROADMAP.md)
+Version: 0.0.3 (see VERSION and ROADMAP.md)
 
 Facework Protocol is an open standard for turning cultural signal into coherent, ownable business systems for creators and cultural brands.
 
