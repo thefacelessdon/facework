@@ -1,0 +1,38 @@
+name: Claude Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Claude Code Review
+        uses: anthropics/claude-code-action@beta
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          model: claude-sonnet-4-6
+          direct_prompt: |
+            Review this PR diff for:
+            1. Protocol consistency — PROTOCOL.md is source of truth, skills must match
+            2. Phase sequence — 8 phases, 12 primitives, canonical order must be preserved
+            3. Skill specification — every SKILL.md must state phase number, entry/exit criteria, inputs/outputs
+            4. Theory alignment — skills must trace to Cultural Physics and Coherence OS theories
+            5. Authority chain — Theory > Protocol > Methodology > Skills, never violated
+            6. Canonical objects — the 14 typed objects must stay consistent across all references
+            7. Stage gates — MVP/BETA/SCALE criteria must not weaken between versions
+            8. Methodology evolution — changes must be captured in CHANGELOG.md with version bump
+
+            Context: Facework is an open coherence protocol for building cultural products.
+            The authority chain (Theory > Protocol > Methodology > Skills) is non-negotiable.
+            Every change must maintain structural coherence across all layers.
+
+            Be direct. Flag real issues, skip style nitpicks. If it's clean, say so.
