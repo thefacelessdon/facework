@@ -1,30 +1,54 @@
 # FACEWORK
 
-A coherence practice for building things.
+An open protocol for turning ideas into coherent, ownable systems.
 
-Facework is a system of 12 primitives (forces that govern coherence), engines, and architectural forms that maintain structural alignment inside complex systems. Applied to product creation, it becomes an 8-phase methodology that takes an idea from zero to a fully architected, spec'd, and handoff-ready product with working interfaces.
-
-The methodology was developed and validated building [GAMUT](https://github.com/thefacelessdon/GAMUT) — creator commerce infrastructure — and refined across multiple protocol runs including [HUE Unlimited](https://github.com/thefacelessdon/hue-unlimited).
+Facework is 12 primitives (forces that govern coherence), an 8-phase build methodology, and a set of Claude Code skills that take a project from zero to fully architected, spec'd, and handoff-ready — with working interfaces. The methodology was developed building [GAMUT](https://github.com/thefacelessdon/GAMUT) and refined across multiple protocol runs including [HUE Unlimited](https://github.com/thefacelessdon/hue-unlimited).
 
 ---
 
-## Why
+## What It Does
 
-Products collapse because people build surfaces before they build systems. A prototype without governance is a liability. Specs without resolved decisions are built on assumptions. Code without playbooks produces behavior nobody designed.
+- **Detects your project track** — Creator, Cultural Brand, Athlete/Public Figure, Agency/Studio, or Platform/Product — and tailors every phase to it.
+- **Produces canonical artifacts** — strategy docs, architecture specs, decision records, operational playbooks, sovereignty maps — each gated before the next phase begins.
+- **Builds working interfaces** from declared capabilities, not generic prototypes.
+- **Closes with a diagnostic** that evolves the methodology itself. Every project makes the practice better.
 
-The conflict at the center of building things is not talent, speed, or funding. The conflict is: systems are asked to carry weight before their coherence is established. Facework resolves this by enforcing a build sequence where each layer's coherence is verified before the next layer is added.
+The law underneath: anything not coherent will eventually contradict itself. Anything that contradicts itself will eventually collapse. Facework makes collapse optional.
 
-The law is simple: anything not coherent will eventually contradict itself. Anything that contradicts itself will eventually collapse. Gates, canonical sources, decision records, and specs make collapse optional.
+---
 
-There is a deeper pattern underneath the structural one. The history of creative industries — jazz, hip hop, fashion, social media — follows the same physics: communities generate the cultural energy, and external systems capture the current. The infrastructure was never designed to sustain the source. Products built without coherence thinking reproduce this pattern by accident, because the build process never asks: whose energy powers this system, and who controls the infrastructure it flows through? Facework carries that question through every phase of the build.
+## Quickstart
+
+**Prerequisites:** Git, Node.js (v20+), [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview) (`npm install -g @anthropic-ai/claude-code`)
+
+```bash
+git clone https://github.com/thefacelessdon/facework.git
+cd facework
+./install.sh
+```
+
+This symlinks 12 protocol skills and 8 operating skills into your Claude Code environment.
+
+Now open Claude Code in your project directory and start the protocol:
+
+```bash
+cd ~/projects/your-project
+claude
+```
+
+```
+/fw-semantics
+```
+
+It reads what exists, detects your project track, and begins extracting meaning. Chain through all 8 phases to a fully coherent system.
+
+> **New to the terminal?** See the full [Setup Guide](SETUP.md) — covers everything from opening a terminal to configuring Git, GitHub, and Claude Code from scratch.
 
 ---
 
 ## The Primitive Stack
 
-Twelve primitives — forces that govern coherence — across eight phases. Phase 1 detects the project track and extracts meaning. The final phase closes with a diagnostic that evolves the practice.
-
-Five project tracks tailor the protocol: Creator, Cultural Brand, Athlete/Public Figure, Agency/Studio, Platform/Product.
+Twelve primitives across eight phases. Phase 1 detects the project track and extracts meaning. The final phase closes with a diagnostic that evolves the practice.
 
 ```
 Phase 1  SEMANTICS      Detect track, extract meaning, define canonical language
@@ -43,69 +67,6 @@ Phase 8  COHERENCE      Integrate into a unified whole + diagnostic
 
 ---
 
-## Install
-
-```bash
-git clone https://github.com/thefacelessdon/facework.git
-cd facework
-./install.sh
-```
-
-This symlinks 12 protocol skills and 8 operating skills into your Claude Code environment.
-
-## Protocol and Validation
-
-Facework Protocol v2 docs:
-
-- `PROTOCOL.md`
-- `COMPLIANCE.md`
-- `CERTIFICATION.md`
-- `facework.manifest.schema.json`
-
-Sample manifest:
-
-- `facework.manifest.yaml`
-
-Validate in one command:
-
-```bash
-./bin/validate-manifest
-```
-
-Standard repo command:
-
-```bash
-make validate
-```
-
-Validate a custom manifest path:
-
-```bash
-./bin/validate-manifest /path/to/facework.manifest.yaml
-```
-
-Or with make:
-
-```bash
-make validate-manifest FILE=/path/to/facework.manifest.yaml
-```
-
-Full protocol check (manifest + required spec files):
-
-```bash
-make protocol-check
-```
-
-## Use
-
-Open Claude Code in any project directory. Type:
-
-```
-/fw-semantics
-```
-
-It will read what exists, detect your project track, and begin extracting meaning. Chain through all 8 phases. Coherence closes the loop with a diagnostic that evolves the methodology.
-
 ## Commands
 
 | Command | Phase | What It Produces |
@@ -123,6 +84,8 @@ It will read what exists, detect your project track, and begin extracting meanin
 | `/fw-consonance` | 7: Integrity | Cross-layer alignment check, contradiction register, stakeholder consonance |
 | `/fw-coherence` | 8: Integration | README, review brief, project tracker, engineering guide, clean repo, coherence scorecard, diagnostic retro |
 
+---
+
 ## The Loop
 
 ```
@@ -136,8 +99,8 @@ Extract signal    Lock direction
 /fw-flow → /fw-stability
 Design operations   Build architecture + CapabilityMap
 
-/fw-resonance → /fw-entropy + /fw-sovereignty + /fw-consonance
-Build interfaces   Integrity: pressure test + ownership + alignment
+/fw-resonance → /fw-entropy → /fw-sovereignty → /fw-consonance
+Build interfaces   Pressure test   Ownership audit   Alignment check
 
 /fw-coherence
 Package handoff + diagnostic
@@ -152,37 +115,18 @@ Every project makes the practice better. Every retro is a version bump.
 
 ---
 
-## Start Here
+## Go Deeper
 
-New to Facework? Read in this order:
-
-1. **This README** — what it is, how to install, what the commands do (5 min)
-2. **[The Theory of Cultural Physics](theories/cultural-physics.md)** — why coherence matters, the extraction pattern, the governing equation (15 min)
-3. **[The Coherence Operating System](theories/the-coherence-operating-system.md)** — the 12 primitives, engines, and how they operate inside the build (15 min)
-4. **[Build Methodology](methodology/build-methodology.md)** — the GAMUT case study that validated the methodology (20 min)
-5. **Install and run `/fw-semantics`** — detect your track and start building (5 min)
-
-Total: under 1 hour from clone to first skill.
-
-## Theories
-
-The full Facework theory — 12 primitives, engines, architectural forms, and how they operate inside the build methodology — lives in [`theories/the-coherence-operating-system.md`](theories/the-coherence-operating-system.md).
-
-The theory of Cultural Physics — the paradigm that explains why coherence matters, what happens when creative energy is extracted instead of sustained, and why this matters most for the cultures that have always supplied the energy the world runs on — lives in [`theories/cultural-physics.md`](theories/cultural-physics.md).
-
-## Methodology
-
-The GAMUT case study — the first complete protocol run that validated the build methodology — lives in [`methodology/build-methodology.md`](methodology/build-methodology.md). The canonical 8-phase sequence is defined in [`PROTOCOL.md`](PROTOCOL.md).
-
-Version history: [`methodology/CHANGELOG.md`](methodology/CHANGELOG.md)
-
-Project retros: [`methodology/retros/`](methodology/retros/)
+1. **[The Theory of Cultural Physics](theories/cultural-physics.md)** — why coherence matters, the extraction pattern, the governing equation
+2. **[The Coherence Operating System](theories/the-coherence-operating-system.md)** — the 12 primitives, engines, and how they operate inside the build
+3. **[Build Methodology](methodology/build-methodology.md)** — the GAMUT case study that validated the methodology
+4. **[Protocol Spec](PROTOCOL.md)** — lifecycle phases, required artifacts, pass/fail gates, manifest schema
 
 ---
 
 ## Companion Tooling
 
-Facework pairs with [gstack](https://github.com/garrytan/gstack) — Garry Tan's Claude Code skill pack — for review, design, QA, and shipping. gstack skills surface throughout the Facework workflow:
+Facework pairs with [gstack](https://github.com/garrytan/gstack) for review, design, QA, and shipping. Both install as Claude Code skills and work independently — Facework doesn't require gstack, but the methodology was developed using both.
 
 | gstack Skill | Facework Phase | Role |
 |---|---|---|
@@ -197,9 +141,6 @@ Facework pairs with [gstack](https://github.com/garrytan/gstack) — Garry Tan's
 | `/retro` | Diagnostic | Engineering retrospective — commit analysis, work patterns, team breakdown |
 | `/ship` | Coherence | Sync main, run tests, push, open PR — the last mile |
 | `/document-release` | Coherence | Post-ship doc update — syncs README, CHANGELOG, and guides to match what shipped |
-| `/gstack-upgrade` | — | Upgrade gstack to the latest version |
-
-Facework's 12 protocol skills handle the build sequence. gstack handles the pressure testing, design review, QA, and shipping that keep each phase honest. Both install as Claude Code skills and work independently — Facework doesn't require gstack, but the methodology was developed using both and they stay in lockstep.
 
 See gstack's [README](https://github.com/garrytan/gstack) for install instructions.
 
