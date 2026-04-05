@@ -24,6 +24,7 @@ This spec defines:
 
 A conforming implementation MUST produce these objects:
 
+- `ProjectContext`
 - `SignalThesis`
 - `AudienceFieldMap`
 - `TasteContract`
@@ -32,21 +33,44 @@ A conforming implementation MUST produce these objects:
 - `WedgeSpec`
 - `WorkflowPlaybooks`
 - `SystemArchitecture`
+- `CapabilityMap`
 - `LaunchPlan`
 - `SovereigntyMap`
 - `ConsonanceCheck`
 - `HandoffPackage`
 - `DiagnosticReport`
 
-## 3) Lifecycle Phases
+## 3) Prerequisites
+
+### Setup
+
+Before running the protocol, builders must have the tools to operate.
+See `SETUP.md` for the tiered setup guide (terminal, Git, Claude Code, etc.).
+Setup is not a protocol phase — it is logistics.
+
+### Project Tracks
+
+Five project tracks tailor the protocol to the builder's situation. Track
+detection happens inside Phase 1 (Semantics) as part of intake — it is not
+a separate phase.
+
+- **Creator** — individual building around their own signal (artist, writer, designer, musician).
+- **Cultural Brand** — brand rooted in cultural context and community identity.
+- **Athlete / Public Figure** — public figure converting attention into owned infrastructure.
+- **Agency / Studio** — service business building systems for clients or internal products.
+- **Platform / Product** — technology product serving a market.
+
+## 4) Lifecycle Phases
 
 ### Phase 1: Semantics
-Goal: Define canonical meaning boundaries and anti-distortion language.
+Goal: Detect project track, define canonical meaning boundaries, and establish anti-distortion language.
 
-Required output:
+Required outputs:
+- `ProjectContext` (track, audience, phase emphasis)
 - `SignalThesis`
 
 Gate:
+- Project track detected and confirmed.
 - Includes "means" and "does-not-mean" sections.
 - Distortion risks documented.
 
@@ -84,27 +108,32 @@ Gate:
 - Wedge has audience, offer, channel, and economic logic.
 
 ### Phase 5: Architecture & Flow (Flow + Stability)
-Goal: Document operational reality, then produce buildable architecture.
+Goal: Document operational reality, then produce buildable architecture grounded in capabilities.
 
 Required outputs:
 - `WorkflowPlaybooks`
 - `SystemArchitecture`
+- `CapabilityMap` (atomic primitives, contracts, isolation properties, integration surface — or explicit waiver with rationale)
 
 Gate:
 - Workflows include triggers, thresholds, ownership, and escalation paths.
 - Build artifacts are implementable without founder context.
 - Playbooks inform specs (operational reality before architecture).
+- Capability map declares what the system can do (owned, rented, or deferred) so interfaces can compose from it.
 
 ### Phase 6: Activation (Resonance)
-Goal: Build transmissible implementation from DESIGN.md. Permanent demo mode.
+Goal: Build working interfaces composed from declared capabilities. Permanent demo mode.
 
 Required outputs:
 - `LaunchPlan`
-- Working prototype with demo data, typed schema, test suite
+- `CapabilityMap` (from Stability — referenced here, not created)
+- Working interfaces with demo data, typed schema, test suite
 
 Gate:
-- Prototype carries the frequency of the community it serves.
+- Composition test: every interface traces to declared capabilities. If an interface needs undeclared capabilities, that is a Stability gap — not more UI.
+- Specificity test: interfaces are specific to this project. A generic output that could belong to any project fails.
 - DESIGN.md applied (not generic SaaS patterns).
+- Interfaces carry the frequency of the community they serve.
 - Launch roles, sequencing, metrics, and rollback conditions defined.
 
 ### Phase 7: Integrity (Entropy + Sovereignty + Consonance)
@@ -134,7 +163,7 @@ Gate:
 - Coherence scorecard produced with Flow, Resonance, Structural Integrity scores.
 - Lessons include concrete updates to templates, tests, or rules.
 
-## 4) Manifest Interoperability
+## 5) Manifest Interoperability
 
 Conforming projects should include a machine-readable `facework.manifest.yaml` and validate it against `facework.manifest.schema.json`.
 
@@ -146,11 +175,11 @@ Recommended root keys:
 - `gates`
 - `compliance`
 
-## 5) Normative Terms
+## 6) Normative Terms
 
 The terms "MUST", "MUST NOT", "SHOULD", and "MAY" in this document are used as described in RFC 2119.
 
-## 6) Minimum Conformance
+## 7) Minimum Conformance
 
 A project is minimally conformant with Facework Protocol v2 only if:
 - all required primitive artifacts are present,
@@ -159,7 +188,7 @@ A project is minimally conformant with Facework Protocol v2 only if:
 - compliance score is computed,
 - sovereignty risks are documented with mitigation.
 
-## 7) Stage Gate Profiles (Constrained v1)
+## 8) Stage Gate Profiles (Constrained v1)
 
 This section defines stage content inside the protocol itself to avoid expanding
 spec surface in v1. Each stage is governed by four questions only.

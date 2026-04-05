@@ -57,7 +57,25 @@ Before specifying architecture, scan the project for prior work:
 - API documentation, integration guides, or dependency registries
 - Prior security audits, performance reports, or infrastructure reviews
 
+Read `define/PROJECT-CONTEXT.md` if it exists. Read the `track:` field from its
+YAML frontmatter. Adapt depth, spec categories, and CapabilityMap format to the
+track (see Track Emphasis below). If it doesn't exist, proceed normally.
+
 Summarize what you found. Do not re-specify systems these artifacts already cover.
+
+### Track Emphasis
+
+The project track determines architectural depth:
+
+| Track | Stability emphasis |
+|-------|-------------------|
+| Creator | Light — platform-hosted capabilities. Focus on: integration map (which platforms own what), data portability, content ownership. Skip: database schemas, migration sequences. CapabilityMap = integration surface. |
+| Cultural Brand | Standard — own site + integrations. CMS spec, commerce integration, community tooling, content pipeline architecture. CapabilityMap = owned + rented capabilities. |
+| Athlete / Public Figure | Standard — mixed ownership. Merch fulfillment, content distribution, booking system, endorsement tracking. CapabilityMap = heavy on sovereignty classification. |
+| Agency / Studio | Light-to-Standard — methodology > infrastructure. Delivery system spec, client portal requirements, project tracking, reporting. CapabilityMap = delivery capabilities + client-facing tools. |
+| Platform / Product | Heavy — full architecture. Database schemas, migration sequence, DataSource contract, event vocabulary, API surface, auth model. CapabilityMap = full capability audit with owned/rented/deferred. |
+
+If no track is set, infer from artifacts and confirm with the user.
 
 ## Step 1: Read Frequency + Current Artifacts
 
@@ -156,7 +174,80 @@ Include ASCII diagrams for any non-trivial:
 - System topology (queue layout, service architecture)
 - Decision tree (threshold logic, branching behavior)
 
-## Step 5: Cross-Reference
+## Step 5: Capability Map
+
+After specs are written, produce a `CapabilityMap` — the contract that
+Resonance (Phase 6) will compose interfaces from. This is the bridge
+between architecture and working interfaces.
+
+The CapabilityMap declares what the system can do. Every interface built
+in Resonance must trace to a declared capability. If a capability doesn't
+exist here, Resonance cannot build an interface that depends on it.
+
+**For Platform/Product projects:**
+```markdown
+# Capability Map
+
+## Owned Capabilities
+| Capability | Domain | Status | Contract Surface | Events Emitted |
+|-----------|--------|--------|-----------------|----------------|
+| e.g. Tenant isolation | Core | Built | RLS via tenant_id | tenant.created |
+| e.g. Order processing | Commerce | Specified | create_order RPC | order.placed |
+
+## Rented Capabilities (platform dependencies)
+| Capability | Provider | Integration Status | Fallback |
+|-----------|----------|-------------------|----------|
+| e.g. Payments | Stripe | Connected | Manual invoice |
+
+## Deferred Capabilities (known gaps — backlog for future phases)
+| Capability | Why Deferred | What Depends On It |
+|-----------|-------------|-------------------|
+| e.g. Analytics | Below MVP threshold | Operator dashboard |
+```
+
+**For Creator/Brand/Athlete projects:**
+```markdown
+# Capability Map
+
+## Platform Capabilities (rented — the integration surface)
+| Capability | Platform | What It Provides | API/Connection |
+|-----------|----------|-----------------|----------------|
+| e.g. Product catalog | Shopify | Products, inventory, checkout | Storefront API |
+| e.g. Email delivery | ConvertKit | Sequences, broadcasts, subscribers | REST API |
+
+## Owned Capabilities (what you control directly)
+| Capability | Where It Lives | What It Provides |
+|-----------|---------------|-----------------|
+| e.g. Content | Own site / CMS | Portfolio, blog, about |
+| e.g. Brand identity | DESIGN.md | Visual system, tone, voice |
+
+## Gaps (no platform covers this yet)
+| Need | Options Considered | Decision |
+|------|-------------------|----------|
+```
+
+**For Agency/Studio projects:**
+```markdown
+# Capability Map
+
+## Delivery Capabilities (the methodology as infrastructure)
+| Capability | Tool/Process | Status |
+|-----------|-------------|--------|
+| e.g. Intake | Typeform + Notion | Live |
+| e.g. Scoping | Internal template | Manual |
+| e.g. Delivery tracking | Linear | Live |
+
+## Client-Facing Capabilities
+| Capability | Surface | Status |
+|-----------|---------|--------|
+| e.g. Client portal | Custom app | Needs build |
+| e.g. Reporting | Notion export | Manual |
+```
+
+The CapabilityMap is a **required artifact** for Phase 5 gate. Resonance
+will not produce grounded interfaces without it.
+
+## Step 6: Cross-Reference
 
 - Every rate/threshold traces to canonical source in business model
 - No spec contradicts another spec
@@ -166,9 +257,40 @@ Include ASCII diagrams for any non-trivial:
 - Ownership and control structures in the architecture match the
   decisions made in Frequency and Current — the architecture implements
   the ownership model, it doesn't override it
+- CapabilityMap covers every domain referenced in specs
 
 ## Output
 
-"Stability built. [N] specs produced ([N] lines total). Every major
-system is specified. Run /fw-flow for operational playbooks, or run
-it in parallel if you prefer."
+### Tier 1 — Narrative (shown in conversation)
+
+Present a 5–7 sentence summary: "Here's the architecture and what the system
+can do." Cover stack decisions, key specs produced, and the capability surface
+(owned vs rented vs deferred). This is what the user reads immediately.
+
+### Tier 2 — Summary Card (written to file)
+
+Write to `define/stability-summary.md`:
+- Specs produced (count and names)
+- Capability count (owned / rented / deferred)
+- Key architecture decisions
+- One summary table
+
+### Tier 3 — Machine Artifact (written to file)
+
+Write the full SystemArchitecture + CapabilityMap to `define/stability-specs.md`
+with YAML frontmatter:
+```yaml
+---
+artifact: SystemArchitecture
+phase: stability
+track: [track from PROJECT-CONTEXT.md or "unset"]
+version: 1.0
+status: Working Draft
+---
+```
+
+Close with: "Stability built. [N] specs produced ([N] lines total). CapabilityMap
+declares [N] capabilities ([N] owned, [N] rented, [N] deferred).
+Every major system is specified. Run /fw-flow for operational playbooks,
+or run it in parallel if you prefer. Run /fw-resonance to compose
+interfaces from declared capabilities."

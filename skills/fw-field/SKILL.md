@@ -1,6 +1,6 @@
 ---
 name: fw-field
-version: 3.0.0
+version: 3.1.0
 description: |
   Field: Phase 2 of the Facework Protocol. Map cultural physics — status
   dynamics, norms, incentives, and adoption loops that determine how the system
@@ -44,6 +44,13 @@ Before asking questions, scan the project for prior work that informs field mapp
 - Any prior field work, ethnographic notes, or community observations
 
 Summarize what you found. Do not re-ask questions these artifacts already answer.
+
+## Step 0.5: Read ProjectContext
+
+Check for `define/PROJECT-CONTEXT.md` (produced by fw-semantics). If it exists, read
+it and adapt: skip questions already answered, calibrate depth to the detected
+track (e.g., a B2B tool needs less ritual mapping, more institutional actor focus).
+If it does not exist, proceed normally.
 
 ## Step 1: Define Field Participants
 
@@ -102,15 +109,56 @@ Before marking complete:
 
 If not, revise before moving to Frequency or Stability decisions.
 
-## Output
+## Output — Three-Tier Artifact Structure
 
-Return:
-- `Field participant map`
-- `Status and incentive model`
-- `Norm and ritual analysis`
-- `Adoption and resistance model`
-- `Extraction risk map`
-- `Field gate result`
+### Tier 1: Narrative (shown in conversation)
+
+Present the findings conversationally. This is what the user actually reads.
+Max 5-7 sentences. Frame it as:
+
+> "Here's who's in the room and what moves them."
+
+Cover:
+- The key actors and their real incentives (not the polite version)
+- The sharpest adoption dynamic (what makes or breaks entry)
+- The biggest extraction risk
+- One forward-looking thread to Taste (what quality must look like given this field)
+
+Where field actors or dynamics map naturally to future capability domains, name
+them. E.g., if "curation" emerges as a key intermediary behavior, note it as a
+likely capability domain. This threads architecture through from Phase 2.
+
+### Tier 2: Summary Card (written to file)
+
+Write a scannable reference card to `define/field-summary.md`:
+- Actor map (table: actor type | who | incentive | risk level)
+- Entry vector (1-2 sentences)
+- Key dynamics (3-5 bullet points)
+- Top extraction risks (ranked)
+
+~10 lines max. No prose — just the locked answers.
+
+### Tier 3: Machine Artifact (written to file)
+
+Write the full AudienceFieldMap to `define/AudienceFieldMap.md` with YAML frontmatter:
+
+```yaml
+---
+artifact: AudienceFieldMap
+phase: field
+version: 1.0
+status: locked
+capability-domains: []  # nouns that map to future system capabilities
+---
+```
+
+Body contains the complete structured output:
+- Field participant map
+- Status and incentive model
+- Norm and ritual analysis
+- Adoption and resistance model
+- Extraction risk map
+- Field gate result
 
 Conclude with:
 "Field mapped. Run /fw-taste to define quality governance and design language."

@@ -1,6 +1,6 @@
 ---
 name: fw-taste
-version: 3.0.0
+version: 3.1.0
 description: |
   Taste: Phase 3 of the Facework Protocol. Define and enforce quality criteria
   that preserve signal fidelity and contextual integrity across narrative,
@@ -45,6 +45,13 @@ Before asking questions, scan the project for prior work that informs taste:
 - Community aesthetic norms documented in the field map
 
 Summarize what you found. Do not re-ask questions these artifacts already answer.
+
+## Step 0.5: Read ProjectContext
+
+Check for `define/PROJECT-CONTEXT.md` (produced by fw-semantics). If it exists, read
+it and adapt: skip questions already answered, calibrate depth to the detected
+track (e.g., a developer tool needs less aesthetic exploration, more behavioral
+coherence focus). If it does not exist, proceed normally.
 
 ## Step 1: Define Taste Standard
 
@@ -93,15 +100,55 @@ Before marking complete:
 
 If any fail, iterate rubric and examples.
 
-## Output
+## Output — Three-Tier Artifact Structure
 
-Return:
-- `Taste standard`
-- `Scoring rubric`
-- `Artifact scorecard`
-- `Rejection reasons`
-- `Correction directives`
-- `Taste gate result`
+### Tier 1: Narrative (shown in conversation)
+
+Present the findings conversationally. This is what the user actually reads.
+Max 5-7 sentences. Frame it as:
+
+> "Here's what good looks like for your thing."
+
+Cover:
+- The quality bar in concrete terms (not adjectives — examples)
+- The sharpest anti-pattern to avoid
+- The non-negotiable that would kill the signal if violated
+- One forward-looking thread to Strategy Lock (what this quality bar implies for economics)
+
+Where taste criteria map naturally to future capability domains, name them.
+E.g., if "editorial voice" emerges as a non-negotiable quality, note it as a
+likely capability domain. This threads architecture through from Phase 3.
+
+### Tier 2: Summary Card (written to file)
+
+Write a scannable reference card to `define/taste-summary.md`:
+- 5 taste criteria (table: dimension | pass example | fail example)
+- Non-negotiables (3 max, one line each)
+- Top anti-patterns (ranked)
+
+One table, ~10 lines max. No prose — just the locked answers.
+
+### Tier 3: Machine Artifact (written to file)
+
+Write the full TasteContract to `define/TasteContract.md` with YAML frontmatter:
+
+```yaml
+---
+artifact: TasteContract
+phase: taste
+version: 1.0
+status: locked
+capability-domains: []  # nouns that map to future system capabilities
+---
+```
+
+Body contains the complete structured output:
+- Taste standard
+- Scoring rubric (with pass/fail indicators per dimension)
+- Artifact scorecard
+- Rejection reasons
+- Correction directives
+- Taste gate result
 
 Conclude with:
 "Taste calibrated. Run /fw-frequency and /fw-current to lock strategy and economics."

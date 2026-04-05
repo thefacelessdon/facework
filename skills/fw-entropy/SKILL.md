@@ -21,7 +21,7 @@ allowed-tools:
 # /fw-entropy — Reveal Structural Weakness
 
 **Phase 7 of the Facework Protocol (Integrity — with /fw-sovereignty and /fw-consonance).**
-Entry: LaunchPlan and working prototype exist (Phase 6 gate).
+Entry: LaunchPlan and working interfaces exist (Phase 6 gate).
 Exit: Resolved issues, critical gap fixes, SovereigntyMap, and ConsonanceCheck.
 Co-skills: /fw-sovereignty and /fw-consonance run alongside this phase.
 
@@ -54,11 +54,24 @@ alongside technical entropy.
 ## Step 0: Read Existing Artifacts
 
 Before scoping the review, scan the project for prior work:
-- All artifacts from Phases 1–6 (SignalThesis through prototype)
+- All artifacts from Phases 1–6 (SignalThesis through working interfaces)
 - Prior audit reports, security reviews, or code quality assessments
 - Incident logs, bug reports, or known issue trackers
 - Performance benchmarks or load test results
 - Dependency audit results or supply chain reviews
+
+Read `define/PROJECT-CONTEXT.md` if it exists. Read the `track:` field and adapt
+audit depth to the track:
+
+| Track | Entropy emphasis |
+|-------|-----------------|
+| Creator | Light technical audit, heavy extraction audit. Platform dependency risks. Content portability gaps. Audience ownership gaps. |
+| Cultural Brand | Standard technical, heavy extraction + brand integrity. Editorial pipeline gaps. Community governance gaps. |
+| Athlete / Public Figure | Heavy extraction audit. Agent/league lock-in. NIL rights gaps. Revenue stream fragility. |
+| Agency / Studio | Heavy operational entropy. Delivery methodology gaps. Client concentration risk. Pricing model stress test. |
+| Platform / Product | Full depth all categories. Architecture gaps, code quality, test coverage, performance, extraction patterns, capability gaps. |
+
+If no PROJECT-CONTEXT.md exists or no track is set, default to Platform / Product (full depth).
 
 Summarize what you found. Prior audits set the baseline — don't re-discover known issues.
 
@@ -141,7 +154,34 @@ Produce a summary:
 - NOT-in-scope list (considered and deferred, with reasoning)
 - What-already-exists list (reusable assets identified)
 
-## Output
+## Output (Three-Tier Progressive Disclosure)
 
+**Tier 1 — Narrative (always produced):**
+Deliver a 5–7 sentence summary: "Here's where the system is weak and what to fix."
+Cover the most critical findings, extraction audit result, and recommended next action.
+
+**Tier 2 — Summary artifact:**
+Write `define/entropy-summary.md` containing:
+- Gap count by severity (critical / high / medium / low)
+- Top 3 critical issues with one-line descriptions
+- Extraction audit result (pass / watch / fail)
+- Track-specific findings (if track was read from PROJECT-CONTEXT.md)
+
+**Tier 3 — Full artifact:**
+Produce the complete EntropyAudit with YAML frontmatter:
+
+```yaml
+---
+artifact: EntropyAudit
+phase: entropy
+track: <track from PROJECT-CONTEXT.md or "platform-product">
+version: <protocol version>
+---
+```
+
+Include all domain reviews, failure mode analysis, implementation artifacts produced,
+and the full issue register.
+
+Conclude with:
 "Entropy surfaced. [N] issues resolved, [N] critical gaps fixed,
-[N] new specs produced. Run /fw-coherence to package for handoff."
+[N] new specs produced. Run /fw-sovereignty next to validate ownership and autonomy."

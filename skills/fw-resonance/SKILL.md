@@ -1,9 +1,9 @@
 ---
 name: fw-resonance
-version: 4.0.0
+version: 5.0.0
 description: |
-  Resonance: Phase 6 of the Facework Protocol (Activation). Build a working
-  prototype that demonstrates the system without requiring live infrastructure.
+  Resonance: Phase 6 of the Facework Protocol (Activation). Build working
+  interfaces composed from declared capabilities — not generic prototypes.
   Permanent demo mode. Typed schema. Lifecycle-aware. Testable. Runs after
   Architecture and Flow (Phase 5), before Integrity (Phase 7).
 allowed-tools:
@@ -20,18 +20,23 @@ allowed-tools:
 # /fw-resonance — Make It Transmissible
 
 **Phase 6 of the Facework Protocol (Activation).**
-Entry: WorkflowPlaybooks and SystemArchitecture exist (Phase 5 gate).
-Exit: LaunchPlan and working prototype with DESIGN.md applied; demo data; test suite passing.
+Entry: WorkflowPlaybooks, SystemArchitecture, and CapabilityMap exist (Phase 5 gate).
+Exit: LaunchPlan and working interfaces composed from declared capabilities; demo data; test suite passing.
 
-You are building a working prototype that demonstrates the system — not a
-mockup, not a wireframe, a living artifact someone can interact with and
-understand without explanation.
+You are building working interfaces — not a mockup, not a wireframe, not a
+generic prototype. Every interface you build must trace to a declared capability
+in the CapabilityMap. If an interface needs something that isn't declared,
+that is a Stability gap. Stop and backlog it. Do not invent new backend shape
+to make a page look complete.
+
+**The composition rule:** Interfaces are compositions, not creations. They
+assemble declared capabilities into delivery surfaces for specific people.
+A generic output that could belong to any project is a failure.
 
 **Strategy Lock boundary:** If a decision locked in Phase 4 says "don't build X
-yet," the prototype demonstrates architecture and design language WITHOUT building
+yet," the interfaces demonstrate architecture and design language WITHOUT building
 that surface. Resonance proves transmission — it does not override strategy lock
-decisions. The prototype shows what the system IS, not everything it COULD become.
-When in doubt, read the DecisionLedger before scoping prototype features.
+decisions. When in doubt, read the DecisionLedger before scoping.
 
 ## The Cultural Physics Foundation
 
@@ -43,117 +48,144 @@ In culture, resonance is the emotional and cultural connection between creators
 and audiences — work that feels "in tune" with its environment. Honest, relevant,
 alive.
 
-A prototype that resonates doesn't just demonstrate features. It carries the
-frequency of the community it was built to serve. The demo data should feel like
+Interfaces that resonate don't just demonstrate features. They carry the
+frequency of the community they were built to serve. The demo data should feel like
 real people with real names and real work — not "Test User" and "Lorem ipsum."
-The interface should reflect the aesthetic values of the people who will use it.
+The design should reflect the aesthetic values of the people who will use it.
 The interactions should move at the tempo of the community, not the tempo of
 the platform.
 
 Resonance is what makes the system transmissible without explanation. When someone
 from the community sees it and says "that's for me" before reading a single line
-of documentation — that's resonance. It's the difference between a product that
-serves a community and a product that was built about that community by outsiders.
-
-## Core Principles
-
-1. **Demo mode is permanent** — not scaffolding, a feature. Demo and live
-   data share the same interface. Toggle with one environment variable.
-2. **Schema-first** — define the typed schema BEFORE the database exists.
-   The schema IS the database definition.
-3. **Lifecycle-aware** — the UI adapts to where the user is in their journey.
-   New users see different content than power users.
-4. **Build against specs** — every page, component, and data query maps to
-   a Stability spec. Contradictions surface as type errors.
-5. **Carry the frequency** — the prototype should reflect the identity and
-   aesthetic of the community it serves, not generic SaaS patterns.
+of documentation — that's resonance.
 
 ## Step 0: Read Existing Artifacts
 
-Before building anything, scan the project for prior work that informs the prototype:
-- All artifacts from Phases 1–5 (SignalThesis through SystemArchitecture)
-- DecisionLedger — especially decisions that constrain prototype scope
-- DesignLanguageSpec / DESIGN.md from Phase 3 (if produced there)
-- Existing prototypes, mockups, or design comps
-- Existing codebase, component libraries, or design systems
+Before building anything, scan the project for prior work:
+- All artifacts from Phases 1–5 (SignalThesis through CapabilityMap)
+- DecisionLedger — especially decisions that constrain scope
+- DesignLanguageSpec / DESIGN.md from Phase 3
+- CapabilityMap from Phase 5 — **this is the contract your interfaces compose from**
+- Existing code, component libraries, or design systems
 - Brand assets, logos, icons, or visual materials
 
-Summarize what you found. Do not rebuild what already exists and still holds.
+Summarize what you found. Identify:
+1. What capabilities are declared and available to compose from
+2. What the declared integration surface is (owned backend, platforms like Shopify/Substack/Stripe, methodology tools, etc.)
+3. What strategy lock decisions constrain scope
+
+Do not rebuild what already exists and still holds.
 
 ## Step 1: DESIGN.md — Design Language Spec
 
 **This step runs BEFORE any code is written.** The Design Language Spec is
-the visual implementation of Frequency. Without it, the prototype defaults
+the visual implementation of Frequency. Without it, interfaces default
 to generic SaaS patterns — structurally correct but culturally incoherent.
 
-Produce `DESIGN.md` at the project root. It must cover:
+If DESIGN.md was already produced in Phase 3 (Taste) and still holds, skip
+to Step 2. Otherwise, produce `DESIGN.md` at the project root covering:
 
 1. **Typography system** — primary typeface, scale (on 8px baseline grid),
    weight rules, tracking, size hierarchy (headline → body → caption)
 2. **Color system** — primary palette + accent colors mapped to system states
    or semantic meaning. Accents are not decoration — they communicate.
-   Rules: when accents appear, how many per section, never as backgrounds.
 3. **Grid + layout rules** — column system, margins, vertical spacing,
-   allowed layout structures. If it feels like improvisation, it's wrong.
-4. **Motion principles** — easing curves, what motion communicates (system
-   stabilizing, not animating), what's prohibited (bounce, elastic, playful).
-5. **Iconography / symbol system** — if applicable. Symbols map to domain
-   concepts, never random icons.
+   allowed layout structures.
+4. **Motion principles** — easing curves, what motion communicates,
+   what's prohibited.
+5. **Iconography / symbol system** — if applicable.
 6. **Tone + textual rules** — voice, sentence structure, allowed/disallowed
-   language patterns. What the copy world feels like.
-
-The spec is derived FROM the creator's frequency and the identity expression
-decisions made in Current. It is not imposed — it emerges from who they are.
+   language patterns.
 
 Check: if someone from the community saw only the DESIGN.md, would they
 recognize it as built for their world?
 
-## Step 2: Determine Stack
+## Step 2: Capability Inventory
+
+Before choosing a stack or writing a line of code, map what you're composing from.
+
+Read the CapabilityMap and classify each capability:
+
+| Capability | Source | Status | Interface it enables |
+|-----------|--------|--------|---------------------|
+| e.g. Product catalog | Shopify | Live | Store, product pages |
+| e.g. Email delivery | ConvertKit | Live | Newsletter signup, sequences |
+| e.g. Booking | Calendly | Live | Booking page |
+| e.g. Payments | Stripe | Live | Checkout |
+| e.g. Content hosting | Own CMS / Sanity | Needs setup | Blog, portfolio |
+| e.g. Tenant isolation | Own backend | Needs build | Multi-user dashboard |
+
+**For Platform/Product projects:** The capability inventory is the DataSource
+contract — what operations exist, organized by domain. Demo and live adapters
+implement the same interface.
+
+**For Creator/Brand/Athlete projects:** The capability inventory is the
+integration map — which platforms own which operations. Interfaces wire to
+real platforms, not mocked endpoints.
+
+**For Agency/Studio projects:** The capability inventory is the delivery
+system — intake, scoping, staffing, handoff, client tools. Interfaces
+operationalize the methodology.
+
+If a planned interface has no backing capability, flag it as a **Stability gap**
+and note it for backlog. Do not build a fake version.
+
+## Step 3: Determine Stack
 
 Ask the user about technical preferences and constraints:
-- Frontend framework (Next.js, SvelteKit, Remix, static HTML, etc.)
-- Styling approach (Tailwind, CSS modules, styled components, etc.)
-- Database target (Supabase, PlanetScale, Neon, Firebase, etc.)
-- Deployment target (Vercel, Railway, Fly, AWS, etc.)
+- Frontend framework (Next.js, SvelteKit, Astro, static HTML, etc.)
+- Styling approach (Tailwind, CSS modules, etc.)
+- Database / backend target (Supabase, own API, platform APIs, etc.)
+- Deployment target (Vercel, Railway, Fly, etc.)
 - Any existing code or design system to build on?
 
-If they don't have strong preferences, recommend based on what the Stability
-specs suggest the system needs.
+Recommend based on what the CapabilityMap and SystemArchitecture suggest.
+Match the stack to the integration surface — don't introduce unnecessary
+infrastructure.
 
-## Step 3: Schema
+## Step 4: Schema + DataSource
 
-From the Stability specs, create a typed schema:
-- Every table/collection defined with types
-- Relationships between entities explicit
-- Ownership fields explicit (who owns this record, what happens on exit)
-- This schema will be used by BOTH demo mode and live mode
+**For Platform/Product projects:**
+From the Stability specs + CapabilityMap, create:
+- Typed schema (every table/collection with types and relationships)
+- DataSource interface that both demo and live implement
+- Demo adapter with realistic data
+- Live adapter scaffolded against real backend contracts
 
-## Step 4: DataSource Adapter
+**For Creator/Brand/Athlete projects:**
+- Integration schema: what data flows between which platforms
+- API connection stubs for each declared platform capability
+- Demo data that reflects the creator's actual content, products, and audience
+- Configuration surface for platform credentials
 
-Create an interface that both data sources implement:
-```
-DataSource interface
-├── DemoDataSource (hardcoded realistic data)
-└── LiveDataSource (real database queries — scaffolded, not implemented)
+**For Agency/Studio projects:**
+- Delivery schema: projects, clients, phases, deliverables, team allocation
+- Demo data reflecting actual engagement types and delivery patterns
+- Integration points for project management / client communication tools
 
-Toggle: environment variable
-Demo mode available permanently.
-```
+In all cases: demo data must be realistic and specific. Names, numbers, dates
+that feel real. If the product serves a specific community, the demo data
+reflects that community authentically.
 
-Populate demo data with realistic content — not "test test test" or
-"Lorem ipsum." Names, numbers, dates that feel real. If the product serves
-a specific community, the demo data should reflect that community authentically.
+## Step 5: Build Interfaces
 
-## Step 5: Build Pages
+From the SystemArchitecture spec (or equivalent from Stability), build
+the declared interfaces. Each interface must:
 
-From the dashboard IA spec (or equivalent from Stability):
-- Auth flow
-- Main views (adapt to whatever the product is)
-- Admin/operator views (if applicable)
-- Public pages (if applicable)
+1. **Trace to capabilities** — every data query, mutation, or action maps to
+   a declared capability in the inventory
+2. **Apply DESIGN.md** — typography, color, spacing, motion from Step 1
+3. **Be lifecycle-aware** — if the product has phases (onboarding → active →
+   mature), same interface adapts per phase
+4. **Be specific** — this interface is for THIS project's users, not a template
 
-If the product has a lifecycle (onboarding → active → mature), build
-lifecycle-aware rendering — same pages, different content per phase.
+Common interface surfaces (build what applies):
+- Auth / onboarding flow
+- Primary workspace / dashboard
+- Public-facing pages (landing, portfolio, store, content)
+- Operator / admin views
+- Transaction / commerce surfaces
+- Community / social surfaces
 
 ## Step 6: Components & Design
 
@@ -163,47 +195,106 @@ lifecycle-aware rendering — same pages, different content per phase.
 - Loading states and skeletons
 - Empty states with contextual messaging
 
-## Step 7: Tests
+## Step 7: Composition Test
+
+Before proceeding, run the composition test — this is a **gate**:
+
+For each interface built:
+1. List every capability it calls
+2. Verify each capability exists in the CapabilityMap
+3. If any interface requires an undeclared capability → **flag as Stability gap**
+4. If any interface could belong to a different project with minimal changes → **flag as generic** and make it specific
+
+The composition test passes when:
+- Every interface traces to declared capabilities
+- No interface invents new backend shape
+- The output is recognizably THIS project, not a template
+
+If the test fails, fix the gaps before continuing. Stability gaps go to backlog.
+Generic interfaces get reworked for specificity.
+
+## Step 8: Tests
 
 - Unit tests for business logic
 - Data shape tests (demo data conforms to schema)
+- Integration tests for platform connections (where applicable)
 - Component tests where complexity warrants
 - All tests pass before Resonance is complete
 
-## Step 8: Engineering Guide
+## Step 9: Engineering Guide
 
 Create a CLAUDE.md in the platform directory:
 - Architecture overview
 - Code conventions
-- Data patterns (adapter, lifecycle, roles)
+- Data patterns (adapter, lifecycle, roles, integrations)
 - How to add a new page/feature
 - Test expectations
+- Capability-to-interface map (which capabilities power which surfaces)
 
-## Step 9: Five Laws Check
+## Step 10: Five Laws Check
 
-Before marking Resonance complete, evaluate the prototype against the
+Before marking Resonance complete, evaluate the interfaces against the
 five Laws of Design from Cultural Physics:
 
-1. **Energy Must Move.** Does the prototype feel alive? Is there motion,
-   progression, dynamic content — or does it feel static and inert?
+1. **Energy Must Move.** Do the interfaces feel alive? Is there motion,
+   progression, dynamic content — or do they feel static and inert?
 2. **Emotion Leads Form.** Does the design start from how it should feel,
-   not just what it should display? Would a user feel something before
-   they understand the interface?
+   not just what it should display?
 3. **Rhythm Over Rules.** Does the system organize by tempo — faster for
-   urgent actions, slower for important decisions — or does everything
-   move at the same pace?
-4. **Friction Reveals Imbalance.** Where is friction in the prototype?
-   Is it intentional (protecting the user) or accidental (serving the
-   platform)? Accidental friction is entropy — fix it.
-5. **Dual Worlds, One Current.** If this system has both physical and
-   digital touchpoints, do they hum at the same frequency? Would the
-   experience feel coherent across both planes?
+   urgent actions, slower for important decisions?
+4. **Friction Reveals Imbalance.** Where is friction? Is it intentional
+   (protecting the user) or accidental (serving the platform)?
+5. **Dual Worlds, One Current.** If this system has physical and digital
+   touchpoints, do they hum at the same frequency?
 
 Flag any law violations. Fix what can be fixed now. Note the rest for
 /fw-entropy.
 
 ## Output
 
-"Resonance built. Prototype runs at localhost with demo data.
-[N] pages, [N] components, [N] tests passing. Run /fw-entropy
-to pressure test the architecture."
+Three-tier progressive disclosure. Every tier is mandatory.
+
+### Tier 1 — Narrative (shown in conversation)
+
+5–7 sentences covering:
+- What interfaces were built and for whom
+- What capabilities they compose from (owned vs rented)
+- Composition test result (pass/fail, gaps flagged)
+- Specificity test result (is this recognizably THIS project?)
+- What's ready to pressure test
+
+### Tier 2 — Summary Card (written to `define/resonance-summary.md`)
+
+Scannable reference card:
+- **Interface inventory table** — interface | capabilities used | status
+- **Composition test result** — traced / gaps
+- **Specificity verdict** — pass or flag
+- **Tech stack summary**
+- **Demo mode status**
+
+### Tier 3 — Machine Artifact (written to `define/LaunchPlan.md`)
+
+Full LaunchPlan with YAML frontmatter:
+
+```yaml
+---
+artifact: LaunchPlan
+phase: resonance
+track: [from PROJECT-CONTEXT]
+version: 1.0
+status: locked
+interfaces_built: [count]
+capabilities_traced: [count]
+composition_gaps: [count]
+---
+```
+
+Body: launch roles, sequencing, metrics, rollback conditions,
+interface-to-capability map, and the full composition test results.
+
+---
+
+Close with:
+
+"Resonance built. [N] interfaces running at localhost with demo data.
+Composition test: [pass/fail]. Run /fw-entropy to pressure test."

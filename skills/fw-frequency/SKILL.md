@@ -58,6 +58,7 @@ can overcome it.
 ## Step 0: Read Existing Artifacts
 
 Before asking questions, scan the project for prior work that informs economics:
+- `define/PROJECT-CONTEXT.md` — if it exists, read the `track:` field from YAML frontmatter. The track (Creator, Cultural Brand, Athlete/Public Figure, Agency/Studio, Platform/Product) determines which discovery questions to emphasize in Step 1.
 - SignalThesis, AudienceFieldMap, TasteContract from prior phases
 - Existing business plans, financial models, or pitch decks
 - Prior pricing decisions, revenue models, or cost analyses
@@ -113,6 +114,30 @@ high-entropy, and high-entropy systems collapse.
 - How many customers/users for sustainability?
 - What's the cost basis per customer?
 - Is there a network effect or does it scale linearly?
+
+## Step 1b: Track-Specific Discovery Focus
+
+If a track was detected in `define/PROJECT-CONTEXT.md`, adapt discovery emphasis accordingly. These are additive — always run the core discovery questions from Step 1, then deepen based on track:
+
+| Track | Frequency emphasis |
+|-------|-------------------|
+| Creator | Revenue streams (direct sales, subscriptions, licensing, commissions). Platform economics (what % goes to Shopify/Patreon/etc). Audience size and conversion reality. |
+| Cultural Brand | Commerce margins, content monetization, community economics. Brand licensing potential. Channel economics (own site vs marketplace). |
+| Athlete / Public Figure | Endorsement deal structure, merch economics, appearance fees, content revenue. Agent/manager splits. League/federation obligations. |
+| Agency / Studio | Utilization rates, engagement pricing, margin targets, capacity model. Client acquisition cost. Delivery cost per engagement. |
+| Platform / Product | Unit economics, CAC/LTV, infrastructure costs. Capability layer as governing truth — DataSource-style contract. Multi-tenant economics if applicable. |
+
+Use AskUserQuestion to probe the track-specific areas that Step 1 didn't already cover.
+
+## Step 1c: Capability Awareness
+
+After extracting economic truth, note which capabilities must exist for the economics to work. For each revenue stream or economic mechanism identified, name the capabilities it depends on. Examples:
+- Revenue from product sales -> "product catalog" and "checkout" are required capabilities
+- Subscription model -> "billing system," "access control," and "account management"
+- Marketplace transaction fees -> "listing system," "payment processing," "escrow/settlement"
+- Content monetization -> "content management," "paywall/access gating," "analytics"
+
+Record these as `required-capabilities` in the FrequencyMap artifact. This threads directly into the CapabilityMap that /fw-stability will produce — Stability should not have to re-derive which capabilities are economically load-bearing.
 
 ## Step 2: Build the Business Model
 
@@ -255,7 +280,23 @@ Set up the project's ops directory:
 
 ## Output
 
-Tell the user what was produced, which gates are established, and:
+Produce three tiers of output:
+
+**Tier 1 — Narrative (shown in conversation):**
+"Here's the governing truth of your business" — 5-7 sentences that capture the economic reality, who generates the energy, how money flows, and what the hard constraints are. This is the version you'd say out loud.
+
+**Tier 2 — Summary card (written to `define/frequency-summary.md`):**
+A concise reference card containing:
+- Economic floor (minimum viable revenue / sustainability threshold)
+- Revenue model (one-line description)
+- Key numbers (canonical figures from the business model)
+- Non-negotiables (hard constraints that cannot be traded away)
+- Required capabilities (from Step 1c)
+
+**Tier 3 — Machine artifact (written to `define/FrequencyMap.md`):**
+The full structured artifact with YAML frontmatter including `track:`, `version:`, `date:`, and all business model details, governance documents, gate structure, and extraction check results. This is the artifact downstream phases reference programmatically.
+
+After writing all three tiers, tell the user what was produced, which gates are established, and:
 
 "Frequency extracted. The governing truth is documented. Run /fw-current
 to pressure test strategic decisions and lock direction before building."

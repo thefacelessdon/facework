@@ -18,12 +18,13 @@ produces. Ignore it when running the protocol on a new project.
 
 | Phase | Name | Skill(s) | Purpose |
 |-------|------|----------|---------|
-| 1 | Semantics | `/fw-semantics` | Extract meaning and canonical language |
+| — | Setup | `SETUP.md` | Prerequisite: get tools installed |
+| 1 | Semantics | `/fw-semantics` | Detect track, extract meaning and canonical language |
 | 2 | Field | `/fw-field` | Map social dynamics and adoption loops |
 | 3 | Taste | `/fw-taste` | Define quality governance and design language |
 | 4 | Strategy Lock | `/fw-frequency` + `/fw-current` | Lock economics and strategic direction |
 | 5 | Architecture & Flow | `/fw-flow` + `/fw-stability` | Document operations, then specify architecture |
-| 6 | Activation | `/fw-resonance` | Build transmissible prototype from DESIGN.md |
+| 6 | Activation | `/fw-resonance` | Build working interfaces from declared capabilities |
 | 7 | Integrity | `/fw-entropy` + `/fw-sovereignty` + `/fw-consonance` | Pressure test, enforce boundaries, verify alignment |
 | 8 | Integration | `/fw-coherence` | Package for handoff + diagnostic + methodology evolution |
 
@@ -31,7 +32,8 @@ produces. Ignore it when running the protocol on a new project.
 
 ```
 Facework/
-├── PROTOCOL.md          ← open protocol spec v2.0.0 (source of truth)
+├── PROTOCOL.md          ← open protocol spec (source of truth)
+├── SETUP.md             ← zero-to-ready setup guide (tiered by when you need it)
 ├── theories/            ← paradigm (Cultural Physics, Coherence OS)
 ├── methodology/         ← build system (retros, changelog)
 ├── skills/              ← 12 protocol skills + 8 operating skills

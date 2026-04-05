@@ -46,6 +46,7 @@ distinction determines whether the system sustains or extracts.
 ## Step 0: Read Existing Artifacts
 
 Before surfacing dilemmas, scan the project for prior work that informs strategy:
+- `define/PROJECT-CONTEXT.md` — if it exists, read the `track:` field from YAML frontmatter. The track (Creator, Cultural Brand, Athlete/Public Figure, Agency/Studio, Platform/Product) determines which dilemma categories to emphasize in Step 2.
 - All artifacts from Phases 1–3 (SignalThesis, AudienceFieldMap, TasteContract)
 - Existing strategy documents, decision logs, or prior direction-setting work
 - Restructure notes, pivot documentation, or "why we changed" records
@@ -70,7 +71,7 @@ A dilemma is a genuine strategic question with multiple valid answers. Scan for:
 - **Identity Expression dilemmas (MANDATORY):** How does this system present itself?
   What is the visual language, tone, and brand voice? This is a strategic decision —
   not a design afterthought resolved during prototyping. The visual identity carries
-  the frequency. If it's decided late, the prototype will be built generic and
+  the frequency. If it's decided late, interfaces will be built generic and
   retrofitted, which produces structural correctness without cultural resonance.
   Resolve: what does this look like, sound like, and feel like? Record it.
 - **Architecture dilemmas:** Build vs buy? Monolith vs services? Self-hosted vs managed?
@@ -79,6 +80,18 @@ A dilemma is a genuine strategic question with multiple valid answers. Scan for:
 - **Economics dilemmas:** Is the pricing right? Does the model sustain at target scale?
 - **Sequence dilemmas:** What order should things be built? What can be deferred vs what's foundational?
 - **Partnership dilemmas:** Who is a partner vs a dependency? What relationships are load-bearing?
+
+### Track-Specific Dilemma Emphasis
+
+If a track was detected in `define/PROJECT-CONTEXT.md`, prioritize these additional dilemma areas on top of the universal categories above. The Identity Expression dilemma remains MANDATORY for all tracks.
+
+| Track | Current emphasis |
+|-------|-----------------|
+| Creator | Identity expression (MANDATORY — already exists). Platform dependency dilemmas (own vs rent). Audience ownership. Content rights. |
+| Cultural Brand | Brand integrity vs growth. Editorial independence vs sponsorship. Community governance. Distribution control. |
+| Athlete / Public Figure | Agent/management relationship. League/federation constraints. NIL (name/image/likeness) strategy. Post-career transition. |
+| Agency / Studio | Productization vs custom. Hiring vs contracting. Methodology ownership. Client dependency concentration. |
+| Platform / Product | Build vs buy. Monolith vs services. Data sovereignty (multi-tenant). API-first vs UI-first. |
 
 For each, present it clearly:
 ```
@@ -152,6 +165,22 @@ Resolve dilemma files (mark RESOLVED with decision reference).
 - Ownership dilemma addressed — the system's relationship to its energy source is explicit
 
 ## Output
+
+Produce three tiers of output:
+
+**Tier 1 — Narrative (shown in conversation):**
+"Here are the decisions we locked and why" — 5-7 sentences covering the key dilemmas resolved, the direction chosen, and the strategic logic. This is the version you'd say out loud.
+
+**Tier 2 — Summary card (written to `define/current-summary.md`):**
+A concise reference card containing:
+- Locked decisions table (decision title, resolution, one-line rationale)
+- Open dilemmas (any deferred items with their named triggers for revisiting)
+- Wedge spec summary (audience, offer, channel, economic logic in brief)
+
+**Tier 3 — Machine artifact (full DecisionLedger + WedgeSpec with YAML frontmatter):**
+The complete DecisionLedger written to `decisions/` as individual decision files (already produced in Step 4), plus the WedgeSpec. YAML frontmatter includes `track:`, `version:`, `date:`, and references to the FrequencyMap.
+
+After writing all three tiers:
 
 "Current locked. [N] dilemmas resolved, [N] decision records created.
 Direction is set. Run /fw-stability to begin architecture specification."

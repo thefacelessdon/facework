@@ -1,6 +1,6 @@
 ---
 name: fw-coherence
-version: 4.0.0
+version: 4.1.0
 description: |
   Coherence: Phase 8 of the Facework Protocol (Integration). Final phase.
   Package everything so someone can clone the repo and start building on Day 1
@@ -22,7 +22,7 @@ allowed-tools:
 
 **Phase 8 of the Facework Protocol (Integration). Final phase.**
 Entry: SovereigntyMap and ConsonanceCheck exist; all critical gaps addressed (Phase 7 gate).
-Exit: HandoffPackage; coherence scorecard; DiagnosticReport; methodology updated.
+Exit: HandoffPackage; coherence scorecard; DiagnosticReport (with YAML frontmatter); coherence-summary.md; methodology updated.
 
 You are packaging everything from previous phases so a new participant can
 enter the system and build from it without the original builder present.
@@ -56,8 +56,27 @@ Before packaging, scan the project for everything produced across all phases:
 - Existing README, CLAUDE.md, or orientation documents
 - Prior handoff packages or onboarding docs
 - Git history to understand the build arc
+- Read `define/PROJECT-CONTEXT.md` if it exists. Extract the `track:` field.
+  Adapt all handoff packaging to the track (see Track-Specific Emphasis below).
+  If no PROJECT-CONTEXT.md exists, ask the user which track applies before proceeding.
 
 This step IS the audit — Coherence reads everything. Step 1 structures what you find.
+
+### Track-Specific Emphasis
+
+The `track:` field from PROJECT-CONTEXT.md determines what "handoff-ready" means:
+
+| Track | Coherence emphasis |
+|-------|-------------------|
+| **Creator** | Handoff = the creator themselves can maintain and evolve. README oriented to solo operator. Engineering guide focused on "how to update your site/store/content." Diagnostic focuses on identity coherence. |
+| **Cultural Brand** | Handoff = new team member can build on this. Full README + review brief + engineering guide. Diagnostic focuses on brand coherence across touchpoints. |
+| **Athlete / Public Figure** | Handoff = manager/agent team can operate. README oriented to non-technical operators. Playbooks are the key artifact. Diagnostic focuses on sovereignty and extraction. |
+| **Agency / Studio** | Handoff = new team member can deliver to clients. Methodology docs are the key artifact. Engineering guide = delivery playbook. Diagnostic focuses on operational coherence. |
+| **Platform / Product** | Full depth. Complete handoff package. Engineering guide must enable new developer on Day 1. Diagnostic covers all dimensions. |
+
+Apply this emphasis throughout Steps 2–8. For example, a Creator track may skip
+the Review Brief (Step 3) if the creator is the only builder, while an Agency track
+should weight the Project Tracker (Step 4) toward client delivery workflows.
 
 ## Step 1: Audit What Exists
 
@@ -66,7 +85,7 @@ Read the full project directory. Catalog:
 - All playbooks (from /fw-flow)
 - All decision records (from /fw-current)
 - All governance docs (from /fw-frequency)
-- The prototype (from /fw-resonance)
+- The working interfaces (from /fw-resonance)
 - Any engineering guides already written
 
 ## Step 2: README
@@ -127,7 +146,7 @@ Ensure the platform directory has a CLAUDE.md (or equivalent):
 Before marking complete, ask yourself:
 
 **Technical coherence:**
-- Can someone clone this repo and run the prototype in under 5 minutes?
+- Can someone clone this repo and run the interfaces in under 5 minutes?
 - Can they find any spec within 30 seconds using the README?
 - Can they understand the business model in one read of the business model doc?
 - Can they start building a feature using only the engineering guide?
@@ -160,7 +179,7 @@ Did any number change during the build? Did the extraction check surface anythin
 you wish you'd surfaced earlier?"
 **Flow:** "Did the playbooks match reality? What workflows played out differently?"
 **Stability:** "Were the specs accurate? Which ones needed rework?"
-**Resonance:** "Was demo mode useful? Did the prototype carry the frequency
+**Resonance:** "Was demo mode useful? Did the interfaces carry the frequency
 of the community it was built for?"
 **Entropy:** "What did the review catch that would have been a production incident?"
 **Sovereignty:** "Did the ownership model hold? Any lock-in risks that slipped through?"
@@ -254,13 +273,54 @@ Propose specific changes based on retro findings. For each:
 
 Apply approved changes. Update CHANGELOG.md with version bump.
 
-## Output
+## Output — Three-Tier Progressive Disclosure
 
-Tell the user:
-- Handoff status (repo URL, what's ready)
-- Coherence scorecard (score and zone)
-- How many methodology changes were made
-- What the next project should do differently
+### Tier 1 — Narrative (shown in conversation)
+
+Present 5–7 sentences covering:
+- **Coherence verdict:** Is this system transmissible? Can someone start without the builder?
+- **Strongest dimension:** Which primitive held best and why.
+- **Weakest dimension:** Where the system is most fragile.
+- **One forward-looking recommendation:** What the next project or next phase should prioritize.
+
+This is the only output shown directly. Keep it human, direct, and decisive.
+
+### Tier 2 — Summary Card (written to `define/coherence-summary.md`)
+
+Write a summary card containing:
+- **Coherence scorecard** (Flow, Resonance, Structural Integrity scores + computed Coherence score and zone)
+- **Handoff readiness verdict:** Can someone start building from this without the original builder? Yes/No + 1-sentence explanation.
+- **Cultural coherence verdict:** Can the community this was built for operate this? Yes/No + 1-sentence explanation.
+- **Top 3 methodology learnings** from this run (what the practice should carry forward).
+- **Track:** The project track from PROJECT-CONTEXT.md, so future readers know which emphasis was applied.
+
+### Tier 3 — Machine Artifact (HandoffPackage + DiagnosticReport)
+
+The HandoffPackage (README, review brief, project tracker, engineering guide) is
+already produced in Steps 2–6.
+
+Write the DiagnosticReport with YAML frontmatter:
+```yaml
+---
+artifact: DiagnosticReport
+phase: coherence
+track: [from PROJECT-CONTEXT.md]
+version: [protocol version from this run]
+scores:
+  flow: [1-5]
+  resonance: [1-5]
+  structural_integrity: [1-5]
+  entropy: [computed]
+  coherence: [computed]
+  zone: [RED / AMBER / GREEN / DEEP GREEN]
+handoff_ready: [true/false]
+cultural_coherence: [true/false]
+date: [YYYY-MM-DD]
+---
+```
+
+Below the frontmatter, include the full per-primitive walkthrough answers,
+the coherence scorecard visual, the retro, and methodology proposals.
 
 ```
 Project → /fw-coherence → Handoff + Diagnostic → Methodology Update

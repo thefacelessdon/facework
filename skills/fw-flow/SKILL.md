@@ -60,7 +60,25 @@ Before asking questions, scan the project for prior work that informs operations
 - Incident reports or post-mortems that reveal operational gaps
 - Automation scripts or agent configurations already in place
 
+Read `define/PROJECT-CONTEXT.md` if it exists. Read the `track:` field from its
+YAML frontmatter. Adapt depth and questions to the track (see Track Emphasis
+below). If it doesn't exist, proceed normally.
+
 Summarize what you found. Do not re-document workflows these artifacts already cover.
+
+### Track Emphasis
+
+The project track determines operational depth:
+
+| Track | Flow emphasis |
+|-------|-------------|
+| Creator | Light — solo operations, minimal playbooks. Focus on: content pipeline, audience engagement, sales/fulfillment. Skip: team ops, client management. |
+| Cultural Brand | Standard — editorial calendar, community management, commerce ops, content distribution. |
+| Athlete / Public Figure | Light — team-managed ops. Focus on: appearance/booking flow, content cadence, endorsement pipeline. Agent/manager handoff points. |
+| Agency / Studio | Heavy — operations ARE the product. Full depth: intake, scoping, staffing, delivery, client communication, QA, handoff, invoicing, retrospective. |
+| Platform / Product | Heavy — full operational depth. User lifecycle, incident response, deployment, monitoring, support, onboarding, billing. |
+
+If no track is set, infer from artifacts and confirm with the user.
 
 ## Step 1: Identify Workflows
 
@@ -151,5 +169,35 @@ For each playbook, identify: how far does the system bend before it breaks?
 
 ## Output
 
-"Flow designed. [N] playbooks produced. Every workflow mapped to ownership
-tiers. Run /fw-resonance to build the prototype."
+### Tier 1 — Narrative (shown in conversation)
+
+Present a 5–7 sentence summary: "Here's how your operations work." Cover key
+workflows, ownership model (what's human, what's agent, what's automated), and
+where automation vs human judgment applies. This is what the user reads
+immediately.
+
+### Tier 2 — Summary Card (written to file)
+
+Write to `define/flow-summary.md`:
+- Workflow count
+- Ownership tiers (human / agent / automated) with counts
+- Key escalation paths
+- One summary table
+
+### Tier 3 — Machine Artifact (written to file)
+
+Write the full WorkflowPlaybooks to `define/flow-playbooks.md` with YAML
+frontmatter:
+```yaml
+---
+artifact: WorkflowPlaybooks
+phase: flow
+track: [track from PROJECT-CONTEXT.md or "unset"]
+version: 1.0
+status: Working Draft
+---
+```
+
+Close with: "Flow designed. [N] playbooks produced. Every workflow mapped to
+ownership tiers. Run /fw-resonance to compose working interfaces from declared
+capabilities."
