@@ -247,6 +247,67 @@ exist here, Resonance cannot build an interface that depends on it.
 The CapabilityMap is a **required artifact** for Phase 5 gate. Resonance
 will not produce grounded interfaces without it.
 
+## Step 5b: Parallel Lanes
+
+When the build will use multiple agents or parallel workstreams, define the
+parallelization boundaries. This makes execution implications explicit —
+Stability already defines component boundaries, this section maps them to
+non-overlapping file scopes.
+
+```
+PARALLEL LANES
+═══════════════
+Lane A: [module/scope] — directories: [paths], depends on: [nothing / Lane X]
+Lane B: [module/scope] — directories: [paths], depends on: [nothing / Lane X]
+Lane C: [module/scope] — directories: [paths], depends on: [Lane A]
+...
+CONFLICT ZONES: [directories where multiple lanes overlap — force sequential]
+```
+
+**The rule:** If two lanes share a directory, they go in the same lane
+(sequential). If they don't, they can run in parallel. Parallelization works
+at the module/directory level, not the file level. Plans describe intent
+("add API endpoints"), not specific files. Module-level boundaries
+(`app/api/`, `app/pages/`, `lib/`) are reliable. File-level boundaries
+are guesswork.
+
+**When to skip:** Solo builder working sequentially. The parallel lanes
+section earns its weight when 2+ agents or contributors will build
+simultaneously.
+
+**Cost:** 10 minutes. Prevents merge conflicts and rework during parallel execution.
+
+## Step 5c: Verification Map
+
+For each capability in the CapabilityMap, define how to verify it works,
+how to prove it's broken, and what the edge cases are. This is a verification
+contract — not a test plan. It's written in capability language, not code
+language, and maps directly to tests during implementation.
+
+For each capability:
+```
+CAPABILITY: [name]
+  WORKS: [input] → [expected output]
+  BREAKS: [failure condition] → [user sees X] → [system does Y]
+  EDGES: [boundary condition 1], [boundary condition 2]
+```
+
+Example:
+```
+CAPABILITY: Subscribe to newsletter
+  WORKS: valid email → 200, stored in Sanity, welcome email sent
+  BREAKS: Sanity unavailable → 503, email queued for retry
+  EDGES: duplicate email → 200 "already signed up", honeypot filled → 200 silent reject, invalid email → 400
+```
+
+The verification map prevents two failure modes:
+1. Tests that miss edge cases because the tester invented coverage ad hoc
+2. Capabilities that ship without any verification because no one defined
+   what "working" means
+
+**Cost:** One table per capability. Add 2-3 columns to the existing CapabilityMap
+or produce as a companion artifact.
+
 ## Step 6: Cross-Reference
 
 - Every rate/threshold traces to canonical source in business model
@@ -258,6 +319,27 @@ will not produce grounded interfaces without it.
   decisions made in Frequency and Current — the architecture implements
   the ownership model, it doesn't override it
 - CapabilityMap covers every domain referenced in specs
+
+## Step 6.5: Cold Read (Optional)
+
+Before marking Stability complete, optionally dispatch a cold read — a separate
+agent (or reviewer) who reads the architecture specs with no conversation context.
+
+**Input:** The SystemArchitecture, CapabilityMap, and key specs — assembled as
+one structured summary.
+
+**Instruction to the cold reader:** "Read this architecture and tell me what's
+wrong. No compliments. Just the problems."
+
+**Process:** For each finding, decide:
+- **Accept** — incorporate the fix before closing.
+- **Reject** — state the reasoning.
+- **Defer** — name the trigger for revisiting.
+
+**When to skip:** Thesis-level projects. Challenge the architecture when there's
+validated demand behind it.
+
+**Time cost:** 5 minutes.
 
 ## Output
 

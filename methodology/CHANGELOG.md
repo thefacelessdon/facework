@@ -1,3 +1,47 @@
+# 0.0.4 — 2026-04-05 (Execution Learnings — TONL Session)
+
+**What changed:**
+- Added **Demand Gate** to PROTOCOL.md prerequisites and `/fw-semantics` Step 0.75.
+  Three forcing questions (demand reality, status quo, specificity) run before
+  meaning extraction. Classifies project as Validated / Signaled / Thesis.
+- Added **Evidence-Level calibration** system. Evidence level recorded in
+  `ProjectContext` and calibrates protocol depth throughout all phases.
+  Thesis-level projects run all phases lighter. `EvidenceLevel` added to
+  canonical objects in PROTOCOL.md.
+- Added **Cold Read** (optional adversarial review) to `/fw-frequency` (Step 7),
+  `/fw-current` (Step 6.5), and `/fw-stability` (Step 6.5). Dispatches a fresh
+  agent to read phase output with no conversation context. Accept/reject/defer
+  per finding. 5 minutes per phase.
+- Added **Build Brief** to `/fw-coherence` (Step 6b). One-page builder-oriented
+  synthesis: problem, approach, what to skip, premises, success criteria,
+  dependencies. Extracted from existing artifacts, not new research.
+- Added **Parallel Lanes** to `/fw-stability` (Step 5b). Maps component
+  boundaries to non-overlapping directory scopes for parallel agent execution.
+  Rule: shared directory = same lane (sequential).
+- Added **Reference Page** to `/fw-resonance` (Step 4b). Optional for UI
+  projects. Self-contained HTML per key screen with real design tokens and
+  real content. Visual contract, not interactive prototype.
+- Added **Verification Map** to `/fw-stability` (Step 5c). WORKS/BREAKS/EDGES
+  contract per capability. Written in capability language, maps directly to
+  tests during implementation.
+
+**Protocol weight added:** No new phases. 5 additions to existing phase outputs,
+1 pre-phase gate, 1 optional per-phase step. ~90 minutes total at full depth,
+~30 minutes at thesis level.
+
+**What was NOT adopted:** Review readiness dashboards, telemetry, multi-pass
+rating systems, CHANGELOG/VERSION automation, adversarial review pipelines with
+P1 gates. These solve team coordination problems. Facework solves meaning,
+direction, and architectural clarity.
+
+**Triggered by:** TONL project gstack session (2026-04-05). Full protocol run
+followed by /office-hours → /plan-ceo-review → /plan-design-review →
+/plan-eng-review → 5 parallel agents → /ship. The protocol-to-shipping gap
+was closed in one session. These 7 learnings are the patterns that made it
+possible. Evidence: thefacelessdon/TONL PR #1, 60+ files, 36 tests, 4 reviews.
+
+---
+
 # 0.0.3 — 2026-03-31 (Protocol Consolidation)
 
 **What changed:**

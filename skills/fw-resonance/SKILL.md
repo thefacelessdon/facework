@@ -167,6 +167,34 @@ In all cases: demo data must be realistic and specific. Names, numbers, dates
 that feel real. If the product serves a specific community, the demo data
 reflects that community authentically.
 
+## Step 4b: Reference Page (Optional — UI projects only)
+
+When the system has a visual interface, produce one self-contained HTML file per
+key screen before building framework-native components. This is a reference, not
+a prototype. Builders look at it to resolve ambiguity during implementation.
+
+Requirements:
+- **Self-contained** — inline CSS, no CDN, no build step, opens in any browser
+- **Uses real design tokens** from DESIGN.md (exact hex values, font stacks, spacing)
+- **Contains real content** — not lorem ipsum. Names, numbers, dates that reflect
+  the actual community this serves
+- **Shows information hierarchy** as defined by the design language
+- **Includes empty and error states** (commented sections or toggleable)
+
+Write to `reference/[screen-name].html`.
+
+**What this is:** A visual contract. When someone asks "what does the empty
+creator directory look like?" — open the HTML file.
+
+**What this is NOT:** An interactive prototype. No JavaScript behavior, no
+routing, no state management. Pure visual reference.
+
+**When to skip:** Backend-only systems, API-only projects, infrastructure.
+Only produce reference pages when the system has user-facing screens.
+
+**Cost:** One HTML file per key screen. 30 minutes with AI assistance. Saves
+hours of "does this look right?" during implementation.
+
 ## Step 5: Build Interfaces
 
 From the SystemArchitecture spec (or equivalent from Stability), build

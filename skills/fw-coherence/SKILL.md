@@ -141,6 +141,47 @@ Ensure the platform directory has a CLAUDE.md (or equivalent):
 - Push to GitHub (ask user: public or private?)
 - Set up collaborator access if needed
 
+## Step 6b: Build Brief
+
+Produce a one-page synthesis oriented to the builder (human or agent). The Build
+Brief extracts from existing phase artifacts — it is not new research. This is
+the artifact someone opens when they sit down to implement.
+
+Write to `define/build-brief.md`:
+
+```markdown
+# Build Brief: [Feature/Project Name]
+
+## Problem (from Frequency)
+One paragraph. What user, what pain, what evidence level.
+
+## Approach (from Stability)
+What to build. 3-5 bullet points. Specific components, not concepts.
+
+## What to Skip
+Explicit list of things that were considered and deferred.
+Each with one-line rationale.
+
+## Premises (from Current decisions)
+Numbered list of assumptions the build depends on.
+If any premise is wrong, the build changes.
+
+## Success Criteria
+Measurable. Include a kill signal: what would tell you to stop.
+
+## Dependencies
+What must exist before building starts.
+Ordered: do this first, then this, then this.
+```
+
+The Build Brief differs from the HandoffPackage: the HandoffPackage helps
+someone understand the project. The Build Brief helps someone build the
+next thing. Different audience, different artifact.
+
+**When to skip:** If the project is thesis-level with no validated demand,
+the Build Brief may be premature. Produce it when there's a concrete build
+ahead.
+
 ## Step 7: Coherence Test
 
 Before marking complete, ask yourself:

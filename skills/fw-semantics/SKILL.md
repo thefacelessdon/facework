@@ -123,7 +123,51 @@ Close with: *"You don't need these now — they come up in later phases. Just kn
 they're coming so there are no surprises. If you haven't completed SETUP.md
 Tier 1 yet, do that first."*
 
-Then continue to Step 1 in the same conversation.
+Then continue to Step 0.75 in the same conversation.
+
+## Step 0.75: Demand Gate
+
+After confirming the track, run the demand gate. Three questions, each requiring
+a specific answer — not a category or thesis. Use AskUserQuestion:
+
+**"Name one person who would be upset if this disappeared tomorrow."**
+Not "interested." Upset. If the answer is a category ("music producers"), not
+a named person, the demand is hypothetical.
+
+**"What is that person doing right now to solve this problem, even badly?"**
+If the answer is "nothing," the problem may not be painful enough to act on.
+Workarounds — even bad ones — are demand signal.
+
+**"Describe them: name, title, what gets them promoted, what gets them fired."**
+If you can't describe one person at this level, you're building for an
+abstraction. That's not disqualifying — but the protocol should know.
+
+### Set Evidence Level
+
+Based on all three answers, classify and record:
+
+| Level | Signal | Protocol calibration |
+|---|---|---|
+| **Validated** | Named users, observed behavior, payment or engagement signals | Full depth. All phases earn their weight. |
+| **Signaled** | Inbound interest, repeated asks from specific people, adjacent evidence | Standard depth. Run all phases but flag speculative decisions. |
+| **Thesis** | Pattern recognition, market observation, founder conviction | Reduced depth. Prioritize Frequency (Phase 4) and one validation artifact. Defer deep Sovereignty, Consonance, and Entropy until demand evidence exists. |
+
+Add `evidence_level:` to the PROJECT-CONTEXT.md frontmatter:
+
+```yaml
+evidence_level: [validated | signaled | thesis]
+demand_evidence: [one-line summary of what was provided]
+```
+
+**Do not skip phases at thesis level.** Run them lighter. The Demand Gate
+calibrates effort, not sequence. A thesis-level project running full-depth
+Sovereignty maps is over-investing in insurance on a bet that hasn't been placed.
+
+Present the classification to the user:
+**"Evidence level: [Level]. This means [brief calibration note].
+The protocol runs all phases — [Level] calibrates how deep we go."**
+
+Then continue to Step 1.
 
 ## Step 1: Capture the Hunch
 

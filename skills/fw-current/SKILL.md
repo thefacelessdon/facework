@@ -164,6 +164,26 @@ Resolve dilemma files (mark RESOLVED with decision reference).
 - No "we'll figure it out later" items remain without a named trigger
 - Ownership dilemma addressed — the system's relationship to its energy source is explicit
 
+## Step 6.5: Cold Read (Optional)
+
+Before marking Current complete, optionally dispatch a cold read — a separate
+agent (or reviewer) who reads the locked decisions with no conversation context.
+
+**Input:** The DecisionLedger and WedgeSpec — assembled as one structured summary.
+
+**Instruction to the cold reader:** "Read these decisions and tell me what's
+wrong. No compliments. Just the problems."
+
+**Process:** For each finding, decide:
+- **Accept** — incorporate before closing.
+- **Reject** — state the reasoning.
+- **Defer** — name the trigger for revisiting.
+
+**When to skip:** Thesis-level projects. The cold read earns its weight when
+decisions are load-bearing for a validated problem.
+
+**Time cost:** 5 minutes.
+
 ## Output
 
 Produce three tiers of output:

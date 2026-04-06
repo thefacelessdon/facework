@@ -1,7 +1,7 @@
 # Facework Protocol
 
 Status: Draft
-Version: 0.0.3 (see VERSION and ROADMAP.md)
+Version: 0.0.4 (see VERSION and ROADMAP.md)
 
 Facework Protocol is an open standard for turning cultural signal into coherent, ownable business systems for creators and cultural brands.
 
@@ -25,6 +25,7 @@ This spec defines:
 A conforming implementation MUST produce these objects:
 
 - `ProjectContext`
+- `EvidenceLevel`
 - `SignalThesis`
 - `AudienceFieldMap`
 - `TasteContract`
@@ -59,6 +60,33 @@ a separate phase.
 - **Athlete / Public Figure** — public figure converting attention into owned infrastructure.
 - **Agency / Studio** — service business building systems for clients or internal products.
 - **Platform / Product** — technology product serving a market.
+
+### Demand Gate
+
+Before entering Phase 1, answer three forcing questions. Each requires a
+specific answer, not a category or thesis:
+
+1. **Demand reality:** Name one person who would be upset if this disappeared
+   tomorrow. Not "interested." Upset. If the answer is a category ("music
+   producers"), not a person, the demand is hypothetical.
+2. **Status quo:** What is the user doing right now to solve this problem, even
+   badly? If the answer is "nothing," the problem may not be painful enough to
+   act on.
+3. **Specificity:** Name, title, what gets them promoted, what gets them fired.
+   If you can't describe one person at this level, you're building for an
+   abstraction.
+
+The answers determine the project's **evidence level**:
+
+| Level | Evidence | Protocol depth |
+|---|---|---|
+| **Validated** | Named users, observed behavior, payment or engagement signals | Full depth. All phases earn their weight. |
+| **Signaled** | Inbound interest, repeated asks from specific people, adjacent evidence | Standard depth. Run all phases but flag speculative decisions. |
+| **Thesis** | Pattern recognition, market observation, founder conviction | Reduced depth. Prioritize Frequency and one validation artifact. Defer Sovereignty, Consonance, and Entropy until demand evidence exists. |
+
+The evidence level is recorded in `ProjectContext` and calibrates effort
+throughout the protocol. A thesis-level project SHOULD NOT produce the same
+volume of artifacts as a validated one.
 
 ## 4) Lifecycle Phases
 

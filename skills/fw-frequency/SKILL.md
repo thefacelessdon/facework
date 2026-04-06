@@ -278,6 +278,28 @@ Set up the project's ops directory:
 └── decisions/                   (empty — populated in /fw-current)
 ```
 
+## Step 7: Cold Read (Optional)
+
+Before marking Frequency complete, optionally dispatch a cold read — a separate
+agent (or reviewer) who reads the phase output with no conversation context.
+
+**Input:** The FrequencyMap, business model, governance documents, and gate
+structure — assembled into one structured summary.
+
+**Instruction to the cold reader:** "Read this and tell me what's wrong.
+No compliments. Just the problems."
+
+**Process:** For each finding, decide:
+- **Accept** — incorporate the fix before closing.
+- **Reject** — state the reasoning. A founder who can articulate WHY they reject
+  a challenge is demonstrating conviction, not stubbornness.
+- **Defer** — name the trigger for revisiting.
+
+**When to skip:** Thesis-level projects (see Demand Gate). The cold read earns
+its weight when the economics are load-bearing. Before that, it's optional.
+
+**Time cost:** 5 minutes.
+
 ## Output
 
 Produce three tiers of output:
