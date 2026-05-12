@@ -6,6 +6,9 @@ trigger: scheduled
 schedule: "0 6 * * *"
 ownership: agent
 tags: [intel, daily]
+# v1.4.0
+sponsors: ["harper@face.works"]
+model_tier: standard
 ---
 
 # Go-to-Market Pulse

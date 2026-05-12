@@ -1,7 +1,7 @@
 # Facework Protocol
 
 Status: Draft
-Version: 0.0.7 (see VERSION and ROADMAP.md). Manifest schema 1.0.0 (baseline), 1.1.0 (Runtime Ports, §9), 1.2.0 (HarnessBundle, §10), 1.3.0 (DesignInfrastructure, §11).
+Version: 0.0.8 (see VERSION and ROADMAP.md). Manifest schema 1.0.0 (baseline), 1.1.0 (Runtime Ports, §9), 1.2.0 (HarnessBundle, §10), 1.3.0 (DesignInfrastructure, §11), 1.4.0 (efficiency hints + skill polish — amendments throughout §9–§11, new §12 Observability Interface).
 
 Facework Protocol is an open standard for turning cultural signal into coherent, ownable business systems for creators and cultural brands.
 
@@ -378,11 +378,29 @@ in a `WorkflowPlaybook` (Phase 5 Flow) and capabilities declared in
 `context_load[]`, `integrations[]`, `escalation`, `schedule` (required if
 `trigger=scheduled`), `event` (required if `trigger=event`), `tags[]`.
 
+**v1.4.0 optional skill fields (additive, all default-omitted):**
+- `sponsors[]` — humans accountable for the skill's correctness, memory
+  hygiene, and lifecycle. SHOULD be populated on Validated-evidence projects.
+- `verifier_skill_id` — generalizes the `design-eye-evaluator` pattern.
+  References a Skill (in the same manifest) that gates this skill's
+  output before publication. The verifier SHOULD have `domain: quality`.
+- `multiplayer: bool` — when `true`, the skill may be invoked by multiple
+  users concurrently and memory writes accrue across users. Default
+  `false`.
+- `model_tier: standard | advanced` — declares which model tier this
+  skill warrants. Runtimes map `advanced` to their premium tier (e.g.
+  Opus). Default `standard`.
+- `advisor_escalation` — optional skill_id this skill can invoke for a
+  one-shot advisor judgment. Composable: the escalation goes through a
+  registered Skill, so it gets its own audit trail.
+
 **Validation:**
 1. All skill IDs unique within the manifest.
 2. Every `playbook` path resolves to an existing file.
 3. Cross-manifest references resolve (§9.7).
 4. If `trigger=scheduled`, `schedule` is a cron expression.
+5. (v1.4.0) `verifier_skill_id` and `advisor_escalation`, when present,
+   resolve to declared skills in the same manifest.
 
 **Phase 5 gate (Skills port):**
 - Every `WorkflowPlaybook` produced in Phase 5 is referenced by ≥1 skill.
@@ -405,6 +423,12 @@ critically — the boundary against runtime-level memory.
 
 **Required folder fields:** `path`, `purpose`. Optional: `contains[]`,
 `written_by[]`, `read_by[]`, `children[]` (nested folders).
+
+**v1.4.0 optional folder field:** `compactable: bool` — when `true`, the
+folder's contents may be summarized or dropped from in-session context
+after writing. Content persists on disk; just not in the live agent's
+context window. Default `false`. Maps to Claude Platform compaction
+optimization.
 
 **Boundary block (REQUIRED)** declares the separation between tenant memory
 (the vault) and runtime memory (the agent's own continuity store). Fields:
@@ -460,6 +484,12 @@ map directly to harness-native files in Move C (v0.0.6):
 **Optional bundle fields:** `max_tokens` (budget hint), `priority` (`must` |
 `should` | `may`), `composes[]` (inherit other bundles), `excludes[]`.
 
+**v1.4.0 optional bundle field:** `cache_affinity: stable | dynamic` —
+hint for runtimes implementing prompt caching. Default `stable` (cache
+aggressively). Tenants declare `dynamic` for bundles with live feeds or
+frequently-rotating content. Most protocol artifacts (`soul`, `identity`,
+`purpose`, `taste`) are stable by construction.
+
 **Validation:**
 1. Bundle IDs unique. No cycles in `composes`.
 2. Every `file` source `path` resolves.
@@ -491,6 +521,19 @@ Validated in Phase 5 (Architecture & Flow) and again in Phase 7
 **Optional integration fields:** `endpoint`, `scope[]`, `secrets[]`
 (secret-store references — NEVER secret values), `rate_limits`, `failover`,
 `data_residency`, `pii`, `description`.
+
+**v1.4.0 optional integration fields:**
+- `load_mode: eager | lazy | on_search` — declares whether the runtime
+  should eagerly load the integration's schema/handles or pull on demand.
+  Default `eager`. Setting `on_search` maps to the Claude Platform tool-
+  search optimization — appropriate when the integration's schema is
+  large and infrequently used.
+- `scope[]` items may now be either a plain operation string (back-compat
+  with v1.0.0–v1.3.0) OR an object `{operation, direction}` where
+  `direction` is `sensor` (reads from the external world), `actuator`
+  (writes to / acts on the external world), or `both`. Mixed forms are
+  allowed in the same manifest. This adopts Karpathy's sensors-and-
+  actuators framing for agent-native infrastructure.
 
 **Secret refs** carry `{name, store, ref, required?}`. The validator
 hard-fails on any field that looks like a raw key, token, or password —
@@ -626,7 +669,9 @@ name. Tenants do not rename; deviations break runtime ingest.
 
 ### 10.2 Manifest declaration
 
-A v1.2.0 manifest extends the `runtime_ports` block with a `bundle` field:
+A v1.2.0 manifest extends the `runtime_ports` block with a `bundle` field
+(v1.4.0 adds optional `cache_affinity` to both port refs and the bundle
+ref):
 
 ```yaml
 runtime_ports:
@@ -862,3 +907,89 @@ feedback that surfaces patterns the contract didn't capture could in
 principle propagate back into TasteContract amendments. Round-trip is
 deferred to v0.1.0+.
 
+### 11.11 Verifier pattern generalizes (v1.4.0)
+
+The `design-eye-evaluator` Skill registered by DesignInfrastructure is
+one instance of a broader pattern. As of v1.4.0, any output-producing
+Skill MAY declare a `verifier_skill_id` in its SkillManifest entry,
+referencing another Skill (typically `domain: quality`, `ownership:
+agent`) that gates the producing skill's output before publication.
+DesignInfrastructure's evaluator was the first concrete verifier; other
+tenant worlds can register verifiers for legal review, accuracy
+checking, policy compliance, or any other output-gating concern. See
+§9.3 v1.4.0 optional skill fields.
+
+## 12) Observability Interface (v1.4.0, additive)
+
+Runtime Ports (§9), HarnessBundle (§10), and DesignInfrastructure (§11)
+declare WHAT the tenant world is. The Observability Interface declares
+WHAT EVENTS runtimes SHOULD emit during operation. The protocol
+specifies the event surface; runtimes pick the transport (stdout,
+OpenTelemetry, custom dashboard, logfile, vendor sink — runtime's call).
+
+This means: a dashboard that visualizes Facework runs — like the Claude
+Platform dev dashboard, Corey's runtime dashboard, or any tenant's
+custom UI — consumes the same event surface regardless of which runtime
+is producing the events. Facework specifies it; nothing builds it.
+
+### 12.1 Minimum event surface
+
+Any v1.4.0 conforming runtime SHOULD emit these events. Different
+transport, same surface:
+
+| Event | Fields | When |
+|---|---|---|
+| `skill.invoked` | skill_id, invoker, inputs (redacted), timestamp, multiplayer | At skill start |
+| `skill.completed` | skill_id, outputs (paths), duration_ms, status, model_tier_used | On skill finish |
+| `skill.error` | skill_id, error_class, message, timestamp | On skill failure |
+| `memory.write` | path, skill_id, bytes, timestamp, compactable | Per memory write |
+| `memory.read` | path_pattern, skill_id, timestamp | Per memory read (may be sampled) |
+| `integration.called` | integration_id, operation, direction, skill_id, duration_ms | Per integration call |
+| `verifier.run` | verifier_skill_id, gated_skill_id, verdict, scores, timestamp | When a verifier gates an output |
+| `cache.hit` | prompt_prefix_hash, skill_id, savings_pct, cache_affinity | Per cache hit |
+| `cache.miss` | prompt_prefix_hash, skill_id, reason, cache_affinity | Per cache miss |
+| `advisor.escalated` | from_skill_id, to_skill_id, prompt_summary, timestamp | When `advisor_escalation` is invoked |
+
+### 12.2 Field conventions
+
+- **`redacted`** — secrets (per `IntegrationManifest.secrets[]`) and PII
+  (per `IntegrationManifest.pii: true`) MUST be redacted from event
+  payloads.
+- **`path_pattern`** — for memory.read events, the original glob/template
+  is preferred over the resolved literal (e.g., `wiki/clients/**` not
+  `wiki/clients/acme/define/foo.md`) to keep events readable at scale.
+- **`timestamp`** — ISO 8601 UTC unless the runtime's transport mandates
+  a different format.
+- **`duration_ms`** — wall-clock milliseconds from invocation start to
+  completion.
+
+### 12.3 What runtimes pick
+
+The protocol does not specify:
+- Event transport (stdout / OpenTelemetry / custom HTTP sink / file)
+- Event format encoding (JSON / protobuf / msgpack)
+- Sampling rate for high-volume events (memory.read, cache.hit)
+- Retention policy on emitted events
+- Aggregation or rollup conventions
+
+These are runtime concerns. Different runtimes will choose differently;
+the event surface is the interoperability layer.
+
+### 12.4 Phase 8 (Coherence) gate addition
+
+For v1.4.0 conformers, `/fw-coherence` (Phase 8) SHOULD confirm:
+- The chosen runtime can emit the minimum event surface (§12.1).
+- The HandoffPackage documents which transport the runtime uses, so
+  the receiving operator knows where to look.
+- Secrets and PII redaction is exercised at least once before handoff.
+
+### 12.5 Relationship to other protocol layers
+
+- **Runtime Ports (§9)** declare what the tenant world contains.
+- **HarnessBundle (§10)** packages it for file-based ingest.
+- **DesignInfrastructure (§11)** declares an active design layer (the
+  first verifier).
+- **Observability Interface (§12)** declares the operational visibility
+  surface — what the system reveals about itself as it runs.
+
+Together: four layers, each declaring properties; runtimes implement.

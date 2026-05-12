@@ -34,6 +34,10 @@ skills:
     writes_memory: ["wiki/prospects/{prospect_name}/"]
     escalation: "Founder review if score is borderline (5-7 of 10)"
     tags: [revenue, intake]
+    # v1.4.0 additions
+    sponsors: ["harper@face.works"]
+    multiplayer: true
+    model_tier: standard
 
   - id: engagement-delivery
     name: "Engagement Delivery"
@@ -67,6 +71,14 @@ skills:
     writes_memory: ["wiki/clients/{client_id}/define/", "wiki/clients/{client_id}/prototype/"]
     escalation: "Stage-gate failure escalates to founder for go/no-go"
     tags: [revenue, core]
+    # v1.4.0 additions
+    sponsors: ["harper@face.works"]
+    multiplayer: true
+    model_tier: standard
+    # Verifier gates the prototype artifacts before they ship to client
+    verifier_skill_id: design-eye-evaluator
+    # Hard decisions during delivery escalate to the GAMUT audit skill for a one-shot advisor judgment
+    advisor_escalation: gamut-audit
 
   - id: stage-gate-monitoring
     name: "Stage-Gate Monitoring"
@@ -89,6 +101,9 @@ skills:
     writes_memory: ["outputs/weekly-status/"]
     escalation: "Any red flag posts to #engagement-health Slack channel"
     tags: [monitoring, ops]
+    # v1.4.0 additions
+    sponsors: ["harper@face.works"]
+    model_tier: standard
 
   - id: engagement-closure
     name: "Engagement Closure"
@@ -118,6 +133,11 @@ skills:
     reads_memory: ["wiki/clients/{client_id}/**"]
     writes_memory: ["wiki/clients/{client_id}/handoff/", "archive/clients/"]
     tags: [delivery, lifecycle]
+    # v1.4.0 additions
+    sponsors: ["harper@face.works"]
+    model_tier: standard
+    # Closure produces the HandoffPackage — verify before delivery
+    verifier_skill_id: design-eye-evaluator
 
   - id: gamut-audit
     name: "GAMUT Audit"
@@ -143,6 +163,10 @@ skills:
     reads_memory: ["wiki/audits/**"]
     writes_memory: ["wiki/audits/{target_tenant}/"]
     tags: [proof, sales-asset]
+    # v1.4.0 additions
+    sponsors: ["harper@face.works"]
+    # GAMUT audits are high-stakes sales-asset judgments — warrants the advanced tier
+    model_tier: advanced
 
   - id: go-to-market-pulse
     name: "Go-to-Market Pulse"
@@ -164,6 +188,9 @@ skills:
     reads_memory: ["wiki/prospects/**", "wiki/competitors/**"]
     writes_memory: ["outputs/morning-brief/"]
     tags: [intel, daily]
+    # v1.4.0 additions
+    sponsors: ["harper@face.works"]
+    model_tier: standard
 
   - id: design-eye-evaluator
     name: "Design Eye Evaluator"
@@ -200,3 +227,8 @@ skills:
     reads_memory: ["wiki/protocol-reference/**"]
     writes_memory: ["outputs/design-evals/"]
     tags: [quality, design, gate]
+    # v1.4.0 additions
+    sponsors: ["harper@face.works"]
+    # Evaluator runs on demand from multiple skills concurrently
+    multiplayer: true
+    model_tier: standard

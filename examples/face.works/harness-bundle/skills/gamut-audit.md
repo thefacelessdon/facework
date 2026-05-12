@@ -5,6 +5,9 @@ domain: proof
 trigger: on_demand
 ownership: hybrid
 tags: [proof, sales-asset]
+# v1.4.0
+sponsors: ["harper@face.works"]
+model_tier: advanced
 ---
 
 # GAMUT Audit

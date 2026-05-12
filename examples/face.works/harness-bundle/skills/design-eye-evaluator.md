@@ -5,6 +5,10 @@ domain: quality
 trigger: on_demand
 ownership: agent
 tags: [quality, design, gate]
+# v1.4.0
+sponsors: ["harper@face.works"]
+multiplayer: true
+model_tier: standard
 ---
 
 # Design Eye Evaluator

@@ -9,7 +9,12 @@ integrations:
     auth: oauth
     trust_boundary: rent
     endpoint: "mcp:linear"
-    scope: [read, write, comment]
+    load_mode: eager  # v1.4.0 — high-frequency, always-needed integration
+    # v1.4.0 — scope items use object form to declare sensor/actuator direction
+    scope:
+      - { operation: read,    direction: sensor }
+      - { operation: write,   direction: actuator }
+      - { operation: comment, direction: actuator }
     used_by:
       - prospect-qualification
       - engagement-delivery
@@ -33,6 +38,8 @@ integrations:
     auth: oauth
     trust_boundary: rent
     endpoint: "mcp:github"
+    load_mode: eager  # v1.4.0
+    # v1.4.0 — keeping string form here to demonstrate back-compat alongside the object form on linear
     scope: [read, write, pr_create, issue_create]
     used_by:
       - engagement-delivery
@@ -56,7 +63,11 @@ integrations:
     auth: oauth
     trust_boundary: rent
     endpoint: "mcp:gmail"
-    scope: [read, search, send_draft]
+    load_mode: lazy  # v1.4.0 — only one skill uses it (prospect-qualification); lazy-load
+    scope:
+      - { operation: read,        direction: sensor }
+      - { operation: search,      direction: sensor }
+      - { operation: send_draft,  direction: actuator }
     used_by:
       - prospect-qualification
     secrets:
@@ -77,6 +88,7 @@ integrations:
     auth: oauth
     trust_boundary: rent
     endpoint: "mcp:notion"
+    load_mode: on_search  # v1.4.0 — large schema; pull on demand via tool search
     scope: [read, write, page_create]
     used_by:
       - engagement-delivery
@@ -98,6 +110,7 @@ integrations:
     auth: oauth
     trust_boundary: rent
     endpoint: "mcp:slack"
+    load_mode: eager  # v1.4.0
     scope: [post_message, read_channel]
     used_by:
       - stage-gate-monitoring
@@ -118,6 +131,7 @@ integrations:
     auth: api_key
     trust_boundary: mitigate
     endpoint: "https://api.x.com/2"
+    load_mode: lazy  # v1.4.0 — only one skill uses it; lazy-load
     scope: [read_timeline, read_search]
     used_by:
       - go-to-market-pulse
@@ -139,7 +153,11 @@ integrations:
     auth: local
     trust_boundary: own
     endpoint: "./vault/"
-    scope: [read, write, list]
+    load_mode: eager  # v1.4.0 — critical; always available
+    scope:
+      - { operation: read,  direction: sensor }
+      - { operation: write, direction: actuator }
+      - { operation: list,  direction: sensor }
     used_by:
       - prospect-qualification
       - engagement-delivery
@@ -157,6 +175,7 @@ integrations:
     auth: local
     trust_boundary: own
     endpoint: "qmd"
+    load_mode: eager  # v1.4.0
     scope: [query]
     used_by:
       - engagement-delivery

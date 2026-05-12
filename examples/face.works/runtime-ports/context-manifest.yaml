@@ -8,6 +8,8 @@ global:
   composes: [soul, identity, purpose]
   max_tokens: 4000
   priority: must
+  # v1.4.0 — global composes governance artifacts; stable by construction
+  cache_affinity: stable
 
 bundles:
   - id: soul
@@ -17,6 +19,7 @@ bundles:
       the same signal foundation and quality bar.
     priority: must
     max_tokens: 2000
+    cache_affinity: stable  # v1.4.0 — signal thesis + taste contract are stable
     load:
       - kind: file
         path: "examples/face.works/define/architecture/business-model/business-model.md"
@@ -35,6 +38,7 @@ bundles:
     purpose: "Who this tenant is, who it serves, and which stage it operates in"
     priority: must
     max_tokens: 800
+    cache_affinity: stable  # v1.4.0 — project context shifts slowly (track/audience/stage)
     load:
       - kind: file
         path: "examples/face.works/define/README.md"
@@ -52,6 +56,7 @@ bundles:
     purpose: "Locked strategic direction and current operational wedge"
     priority: must
     max_tokens: 2000
+    cache_affinity: stable  # v1.4.0 — locked decisions are stable until explicitly re-litigated
     load:
       - kind: file
         path: "examples/face.works/define/decisions/002-creator-first-wedge.md"
@@ -72,6 +77,7 @@ bundles:
     priority: should
     max_tokens: 6000
     composes: [soul]
+    cache_affinity: stable  # v1.4.0
     load:
       - kind: file
         path: "examples/face.works/prototype/DESIGN.md"

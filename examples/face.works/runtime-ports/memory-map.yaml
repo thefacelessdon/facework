@@ -6,6 +6,8 @@ structure:
   - path: "raw/"
     purpose: "Inbox and capture staging — anything dropped here is unprocessed signal until promoted to wiki/ during engagement work"
     contains: ["*.md", "*.pdf", "*.txt"]
+    # v1.4.0 — staging area; once promoted, no need to keep raw entries in live context
+    compactable: true
 
   - path: "wiki/"
     purpose: "Codified knowledge — the LLM-maintained knowledge base"
@@ -28,6 +30,8 @@ structure:
       - path: "wiki/competitors/"
         purpose: "Competitor and adjacent-space tracking"
         read_by: [go-to-market-pulse]
+        # v1.4.0 — competitor data rotates frequently; OK to drop from live context after read
+        compactable: true
       - path: "wiki/case-studies/"
         purpose: "Completed engagements distilled into case studies"
         written_by: [engagement-closure]
@@ -39,6 +43,8 @@ structure:
       - path: "outputs/morning-brief/"
         purpose: "Daily pipeline + signal briefs"
         written_by: [go-to-market-pulse]
+        # v1.4.0 — daily ephemeral; no need to keep in live context after the day
+        compactable: true
       - path: "outputs/weekly-status/"
         purpose: "Weekly engagement health reports"
         written_by: [stage-gate-monitoring]
@@ -51,6 +57,8 @@ structure:
         written_by: [engagement-closure]
       - path: "archive/raw/"
         purpose: "Aged raw captures, partitioned by year/month"
+        # v1.4.0 — archive content is by definition out of live context
+        compactable: true
 
   - path: "_index/"
     purpose: "LLM-maintained table of contents and cross-reference index"
