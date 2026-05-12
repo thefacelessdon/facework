@@ -157,3 +157,31 @@ bundles:
         path: "examples/face.works/define/decisions/003-gamut-counts-if-audited.md"
         format: markdown
         as: inline
+
+  - id: design-infrastructure
+    name: "Design Infrastructure"
+    purpose: "Tokens + components + examples for the design-eye evaluator"
+    priority: must
+    max_tokens: 8000
+    composes: [taste]
+    load:
+      - kind: file
+        path: "examples/face.works/design-infrastructure/tokens.json"
+        format: json
+        as: tool_result
+        description: "Design tokens — structured data"
+      - kind: file
+        path: "examples/face.works/design-infrastructure/components.yaml"
+        format: yaml
+        as: tool_result
+        description: "Component primitives with machine-readable contract rules"
+      - kind: file
+        path: "examples/face.works/design-infrastructure/examples/on-brand-examples.md"
+        format: markdown
+        as: system_prompt
+        description: "Concrete passing examples with annotated rationale"
+      - kind: file
+        path: "examples/face.works/design-infrastructure/examples/off-brand-anti-examples.md"
+        format: markdown
+        as: system_prompt
+        description: "Anti-examples with annotated drift patterns"

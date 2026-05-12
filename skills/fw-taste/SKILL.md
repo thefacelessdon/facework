@@ -1,11 +1,14 @@
 ---
 name: fw-taste
-version: 3.1.0
+version: 3.2.0
 description: |
   Taste: Phase 3 of the Facework Protocol. Define and enforce quality criteria
   that preserve signal fidelity and contextual integrity across narrative,
   interaction, and system behavior. Runs after Field (Phase 2), before Strategy
   Lock (Phase 4). Produces TasteContract and DesignLanguageSpec (DESIGN.md).
+  In v1.3.0 (toolkit v0.0.7), also emits DesignInfrastructure (§11) for
+  track-relevant tracks — tokens, component primitives, design-eye evaluator
+  Skill, and examples library that makes the TasteContract LLM-callable.
 allowed-tools:
   - Read
   - Write
@@ -100,6 +103,88 @@ Before marking complete:
 
 If any fail, iterate rubric and examples.
 
+## Step 6: Emit Design Infrastructure (track-relevant)
+
+For tracks where design fidelity is load-bearing, emit the four
+DesignInfrastructure components defined in PROTOCOL.md §11. This turns
+the TasteContract from governance documentation into an active layer the
+runtime calls.
+
+**Conformance by track** (§11.7):
+
+| Track | Conformance |
+|---|---|
+| Creator | SHOULD emit (brand fidelity is load-bearing) |
+| Cultural Brand | MUST emit (brand IS the product) |
+| Athlete / Public Figure | SHOULD emit |
+| Agency / Studio | MAY emit (delivery-shaped, brand secondary) |
+| Platform / Product | SHOULD emit (UI consistency is operational) |
+
+Read `define/PROJECT-CONTEXT.md` for `track`. If unset, ask the user
+before emitting.
+
+### 6.1 — Tokens → `define/design-infrastructure/tokens.json`
+
+Structured design tokens. Canonical top-level vocabulary:
+`color`, `type`, `space`, `radius`, `motion`. Within each, choose values
+that reflect the TasteContract just locked. JSON format for widest tool
+compatibility.
+
+### 6.2 — Components → `define/design-infrastructure/components.yaml`
+
+Minimum viable component primitives. Each component declares: `id`,
+`name`, `purpose`, `variants[]`, `states[]`, `tokens_used[]`,
+`contract.must[]`, `contract.must_not[]`.
+
+The contract rules are machine-readable — the design-eye-evaluator
+consumes them when grading output.
+
+### 6.3 — Design-eye spec → `define/design-infrastructure/design-eye-spec.md`
+
+The playbook the `design-eye-evaluator` Skill executes. Defines:
+- Input shape (artifact + type + optional severity threshold)
+- Evaluation rubric (criteria pulled from TasteContract Step 2)
+- Output shape (pass/fail + dimension scores + grounded feedback)
+- How to evaluate per artifact_type (html, image-description, text, doc)
+
+### 6.4 — Examples library → `define/design-infrastructure/examples/`
+
+Two required markdown files:
+- `on-brand-examples.md` — concrete cases that pass the TasteContract,
+  with annotated rationale
+- `off-brand-anti-examples.md` — cases that fail, with annotations of
+  which contract clauses they violate
+
+LLM-readable. The evaluator pulls these as reference data when grading.
+
+### 6.5 — Register evaluator in manifest
+
+Declare in `facework.manifest.yaml` (bump `protocol_version` to `1.3.0`):
+
+```yaml
+design_infrastructure:
+  tokens:     "define/design-infrastructure/tokens.json"
+  components: "define/design-infrastructure/components.yaml"
+  examples:   "define/design-infrastructure/examples/"
+  evaluator_skill_id: "design-eye-evaluator"
+```
+
+When `/fw-stability` runs Phase 5, it picks up the
+`evaluator_skill_id` and includes a `design-eye-evaluator` entry in
+the SkillManifest. The Skill's playbook field points at the
+design-eye-spec.md emitted here.
+
+### 6.6 — Gate
+
+DesignInfrastructure emission gate:
+- Four files (or paths) present per §11.1
+- Tokens file parses as JSON
+- Components file parses as YAML
+- Each component's `tokens_used[]` resolves to a path in tokens.json
+- Examples files exist and are non-empty
+
+Run `bin/validate-manifest` after emission to confirm structural validity.
+
 ## Output — Three-Tier Artifact Structure
 
 ### Tier 1: Narrative (shown in conversation)
@@ -152,3 +237,17 @@ Body contains the complete structured output:
 
 Conclude with:
 "Taste calibrated. Run /fw-frequency and /fw-current to lock strategy and economics."
+
+### Tier 3b: DesignInfrastructure (v1.3.0, track-relevant)
+
+If Step 6 emitted DesignInfrastructure, the additional files at
+`define/design-infrastructure/` are part of the Phase 3 output:
+
+- `tokens.json` — design tokens
+- `components.yaml` — primitives with machine-readable contract rules
+- `design-eye-spec.md` — evaluator playbook
+- `examples/on-brand-examples.md` and `examples/off-brand-anti-examples.md`
+
+The `design_infrastructure` block in `facework.manifest.yaml` declares
+the paths and links to the evaluator skill ID. `/fw-stability` will
+register the evaluator skill at Phase 5 SkillManifest emission.

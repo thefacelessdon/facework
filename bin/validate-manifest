@@ -429,6 +429,7 @@ begin
   context_info = nil
   integration_info = nil
   bundle_summary = nil
+  design_summary = nil
 
   if runtime_ports
     raise "runtime_ports must be an object" unless runtime_ports.is_a?(Hash)
@@ -470,6 +471,8 @@ begin
     end
 
     ports_summary = declared.join(", ")
+
+    # ----- DesignInfrastructure (v1.3.0) declared at top level — set up later
 
     # ----- HarnessBundle (v1.2.0) ----------------------------------------
     bundle_ref = runtime_ports[bundle_key]
@@ -517,6 +520,54 @@ begin
     end
   end
 
+  # ----- DesignInfrastructure (v1.3.0) ------------------------------------
+
+  design_infra = manifest["design_infrastructure"]
+  if design_infra
+    raise "design_infrastructure must be an object" unless design_infra.is_a?(Hash)
+    %w[tokens components examples evaluator_skill_id].each do |k|
+      raise "design_infrastructure.#{k} is required" unless design_infra[k].is_a?(String) && !design_infra[k].strip.empty?
+    end
+
+    tokens_path = File.expand_path(design_infra["tokens"], manifest_dir)
+    raise "design_infrastructure.tokens file not found: #{tokens_path}" unless File.exist?(tokens_path)
+    begin
+      JSON.parse(File.read(tokens_path))
+    rescue => e
+      raise "design_infrastructure.tokens did not parse as JSON: #{e.message}"
+    end
+
+    components_path = File.expand_path(design_infra["components"], manifest_dir)
+    raise "design_infrastructure.components file not found: #{components_path}" unless File.exist?(components_path)
+    begin
+      comp_data = YAML.safe_load(File.read(components_path), aliases: false)
+      raise "components manifest must be an object" unless comp_data.is_a?(Hash)
+      raise "components manifest must declare components[]" unless comp_data["components"].is_a?(Array) && !comp_data["components"].empty?
+    rescue => e
+      raise "design_infrastructure.components did not parse cleanly: #{e.message}"
+    end
+
+    examples_dir = File.expand_path(design_infra["examples"], manifest_dir)
+    raise "design_infrastructure.examples directory not found: #{examples_dir}" unless File.directory?(examples_dir)
+    on_brand = File.join(examples_dir, "on-brand-examples.md")
+    off_brand = File.join(examples_dir, "off-brand-anti-examples.md")
+    missing_examples = []
+    missing_examples << "on-brand-examples.md"  unless File.exist?(on_brand)
+    missing_examples << "off-brand-anti-examples.md" unless File.exist?(off_brand)
+    raise "design_infrastructure.examples directory missing required files: #{missing_examples.join(', ')}" unless missing_examples.empty?
+
+    if skills_info
+      eval_id = design_infra["evaluator_skill_id"]
+      raise "design_infrastructure.evaluator_skill_id ('#{eval_id}') does not resolve to a Skill in SkillManifest" unless skills_info[:ids].include?(eval_id)
+    end
+
+    design_summary = {
+      components_count: comp_data["components"].size,
+      evaluator: design_infra["evaluator_skill_id"],
+      track_relevant: %w[creator cultural_brand athlete platform_product].include?(track)
+    }
+  end
+
   # ----- Output ------------------------------------------------------------
 
   puts "[ok] manifest valid: #{manifest_path}"
@@ -548,6 +599,10 @@ begin
   end
   if bundle_summary
     puts "  [ok] HarnessBundle: #{bundle_summary[:path]} (#{bundle_summary[:required_count]} required files, #{bundle_summary[:skill_files]} skill files)"
+  end
+  if design_summary
+    track_note = design_summary[:track_relevant] ? "track-relevant" : "track-optional"
+    puts "  [ok] DesignInfrastructure: #{design_summary[:components_count]} components, evaluator skill '#{design_summary[:evaluator]}' (#{track_note})"
   end
 rescue => e
   warn "[error] #{e.message}"

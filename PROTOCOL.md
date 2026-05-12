@@ -1,7 +1,7 @@
 # Facework Protocol
 
 Status: Draft
-Version: 0.0.6 (see VERSION and ROADMAP.md). Manifest schema 1.0.0 (baseline), 1.1.0 (adds Runtime Ports, §9), 1.2.0 (adds HarnessBundle, §10).
+Version: 0.0.7 (see VERSION and ROADMAP.md). Manifest schema 1.0.0 (baseline), 1.1.0 (Runtime Ports, §9), 1.2.0 (HarnessBundle, §10), 1.3.0 (DesignInfrastructure, §11).
 
 Facework Protocol is an open standard for turning cultural signal into coherent, ownable business systems for creators and cultural brands.
 
@@ -45,6 +45,7 @@ A conforming implementation MUST produce these objects:
 - `ContextManifest` (v1.1.0 — Runtime Ports, §9)
 - `IntegrationManifest` (v1.1.0 — Runtime Ports, §9)
 - `HarnessBundle` (v1.2.0 — derived markdown view of Runtime Ports, §10)
+- `DesignInfrastructure` (v1.3.0 — active design system + design-eye evaluator, §11)
 
 ## 3) Prerequisites
 
@@ -706,4 +707,158 @@ Adding to existing Phase 8 (Coherence) gate criteria:
 Facework v0.0.6 defines the bundle format; GAMUT (or any equivalent
 practice) ships per-track skeleton bundles. Facework remains track-neutral
 in the spec.
+
+## 11) DesignInfrastructure (v1.3.0, additive)
+
+Phase 3 (Taste) historically produces a `TasteContract` and
+`DesignLanguageSpec` (DESIGN.md) — both readable, governance-grade
+documents. They define what on-brand means; they do not, in their
+current form, **gate output in real time**.
+
+`DesignInfrastructure` (v1.3.0) makes Phase 3 emit an **active** layer:
+design tokens as data, component primitives, a callable design-eye
+evaluator Skill, and an LLM-readable examples library. The TasteContract
+becomes load-bearing during operation, not just at handoff.
+
+This is "design as infrastructure, not governance" (the framing from
+Diego at Ramp / Glass).
+
+### 11.1 The four components
+
+| Component | Purpose | Format |
+|---|---|---|
+| `tokens.json` | Structured design tokens (color, type, space, radius, motion) | JSON |
+| `components.yaml` | Minimum component primitives with token references and contract rules | YAML |
+| `design-eye-spec.md` | Playbook for the design-eye-evaluator Skill | Markdown |
+| `examples/` | LLM-readable on-brand and anti-examples with annotated rationale | Markdown |
+
+### 11.2 Manifest declaration
+
+A v1.3.0 manifest adds a top-level `design_infrastructure` block:
+
+```yaml
+design_infrastructure:
+  tokens:     "define/design-infrastructure/tokens.json"
+  components: "define/design-infrastructure/components.yaml"
+  examples:   "define/design-infrastructure/examples/"
+  evaluator_skill_id: "design-eye-evaluator"
+```
+
+`evaluator_skill_id` MUST resolve to a Skill declared in
+`SkillManifest`. The Skill's `playbook` field SHOULD point at the
+design-eye-spec.md.
+
+### 11.3 Tokens (`tokens.json`)
+
+Structured design tokens. Canonical top-level vocabulary:
+
+| Key | Purpose |
+|---|---|
+| `color` | Named color values (neutral / brand / semantic) |
+| `type` | Typography: family, scale, leading |
+| `space` | Spacing scale |
+| `radius` | Border radius scale |
+| `motion` | Duration + easing |
+
+Within each, tenants choose their own values. Tokens are JSON for
+widest tool ecosystem compatibility (Style Dictionary, CSS-in-JS, etc.).
+DTCG export can be added later as a derived view.
+
+### 11.4 Components (`components.yaml`)
+
+Minimum viable component primitives. Each component declares:
+
+- `id` (slug) and `name`
+- `purpose` — one-line description
+- `variants[]` — declared variant names
+- `states[]` — declared interaction states
+- `tokens_used[]` — token paths the component references
+- `contract.must[]` and `contract.must_not[]` — rules that pass the
+  `TasteContract` by construction
+
+The contract rules are **machine-readable**: the design-eye-evaluator
+consumes them when grading output.
+
+### 11.5 Design-eye-evaluator Skill
+
+Registered in `SkillManifest` as a callable workflow:
+
+- `id: design-eye-evaluator`
+- `domain: quality`
+- `trigger: on_demand`
+- `ownership: agent`
+- Inputs: `artifact_path` (required), `artifact_type` (required),
+  `severity_threshold` (optional)
+- Outputs: `evaluation_report` — markdown report with pass/fail +
+  dimension scores + grounded feedback referencing specific contract
+  clauses and example library entries
+- Context: loads `soul`, `taste`, and a new `design-infrastructure`
+  bundle that includes tokens + components + examples
+
+Other output-producing skills (page builders, content generators) MAY
+register the evaluator as a post-step, blocking ship if it fails the
+declared threshold.
+
+### 11.6 Examples library (`examples/`)
+
+Two required markdown files:
+
+- `examples/on-brand-examples.md` — concrete cases that pass the
+  TasteContract, with annotations of why they pass
+- `examples/off-brand-anti-examples.md` — cases that fail, with
+  annotations of which contract clauses they violate
+
+These are reference data for the evaluator. v1.3.0 ships markdown-only;
+image-based examples + vision evaluation are deferred.
+
+### 11.7 Conformance — track-aware
+
+Unlike Move A and Move C (evidence-level calibrated),
+DesignInfrastructure conformance is **track-aware**:
+
+| Track | Conformance |
+|---|---|
+| Creator | SHOULD emit (brand fidelity is load-bearing) |
+| Cultural Brand | MUST emit (brand IS the product) |
+| Athlete / Public Figure | SHOULD emit |
+| Agency / Studio | MAY emit (delivery-shaped, brand secondary) |
+| Platform / Product | SHOULD emit (UI consistency is operational) |
+
+Rationale: design fidelity is a function of *what kind of project this
+is*, not *how much demand evidence exists*. A Cultural Brand at
+thesis-level still needs the active infrastructure; an Agency at
+validated-level may legitimately defer.
+
+### 11.8 Generation
+
+`/fw-taste` emits the four components in Phase 3 alongside the existing
+`TasteContract` and `DesignLanguageSpec`. New step: **Step 6 — Emit
+Design Infrastructure (track-relevant)**.
+
+`/fw-stability` Step 5d.1 (SkillManifest emission) registers the
+`design-eye-evaluator` Skill automatically when DesignInfrastructure
+exists.
+
+For v1.3.0, the evaluator implementation is the runtime's job — the
+spec declares what gets evaluated and the output shape; runtimes execute
+the actual LLM call against tokens + components + examples + contract.
+
+### 11.9 Phase 3 gate — full extension
+
+Adding to existing Phase 3 (Taste) gate criteria:
+
+- For tracks where DesignInfrastructure is required by §11.7, the four
+  components are emitted and validate.
+- `evaluator_skill_id` references a Skill in `SkillManifest` that
+  exists and has `domain: quality` and `ownership: agent`.
+- Tokens file parses as JSON; components file parses as YAML.
+- `examples/on-brand-examples.md` and
+  `examples/off-brand-anti-examples.md` exist and are non-empty.
+
+### 11.10 Round-trip from feedback (deferred)
+
+v1.3.0 ships one-way: TasteContract → DesignInfrastructure. Evaluator
+feedback that surfaces patterns the contract didn't capture could in
+principle propagate back into TasteContract amendments. Round-trip is
+deferred to v0.1.0+.
 

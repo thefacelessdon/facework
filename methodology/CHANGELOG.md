@@ -1,3 +1,77 @@
+# 0.0.7 — 2026-05-12 (DesignInfrastructure — Manifest Schema 1.3.0)
+
+**What changed:**
+- Added **DesignInfrastructure** as a new canonical artifact (PROTOCOL.md
+  §11). Phase 3 (Taste) now emits an *active* design layer alongside the
+  governance documents — design tokens as structured data, component
+  primitives with machine-readable contract rules, an LLM-readable
+  examples library, and a callable design-eye-evaluator Skill.
+- This is the **design axis** (Diego at Ramp / Glass): "design as
+  infrastructure, not governance." The TasteContract becomes load-bearing
+  during operation, not just at handoff. Non-designers in the tenant
+  world can ship without producing brand-destructive output.
+- Bumped manifest schema to **1.3.0**. Adds optional top-level
+  `design_infrastructure` block: `tokens` (path), `components` (path),
+  `examples` (path), `evaluator_skill_id` (Skill in SkillManifest).
+  v1.0.0–v1.2.0 manifests remain conformant — additive only.
+- **Track-aware conformance** (different from v0.0.5/v0.0.6's
+  evidence-level calibration): Cultural Brand MUST emit; Creator,
+  Athlete, Platform/Product SHOULD emit; Agency/Studio MAY emit. Design
+  fidelity is a function of project track, not demand evidence depth.
+- The four components:
+  - `tokens.json` — canonical vocabulary `color`/`type`/`space`/`radius`/
+    `motion` with tenant-chosen values
+  - `components.yaml` — primitives with `tokens_used[]`, variants,
+    states, and machine-readable `contract.must[]` / `contract.must_not[]`
+  - `design-eye-spec.md` — playbook the evaluator Skill executes
+  - `examples/on-brand-examples.md` + `examples/off-brand-anti-examples.md`
+    — LLM-readable reference data for grading
+- The **design-eye-evaluator** Skill is registered in `SkillManifest`
+  (domain: quality, ownership: agent). Other output-producing skills can
+  register it as a post-step quality gate. Runtime executes the LLM call;
+  Facework declares the contract.
+- Updated **`/fw-taste`** (3.2.0): new Step 6 — Emit Design
+  Infrastructure (track-relevant). Output Tier 3b lists the four
+  DesignInfrastructure files when emitted.
+- Extended `bin/validate-manifest`: when `design_infrastructure` is
+  declared, the validator checks tokens parses as JSON, components
+  parses as YAML with non-empty components[], examples directory has
+  required files, evaluator_skill_id resolves to a Skill in SkillManifest.
+  Reports track-relevant vs track-optional based on conformance table.
+- Added worked example `examples/face.works/design-infrastructure/`:
+  tokens (color/type/space/radius/motion for an agency aesthetic),
+  6 components (heading, body-text, button, section, card, link) with
+  contract rules, design-eye spec, and 4+4 examples covering
+  consultant-register drift, SaaS aesthetic mimicry, magic numbers,
+  marketing prose, and abstractions over names.
+- Added planning artifact `DESIGN-INFRASTRUCTURE-PLAN.md`.
+
+**One-way export (deferred):** Evaluator feedback that surfaces patterns
+the TasteContract didn't capture could in principle propagate back into
+contract amendments. Round-trip is deferred to v0.1.0+.
+
+**What was NOT adopted (deferred):**
+- DTCG (Design Token Community Group) format export → future (JSON
+  format chosen for v0.0.7 for widest tool compatibility; DTCG export
+  can be added as a derived view later).
+- Image-based examples + vision evaluation → future when evaluators
+  integrate vision capabilities natively.
+- Component code generation from primitives → out of Facework's scope
+  (the runtime's job; Facework declares the contract, not the
+  implementation).
+- Per-track skeleton design infrastructure → GAMUT v0.0.7+ (Facework
+  remains track-neutral in the spec).
+
+**Triggered by:** v0.0.5/v0.0.6 set up the portability layer (YAML +
+markdown views of Runtime Ports). Move B completes the operating-layer
+trilogy by adding the design axis Diego identified at Ramp. Cross-validated
+by Face.works emitting a full DesignInfrastructure including 6 component
+primitives whose contract rules pass structural validation against the
+schema, and a design-eye-evaluator Skill registered cleanly in the
+SkillManifest with all cross-references resolving.
+
+---
+
 # 0.0.6 — 2026-05-12 (HarnessBundle — Manifest Schema 1.2.0)
 
 **What changed:**

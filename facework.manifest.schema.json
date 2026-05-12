@@ -176,6 +176,10 @@
     "runtime_ports": {
       "$ref": "#/$defs/runtimePorts",
       "description": "Optional v1.1.0 block declaring the four runtime port manifest paths. Conformance per evidence_level: Validated=MUST, Signaled=SHOULD, Thesis=MAY (minimal SkillManifest only)."
+    },
+    "design_infrastructure": {
+      "$ref": "#/$defs/designInfrastructureRef",
+      "description": "Optional v1.3.0 block declaring tokens, components, examples, and evaluator skill ID. Conformance is track-aware (see PROTOCOL.md §11.7) — Cultural Brand MUST, Creator/Athlete/Platform SHOULD, Agency/Studio MAY."
     }
   },
   "$defs": {
@@ -211,6 +215,33 @@
           "type": "string",
           "minLength": 1,
           "description": "Relative path to the harness-bundle/ directory (v1.2.0)."
+        }
+      }
+    },
+    "designInfrastructureRef": {
+      "type": "object",
+      "required": ["tokens", "components", "examples", "evaluator_skill_id"],
+      "additionalProperties": false,
+      "properties": {
+        "tokens": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Relative path to tokens.json (or .yaml)."
+        },
+        "components": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Relative path to components.yaml."
+        },
+        "examples": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Relative path to the examples/ directory."
+        },
+        "evaluator_skill_id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "description": "Skill ID in SkillManifest that implements the design-eye evaluator."
         }
       }
     },

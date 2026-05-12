@@ -164,3 +164,39 @@ skills:
     reads_memory: ["wiki/prospects/**", "wiki/competitors/**"]
     writes_memory: ["outputs/morning-brief/"]
     tags: [intel, daily]
+
+  - id: design-eye-evaluator
+    name: "Design Eye Evaluator"
+    description: >
+      Gate output against the TasteContract. Returns pass/fail + dimension
+      scores + grounded feedback referencing specific contract clauses and
+      on/off-brand example entries. Called by output-producing skills
+      before publishing.
+    domain: quality
+    trigger: on_demand
+    ownership: agent
+    playbook: "examples/face.works/design-infrastructure/design-eye-spec.md"
+    inputs:
+      - name: artifact_path
+        type: file_path
+        required: true
+        description: "Path to the artifact under review"
+      - name: artifact_type
+        type: string
+        required: true
+        description: "html | image-description | text | doc"
+      - name: severity_threshold
+        type: string
+        required: false
+        description: "must (default) | should | info"
+    outputs:
+      - name: evaluation_report
+        type: file_path
+        write_to: "outputs/design-evals/{artifact_type}/{yyyy-mm-dd}-eval.md"
+        description: "Verdict + scored dimensions + grounded feedback"
+    depends_on_capabilities: [taste_evaluation]
+    integrations: [vault-fs]
+    context_load: [soul, taste, design-infrastructure]
+    reads_memory: ["wiki/protocol-reference/**"]
+    writes_memory: ["outputs/design-evals/"]
+    tags: [quality, design, gate]
