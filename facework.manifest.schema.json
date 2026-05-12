@@ -16,8 +16,8 @@
   "properties": {
     "protocol_version": {
       "type": "string",
-      "pattern": "^1\\.[01]\\.0$",
-      "description": "1.0.0 (v0.0.4 baseline) or 1.1.0 (v0.0.5 with runtime_ports)."
+      "pattern": "^1\\.\\d+\\.\\d+$",
+      "description": "1.0.0 (v0.0.4 baseline), 1.1.0 (v0.0.5 — Runtime Ports), 1.2.0 (v0.0.6 — HarnessBundle), and forward 1.x.x compatible."
     },
     "project": {
       "type": "object",
@@ -198,7 +198,20 @@
         "skills":      { "$ref": "#/$defs/runtimePortRef" },
         "memory":      { "$ref": "#/$defs/runtimePortRef" },
         "context":     { "$ref": "#/$defs/runtimePortRef" },
-        "connections": { "$ref": "#/$defs/runtimePortRef" }
+        "connections": { "$ref": "#/$defs/runtimePortRef" },
+        "bundle":      { "$ref": "#/$defs/harnessBundleRef" }
+      }
+    },
+    "harnessBundleRef": {
+      "type": "object",
+      "required": ["path"],
+      "additionalProperties": true,
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Relative path to the harness-bundle/ directory (v1.2.0)."
+        }
       }
     },
     "runtimePortRef": {

@@ -346,7 +346,7 @@ begin
   raise "manifest root must be an object" unless manifest.is_a?(Hash)
 
   protocol_version = require_string!(manifest, "protocol_version")
-  raise "protocol_version must be 1.0.0 or 1.1.0" unless %w[1.0.0 1.1.0].include?(protocol_version)
+  raise "protocol_version must match 1.x.x (1.0.0 / 1.1.0 / 1.2.0 supported)" unless protocol_version =~ /^1\.\d+\.\d+$/
 
   project = require_hash!(manifest, "project")
   require_string!(project, "name")
@@ -428,14 +428,17 @@ begin
   memory_info = nil
   context_info = nil
   integration_info = nil
+  bundle_summary = nil
 
   if runtime_ports
     raise "runtime_ports must be an object" unless runtime_ports.is_a?(Hash)
     valid_port_keys = %w[skills memory context connections]
-    unknown = runtime_ports.keys - valid_port_keys
-    raise "runtime_ports has unknown ports: #{unknown.join(', ')}" unless unknown.empty?
+    bundle_key = "bundle"
+    valid_keys = valid_port_keys + [bundle_key]
+    unknown = runtime_ports.keys - valid_keys
+    raise "runtime_ports has unknown keys: #{unknown.join(', ')}" unless unknown.empty?
 
-    declared = runtime_ports.keys
+    declared = runtime_ports.keys & valid_port_keys
     if evidence_level == "validated"
       missing = valid_port_keys - declared
       raise "evidence_level=validated requires all four ports (missing: #{missing.join(', ')})" unless missing.empty?
@@ -467,6 +470,51 @@ begin
     end
 
     ports_summary = declared.join(", ")
+
+    # ----- HarnessBundle (v1.2.0) ----------------------------------------
+    bundle_ref = runtime_ports[bundle_key]
+    if bundle_ref
+      raise "runtime_ports.bundle must be an object" unless bundle_ref.is_a?(Hash)
+      bundle_path = bundle_ref["path"]
+      raise "runtime_ports.bundle.path is required" unless bundle_path.is_a?(String) && !bundle_path.strip.empty?
+      bundle_dir = File.expand_path(bundle_path, manifest_dir)
+      raise "runtime_ports.bundle path does not exist: #{bundle_dir}" unless File.directory?(bundle_dir)
+
+      # Required files depend on evidence_level
+      always_required = %w[CLAUDE.md]
+      validated_required = %w[CLAUDE.md soul.md identity.md purpose.md memory.md tools.md boundary.md]
+      signaled_required  = %w[CLAUDE.md soul.md identity.md purpose.md]
+
+      required_files = case evidence_level
+                       when "validated" then validated_required
+                       when "signaled"  then signaled_required
+                       else                  always_required
+                       end
+
+      missing_files = required_files.reject { |f| File.exist?(File.join(bundle_dir, f)) }
+      raise "harness bundle missing required files (evidence_level=#{evidence_level || 'unset'}): #{missing_files.join(', ')}" unless missing_files.empty?
+
+      # skills/ subdirectory: one file per skill (when SkillManifest exists)
+      skills_dir = File.join(bundle_dir, "skills")
+      missing_skill_files = []
+      if skills_info
+        unless File.directory?(skills_dir)
+          raise "harness bundle missing skills/ subdirectory at #{skills_dir}"
+        end
+        skills_info[:ids].each do |sid|
+          unless File.exist?(File.join(skills_dir, "#{sid}.md"))
+            missing_skill_files << "#{sid}.md"
+          end
+        end
+      end
+      raise "harness bundle skills/ missing files: #{missing_skill_files.join(', ')}" unless missing_skill_files.empty?
+
+      bundle_summary = {
+        path: bundle_path,
+        required_count: required_files.size,
+        skill_files: skills_info ? skills_info[:ids].size : 0
+      }
+    end
   end
 
   # ----- Output ------------------------------------------------------------
@@ -497,6 +545,9 @@ begin
   end
   if skills_info && (memory_info || context_info || integration_info)
     puts "  [ok] cross-manifest references resolve (§9.7)"
+  end
+  if bundle_summary
+    puts "  [ok] HarnessBundle: #{bundle_summary[:path]} (#{bundle_summary[:required_count]} required files, #{bundle_summary[:skill_files]} skill files)"
   end
 rescue => e
   warn "[error] #{e.message}"

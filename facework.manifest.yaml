@@ -1,4 +1,4 @@
-protocol_version: "1.1.0"
+protocol_version: "1.2.0"
 
 project:
   name: "Example Cultural Brand"
@@ -62,3 +62,6 @@ runtime_ports:
     manifest: "examples/face.works/runtime-ports/context-manifest.yaml"
   connections:
     manifest: "examples/face.works/runtime-ports/integration-manifest.yaml"
+  # v1.2.0 — harness-readable markdown bundle (derived view of the four port manifests).
+  bundle:
+    path: "examples/face.works/harness-bundle/"

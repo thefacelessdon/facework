@@ -1,7 +1,7 @@
 # Facework Protocol
 
 Status: Draft
-Version: 0.0.5 (see VERSION and ROADMAP.md). Manifest schema 1.0.0 (baseline) and 1.1.0 (adds Runtime Ports, §9).
+Version: 0.0.6 (see VERSION and ROADMAP.md). Manifest schema 1.0.0 (baseline), 1.1.0 (adds Runtime Ports, §9), 1.2.0 (adds HarnessBundle, §10).
 
 Facework Protocol is an open standard for turning cultural signal into coherent, ownable business systems for creators and cultural brands.
 
@@ -44,6 +44,7 @@ A conforming implementation MUST produce these objects:
 - `MemoryMap` (v1.1.0 — Runtime Ports, §9)
 - `ContextManifest` (v1.1.0 — Runtime Ports, §9)
 - `IntegrationManifest` (v1.1.0 — Runtime Ports, §9)
+- `HarnessBundle` (v1.2.0 — derived markdown view of Runtime Ports, §10)
 
 ## 3) Prerequisites
 
@@ -583,11 +584,126 @@ opinionated starting points. Facework itself remains track-neutral in the
 spec — the protocol defines the `track` field; GAMUT (or another practice)
 publishes the per-track defaults.
 
-### 9.10 Boundary with HarnessBundle (deferred to v0.0.6)
+### 9.10 Boundary with HarnessBundle
 
-Runtime Ports declare YAML contracts. v0.0.6 (Move C) adds a `HarnessBundle`
-artifact that reformats these contracts as harness-native markdown files
-(`soul.md`, `identity.md`, `skills/`, etc.) for runtimes that prefer
-file-based ingest. The YAML manifests remain the source of truth; the
-HarnessBundle is a derived view.
+Runtime Ports declare YAML contracts. The `HarnessBundle` (v1.2.0, see §10)
+reformats these contracts as harness-native markdown files (`soul.md`,
+`identity.md`, `skills/`, etc.) for runtimes that prefer file-based
+ingest. The YAML manifests remain the source of truth; the HarnessBundle
+is a derived view.
+
+## 10) HarnessBundle (v1.2.0, additive)
+
+Runtime Ports (§9) declare YAML contracts. Some runtimes ingest YAML
+directly. Others — Open Claw, Glass-style internal tools, file-based
+harnesses — expect a markdown bundle on disk: `soul.md`, `identity.md`,
+`skills/`, etc. The HarnessBundle is the **derived markdown view** of the
+Runtime Ports for those runtimes.
+
+The YAML manifests in §9 remain the source of truth. The HarnessBundle is
+regeneratable from them, one-way only in v1.2.0 (round-trip deferred).
+
+### 10.1 Bundle layout
+
+```
+harness-bundle/
+├── CLAUDE.md         # top-level navigation — runtime's entry point
+├── soul.md           # SignalThesis + TasteContract + Frequency
+├── identity.md       # ProjectContext: tenant, track, audience, phase
+├── purpose.md        # Current decisions + WedgeSpec + stage criteria
+├── memory.md         # MemoryMap navigation (vault structure)
+├── tools.md          # IntegrationManifest as readable wiring guide
+├── boundary.md       # memory boundary rule — runtime reads at install
+└── skills/
+    ├── {skill-id-1}.md
+    ├── {skill-id-2}.md
+    └── ...
+```
+
+**Filenames are conventional and load-bearing.** Runtimes locate files by
+name. Tenants do not rename; deviations break runtime ingest.
+
+### 10.2 Manifest declaration
+
+A v1.2.0 manifest extends the `runtime_ports` block with a `bundle` field:
+
+```yaml
+runtime_ports:
+  skills:      { manifest: "define/skill-manifest.yaml" }
+  memory:      { manifest: "define/memory-map.yaml" }
+  context:     { manifest: "define/context-manifest.yaml" }
+  connections: { manifest: "define/integration-manifest.yaml" }
+  bundle:      { path: "harness-bundle/" }
+```
+
+The `bundle.path` field declares where the markdown bundle lives, relative
+to the main manifest. Existing four-port declarations are unchanged.
+
+### 10.3 File specifications
+
+Each bundle file has a declared source and shape:
+
+| File | Source artifacts | Shape |
+|---|---|---|
+| `CLAUDE.md` | (generated) | YAML frontmatter (`manifest_version`, `generated_at`, `source_manifest_sha`) + navigation listing of bundle files |
+| `soul.md` | `SignalThesis` + `TasteContract` + Frequency decisions | Voice of the tenant world — narrative + means/does-not-mean + quality bar |
+| `identity.md` | `ProjectContext` + stage | Scannable factual block: tenant, track, audience, evidence level, stage |
+| `purpose.md` | Current decisions + `WedgeSpec` + stage criteria | Numbered list of premises the system depends on |
+| `memory.md` | `MemoryMap.structure[]` + `indexing[]` + `conventions` | Tree view of vault + indexing notes (excludes `boundary` — that's `boundary.md`) |
+| `tools.md` | `IntegrationManifest.integrations[]` | Per-integration setup with auth pointer (NOT secret values), rate limits, failover |
+| `boundary.md` | `MemoryMap.boundary` | Declarative contract: who owns what, no-auto-promotion rule |
+| `skills/{id}.md` | `SkillManifest.skills[]` (one file per skill) | YAML frontmatter (id, trigger, ownership, tags) + sections: inputs, outputs, dependencies, when this fires, escalation, source playbook link |
+
+### 10.4 Conformance — calibrated by evidence level
+
+| Evidence level | Bundle conformance |
+|---|---|
+| Validated | MUST emit the full bundle |
+| Signaled | SHOULD emit minimum: `CLAUDE.md`, `soul.md`, `identity.md`, `purpose.md`, `skills/` |
+| Thesis | MAY emit minimal: `CLAUDE.md` + `skills/` only |
+
+The bundle is a **handoff artifact**, not a methodology artifact —
+conformance shifts with handoff-readiness rather than evidence depth
+alone.
+
+### 10.5 Generation
+
+The HarnessBundle is **derived** from the four Runtime Port manifests plus
+existing artifacts (`SignalThesis`, `TasteContract`, `DecisionLedger`,
+`WedgeSpec`, `ProjectContext`).
+
+**Source of truth:** the YAML manifests in §9. Tenant edits to bundle
+files do not propagate back. To update content, edit the source artifact
+and regenerate.
+
+`/fw-coherence` emits the HarnessBundle in Phase 8 (Integration) as part
+of the HandoffPackage (Step 6c — Emit Harness Bundle). For v1.2.0,
+generation is manual (the skill walks the user through producing each
+file). Automation deferred to later versions once the bundle format
+stabilizes against ≥2 reference runtimes.
+
+### 10.6 Round-trip (deferred)
+
+v1.2.0 ships **one-way export only** (YAML → markdown). The YAML
+manifests are the source of truth; the bundle is read-only.
+
+Round-trip editing (bundle MD edits re-imported into YAML) is deferred to
+v0.1.0+ if real-world use shows demand.
+
+### 10.7 Phase 8 gate — full extension
+
+Adding to existing Phase 8 (Coherence) gate criteria:
+
+- When `runtime_ports.bundle.path` is declared, the directory exists at
+  that path relative to the main manifest.
+- Required bundle files present per `project.evidence_level` (§10.4).
+- `boundary.md` is present and non-empty when the bundle exists.
+- Every skill in `SkillManifest.skills[]` has a corresponding
+  `skills/{id}.md` file.
+
+### 10.8 Track-aware skeletons (GAMUT v0.0.6)
+
+Facework v0.0.6 defines the bundle format; GAMUT (or any equivalent
+practice) ships per-track skeleton bundles. Facework remains track-neutral
+in the spec.
 

@@ -1,3 +1,62 @@
+# 0.0.6 — 2026-05-12 (HarnessBundle — Manifest Schema 1.2.0)
+
+**What changed:**
+- Added **HarnessBundle** as a new canonical artifact (PROTOCOL.md §10).
+  Reformats the four Runtime Port YAML manifests as harness-native
+  markdown files (`soul.md`, `identity.md`, `purpose.md`, `memory.md`,
+  `tools.md`, `boundary.md`, `skills/*.md`, plus top-level `CLAUDE.md`).
+  This is what file-based runtimes (Open Claw, Glass-style tools,
+  Corey's build) ingest directly.
+- Bumped manifest schema to **1.2.0**. Adds optional
+  `runtime_ports.bundle.path` field declaring where the markdown bundle
+  lives. `protocol_version` pattern relaxed to `^1\.\d+\.\d+$` for
+  forward 1.x.x compatibility. v1.0.0 and v1.1.0 manifests remain
+  conformant — additive only.
+- Conformance calibrated by `evidence_level`: Validated MUST emit the
+  full bundle; Signaled SHOULD emit a defined minimum subset; Thesis MAY
+  emit minimal (CLAUDE.md + skills/) only.
+- The bundle is **one-way export** (YAML → markdown). The YAML
+  manifests are the source of truth; the bundle is read-only. Round-trip
+  editing deferred to v0.1.0+.
+- Updated **`/fw-coherence`** (4.3.0): new Step 6c — Emit Harness Bundle.
+  Phase 8 audit catalog and Tier 3 output extended to include the bundle.
+  Walks the user through producing each file from source artifacts in
+  dependency order (boundary first, CLAUDE.md last).
+- Extended `bin/validate-manifest`: when `runtime_ports.bundle.path` is
+  declared, the validator checks (a) the directory exists, (b) required
+  files are present per evidence_level, (c) one `skills/{id}.md` file
+  exists for each skill in SkillManifest. Hard fail on missing required
+  files.
+- Added worked example `examples/face.works/harness-bundle/` — full
+  bundle with 7 top-level markdown files plus 6 skill files (one per
+  skill in face.works SkillManifest). Demonstrates the file-based view
+  any runtime can ingest.
+- Added planning artifact `HARNESS-BUNDLE-PLAN.md` (v0.0.6 execution
+  detail).
+
+**Strategic positioning (unchanged from v0.0.5):** Facework is the
+interface between GAMUT (practice) and runtimes (Corey's build, Open
+Claw, Glass, others). HarnessBundle is the **file-based bridge** to
+runtimes that consume markdown, alongside the YAML-based bridge to
+runtimes that consume structured data. Both are derived views of the
+same source contracts — pick the one your runtime ingests.
+
+**What was NOT adopted (deferred):**
+- Automated bundle generation from YAMLs → v0.0.7+ once the format
+  stabilizes against ≥2 reference runtimes.
+- Round-trip bundle editing (bundle MD edits propagate back to YAML)
+  → v0.1.0+.
+- Per-track skeleton bundles — GAMUT ships these as a separate
+  v0.0.6 release alongside Facework. Facework stays track-neutral.
+
+**Triggered by:** v0.0.5 (Runtime Ports) shipped clean YAML contracts.
+Move C completes the portability picture by giving file-based runtimes
+their native ingest format. Cross-validated by Face.works (real
+agency-track project) emitting a full bundle that passes structural
+validation against the schema.
+
+---
+
 # 0.0.5 — 2026-05-12 (Runtime Ports — Manifest Schema 1.1.0)
 
 **What changed:**
