@@ -1,3 +1,113 @@
+# 0.0.8 — 2026-05-12 (Efficiency Hints + Skill Polish — Manifest Schema 1.4.0)
+
+**What changed:**
+- Added **10 optional declarative fields** across the existing port schemas
+  to close gaps surfaced by four independent research sources (Karpathy /
+  Fung / Asana / Claude Platform). All additions are MAY/SHOULD, never
+  MUST. v1.0.0–v1.3.0 manifests stay conformant.
+- Added **new PROTOCOL.md §12 Observability Interface** — declares the
+  minimum event surface (skill.invoked, skill.completed, skill.error,
+  memory.write, memory.read, integration.called, verifier.run, cache.hit,
+  cache.miss, advisor.escalated). Protocol specifies the events; runtimes
+  pick the transport (stdout, OpenTelemetry, custom sink, etc.).
+
+**Cluster A — Skill semantics polish:**
+- `sponsors[]` on Skill — humans accountable for the skill's correctness,
+  memory hygiene, and lifecycle. From Asana's agent-sponsorship pattern.
+- `verifier_skill_id` on Skill — generalizes the design-eye-evaluator
+  pattern. Any output-producing skill MAY declare a verifier that gates
+  its output. Cross-manifest validation enforces resolution.
+- `multiplayer: bool` on Skill — declares whether the skill may be invoked
+  by multiple users concurrently with memory accruing across users.
+  Default false. From Asana's multiplayer agent semantics.
+- Integration `scope[]` items now accept either a plain operation string
+  (back-compat) OR an object `{operation, direction}` where `direction`
+  is `sensor` / `actuator` / `both`. Adopts Karpathy's sensors-and-
+  actuators framing.
+
+**Cluster B — Runtime efficiency hints (Claude Platform optimization
+strategies):**
+- `cache_affinity: stable | dynamic` on context bundles, port refs, and
+  HarnessBundle refs. Default `stable`. Runtimes implementing prompt
+  caching use this for eviction strategy.
+- `load_mode: eager | lazy | on_search` on integrations. Default
+  `eager`. `on_search` maps to Claude Platform tool-search optimization.
+- `intermediate: bool` on skill outputs. Marks outputs for downstream
+  tool consumption only — runtimes may keep them out of the operator's
+  context window. Maps to "programmatic tool calling" optimization.
+- `compactable: bool` on MemoryMap folders. Declares whether contents
+  may be summarized/dropped from in-session context after writing.
+  Content persists on disk. Maps to compaction optimization.
+- `model_tier: standard | advanced` on Skill. Runtimes map `advanced`
+  to their premium tier (e.g. Opus). Default `standard`.
+- `advisor_escalation: skill_id` on Skill. Optional skill the calling
+  skill can invoke for a one-shot advanced-tier advisor judgment.
+  Composable: escalation goes through a registered Skill, so it gets
+  its own audit trail.
+
+**Validator extensions:**
+- `bin/validate-manifest` validates all new optional fields with
+  appropriate enums.
+- Cross-manifest validation enforces `verifier_skill_id` and
+  `advisor_escalation` resolve to declared skills.
+- Scope polymorphism handled — string OR object form, both valid in the
+  same manifest.
+- Validator output reports v1.4.0 feature usage: sponsor count,
+  multiplayer count, advanced-tier count, verifier-gated count,
+  advisor-escalating count, load_mode distribution.
+
+**Worked example (Face.works) updated to exercise every new field:**
+- All 7 skills get `sponsors: ["harper@face.works"]`
+- 3 skills marked `multiplayer: true` (prospect-qualification,
+  engagement-delivery, design-eye-evaluator)
+- `gamut-audit` gets `model_tier: advanced`
+- `engagement-delivery` and `engagement-closure` get
+  `verifier_skill_id: design-eye-evaluator`
+- `engagement-delivery` gets `advisor_escalation: gamut-audit`
+- MemoryMap: raw/, wiki/competitors/, outputs/morning-brief/,
+  archive/raw/ marked `compactable: true`
+- ContextManifest: soul, identity, purpose, taste, global get explicit
+  `cache_affinity: stable`
+- IntegrationManifest: linear, gmail, vault-fs use the new object-form
+  scope items with direction; load_mode set on every integration
+- HarnessBundle skill files updated with v1.4.0 frontmatter
+
+**Conformance posture:**
+- Audit events (§12) are SHOULD for v1.4.0 runtime conformers.
+- `sponsors[]` is SHOULD on Validated-evidence projects, MAY otherwise.
+- Everything else is MAY — purely declarative hints.
+- v1.0.0–v1.3.0 manifests remain conformant. No breaking changes.
+
+**Strategic positioning:**
+This is a **polish + efficiency-hints release.** Smaller than each trilogy
+commit. The pattern: protocol declares properties, runtimes implement.
+Adding hints lets runtimes optimize without coupling the protocol to a
+specific runtime implementation. The dashboard pattern shown in the Claude
+Platform talk (efficiency dashboard with caching/compaction/tool-search/
+advisor strategies) consumes these declarations — Facework specifies the
+surface, dashboards render it.
+
+**What was NOT adopted (deferred to v0.0.9+):**
+- Bottleneck-shift assessment as a recurring methodology element (Fung
+  pattern) — needs methodology-level prose work.
+- Cross-user memory propagation rules — Asana case. `multiplayer: true`
+  declares the property; semantics of how corrections propagate stay
+  runtime-side for now.
+- Process kill discipline in /retro — methodology evolution.
+- Software 3.0 framing in PROTOCOL.md intro — reframe of identity.
+- Cross-tenant skill registry — Asana enterprise memory at scale. v0.1.0+.
+- Per-track skeleton ports — GAMUT's responsibility.
+
+**Triggered by:** Four independent research sources converging on the same
+gaps: Karpathy (Software 3.0, verifiability, sensors/actuators, outsource
+thinking not understanding), Fung (bottlenecks shifted, verification is
+new bottleneck), Asana (multiplayer agents, sponsors, grader pattern),
+Claude Platform (caching/tool-search/compaction/advisor strategies). The
+four-source convergence justified a tight patch release alongside the
+trilogy rather than waiting for v0.1.0.
+
+---
+
 # 0.0.7 — 2026-05-12 (DesignInfrastructure — Manifest Schema 1.3.0)
 
 **What changed:**

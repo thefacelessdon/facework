@@ -1,10 +1,11 @@
 ---
-manifest_version: "1.2.0"
+manifest_version: "1.4.0"
 generated_at: "2026-05-12T00:00:00Z"
 source_manifest: "examples/face.works/runtime-ports/"
 tenant: "face.works"
 track: "agency_studio"
 evidence_level: "validated"
+cache_affinity: stable
 ---
 
 # Face.works — Harness Bundle

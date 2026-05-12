@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://facework.dev/schemas/facework.manifest.schema.json",
   "title": "Facework Manifest",
-  "description": "Schema for Facework Protocol v1 project manifests. v1.1.0 adds optional runtime_ports for harness portability (Move A of the Operating Layer plan).",
+  "description": "Schema for Facework Protocol v1 project manifests. v1.1.0 adds runtime_ports; v1.2.0 adds HarnessBundle; v1.3.0 adds DesignInfrastructure; v1.4.0 adds optional efficiency hints + skill semantics polish (sponsors, verifier_skill_id, multiplayer, sensors/actuators, cache_affinity, load_mode, intermediate, compactable, model_tier, advisor_escalation).",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -17,7 +17,7 @@
     "protocol_version": {
       "type": "string",
       "pattern": "^1\\.\\d+\\.\\d+$",
-      "description": "1.0.0 (v0.0.4 baseline), 1.1.0 (v0.0.5 — Runtime Ports), 1.2.0 (v0.0.6 — HarnessBundle), and forward 1.x.x compatible."
+      "description": "1.0.0 (v0.0.4 baseline), 1.1.0 (v0.0.5 Runtime Ports), 1.2.0 (v0.0.6 HarnessBundle), 1.3.0 (v0.0.7 DesignInfrastructure), 1.4.0 (v0.0.8 efficiency hints + skill polish), and forward 1.x.x compatible."
     },
     "project": {
       "type": "object",
@@ -215,6 +215,12 @@
           "type": "string",
           "minLength": 1,
           "description": "Relative path to the harness-bundle/ directory (v1.2.0)."
+        },
+        "cache_affinity": {
+          "type": "string",
+          "enum": ["stable", "dynamic"],
+          "default": "stable",
+          "description": "v1.4.0 — Cache affinity hint for the bundle. Default 'stable'."
         }
       }
     },
@@ -254,6 +260,12 @@
           "type": "string",
           "minLength": 1,
           "description": "Relative path to the port manifest YAML file."
+        },
+        "cache_affinity": {
+          "type": "string",
+          "enum": ["stable", "dynamic"],
+          "default": "stable",
+          "description": "v1.4.0 — Cache affinity hint for the entire port manifest. Default 'stable'."
         }
       }
     },
@@ -305,7 +317,33 @@
             "source": { "type": "string", "minLength": 1 }
           }
         },
-        "tags": { "type": "array", "items": { "type": "string" } }
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "sponsors": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "description": "v1.4.0 — Human(s) accountable for the skill's correctness, memory hygiene, and lifecycle. SHOULD be populated on Validated-evidence projects."
+        },
+        "verifier_skill_id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "description": "v1.4.0 — ID of a Skill (in the same manifest) that gates this skill's output before publication. The verifier SHOULD have domain: quality. Generalizes the design-eye-evaluator pattern (PROTOCOL.md §11)."
+        },
+        "multiplayer": {
+          "type": "boolean",
+          "default": false,
+          "description": "v1.4.0 — When true, the skill may be invoked by multiple users concurrently and memory writes accrue across users. Default false (single-user)."
+        },
+        "model_tier": {
+          "type": "string",
+          "enum": ["standard", "advanced"],
+          "default": "standard",
+          "description": "v1.4.0 — Declares which model tier this skill warrants. Runtimes map 'advanced' to their premium tier (e.g. Opus). Default 'standard'."
+        },
+        "advisor_escalation": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "description": "v1.4.0 — Optional skill_id that this skill can invoke for a one-shot advisor judgment on advanced model_tier. Composable: the escalation goes through a registered Skill, so it gets its own audit trail."
+        }
       },
       "allOf": [
         { "if": { "properties": { "trigger": { "const": "scheduled" } } },
@@ -333,7 +371,12 @@
         "name":        { "type": "string", "minLength": 1 },
         "type":        { "enum": ["string", "number", "boolean", "object", "array", "file_path", "url"] },
         "write_to":    { "type": "string" },
-        "description": { "type": "string" }
+        "description": { "type": "string" },
+        "intermediate": {
+          "type": "boolean",
+          "default": false,
+          "description": "v1.4.0 — When true, the output exists for downstream tool consumption only. Runtimes may keep it out of the operator's context window. Default false (visible)."
+        }
       }
     },
 
@@ -362,7 +405,12 @@
         "contains":   { "type": "array", "items": { "type": "string" } },
         "written_by": { "type": "array", "items": { "type": "string" } },
         "read_by":    { "type": "array", "items": { "type": "string" } },
-        "children":   { "type": "array", "items": { "$ref": "#/$defs/memoryFolder" } }
+        "children":   { "type": "array", "items": { "$ref": "#/$defs/memoryFolder" } },
+        "compactable": {
+          "type": "boolean",
+          "default": false,
+          "description": "v1.4.0 — When true, the folder's contents may be summarized or dropped from in-session context after writing. Content persists on disk. Default false (kept in context)."
+        }
       }
     },
     "memoryBoundary": {
@@ -438,7 +486,13 @@
         "max_tokens": { "type": "integer", "minimum": 1 },
         "priority":   { "enum": ["must", "should", "may"] },
         "composes":   { "type": "array", "items": { "type": "string" } },
-        "excludes":   { "type": "array", "items": { "type": "string" } }
+        "excludes":   { "type": "array", "items": { "type": "string" } },
+        "cache_affinity": {
+          "type": "string",
+          "enum": ["stable", "dynamic"],
+          "default": "stable",
+          "description": "v1.4.0 — Runtimes implementing prompt caching use this to inform eviction strategy. Default 'stable' (cache aggressively)."
+        }
       },
       "anyOf": [
         { "properties": { "load":     { "type": "array", "minItems": 1 } }, "required": ["load"] },
@@ -494,13 +548,23 @@
         "trust_boundary":  { "enum": ["own", "rent", "mitigate"] },
         "used_by":         { "type": "array", "items": { "type": "string" } },
         "endpoint":        { "type": "string" },
-        "scope":           { "type": "array", "items": { "type": "string" } },
+        "scope":           {
+          "type": "array",
+          "items": { "$ref": "#/$defs/integrationScopeItem" },
+          "description": "v1.4.0 — Each item is either a string (operation name, back-compat with v1.0.0–v1.3.0) OR an object {operation, direction}. Mixed forms allowed."
+        },
         "secrets":         { "type": "array", "items": { "$ref": "#/$defs/secretRef" } },
         "rate_limits":     { "type": "object", "additionalProperties": true },
         "failover":        { "type": "string" },
         "data_residency":  { "type": "string" },
         "pii":             { "type": "boolean" },
-        "description":     { "type": "string" }
+        "description":     { "type": "string" },
+        "load_mode": {
+          "type": "string",
+          "enum": ["eager", "lazy", "on_search"],
+          "default": "eager",
+          "description": "v1.4.0 — Declares whether the runtime should eagerly load the integration's schema/handles or pull on demand. Default 'eager'. 'on_search' maps to Claude Platform tool-search optimization."
+        }
       },
       "allOf": [
         { "if": { "properties": { "pii": { "const": true } } },
@@ -517,6 +581,25 @@
         "ref":      { "type": "string", "minLength": 1 },
         "required": { "type": "boolean" }
       }
+    },
+    "integrationScopeItem": {
+      "description": "v1.4.0 — Scope items may be either a plain operation string (back-compat) or an object with operation + direction (sensors/actuators framing from Karpathy).",
+      "oneOf": [
+        { "type": "string", "minLength": 1 },
+        {
+          "type": "object",
+          "required": ["operation"],
+          "additionalProperties": false,
+          "properties": {
+            "operation": { "type": "string", "minLength": 1 },
+            "direction": {
+              "type": "string",
+              "enum": ["sensor", "actuator", "both"],
+              "description": "sensor = reads from external world; actuator = writes/acts on external world; both = bidirectional."
+            }
+          }
+        }
+      ]
     }
   }
 }

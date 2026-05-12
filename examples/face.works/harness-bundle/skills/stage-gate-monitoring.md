@@ -6,6 +6,9 @@ trigger: scheduled
 schedule: "0 9 * * MON"
 ownership: agent
 tags: [monitoring, ops]
+# v1.4.0
+sponsors: ["harper@face.works"]
+model_tier: standard
 ---
 
 # Stage-Gate Monitoring

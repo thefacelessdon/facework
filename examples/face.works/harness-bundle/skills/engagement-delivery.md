@@ -5,6 +5,12 @@ domain: delivery
 trigger: on_demand
 ownership: hybrid
 tags: [revenue, core]
+# v1.4.0
+sponsors: ["harper@face.works"]
+multiplayer: true
+model_tier: standard
+verifier_skill_id: design-eye-evaluator
+advisor_escalation: gamut-audit
 ---
 
 # Engagement Delivery

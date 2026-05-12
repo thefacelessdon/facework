@@ -90,8 +90,14 @@ def validate_skill_manifest!(data)
   human_count = 0
   agent_count = 0
   hybrid_count = 0
+  multiplayer_count = 0
+  advanced_tier_count = 0
+  with_sponsors_count = 0
+  verifier_refs = []     # v1.4.0: [{ skill_id, verifier_skill_id }]
+  advisor_refs = []      # v1.4.0: [{ skill_id, advisor_skill_id }]
   valid_triggers = %w[on_demand scheduled event continuous]
   valid_ownership = %w[human agent hybrid]
+  valid_model_tiers = %w[standard advanced]
 
   skills.each_with_index do |s, i|
     raise "skills[#{i}] must be an object" unless s.is_a?(Hash)
@@ -118,9 +124,57 @@ def validate_skill_manifest!(data)
       ev = s["event"]
       raise "skills[#{i}].event{name,source} required when trigger=event" unless ev.is_a?(Hash) && ev["name"].is_a?(String) && ev["source"].is_a?(String)
     end
+
+    # v1.4.0 optional fields
+    if s.key?("sponsors")
+      raise "skills[#{i}].sponsors must be an array" unless s["sponsors"].is_a?(Array)
+      s["sponsors"].each_with_index do |sp, j|
+        raise "skills[#{i}].sponsors[#{j}] must be a non-empty string" unless sp.is_a?(String) && !sp.strip.empty?
+      end
+      with_sponsors_count += 1 unless s["sponsors"].empty?
+    end
+
+    if s.key?("multiplayer")
+      raise "skills[#{i}].multiplayer must be a boolean" unless [true, false].include?(s["multiplayer"])
+      multiplayer_count += 1 if s["multiplayer"] == true
+    end
+
+    if s.key?("model_tier")
+      mt = s["model_tier"]
+      raise "skills[#{i}].model_tier must be one of #{valid_model_tiers.join('|')}" unless valid_model_tiers.include?(mt)
+      advanced_tier_count += 1 if mt == "advanced"
+    end
+
+    if s.key?("verifier_skill_id")
+      vid = s["verifier_skill_id"]
+      raise "skills[#{i}].verifier_skill_id must be a slug string" unless vid.is_a?(String) && vid =~ /^[a-z][a-z0-9-]*$/
+      verifier_refs << { gated: s["id"], verifier: vid }
+    end
+
+    if s.key?("advisor_escalation")
+      aid = s["advisor_escalation"]
+      raise "skills[#{i}].advisor_escalation must be a slug string" unless aid.is_a?(String) && aid =~ /^[a-z][a-z0-9-]*$/
+      advisor_refs << { caller: s["id"], advisor: aid }
+    end
+
+    # v1.4.0: validate optional `intermediate` flag on outputs
+    (s["outputs"] || []).each_with_index do |out, j|
+      if out.is_a?(Hash) && out.key?("intermediate")
+        raise "skills[#{i}].outputs[#{j}].intermediate must be a boolean" unless [true, false].include?(out["intermediate"])
+      end
+    end
   end
 
-  { ids: ids, count: skills.size, human: human_count, agent: agent_count, hybrid: hybrid_count }
+  {
+    ids: ids,
+    count: skills.size,
+    human: human_count, agent: agent_count, hybrid: hybrid_count,
+    multiplayer: multiplayer_count,
+    advanced_tier: advanced_tier_count,
+    with_sponsors: with_sponsors_count,
+    verifier_refs: verifier_refs,
+    advisor_refs: advisor_refs
+  }
 end
 
 def validate_memory_map!(data)
@@ -233,6 +287,9 @@ def validate_integration_manifest!(data)
   valid_kinds = %w[mcp rest cli filesystem webhook db]
   valid_auth = %w[oauth api_key local none mtls]
   valid_boundaries = %w[own rent mitigate]
+  valid_load_modes = %w[eager lazy on_search]
+  valid_directions = %w[sensor actuator both]
+  load_mode_counts = { "eager" => 0, "lazy" => 0, "on_search" => 0 }
 
   integrations.each_with_index do |int, i|
     raise "integrations[#{i}] must be an object" unless int.is_a?(Hash)
@@ -254,6 +311,35 @@ def validate_integration_manifest!(data)
       raise "integrations[#{i}] pii=true requires data_residency" unless int["data_residency"].is_a?(String) && !int["data_residency"].strip.empty?
     end
 
+    # v1.4.0: load_mode optional
+    if int.key?("load_mode")
+      lm = int["load_mode"]
+      raise "integrations[#{i}].load_mode must be one of #{valid_load_modes.join('|')}" unless valid_load_modes.include?(lm)
+      load_mode_counts[lm] += 1
+    else
+      load_mode_counts["eager"] += 1 # default
+    end
+
+    # v1.4.0: scope items polymorphic — string OR { operation, direction? }
+    if int.key?("scope")
+      raise "integrations[#{i}].scope must be an array" unless int["scope"].is_a?(Array)
+      int["scope"].each_with_index do |item, j|
+        if item.is_a?(String)
+          raise "integrations[#{i}].scope[#{j}] string must be non-empty" if item.strip.empty?
+        elsif item.is_a?(Hash)
+          op = item["operation"]
+          raise "integrations[#{i}].scope[#{j}].operation required" unless op.is_a?(String) && !op.strip.empty?
+          if item.key?("direction")
+            raise "integrations[#{i}].scope[#{j}].direction must be one of #{valid_directions.join('|')}" unless valid_directions.include?(item["direction"])
+          end
+          extra = item.keys - %w[operation direction]
+          raise "integrations[#{i}].scope[#{j}] has unknown fields: #{extra.join(', ')}" unless extra.empty?
+        else
+          raise "integrations[#{i}].scope[#{j}] must be a string or {operation, direction?} object"
+        end
+      end
+    end
+
     # Raw-secret heuristic — block obvious raw secret values
     (int["secrets"] || []).each_with_index do |sec, j|
       raise "integrations[#{i}].secrets[#{j}] must be a SecretRef object" unless sec.is_a?(Hash)
@@ -268,7 +354,7 @@ def validate_integration_manifest!(data)
     end
   end
 
-  { ids: ids, count: integrations.size, used_by_refs: used_by_refs.uniq }
+  { ids: ids, count: integrations.size, used_by_refs: used_by_refs.uniq, load_mode_counts: load_mode_counts }
 end
 
 def memory_path_resolves?(skill_path, memory_paths)
@@ -337,6 +423,20 @@ def validate_cross_manifest!(ports, skills_info, memory_info, context_info, inte
     end
   end
 
+  # v1.4.0: verifier_skill_id and advisor_escalation must resolve to skills in same manifest
+  if skills_info
+    (skills_info[:verifier_refs] || []).each do |ref|
+      unless skills_info[:ids].include?(ref[:verifier])
+        errors << "skill '#{ref[:gated]}' verifier_skill_id '#{ref[:verifier]}' does not resolve to any declared skill"
+      end
+    end
+    (skills_info[:advisor_refs] || []).each do |ref|
+      unless skills_info[:ids].include?(ref[:advisor])
+        errors << "skill '#{ref[:caller]}' advisor_escalation '#{ref[:advisor]}' does not resolve to any declared skill"
+      end
+    end
+  end
+
   raise errors.join("\n  ") unless errors.empty?
 end
 
@@ -346,7 +446,7 @@ begin
   raise "manifest root must be an object" unless manifest.is_a?(Hash)
 
   protocol_version = require_string!(manifest, "protocol_version")
-  raise "protocol_version must match 1.x.x (1.0.0 / 1.1.0 / 1.2.0 supported)" unless protocol_version =~ /^1\.\d+\.\d+$/
+  raise "protocol_version must match 1.x.x (1.0.0 / 1.1.0 / 1.2.0 / 1.3.0 / 1.4.0 known)" unless protocol_version =~ /^1\.\d+\.\d+$/
 
   project = require_hash!(manifest, "project")
   require_string!(project, "name")
@@ -579,6 +679,14 @@ begin
   if skills_info
     puts "  [ok] SkillManifest: #{skills_info[:count]} skills (#{skills_info[:human]} human / #{skills_info[:agent]} agent / #{skills_info[:hybrid]} hybrid)"
     warn "  [warn] no human-ownership skill declared (recommended for safety)" if skills_info[:human] == 0
+    # v1.4.0 summary
+    v14_lines = []
+    v14_lines << "#{skills_info[:with_sponsors]} with sponsors" if skills_info[:with_sponsors] && skills_info[:with_sponsors] > 0
+    v14_lines << "#{skills_info[:multiplayer]} multiplayer" if skills_info[:multiplayer] && skills_info[:multiplayer] > 0
+    v14_lines << "#{skills_info[:advanced_tier]} advanced-tier" if skills_info[:advanced_tier] && skills_info[:advanced_tier] > 0
+    v14_lines << "#{(skills_info[:verifier_refs] || []).size} verifier-gated" if (skills_info[:verifier_refs] || []).any?
+    v14_lines << "#{(skills_info[:advisor_refs] || []).size} advisor-escalating" if (skills_info[:advisor_refs] || []).any?
+    puts "    v1.4.0: #{v14_lines.join(' / ')}" unless v14_lines.empty?
   end
   if memory_info
     puts "  [ok] MemoryMap: #{memory_info[:folder_count]} folders, boundary declared, indexed: #{memory_info[:has_indexing] ? 'yes' : 'no'}"
@@ -593,6 +701,10 @@ begin
   end
   if integration_info
     puts "  [ok] IntegrationManifest: #{integration_info[:count]} integrations, no raw secrets detected"
+    if integration_info[:load_mode_counts]
+      lmc = integration_info[:load_mode_counts]
+      puts "    v1.4.0: load_mode — #{lmc['eager']} eager / #{lmc['lazy']} lazy / #{lmc['on_search']} on_search"
+    end
   end
   if skills_info && (memory_info || context_info || integration_info)
     puts "  [ok] cross-manifest references resolve (§9.7)"

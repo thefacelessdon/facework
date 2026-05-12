@@ -1,4 +1,4 @@
-protocol_version: "1.3.0"
+protocol_version: "1.4.0"
 
 project:
   name: "Example Cultural Brand"
@@ -54,17 +54,24 @@ compliance:
 # reference manifest points at the Face.works worked example for end-to-end validation. When
 # /fw-stability emits ports for a real tenant project, they land at define/ — see §9.1.
 runtime_ports:
+  # v1.4.0 — port refs accept optional cache_affinity (defaults to "stable"). Face.works
+  # ports are stable governance artifacts, perfect for aggressive caching.
   skills:
     manifest: "examples/face.works/runtime-ports/skill-manifest.yaml"
+    cache_affinity: stable
   memory:
     manifest: "examples/face.works/runtime-ports/memory-map.yaml"
+    cache_affinity: stable
   context:
     manifest: "examples/face.works/runtime-ports/context-manifest.yaml"
+    cache_affinity: stable
   connections:
     manifest: "examples/face.works/runtime-ports/integration-manifest.yaml"
+    cache_affinity: stable
   # v1.2.0 — harness-readable markdown bundle (derived view of the four port manifests).
   bundle:
     path: "examples/face.works/harness-bundle/"
+    cache_affinity: stable
 
 # v1.3.0 — DesignInfrastructure: tokens + components + examples + evaluator skill.
 # Track-aware conformance (PROTOCOL.md §11.7): face.works is agency_studio (MAY) but emits

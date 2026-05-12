@@ -7,6 +7,10 @@ event_name: "engagement.scale_exit"
 event_source: "linear"
 ownership: hybrid
 tags: [delivery, lifecycle]
+# v1.4.0
+sponsors: ["harper@face.works"]
+model_tier: standard
+verifier_skill_id: design-eye-evaluator
 ---
 
 # Engagement Closure
