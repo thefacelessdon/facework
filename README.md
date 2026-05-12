@@ -154,15 +154,20 @@ Every project makes the practice better. Every retro is a version bump.
 
 ## Companion Tooling
 
-Facework pairs with [gstack](https://github.com/garrytan/gstack) for review, design, QA, and shipping. Both install as Claude Code skills and work independently — Facework doesn't require gstack, but the methodology was developed using both.
+Facework pairs with [gstack](https://github.com/garrytan/gstack) for review, design, QA, and shipping, and with [Impeccable](https://github.com/pbakaus/impeccable) for design-language enforcement. All three install as Claude Code skills and work independently — Facework doesn't require either companion, but the methodology was developed using all three.
+
+### gstack — Review, design, QA, ship
 
 | gstack Skill | Facework Phase | Role |
 |---|---|---|
 | `/plan-ceo-review` | Frequency, Current | Challenges assumptions, finds the 10-star product, forces decisions |
 | `/plan-eng-review` | Stability, Entropy | Locks architecture, data flow, failure modes, test coverage |
 | `/design-consultation` | Resonance | Establishes design system — typography, color, spacing, motion — before building interfaces |
-| `/plan-design-review` | Resonance, Entropy | Designer's eye audit of working interfaces — spacing, hierarchy, contrast, AI slop |
-| `/qa-design-review` | Resonance, Entropy | Same audit, but iteratively fixes issues and re-verifies with screenshots |
+| `/design-shotgun` | Taste, Resonance | Generates multiple AI design variants, opens a comparison board, collects structured feedback before committing to one direction |
+| `/design-html` | Resonance | Design finalization — produces production-quality Pretext-native HTML/CSS that reflows dynamically (smart API routing per design type) |
+| `/plan-design-review` | Resonance, Entropy | Designer's eye review of a design plan before implementation — pre-build rating across each design dimension |
+| `/qa-design-review` | Resonance, Entropy | Build-time designer's eye QA with iterative fix loop — screenshots before/after |
+| `/design-review` | Resonance, Entropy | Live-site designer's eye audit — visual inconsistency, spacing, hierarchy, AI slop patterns, iteratively fixed and re-verified |
 | `/review` | Entropy | Pre-landing structural review — race conditions, trust boundaries, missing invariants |
 | `/qa` | Entropy | Systematic QA against running interfaces — health score, screenshots, repro steps |
 | `/browse` | Resonance, Entropy | Gives the agent eyes — navigate, click, screenshot, verify live interfaces |
@@ -170,7 +175,23 @@ Facework pairs with [gstack](https://github.com/garrytan/gstack) for review, des
 | `/ship` | Coherence | Sync main, run tests, push, open PR — the last mile |
 | `/document-release` | Coherence | Post-ship doc update — syncs README, CHANGELOG, and guides to match what shipped |
 
-See gstack's [README](https://github.com/garrytan/gstack) for install instructions.
+See gstack's [README](https://github.com/garrytan/gstack) for the full skill catalog and install instructions.
+
+### Impeccable — Design language layer
+
+[Impeccable](https://github.com/pbakaus/impeccable) ("the design language that makes your AI harness better at design") is a Claude Code skill engineered specifically against the SaaS aesthetic mimicry problem — the same drift Facework's TasteContract calls out as off-brand. It provides 7 domain reference files (typography / color / motion / spatial / interaction / responsive / UX writing), 23 commands (`polish`, `audit`, `critique`, `distill`, `animate`, `bolder`, `quieter`, and more), plus 27 deterministic anti-pattern rules and a 12-rule LLM critique pass.
+
+Impeccable interlocks with Facework's design layer in three places:
+
+| Impeccable mode | Facework phase / artifact | Role |
+|---|---|---|
+| `teach` (design context setup) | Phase 3 Taste — DESIGN.md generation | Bootstrap the project's design vocabulary against Impeccable's curated references |
+| `craft` (shape-then-build) | Phase 6 Resonance — working interfaces | Build interfaces with high design quality, avoiding the SaaS register Facework's TasteContract explicitly rejects |
+| `extract` (pull reusable components + tokens) | v1.3.0 DesignInfrastructure (PROTOCOL.md §11) | Extract components and tokens — feeds directly into the `tokens.json` / `components.yaml` / examples library that DesignInfrastructure declares |
+
+Impeccable's deterministic anti-pattern rules + LLM critique pass are a concrete implementation of the **design-eye-evaluator** Skill pattern declared by Facework v1.4.0 (PROTOCOL.md §9.3 `verifier_skill_id`). Facework declares the contract; Impeccable can be the runtime that implements the gate.
+
+See [impeccable.style](https://impeccable.style) for ready-to-use bundles.
 
 ---
 
