@@ -1,16 +1,17 @@
 # FACEWORK
 
-An open protocol for turning ideas into coherent, ownable systems.
+An open protocol for turning ideas into coherent, ownable systems — and exposing them to any runtime.
 
-Facework is 12 primitives (forces that govern coherence), an 8-phase build methodology, and a set of Claude Code skills that take a project from zero to fully architected, spec'd, and handoff-ready — with working interfaces. The methodology was developed building [GAMUT](https://github.com/thefacelessdon/GAMUT) and refined across multiple protocol runs including [HUE Unlimited](https://github.com/thefacelessdon/hue-unlimited).
+Facework is 12 primitives (forces that govern coherence), an 8-phase build methodology, a runtime portability layer (v1.4.0 manifest schema), and a set of Claude Code skills that take a project from zero to fully architected, spec'd, handoff-ready — with working interfaces and declarative ports any agent harness can ingest. The methodology was developed building [GAMUT](https://github.com/thefacelessdon/GAMUT) and refined across multiple protocol runs including [HUE Unlimited](https://github.com/thefacelessdon/hue-unlimited).
 
 ---
 
 ## What It Does
 
 - **Detects your project track** — Creator, Cultural Brand, Athlete/Public Figure, Agency/Studio, or Platform/Product — and tailors every phase to it.
-- **Produces canonical artifacts** — strategy docs, architecture specs, decision records, operational playbooks, sovereignty maps — each gated before the next phase begins.
+- **Produces canonical artifacts** — 20 of them, including strategy docs, architecture specs, decision records, operational playbooks, sovereignty maps, and v1.1.0+ runtime ports — each gated before the next phase begins.
 - **Builds working interfaces** from declared capabilities, not generic prototypes.
+- **Exposes runtime ports** for any agent harness — four declarative YAML manifests (Skills, Memory, Context, Connections) plus a markdown bundle for file-based runtimes. The tenant world becomes portable across runtimes without rebuilding context.
 - **Closes with a diagnostic** that evolves the methodology itself. Every project makes the practice better.
 
 The law underneath: anything not coherent will eventually contradict itself. Anything that contradicts itself will eventually collapse. Facework makes collapse optional.
@@ -67,22 +68,49 @@ Phase 8  COHERENCE      Integrate into a unified whole + diagnostic
 
 ---
 
+## The Operating Layer (v1.4.0 manifest schema)
+
+The 8 phases produce a coherent tenant world. The Operating Layer makes that world **portable to any runtime** — agent harnesses, file-based tools, custom runtimes. Facework declares the interface; runtimes implement.
+
+Four runtime ports declared in YAML:
+
+| Port | Artifact | Declares |
+|---|---|---|
+| Skills | `SkillManifest` | Every callable workflow with sponsors, verifier, multiplayer, model tier |
+| Memory | `MemoryMap` | Vault structure + indexing + retention + boundary against runtime memory |
+| Context | `ContextManifest` | What each skill loads at session start (soul / identity / purpose bundles) |
+| Connections | `IntegrationManifest` | External tools with auth, trust boundary, sensors/actuators |
+
+Three derived layers:
+
+- **HarnessBundle** — markdown view (`soul.md` / `identity.md` / `purpose.md` / `skills/` / `memory.md` / `tools.md` / `boundary.md`) for file-based runtimes that ingest directories instead of YAML.
+- **DesignInfrastructure** — LLM-callable design layer: structured design tokens, component primitives with machine-readable contract rules, a `design-eye-evaluator` Skill that gates output against the TasteContract, plus an examples library.
+- **Observability Interface (PROTOCOL.md §12)** — minimum event surface any v1.4.0 runtime emits (`skill.invoked`, `memory.write`, `cache.hit`, `verifier.run`, etc.). The protocol declares the events; runtimes pick the transport.
+
+**Conformance is calibrated** — Validated-evidence projects MUST emit all four ports; Signaled SHOULD; Thesis MAY emit a minimal SkillManifest only. DesignInfrastructure is track-aware (Cultural Brand MUST, Creator/Athlete/Platform SHOULD, Agency/Studio MAY).
+
+The pattern: **protocol declares properties, runtimes implement.** A tenant world built through the 8 phases can be operated by Corey's runtime, Open Claw, Glass-style internal tools, or any harness that supports the four-port interface.
+
+See [PROTOCOL.md](PROTOCOL.md) §9 (Runtime Ports), §10 (HarnessBundle), §11 (DesignInfrastructure), §12 (Observability Interface), and the worked example at [examples/face.works/](examples/face.works/) — a complete agency/studio tenant world demonstrating every layer.
+
+---
+
 ## Commands
 
 | Command | Phase | What It Produces |
 |---------|-------|-----------------|
 | `/fw-semantics` | 1: Semantics | ProjectContext (track detection), signal thesis, canonical language, distortion risks, audience interpretation map |
 | `/fw-field` | 2: Field | Field participant map, status/incentive model, adoption dynamics, extraction risk map |
-| `/fw-taste` | 3: Taste | Taste contract, DESIGN.md (design language spec), quality rubric, anti-patterns |
+| `/fw-taste` | 3: Taste | Taste contract, DESIGN.md (design language spec), quality rubric, anti-patterns, and (track-relevant) DesignInfrastructure — tokens, components, design-eye evaluator, examples library |
 | `/fw-frequency` | 4: Strategy Lock | Business model, rate structure, governance, agreements, exit guarantees, gates |
 | `/fw-current` | 4: Strategy Lock | Dilemmas surfaced, decision records with reasoning, all contradictions resolved |
 | `/fw-flow` | 5: Architecture & Flow | Operational playbooks — every workflow mapped to human/agent ownership |
-| `/fw-stability` | 5: Architecture & Flow | Architecture specs — schemas, state machines, data flows, edge cases |
+| `/fw-stability` | 5: Architecture & Flow | Architecture specs — schemas, state machines, data flows, edge cases — and the four Runtime Port manifests (Skills, Memory, Context, Connections) |
 | `/fw-resonance` | 6: Activation | Working interfaces composed from declared capabilities, demo data, typed schema, test suite |
 | `/fw-entropy` | 7: Integrity | Pressure test, failure mode analysis, implementation specs, critical gap fixes |
 | `/fw-sovereignty` | 7: Integrity | Ownership/control matrix, dependency risk tiers, exit audit, sovereignty requirements |
 | `/fw-consonance` | 7: Integrity | Cross-layer alignment check, contradiction register, stakeholder consonance |
-| `/fw-coherence` | 8: Integration | README, review brief, project tracker, engineering guide, clean repo, coherence scorecard, diagnostic retro |
+| `/fw-coherence` | 8: Integration | README, review brief, project tracker, engineering guide, HarnessBundle (markdown view of runtime ports), clean repo, coherence scorecard, diagnostic retro |
 
 ---
 
