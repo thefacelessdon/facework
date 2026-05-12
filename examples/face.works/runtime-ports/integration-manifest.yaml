@@ -1,0 +1,166 @@
+version: "1.0.0"
+tenant: "face.works"
+
+integrations:
+  - id: linear
+    name: "Linear"
+    description: "Engagement tracking, pipeline management, stage-gate state"
+    kind: mcp
+    auth: oauth
+    trust_boundary: rent
+    endpoint: "mcp:linear"
+    scope: [read, write, comment]
+    used_by:
+      - prospect-qualification
+      - engagement-delivery
+      - stage-gate-monitoring
+      - engagement-closure
+      - go-to-market-pulse
+    secrets:
+      - name: LINEAR_OAUTH_TOKEN
+        store: "1password"
+        ref: "vault/face.works/linear-oauth"
+        required: true
+    rate_limits:
+      requests_per_minute: 60
+    failover: "Manual escalation to founder if Linear is down >30 min"
+    pii: false
+
+  - id: github
+    name: "GitHub"
+    description: "Source of truth for client prototype repos and Facework toolkit"
+    kind: mcp
+    auth: oauth
+    trust_boundary: rent
+    endpoint: "mcp:github"
+    scope: [read, write, pr_create, issue_create]
+    used_by:
+      - engagement-delivery
+      - engagement-closure
+      - gamut-audit
+      - go-to-market-pulse
+    secrets:
+      - name: GITHUB_OAUTH_TOKEN
+        store: "1password"
+        ref: "vault/face.works/github-oauth"
+        required: true
+    rate_limits:
+      requests_per_minute: 80
+    failover: "Read-only fallback via local git clone if API is down"
+    pii: false
+
+  - id: gmail
+    name: "Gmail"
+    description: "Inbound prospect intake and engagement comms"
+    kind: mcp
+    auth: oauth
+    trust_boundary: rent
+    endpoint: "mcp:gmail"
+    scope: [read, search, send_draft]
+    used_by:
+      - prospect-qualification
+    secrets:
+      - name: GMAIL_OAUTH_TOKEN
+        store: "1password"
+        ref: "vault/face.works/gmail-oauth"
+        required: true
+    rate_limits:
+      requests_per_minute: 30
+    failover: "Manual prospect intake if Gmail MCP is down"
+    pii: true
+    data_residency: "us"
+
+  - id: notion
+    name: "Notion"
+    description: "Long-form client docs and shared workspaces"
+    kind: mcp
+    auth: oauth
+    trust_boundary: rent
+    endpoint: "mcp:notion"
+    scope: [read, write, page_create]
+    used_by:
+      - engagement-delivery
+      - engagement-closure
+    secrets:
+      - name: NOTION_OAUTH_TOKEN
+        store: "1password"
+        ref: "vault/face.works/notion-oauth"
+        required: true
+    rate_limits:
+      requests_per_minute: 30
+    failover: "Generate to local markdown if Notion is down — sync later"
+    pii: false
+
+  - id: slack
+    name: "Slack"
+    description: "Engagement health alerts and team comms"
+    kind: mcp
+    auth: oauth
+    trust_boundary: rent
+    endpoint: "mcp:slack"
+    scope: [post_message, read_channel]
+    used_by:
+      - stage-gate-monitoring
+    secrets:
+      - name: SLACK_OAUTH_TOKEN
+        store: "1password"
+        ref: "vault/face.works/slack-oauth"
+        required: true
+    rate_limits:
+      requests_per_minute: 60
+    failover: "Skip notification if Slack is down; log to outputs/weekly-status/"
+    pii: false
+
+  - id: twitter-x
+    name: "Twitter / X"
+    description: "Competitor and signal scanning"
+    kind: rest
+    auth: api_key
+    trust_boundary: mitigate
+    endpoint: "https://api.x.com/2"
+    scope: [read_timeline, read_search]
+    used_by:
+      - go-to-market-pulse
+    secrets:
+      - name: X_API_KEY
+        store: "1password"
+        ref: "vault/face.works/x-api-key"
+        required: true
+    rate_limits:
+      requests_per_minute: 15
+      requests_per_day: 500
+    failover: "Skip social signal section of morning brief if rate-limited"
+    pii: false
+
+  - id: vault-fs
+    name: "Vault filesystem"
+    description: "Local read/write to the Obsidian vault"
+    kind: filesystem
+    auth: local
+    trust_boundary: own
+    endpoint: "./vault/"
+    scope: [read, write, list]
+    used_by:
+      - prospect-qualification
+      - engagement-delivery
+      - stage-gate-monitoring
+      - engagement-closure
+      - gamut-audit
+      - go-to-market-pulse
+    failover: "Hard fail — vault is the source of truth"
+    pii: false
+
+  - id: qmd-index
+    name: "QMD local search"
+    description: "Local search index over the vault"
+    kind: cli
+    auth: local
+    trust_boundary: own
+    endpoint: "qmd"
+    scope: [query]
+    used_by:
+      - engagement-delivery
+      - go-to-market-pulse
+      - gamut-audit
+    failover: "Fall back to grep over vault/ if QMD index is stale"
+    pii: false

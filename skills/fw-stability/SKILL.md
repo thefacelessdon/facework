@@ -1,11 +1,13 @@
 ---
 name: fw-stability
-version: 4.0.0
+version: 4.1.0
 description: |
   Stability: Phase 5 of the Facework Protocol (with /fw-flow). Build the
   architectural foundation. Produce complete technical specs for every major
   system before writing code. Adapts spec categories to the product type.
-  Runs after Strategy Lock (Phase 4), alongside Flow.
+  In v1.1.0 (toolkit v0.0.5), also emits the four Runtime Ports (§9) so any
+  runtime can operate the tenant world. Runs after Strategy Lock (Phase 4),
+  alongside Flow.
 allowed-tools:
   - Read
   - Write
@@ -308,6 +310,118 @@ The verification map prevents two failure modes:
 **Cost:** One table per capability. Add 2-3 columns to the existing CapabilityMap
 or produce as a companion artifact.
 
+## Step 5d: Runtime Ports (v1.1.0)
+
+After CapabilityMap and Verification Map, emit the four Runtime Ports
+defined in `PROTOCOL.md` §9. These are machine contracts any runtime ingests
+to operate the tenant world — they expose Phase 5 outputs as portable,
+declarative manifests.
+
+**Conformance is calibrated by `project.evidence_level`** (§9.2):
+
+| Evidence level | Emit |
+|---|---|
+| Validated | All four port manifests (MUST) |
+| Signaled | All four if possible; minimum: `SkillManifest` + `MemoryMap` (SHOULD) |
+| Thesis | Minimal `SkillManifest` only (MAY) |
+
+Read `define/PROJECT-CONTEXT.md` for `evidence_level`. If unset, ask the
+user before emitting. Reference example for every port:
+`examples/face.works/runtime-ports/`.
+
+### 5d.1 — SkillManifest → `define/skill-manifest.yaml`
+
+Declare every callable workflow as a Skill. Pull from `/fw-flow`'s
+`WorkflowPlaybooks` — every playbook is referenced by ≥1 skill.
+
+Required skill fields: `id`, `name`, `description`, `domain`, `trigger`
+(`on_demand` | `scheduled` | `event` | `continuous`), `ownership` (`human`
+| `agent` | `hybrid`), `playbook` (path).
+
+Optional: `inputs`, `outputs`, `depends_on_capabilities` (references
+CapabilityMap), `reads_memory`, `writes_memory`, `context_load`,
+`integrations`, `escalation`, `schedule` (required if `trigger=scheduled`),
+`event` (required if `trigger=event`), `tags`.
+
+Track-relevant skills MUST be present per `ProjectContext.track`:
+- Agency/Studio: ≥1 of {prospect qualification, engagement delivery,
+  stage-gate monitoring, engagement closure}
+- Creator / Cultural Brand / Athlete: ≥1 of {content pipeline, audience
+  capture, distribution}
+- Platform/Product: ≥1 of {onboarding, customer feedback loop, release
+  operations}
+
+At least one human-ownership skill SHOULD exist (avoids fully-automated
+drift). Some agency/automation-heavy systems legitimately keep human
+judgment outside the runtime — that's fine, but document why.
+
+### 5d.2 — MemoryMap → `define/memory-map.yaml`
+
+Declare the vault structure that holds long-term tenant knowledge.
+
+Required: `root`, `structure[]` (at minimum: capture / wiki / outputs /
+archive folders — or explicit waiver), `boundary` block.
+
+**The `boundary` block MUST be present and explicit.** Declare the
+separation between tenant memory (the vault) and runtime memory (Claude's
+per-project memory at `~/.claude/projects/<sanitized-cwd>/memory/`).
+Skills MUST write tenant content to the vault; runtimes MUST NOT
+auto-promote tenant content without explicit user action. This resolves
+the "one system of record" collision — see PROTOCOL.md §9.4.
+
+Optional: `indexing[]` (search/RAG layers), `retention[]` (archive/delete
+policies), `conventions` (filename, frontmatter, link style).
+
+### 5d.3 — ContextManifest → `define/context-manifest.yaml`
+
+Declare what each skill loads at session start.
+
+Required: `global` bundle (loaded for every skill), `bundles[]`. Each
+bundle: `id`, `name`, `purpose`, `load[]` (file / query / live / section
+sources).
+
+**Three conventional bundles SHOULD be present** (Validated: MUST). They
+map directly to the harness-native files Move C (v0.0.6) will emit:
+- `soul` — from `SignalThesis` + `TasteContract` + Frequency decisions
+- `identity` — from `ProjectContext` (track, audience, phase emphasis)
+- `purpose` — from Current decisions + `WedgeSpec` + stage criteria
+
+### 5d.4 — IntegrationManifest → `define/integration-manifest.yaml`
+
+Declare every external tool the tenant world reaches.
+
+Required: `id`, `name`, `kind` (`mcp` | `rest` | `cli` | `filesystem` |
+`webhook` | `db`), `auth` (`oauth` | `api_key` | `local` | `none` | `mtls`),
+`trust_boundary` (`own` | `rent` | `mitigate` from `SovereigntyMap`),
+`used_by[]` (skill IDs).
+
+**Never include raw secrets.** Use `SecretRef` pointers
+(`{name, store, ref, required?}`) into external secret stores
+(`1password`, `aws_secrets`, `env`, `doppler`, custom). Validator
+hard-fails on any field that looks like a raw key, token, or password.
+
+Optional: `endpoint`, `scope[]`, `rate_limits`, `failover`,
+`data_residency`, `pii`, `description`. If `pii: true`, `data_residency`
+is required.
+
+Phase 7 (Sovereignty) further validates `trust_boundary` against
+`SovereigntyMap`.
+
+### 5d.5 — Declare ports in `facework.manifest.yaml`
+
+Bump `protocol_version` to `1.1.0` and add the `runtime_ports` block:
+
+```yaml
+runtime_ports:
+  skills:      { manifest: "define/skill-manifest.yaml" }
+  memory:      { manifest: "define/memory-map.yaml" }
+  context:     { manifest: "define/context-manifest.yaml" }
+  connections: { manifest: "define/integration-manifest.yaml" }
+```
+
+Ensure `project.evidence_level` and `project.track` are set in the
+manifest — both inform conformance and port shape.
+
 ## Step 6: Cross-Reference
 
 - Every rate/threshold traces to canonical source in business model
@@ -319,6 +433,27 @@ or produce as a companion artifact.
   decisions made in Frequency and Current — the architecture implements
   the ownership model, it doesn't override it
 - CapabilityMap covers every domain referenced in specs
+
+**Runtime Ports cross-manifest checks (§9.7) — bidirectional:**
+
+- `SkillManifest.skills[].reads_memory[]` and `writes_memory[]` resolve to
+  paths declared in `MemoryMap.structure[]` (literal or pattern match)
+- `SkillManifest.skills[].context_load[]` resolves to bundle IDs in
+  `ContextManifest.bundles[]` or `ContextManifest.global.id`
+- `SkillManifest.skills[].integrations[]` ↔
+  `IntegrationManifest.integrations[].used_by[]` — bidirectional, both
+  directions must resolve
+- `SkillManifest.skills[].depends_on_capabilities[]` resolves to entries
+  in CapabilityMap
+- `ContextManifest.bundles[].load[]` of `kind: live` references an
+  integration declared in `IntegrationManifest`
+- `MemoryMap.structure[].written_by[]` and `read_by[]` resolve to skill
+  IDs in `SkillManifest`
+- `MemoryMap.boundary` is present and non-empty
+- No raw secrets in `IntegrationManifest` — only `SecretRef` pointers
+
+Run `bin/validate-manifest` to confirm port references resolve cleanly
+before closing Stability.
 
 ## Step 6.5: Cold Read (Optional)
 
@@ -345,19 +480,22 @@ validated demand behind it.
 
 ### Tier 1 — Narrative (shown in conversation)
 
-Present a 5–7 sentence summary: "Here's the architecture and what the system
-can do." Cover stack decisions, key specs produced, and the capability surface
-(owned vs rented vs deferred). This is what the user reads immediately.
+Present a 5–7 sentence summary: "Here's the architecture, what the system
+can do, and how it exposes itself to runtimes." Cover stack decisions, key
+specs produced, the capability surface (owned vs rented vs deferred), and
+the four Runtime Ports emitted (skills, memory, context, connections —
+calibrated by evidence_level). This is what the user reads immediately.
 
 ### Tier 2 — Summary Card (written to file)
 
 Write to `define/stability-summary.md`:
 - Specs produced (count and names)
 - Capability count (owned / rented / deferred)
+- Runtime Ports emitted (count per port + evidence-level conformance status)
 - Key architecture decisions
 - One summary table
 
-### Tier 3 — Machine Artifact (written to file)
+### Tier 3 — Machine Artifacts (written to files)
 
 Write the full SystemArchitecture + CapabilityMap to `define/stability-specs.md`
 with YAML frontmatter:
@@ -371,8 +509,20 @@ status: Working Draft
 ---
 ```
 
-Close with: "Stability built. [N] specs produced ([N] lines total). CapabilityMap
-declares [N] capabilities ([N] owned, [N] rented, [N] deferred).
-Every major system is specified. Run /fw-flow for operational playbooks,
-or run it in parallel if you prefer. Run /fw-resonance to compose
-interfaces from declared capabilities."
+**Runtime Ports** (v1.1.0):
+- `define/skill-manifest.yaml` — `SkillManifest`
+- `define/memory-map.yaml` — `MemoryMap`
+- `define/context-manifest.yaml` — `ContextManifest`
+- `define/integration-manifest.yaml` — `IntegrationManifest`
+
+Update `facework.manifest.yaml`:
+- `protocol_version: "1.1.0"`
+- `project.evidence_level` and `project.track` populated
+- `runtime_ports` block declaring the four manifest paths
+
+Close with: "Stability built. [N] specs produced ([N] lines total).
+CapabilityMap declares [N] capabilities ([N] owned, [N] rented, [N] deferred).
+Runtime Ports emitted: [N] skills, [N] vault folders, [N] context bundles,
+[N] integrations — manifest at protocol_version 1.1.0. Every major system
+is specified. Run /fw-flow for operational playbooks (or in parallel).
+Run /fw-resonance to compose interfaces from declared capabilities."

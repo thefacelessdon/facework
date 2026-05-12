@@ -1,0 +1,112 @@
+version: "1.0.0"
+tenant: "face.works"
+root: "vault/"
+
+structure:
+  - path: "raw/"
+    purpose: "Inbox and capture staging — anything dropped here is unprocessed signal until promoted to wiki/ during engagement work"
+    contains: ["*.md", "*.pdf", "*.txt"]
+
+  - path: "wiki/"
+    purpose: "Codified knowledge — the LLM-maintained knowledge base"
+    children:
+      - path: "wiki/prospects/"
+        purpose: "Per-prospect intake and qualification records"
+        written_by: [prospect-qualification]
+        read_by: [prospect-qualification, go-to-market-pulse]
+      - path: "wiki/clients/"
+        purpose: "Active client engagements with Define + Prototype subfolders"
+        written_by: [engagement-delivery, engagement-closure]
+        read_by: [stage-gate-monitoring, engagement-closure, gamut-audit]
+      - path: "wiki/audits/"
+        purpose: "GAMUT audits run as proof artifacts"
+        written_by: [gamut-audit]
+        read_by: [gamut-audit]
+      - path: "wiki/protocol-reference/"
+        purpose: "Facework Protocol reference materials and skill definitions"
+        read_by: [engagement-delivery]
+      - path: "wiki/competitors/"
+        purpose: "Competitor and adjacent-space tracking"
+        read_by: [go-to-market-pulse]
+      - path: "wiki/case-studies/"
+        purpose: "Completed engagements distilled into case studies"
+        written_by: [engagement-closure]
+        read_by: [prospect-qualification]
+
+  - path: "outputs/"
+    purpose: "Reports, briefs, decks — generated artifacts ready to share or ship"
+    children:
+      - path: "outputs/morning-brief/"
+        purpose: "Daily pipeline + signal briefs"
+        written_by: [go-to-market-pulse]
+      - path: "outputs/weekly-status/"
+        purpose: "Weekly engagement health reports"
+        written_by: [stage-gate-monitoring]
+
+  - path: "archive/"
+    purpose: "Cold storage for closed engagements and aged raw captures"
+    children:
+      - path: "archive/clients/"
+        purpose: "Closed client engagements by year"
+        written_by: [engagement-closure]
+      - path: "archive/raw/"
+        purpose: "Aged raw captures, partitioned by year/month"
+
+  - path: "_index/"
+    purpose: "LLM-maintained table of contents and cross-reference index"
+
+indexing:
+  - folder: "wiki"
+    tool: "qmd"
+    scope: "recursive"
+    refresh: "on_write"
+  - folder: "outputs"
+    tool: "qmd"
+    scope: "recursive"
+    refresh: "scheduled"
+    refresh_schedule: "0 */6 * * *"
+
+boundary:
+  tenant_memory_root: "vault/"
+  runtime_memory_path: "~/.claude/projects/<sanitized-cwd>/memory/"
+  rule: >
+    Tenant memory (vault/) holds the tenant world's operational knowledge —
+    prospects, clients, audits, content, decisions. Runtime memory holds the
+    agent's cross-session continuity — preferences, ways of working, runtime
+    state. Skills MUST write tenant content to vault/. Runtimes MUST NOT
+    auto-promote tenant content into runtime memory without explicit user
+    action. The user's "one system of record" rule applies WITHIN each layer
+    independently — there is one canonical tenant memory and one canonical
+    runtime memory; they coexist but do not mirror each other.
+  responsibilities:
+    tenant_memory:
+      - "operational records (clients, prospects, audits)"
+      - "research (competitors, market signals)"
+      - "decisions (engagement-level)"
+      - "content (briefs, reports, case studies)"
+    runtime_memory:
+      - "agent preferences"
+      - "cross-project patterns and feedback"
+      - "runtime state and session continuity"
+
+retention:
+  - path: "raw/"
+    policy: "archive_after_days"
+    days: 30
+    target: "archive/raw/{yyyy}/{mm}/"
+  - path: "outputs/morning-brief/"
+    policy: "archive_after_days"
+    days: 90
+    target: "archive/morning-brief/{yyyy}/{mm}/"
+  - path: "wiki/clients/"
+    policy: "keep_forever"
+  - path: "wiki/audits/"
+    policy: "keep_forever"
+
+conventions:
+  filename: "kebab-case"
+  frontmatter:
+    required_keys: [title, created_at, source]
+    format: yaml
+  link_style: "wikilink"
+  date_format: "iso8601"

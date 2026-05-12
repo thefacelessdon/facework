@@ -1,0 +1,132 @@
+version: "1.0.0"
+tenant: "face.works"
+
+components:
+  - id: heading
+    name: "Heading"
+    purpose: "Section and page-level titles establishing hierarchy"
+    variants: [display, h1, h2, h3]
+    states: [default]
+    tokens_used:
+      - color.brand.primary
+      - type.family.display
+      - type.scale.3xl
+      - type.scale.2xl
+      - type.scale.xl
+      - type.scale.lg
+      - type.leading.tight
+      - type.weight.semibold
+    contract:
+      must:
+        - "uses type.family.display (not body)"
+        - "uses color.brand.primary (not neutral.900 — they differ)"
+        - "leading is tight (1.1) for display/h1; normal (1.5) for h2/h3"
+      must_not:
+        - "no decorative text shadows"
+        - "no all-caps display text — body conventions only"
+        - "no gradient fills"
+
+  - id: body-text
+    name: "Body Text"
+    purpose: "Primary running prose and paragraph content"
+    variants: [base, sm, lg]
+    states: [default]
+    tokens_used:
+      - color.neutral.800
+      - type.family.body
+      - type.scale.base
+      - type.scale.sm
+      - type.scale.lg
+      - type.leading.relaxed
+      - type.weight.regular
+    contract:
+      must:
+        - "uses type.family.body"
+        - "color is neutral.800 (NOT brand.primary — that's reserved for headings)"
+        - "leading is relaxed (1.7) for base; normal (1.5) for sm/lg"
+      must_not:
+        - "no justified text"
+        - "no hyphenation forced"
+        - "no max-width beyond 64ch"
+
+  - id: button
+    name: "Button"
+    purpose: "Primary call to action"
+    variants: [primary, secondary, ghost]
+    states: [default, hover, active, disabled, focus]
+    tokens_used:
+      - color.brand.primary
+      - color.brand.accent
+      - color.neutral.0
+      - color.neutral.100
+      - type.family.body
+      - type.scale.base
+      - type.weight.medium
+      - space.3
+      - space.6
+      - radius.md
+      - motion.base
+      - motion.easing
+    contract:
+      must:
+        - "minimum 44px hit target (height ≥ 44px)"
+        - "primary variant uses brand.primary fill OR brand.accent fill"
+        - "focus state shows visible outline (accessibility)"
+      must_not:
+        - "no gradient backgrounds"
+        - "no shadow variants for primary buttons"
+        - "no animated icons or pulsing effects"
+
+  - id: section
+    name: "Section"
+    purpose: "Top-level content block with vertical rhythm"
+    variants: [default, narrow, wide]
+    states: [default]
+    tokens_used:
+      - space.16
+      - space.24
+      - space.6
+    contract:
+      must:
+        - "vertical padding ≥ space.16 (64px) top and bottom"
+        - "max-width 64ch for narrow, 80ch for default, 96ch for wide"
+      must_not:
+        - "no centered text by default (left-align is the editorial baseline)"
+
+  - id: card
+    name: "Card"
+    purpose: "Discrete content container for prospects, audits, briefs"
+    variants: [default, raised]
+    states: [default, hover]
+    tokens_used:
+      - color.neutral.50
+      - color.neutral.200
+      - space.6
+      - space.4
+      - radius.lg
+      - motion.fast
+    contract:
+      must:
+        - "background is neutral.50; border is neutral.200 1px"
+        - "internal padding ≥ space.6 (24px)"
+        - "radius is lg (8px) — consistent with the editorial register"
+      must_not:
+        - "no drop shadows beyond a 2px subtle elevation on raised variant"
+        - "no rounded-full or zero-radius — must be the declared lg value"
+
+  - id: link
+    name: "Inline Link"
+    purpose: "In-prose hyperlinks"
+    variants: [default]
+    states: [default, hover, visited, focus]
+    tokens_used:
+      - color.brand.accent
+      - color.neutral.800
+      - motion.fast
+    contract:
+      must:
+        - "uses brand.accent for the link color"
+        - "underline visible by default (not on hover only)"
+        - "focus state shows visible outline"
+      must_not:
+        - "no color changes on hover (underline weight may change instead)"

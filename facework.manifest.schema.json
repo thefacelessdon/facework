@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://facework.dev/schemas/facework.manifest.schema.json",
   "title": "Facework Manifest",
-  "description": "Schema for Facework Protocol v1 project manifests.",
+  "description": "Schema for Facework Protocol v1 project manifests. v1.1.0 adds optional runtime_ports for harness portability (Move A of the Operating Layer plan).",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -16,7 +16,8 @@
   "properties": {
     "protocol_version": {
       "type": "string",
-      "pattern": "^1\\.0\\.0$"
+      "pattern": "^1\\.\\d+\\.\\d+$",
+      "description": "1.0.0 (v0.0.4 baseline), 1.1.0 (v0.0.5 — Runtime Ports), 1.2.0 (v0.0.6 — HarnessBundle), and forward 1.x.x compatible."
     },
     "project": {
       "type": "object",
@@ -42,6 +43,26 @@
             "beta",
             "scale"
           ]
+        },
+        "evidence_level": {
+          "type": "string",
+          "enum": [
+            "validated",
+            "signaled",
+            "thesis"
+          ],
+          "description": "Demand evidence level from PROTOCOL.md §3. Calibrates artifact production depth and runtime_ports conformance (Validated=MUST, Signaled=SHOULD, Thesis=MAY-minimal)."
+        },
+        "track": {
+          "type": "string",
+          "enum": [
+            "creator",
+            "cultural_brand",
+            "athlete",
+            "agency_studio",
+            "platform_product"
+          ],
+          "description": "Project track from PROTOCOL.md §3. Determines track-aware port skeleton defaults."
         }
       }
     },
@@ -151,6 +172,14 @@
           ]
         }
       }
+    },
+    "runtime_ports": {
+      "$ref": "#/$defs/runtimePorts",
+      "description": "Optional v1.1.0 block declaring the four runtime port manifest paths. Conformance per evidence_level: Validated=MUST, Signaled=SHOULD, Thesis=MAY (minimal SkillManifest only)."
+    },
+    "design_infrastructure": {
+      "$ref": "#/$defs/designInfrastructureRef",
+      "description": "Optional v1.3.0 block declaring tokens, components, examples, and evaluator skill ID. Conformance is track-aware (see PROTOCOL.md §11.7) — Cultural Brand MUST, Creator/Athlete/Platform SHOULD, Agency/Studio MAY."
     }
   },
   "$defs": {
@@ -165,6 +194,329 @@
       "type": "integer",
       "minimum": 0,
       "maximum": 20
+    },
+    "runtimePorts": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "skills":      { "$ref": "#/$defs/runtimePortRef" },
+        "memory":      { "$ref": "#/$defs/runtimePortRef" },
+        "context":     { "$ref": "#/$defs/runtimePortRef" },
+        "connections": { "$ref": "#/$defs/runtimePortRef" },
+        "bundle":      { "$ref": "#/$defs/harnessBundleRef" }
+      }
+    },
+    "harnessBundleRef": {
+      "type": "object",
+      "required": ["path"],
+      "additionalProperties": true,
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Relative path to the harness-bundle/ directory (v1.2.0)."
+        }
+      }
+    },
+    "designInfrastructureRef": {
+      "type": "object",
+      "required": ["tokens", "components", "examples", "evaluator_skill_id"],
+      "additionalProperties": false,
+      "properties": {
+        "tokens": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Relative path to tokens.json (or .yaml)."
+        },
+        "components": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Relative path to components.yaml."
+        },
+        "examples": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Relative path to the examples/ directory."
+        },
+        "evaluator_skill_id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "description": "Skill ID in SkillManifest that implements the design-eye evaluator."
+        }
+      }
+    },
+    "runtimePortRef": {
+      "type": "object",
+      "required": ["manifest"],
+      "additionalProperties": true,
+      "properties": {
+        "manifest": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Relative path to the port manifest YAML file."
+        }
+      }
+    },
+
+    "skillManifest": {
+      "type": "object",
+      "required": ["version", "tenant", "track", "skills"],
+      "additionalProperties": false,
+      "properties": {
+        "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+        "tenant":  { "type": "string", "minLength": 1 },
+        "track": {
+          "type": "string",
+          "enum": ["creator", "cultural_brand", "athlete", "agency_studio", "platform_product"]
+        },
+        "skills": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/skill" }
+        }
+      }
+    },
+    "skill": {
+      "type": "object",
+      "required": ["id", "name", "description", "domain", "trigger", "ownership", "playbook"],
+      "additionalProperties": false,
+      "properties": {
+        "id":          { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+        "name":        { "type": "string", "minLength": 1 },
+        "description": { "type": "string", "minLength": 1 },
+        "domain":      { "type": "string", "minLength": 1 },
+        "trigger":     { "enum": ["on_demand", "scheduled", "event", "continuous"] },
+        "ownership":   { "enum": ["human", "agent", "hybrid"] },
+        "playbook":    { "type": "string", "minLength": 1 },
+        "inputs":      { "type": "array", "items": { "$ref": "#/$defs/skillParameter" } },
+        "outputs":     { "type": "array", "items": { "$ref": "#/$defs/skillOutput" } },
+        "depends_on_capabilities": { "type": "array", "items": { "type": "string" } },
+        "reads_memory":  { "type": "array", "items": { "type": "string" } },
+        "writes_memory": { "type": "array", "items": { "type": "string" } },
+        "context_load":  { "type": "array", "items": { "type": "string" } },
+        "integrations":  { "type": "array", "items": { "type": "string" } },
+        "escalation":    { "type": "string" },
+        "schedule":      { "type": "string" },
+        "event": {
+          "type": "object",
+          "required": ["name", "source"],
+          "properties": {
+            "name":   { "type": "string", "minLength": 1 },
+            "source": { "type": "string", "minLength": 1 }
+          }
+        },
+        "tags": { "type": "array", "items": { "type": "string" } }
+      },
+      "allOf": [
+        { "if": { "properties": { "trigger": { "const": "scheduled" } } },
+          "then": { "required": ["schedule"] } },
+        { "if": { "properties": { "trigger": { "const": "event" } } },
+          "then": { "required": ["event"] } }
+      ]
+    },
+    "skillParameter": {
+      "type": "object",
+      "required": ["name", "type"],
+      "additionalProperties": false,
+      "properties": {
+        "name":        { "type": "string", "minLength": 1 },
+        "type":        { "enum": ["string", "number", "boolean", "object", "array", "file_path", "url"] },
+        "required":    { "type": "boolean" },
+        "description": { "type": "string" }
+      }
+    },
+    "skillOutput": {
+      "type": "object",
+      "required": ["name", "type"],
+      "additionalProperties": false,
+      "properties": {
+        "name":        { "type": "string", "minLength": 1 },
+        "type":        { "enum": ["string", "number", "boolean", "object", "array", "file_path", "url"] },
+        "write_to":    { "type": "string" },
+        "description": { "type": "string" }
+      }
+    },
+
+    "memoryMap": {
+      "type": "object",
+      "required": ["version", "tenant", "root", "structure", "boundary"],
+      "additionalProperties": false,
+      "properties": {
+        "version":   { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+        "tenant":    { "type": "string", "minLength": 1 },
+        "root":      { "type": "string", "minLength": 1, "not": { "pattern": "^/" } },
+        "structure": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/memoryFolder" } },
+        "indexing":  { "type": "array", "items": { "$ref": "#/$defs/memoryIndex" } },
+        "boundary":  { "$ref": "#/$defs/memoryBoundary" },
+        "retention": { "type": "array", "items": { "$ref": "#/$defs/memoryRetention" } },
+        "conventions": { "type": "object", "additionalProperties": true }
+      }
+    },
+    "memoryFolder": {
+      "type": "object",
+      "required": ["path", "purpose"],
+      "additionalProperties": false,
+      "properties": {
+        "path":       { "type": "string", "minLength": 1 },
+        "purpose":    { "type": "string", "minLength": 1 },
+        "contains":   { "type": "array", "items": { "type": "string" } },
+        "written_by": { "type": "array", "items": { "type": "string" } },
+        "read_by":    { "type": "array", "items": { "type": "string" } },
+        "children":   { "type": "array", "items": { "$ref": "#/$defs/memoryFolder" } }
+      }
+    },
+    "memoryBoundary": {
+      "type": "object",
+      "required": ["tenant_memory_root", "runtime_memory_path", "rule"],
+      "additionalProperties": false,
+      "properties": {
+        "tenant_memory_root":  { "type": "string", "minLength": 1 },
+        "runtime_memory_path": { "type": "string", "minLength": 1 },
+        "rule":                { "type": "string", "minLength": 1 },
+        "responsibilities": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tenant_memory":  { "type": "array", "items": { "type": "string" } },
+            "runtime_memory": { "type": "array", "items": { "type": "string" } }
+          }
+        }
+      }
+    },
+    "memoryIndex": {
+      "type": "object",
+      "required": ["folder", "tool"],
+      "additionalProperties": false,
+      "properties": {
+        "folder":          { "type": "string", "minLength": 1 },
+        "tool":            { "type": "string", "minLength": 1 },
+        "scope":           { "enum": ["recursive", "direct"] },
+        "refresh":         { "enum": ["on_write", "scheduled", "manual"] },
+        "refresh_schedule": { "type": "string" }
+      },
+      "allOf": [
+        { "if": { "properties": { "refresh": { "const": "scheduled" } } },
+          "then": { "required": ["refresh_schedule"] } }
+      ]
+    },
+    "memoryRetention": {
+      "type": "object",
+      "required": ["path", "policy"],
+      "additionalProperties": false,
+      "properties": {
+        "path":   { "type": "string", "minLength": 1 },
+        "policy": { "enum": ["keep_forever", "archive_after_days", "delete_after_days", "compress_after_days"] },
+        "days":   { "type": "integer", "minimum": 1 },
+        "target": { "type": "string" }
+      },
+      "allOf": [
+        { "if": { "properties": { "policy": { "enum": ["archive_after_days", "delete_after_days", "compress_after_days"] } } },
+          "then": { "required": ["days"] } }
+      ]
+    },
+
+    "contextManifest": {
+      "type": "object",
+      "required": ["version", "tenant", "global", "bundles"],
+      "additionalProperties": false,
+      "properties": {
+        "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+        "tenant":  { "type": "string", "minLength": 1 },
+        "global":  { "$ref": "#/$defs/contextBundle" },
+        "bundles": { "type": "array", "items": { "$ref": "#/$defs/contextBundle" } }
+      }
+    },
+    "contextBundle": {
+      "type": "object",
+      "required": ["id", "name", "purpose"],
+      "additionalProperties": false,
+      "properties": {
+        "id":         { "type": "string", "pattern": "^[a-z_][a-z0-9_-]*$" },
+        "name":       { "type": "string", "minLength": 1 },
+        "purpose":    { "type": "string", "minLength": 1 },
+        "load":       { "type": "array", "items": { "$ref": "#/$defs/contextSource" } },
+        "max_tokens": { "type": "integer", "minimum": 1 },
+        "priority":   { "enum": ["must", "should", "may"] },
+        "composes":   { "type": "array", "items": { "type": "string" } },
+        "excludes":   { "type": "array", "items": { "type": "string" } }
+      },
+      "anyOf": [
+        { "properties": { "load":     { "type": "array", "minItems": 1 } }, "required": ["load"] },
+        { "properties": { "composes": { "type": "array", "minItems": 1 } }, "required": ["composes"] }
+      ]
+    },
+    "contextSource": {
+      "type": "object",
+      "required": ["kind"],
+      "additionalProperties": false,
+      "properties": {
+        "kind":        { "enum": ["file", "query", "live", "section"] },
+        "path":        { "type": "string" },
+        "query":       { "type": "string" },
+        "against":     { "type": "string" },
+        "integration": { "type": "string" },
+        "section":     { "type": "string" },
+        "format":      { "enum": ["markdown", "yaml", "json", "text"] },
+        "as":          { "enum": ["system_prompt", "tool_result", "file", "inline"] },
+        "description": { "type": "string" }
+      },
+      "allOf": [
+        { "if": { "properties": { "kind": { "const": "file" } } },
+          "then": { "required": ["path"] } },
+        { "if": { "properties": { "kind": { "const": "query" } } },
+          "then": { "required": ["query", "against"] } },
+        { "if": { "properties": { "kind": { "const": "live" } } },
+          "then": { "required": ["integration"] } },
+        { "if": { "properties": { "kind": { "const": "section" } } },
+          "then": { "required": ["path", "section"] } }
+      ]
+    },
+
+    "integrationManifest": {
+      "type": "object",
+      "required": ["version", "tenant", "integrations"],
+      "additionalProperties": false,
+      "properties": {
+        "version":      { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+        "tenant":       { "type": "string", "minLength": 1 },
+        "integrations": { "type": "array", "items": { "$ref": "#/$defs/integration" } }
+      }
+    },
+    "integration": {
+      "type": "object",
+      "required": ["id", "name", "kind", "auth", "trust_boundary", "used_by"],
+      "additionalProperties": false,
+      "properties": {
+        "id":              { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+        "name":            { "type": "string", "minLength": 1 },
+        "kind":            { "enum": ["mcp", "rest", "cli", "filesystem", "webhook", "db"] },
+        "auth":            { "enum": ["oauth", "api_key", "local", "none", "mtls"] },
+        "trust_boundary":  { "enum": ["own", "rent", "mitigate"] },
+        "used_by":         { "type": "array", "items": { "type": "string" } },
+        "endpoint":        { "type": "string" },
+        "scope":           { "type": "array", "items": { "type": "string" } },
+        "secrets":         { "type": "array", "items": { "$ref": "#/$defs/secretRef" } },
+        "rate_limits":     { "type": "object", "additionalProperties": true },
+        "failover":        { "type": "string" },
+        "data_residency":  { "type": "string" },
+        "pii":             { "type": "boolean" },
+        "description":     { "type": "string" }
+      },
+      "allOf": [
+        { "if": { "properties": { "pii": { "const": true } } },
+          "then": { "required": ["data_residency"] } }
+      ]
+    },
+    "secretRef": {
+      "type": "object",
+      "required": ["name", "store", "ref"],
+      "additionalProperties": false,
+      "properties": {
+        "name":     { "type": "string", "minLength": 1 },
+        "store":    { "type": "string", "minLength": 1 },
+        "ref":      { "type": "string", "minLength": 1 },
+        "required": { "type": "boolean" }
+      }
     }
   }
 }

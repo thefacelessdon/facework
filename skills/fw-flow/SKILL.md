@@ -1,11 +1,13 @@
 ---
 name: fw-flow
-version: 4.0.0
+version: 4.1.0
 description: |
   Flow: Phase 5 of the Facework Protocol (with /fw-stability). Design adaptive
   behavior. Document every operational workflow with triggers, steps, decision
   points, thresholds, and escalation. Maps each step to human or machine
-  ownership. Runs after Strategy Lock (Phase 4), alongside Stability.
+  ownership. In v1.1.0 (toolkit v0.0.5), playbooks become the source of
+  callable skills declared in /fw-stability's SkillManifest. Runs after
+  Strategy Lock (Phase 4), alongside Stability.
 allowed-tools:
   - Read
   - Write
@@ -98,6 +100,12 @@ that applies to their product:
 
 ## Step 2: Write Each Playbook
 
+Each playbook file's path will be referenced by ≥1 skill in `/fw-stability`'s
+`SkillManifest` (the `playbook` field). Use **stable kebab-case filenames**
+(e.g. `01-prospect-qualification.md`) — once a playbook is referenced from a
+SkillManifest, renaming the file breaks the reference. Add a numeric prefix
+if ordering matters for the operator's mental model; otherwise omit it.
+
 ```markdown
 # [Workflow Name] Playbook
 
@@ -166,6 +174,10 @@ For each playbook, identify: how far does the system bend before it breaks?
 - No workflow has steps with no owner
 - Energy flow checks completed — no workflow extracts from participants
   by design. If extraction friction exists, it's flagged and justified.
+- **Skill alignment (v1.1.0):** every playbook is referenced by ≥1 skill
+  in `/fw-stability`'s `SkillManifest`. If a playbook has no skill, either
+  declare one in Stability or document why the workflow is human-only and
+  not callable through a runtime.
 
 ## Output
 
@@ -198,6 +210,7 @@ status: Working Draft
 ---
 ```
 
-Close with: "Flow designed. [N] playbooks produced. Every workflow mapped to
-ownership tiers. Run /fw-resonance to compose working interfaces from declared
-capabilities."
+Close with: "Flow designed. [N] playbooks produced. Every workflow mapped
+to ownership tiers. Stable filenames in place — each playbook is referenceable
+from `/fw-stability`'s SkillManifest. Run /fw-resonance to compose working
+interfaces from declared capabilities."

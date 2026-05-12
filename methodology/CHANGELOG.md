@@ -1,3 +1,199 @@
+# 0.0.7 — 2026-05-12 (DesignInfrastructure — Manifest Schema 1.3.0)
+
+**What changed:**
+- Added **DesignInfrastructure** as a new canonical artifact (PROTOCOL.md
+  §11). Phase 3 (Taste) now emits an *active* design layer alongside the
+  governance documents — design tokens as structured data, component
+  primitives with machine-readable contract rules, an LLM-readable
+  examples library, and a callable design-eye-evaluator Skill.
+- This is the **design axis** (Diego at Ramp / Glass): "design as
+  infrastructure, not governance." The TasteContract becomes load-bearing
+  during operation, not just at handoff. Non-designers in the tenant
+  world can ship without producing brand-destructive output.
+- Bumped manifest schema to **1.3.0**. Adds optional top-level
+  `design_infrastructure` block: `tokens` (path), `components` (path),
+  `examples` (path), `evaluator_skill_id` (Skill in SkillManifest).
+  v1.0.0–v1.2.0 manifests remain conformant — additive only.
+- **Track-aware conformance** (different from v0.0.5/v0.0.6's
+  evidence-level calibration): Cultural Brand MUST emit; Creator,
+  Athlete, Platform/Product SHOULD emit; Agency/Studio MAY emit. Design
+  fidelity is a function of project track, not demand evidence depth.
+- The four components:
+  - `tokens.json` — canonical vocabulary `color`/`type`/`space`/`radius`/
+    `motion` with tenant-chosen values
+  - `components.yaml` — primitives with `tokens_used[]`, variants,
+    states, and machine-readable `contract.must[]` / `contract.must_not[]`
+  - `design-eye-spec.md` — playbook the evaluator Skill executes
+  - `examples/on-brand-examples.md` + `examples/off-brand-anti-examples.md`
+    — LLM-readable reference data for grading
+- The **design-eye-evaluator** Skill is registered in `SkillManifest`
+  (domain: quality, ownership: agent). Other output-producing skills can
+  register it as a post-step quality gate. Runtime executes the LLM call;
+  Facework declares the contract.
+- Updated **`/fw-taste`** (3.2.0): new Step 6 — Emit Design
+  Infrastructure (track-relevant). Output Tier 3b lists the four
+  DesignInfrastructure files when emitted.
+- Extended `bin/validate-manifest`: when `design_infrastructure` is
+  declared, the validator checks tokens parses as JSON, components
+  parses as YAML with non-empty components[], examples directory has
+  required files, evaluator_skill_id resolves to a Skill in SkillManifest.
+  Reports track-relevant vs track-optional based on conformance table.
+- Added worked example `examples/face.works/design-infrastructure/`:
+  tokens (color/type/space/radius/motion for an agency aesthetic),
+  6 components (heading, body-text, button, section, card, link) with
+  contract rules, design-eye spec, and 4+4 examples covering
+  consultant-register drift, SaaS aesthetic mimicry, magic numbers,
+  marketing prose, and abstractions over names.
+- Added planning artifact `DESIGN-INFRASTRUCTURE-PLAN.md`.
+
+**One-way export (deferred):** Evaluator feedback that surfaces patterns
+the TasteContract didn't capture could in principle propagate back into
+contract amendments. Round-trip is deferred to v0.1.0+.
+
+**What was NOT adopted (deferred):**
+- DTCG (Design Token Community Group) format export → future (JSON
+  format chosen for v0.0.7 for widest tool compatibility; DTCG export
+  can be added as a derived view later).
+- Image-based examples + vision evaluation → future when evaluators
+  integrate vision capabilities natively.
+- Component code generation from primitives → out of Facework's scope
+  (the runtime's job; Facework declares the contract, not the
+  implementation).
+- Per-track skeleton design infrastructure → GAMUT v0.0.7+ (Facework
+  remains track-neutral in the spec).
+
+**Triggered by:** v0.0.5/v0.0.6 set up the portability layer (YAML +
+markdown views of Runtime Ports). Move B completes the operating-layer
+trilogy by adding the design axis Diego identified at Ramp. Cross-validated
+by Face.works emitting a full DesignInfrastructure including 6 component
+primitives whose contract rules pass structural validation against the
+schema, and a design-eye-evaluator Skill registered cleanly in the
+SkillManifest with all cross-references resolving.
+
+---
+
+# 0.0.6 — 2026-05-12 (HarnessBundle — Manifest Schema 1.2.0)
+
+**What changed:**
+- Added **HarnessBundle** as a new canonical artifact (PROTOCOL.md §10).
+  Reformats the four Runtime Port YAML manifests as harness-native
+  markdown files (`soul.md`, `identity.md`, `purpose.md`, `memory.md`,
+  `tools.md`, `boundary.md`, `skills/*.md`, plus top-level `CLAUDE.md`).
+  This is what file-based runtimes (Open Claw, Glass-style tools,
+  Corey's build) ingest directly.
+- Bumped manifest schema to **1.2.0**. Adds optional
+  `runtime_ports.bundle.path` field declaring where the markdown bundle
+  lives. `protocol_version` pattern relaxed to `^1\.\d+\.\d+$` for
+  forward 1.x.x compatibility. v1.0.0 and v1.1.0 manifests remain
+  conformant — additive only.
+- Conformance calibrated by `evidence_level`: Validated MUST emit the
+  full bundle; Signaled SHOULD emit a defined minimum subset; Thesis MAY
+  emit minimal (CLAUDE.md + skills/) only.
+- The bundle is **one-way export** (YAML → markdown). The YAML
+  manifests are the source of truth; the bundle is read-only. Round-trip
+  editing deferred to v0.1.0+.
+- Updated **`/fw-coherence`** (4.3.0): new Step 6c — Emit Harness Bundle.
+  Phase 8 audit catalog and Tier 3 output extended to include the bundle.
+  Walks the user through producing each file from source artifacts in
+  dependency order (boundary first, CLAUDE.md last).
+- Extended `bin/validate-manifest`: when `runtime_ports.bundle.path` is
+  declared, the validator checks (a) the directory exists, (b) required
+  files are present per evidence_level, (c) one `skills/{id}.md` file
+  exists for each skill in SkillManifest. Hard fail on missing required
+  files.
+- Added worked example `examples/face.works/harness-bundle/` — full
+  bundle with 7 top-level markdown files plus 6 skill files (one per
+  skill in face.works SkillManifest). Demonstrates the file-based view
+  any runtime can ingest.
+- Added planning artifact `HARNESS-BUNDLE-PLAN.md` (v0.0.6 execution
+  detail).
+
+**Strategic positioning (unchanged from v0.0.5):** Facework is the
+interface between GAMUT (practice) and runtimes (Corey's build, Open
+Claw, Glass, others). HarnessBundle is the **file-based bridge** to
+runtimes that consume markdown, alongside the YAML-based bridge to
+runtimes that consume structured data. Both are derived views of the
+same source contracts — pick the one your runtime ingests.
+
+**What was NOT adopted (deferred):**
+- Automated bundle generation from YAMLs → v0.0.7+ once the format
+  stabilizes against ≥2 reference runtimes.
+- Round-trip bundle editing (bundle MD edits propagate back to YAML)
+  → v0.1.0+.
+- Per-track skeleton bundles — GAMUT ships these as a separate
+  v0.0.6 release alongside Facework. Facework stays track-neutral.
+
+**Triggered by:** v0.0.5 (Runtime Ports) shipped clean YAML contracts.
+Move C completes the portability picture by giving file-based runtimes
+their native ingest format. Cross-validated by Face.works (real
+agency-track project) emitting a full bundle that passes structural
+validation against the schema.
+
+---
+
+# 0.0.5 — 2026-05-12 (Runtime Ports — Manifest Schema 1.1.0)
+
+**What changed:**
+- Added **Runtime Ports** layer (PROTOCOL.md §9). Four new canonical
+  artifacts expose the tenant world as machine contracts any runtime can
+  ingest: `SkillManifest`, `MemoryMap`, `ContextManifest`,
+  `IntegrationManifest`. These declare how the tenant world is *operated*,
+  separate from how it's built — Phases 1–8 remain structurally unchanged.
+- Adopted Meng's four-layer model (Skills, Memory, Context, Connections)
+  as the canonical port spec. Independently converged on by three research
+  sources (Chase / Agentic OS, Meng / Toolbenders, Diego / Ramp).
+- Bumped manifest schema to **1.1.0**. Adds optional top-level
+  `runtime_ports` block + `project.evidence_level` + `project.track`.
+  v1.0.0 manifests remain conformant — additive only, no breaking changes.
+- Conformance calibrated by `evidence_level`: Validated MUST emit all four
+  ports; Signaled SHOULD; Thesis MAY emit a minimal `SkillManifest` only.
+- `MemoryMap.boundary` block resolves the "one system of record" collision
+  between tenant memory (the vault) and runtime auto-memory (Claude's
+  per-project memory at `~/.claude/projects/<sanitized-cwd>/memory/`).
+- Cross-manifest reference resolution (§9.7): `bin/validate-manifest` now
+  loads each declared port manifest, validates structure, and checks all
+  bidirectional cross-references resolve. End-to-end validation runs
+  cleanly against the Face.works worked example.
+- Updated **`/fw-stability`** (4.1.0): new Step 5d emits the four ports
+  during Phase 5 architecture work. Output Tier 3 lists port manifests as
+  part of the machine artifact bundle.
+- Updated **`/fw-flow`** (4.1.0): stable kebab-case filenames; each
+  playbook referenced by ≥1 skill in SkillManifest (skill alignment check
+  in Step 5).
+- Updated **`/fw-coherence`** (4.2.0): runtime coherence test in Phase 8
+  (cross-manifest validation gates handoff readiness); Stability primitive
+  walkthrough extended to include port emission learnings.
+- Added worked example `examples/face.works/runtime-ports/` — four port
+  YAMLs populated from real Face.works playbooks/decisions/proof.
+- Added planning artifacts: `OPERATING-LAYER-PLAN.md` (strategic umbrella
+  across v0.0.5–v0.0.7) and `RUNTIME-PORTS-PLAN.md` (v0.0.5 execution
+  detail).
+
+**Strategic reframe:** Facework is the **interface layer** between GAMUT
+(practice — builds the tenant world) and runtimes (Corey's build,
+Open Claw, Glass, others — operate the world). The protocol's improvement
+vector is portability, not runtime growth. **Explicitly out of scope (won't
+be added):** Facework-native dashboard, observability tooling, harness
+implementation, runtime-side adapter code.
+
+**What was NOT adopted (deferred):**
+- `HarnessBundle` markdown export (soul.md / identity.md / skills/) →
+  Move C, v0.0.6. This is what Corey's runtime will ingest file-by-file.
+- `DesignInfrastructure` as active artifact (LLM-callable design eye) →
+  Move B, v0.0.7. Diego's "design as infrastructure" insight.
+- Artifact compression (TasteContract+DesignLanguageSpec consolidation,
+  SovereigntyMap+ConsonanceCheck consolidation) → v0.1.0 once 3+ reference
+  tenants exist.
+- Track-aware skeleton ports — GAMUT publishes per-track defaults in v0.0.6.
+
+**Triggered by:** Three research inputs converging on the four-port model
+(Chase / Agentic OS, Meng / Toolbenders, Diego / Ramp) plus the
+GAMUT/Facework/Corey three-layer clarification. Cross-validated by
+Face.works (real agency-track project) emitting all four ports cleanly
+with bidirectional cross-references resolving and zero raw secrets.
+
+---
+
 # 0.0.4 — 2026-04-05 (Execution Learnings — TONL Session)
 
 **What changed:**

@@ -1,12 +1,15 @@
 ---
 name: fw-coherence
-version: 4.1.0
+version: 4.3.0
 description: |
   Coherence: Phase 8 of the Facework Protocol (Integration). Final phase.
   Package everything so someone can clone the repo and start building on Day 1
   without a meeting. README, review brief, project tracker, engineering guide,
-  clean repo. Closes with diagnostic — coherence scorecard, retro, and
-  methodology evolution. Runs after Integrity (Phase 7).
+  clean repo. In v1.1.0 (toolkit v0.0.5), also validates the four Runtime
+  Ports cross-manifest references (§9.7) before declaring handoff ready. In
+  v1.2.0 (toolkit v0.0.6), emits the HarnessBundle markdown export (§10) for
+  runtimes that ingest file-based bundles. Closes with diagnostic — coherence
+  scorecard, retro, and methodology evolution. Runs after Integrity (Phase 7).
 allowed-tools:
   - Read
   - Write
@@ -87,6 +90,14 @@ Read the full project directory. Catalog:
 - All governance docs (from /fw-frequency)
 - The working interfaces (from /fw-resonance)
 - Any engineering guides already written
+- **Runtime Ports (v1.1.0):** the four port manifests (from /fw-stability):
+  `define/skill-manifest.yaml`, `define/memory-map.yaml`,
+  `define/context-manifest.yaml`, `define/integration-manifest.yaml`. These
+  are the machine contracts a runtime ingests — they MUST be present and
+  cross-references MUST resolve for handoff to be runtime-ready.
+- **HarnessBundle (v1.2.0):** if `runtime_ports.bundle.path` is declared,
+  the markdown bundle directory (`harness-bundle/` by default) with
+  required files per evidence_level. Emitted in Step 6c.
 
 ## Step 2: README
 
@@ -182,6 +193,82 @@ next thing. Different audience, different artifact.
 the Build Brief may be premature. Produce it when there's a concrete build
 ahead.
 
+## Step 6c: Emit Harness Bundle (v1.2.0)
+
+If the manifest declares `runtime_ports.bundle.path` (v1.2.0), emit the
+markdown bundle that file-based runtimes (Open Claw, Glass-style internal
+tools, others) will ingest. The bundle is **derived** from the four
+Runtime Port YAML manifests (§9) plus the existing artifacts —
+`SignalThesis`, `TasteContract`, `DecisionLedger`, `WedgeSpec`,
+`ProjectContext`. The YAML manifests remain the source of truth; the
+bundle is regeneratable from them.
+
+**Conformance by `project.evidence_level`** (PROTOCOL.md §10.4):
+
+| Evidence level | Bundle |
+|---|---|
+| Validated | MUST emit the full bundle |
+| Signaled | SHOULD emit: CLAUDE.md, soul.md, identity.md, purpose.md, skills/ |
+| Thesis | MAY emit minimal: CLAUDE.md + skills/ |
+
+### 6c.1 — Bundle location
+
+Default path: `harness-bundle/` relative to the project root. The path is
+declared in the main manifest as `runtime_ports.bundle.path`.
+
+### 6c.2 — File generation order
+
+Generate in this order so dependencies resolve cleanly:
+
+1. **`boundary.md`** — extract `MemoryMap.boundary` block as a
+   declarative contract. Runtimes read this first at install time.
+2. **`identity.md`** — pull `ProjectContext` (tenant, track, audience,
+   evidence_level, stage) as a scannable factual block.
+3. **`soul.md`** — compile `SignalThesis` (means / does-not-mean) +
+   `TasteContract` quality bar + Frequency decisions (governing truth).
+   Voice of the tenant world, not protocol prose.
+4. **`purpose.md`** — numbered list of locked premises from
+   `DecisionLedger` + `WedgeSpec` (audience / offer / channel / economic
+   logic) + stage criteria from PROTOCOL.md §8.
+5. **`memory.md`** — render `MemoryMap.structure[]` as a tree plus
+   `indexing[]`, `retention[]`, and `conventions`. Exclude the boundary
+   block (lives in `boundary.md`).
+6. **`tools.md`** — per-integration setup from `IntegrationManifest`,
+   with auth pointers (NOT secret values), rate limits, failover. Trust
+   boundary distribution summary at the end.
+7. **`skills/{id}.md`** — one file per skill in `SkillManifest.skills[]`.
+   YAML frontmatter (id, trigger, ownership, tags) + body sections
+   (description, when this fires, inputs, outputs, dependencies,
+   escalation, source playbook link).
+8. **`CLAUDE.md`** — top-level navigation written LAST, listing all
+   above files with one-line purpose for each. YAML frontmatter declares
+   `manifest_version`, `generated_at`, `source_manifest`.
+
+### 6c.3 — Generation method
+
+For v1.2.0, emission is **manual** — walk the user through producing each
+file from the source artifacts. Automation (a script that reads the four
+YAMLs and renders all bundle files) is deferred until the format
+stabilizes against ≥2 reference runtimes.
+
+### 6c.4 — Read-only contract
+
+The bundle is one-way export. Tenant edits to bundle files do not
+propagate back to the YAML manifests. If content needs to change, edit
+the source artifact (SignalThesis, TasteContract, etc.) and regenerate.
+Document this in `CLAUDE.md` for the runtime operator.
+
+### 6c.5 — Validation
+
+After emission, run `bin/validate-manifest`. It checks:
+- Bundle directory exists at declared path
+- Required files present per evidence_level
+- One `skills/{id}.md` file for each skill in SkillManifest
+- `boundary.md` is present and non-empty
+
+If validation fails, the HandoffPackage is incomplete — do not declare
+coherence until the bundle passes.
+
 ## Step 7: Coherence Test
 
 Before marking complete, ask yourself:
@@ -192,6 +279,20 @@ Before marking complete, ask yourself:
 - Can they understand the business model in one read of the business model doc?
 - Can they start building a feature using only the engineering guide?
 - Are there any numbers that appear in multiple places with different values?
+
+**Runtime coherence (v1.1.0):**
+- Does `bin/validate-manifest` pass cleanly? Run it now if you haven't —
+  this is the gate that catches stale port references.
+- Do the four Runtime Port manifests cross-reference cleanly (§9.7)?
+  - Skill `reads_memory`/`writes_memory` paths exist in `MemoryMap`
+  - Skill `context_load` IDs exist in `ContextManifest`
+  - Skill `integrations` ↔ Integration `used_by` resolves bidirectionally
+  - Skill `depends_on_capabilities` resolves to entries in `CapabilityMap`
+- Is `MemoryMap.boundary` block present and explicit?
+- Does the `IntegrationManifest` contain zero raw secrets — only `SecretRef`
+  pointers?
+- Does the project's `evidence_level` match what the ports declare? A
+  Validated project MUST emit all four; the validator hard-fails otherwise.
 
 **Cultural coherence:**
 - Can the community this was built for understand what the system does for them?
@@ -219,7 +320,10 @@ Did any number change during the build? Did the extraction check surface anythin
 **Current:** "Did the decisions hold? Were any revisited? Were there dilemmas
 you wish you'd surfaced earlier?"
 **Flow:** "Did the playbooks match reality? What workflows played out differently?"
-**Stability:** "Were the specs accurate? Which ones needed rework?"
+**Stability:** "Were the specs accurate? Which ones needed rework? For
+v1.1.0 projects: did the four Runtime Ports stay in sync with the specs,
+or did they drift? Were skill/playbook/capability cross-references hard to
+keep aligned?"
 **Resonance:** "Was demo mode useful? Did the interfaces carry the frequency
 of the community it was built for?"
 **Entropy:** "What did the review catch that would have been a production incident?"
@@ -338,7 +442,13 @@ Write a summary card containing:
 ### Tier 3 — Machine Artifact (HandoffPackage + DiagnosticReport)
 
 The HandoffPackage (README, review brief, project tracker, engineering guide) is
-already produced in Steps 2–6.
+already produced in Steps 2–6. For v1.1.0 projects, the four Runtime Port
+manifests (`define/{skill,memory-map,context,integration}-manifest.yaml`) are
+part of the HandoffPackage — they are how the next operator's runtime
+ingests the world without rebuilding context. For v1.2.0 projects, the
+markdown HarnessBundle (`harness-bundle/`) emitted in Step 6c is also part
+of the HandoffPackage — it's the file-based view runtimes like Open Claw
+and Glass-style harnesses read directly.
 
 Write the DiagnosticReport with YAML frontmatter:
 ```yaml

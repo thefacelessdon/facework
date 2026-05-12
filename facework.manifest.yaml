@@ -1,9 +1,11 @@
-protocol_version: "1.0.0"
+protocol_version: "1.3.0"
 
 project:
   name: "Example Cultural Brand"
   domain: "creator-commerce"
   stage: "mvp"
+  evidence_level: "validated"
+  track: "agency_studio"
 
 inputs:
   hunch: "Turn cultural momentum into owned creator commerce infrastructure."
@@ -42,3 +44,33 @@ compliance:
   infrastructure_sovereignty: 15
   total: 75
   level: "L3 Launch-Ready"
+
+# v1.1.0: Runtime Ports — four manifest paths a runtime ingests to operate the tenant world.
+# Conformance per evidence_level: Validated MUST emit all four; Signaled SHOULD; Thesis MAY emit
+# a minimal SkillManifest only. See PROTOCOL.md §9 and RUNTIME-PORTS-PLAN.md for detail.
+#
+# CANONICAL CONVENTION: a real tenant's port manifests live at `define/*.yaml`. The Facework
+# toolkit repo itself is NOT a Facework tenant project (it's the protocol toolkit), so this
+# reference manifest points at the Face.works worked example for end-to-end validation. When
+# /fw-stability emits ports for a real tenant project, they land at define/ — see §9.1.
+runtime_ports:
+  skills:
+    manifest: "examples/face.works/runtime-ports/skill-manifest.yaml"
+  memory:
+    manifest: "examples/face.works/runtime-ports/memory-map.yaml"
+  context:
+    manifest: "examples/face.works/runtime-ports/context-manifest.yaml"
+  connections:
+    manifest: "examples/face.works/runtime-ports/integration-manifest.yaml"
+  # v1.2.0 — harness-readable markdown bundle (derived view of the four port manifests).
+  bundle:
+    path: "examples/face.works/harness-bundle/"
+
+# v1.3.0 — DesignInfrastructure: tokens + components + examples + evaluator skill.
+# Track-aware conformance (PROTOCOL.md §11.7): face.works is agency_studio (MAY) but emits
+# anyway since GAMUT audits include design-quality evaluations of client deliverables.
+design_infrastructure:
+  tokens:     "examples/face.works/design-infrastructure/tokens.json"
+  components: "examples/face.works/design-infrastructure/components.yaml"
+  examples:   "examples/face.works/design-infrastructure/examples/"
+  evaluator_skill_id: "design-eye-evaluator"
