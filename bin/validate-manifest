@@ -21,11 +21,13 @@ if ! command -v ruby >/dev/null 2>&1; then
 fi
 
 ruby - "$MANIFEST_PATH" "$SCHEMA_PATH" <<'RUBY'
+# encoding: utf-8
 require "yaml"
 require "json"
 
 manifest_path = ARGV[0]
 schema_path = ARGV[1]
+manifest_dir = File.dirname(manifest_path)
 
 begin
   manifest = YAML.safe_load(File.read(manifest_path), aliases: false)
@@ -60,17 +62,308 @@ def require_int_range!(obj, key, min, max)
   value
 end
 
+# ----- Runtime Port (v1.1.0) helpers --------------------------------------
+
+def load_port!(manifest_dir, port_ref, port_name)
+  rel = port_ref["manifest"]
+  raise "runtime_ports.#{port_name}.manifest must be a non-empty string" unless rel.is_a?(String) && !rel.strip.empty?
+  full = File.expand_path(rel, manifest_dir)
+  raise "runtime_ports.#{port_name} manifest file not found: #{full}" unless File.exist?(full)
+  begin
+    YAML.safe_load(File.read(full), aliases: false)
+  rescue => e
+    raise "could not parse runtime_ports.#{port_name} manifest at #{full}: #{e.message}"
+  end
+end
+
+def validate_skill_manifest!(data)
+  raise "skill manifest must be an object" unless data.is_a?(Hash)
+  require_string!(data, "version")
+  require_string!(data, "tenant")
+  track = require_string!(data, "track")
+  valid_tracks = %w[creator cultural_brand athlete agency_studio platform_product]
+  raise "skill manifest track must be one of #{valid_tracks.join('|')}" unless valid_tracks.include?(track)
+  skills = data["skills"]
+  raise "skill manifest skills must be a non-empty array" unless skills.is_a?(Array) && !skills.empty?
+
+  ids = []
+  human_count = 0
+  agent_count = 0
+  hybrid_count = 0
+  valid_triggers = %w[on_demand scheduled event continuous]
+  valid_ownership = %w[human agent hybrid]
+
+  skills.each_with_index do |s, i|
+    raise "skills[#{i}] must be an object" unless s.is_a?(Hash)
+    %w[id name description domain trigger ownership playbook].each do |k|
+      require_string!(s, k) rescue (raise "skills[#{i}].#{k} is required")
+    end
+    raise "skills[#{i}].id pattern invalid (#{s['id']})" unless s["id"] =~ /^[a-z][a-z0-9-]*$/
+    raise "duplicate skill id: #{s['id']}" if ids.include?(s["id"])
+    ids << s["id"]
+
+    raise "skills[#{i}].trigger invalid: #{s['trigger']}" unless valid_triggers.include?(s["trigger"])
+    raise "skills[#{i}].ownership invalid: #{s['ownership']}" unless valid_ownership.include?(s["ownership"])
+    case s["ownership"]
+    when "human"  then human_count += 1
+    when "agent"  then agent_count += 1
+    when "hybrid" then hybrid_count += 1
+    end
+
+    if s["trigger"] == "scheduled"
+      sched = s["schedule"]
+      raise "skills[#{i}].schedule required when trigger=scheduled" unless sched.is_a?(String) && !sched.strip.empty?
+    end
+    if s["trigger"] == "event"
+      ev = s["event"]
+      raise "skills[#{i}].event{name,source} required when trigger=event" unless ev.is_a?(Hash) && ev["name"].is_a?(String) && ev["source"].is_a?(String)
+    end
+  end
+
+  { ids: ids, count: skills.size, human: human_count, agent: agent_count, hybrid: hybrid_count }
+end
+
+def validate_memory_map!(data)
+  raise "memory map must be an object" unless data.is_a?(Hash)
+  require_string!(data, "version")
+  require_string!(data, "tenant")
+  root = require_string!(data, "root")
+  raise "memory map root must be a relative path (not absolute, not ~)" if root.start_with?("/", "~")
+
+  structure = data["structure"]
+  raise "memory map structure must be a non-empty array" unless structure.is_a?(Array) && !structure.empty?
+
+  boundary = data["boundary"]
+  raise "memory map boundary block is required (resolves runtime-vs-tenant memory)" unless boundary.is_a?(Hash)
+  %w[tenant_memory_root runtime_memory_path rule].each do |k|
+    require_string!(boundary, k) rescue (raise "memory map boundary.#{k} is required and non-empty")
+  end
+
+  paths = []
+  written_by_refs = []
+  read_by_refs = []
+  walk = lambda do |folders|
+    folders.each_with_index do |f, i|
+      raise "memory folder entry must be an object" unless f.is_a?(Hash)
+      path = require_string!(f, "path")
+      require_string!(f, "purpose")
+      raise "duplicate memory folder path: #{path}" if paths.include?(path)
+      paths << path
+      written_by_refs.concat(f["written_by"] || [])
+      read_by_refs.concat(f["read_by"] || [])
+      walk.call(f["children"]) if f["children"].is_a?(Array)
+    end
+  end
+  walk.call(structure)
+
+  { paths: paths, written_by_refs: written_by_refs.uniq, read_by_refs: read_by_refs.uniq, folder_count: paths.size, has_indexing: !(data["indexing"].nil? || data["indexing"].empty?) }
+end
+
+def validate_context_manifest!(data)
+  raise "context manifest must be an object" unless data.is_a?(Hash)
+  require_string!(data, "version")
+  require_string!(data, "tenant")
+
+  global = data["global"]
+  raise "context manifest global bundle is required" unless global.is_a?(Hash)
+  %w[id name purpose].each do |k|
+    raise "context.global.#{k} is required" unless global.key?(k)
+  end
+  has_load = global["load"].is_a?(Array) && !global["load"].empty?
+  has_composes = global["composes"].is_a?(Array) && !global["composes"].empty?
+  raise "context.global must declare at least one of load[] or composes[]" unless has_load || has_composes
+
+  bundles = data["bundles"]
+  raise "context manifest bundles must be an array" unless bundles.is_a?(Array)
+
+  ids = [global["id"]]
+  conventional = %w[soul identity purpose]
+  conventional_present = []
+  live_integration_refs = []
+
+  bundles.each_with_index do |b, i|
+    raise "bundles[#{i}] must be an object" unless b.is_a?(Hash)
+    require_string!(b, "id")
+    require_string!(b, "name")
+    require_string!(b, "purpose")
+    raise "bundles[#{i}].id pattern invalid: #{b['id']}" unless b["id"] =~ /^[a-z_][a-z0-9_-]*$/
+    raise "duplicate bundle id: #{b['id']}" if ids.include?(b["id"])
+    ids << b["id"]
+    conventional_present << b["id"] if conventional.include?(b["id"])
+
+    load = b["load"]
+    composes = b["composes"]
+    has_b_load = load.is_a?(Array) && !load.empty?
+    has_b_composes = composes.is_a?(Array) && !composes.empty?
+    raise "bundles[#{i}] (#{b['id']}) must declare at least one of load[] or composes[]" unless has_b_load || has_b_composes
+    if has_b_load
+      load.each_with_index do |src, j|
+        raise "bundles[#{i}].load[#{j}] must be an object" unless src.is_a?(Hash)
+        kind = src["kind"]
+        valid_kinds = %w[file query live section]
+        raise "bundles[#{i}].load[#{j}].kind invalid: #{kind}" unless valid_kinds.include?(kind)
+        case kind
+        when "file"
+          raise "bundles[#{i}].load[#{j}] file source requires path" unless src["path"].is_a?(String)
+        when "query"
+          raise "bundles[#{i}].load[#{j}] query source requires query+against" unless src["query"].is_a?(String) && src["against"].is_a?(String)
+        when "live"
+          int = src["integration"]
+          raise "bundles[#{i}].load[#{j}] live source requires integration" unless int.is_a?(String)
+          live_integration_refs << int
+        when "section"
+          raise "bundles[#{i}].load[#{j}] section source requires path+section" unless src["path"].is_a?(String) && src["section"].is_a?(String)
+        end
+      end
+    end
+  end
+
+  { ids: ids, count: bundles.size + 1, conventional_present: conventional_present, live_integration_refs: live_integration_refs.uniq }
+end
+
+def validate_integration_manifest!(data)
+  raise "integration manifest must be an object" unless data.is_a?(Hash)
+  require_string!(data, "version")
+  require_string!(data, "tenant")
+  integrations = data["integrations"]
+  raise "integration manifest integrations must be an array" unless integrations.is_a?(Array)
+
+  ids = []
+  used_by_refs = []
+  valid_kinds = %w[mcp rest cli filesystem webhook db]
+  valid_auth = %w[oauth api_key local none mtls]
+  valid_boundaries = %w[own rent mitigate]
+
+  integrations.each_with_index do |int, i|
+    raise "integrations[#{i}] must be an object" unless int.is_a?(Hash)
+    %w[id name kind auth trust_boundary].each do |k|
+      raise "integrations[#{i}].#{k} is required" unless int[k].is_a?(String)
+    end
+    raise "integrations[#{i}].id pattern invalid: #{int['id']}" unless int["id"] =~ /^[a-z][a-z0-9-]*$/
+    raise "duplicate integration id: #{int['id']}" if ids.include?(int["id"])
+    ids << int["id"]
+    raise "integrations[#{i}].kind invalid" unless valid_kinds.include?(int["kind"])
+    raise "integrations[#{i}].auth invalid" unless valid_auth.include?(int["auth"])
+    raise "integrations[#{i}].trust_boundary invalid" unless valid_boundaries.include?(int["trust_boundary"])
+
+    used_by = int["used_by"]
+    raise "integrations[#{i}].used_by must be an array" unless used_by.is_a?(Array)
+    used_by_refs.concat(used_by)
+
+    if int["pii"] == true
+      raise "integrations[#{i}] pii=true requires data_residency" unless int["data_residency"].is_a?(String) && !int["data_residency"].strip.empty?
+    end
+
+    # Raw-secret heuristic — block obvious raw secret values
+    (int["secrets"] || []).each_with_index do |sec, j|
+      raise "integrations[#{i}].secrets[#{j}] must be a SecretRef object" unless sec.is_a?(Hash)
+      %w[name store ref].each { |k| require_string!(sec, k) rescue (raise "integrations[#{i}].secrets[#{j}].#{k} is required") }
+      # The schema forbids raw secret fields. Sanity-check that no field looks like a raw secret value.
+      sec.each do |k, v|
+        next unless v.is_a?(String)
+        if v.length > 20 && v =~ /\A[A-Za-z0-9_\-+\/=]{20,}\z/ && !%w[name store ref].include?(k.to_s)
+          raise "integrations[#{i}].secrets[#{j}].#{k} looks like a raw secret value — use SecretRef pointers only"
+        end
+      end
+    end
+  end
+
+  { ids: ids, count: integrations.size, used_by_refs: used_by_refs.uniq }
+end
+
+def memory_path_resolves?(skill_path, memory_paths)
+  return false if skill_path.nil?
+  s = skill_path.to_s.strip
+  return false if s.empty?
+  prefix = s.split(/[{*]/).first.to_s.chomp("/")
+  return true if prefix.empty?
+  memory_paths.any? do |mpath|
+    normalized = mpath.to_s.chomp("/")
+    prefix == normalized || prefix.start_with?(normalized + "/")
+  end
+end
+
+def validate_cross_manifest!(ports, skills_info, memory_info, context_info, integration_info)
+  errors = []
+
+  if skills_info && context_info
+    skills_info[:skills_data] && skills_info[:skills_data].each do |s|
+      (s["context_load"] || []).each do |cl|
+        unless context_info[:ids].include?(cl)
+          errors << "skill '#{s['id']}' references undeclared context bundle '#{cl}'"
+        end
+      end
+    end
+  end
+
+  if skills_info && integration_info
+    skills_info[:skills_data] && skills_info[:skills_data].each do |s|
+      (s["integrations"] || []).each do |int|
+        unless integration_info[:ids].include?(int)
+          errors << "skill '#{s['id']}' references undeclared integration '#{int}'"
+        end
+      end
+    end
+    # Bidirectional: every integration used_by must resolve to a skill
+    integration_info[:used_by_refs].each do |sid|
+      unless skills_info[:ids].include?(sid)
+        errors << "integration used_by references undeclared skill '#{sid}'"
+      end
+    end
+  end
+
+  if memory_info && skills_info
+    (memory_info[:written_by_refs] + memory_info[:read_by_refs]).uniq.each do |sid|
+      unless skills_info[:ids].include?(sid)
+        errors << "memory folder written_by/read_by references undeclared skill '#{sid}'"
+      end
+    end
+
+    # Forward direction: skill memory paths must resolve to a declared folder
+    skills_info[:skills_data].each do |s|
+      ((s["reads_memory"] || []) + (s["writes_memory"] || [])).each do |path|
+        unless memory_path_resolves?(path, memory_info[:paths])
+          errors << "skill '#{s['id']}' memory path '#{path}' does not resolve to any folder in MemoryMap (literal prefix not found)"
+        end
+      end
+    end
+  end
+
+  if context_info && integration_info
+    context_info[:live_integration_refs].each do |int|
+      unless integration_info[:ids].include?(int)
+        errors << "context bundle live source references undeclared integration '#{int}'"
+      end
+    end
+  end
+
+  raise errors.join("\n  ") unless errors.empty?
+end
+
+# --------------------------------------------------------------------------
+
 begin
   raise "manifest root must be an object" unless manifest.is_a?(Hash)
 
   protocol_version = require_string!(manifest, "protocol_version")
-  raise "protocol_version must be 1.0.0" unless protocol_version == "1.0.0"
+  raise "protocol_version must be 1.0.0 or 1.1.0" unless %w[1.0.0 1.1.0].include?(protocol_version)
 
   project = require_hash!(manifest, "project")
   require_string!(project, "name")
   require_string!(project, "domain")
   stage = require_string!(project, "stage")
   raise "project.stage must be one of mvp|beta|scale" unless %w[mvp beta scale].include?(stage)
+
+  evidence_level = project["evidence_level"]
+  if evidence_level
+    raise "project.evidence_level must be validated|signaled|thesis" unless %w[validated signaled thesis].include?(evidence_level)
+  end
+
+  track = project["track"]
+  if track
+    valid_tracks = %w[creator cultural_brand athlete agency_studio platform_product]
+    raise "project.track must be one of #{valid_tracks.join('|')}" unless valid_tracks.include?(track)
+  end
 
   inputs = require_hash!(manifest, "inputs")
   require_string!(inputs, "hunch")
@@ -127,10 +420,84 @@ begin
 
   raise "compliance.level '#{level}' does not match score band (expected '#{expected_level}')" if level != expected_level
 
+  # ----- Runtime Ports (v1.1.0) -------------------------------------------
+
+  runtime_ports = manifest["runtime_ports"]
+  ports_summary = "(none)"
+  skills_info = nil
+  memory_info = nil
+  context_info = nil
+  integration_info = nil
+
+  if runtime_ports
+    raise "runtime_ports must be an object" unless runtime_ports.is_a?(Hash)
+    valid_port_keys = %w[skills memory context connections]
+    unknown = runtime_ports.keys - valid_port_keys
+    raise "runtime_ports has unknown ports: #{unknown.join(', ')}" unless unknown.empty?
+
+    declared = runtime_ports.keys
+    if evidence_level == "validated"
+      missing = valid_port_keys - declared
+      raise "evidence_level=validated requires all four ports (missing: #{missing.join(', ')})" unless missing.empty?
+    end
+
+    # Load each declared port manifest
+    port_data = {}
+    declared.each do |port_key|
+      port_data[port_key] = load_port!(manifest_dir, runtime_ports[port_key], port_key)
+    end
+
+    if port_data["skills"]
+      info = validate_skill_manifest!(port_data["skills"])
+      info[:skills_data] = port_data["skills"]["skills"]
+      skills_info = info
+    end
+    if port_data["memory"]
+      memory_info = validate_memory_map!(port_data["memory"])
+    end
+    if port_data["context"]
+      context_info = validate_context_manifest!(port_data["context"])
+    end
+    if port_data["connections"]
+      integration_info = validate_integration_manifest!(port_data["connections"])
+    end
+
+    if [skills_info, memory_info, context_info, integration_info].compact.size > 1
+      validate_cross_manifest!(port_data, skills_info, memory_info, context_info, integration_info)
+    end
+
+    ports_summary = declared.join(", ")
+  end
+
+  # ----- Output ------------------------------------------------------------
+
   puts "[ok] manifest valid: #{manifest_path}"
   puts "[ok] protocol_version: #{protocol_version}"
-  puts "[ok] stage: #{stage}"
+  puts "[ok] stage: #{stage}#{evidence_level ? " (evidence_level: #{evidence_level})" : ""}#{track ? " (track: #{track})" : ""}"
   puts "[ok] compliance: #{total} (#{level})"
+  puts "[ok] runtime_ports: #{ports_summary}"
+
+  if skills_info
+    puts "  [ok] SkillManifest: #{skills_info[:count]} skills (#{skills_info[:human]} human / #{skills_info[:agent]} agent / #{skills_info[:hybrid]} hybrid)"
+    warn "  [warn] no human-ownership skill declared (recommended for safety)" if skills_info[:human] == 0
+  end
+  if memory_info
+    puts "  [ok] MemoryMap: #{memory_info[:folder_count]} folders, boundary declared, indexed: #{memory_info[:has_indexing] ? 'yes' : 'no'}"
+  end
+  if context_info
+    missing_conv = %w[soul identity purpose] - context_info[:conventional_present]
+    conv_note = missing_conv.empty? ? "all three conventional bundles present" : "missing conventional bundles: #{missing_conv.join(', ')}"
+    puts "  [ok] ContextManifest: #{context_info[:count]} bundles, #{conv_note}"
+    if evidence_level == "validated" && !missing_conv.empty?
+      warn "  [warn] evidence_level=validated SHOULD include all three conventional bundles (soul/identity/purpose)"
+    end
+  end
+  if integration_info
+    puts "  [ok] IntegrationManifest: #{integration_info[:count]} integrations, no raw secrets detected"
+  end
+  if skills_info && (memory_info || context_info || integration_info)
+    puts "  [ok] cross-manifest references resolve (§9.7)"
+  end
 rescue => e
   warn "[error] #{e.message}"
   exit 1

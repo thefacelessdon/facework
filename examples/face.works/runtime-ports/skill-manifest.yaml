@@ -1,0 +1,166 @@
+version: "1.0.0"
+tenant: "face.works"
+track: "agency_studio"
+
+skills:
+  - id: prospect-qualification
+    name: "Prospect Qualification"
+    description: >
+      Score an inbound prospect against engagement criteria (signal fit,
+      stage readiness, sovereignty posture, economic floor) and produce a
+      structured qualification report with a go/no-go recommendation.
+    domain: sales
+    trigger: on_demand
+    ownership: hybrid
+    playbook: "examples/face.works/define/playbooks/01-prospect-qualification.md"
+    inputs:
+      - name: prospect_name
+        type: string
+        required: true
+        description: "Tenant or prospect identifier"
+      - name: source
+        type: string
+        required: false
+        description: "Where the prospect came from (referral, inbound, outbound)"
+    outputs:
+      - name: qualification_report
+        type: file_path
+        write_to: "wiki/prospects/{prospect_name}/qualification.md"
+        description: "Structured assessment with score and recommendation"
+    depends_on_capabilities: [crm_query, signal_assessment]
+    integrations: [linear, gmail]
+    context_load: [soul, identity, sales-criteria]
+    reads_memory: ["wiki/prospects/**", "wiki/case-studies/**"]
+    writes_memory: ["wiki/prospects/{prospect_name}/"]
+    escalation: "Founder review if score is borderline (5-7 of 10)"
+    tags: [revenue, intake]
+
+  - id: engagement-delivery
+    name: "Engagement Delivery"
+    description: >
+      Run a full Facework engagement from kickoff through diagnostic. Produces
+      the canonical Define folder for the client (signal thesis, taste
+      contract, workflow playbooks, capability map, etc.).
+    domain: delivery
+    trigger: on_demand
+    ownership: hybrid
+    playbook: "examples/face.works/define/playbooks/02-engagement-delivery.md"
+    inputs:
+      - name: client_id
+        type: string
+        required: true
+      - name: engagement_stage
+        type: string
+        required: true
+        description: "MVP | Beta | Scale"
+    outputs:
+      - name: define_folder
+        type: file_path
+        write_to: "wiki/clients/{client_id}/define/"
+      - name: prototype_repo
+        type: file_path
+        write_to: "wiki/clients/{client_id}/prototype/"
+    depends_on_capabilities: [protocol_runtime, gamut_audit, artifact_generation]
+    integrations: [github, linear, notion]
+    context_load: [soul, identity, taste, delivery-standard]
+    reads_memory: ["wiki/clients/{client_id}/**", "wiki/protocol-reference/**"]
+    writes_memory: ["wiki/clients/{client_id}/define/", "wiki/clients/{client_id}/prototype/"]
+    escalation: "Stage-gate failure escalates to founder for go/no-go"
+    tags: [revenue, core]
+
+  - id: stage-gate-monitoring
+    name: "Stage-Gate Monitoring"
+    description: >
+      Periodically check active engagements against stage criteria, flag
+      drift, and produce a status update with red/yellow/green per gate.
+    domain: delivery
+    trigger: scheduled
+    schedule: "0 9 * * MON"
+    ownership: agent
+    playbook: "examples/face.works/define/playbooks/03-stage-gate-monitoring.md"
+    outputs:
+      - name: weekly_status
+        type: file_path
+        write_to: "outputs/weekly-status/{yyyy}-{ww}.md"
+    depends_on_capabilities: [gate_evaluator]
+    integrations: [linear, slack]
+    context_load: [soul, stage-criteria]
+    reads_memory: ["wiki/clients/**/define/decisions/**", "wiki/clients/**/status/**"]
+    writes_memory: ["outputs/weekly-status/"]
+    escalation: "Any red flag posts to #engagement-health Slack channel"
+    tags: [monitoring, ops]
+
+  - id: engagement-closure
+    name: "Engagement Closure"
+    description: >
+      Produce the HandoffPackage, run the DiagnosticReport, capture
+      lessons, and archive the engagement.
+    domain: delivery
+    trigger: event
+    event:
+      name: "engagement.scale_exit"
+      source: "linear"
+    ownership: hybrid
+    playbook: "examples/face.works/define/playbooks/04-engagement-closure.md"
+    outputs:
+      - name: handoff_package
+        type: file_path
+        write_to: "wiki/clients/{client_id}/handoff/"
+      - name: diagnostic_report
+        type: file_path
+        write_to: "wiki/clients/{client_id}/diagnostic.md"
+      - name: archive_entry
+        type: file_path
+        write_to: "archive/clients/{yyyy}/{client_id}/"
+    depends_on_capabilities: [diagnostic_synthesis, archival]
+    integrations: [github, linear, notion]
+    context_load: [soul, identity, taste, delivery-standard]
+    reads_memory: ["wiki/clients/{client_id}/**"]
+    writes_memory: ["wiki/clients/{client_id}/handoff/", "archive/clients/"]
+    tags: [delivery, lifecycle]
+
+  - id: gamut-audit
+    name: "GAMUT Audit"
+    description: >
+      Audit a tenant world against the GAMUT practice rubric — coherence
+      across strategy, taste, architecture, operations, and product.
+      Outputs a proof artifact used in go-to-market.
+    domain: proof
+    trigger: on_demand
+    ownership: hybrid
+    playbook: "examples/face.works/define/proof/gamut-audit.md"
+    inputs:
+      - name: target_tenant
+        type: string
+        required: true
+    outputs:
+      - name: gamut_proof
+        type: file_path
+        write_to: "wiki/audits/{target_tenant}/gamut-proof.md"
+    depends_on_capabilities: [protocol_validator, coherence_scorecard]
+    integrations: [github]
+    context_load: [soul, taste, gamut-rubric]
+    reads_memory: ["wiki/audits/**"]
+    writes_memory: ["wiki/audits/{target_tenant}/"]
+    tags: [proof, sales-asset]
+
+  - id: go-to-market-pulse
+    name: "Go-to-Market Pulse"
+    description: >
+      Daily scan of pipeline, prospects, content signals, and competitor
+      activity. Produces a one-page brief for the founder's morning review.
+    domain: sales
+    trigger: scheduled
+    schedule: "0 6 * * *"
+    ownership: agent
+    playbook: "examples/face.works/define/playbooks/05-go-to-market.md"
+    outputs:
+      - name: morning_brief
+        type: file_path
+        write_to: "outputs/morning-brief/{yyyy-mm-dd}.md"
+    depends_on_capabilities: [signal_scan, pipeline_query]
+    integrations: [linear, twitter-x, github]
+    context_load: [soul, identity, sales-criteria]
+    reads_memory: ["wiki/prospects/**", "wiki/competitors/**"]
+    writes_memory: ["outputs/morning-brief/"]
+    tags: [intel, daily]

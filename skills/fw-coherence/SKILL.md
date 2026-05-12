@@ -1,12 +1,14 @@
 ---
 name: fw-coherence
-version: 4.1.0
+version: 4.2.0
 description: |
   Coherence: Phase 8 of the Facework Protocol (Integration). Final phase.
   Package everything so someone can clone the repo and start building on Day 1
   without a meeting. README, review brief, project tracker, engineering guide,
-  clean repo. Closes with diagnostic — coherence scorecard, retro, and
-  methodology evolution. Runs after Integrity (Phase 7).
+  clean repo. In v1.1.0 (toolkit v0.0.5), also validates the four Runtime
+  Ports cross-manifest references (§9.7) before declaring handoff ready.
+  Closes with diagnostic — coherence scorecard, retro, and methodology
+  evolution. Runs after Integrity (Phase 7).
 allowed-tools:
   - Read
   - Write
@@ -87,6 +89,11 @@ Read the full project directory. Catalog:
 - All governance docs (from /fw-frequency)
 - The working interfaces (from /fw-resonance)
 - Any engineering guides already written
+- **Runtime Ports (v1.1.0):** the four port manifests (from /fw-stability):
+  `define/skill-manifest.yaml`, `define/memory-map.yaml`,
+  `define/context-manifest.yaml`, `define/integration-manifest.yaml`. These
+  are the machine contracts a runtime ingests — they MUST be present and
+  cross-references MUST resolve for handoff to be runtime-ready.
 
 ## Step 2: README
 
@@ -193,6 +200,20 @@ Before marking complete, ask yourself:
 - Can they start building a feature using only the engineering guide?
 - Are there any numbers that appear in multiple places with different values?
 
+**Runtime coherence (v1.1.0):**
+- Does `bin/validate-manifest` pass cleanly? Run it now if you haven't —
+  this is the gate that catches stale port references.
+- Do the four Runtime Port manifests cross-reference cleanly (§9.7)?
+  - Skill `reads_memory`/`writes_memory` paths exist in `MemoryMap`
+  - Skill `context_load` IDs exist in `ContextManifest`
+  - Skill `integrations` ↔ Integration `used_by` resolves bidirectionally
+  - Skill `depends_on_capabilities` resolves to entries in `CapabilityMap`
+- Is `MemoryMap.boundary` block present and explicit?
+- Does the `IntegrationManifest` contain zero raw secrets — only `SecretRef`
+  pointers?
+- Does the project's `evidence_level` match what the ports declare? A
+  Validated project MUST emit all four; the validator hard-fails otherwise.
+
 **Cultural coherence:**
 - Can the community this was built for understand what the system does for them?
 - Does the ownership model protect the people generating the energy?
@@ -219,7 +240,10 @@ Did any number change during the build? Did the extraction check surface anythin
 **Current:** "Did the decisions hold? Were any revisited? Were there dilemmas
 you wish you'd surfaced earlier?"
 **Flow:** "Did the playbooks match reality? What workflows played out differently?"
-**Stability:** "Were the specs accurate? Which ones needed rework?"
+**Stability:** "Were the specs accurate? Which ones needed rework? For
+v1.1.0 projects: did the four Runtime Ports stay in sync with the specs,
+or did they drift? Were skill/playbook/capability cross-references hard to
+keep aligned?"
 **Resonance:** "Was demo mode useful? Did the interfaces carry the frequency
 of the community it was built for?"
 **Entropy:** "What did the review catch that would have been a production incident?"
@@ -338,7 +362,10 @@ Write a summary card containing:
 ### Tier 3 — Machine Artifact (HandoffPackage + DiagnosticReport)
 
 The HandoffPackage (README, review brief, project tracker, engineering guide) is
-already produced in Steps 2–6.
+already produced in Steps 2–6. For v1.1.0 projects, the four Runtime Port
+manifests (`define/{skill,memory-map,context,integration}-manifest.yaml`) are
+part of the HandoffPackage — they are how the next operator's runtime
+ingests the world without rebuilding context.
 
 Write the DiagnosticReport with YAML frontmatter:
 ```yaml

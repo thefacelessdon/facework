@@ -1,0 +1,159 @@
+version: "1.0.0"
+tenant: "face.works"
+
+global:
+  id: __global__
+  name: "Always-loaded context"
+  purpose: "Soul, identity, purpose loaded for every skill invocation"
+  composes: [soul, identity, purpose]
+  max_tokens: 4000
+  priority: must
+
+bundles:
+  - id: soul
+    name: "Soul — signal thesis + taste"
+    purpose: >
+      The tenant's reason for existing. Loaded so every skill operates from
+      the same signal foundation and quality bar.
+    priority: must
+    max_tokens: 2000
+    load:
+      - kind: file
+        path: "examples/face.works/define/architecture/business-model/business-model.md"
+        format: markdown
+        as: system_prompt
+        description: "Signal thesis and economic frame"
+      - kind: section
+        path: "examples/face.works/define/decisions/013-design-language-spec.md"
+        section: "Design Language Spec"
+        format: markdown
+        as: system_prompt
+        description: "Taste contract as design language"
+
+  - id: identity
+    name: "Identity — track, audience, phase"
+    purpose: "Who this tenant is, who it serves, and which stage it operates in"
+    priority: must
+    max_tokens: 800
+    load:
+      - kind: file
+        path: "examples/face.works/define/README.md"
+        format: markdown
+        as: system_prompt
+        description: "Project context summary"
+      - kind: section
+        path: "examples/face.works/define/PROJECT-TRACKER.md"
+        section: "Current Stage"
+        format: markdown
+        as: inline
+
+  - id: purpose
+    name: "Purpose — current decisions + wedge"
+    purpose: "Locked strategic direction and current operational wedge"
+    priority: must
+    max_tokens: 2000
+    load:
+      - kind: file
+        path: "examples/face.works/define/decisions/002-creator-first-wedge.md"
+        format: markdown
+        as: system_prompt
+      - kind: file
+        path: "examples/face.works/define/decisions/004-no-go-lines.md"
+        format: markdown
+        as: system_prompt
+      - kind: file
+        path: "examples/face.works/define/decisions/014-pricing-philosophy-first.md"
+        format: markdown
+        as: system_prompt
+
+  - id: taste
+    name: "Taste — full design language and quality criteria"
+    purpose: "Heavy-load taste bundle for delivery skills that produce client-facing artifacts"
+    priority: should
+    max_tokens: 6000
+    composes: [soul]
+    load:
+      - kind: file
+        path: "examples/face.works/prototype/DESIGN.md"
+        format: markdown
+        as: system_prompt
+      - kind: file
+        path: "examples/face.works/define/decisions/013-design-language-spec.md"
+        format: markdown
+        as: system_prompt
+
+  - id: sales-criteria
+    name: "Sales criteria — qualification rubric"
+    purpose: "Loaded by prospect-qualification and go-to-market-pulse for consistent scoring"
+    priority: must
+    max_tokens: 1500
+    load:
+      - kind: file
+        path: "examples/face.works/define/playbooks/01-prospect-qualification.md"
+        format: markdown
+        as: tool_result
+        description: "Qualification playbook as ground truth"
+      - kind: file
+        path: "examples/face.works/define/decisions/009-capacity-calibration.md"
+        format: markdown
+        as: inline
+      - kind: file
+        path: "examples/face.works/define/decisions/010-revenue-floor-5k.md"
+        format: markdown
+        as: inline
+
+  - id: delivery-standard
+    name: "Delivery standard — engagement playbook + decisions"
+    purpose: "Loaded by engagement-delivery and engagement-closure"
+    priority: must
+    max_tokens: 8000
+    composes: [taste]
+    load:
+      - kind: file
+        path: "examples/face.works/define/playbooks/02-engagement-delivery.md"
+        format: markdown
+        as: tool_result
+      - kind: file
+        path: "examples/face.works/define/architecture/engagement-delivery-spec.md"
+        format: markdown
+        as: system_prompt
+      - kind: file
+        path: "examples/face.works/define/architecture/conformance-model.md"
+        format: markdown
+        as: system_prompt
+
+  - id: stage-criteria
+    name: "Stage-gate criteria"
+    purpose: "Loaded by stage-gate-monitoring to evaluate each engagement's gate posture"
+    priority: must
+    max_tokens: 2000
+    load:
+      - kind: section
+        path: "PROTOCOL.md"
+        section: "Stage Gate Profiles (Constrained v1)"
+        format: markdown
+        as: system_prompt
+      - kind: file
+        path: "examples/face.works/define/decisions/001-mvp-stage-boundary.md"
+        format: markdown
+        as: inline
+      - kind: file
+        path: "examples/face.works/define/decisions/006-identity-shift-at-beta.md"
+        format: markdown
+        as: inline
+
+  - id: gamut-rubric
+    name: "GAMUT audit rubric"
+    purpose: "The full GAMUT scoring framework — only loaded for audit skill"
+    priority: must
+    max_tokens: 4000
+    composes: [soul]
+    load:
+      - kind: file
+        path: "examples/face.works/define/proof/gamut-audit.md"
+        format: markdown
+        as: system_prompt
+      - kind: file
+        path: "examples/face.works/define/decisions/003-gamut-counts-if-audited.md"
+        format: markdown
+        as: inline

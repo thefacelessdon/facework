@@ -1,3 +1,66 @@
+# 0.0.5 — 2026-05-12 (Runtime Ports — Manifest Schema 1.1.0)
+
+**What changed:**
+- Added **Runtime Ports** layer (PROTOCOL.md §9). Four new canonical
+  artifacts expose the tenant world as machine contracts any runtime can
+  ingest: `SkillManifest`, `MemoryMap`, `ContextManifest`,
+  `IntegrationManifest`. These declare how the tenant world is *operated*,
+  separate from how it's built — Phases 1–8 remain structurally unchanged.
+- Adopted Meng's four-layer model (Skills, Memory, Context, Connections)
+  as the canonical port spec. Independently converged on by three research
+  sources (Chase / Agentic OS, Meng / Toolbenders, Diego / Ramp).
+- Bumped manifest schema to **1.1.0**. Adds optional top-level
+  `runtime_ports` block + `project.evidence_level` + `project.track`.
+  v1.0.0 manifests remain conformant — additive only, no breaking changes.
+- Conformance calibrated by `evidence_level`: Validated MUST emit all four
+  ports; Signaled SHOULD; Thesis MAY emit a minimal `SkillManifest` only.
+- `MemoryMap.boundary` block resolves the "one system of record" collision
+  between tenant memory (the vault) and runtime auto-memory (Claude's
+  per-project memory at `~/.claude/projects/<sanitized-cwd>/memory/`).
+- Cross-manifest reference resolution (§9.7): `bin/validate-manifest` now
+  loads each declared port manifest, validates structure, and checks all
+  bidirectional cross-references resolve. End-to-end validation runs
+  cleanly against the Face.works worked example.
+- Updated **`/fw-stability`** (4.1.0): new Step 5d emits the four ports
+  during Phase 5 architecture work. Output Tier 3 lists port manifests as
+  part of the machine artifact bundle.
+- Updated **`/fw-flow`** (4.1.0): stable kebab-case filenames; each
+  playbook referenced by ≥1 skill in SkillManifest (skill alignment check
+  in Step 5).
+- Updated **`/fw-coherence`** (4.2.0): runtime coherence test in Phase 8
+  (cross-manifest validation gates handoff readiness); Stability primitive
+  walkthrough extended to include port emission learnings.
+- Added worked example `examples/face.works/runtime-ports/` — four port
+  YAMLs populated from real Face.works playbooks/decisions/proof.
+- Added planning artifacts: `OPERATING-LAYER-PLAN.md` (strategic umbrella
+  across v0.0.5–v0.0.7) and `RUNTIME-PORTS-PLAN.md` (v0.0.5 execution
+  detail).
+
+**Strategic reframe:** Facework is the **interface layer** between GAMUT
+(practice — builds the tenant world) and runtimes (Corey's build,
+Open Claw, Glass, others — operate the world). The protocol's improvement
+vector is portability, not runtime growth. **Explicitly out of scope (won't
+be added):** Facework-native dashboard, observability tooling, harness
+implementation, runtime-side adapter code.
+
+**What was NOT adopted (deferred):**
+- `HarnessBundle` markdown export (soul.md / identity.md / skills/) →
+  Move C, v0.0.6. This is what Corey's runtime will ingest file-by-file.
+- `DesignInfrastructure` as active artifact (LLM-callable design eye) →
+  Move B, v0.0.7. Diego's "design as infrastructure" insight.
+- Artifact compression (TasteContract+DesignLanguageSpec consolidation,
+  SovereigntyMap+ConsonanceCheck consolidation) → v0.1.0 once 3+ reference
+  tenants exist.
+- Track-aware skeleton ports — GAMUT publishes per-track defaults in v0.0.6.
+
+**Triggered by:** Three research inputs converging on the four-port model
+(Chase / Agentic OS, Meng / Toolbenders, Diego / Ramp) plus the
+GAMUT/Facework/Corey three-layer clarification. Cross-validated by
+Face.works (real agency-track project) emitting all four ports cleanly
+with bidirectional cross-references resolving and zero raw secrets.
+
+---
+
 # 0.0.4 — 2026-04-05 (Execution Learnings — TONL Session)
 
 **What changed:**
