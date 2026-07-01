@@ -1,3 +1,35 @@
+# 0.0.5 — 2026-06-29 (Standards Architecture Integration — Phase 1)
+
+**What changed:**
+- Reviewed and integrated the external *Facework Standards Architecture* draft.
+  Full review found the theory/primitives layers strong but the draft carried
+  three competing layer models, two incompatible FOS-500 versions, and a split
+  vocabulary. Resolved via five spine decisions (see
+  `methodology/architecture-reconciliation-2026-06.md`).
+- **Canonical five-layer model locked:** Theory → Discipline → Practice →
+  Implementation → Runtime. Collapsed the draft's competing 7- and 9-layer models.
+- **Capability confirmed as an artifact, not a layer.** Architecture stays
+  Primitive → Protocol → Skill → Artifact.
+- Added **`CONSTITUTION.md`** — the governing authority of the practice (13 articles).
+- Added **`theories/coherence-design.md`** — the missing Discipline layer between
+  Cultural Physics (Theory) and Facework (Practice).
+- Introduced **Postures** — the maintenance half of the practice. The Protocol
+  establishes coherence; Postures (the 8 operating skills) maintain it.
+  `skills/OPERATING_SKILLS.md` reframed; Constitution Article V updated.
+- Sharpened **positioning** in `README.md`: Cultural Physics → Coherence Design →
+  Facework → ventures.
+- **Deferred the standards apparatus** (FS-000–900, FOS-100–800, FRS-000–800,
+  Runtime/Ports, certification) to a post-1.0 track under `standards/`, with the
+  source draft archived. It activates when the protocol earns it through external
+  runs — not before. Avoids scaling the specification ahead of the evidence.
+
+**Decisions:** FRN is the single identifier; Resonance has one unified definition
+(transmission through frequency alignment). Open follow-ups: define `Stability`
+and `Signal` canonically; decide the 5-document rollout split when the standards
+track activates.
+
+---
+
 # 0.0.4 — 2026-04-05 (Execution Learnings — TONL Session)
 
 **What changed:**

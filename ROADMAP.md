@@ -38,6 +38,8 @@ Maps methodology changelog iterations to release versions.
 | 0.0.1 | v1.0–v4.0 | Mar 2026 | Initial protocol through reconciliation. 7-phase → 10-phase. Cultural Physics integration. 13 skills. Protocol spec v2.0.0 established. |
 | 0.0.2 | v4.1–v5.0 | Mar 2026 | Post-diagnostic fixes. Scoring system corrected. `/fw-intake` created (Phase 0). Phase numbering added to all skills. Artifact ingestion step added. 14 skills. Update system added. |
 | 0.0.3 | — | Mar 2026 | Protocol consolidation. 10→8 phases. Intake folded into Step 0. Diagnostic folded into `/fw-coherence`. 14→12 skills. Versioning system added. First release tracked under new versioning. |
+| 0.0.4 | — | Apr 2026 | Execution learnings (TONL session). Demand Gate + Evidence-Level calibration. Cold Read, Build Brief, Parallel Lanes, Reference Page, Verification Map added to existing phases. |
+| 0.0.5 | — | Jun 2026 | Standards Architecture integration (Phase 1). Constitution added. Five-layer model locked. Coherence Design discipline doc added. Postures introduced (Protocol establishes / Postures maintain). Standards apparatus (FS/FOS/FRS) staged under `standards/` as a deferred post-1.0 track. |
 
 ---
 

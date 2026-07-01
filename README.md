@@ -17,6 +17,24 @@ The law underneath: anything not coherent will eventually contradict itself. Any
 
 ---
 
+## Where Facework Sits
+
+Facework is one layer of a larger system for building coherent things:
+
+```
+Cultural Physics   →  why systems cohere or decay        (the theory)
+Coherence Design   →  how coherent systems are designed   (the discipline)
+Facework           →  the practice that applies it        (Protocol + Postures)
+HUE · GAMUT · …    →  the ventures that prove it
+```
+
+Within the practice, the **Protocol establishes** coherence (run it once to set a
+system's foundation) and **Postures maintain** it (standing operating modes that
+keep coherence intact as the work continues). The [Constitution](CONSTITUTION.md)
+governs all of it.
+
+---
+
 ## Quickstart
 
 **Prerequisites:** Git, Node.js (v20+), [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview) (`npm install -g @anthropic-ai/claude-code`)
@@ -27,7 +45,7 @@ cd facework
 ./install.sh
 ```
 
-This symlinks 12 protocol skills and 8 operating skills into your Claude Code environment.
+This symlinks 12 protocol skills (the Protocol — establishes coherence) and 8 postures (operating skills — maintain coherence) into your Claude Code environment.
 
 Now open Claude Code in your project directory and start the protocol:
 
@@ -42,7 +60,9 @@ claude
 
 It reads what exists, detects your project track, and begins extracting meaning. Chain through all 8 phases to a fully coherent system.
 
-> **New to the terminal?** See the full [Setup Guide](SETUP.md) — covers everything from opening a terminal to configuring Git, GitHub, and Claude Code from scratch.
+> ### First time building from the terminal?
+>
+> Start with the **[Setup Guide](SETUP.md)** before cloning. It walks you through everything — opening a terminal, installing Git, creating a GitHub account, setting up Node.js and Claude Code, and creating your first project directory. Tiered by when you need it: Tier 1 gets you running the protocol, Tiers 2–3 add deployment, databases, commerce, and CMS as later phases require them.
 
 ---
 
@@ -117,10 +137,12 @@ Every project makes the practice better. Every retro is a version bump.
 
 ## Go Deeper
 
-1. **[The Theory of Cultural Physics](theories/cultural-physics.md)** — why coherence matters, the extraction pattern, the governing equation
-2. **[The Coherence Operating System](theories/the-coherence-operating-system.md)** — the 12 primitives, engines, and how they operate inside the build
-3. **[Build Methodology](methodology/build-methodology.md)** — the GAMUT case study that validated the methodology
-4. **[Protocol Spec](PROTOCOL.md)** — lifecycle phases, required artifacts, pass/fail gates, manifest schema
+1. **[The Constitution of Facework](CONSTITUTION.md)** — the thirteen articles that govern the practice
+2. **[The Theory of Cultural Physics](theories/cultural-physics.md)** — why coherence matters, the extraction pattern, the governing equation
+3. **[Coherence Design](theories/coherence-design.md)** — the discipline beneath the practice: principles, domains, the coherence economy
+4. **[The Coherence Operating System](theories/the-coherence-operating-system.md)** — the 12 primitives, engines, and how they operate inside the build
+5. **[Build Methodology](methodology/build-methodology.md)** — the GAMUT case study that validated the methodology
+6. **[Protocol Spec](PROTOCOL.md)** — lifecycle phases, required artifacts, pass/fail gates, manifest schema
 
 ---
 

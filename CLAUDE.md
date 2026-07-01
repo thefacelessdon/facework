@@ -32,15 +32,23 @@ produces. Ignore it when running the protocol on a new project.
 
 ```
 Facework/
+├── CONSTITUTION.md      ← governing authority of the practice (13 articles)
 ├── PROTOCOL.md          ← open protocol spec (source of truth)
 ├── SETUP.md             ← zero-to-ready setup guide (tiered by when you need it)
-├── theories/            ← paradigm (Cultural Physics, Coherence OS)
-├── methodology/         ← build system (retros, changelog)
-├── skills/              ← 12 protocol skills + 8 operating skills
+├── theories/            ← Theory (Cultural Physics) + Discipline (Coherence Design) + COS
+├── methodology/         ← build system (retros, changelog, architecture decisions)
+├── skills/              ← 12 protocol skills (Protocol) + 8 postures (operating skills)
+├── standards/           ← deferred post-1.0 standards track (FS/FOS/FRS) — NOT canonical yet
 ├── examples/            ← reference output from completed runs (NOT active project)
 │   └── face.works/      ← first protocol run (Facework's own infrastructure)
 └── bin/                 ← validation tooling
 ```
+
+The five-layer model: **Theory** (Cultural Physics) → **Discipline** (Coherence
+Design) → **Practice** (Facework: Constitution, Protocol, Postures) →
+**Implementation** (Skills, Artifacts) → **Runtime**. The Protocol establishes
+coherence; Postures maintain it. See
+`methodology/architecture-reconciliation-2026-06.md`.
 
 ## gstack
 

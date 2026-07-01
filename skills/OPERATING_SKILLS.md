@@ -1,6 +1,13 @@
-# Facework Operating Skills Map
+# Facework Postures (Operating Skills Map)
 
-## Added Skills
+**Postures** are the maintenance half of the practice. Where the **Protocol**
+establishes coherence (run once to set a system's foundation), Postures are the
+standing operating modes that **keep coherence intact as the work continues** —
+after launch, under change, across handoffs. Each posture is an operating skill;
+together they are how a coherent system stays coherent. See
+[CONSTITUTION.md](../CONSTITUTION.md) Article V.
+
+## The Postures
 - `/mvp-cut` - Define the smallest high-integrity MVP slice.
 - `/beta-hardening` - Harden MVP into beta reliability and observability.
 - `/scale-readiness` - Assess readiness to scale team, system, and operations.
