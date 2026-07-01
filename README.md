@@ -243,13 +243,15 @@ It reads what exists, detects your project track, and begins extracting meaning.
 
 ## Go Deeper
 
-1. **[Protocol Spec](PROTOCOL.md)** — lifecycle phases, canonical artifacts, gates, manifest schema 1.4.0, §9 Runtime Ports, §10 HarnessBundle, §11 DesignInfrastructure, §12 Observability Interface
-2. **[The Theory of Cultural Physics](theories/cultural-physics.md)** — why coherence matters, the extraction pattern, the governing equation
-3. **[The Coherence Operating System](theories/the-coherence-operating-system.md)** — the 12 primitives, engines, and how they operate inside the build
-4. **[Build Methodology](methodology/build-methodology.md)** — the GAMUT case study that validated the methodology
-5. **[Roadmap](ROADMAP.md)** — versioning rules, version history, criteria for 0.1.0 and 1.0.0
-6. **[Compliance v1](COMPLIANCE.md)** — scoring rubric for protocol adherence
-7. **[Certification](CERTIFICATION.md)** — eligibility for the "Powered by Facework" claim
+1. **[The Constitution of Facework](CONSTITUTION.md)** — the thirteen articles that govern the practice
+2. **[Protocol Spec](PROTOCOL.md)** — lifecycle phases, canonical artifacts, gates, manifest schema 1.4.0, §9 Runtime Ports, §10 HarnessBundle, §11 DesignInfrastructure, §12 Observability Interface
+3. **[The Theory of Cultural Physics](theories/cultural-physics.md)** — why coherence matters, the extraction pattern, the governing equation
+4. **[Coherence Design](theories/coherence-design.md)** — the discipline beneath the practice: principles, domains, the coherence economy
+5. **[The Coherence Operating System](theories/the-coherence-operating-system.md)** — the 12 primitives, engines, and how they operate inside the build
+6. **[Build Methodology](methodology/build-methodology.md)** — the GAMUT case study that validated the methodology
+7. **[Roadmap](ROADMAP.md)** — versioning rules, version history, criteria for 0.1.0 and 1.0.0
+8. **[Compliance v1](COMPLIANCE.md)** — scoring rubric for protocol adherence
+9. **[Certification](CERTIFICATION.md)** — eligibility for the "Powered by Facework" claim
 
 ---
 

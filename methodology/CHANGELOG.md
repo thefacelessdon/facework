@@ -1,3 +1,36 @@
+# 0.0.9 — 2026-06-30 (Constitution + Coherence Design — Standards Integration Phase 1)
+
+**What changed:**
+- Added **`CONSTITUTION.md`** — the governing authority of the practice (13
+  articles), ported from the *Facework Standards Architecture* and faithful to
+  its definition of Facework as the Practice.
+- Added **`theories/coherence-design.md`** — the Discipline layer between
+  Cultural Physics (Theory) and Facework (Practice). Completes the five-layer
+  model: Theory → Discipline → Practice → Implementation → Runtime.
+- Recorded the **five spine decisions** from the Standards Architecture review
+  in `methodology/architecture-reconciliation-2026-06.md`: five-layer model,
+  Capability-is-an-artifact-not-a-layer, FRN as sole identifier, one Resonance
+  definition, and Postures as the maintenance half of the Practice.
+- **Staged the standards apparatus** (FS-000–900, FOS-100–800, FRS-000–800,
+  certification) under `standards/` as a deferred post-1.0 track, source draft
+  archived. Corrected an earlier draft: **Runtime Ports are NOT deferred** —
+  they shipped at 0.0.5–0.0.8; only the formal FS-400 spec stays deferred.
+- **Archived** the five stale `*-PLAN.md` files (Operating Layer / Runtime Ports
+  / Harness Bundle / Design Infrastructure / V0.0.8) to `methodology/archive/`.
+  The Operating Layer plan self-retires once 0.0.7 ships, which it did.
+- README + CLAUDE.md updated with the new docs; Facework's definition left to
+  the Standards Architecture (unchanged).
+
+**Open follow-ups:** reconcile the README "Facework is a protocol" wording with
+the Constitution's "Facework is the Practice" wording at the Standards
+Architecture rollout; define `Stability` and `Signal` canonically.
+
+**Note on lineage:** this work began against 0.0.4 as a 0.0.5 branch, which
+collided with the parallel Operating Layer trilogy (0.0.5–0.0.8). It was closed
+and rebuilt cleanly against current main. Docs-only; no protocol behavior changed.
+
+---
+
 # 0.0.8 — 2026-05-12 (Efficiency Hints + Skill Polish — Manifest Schema 1.4.0)
 
 **What changed:**
