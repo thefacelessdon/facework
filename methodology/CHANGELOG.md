@@ -1,3 +1,25 @@
+# 0.0.10 — 2026-07-01 (Vocabulary — Signal + Stability)
+
+**What changed:**
+- Defined **`Signal`** canonically in `theories/cultural-physics.md` §VII — the
+  irreducible pattern within a system's energy that Frequency extracts. Closes a
+  gap where "signal" was used throughout the canon (`Signal before scale`, "the
+  irreducible signal", `SignalThesis`) but never defined as a term.
+- Disambiguated the overload: canonical `Signal` (the system's irreducible
+  truth) vs. the ordinary "signal = diagnostic information" sense (as in
+  "entropy is signal"). One name had two meanings; now flagged explicitly.
+- Completed the §VII canonical term table — it now covers **Signal, Frequency,
+  Current, Stability, Coherence**. `Stability` was already defined in prose
+  (§VII "The Conductor" + the COS Primitive Stack); only its table row was
+  missing.
+- No new glossary file — anchored both terms in the existing vocabulary source
+  to avoid a competing dictionary (Article X: one concept, one name, one meaning).
+
+Docs-only; no protocol behavior changed. Closes the Signal/Stability follow-up
+from the 0.0.9 reconciliation record.
+
+---
+
 # 0.0.9 — 2026-06-30 (Constitution + Coherence Design — Standards Integration Phase 1)
 
 **What changed:**

@@ -169,6 +169,8 @@ Every project begins by establishing frequency — the emotional and aesthetic f
 
 This is why Facework treats design as energy calibration more than visual styling. And it's why the Facework build sequence starts with `/fw-frequency` — extracting the irreducible signal before anything else moves.
 
+**Signal** is what Frequency extracts: the irreducible pattern within a system's energy — the truth it carries when performance, positioning, and aspiration are stripped away. It is what stays constant while expression changes. Signal is the *what*; Frequency is the act of tuning to it. (Distinct from the ordinary use of "signal" to mean diagnostic information — as in "entropy is signal" — which means useful data, not the system's irreducible truth.)
+
 ### Current — The Architecture of Movement
 
 In physics, current is the flow of charge through a conductor.
@@ -194,8 +196,10 @@ Stability doesn't appear in the governing equation by name because it's the prec
 
 | Concept | Definition | Role |
 |---------|-----------|------|
+| **Signal** | The irreducible pattern within a system's energy — the truth it carries when performance is stripped away | The *what* Frequency tunes to |
 | **Frequency** | The emotional and aesthetic vibration that defines identity | Sets tone and intention |
 | **Current** | The organized movement of that energy through systems and networks | Scales energy and connects participants |
+| **Stability** | The architectural foundation — the specifications, schemas, and infrastructure current flows through | The conductor; the precondition for Flow |
 | **Coherence** | The synchronization of frequency and current that sustains creative energy | Measures the health and power of the cultural system |
 
 When Frequency (identity) and Current (infrastructure) vibrate in rhythm, they create Coherence — a state where creativity scales without losing its soul.
