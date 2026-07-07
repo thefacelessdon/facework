@@ -1,5 +1,12 @@
 # Facework Operating Skills Map
 
+**These are the Postures — the product-loop operating modes.** Where the Protocol
+*establishes* coherence (a one-pass sequence), Postures *maintain* it: the
+standing operating modes that keep a live system converging after setup. Each
+fires on a closing signal (drift → `/contract-sync`, broken behavior →
+`/evidence-debug`, growth pressure → `/scale-readiness`). See
+`methodology/loop-model.md` and CONSTITUTION.md Article V.
+
 ## Added Skills
 - `/mvp-cut` - Define the smallest high-integrity MVP slice.
 - `/beta-hardening` - Harden MVP into beta reliability and observability.

@@ -1,3 +1,31 @@
+# 0.0.11 — 2026-07-01 (The Facework Loop Model — Design Note)
+
+**What changed:**
+- Added **`methodology/loop-model.md`** — a design note naming the five-loop
+  stack (execution → task → product → system → oversight) and mapping it onto
+  Facework's existing structure. Loops are the *temporal/convergence* axis;
+  primitives are the *coherence* axis — a lens over the primitives, not a
+  replacement (Article XII).
+- Each loop is wired to the **closing-signal artifact** Facework already
+  produces: task → phase gate, product → ConsonanceCheck/Entropy/contract-sync,
+  system → diagnostic + retro, oversight → sovereignty (human judgment).
+- Introduced the **per-loop autonomy dial** (evidence × risk × oversight
+  bandwidth), extending evidence-level calibration with a second axis. The
+  **sovereignty floor** keeps the oversight loop human on ownership grounds
+  (the extraction thesis), not just quality.
+- **Two reframes made canonical:**
+  - `skills/OPERATING_SKILLS.md` — the eight operating skills are named as the
+    **Postures**, the product-loop operating modes.
+  - `theories/the-coherence-operating-system.md` §VI — the `/fw-coherence`
+    diagnostic + retro is named as the **system loop**.
+- The model is **descriptive of how Facework already runs** across real internal
+  and external projects; only *automating* the system loop is deferred.
+
+Docs-only; no protocol behavior changed. Provisional design note — promote to
+`theories/` once formalized.
+
+---
+
 # 0.0.10 — 2026-07-01 (Vocabulary — Signal + Stability)
 
 **What changed:**
