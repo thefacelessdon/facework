@@ -196,6 +196,8 @@ Each phase produces artifacts the next phase consumes. Skip a phase and the down
 
 After the build: `/fw-coherence` closes with a diagnostic that captures what worked, what didn't, and what was missing. It feeds back into the methodology, updates the changelog, and the next project starts from the evolved system.
 
+This is the **system loop** — the practice improving itself across runs. The diagnostic + retro is its closing signal. See `methodology/loop-model.md` for how it sits above the task loop (a phase against its gate) and the product loop (the Postures maintaining a live system).
+
 ---
 
 ## VII. THE PHILOSOPHY
