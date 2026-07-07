@@ -196,11 +196,86 @@ Each phase produces artifacts the next phase consumes. Skip a phase and the down
 
 After the build: `/fw-coherence` closes with a diagnostic that captures what worked, what didn't, and what was missing. It feeds back into the methodology, updates the changelog, and the next project starts from the evolved system.
 
-This is the **system loop** — the practice improving itself across runs. The diagnostic + retro is its closing signal. See `methodology/loop-model.md` for how it sits above the task loop (a phase against its gate) and the product loop (the Postures maintaining a live system).
+This is the **system loop** — the practice improving itself across runs. The diagnostic + retro is its closing signal. It sits inside a stack of five, described next.
 
 ---
 
-## VII. THE PHILOSOPHY
+## VII. THE LOOPS
+
+The primitives answer *what* forces to establish and *in what order*. The
+Sequence answers *where* each sits. The loops add the axis both were quiet on:
+*at what timescale* each kind of iteration runs, and **what signal closes it.**
+
+Loops are a **temporal lens over** the primitives, not a replacement for them
+(Constitution Article XII — no addition duplicates an existing concept). The
+Sequence is the one-pass order; the loops are the recurring engines at each
+timescale. They compose: a fully autonomous execution loop can run inside a
+human-gated product loop.
+
+**The five loops:**
+
+| Loop | What iterates | Timescale | Facework analog | Closing signal |
+|---|---|---|---|---|
+| **Execution** | Steps within one task | minutes | The Runtime executing a Skill (Facework declares the ports, not the loop) | Tool results, environment feedback (runtime-owned) |
+| **Task** | One artifact against one spec | hours | A single `/fw-*` phase | The **phase gate** — pass/fail evidence |
+| **Product** | A live system + its backlog | continuous | **Postures** — the operating modes that maintain coherence after setup | Posture signals (`contract-sync` drift, `evidence-debug`, `scale-readiness`, QA/review) |
+| **System** | The practice itself | days–weeks | Phase 8 Coherence → diagnostic → retro → methodology evolution | The coherence scorecard + retro + `CHANGELOG` |
+| **Sovereignty** | What is worth doing at all | ongoing | **You** + the Constitution and Frequency that set the governing truth | Sovereignty (Article VIII). Exit: yours to call. |
+
+The top ring is the **Sovereignty loop** (renamed from "oversight" at 0.0.12). It
+shares a name with the Sovereignty *primitive* but sits at a different altitude —
+same force (control/agency): the **primitive** governs the system being built (own
+vs. rent, exit integrity); the **loop** governs the work itself (what is worth
+doing, who decides). One force, two altitudes.
+
+Three reframes this makes canonical:
+
+- **Postures are the product-loop operating modes.** The eight operating skills
+  are how the product loop stays closed.
+- **The Phase 8 diagnostic + retro is the system loop.** It is the mechanism by
+  which the practice improves itself, run over run.
+- **The Protocol establishes coherence; the loops keep it converging.**
+
+### The closing-signal discipline
+
+The reason to adopt the loop lens is not vocabulary. It is convergence:
+
+> A loop without its closing signal doesn't converge. It just runs until tokens,
+> patience, or a human runs out.
+
+This is the "agents running with no visible endpoint" failure — real, expensive,
+and the direct problem this model solves. Facework's advantage is that its
+closing signals already exist as artifacts; the work is to **wire each loop to
+its signal explicitly, per run.** And one rule earned in the field:
+
+> **A closing signal must produce an artifact.** An audit, review, or gate-check
+> that converges only in conversation and leaves nothing re-diffable has not
+> closed its loop — it has stopped. The next run cannot diff against it, so the
+> loop silently reopens.
+
+### The autonomy dial and the sovereignty floor
+
+Autonomy is a separate dial on **each** loop, set by *evidence level × change
+risk × available oversight bandwidth.* Execution runs high-autonomy; Task
+medium–high; Product on configurable checkpoints; System low (the retro
+*proposes*, the human *ratifies*); the **Sovereignty loop is human-only.**
+
+The sovereignty floor is the point. The field's loudest debate — full autonomy
+vs. "there is no auto" — argues on taste and quality. Facework answers it on
+ownership: the human keeps the **Sovereignty loop** — its closing signal is
+Sovereignty itself (Article VIII) — because control of the current is the whole
+thesis. Delegating this loop is not a productivity choice; it is the extraction
+pattern returning by another name.
+
+*Validated as descriptive against a real mature run (14th & Co, 2026-07-07 — see
+`methodology/loop-model-validation-2026-07-07.md`), where the project's actual
+coherence debt mapped 1:1 onto its unclosed loops. Not yet validated across all
+tracks or operators; the design note at `methodology/loop-model.md` carries the
+open questions and per-loop detail.*
+
+---
+
+## VIII. THE PHILOSOPHY
 
 Facework operates from a single principle: **build the architecture, and the identity will make itself known.**
 
@@ -212,7 +287,7 @@ A coherent system does not need performance to remain believable. It simply beha
 
 ---
 
-## VIII. THE LONG GAME
+## IX. THE LONG GAME
 
 The immediate effect of coherence is clarity. The long-term effect is inevitability — a system so aligned that its evolution feels like the only possible outcome.
 
