@@ -1,6 +1,6 @@
 ---
 title: "The Facework Loop Model"
-status: Design Note (provisional — promote to theories/ once formalized)
+status: Design Note (provisional — folds into theories/the-coherence-operating-system.md as "The Loops" once a run validates it; see Promotion below)
 date: 2026-07-01
 relates: theories/the-coherence-operating-system.md, skills/OPERATING_SKILLS.md, PROTOCOL.md
 ---
@@ -17,8 +17,9 @@ kind of iteration runs, and **what signal closes it.***
 
 The AI-engineering field converged in mid-2026 on one overloaded word — *the
 loop* — meaning at least four different things (execution, task, product,
-system), with an unnamed fifth (oversight) on top. The taxonomy is useful, but
-its sharpest rigor is a single sentence:
+system), with an unnamed fifth on top (the field's essayists reached for
+*oversight*). The taxonomy is useful, but its sharpest rigor is a single
+sentence:
 
 > A loop without its closing signal doesn't converge. It just runs until
 > something external stops it.
@@ -49,7 +50,22 @@ product loop.
 | **Task** | One artifact against one spec | hours | A single `/fw-*` phase producing its artifact | The **phase gate** — pass/fail evidence. This *is* the spec-compliance signal. |
 | **Product** | A live system and its backlog | continuous | **Postures** — the operating modes that maintain coherence after setup | `ConsonanceCheck`, `Entropy` report, `contract-sync` drift, `evidence-debug`, QA/review outcomes |
 | **System** | The practice itself | days–weeks | Phase 8 **Coherence** → diagnostic → retro → methodology evolution | The coherence scorecard + retro + `CHANGELOG` ("each project makes the practice better") |
-| **Oversight** | What is worth doing at all | ongoing | **You** + the **Constitution** and **Frequency** that set the governing truth | Sovereignty (Article VIII). Exit: yours to call. |
+| **Sovereignty** | What is worth doing at all | ongoing | **You** + the **Constitution** and **Frequency** that set the governing truth | Sovereignty (Article VIII). Exit: yours to call. |
+
+The field calls the top ring the *oversight loop*. Facework calls it the
+**Sovereignty loop** — deliberately. "Oversight" is what a manager does (watch,
+supervise, catch mistakes); it frames the human as a quality checkpoint.
+Sovereignty is ownership. The human holds the top ring not to catch bad output
+but because control of the current is the whole thesis (Article VIII). The exit
+condition — *yours to call* — is a statement of ownership, not supervision.
+
+**On the two Sovereignties (one force, two altitudes).** The Sovereignty
+*primitive* (Phase 7) applies control and agency to the **system being built** —
+"who owns this product's distribution, data, infrastructure?" The Sovereignty
+*loop* applies the same force to the **work itself** — "who owns what's worth
+doing, and what gets culled?" One concept, one meaning (control/agency),
+instantiated recursively at two scopes. Not an overload — the primitive operating
+on its own process.
 
 **Reframes this makes canonical:**
 - **Postures are the product-loop operating modes.** The eight operating skills
@@ -81,7 +97,7 @@ work is to **wire each loop to its signal explicitly**, per run:
 - **System loop** → the diagnostic scorecard and retro close it. A run that
   skips the diagnostic leaves the system loop open — the practice doesn't learn
   from it.
-- **Oversight loop** → its exit is human judgment against Frequency and the
+- **Sovereignty loop** → its exit is human judgment against Frequency and the
   Constitution. It has no automatic exit *by design* — that is where agency lives.
 
 ---
@@ -93,7 +109,7 @@ Facework's existing **evidence-level calibration** (Validated / Signaled / Thesi
 — which scales *depth*) with a second axis that scales *how much the human is in
 the mid-loop*.
 
-A loop's dial is set by: **evidence level × change risk × available oversight
+A loop's dial is set by: **evidence level × change risk × available human
 bandwidth.**
 
 | Loop | Default posture | Why |
@@ -102,14 +118,14 @@ bandwidth.**
 | **Task** | Medium–high | Agent produces the artifact; the gate (and optional Cold Read) judges done-ness. Human writes the spec/gate. |
 | **Product** | Configurable checkpoints | Set by risk. High-risk changes keep a human in review; low-risk maintenance can run on posture signals. |
 | **System** | Low autonomy | Methodology changes are consequential (Article XII). The retro *proposes*; the human *ratifies*. |
-| **Oversight** | Human only | Sovereignty floor (Article VIII). Not a quality decision — an ownership one. |
+| **Sovereignty** | Human only | Sovereignty floor (Article VIII). Not a quality decision — an ownership one. |
 
 **The sovereignty floor is the point.** The field's loudest debate — full
 autonomy vs. "there is no auto" — argues on taste and quality. Facework answers
-it on ownership: the human keeps the oversight loop because control of the
+it on ownership: the human keeps the Sovereignty loop because control of the
 current is the whole thesis (Cultural Physics — when those who generate the
 energy don't control the infrastructure, the energy is extracted). Delegating the
-oversight loop is not a productivity choice; it is the extraction pattern
+Sovereignty loop is not a productivity choice; it is the extraction pattern
 returning by another name.
 
 ---
@@ -127,6 +143,23 @@ returning by another name.
 
 ---
 
+## Promotion
+
+This is a design note, not canon yet. It does **not** become a new file in
+`theories/` — it is not theory in the Cultural Physics sense (it does not explain
+*why* systems cohere). It is operating-model material, which is exactly what
+`theories/the-coherence-operating-system.md` already covers with "The Engines"
+and "The Sequence." So the promotion path is: **fold this in as a new COS section
+("The Loops"), beside the Engines** — not a fourth theory file.
+
+The bar to earn that fold is a **validating run**: a project taken through the
+protocol with each loop's closing signal made explicit, where the loops
+demonstrably close on those signals. If they close, fold it in. If a loop runs
+without a clear exit, the model gets revised, not enshrined. Until a run clears
+that bar, this stays a design note.
+
+---
+
 ## Boundaries
 
 - **Not a replacement for the primitives.** Loops are temporal; primitives are
@@ -135,5 +168,5 @@ returning by another name.
   pipeline with no feedback. It is a topology you can deploy *inside* any loop
   (e.g. parallel review agents), not a loop of its own.
 - **Open question:** where the per-loop autonomy defaults are declared — project
-  `ProjectContext`, the manifest, or a Postures config. To resolve when this
-  note is promoted from design to canon.
+  `ProjectContext`, the manifest, or a Postures config. To resolve at the fold
+  into the COS doc (see Promotion).
