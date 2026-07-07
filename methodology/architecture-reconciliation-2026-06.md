@@ -82,6 +82,11 @@ All five survive the 0.0.8 state:
 
 - Reconcile the "Facework is a protocol" README wording with the "Facework is
   the Practice" Constitution wording during the Standards Architecture rollout.
-- Define `Stability` and `Signal` canonically in one vocabulary source.
+- ~~Define `Stability` and `Signal` canonically in one vocabulary source.~~
+  **Done (0.0.10):** both anchored in `theories/cultural-physics.md` §VII — the
+  canonical term table now covers Signal, Frequency, Current, Stability,
+  Coherence, and `Signal` has a prose definition (with the "entropy is signal"
+  overload disambiguated). `Stability` was already defined in prose there and in
+  the COS Primitive Stack; only the table row was missing.
 - Decide the five-document rollout split (Cultural Physics → Coherence Design →
   COS → Facework → Gamut) when the Standards track activates.
