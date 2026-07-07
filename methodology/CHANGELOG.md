@@ -1,3 +1,24 @@
+# 0.0.12 — 2026-07-01 (Loop Model — Sovereignty loop rename + promotion path)
+
+**What changed:**
+- Renamed the top loop from **oversight loop** → **Sovereignty loop** in
+  `methodology/loop-model.md`. The field's word is "oversight" (supervision, a
+  quality checkpoint); Facework's is Sovereignty (ownership). The human holds the
+  top ring because control of the current is the thesis, not to catch bad output.
+  Added a note distinguishing the Sovereignty *primitive* (control of the system
+  being built) from the Sovereignty *loop* (control of the work itself) — one
+  force, two altitudes, not an Article X overload.
+- Clarified the **promotion path**: the note does not become a new `theories/`
+  file. It folds into `theories/the-coherence-operating-system.md` as a "The
+  Loops" section (operating-model material, not Cultural Physics theory), gated
+  on a **validating run** — a project where the loops demonstrably close on their
+  named signals. Added a Promotion section documenting the bar.
+
+Docs-only. The 0.0.11 entry below is left as the historical record (it shipped
+with "oversight"); this entry documents the rename.
+
+---
+
 # 0.0.11 — 2026-07-01 (The Facework Loop Model — Design Note)
 
 **What changed:**
