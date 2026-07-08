@@ -1,8 +1,9 @@
 ---
 title: "The Facework Loop Model"
-status: Design Note (provisional — folds into theories/the-coherence-operating-system.md as "The Loops" once a run validates it; see Promotion below)
+status: PROMOTED to canon 2026-07-07 (0.0.13) — folded into theories/the-coherence-operating-system.md §VII "The Loops". This note remains the extended reference (per-loop detail, autonomy dial, open questions). The Promotion bar below was cleared by the 14th & Co validating run.
 date: 2026-07-01
-relates: theories/the-coherence-operating-system.md, skills/OPERATING_SKILLS.md, PROTOCOL.md
+updated: 2026-07-07
+relates: theories/the-coherence-operating-system.md, skills/OPERATING_SKILLS.md, PROTOCOL.md, methodology/loop-model-validation-2026-07-07.md
 ---
 
 # The Facework Loop Model
@@ -100,6 +101,15 @@ work is to **wire each loop to its signal explicitly**, per run:
 - **Sovereignty loop** → its exit is human judgment against Frequency and the
   Constitution. It has no automatic exit *by design* — that is where agency lives.
 
+**Sub-rule (earned on the 14th & Co run, 2026-07-07): a closing signal must
+produce an artifact.** An audit, review, or gate-check that converges only in
+conversation and leaves nothing re-diffable has *not* closed its loop — it has
+stopped. The next run cannot diff against it, so the loop silently reopens. On
+14th & Co, Entropy and Consonance had "run" inline in prior sessions but left no
+artifact; by this rule they had never closed, which is exactly why 8 real
+contradictions sat invisible until a standalone `ConsonanceCheck` was produced.
+Wiring a loop means wiring it *to an artifact.*
+
 ---
 
 ## The autonomy dial (per loop)
@@ -157,6 +167,22 @@ protocol with each loop's closing signal made explicit, where the loops
 demonstrably close on those signals. If they close, fold it in. If a loop runs
 without a clear exit, the model gets revised, not enshrined. Until a run clears
 that bar, this stays a design note.
+
+**Bar cleared — 2026-07-07 (14th & Co).** A full loop-instrumented protocol
+re-pass was run on 14th & Co with every loop's closing signal stated before the
+phase and checked after. Evidence:
+`methodology/loop-model-validation-2026-07-07.md`; retro 007. The subtlety the bar
+anticipated actually occurred: **only 2 of 8 task-loop instances closed cleanly on
+their named signal.** That does *not* trip the "revise, not enshrine" clause,
+because the non-closures were not the model failing — they were the model
+*correctly diagnosing* 14th & Co's instrumentation debt (unwired inline audits,
+un-emitted ports, a missing test suite). Where a signal was wired and testable,
+the loop closed; where it wasn't, the model named exactly why. The Product, System,
+and Sovereignty loops all closed/functioned on their signals this run. So the
+model earned the fold as **validated-descriptive**, and the fold itself is a
+System-loop change — *recommended* by the run, *ratified* by the human (the
+model's own autonomy dial). Folded as §VII. One scope caveat: validated on one
+track (Agency/Studio) and one operator; cross-track validation is future work.
 
 ---
 
