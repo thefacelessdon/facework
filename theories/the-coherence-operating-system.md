@@ -256,7 +256,7 @@ its signal explicitly, per run.** And one rule earned in the field:
 ### The autonomy dial and the sovereignty floor
 
 Autonomy is a separate dial on **each** loop, set by *evidence level × change
-risk × available oversight bandwidth.* Execution runs high-autonomy; Task
+risk × available human bandwidth.* Execution runs high-autonomy; Task
 medium–high; Product on configurable checkpoints; System low (the retro
 *proposes*, the human *ratifies*); the **Sovereignty loop is human-only.**
 
