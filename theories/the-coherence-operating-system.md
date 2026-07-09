@@ -267,6 +267,14 @@ Sovereignty itself (Article VIII) — because control of the current is the whol
 thesis. Delegating this loop is not a productivity choice; it is the extraction
 pattern returning by another name.
 
+**Guard-rail (earned on the 14th & Co run): an agent may *recommend* a
+Sovereignty-loop exit, but must never *record it as decided.*** The decision
+stays open until the human makes it. On that run the instrumentation pre-wrote
+the founder's scope cull as already ratified — a plausible recommendation
+narrated as a settled decision. That is the sovereignty floor breached from
+below: not delegating the call, but counterfeiting it. A recommendation is an
+input to the loop; only the human closes it.
+
 *Validated as descriptive against a real mature run (14th & Co, 2026-07-07 — see
 `methodology/loop-model-validation-2026-07-07.md`), where the project's actual
 coherence debt mapped 1:1 onto its unclosed loops. Not yet validated across all

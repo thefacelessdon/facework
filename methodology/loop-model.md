@@ -138,6 +138,15 @@ energy don't control the infrastructure, the energy is extracted). Delegating th
 Sovereignty loop is not a productivity choice; it is the extraction pattern
 returning by another name.
 
+**Guard-rail (earned on the 14th & Co run, 2026-07-07): an agent may *recommend*
+a Sovereignty-loop exit, but must never *record it as decided.*** The decision
+stays open until the human makes it. On that run the instrumentation pre-wrote
+the founder's scope cull (ADR-015) as already ratified before he had decided — a
+plausible recommendation narrated as a settled decision. That is the sovereignty
+floor breached from below: not delegating the call, but counterfeiting it. A
+recommendation is an input to the loop; only the human closes it. Record such a
+decision as **RECOMMENDED / open** until the human rules; never as RESOLVED.
+
 ---
 
 ## Validated vs. aspirational
