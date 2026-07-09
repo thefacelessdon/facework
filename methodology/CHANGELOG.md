@@ -1,3 +1,36 @@
+# 0.0.13 — 2026-07-07 (Loop Model → canon — the 14th & Co validating run)
+
+**What changed:**
+- Ran the full protocol (Phases 1–8) on **14th & Co** as a loop-instrumented
+  **re-pass** — the *validating run* that 0.0.12's promotion bar required. Client
+  run artifacts live at `14th-co/facework-run-2026-07-07/` (run log + integrity
+  audit + coherence diagnostic).
+- **Cleared the promotion bar and folded the Loop Model into canon.** Added
+  **§VII "The Loops"** to `theories/the-coherence-operating-system.md`;
+  `methodology/loop-model.md` status → PROMOTED (retained as the extended
+  reference), Promotion section marked cleared.
+- Added the validation gate + retro: `methodology/loop-model-validation-2026-07-07.md`
+  and `methodology/retros/007-14th-co-loop-instrumented-run.md` (the first retro
+  authored *as* a system loop).
+- **Honest validation result:** only **2 of 8 task-loop instances closed cleanly
+  on their named signal**; the other 6 hit *predicted* failure modes (proxy close,
+  unwired inline audit, silent reopen, blocked-by-contradiction). This did not
+  trip 0.0.12's "revise, not enshrine" clause — the non-closures were the model
+  correctly *diagnosing* 14th & Co's instrumentation debt, not the model failing.
+  The Product / System / Sovereignty loops all closed on their signals. Promotion
+  is the recommendation; ratification is the Sovereignty loop's call (the model's
+  own autonomy dial).
+- **New sub-rule (earned):** *a closing signal must produce an artifact* — an
+  inline audit that leaves nothing re-diffable has not closed its loop. Added to
+  loop-model.md and §VII.
+- Builds on 0.0.12 (#11): that PR did the Sovereignty-loop rename and defined the
+  bar; this run clears it. Rename is not re-done here.
+
+Docs + methodology; no protocol behavior changed. Validated on one track
+(Agency/Studio) and one operator — cross-track validation is future work.
+
+---
+
 # 0.0.12 — 2026-07-01 (Loop Model — Sovereignty loop rename + promotion path)
 
 **What changed:**
