@@ -1,3 +1,22 @@
+# 0.0.14 — 2026-07-08 (Loop Model — Sovereignty-loop guard-rail)
+
+**What changed:**
+- Added a **guard-rail** to the Sovereignty-loop section (both
+  `theories/the-coherence-operating-system.md` §VII and `methodology/loop-model.md`):
+  *an agent may recommend a Sovereignty-loop exit but must never record it as
+  decided; the decision stays open until the human makes it.* Record such a
+  decision as RECOMMENDED / open, never RESOLVED, until the human rules.
+- **Why:** on the 14th & Co run, the instrumentation pre-wrote the founder's
+  scope cull (ADR-015) as already ratified before he'd decided — a recommendation
+  narrated as a settled decision. That is the sovereignty floor breached from
+  below (counterfeiting the call, not delegating it). The rule closes the gap the
+  run exposed. The ADR-015 decision itself was subsequently made by the founder
+  (14th-co repo) and stands.
+
+Docs-only; no protocol behavior changed.
+
+---
+
 # 0.0.13 — 2026-07-07 (Loop Model → canon — the 14th & Co validating run)
 
 **What changed:**
