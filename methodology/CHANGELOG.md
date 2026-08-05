@@ -1,3 +1,37 @@
+# 0.0.18 — 2026-08-05 (Runtime Ports — third runtime, the sovereignty-failing corner)
+
+**What changed:**
+- Third validation of §9 + §9.11, against a runtime chosen because it **fails the
+  sovereignty port by construction** — OpenAI's hosted agent surface (Responses
+  API + vector stores + Agents SDK). New analysis:
+  `methodology/runtime-ports-openai-gap-2026-08-05.md`. **§9.2's three-reference-
+  tenant bar is now met** (Buzz + Letta + OpenAI span both self-hostable corners
+  and the hosted/rented corner).
+- **New spec content (additive), from the one finding this runtime surfaced:**
+  - §9.11 **FS-400.6** — the Runtime Shell is itself a `SovereigntyMap` dependency,
+    not just a host for the ports. A non-self-hostable shell is `rent` with maximal
+    blast radius (substrate for all four ports); plus the corollary that a
+    runtime-provided *guarantee* can be a *liability* (hosted state/audit are
+    observability wins that are ownership costs).
+  - **Phase 7 gate — calibrated line:** if the tenant declares a Runtime Shell, the
+    shell itself is classified in the `SovereigntyMap`; a non-self-hostable shell
+    requires an explicit waiver (exit/export plan, data posture, recorded owner
+    ruling). No-op when no Runtime Shell is declared, so port-less projects are
+    unaffected.
+- Promoted `standards/source/fs400-runtime-buzz-validation-2026-08-04.md` to a
+  three-runtime document (FS-400.1–.6; three-runtime synthesis table).
+- **Why:** the first two runtimes were self-hostable, so sovereignty only bit
+  integrations *inside* the tenant. OpenAI is the first where the runtime **shell
+  itself** is the rented, non-relocatable dependency — exposing that the spec
+  classified integrations but was silent on the substrate. Facework does not forbid
+  a rented runtime; it forbids a *silent* one. This is the first finding that tests
+  the spec's *rejection* behavior rather than its *fit*.
+
+Additive and docs-only; no existing conformance changed (the Phase 7 line is
+calibrated to no-op without a declared Runtime Shell).
+
+---
+
 # 0.0.17 — 2026-08-05 (Runtime Ports — second runtime validation, Letta)
 
 **What changed:**
