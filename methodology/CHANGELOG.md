@@ -1,3 +1,32 @@
+# 0.0.17 — 2026-08-05 (Runtime Ports — second runtime validation, Letta)
+
+**What changed:**
+- Validated Runtime Ports (§9) + §9.11 against a **second runtime chosen as the
+  opposite corner** — Letta (github.com/letta-ai/letta), a memory-first agent
+  runtime. New analysis: `methodology/runtime-ports-letta-gap-2026-08-05.md`.
+- **§9 refinements (additive), from two findings the second runtime surfaced:**
+  - §9.4 — the `MemoryMap.boundary` is **behavioral, not only structural**: a
+    runtime that lets an agent auto-promote content across the tenant/agent line
+    without human action (e.g. Letta's sleep-time agents rewriting shared memory)
+    breaches the boundary even if it has the structure. Names it the
+    Sovereignty-loop floor at the memory tier.
+  - §9.11 — governance **splits into enforceable gates** (`verifier_skill_id`,
+    `escalation`, `ownership: hybrid` — runtime-hostable; Letta binds them to HITL
+    + tool rules) **vs descriptive metadata** (`trust_boundary`, `pii`,
+    `rate_limits` … — homeless on both runtimes, inherently authoring-layer).
+    Also: the split-runtime binding is now a **complementary pair** (Letta hosts
+    Memory/Context; Buzz hosts triggers/identity/audit; neither hosts all four).
+- Promoted `standards/source/fs400-runtime-buzz-validation-2026-08-04.md` to a
+  two-runtime document (FS-400.1–.5; Letta as §9.2's second reference tenant).
+- **Why:** §9.11 claimed ports bind to different substrates; the Buzz→Letta pair
+  proves it from both sides and shows no single runtime hosts all four. The two
+  new findings harden the boundary rule and the governance model with a second
+  independent data point.
+
+Additive and docs-only; no existing conformance or protocol behavior changed.
+
+---
+
 # 0.0.16 — 2026-08-05 (Fix PROTOCOL.md release-version drift)
 
 **What changed:**
