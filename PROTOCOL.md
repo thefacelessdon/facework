@@ -470,9 +470,15 @@ knowledge as addressable records or channel history) MAY bind `structure` to
 that store instead. When it does, `written_by`/`read_by` degrade to the coarsest
 scope the substrate enforces (e.g. channel/room membership rather than
 per-folder ACL), and `indexing`/`retention`/`conventions` bind only where the
-substrate has an equivalent. The `boundary` block still applies: a
-non-filesystem runtime satisfies it if it exposes distinct tenant-knowledge and
-agent-continuity stores. See §9.11.
+substrate has an equivalent. The `boundary` block still applies, and it is
+**behavioral, not only structural**: a non-filesystem runtime satisfies it only
+if it (a) exposes distinct tenant-knowledge and agent-continuity stores AND
+(b) does not let an agent auto-promote content across that line without explicit
+human action. A runtime that can write shared/tenant memory autonomously (e.g.
+background memory-consolidation agents) has the boundary structurally but
+breaches it at runtime; a conformant binding declares the mitigation (read-only
+tenant stores, or no autonomous write access to the tenant store). This is the
+Sovereignty-loop floor (COS §VII) at the memory tier. See §9.11.
 
 ### 9.5 ContextManifest
 
@@ -659,9 +665,14 @@ A **Runtime Shell** is any system that operates a tenant world after Phases 1–
 produce it by consuming one or more Runtime Ports. A Runtime Shell is a
 *consumer* of the manifest, never its owner. This subsection generalizes the
 port model so it holds against runtimes Facework did not design. It was derived
-from the first external validation — Buzz (github.com/block/buzz) — recorded in
+from two external validations chosen as opposite corners — Buzz
+(github.com/block/buzz, a collaboration/execution/audit runtime) and Letta
+(github.com/letta-ai/letta, a memory/context runtime) — recorded in
 `standards/source/fs400-runtime-buzz-validation-2026-08-04.md` (deferred FS-400
-source input) and `methodology/runtime-ports-buzz-gap-2026-08-04.md`.
+source input), `methodology/runtime-ports-buzz-gap-2026-08-04.md`, and
+`methodology/runtime-ports-letta-gap-2026-08-05.md`. The two runtimes host
+complementary port subsets and neither hosts all four — the evidence for the
+partial conformance and split-runtime binding below.
 
 **Partial conformance.** A Runtime Shell MAY host a proper subset of the four
 ports. Conformance is declared **per port**, not globally. A shell that hosts
@@ -669,28 +680,42 @@ ports. Conformance is declared **per port**, not globally. A shell that hosts
 is a valid, expected shape — not a degraded one.
 
 **Split-runtime binding.** The four ports MAY bind to different substrates in
-one deployment; the manifest is the integration contract across them. Binding
-observed in the field: an event-log / collaboration runtime hosts `SkillManifest`
-(as its agent + workflow surface) and `IntegrationManifest` (as its tool-server
-config) and provides execution and audit; an external filesystem vault reached
-over an integration hosts `MemoryMap` tenant knowledge; and `ContextManifest`
-plus all governance metadata remain in the authoring layer as source of truth.
+one deployment; the manifest is the integration contract across them. The two
+validating runtimes are a complementary pair. A **memory/context runtime**
+(Letta) hosts `MemoryMap` (semantic archival store + shared/read-only memory
+units) and `ContextManifest` (labeled, budgeted context units — `soul`/
+`identity`/`purpose` map to named blocks) natively, but lacks native triggers,
+cryptographic identity, and tamper-evident audit. A **collaboration/execution/
+audit runtime** (Buzz) hosts `SkillManifest` triggers and `IntegrationManifest`
+wiring and provides identity and a tamper-evident audit log, but has no home for
+`MemoryMap` structure or `ContextManifest` composition. A full tenant can bind
+memory/context to the first and triggers/identity/audit to the second, with the
+manifest as the contract. Neither runtime alone hosts all four; the pair does.
 
-**Declared vs enforced.** Governance metadata — `IntegrationManifest.trust_boundary`,
-`secrets`, `rate_limits`, `pii`, `data_residency`; `SkillManifest.verifier_skill_id`,
-`sponsors`, `escalation` — remains authoritative in the manifest **even when the
-Runtime Shell cannot enforce it.** A shell's inability to enforce an attribute
-does not void it; it moves that attribute from *enforced* to *declared*.
-Conformance reporting SHOULD state, per governance attribute, whether the target
-runtime enforces or merely declares it. An attribute a runtime cannot enforce is
-NOT an unsatisfied gate — it is a documented delegation back to the authoring
-layer or to human process.
+**Governance splits into enforceable gates and descriptive metadata.** The two
+runtimes show governance is two kinds, not one axis:
+- **Enforceable gates** — `SkillManifest.verifier_skill_id`, `escalation`,
+  `ownership: hybrid`. A capable Runtime Shell CAN host these: Letta binds them to
+  human-in-the-loop tool approval and tool-execution rules; Buzz to approval
+  events (executor wiring pending). A conformance profile states which gate binds
+  to which runtime mechanism.
+- **Descriptive metadata** — `IntegrationManifest.trust_boundary`, `secrets`,
+  `rate_limits`, `pii`, `data_residency`; `SkillManifest.sponsors`. Homeless on
+  both validating runtimes; inherently authoring-layer. It remains authoritative
+  in the manifest **even when no runtime enforces it** — non-enforcement moves an
+  attribute from *enforced* to *declared*, and *declared* is a documented
+  delegation to the authoring layer or human process, NOT an unsatisfied gate.
 
-**Runtime-provided guarantees.** A Runtime Shell MAY provide guarantees the
-ports only describe. A signed, tamper-evident execution log, for instance, gives
-`DecisionLedger` and `ConsonanceCheck` a runtime home they otherwise lack. Such
-guarantees are recorded in the shell's conformance profile, not required by the
-ports.
+Conformance reporting SHOULD classify each governance attribute as gate or
+metadata, and (for gates) record the runtime mechanism that binds it.
+
+**Runtime-provided guarantees.** A Runtime Shell MAY provide guarantees the ports
+only describe, and these differ by runtime. Buzz's signed, tamper-evident
+execution log gives `DecisionLedger` and `ConsonanceCheck` a runtime home they
+otherwise lack; Letta's context compaction, tool-rule sequencing, and semantic
+archival retrieval back the token-budget, ordering, and `query`-source hints the
+ports only declare. Such guarantees are cataloged in the shell's conformance
+profile, not required by the ports.
 
 ## 10) HarnessBundle (v1.2.0, additive)
 

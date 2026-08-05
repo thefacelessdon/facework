@@ -1,11 +1,12 @@
-# FS-400 Source Input — Buzz as a Partial Conformant Runtime Shell
+# FS-400 Source Input — Runtime Shells validated (Buzz + Letta)
 
-Date: 2026-08-04
+Date: 2026-08-04 (Buzz), updated 2026-08-05 (Letta)
 Status: **Deferred / Not canonical.** Source input to the FS-400 Runtime
 specification, which activates with the standards track post-1.0 (see
 [`../README.md`](../README.md)).
-Companion working analysis:
-[`methodology/runtime-ports-buzz-gap-2026-08-04.md`](../../methodology/runtime-ports-buzz-gap-2026-08-04.md)
+Companion working analyses:
+[`methodology/runtime-ports-buzz-gap-2026-08-04.md`](../../methodology/runtime-ports-buzz-gap-2026-08-04.md) (Buzz),
+[`methodology/runtime-ports-letta-gap-2026-08-05.md`](../../methodology/runtime-ports-letta-gap-2026-08-05.md) (Letta)
 
 ---
 
@@ -17,26 +18,32 @@ Runtime Ports (`PROTOCOL.md` §9) shipped at 0.0.5–0.0.8 as live artifacts; th
 abstract FS-400 specification did not. Reconciling them requires evidence that
 the ports describe a real runtime, not an imagined one.
 
-This memo supplies that evidence. It is the **first validation of Facework
-Runtime Ports against an external runtime shell the practice did not design** —
-Buzz (github.com/block/buzz, Block, Apache-2.0), a self-hostable Nostr-relay
-workspace where humans and AI agents are peer members. All Buzz facts are cited
-to source files pulled from the repository.
+This memo supplies that evidence from **two external runtime shells the practice
+did not design, chosen as opposite corners**: Buzz (github.com/block/buzz, a
+Nostr-relay collaboration/execution/audit runtime) and Letta
+(github.com/letta-ai/letta, a memory/context runtime). Both are Apache-2.0 and
+self-hostable. Buzz facts are cited to source files; Letta facts to
+docs.letta.com and repo schemas.
 
-It proposes four concepts FS-400 should adopt, then binds each Runtime Port to
-Buzz with exact citations, then lists the §9 refinements this exercise surfaced.
+It proposes five concepts FS-400 should adopt, binds each Runtime Port to the
+runtimes, and lists the §9 refinements the exercise surfaced. The two runtimes
+host **complementary** port subsets — neither hosts all four — which is the core
+evidence for partial conformance and split-runtime binding.
 
 ---
 
 ## Summary finding
 
-Runtime Ports are the **right seams** — a real runtime consumes them — but a
-runtime need not host all four. Buzz **partially conforms**: it is a strong host
-for the collaboration / execution / audit ports and a non-host for the knowledge
-/ coherence / governance ports. The correct binding is a **split runtime** with
-the Facework manifest as the cross-substrate contract and authoring source of
-truth. FS-400 should be written to *expect* partial, multi-substrate conformance
-rather than assume a single monolithic runtime.
+Runtime Ports are the **right seams** — real runtimes consume them — but no
+runtime hosts all four. Buzz and Letta **partially conform in complementary
+directions**: Buzz hosts the collaboration/execution/audit ports (`SkillManifest`
+triggers, `IntegrationManifest` wiring, identity, tamper-evident audit) and has
+no home for `MemoryMap` structure or `ContextManifest` composition; Letta hosts
+`MemoryMap` (semantic store + shared/read-only memory units) and `ContextManifest`
+(labeled, budgeted context units) natively but lacks native triggers, crypto
+identity, and tamper-evident audit. The correct binding is a **split runtime**
+with the Facework manifest as the cross-substrate contract. FS-400 should
+*expect* partial, multi-substrate conformance, not a single monolithic runtime.
 
 ---
 
@@ -45,7 +52,8 @@ rather than assume a single monolithic runtime.
 ### FS-400.1 — Runtime Shell (definition)
 A **Runtime Shell** is any system that operates a tenant world after Phases 1–8
 produce it, by consuming one or more Runtime Ports. A Runtime Shell is a
-*consumer* of the manifest, never its owner. Buzz is the reference example.
+*consumer* of the manifest, never its owner. Buzz and Letta are the reference
+examples.
 
 ### FS-400.2 — Partial Conformance
 A Runtime Shell **MAY** host a proper subset of the four ports. Conformance is
@@ -56,21 +64,45 @@ not a degraded one.
 
 ### FS-400.3 — Split-Runtime Binding
 Ports **MAY** bind to different substrates within one deployment. The Facework
-manifest is the **integration contract across substrates**. The canonical Buzz
-binding:
+manifest is the **integration contract across substrates**. The two validating
+runtimes are a complementary pair — a canonical split binding uses both:
 
 | Substrate | Ports it hosts |
 |---|---|
-| Buzz relay | `SkillManifest` (as personas + workflows), `IntegrationManifest` (as `mcp_servers`), execution, audit |
-| External filesystem vault (over MCP) | `MemoryMap` tenant knowledge (the `vault-fs` + `qmd` integrations already in the worked example) |
-| Facework authoring layer | `ContextManifest`, governance metadata, coherence artifacts — source of truth, not delegated |
+| Memory/context runtime (Letta) | `MemoryMap` (semantic archival + shared/read-only blocks), `ContextManifest` (labeled budgeted blocks; `soul`/`identity`/`purpose` → blocks) |
+| Collaboration/execution/audit runtime (Buzz) | `SkillManifest` triggers (workflows), `IntegrationManifest` wiring (`mcp_servers`), identity, tamper-evident audit |
+| Facework authoring layer | descriptive governance metadata + coherence artifacts — source of truth, not delegated |
 
-### FS-400.4 — Authoring Source-of-Truth (governance survives non-enforcement)
-Governance metadata — `trust_boundary`, `verifier_skill_id`, `sponsors`, `pii`,
-`data_residency`, `retention` — **remains authoritative in the manifest even when
-the Runtime Shell cannot enforce it.** A shell's inability to enforce a governance
-attribute does not void it; it downgrades that attribute from *enforced* to
-*declared*. FS-400 conformance MUST distinguish these two states per attribute.
+Neither runtime alone hosts all four; the pair does. This is the split-runtime
+model validated from both corners.
+
+### FS-400.4 — Governance splits into enforceable gates and descriptive metadata
+The two runtimes show governance is **two kinds, not one axis**:
+- **Enforceable gates** — `verifier_skill_id`, `escalation`, `ownership: hybrid`.
+  A capable Runtime Shell CAN host these: Letta binds them to human-in-the-loop
+  tool approval and tool-execution rules; Buzz to approval events (executor
+  wiring pending). A conformance profile states which gate binds to which
+  mechanism.
+- **Descriptive metadata** — `trust_boundary`, `sponsors`, `pii`,
+  `data_residency`, `rate_limits`, `retention`. Homeless on **both** validating
+  runtimes; inherently authoring-layer. It **remains authoritative in the manifest
+  even when no runtime enforces it** — non-enforcement moves an attribute from
+  *enforced* to *declared*, and *declared* is a documented delegation, not an
+  unsatisfied gate.
+
+FS-400 conformance MUST classify each governance attribute as gate or metadata,
+and (for gates) record the runtime mechanism that binds it.
+
+### FS-400.5 — The memory boundary is behavioral, not only structural
+`MemoryMap.boundary` (tenant vs agent memory) is satisfied only if the runtime
+(a) exposes distinct tenant-knowledge and agent-continuity stores **and** (b) does
+not let an agent auto-promote content across that line without explicit human
+action. Letta demonstrates the failure mode: it has the boundary structurally
+(shared vs per-agent blocks) but **breaches it by default** — sleep-time agents
+autonomously rewrite shared memory. A conformant binding declares the mitigation
+(read-only tenant blocks; no autonomous write to the tenant store). This is the
+Sovereignty-loop floor (COS §VII) at the memory tier — the same class as the
+14th & Co ADR-015 counterfeit that 0.0.14's guard-rail closed, one layer down.
 
 ---
 
@@ -196,20 +228,45 @@ profile to a Buzz version, since these gates are expected to close.
 
 ---
 
-## Recommended §9 refinements (fold into FS-400 reconciliation)
+## Second validation: Letta (opposite corner)
 
-1. **State that ports MAY bind to different substrates** in one deployment, with
-   the manifest as the cross-substrate contract (FS-400.3). §9.1 currently reads
-   as "a runtime ingests all four."
-2. **Add the declared-vs-enforced distinction** for governance metadata
-   (FS-400.4) to §9.1, so a manifest attribute a runtime can't enforce is not
-   treated as unsatisfied.
-3. **Clarify `MemoryMap` is filesystem-first**, with a note that `structure` MAY
-   bind to non-filesystem stores (engrams, notes, channels) at degraded
-   `written_by`/`read_by` granularity.
+Letta (a memory-first agent runtime) was chosen to test the split-runtime model
+from the corner opposite Buzz. Full port-by-port:
+`methodology/runtime-ports-letta-gap-2026-08-05.md`. Summary binding:
 
-None break existing conformance; all are additive clarifications for a v0.1.0
-pass.
+| Port | Buzz | Letta |
+|---|---|---|
+| `MemoryMap` | no home (event-native, keyword FTS) | **native** — semantic archival (pgvector), shared + read-only blocks, org/agent boundary |
+| `ContextManifest` | no home (flat prepend) | **native** — memory blocks are labeled, budgeted context units; `soul`/`identity`/`purpose` → blocks |
+| `SkillManifest` | strong triggers, weak governance | weak triggers (no cron/webhook; sleep-time only), strong governance (HITL + tool rules) |
+| `IntegrationManifest` | MCP wiring; metadata homeless | MCP wiring; metadata homeless |
+| identity / audit | keypairs + hash-chained audit | DB string IDs; mutable log (no tamper-evidence) |
+
+The inversion is the point: Letta hosts exactly the ports Buzz could not, and
+goes dark on the ports Buzz aced. It confirms FS-400.2/.3 from the opposite side
+and surfaced FS-400.4 (governance split) and FS-400.5 (behavioral boundary)
+above. Two runtimes now agree that descriptive governance metadata is homeless —
+inherently authoring-layer. Letta is the **second of §9.2's three reference
+tenants**; a third — a hosted/rented runtime that fails the sovereignty port —
+completes the set.
+
+---
+
+## §9 refinements — status
+
+All five FS-400 concepts are folded into `PROTOCOL.md` as additive text:
+
+- **Applied 0.0.15** (Buzz pass): §9.1 substrate-agnostic + ports-bind-to-
+  different-substrates; §9.4 `MemoryMap` filesystem-first with non-filesystem
+  binding; §9.11 (Runtime Shell, partial conformance, split-runtime binding,
+  declared-vs-enforced, runtime-provided guarantees).
+- **Applied 0.0.17** (Letta pass): §9.4 behavioral-boundary check (FS-400.5);
+  §9.11 governance split into gates vs metadata (FS-400.4), complementary-pair
+  binding, and Letta-side runtime guarantees.
+
+None break existing conformance; all are additive clarifications. A v0.1.0 pass
+may formalize the conformance-profile format (per-attribute gate/metadata
+classification; which gate binds which mechanism).
 
 ---
 
@@ -222,6 +279,11 @@ pass.
   (search), `crates/buzz-cli/src/lib.rs` (CLI command tree),
   `crates/buzz-persona/PERSONA_PACK_SPEC.md` + `examples/meadow-core/`
   (persona/pack), `crates/buzz-audit` (audit).
-- Flagged as reported-not-source-verified: approval-executor wiring gap and
-  rate-limit non-enforcement (from prose ARCHITECTURE docs, not read line-by-line
-  here).
+- Letta (docs.letta.com + letta-ai/letta@main): memory blocks/tiers +
+  `schemas/passage.py`; tool rules `schemas/tool_rule.py`; Agent File
+  `schemas/agent_file.py`; MCP `schemas/mcp.py`; folders/sources
+  `schemas/folder.py`; tenancy `schemas/identity.py`; compaction + sleep-time
+  agents + HITL tool approval (guides).
+- Flagged reported-not-source-verified: Buzz approval-executor wiring gap and
+  rate-limit non-enforcement; Letta "no native trigger" (inferred from schema
+  absence) and exact context-window component ordering (JS-rendered docs).
