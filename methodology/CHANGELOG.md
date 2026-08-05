@@ -1,3 +1,29 @@
+# 0.0.15 — 2026-08-04 (Runtime Ports validated against an external runtime — Buzz)
+
+**What changed:**
+- Validated Facework Runtime Ports (§9) against the first **external runtime
+  shell** the practice did not design — Buzz (github.com/block/buzz). Added
+  **§9.11 "Runtime Shells and substrate binding"** to `PROTOCOL.md`, plus two
+  targeted notes: §9.1 (the manifest is substrate-agnostic) and §9.4
+  (`MemoryMap` is filesystem-first and MAY bind to non-filesystem stores at
+  degraded ACL granularity).
+- New analysis artifacts: `methodology/runtime-ports-buzz-gap-2026-08-04.md`
+  (port-by-port gap analysis) and
+  `standards/source/fs400-runtime-buzz-validation-2026-08-04.md` (deferred
+  FS-400 source input proposing Runtime Shell, per-port partial conformance,
+  split-runtime binding, and declared-vs-enforced governance).
+- **Why:** §9 claimed the ports expose a tenant world to "any runtime shell" but
+  had never been tested against a real one. Buzz — a Nostr-relay workspace where
+  humans and agents are peer members — shows the four ports partition into a
+  collaboration/execution/audit group (strong or superior fit) and a
+  knowledge/coherence/governance group (no host on Buzz; stays authoring-side).
+  The additive §9 refinements name that split. First external evidence that the
+  machine contracts port to a runtime Facework did not design.
+
+Additive and docs-only; no existing conformance or protocol behavior changed.
+
+---
+
 # 0.0.14 — 2026-07-08 (Loop Model — Sovereignty-loop guard-rail)
 
 **What changed:**
