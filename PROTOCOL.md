@@ -348,6 +348,12 @@ only; per-port validation loads each file and checks against the relevant
 `$defs` schema. Paths are resolved relative to the directory of the main
 `facework.manifest.yaml`.
 
+The manifest is **substrate-agnostic**. A system that operates the tenant world
+after Phases 1–8 produce it — a *Runtime Shell* — MAY consume the ports on any
+substrate, and the four ports MAY bind to *different* substrates in one
+deployment (see §9.11). The manifest is the integration contract across those
+substrates; it is never owned by the runtime.
+
 ### 9.2 Conformance — evidence-level calibrated
 
 A project's `project.evidence_level` (from §3 Demand Gate) calibrates how
@@ -456,6 +462,17 @@ recorded). `boundary` is present.
 
 Formal schema: `$defs.memoryMap`. Example:
 `examples/face.works/runtime-ports/memory-map.yaml`.
+
+**Substrate note (additive).** `MemoryMap.structure` is filesystem-first — a
+path-addressable vault with per-folder `written_by`/`read_by`. A Runtime Shell
+whose memory is not a filesystem (e.g. an event-log runtime that stores
+knowledge as addressable records or channel history) MAY bind `structure` to
+that store instead. When it does, `written_by`/`read_by` degrade to the coarsest
+scope the substrate enforces (e.g. channel/room membership rather than
+per-folder ACL), and `indexing`/`retention`/`conventions` bind only where the
+substrate has an equivalent. The `boundary` block still applies: a
+non-filesystem runtime satisfies it if it exposes distinct tenant-knowledge and
+agent-continuity stores. See §9.11.
 
 ### 9.5 ContextManifest
 
@@ -635,6 +652,45 @@ reformats these contracts as harness-native markdown files (`soul.md`,
 `identity.md`, `skills/`, etc.) for runtimes that prefer file-based
 ingest. The YAML manifests remain the source of truth; the HarnessBundle
 is a derived view.
+
+### 9.11 Runtime Shells and substrate binding (additive)
+
+A **Runtime Shell** is any system that operates a tenant world after Phases 1–8
+produce it by consuming one or more Runtime Ports. A Runtime Shell is a
+*consumer* of the manifest, never its owner. This subsection generalizes the
+port model so it holds against runtimes Facework did not design. It was derived
+from the first external validation — Buzz (github.com/block/buzz) — recorded in
+`standards/source/fs400-runtime-buzz-validation-2026-08-04.md` (deferred FS-400
+source input) and `methodology/runtime-ports-buzz-gap-2026-08-04.md`.
+
+**Partial conformance.** A Runtime Shell MAY host a proper subset of the four
+ports. Conformance is declared **per port**, not globally. A shell that hosts
+`SkillManifest` + `IntegrationManifest` while another substrate hosts `MemoryMap`
+is a valid, expected shape — not a degraded one.
+
+**Split-runtime binding.** The four ports MAY bind to different substrates in
+one deployment; the manifest is the integration contract across them. Binding
+observed in the field: an event-log / collaboration runtime hosts `SkillManifest`
+(as its agent + workflow surface) and `IntegrationManifest` (as its tool-server
+config) and provides execution and audit; an external filesystem vault reached
+over an integration hosts `MemoryMap` tenant knowledge; and `ContextManifest`
+plus all governance metadata remain in the authoring layer as source of truth.
+
+**Declared vs enforced.** Governance metadata — `IntegrationManifest.trust_boundary`,
+`secrets`, `rate_limits`, `pii`, `data_residency`; `SkillManifest.verifier_skill_id`,
+`sponsors`, `escalation` — remains authoritative in the manifest **even when the
+Runtime Shell cannot enforce it.** A shell's inability to enforce an attribute
+does not void it; it moves that attribute from *enforced* to *declared*.
+Conformance reporting SHOULD state, per governance attribute, whether the target
+runtime enforces or merely declares it. An attribute a runtime cannot enforce is
+NOT an unsatisfied gate — it is a documented delegation back to the authoring
+layer or to human process.
+
+**Runtime-provided guarantees.** A Runtime Shell MAY provide guarantees the
+ports only describe. A signed, tamper-evident execution log, for instance, gives
+`DecisionLedger` and `ConsonanceCheck` a runtime home they otherwise lack. Such
+guarantees are recorded in the shell's conformance profile, not required by the
+ports.
 
 ## 10) HarnessBundle (v1.2.0, additive)
 
