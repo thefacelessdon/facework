@@ -1,3 +1,19 @@
+# 0.0.16 — 2026-08-05 (Fix PROTOCOL.md release-version drift)
+
+**What changed:**
+- Removed the hardcoded `Version: 0.0.8` from `PROTOCOL.md`'s header (stale
+  since ~0.0.9). The release version now points to [`VERSION`](../VERSION) as
+  the single source of truth. The separate **manifest schema** version axis
+  (1.0.0–1.4.0) is unchanged — that is a real, meaningful versioning line, not
+  drift.
+- **Why:** the inline number had drifted ~7 releases behind `VERSION` and
+  misled any reader trusting the spec header. Pointing to `VERSION` instead of
+  restating a number means it can never drift again.
+
+Docs-only; no protocol behavior changed.
+
+---
+
 # 0.0.15 — 2026-08-04 (Runtime Ports validated against an external runtime — Buzz)
 
 **What changed:**
