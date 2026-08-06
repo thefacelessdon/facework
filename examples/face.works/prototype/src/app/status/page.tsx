@@ -1,203 +1,177 @@
+import type { Metadata } from "next";
+import { RecordLabel, SectionHead, StructureLineage } from "@/components/rr";
 import { coherenceSnapshot } from "@/data/demo";
-import { ProgressBar } from "@/components/ProgressBar";
+
+export const metadata: Metadata = {
+  title: "Status",
+  description:
+    "Facework's own coherence tracker — the same standards it asks of client systems, applied to itself.",
+};
+
+const criteriaMarker = {
+  complete: "complete",
+  "in-progress": "progress",
+  "not-started": "pending",
+} as const;
+
+const noGoState = {
+  clear: "rr-strip__desc--settled",
+  approaching: "rr-strip__desc--attention",
+  triggered: "rr-strip__desc--exposure",
+} as const;
 
 export default function StatusPage() {
-  const { stages, noGoLines, metrics, nonNegotiables, date } =
-    coherenceSnapshot;
-  const activeStage =
-    stages.find((stage) => stage.status === "active") ?? stages[0];
+  const { stages, noGoLines, metrics, nonNegotiables, date } = coherenceSnapshot;
+  const activeStage = stages.find((s) => s.status === "active") ?? stages[0];
 
-  const progress = [
-    {
-      label: "Practice Runs",
-      value: metrics.completedRuns,
-      max: metrics.targetRuns,
-      suffix: "",
-    },
-    {
-      label: "Public References",
-      value: metrics.publicReferences,
-      max: metrics.targetReferences,
-      suffix: "",
-    },
-    {
-      label: "Revenue Floor",
-      value: metrics.monthsAtFloor,
-      max: metrics.targetMonthsAtFloor,
-      suffix: " mo",
-    },
+  const gauges = [
+    { label: "Practice runs", value: metrics.completedRuns, max: metrics.targetRuns, suffix: "" },
+    { label: "Public references", value: metrics.publicReferences, max: metrics.targetReferences, suffix: "" },
+    { label: "Revenue floor", value: metrics.monthsAtFloor, max: metrics.targetMonthsAtFloor, suffix: " mo" },
   ];
 
+  const nonNegotiableRows = nonNegotiables.map((item) => ({
+    label: item,
+    note: "held",
+    state: "settled" as const,
+  }));
+
   return (
-    <div className="section-page">
-      <section className="section-threshold" aria-labelledby="status-title">
-        <p className="eyebrow">Facework / Coherence tracker</p>
-        <h1 id="status-title">The practice submits to its own test.</h1>
-        <p className="section-intro">
-          Facework&apos;s own coherence tracker. If the practice asks other
-          systems to be transparent, sovereign, and structurally honest, it has
-          to submit itself to the same test.
-        </p>
-      </section>
-
-      <div className="evidence-strip" role="group" aria-label="Snapshot summary">
-        <p>
-          <span>Snapshot phase</span>
-          {activeStage.label}
-        </p>
-        <p>
-          <span>What this measures</span>
-          Whether the practice is becoming transferable, referencable, and
-          economically real without violating its own boundaries.
-        </p>
-        <p>
-          <span>Governance rule</span>
-          The same standards Facework applies to client systems apply here:
-          visibility, sovereignty, clean transfer, and no hidden dependencies.
-        </p>
-      </div>
-
-      <p className="policy-note">Evidence snapshot: {date}.</p>
-
-      {/* MVP progress */}
-      <section className="section-records" aria-label="MVP progress">
-        <header className="section-head">
-          <p>MVP progress</p>
-          <p>Practice runs · references · revenue floor</p>
+    <div className="rr rr-page section-page">
+      <div className="rr-column rr-column--wide">
+        <header className="rr-masthead">
+          <RecordLabel tick>Operating record · Coherence tracker</RecordLabel>
+          <h1 className="rr-display">The practice submits to its own test.</h1>
+          <p className="rr-lede">
+            Facework&rsquo;s own coherence tracker. If the practice asks other
+            systems to be transparent, sovereign, and structurally honest, it has
+            to submit itself to the same test.
+          </p>
         </header>
-        {progress.map((metric) => (
-          <article className="section-record" key={metric.label}>
-            <p className="artifact-id">{metric.label}</p>
-            <div>
-              <h2>
-                {metric.value}
-                <span style={{ color: "var(--fw-muted)" }}>
-                  /{metric.max}
-                  {metric.suffix}
-                </span>
-              </h2>
-              <div style={{ marginTop: "var(--space-lg)", maxWidth: "24rem" }}>
-                <ProgressBar
-                  value={metric.value}
-                  max={metric.max}
-                  label={metric.label}
-                />
-              </div>
+
+        <section className="rr-section" aria-label="Snapshot summary">
+          <dl className="rr-strip">
+            <div className="rr-strip__pair">
+              <dt className="rr-strip__term">Snapshot phase</dt>
+              <dd className="rr-strip__desc">{activeStage.label}</dd>
             </div>
-          </article>
-        ))}
-      </section>
+            <div className="rr-strip__pair">
+              <dt className="rr-strip__term">What this measures</dt>
+              <dd className="rr-strip__desc">
+                Whether the practice is becoming transferable, referencable, and
+                economically real without violating its own boundaries.
+              </dd>
+            </div>
+            <div className="rr-strip__pair">
+              <dt className="rr-strip__term">Governance rule</dt>
+              <dd className="rr-strip__desc">
+                The same standards Facework applies to client systems apply here:
+                visibility, sovereignty, clean transfer, and no hidden
+                dependencies.
+              </dd>
+            </div>
+          </dl>
+          <p className="rr-note rr-note--record">Evidence snapshot: {date}.</p>
+        </section>
 
-      {/* Stage boundaries */}
-      <section className="section-records" aria-label="Stage boundaries">
-        <header className="section-head">
-          <p>Stage boundaries</p>
-          <p>MVP → Beta → Scale</p>
-        </header>
-        {stages.map((stage) => (
-          <article className="section-record" key={stage.stage}>
-            <p className="artifact-id">
-              {stage.status === "active" ? "Active" : "Upcoming"}
-            </p>
-            <div>
-              <h2>{stage.label}</h2>
-              <p>{stage.description}</p>
-              <ul
-                style={{
-                  marginTop: "var(--space-xl)",
-                  padding: 0,
-                  listStyle: "none",
-                }}
-              >
-                {stage.exitCriteria.map((item, i) => (
-                  <li
-                    key={i}
-                    style={{
-                      display: "flex",
-                      gap: "var(--space-md)",
-                      alignItems: "flex-start",
-                      padding: "var(--space-sm) 0",
-                    }}
-                  >
-                    <span
-                      aria-hidden="true"
-                      className={
-                        item.status === "complete"
-                          ? "text-coherence"
-                          : item.status === "in-progress"
-                            ? "text-resonance"
-                            : "text-muted"
-                      }
-                    >
-                      {item.status === "complete"
-                        ? "●"
-                        : item.status === "in-progress"
-                          ? "◐"
-                          : "○"}
-                    </span>
-                    <div>
-                      <p style={{ margin: 0 }}>{item.description}</p>
-                      {item.evidence && (
-                        <p
-                          style={{
-                            margin: "4px 0 0",
-                            fontSize: ".82rem",
-                          }}
-                        >
-                          Evidence: {item.evidence}
-                        </p>
-                      )}
+        <section className="rr-section" aria-label="MVP progress">
+          <SectionHead
+            label="MVP progress"
+            title="Practice runs · references · revenue floor"
+          />
+          <ul className="rr-rows">
+            {gauges.map((g) => {
+              const pct = g.max > 0 ? Math.min(1, Math.max(0, g.value / g.max)) : 0;
+              return (
+                <li className="rr-rows__item" key={g.label}>
+                  <span className="rr-rows__meta">
+                    <strong>
+                      {g.value}/{g.max}
+                      {g.suffix}
+                    </strong>
+                  </span>
+                  <div className="rr-rows__body">
+                    <h3 className="rr-rows__title">{g.label}</h3>
+                    <div className="rr-gauge">
+                      <div
+                        className="rr-meter"
+                        role="progressbar"
+                        aria-valuenow={g.value}
+                        aria-valuemin={0}
+                        aria-valuemax={g.max}
+                        aria-label={`${g.label}: ${g.value} of ${g.max}`}
+                      >
+                        <div
+                          className="rr-meter__fill"
+                          style={{ transform: `scaleX(${pct})` }}
+                        />
+                      </div>
                     </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </article>
-        ))}
-      </section>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
 
-      {/* No-go lines */}
-      <section className="policy-records" aria-label="No-go lines">
-        <header className="section-head">
-          <p>No-go lines</p>
-          <p>Conditions that signal drift</p>
-        </header>
-        {noGoLines.map((line, i) => (
-          <article className="policy-record" key={i}>
-            <p className="artifact-id">
-              {line.type}
-              <br />
-              <span
-                className={
-                  line.status === "clear"
-                    ? "text-coherence"
-                    : line.status === "approaching"
-                      ? "text-resonance"
-                      : "text-entropy"
-                }
-              >
-                {line.status}
-              </span>
-            </p>
-            <h2>{line.description}</h2>
-            {line.detail && <p>{line.detail}</p>}
-          </article>
-        ))}
-      </section>
+        <section className="rr-section" aria-label="Stage boundaries">
+          <SectionHead label="Stage boundaries" title="MVP → Beta → Scale" />
+          <ul className="rr-rows">
+            {stages.map((stage) => (
+              <li className="rr-rows__item" key={stage.stage}>
+                <span className="rr-rows__meta">
+                  <strong>{stage.status === "active" ? "Active" : "Upcoming"}</strong>
+                </span>
+                <div className="rr-rows__body">
+                  <h3 className="rr-rows__title">{stage.label}</h3>
+                  <p className="rr-rows__note">{stage.description}</p>
+                  <ul className="rr-criteria">
+                    {stage.exitCriteria.map((item, i) => (
+                      <li className="rr-criteria__item" key={i}>
+                        <span
+                          className={`rr-criteria__marker rr-criteria__marker--${criteriaMarker[item.status]}`}
+                          aria-hidden="true"
+                        />
+                        <div>
+                          <p className="rr-criteria__text">{item.description}</p>
+                          {item.evidence ? (
+                            <p className="rr-criteria__evidence">
+                              Evidence: {item.evidence}
+                            </p>
+                          ) : null}
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
 
-      {/* Non-negotiables */}
-      <section className="policy-records" aria-label="Non-negotiables">
-        <header className="section-head">
-          <p>Non-negotiables</p>
-          <p>Boundaries the system cannot violate</p>
-        </header>
-        {nonNegotiables.map((item, i) => (
-          <article className="policy-record" key={i}>
-            <p className="artifact-id">{String(i + 1).padStart(2, "0")}</p>
-            <h2>{item}</h2>
-          </article>
-        ))}
-      </section>
+        <section className="rr-section" aria-label="No-go lines">
+          <SectionHead label="No-go lines" title="Conditions that signal drift" />
+          <ul className="rr-rows">
+            {noGoLines.map((line, i) => (
+              <li className="rr-rows__item" key={i}>
+                <span className="rr-rows__meta">
+                  <strong>{line.type}</strong>
+                  <span className={noGoState[line.status]}>{line.status}</span>
+                </span>
+                <div className="rr-rows__body">
+                  <p className="rr-rows__note">{line.description}</p>
+                  {line.detail ? <p className="rr-rows__sub">{line.detail}</p> : null}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="rr-section" aria-label="Non-negotiables">
+          <SectionHead label="Non-negotiables" title="Boundaries the system cannot violate" />
+          <StructureLineage rows={nonNegotiableRows} label="Non-negotiable boundaries" />
+        </section>
+      </div>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { RecordLabel, SectionHead } from "@/components/rr";
 
 export const metadata: Metadata = {
   title: "Accessibility",
@@ -15,27 +16,52 @@ const commitments = [
 
 export default function AccessibilityPage() {
   return (
-    <div className="section-page policy-page">
-      <section className="section-threshold" aria-labelledby="accessibility-title">
-        <p className="eyebrow">Facework / Operational note 02</p>
-        <h1 id="accessibility-title">Access is part of coherence.</h1>
-        <p className="section-intro">
-          Facework treats accessibility as a release condition, not an optional
-          layer. Automated checks support that work; they do not replace review
-          with assistive technology and disabled people.
-        </p>
-      </section>
-      <section className="policy-records" aria-label="Accessibility commitments">
-        {commitments.map((commitment, index) => (
-          <article className="policy-record" key={commitment}>
-            <p className="artifact-id">0{index + 1}</p>
-            <h2>{commitment}</h2>
-          </article>
-        ))}
-      </section>
-      <div className="policy-note">
-        <p><strong>Current status:</strong> the latest automated audit (2026-08-06, axe-core 4.11.1, WCAG 2.2 A/AA ruleset) reports 0 violations across 16 representative routes of the production build. Automated checks catch only part of what matters; manual VoiceOver, NVDA, iOS Safari, and Android Chrome review remains a named release gate.</p>
-        <p>Report an access barrier at <a href="mailto:hello@face.works">hello@face.works</a>.</p>
+    <div className="rr rr-page section-page">
+      <div className="rr-column">
+        <header className="rr-masthead">
+          <RecordLabel tick>Operating record · Accessibility</RecordLabel>
+          <h1 className="rr-display">Access is part of coherence.</h1>
+          <p className="rr-lede">
+            Facework treats accessibility as a release condition, not an
+            optional layer. Automated checks support that work; they do not
+            replace review with assistive technology and disabled people.
+          </p>
+        </header>
+
+        <section className="rr-section" aria-label="Accessibility commitments">
+          <SectionHead label="Commitments" title="What every release must hold" />
+          <ul className="rr-rows">
+            {commitments.map((commitment, i) => (
+              <li className="rr-rows__item" key={commitment}>
+                <span className="rr-rows__meta">
+                  <strong>{String(i + 1).padStart(2, "0")}</strong>
+                </span>
+                <div className="rr-rows__body">
+                  <p className="rr-rows__note">{commitment}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="rr-section" aria-label="Current status">
+          <SectionHead label="Current status" title="What the audit reports" />
+          <p className="rr-note">
+            The latest automated audit (2026-08-06, axe-core 4.11.1, WCAG 2.2
+            A/AA ruleset) reports 0 violations across 17 representative routes of
+            the production build, in both the light and dark registers, after
+            one color-contrast fix. Automated checks catch only part of what
+            matters; manual VoiceOver, NVDA, iOS Safari, and Android Chrome
+            review remains a named release gate.
+          </p>
+          <p className="rr-note">
+            Report an access barrier at{" "}
+            <a className="rr-link" href="mailto:hello@face.works">
+              hello@face.works
+            </a>
+            .
+          </p>
+        </section>
       </div>
     </div>
   );

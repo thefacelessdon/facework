@@ -2,6 +2,11 @@
  * Simple markdown renderer for protocol docs.
  * Handles: headings, paragraphs, bold, code blocks, lists, tables, blockquotes.
  * No external dependencies — just string parsing.
+ *
+ * Styling is the Reading Room "Record" register (DESIGN.md §5/§6): body in
+ * Literata, headings in Schibsted, code/table cells in Spline Mono, hairline
+ * rules — driven entirely by `.rr-prose` in reading-room.css. Parsing and
+ * output structure are unchanged.
  */
 
 import { parseTableRow } from "@/lib/markdown-table";
@@ -10,15 +15,11 @@ function renderInline(text: string) {
   const parts = text.split(/(\*\*.*?\*\*|`[^`]+`)/);
   return parts.map((part, i) => {
     if (part.startsWith("**") && part.endsWith("**")) {
-      return (
-        <strong key={i} className="text-foreground font-medium">
-          {part.slice(2, -2)}
-        </strong>
-      );
+      return <strong key={i}>{part.slice(2, -2)}</strong>;
     }
     if (part.startsWith("`") && part.endsWith("`")) {
       return (
-        <code key={i} className="text-clarity text-[0.85em] px-1 py-0.5 bg-surface">
+        <code key={i} className="rr-prose__code">
           {part.slice(1, -1)}
         </code>
       );
@@ -46,10 +47,7 @@ export function Markdown({ content }: { content: string }) {
       }
       i++; // skip closing ```
       elements.push(
-        <pre
-          key={elements.length}
-          className="bg-surface border border-border p-4 overflow-x-auto my-6 text-sm leading-relaxed"
-        >
+        <pre key={elements.length} className="rr-prose__pre">
           <code className={lang ? `language-${lang}` : ""}>
             {codeLines.join("\n")}
           </code>
@@ -68,12 +66,12 @@ export function Markdown({ content }: { content: string }) {
         i++;
       }
       elements.push(
-        <div key={elements.length} className="overflow-x-auto my-6">
-          <table className="w-full text-sm">
+        <div key={elements.length} className="rr-prose__tablewrap">
+          <table className="rr-prose__table">
             <thead>
-              <tr className="border-b border-border">
+              <tr>
                 {headerCells.map((cell, j) => (
-                  <th key={j} className="text-left py-2 pr-4 text-muted font-normal text-xs tracking-wide uppercase">
+                  <th key={j} className="rr-prose__th">
                     {cell}
                   </th>
                 ))}
@@ -81,9 +79,9 @@ export function Markdown({ content }: { content: string }) {
             </thead>
             <tbody>
               {rows.map((row, j) => (
-                <tr key={j} className="border-b border-border/50">
+                <tr key={j}>
                   {row.map((cell, k) => (
-                    <td key={k} className="py-2 pr-4 text-muted">
+                    <td key={k} className="rr-prose__td">
                       {renderInline(cell)}
                     </td>
                   ))}
@@ -99,7 +97,7 @@ export function Markdown({ content }: { content: string }) {
     // Heading
     if (line.startsWith("## ")) {
       elements.push(
-        <h2 key={elements.length} className="text-lg font-medium tracking-wide mt-10 mb-4">
+        <h2 key={elements.length} className="rr-prose__h2">
           {line.slice(3)}
         </h2>
       );
@@ -110,7 +108,7 @@ export function Markdown({ content }: { content: string }) {
     // Blockquote (single line for now)
     if (line.startsWith("> ")) {
       elements.push(
-        <blockquote key={elements.length} className="border border-clarity/40 bg-clarity/5 p-4 my-4 text-muted italic">
+        <blockquote key={elements.length} className="rr-prose__quote">
           {renderInline(line.slice(2))}
         </blockquote>
       );
@@ -123,9 +121,9 @@ export function Markdown({ content }: { content: string }) {
       const match = line.match(/- \*\*(.+?)\*\*\s*[—–-]\s*(.+)/);
       if (match) {
         elements.push(
-          <p key={elements.length} className="ml-4 my-2 text-sm">
-            <span className="text-foreground font-medium">{match[1]}</span>
-            <span className="text-muted"> — {match[2]}</span>
+          <p key={elements.length} className="rr-prose__item">
+            <span className="rr-prose__term">{match[1]}</span>
+            <span className="rr-prose__detail"> — {match[2]}</span>
           </p>
         );
         i++;
@@ -136,8 +134,10 @@ export function Markdown({ content }: { content: string }) {
     // Simple list item
     if (line.startsWith("- ")) {
       elements.push(
-        <p key={elements.length} className="ml-4 my-1.5 text-sm text-muted flex gap-2">
-          <span className="text-muted" aria-hidden="true">·</span>
+        <p key={elements.length} className="rr-prose__li">
+          <span className="rr-prose__bullet" aria-hidden="true">
+            ·
+          </span>
           <span>{renderInline(line.slice(2))}</span>
         </p>
       );
@@ -148,7 +148,7 @@ export function Markdown({ content }: { content: string }) {
     // Standalone bold line
     if (line.startsWith("**") && line.endsWith("**") && !line.includes("**", 2)) {
       elements.push(
-        <p key={elements.length} className="font-medium mt-6 text-sm">
+        <p key={elements.length} className="rr-prose__strongline">
           {line.slice(2, -2)}
         </p>
       );
@@ -158,19 +158,19 @@ export function Markdown({ content }: { content: string }) {
 
     // Empty line
     if (line.trim() === "") {
-      elements.push(<div key={elements.length} className="h-2" />);
+      elements.push(<div key={elements.length} className="rr-prose__gap" />);
       i++;
       continue;
     }
 
     // Regular paragraph
     elements.push(
-      <p key={elements.length} className="text-sm leading-relaxed text-muted">
+      <p key={elements.length} className="rr-prose__p">
         {renderInline(line)}
       </p>
     );
     i++;
   }
 
-  return <div className="space-y-1">{elements}</div>;
+  return <div className="rr-prose">{elements}</div>;
 }

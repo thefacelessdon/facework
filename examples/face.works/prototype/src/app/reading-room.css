@@ -1,0 +1,891 @@
+/* =========================================================================
+   Reading Room — the face.works design language (foundation)
+   Binding contract: DESIGN.md (+ .impeccable.md). OKLCH only.
+   NON-BREAKING: all tokens namespaced --rr-* so they never collide with the
+   existing --fw-* Visual Language System. Nothing here restyles the old pages.
+   ========================================================================= */
+
+:root {
+  /* --- The Record — light (DESIGN.md §4) ------------------------------- */
+  --rr-paper: oklch(0.967 0.008 85); /* page ground */
+  --rr-surface: oklch(0.936 0.010 84); /* raised panel / worksheet fill */
+  --rr-rule: oklch(0.800 0.013 82); /* hairline rules, borders */
+  --rr-meta: oklch(0.515 0.012 80); /* metadata + secondary text */
+  --rr-body: oklch(0.305 0.012 68); /* reading body */
+  --rr-ink: oklch(0.175 0.012 55); /* ink, marks, PRIMARY ACTIONS/CTAs */
+  --rr-verdigris: oklch(0.55 0.075 190); /* brand accent — fills / marks */
+  --rr-verdigris-text: oklch(0.47 0.070 190); /* accent AS TEXT on paper (AA) */
+
+  /* --- The Field — dark, warm obsidian (DESIGN.md §4) ----------------- */
+  --rr-field: oklch(0.185 0.008 70); /* ground */
+  --rr-field-panel: oklch(0.235 0.009 70);
+  --rr-field-raised: oklch(0.270 0.010 70);
+  --rr-field-line: oklch(0.340 0.010 70); /* 1px borders */
+  --rr-field-text: oklch(0.920 0.012 85);
+  --rr-field-mute: oklch(0.630 0.013 78);
+  --rr-verdigris-field: oklch(0.740 0.085 190); /* lifted for >=4.5:1 on field */
+
+  /* --- Reserved status (classification only — NOT brand) (§4) --------- */
+  --rr-settled: oklch(0.56 0.12 150); /* green  — settled / owned  (circle); FILLS/MARKS only */
+  --rr-settled-text: oklch(0.49 0.12 150); /* settled AS TEXT on paper (AA >=4.5:1) */
+  --rr-settled-field: oklch(0.72 0.10 150); /* settled AS TEXT lifted for dark field (AA) */
+  --rr-attention: oklch(0.70 0.13 75); /* amber  — needs attention */
+  --rr-attention-text: oklch(0.52 0.12 72); /* text-tier on paper */
+  --rr-exposure: oklch(0.58 0.19 30); /* red    — weak / at risk */
+  --rr-exposure-text: oklch(0.48 0.17 30); /* text-tier on paper */
+  --rr-archive: oklch(0.50 0.13 300); /* violet — archived / wayfinding */
+
+  /* --- Type roles (§5) — mapped to the self-hosted @fontsource families */
+  --rr-font-reading: "Literata Variable", Georgia, serif;
+  --rr-font-structure: "Schibsted Grotesk Variable", system-ui, sans-serif;
+  --rr-font-record: "Spline Sans Mono Variable", ui-monospace, monospace;
+
+  /* --- 4pt spacing scale (§6) ---------------------------------------- */
+  --rr-sp-1: 4px;
+  --rr-sp-2: 8px;
+  --rr-sp-3: 12px;
+  --rr-sp-4: 16px;
+  --rr-sp-6: 24px;
+  --rr-sp-8: 32px;
+  --rr-sp-12: 48px;
+  --rr-sp-16: 64px;
+  --rr-sp-24: 96px;
+
+  /* --- Motion (§9) --------------------------------------------------- */
+  --rr-ease-settle: cubic-bezier(0.22, 1, 0.36, 1);
+  --rr-measure: 68ch;
+}
+
+/* =========================================================================
+   Register scopes — two states of one system (§3).
+   Primitives style themselves via register-neutral aliases (--rr-ground,
+   --rr-text, --rr-line, --rr-accent, --rr-cta-*) that each scope resolves,
+   so a primitive can be dropped into either register unchanged.
+   ========================================================================= */
+
+.rr {
+  /* The Record — settled / issued readings */
+  color-scheme: light;
+  --rr-ground: var(--rr-paper);
+  --rr-ground-raised: var(--rr-surface);
+  --rr-text: var(--rr-body);
+  --rr-text-strong: var(--rr-ink);
+  --rr-muted: var(--rr-meta);
+  --rr-line: var(--rr-rule);
+  --rr-accent: var(--rr-verdigris);
+  --rr-accent-text: var(--rr-verdigris-text);
+  --rr-cta-fill: var(--rr-ink); /* ink-black bg */
+  --rr-cta-ink: var(--rr-paper); /* paper text */
+  --rr-status-attention: var(--rr-attention-text);
+  --rr-status-exposure: var(--rr-exposure-text);
+  --rr-status-settled: var(--rr-settled-text);
+}
+
+.rr-field {
+  /* The Field — live / under observation */
+  color-scheme: dark;
+  --rr-ground: var(--rr-field);
+  --rr-ground-raised: var(--rr-field-raised);
+  --rr-text: var(--rr-field-text);
+  --rr-text-strong: var(--rr-field-text);
+  --rr-muted: var(--rr-field-mute);
+  --rr-line: var(--rr-field-line);
+  --rr-accent: var(--rr-verdigris-field);
+  --rr-accent-text: var(--rr-verdigris-field);
+  --rr-cta-fill: var(--rr-field-text); /* inverts to light fill */
+  --rr-cta-ink: var(--rr-field); /* dark ink text */
+  --rr-status-attention: var(--rr-attention);
+  --rr-status-exposure: var(--rr-exposure);
+  --rr-status-settled: var(--rr-settled-field);
+}
+
+.rr,
+.rr-field {
+  background: var(--rr-ground);
+  color: var(--rr-text);
+  font-family: var(--rr-font-reading);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+.rr-field {
+  line-height: 1.72; /* light-on-dark adds 0.05–0.1 (§5) */
+}
+
+/* =========================================================================
+   Primitive classes — token-driven only. No cards-in-cards, no side-stripe
+   borders (>1px), no gradients, no glow (§11).
+   ========================================================================= */
+
+/* RecordLabel — the mono `.fig` eyebrow (§5) */
+.rr-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rr-sp-2);
+  font-family: var(--rr-font-record);
+  font-weight: 500;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--rr-muted);
+  font-variant-numeric: tabular-nums;
+}
+.rr-label__tick {
+  width: 0.5em;
+  height: 0.5em;
+  background: var(--rr-accent);
+  flex: none;
+}
+
+/* SectionHead — mono label (+ real index) → Schibsted title (§6) */
+.rr-sectionhead {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rr-sp-3);
+}
+.rr-sectionhead__index {
+  color: var(--rr-accent-text);
+}
+.rr-sectionhead__title {
+  font-family: var(--rr-font-structure);
+  font-weight: 600;
+  font-size: clamp(1.4rem, 2.4vw, 1.7rem);
+  line-height: 1.15;
+  letter-spacing: -0.005em;
+  color: var(--rr-text-strong);
+  margin: 0;
+}
+
+/* Reading — the unit: eyebrow → Literata title → body (§6) */
+.rr-reading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rr-sp-4);
+}
+.rr-reading__title {
+  font-family: var(--rr-font-reading);
+  font-weight: 600;
+  font-size: clamp(1.9rem, 4vw, 2.9rem);
+  line-height: 1.1;
+  text-wrap: balance;
+  color: var(--rr-text-strong);
+  margin: 0;
+}
+.rr-reading__body {
+  max-width: var(--rr-measure);
+  color: var(--rr-text);
+}
+.rr-reading__body > * + * {
+  margin-top: var(--rr-sp-4);
+}
+
+/* CoherenceVerdict — n/5 bars in verdigris + shape-law status marker (§7) */
+.rr-verdict {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rr-sp-3);
+  font-family: var(--rr-font-record);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.8125rem;
+  color: var(--rr-muted);
+}
+.rr-verdict__bars {
+  display: inline-flex;
+  gap: 3px;
+}
+.rr-verdict__bar {
+  width: 6px;
+  height: 18px;
+  background: var(--rr-line);
+}
+.rr-verdict__bar--on {
+  background: var(--rr-accent);
+}
+.rr-verdict__score {
+  color: var(--rr-text-strong);
+  letter-spacing: 0.02em;
+}
+.rr-verdict__marker {
+  width: 0.7em;
+  height: 0.7em;
+  flex: none;
+  background: var(--rr-settled);
+}
+.rr-verdict__marker--open {
+  border-radius: 0; /* square = open */
+}
+.rr-verdict__marker--settled {
+  border-radius: 50%; /* circle = settled */
+}
+
+/* Trace — Field/Trace instrument (§7, §9). Verdigris bounded oscillation. */
+.rr-trace {
+  display: block;
+  width: 100%;
+  height: auto;
+  color: var(--rr-accent);
+}
+.rr-trace__axis {
+  stroke: var(--rr-line);
+}
+.rr-trace__path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.rr-trace__path--draw {
+  transition: stroke-dashoffset 1600ms var(--rr-ease-settle);
+}
+
+/* StructureLineage — hairline rows, shape-law markers (§7) */
+.rr-lineage {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--rr-line);
+}
+.rr-lineage__row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: baseline;
+  gap: var(--rr-sp-4);
+  padding: var(--rr-sp-3) 0;
+  border-bottom: 1px solid var(--rr-line);
+}
+.rr-lineage__marker {
+  width: 0.6em;
+  height: 0.6em;
+  align-self: center;
+  flex: none;
+}
+.rr-lineage__marker--open {
+  background: var(--rr-muted);
+} /* square = open */
+.rr-lineage__marker--settled {
+  background: var(--rr-settled);
+  border-radius: 50%;
+} /* circle = settled */
+.rr-lineage__label {
+  font-family: var(--rr-font-structure);
+  font-weight: 500;
+  color: var(--rr-text-strong);
+}
+.rr-lineage__note {
+  font-family: var(--rr-font-record);
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--rr-muted);
+}
+
+/* InkCTA — ink fill / paper text; inverts on Field; verdigris focus ring */
+.rr-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rr-sp-2);
+  font-family: var(--rr-font-structure);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  line-height: 1;
+  padding: var(--rr-sp-3) var(--rr-sp-6);
+  background: var(--rr-cta-fill);
+  color: var(--rr-cta-ink);
+  border: 1px solid var(--rr-cta-fill);
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 180ms var(--rr-ease-settle);
+}
+.rr-cta:hover {
+  opacity: 0.88;
+}
+.rr-cta:focus-visible {
+  outline: 2px solid var(--rr-accent);
+  outline-offset: 2px;
+}
+
+/* Text link — verdigris as text, active/attended only (§4) */
+.rr-link {
+  color: var(--rr-accent-text);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  text-decoration-thickness: 1px;
+}
+.rr-link:focus-visible {
+  outline: 2px solid var(--rr-accent);
+  outline-offset: 2px;
+}
+
+/* CoherenceMarkState — the mark as state machine (§8) */
+.rr-mark {
+  display: inline-block;
+  color: var(--rr-text-strong, currentColor); /* rests in ink, even off-register */
+}
+.rr-mark__band {
+  fill: currentColor;
+}
+.rr-mark__node--open {
+  /* square = open/unsettled — no radius */
+}
+.rr-mark__node--settled {
+  /* circle handled by <circle> element */
+}
+
+/* =========================================================================
+   Page composition — The Work surfaces (§10). The wrapper carries both `.rr`
+   (register) and `section-page` (opt out of the legacy
+   `.site-main > div:not(.section-page)` ink-border rule in globals.css); the
+   `.rr-page` padding below wins by source order.
+   ========================================================================= */
+.rr-page {
+  padding: var(--rr-sp-24) var(--rr-gutter, 6vw);
+  min-height: 70svh;
+}
+.rr-column {
+  max-width: 74ch;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--rr-sp-12);
+}
+.rr-masthead {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rr-sp-4);
+}
+/* Home display statement — the reading room speaks in Literata (§5) */
+.rr-display {
+  font-family: var(--rr-font-reading);
+  font-weight: 600;
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+  color: var(--rr-text-strong);
+  margin: 0;
+}
+.rr-lede {
+  max-width: var(--rr-measure);
+  margin: 0;
+  color: var(--rr-muted);
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+.rr-lead-reading,
+.rr-feature,
+.rr-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rr-sp-6);
+}
+
+/* ReadingIndex — hairline record rows (§6) */
+.rr-index {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--rr-line);
+}
+.rr-index__row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: var(--rr-sp-4);
+  padding: var(--rr-sp-4) 0;
+  border-bottom: 1px solid var(--rr-line);
+}
+.rr-index__main {
+  display: grid;
+  grid-template-columns: 6.5rem 1fr;
+  align-items: baseline;
+  gap: var(--rr-sp-4);
+  text-decoration: none;
+  color: inherit;
+}
+.rr-index__main--noid {
+  grid-template-columns: 1fr;
+}
+.rr-index__id {
+  align-self: baseline;
+}
+.rr-index__text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.rr-index__title {
+  font-family: var(--rr-font-structure);
+  font-weight: 600;
+  font-size: 1.05rem;
+  line-height: 1.25;
+  color: var(--rr-text-strong);
+  transition: color 160ms var(--rr-ease-settle);
+}
+.rr-index__note {
+  color: var(--rr-muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+.rr-index__main:hover .rr-index__title {
+  color: var(--rr-accent-text);
+}
+.rr-index__main:focus-visible {
+  outline: 2px solid var(--rr-accent);
+  outline-offset: 3px;
+}
+.rr-index__status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rr-sp-2);
+  font-family: var(--rr-font-record);
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  color: var(--rr-muted);
+}
+.rr-index__marker {
+  width: 0.6em;
+  height: 0.6em;
+  flex: none;
+}
+.rr-index__marker--open {
+  background: var(--rr-muted);
+} /* square = open */
+.rr-index__marker--settled {
+  background: var(--rr-settled);
+  border-radius: 50%;
+} /* circle = settled */
+
+@media (max-width: 640px) {
+  .rr-index__main {
+    grid-template-columns: 1fr;
+    gap: var(--rr-sp-1);
+  }
+  .rr-index__row {
+    grid-template-columns: 1fr;
+  }
+  .rr-index__status {
+    padding-left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rr-trace__path--draw {
+    transition: none;
+  }
+}
+
+/* =========================================================================
+   Practice + Records composition (§10). Register-neutral: every rule below
+   resolves through the same --rr-* aliases each scope sets, so a block reads
+   correctly on the Record (light) and the Field (dark) unchanged. Hairline
+   rows, mono eyebrows, tabular data — no card grids, no side-stripe accents,
+   no glow (§11). Used by The Practice (engage / proof / cases) and the issued
+   operating records (status / privacy / accessibility).
+   ========================================================================= */
+
+/* A slightly wider reading column for surfaces that carry strips + tables. */
+.rr-column--wide {
+  max-width: 84ch;
+}
+
+/* Disclosure note — a muted reading-voice caption (the honesty layer). */
+.rr-note {
+  max-width: var(--rr-measure);
+  margin: 0;
+  color: var(--rr-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+.rr-note--record {
+  font-family: var(--rr-font-record);
+  font-size: 0.8125rem;
+  line-height: 1.65;
+}
+.rr-note a {
+  color: var(--rr-accent-text);
+  text-underline-offset: 0.15em;
+}
+
+/* Evidence / disclosure strip — definition pairs on a single top rule (§7).
+   Never a card grid: it is a run of term → statement, ruled once at the top. */
+.rr-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: var(--rr-sp-6) var(--rr-sp-8);
+  margin: 0;
+  padding-top: var(--rr-sp-6);
+  border-top: 1px solid var(--rr-line);
+}
+.rr-strip__pair {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rr-sp-2);
+  margin: 0;
+}
+.rr-strip__term {
+  font-family: var(--rr-font-record);
+  font-weight: 500;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--rr-muted);
+}
+.rr-strip__desc {
+  margin: 0;
+  color: var(--rr-text);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+.rr-strip__desc--settled {
+  color: var(--rr-status-settled);
+}
+.rr-strip__desc--attention {
+  color: var(--rr-status-attention);
+}
+.rr-strip__desc--exposure {
+  color: var(--rr-status-exposure);
+}
+
+/* Record rows — a mono meta column → structural title → reading body (§6).
+   The workhorse for method steps, deliverables, pricing tiers, case findings. */
+.rr-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--rr-line);
+}
+.rr-rows__item {
+  display: grid;
+  grid-template-columns: 10.5rem 1fr;
+  gap: var(--rr-sp-3) var(--rr-sp-8);
+  align-items: baseline;
+  padding: var(--rr-sp-6) 0;
+  border-bottom: 1px solid var(--rr-line);
+}
+.rr-rows__meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rr-sp-1);
+  font-family: var(--rr-font-record);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+  color: var(--rr-muted);
+  font-variant-numeric: tabular-nums;
+}
+.rr-rows__meta strong {
+  color: var(--rr-text-strong);
+  font-weight: 500;
+}
+.rr-rows__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rr-sp-2);
+}
+.rr-rows__title {
+  margin: 0;
+  font-family: var(--rr-font-structure);
+  font-weight: 600;
+  font-size: 1.15rem;
+  line-height: 1.2;
+  color: var(--rr-text-strong);
+}
+.rr-rows__note {
+  margin: 0;
+  color: var(--rr-text);
+}
+.rr-rows__sub {
+  margin: 0;
+  color: var(--rr-muted);
+  font-size: 0.95rem;
+}
+
+/* Exit-criteria — a nested list inside a record row, shape-law markers. */
+.rr-criteria {
+  list-style: none;
+  margin: var(--rr-sp-2) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--rr-sp-3);
+}
+.rr-criteria__item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--rr-sp-3);
+  align-items: start;
+}
+.rr-criteria__marker {
+  width: 0.6em;
+  height: 0.6em;
+  margin-top: 0.5em;
+  flex: none;
+}
+.rr-criteria__marker--complete {
+  background: var(--rr-settled);
+  border-radius: 50%;
+}
+.rr-criteria__marker--progress {
+  background: var(--rr-status-attention);
+}
+.rr-criteria__marker--pending {
+  background: transparent;
+  border: 1px solid var(--rr-muted);
+}
+.rr-criteria__text {
+  margin: 0;
+}
+.rr-criteria__evidence {
+  margin: var(--rr-sp-1) 0 0;
+  color: var(--rr-muted);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+/* Meter — an accessible gauge (§9, structural transform only). */
+.rr-gauge {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rr-sp-2);
+  max-width: 22rem;
+}
+.rr-gauge__read {
+  font-family: var(--rr-font-record);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.8125rem;
+  color: var(--rr-muted);
+}
+.rr-gauge__read strong {
+  color: var(--rr-text-strong);
+  font-weight: 500;
+}
+.rr-meter {
+  height: 4px;
+  background: var(--rr-line);
+  overflow: hidden;
+}
+.rr-meter__fill {
+  height: 100%;
+  background: var(--rr-accent);
+  transform-origin: left;
+  transition: transform var(--rr-ease-settle) 600ms;
+}
+
+/* Metrics — truly tabular counts, so a ruled grid is licensed (§6). */
+.rr-metrics {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
+  border-top: 1px solid var(--rr-line);
+  border-left: 1px solid var(--rr-line);
+}
+.rr-metric {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rr-sp-1);
+  padding: var(--rr-sp-4);
+  border-right: 1px solid var(--rr-line);
+  border-bottom: 1px solid var(--rr-line);
+}
+.rr-metric__label {
+  font-family: var(--rr-font-record);
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--rr-muted);
+}
+.rr-metric__value {
+  font-family: var(--rr-font-record);
+  font-variant-numeric: tabular-nums;
+  font-size: 1.7rem;
+  line-height: 1;
+  color: var(--rr-text-strong);
+}
+.rr-metric__caption {
+  color: var(--rr-muted);
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+/* A case = a self-contained reading; keep its sections grouped and spaced. */
+.rr-case {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rr-sp-12);
+}
+
+@media (max-width: 640px) {
+  .rr-rows__item {
+    grid-template-columns: 1fr;
+    gap: var(--rr-sp-2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rr-meter__fill {
+    transition: none;
+  }
+}
+
+/* =========================================================================
+   Markdown renderer — the protocol / theory reading surface (§5, §6).
+   Restyle only: the element tree is emitted by src/components/Markdown.tsx and
+   is preserved exactly. Body reads in Literata; headings speak in Schibsted;
+   code, table cells and record labels certify in Spline Mono. Hairline rules,
+   no cards, verdigris links only (§4, §11). Register-neutral (--rr-* aliases).
+   ========================================================================= */
+.rr-prose {
+  max-width: var(--rr-measure);
+  font-family: var(--rr-font-reading);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--rr-text);
+}
+.rr-prose > * {
+  margin: 0;
+}
+.rr-prose > * + * {
+  margin-top: var(--rr-sp-1);
+}
+
+/* Reading body */
+.rr-prose__p {
+  color: var(--rr-text);
+}
+.rr-prose strong {
+  color: var(--rr-text-strong);
+  font-weight: 600;
+}
+.rr-prose a {
+  color: var(--rr-accent-text);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  text-decoration-thickness: 1px;
+}
+.rr-prose a:focus-visible {
+  outline: 2px solid var(--rr-accent);
+  outline-offset: 2px;
+}
+
+/* Heading — the system speaks (Schibsted) */
+.rr-prose__h2 {
+  font-family: var(--rr-font-structure);
+  font-weight: 600;
+  font-size: clamp(1.3rem, 2.2vw, 1.6rem);
+  line-height: 1.2;
+  letter-spacing: -0.005em;
+  color: var(--rr-text-strong);
+  margin-top: var(--rr-sp-12);
+  margin-bottom: var(--rr-sp-4);
+}
+
+/* Standalone bold line — a sub-label in the reading voice */
+.rr-prose__strongline {
+  margin-top: var(--rr-sp-6);
+  color: var(--rr-text-strong);
+  font-weight: 600;
+}
+
+/* Record voice — inline code / code blocks / labels certify (Spline Mono) */
+.rr-prose__code {
+  font-family: var(--rr-font-record);
+  font-size: 0.85em;
+  padding: 0.1em 0.35em;
+  background: var(--rr-ground-raised);
+  color: var(--rr-text-strong);
+}
+.rr-prose__pre {
+  font-family: var(--rr-font-record);
+  font-size: 0.8125rem;
+  line-height: 1.7;
+  background: var(--rr-ground-raised);
+  border: 1px solid var(--rr-line);
+  padding: var(--rr-sp-4);
+  overflow-x: auto;
+  margin-top: var(--rr-sp-6);
+  margin-bottom: var(--rr-sp-6);
+  color: var(--rr-text-strong);
+}
+.rr-prose__pre code {
+  font-family: inherit;
+}
+
+/* Blockquote — a hairline-bounded aside, not a card (§11) */
+.rr-prose__quote {
+  margin-top: var(--rr-sp-4);
+  margin-bottom: var(--rr-sp-4);
+  padding: var(--rr-sp-2) 0 var(--rr-sp-2) var(--rr-sp-4);
+  border-left: 1px solid var(--rr-accent);
+  color: var(--rr-muted);
+  font-style: italic;
+}
+
+/* List items — reading-voice, hanging structure */
+.rr-prose__item {
+  margin-top: var(--rr-sp-2);
+  margin-left: var(--rr-sp-4);
+  font-size: 0.95rem;
+}
+.rr-prose__term {
+  color: var(--rr-text-strong);
+  font-weight: 600;
+}
+.rr-prose__detail {
+  color: var(--rr-muted);
+}
+.rr-prose__li {
+  display: flex;
+  gap: var(--rr-sp-2);
+  margin-top: var(--rr-sp-1);
+  margin-left: var(--rr-sp-4);
+  font-size: 0.95rem;
+  color: var(--rr-muted);
+}
+.rr-prose__bullet {
+  color: var(--rr-accent-text);
+}
+
+/* Gap — preserves the blank-line rhythm of the source renderer */
+.rr-prose__gap {
+  height: var(--rr-sp-2);
+}
+
+/* Tables — truly tabular record, hairline rules only, no card (§6, §11).
+   Cells certify in the record voice (Spline Mono). */
+.rr-prose__tablewrap {
+  overflow-x: auto;
+  margin-top: var(--rr-sp-6);
+  margin-bottom: var(--rr-sp-6);
+}
+.rr-prose__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--rr-font-record);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.8125rem;
+}
+.rr-prose__th {
+  text-align: left;
+  padding: var(--rr-sp-2) var(--rr-sp-4) var(--rr-sp-2) 0;
+  border-bottom: 1px solid var(--rr-line);
+  color: var(--rr-muted);
+  font-weight: 500;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.rr-prose__td {
+  padding: var(--rr-sp-2) var(--rr-sp-4) var(--rr-sp-2) 0;
+  border-bottom: 1px solid var(--rr-line);
+  color: var(--rr-text);
+  vertical-align: top;
+}
+.rr-prose__td .rr-prose__code {
+  background: transparent;
+  padding: 0;
+}

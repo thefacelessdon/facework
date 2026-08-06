@@ -24,6 +24,29 @@ export type PublicSection = {
   records: PublicRecord[];
 };
 
+// --- Shape-law verdict (DESIGN.md §7, §8) ---------------------------------
+// A record's own `status` string is the source of truth. The verdict derives
+// the shape-law state (square = open/provisional, circle = settled/issued) and
+// a coarse coherence score (n/5) from it — never invented per surface. The
+// state (open vs settled) is load-bearing; the score is an intentionally coarse
+// diagnostic read of the same status.
+
+export type ReadingState = "open" | "settled";
+export type Verdict = { score: number; state: ReadingState; label: string };
+
+export function verdictForStatus(status: string): Verdict {
+  const key = status.trim().toLowerCase();
+  if (key === "canonical") return { score: 5, state: "settled", label: "canonical" };
+  if (key.startsWith("active") || key === "operating" || key === "reference" || key === "indexed" || key.startsWith("level 3"))
+    return { score: 4, state: "settled", label: key.startsWith("level 3") ? "verified" : key };
+  if (key === "developing") return { score: 3, state: "open", label: "developing" };
+  if (key === "in build") return { score: 3, state: "open", label: "in build" };
+  if (key === "observation") return { score: 2, state: "open", label: "observation" };
+  if (key.startsWith("experimental")) return { score: 2, state: "open", label: "experimental" };
+  if (key === "initial synthesis") return { score: 2, state: "open", label: "initial synthesis" };
+  return { score: 3, state: "open", label: key };
+}
+
 export const publicSections: Record<PublicSectionKey, PublicSection> = {
   "field-notes": {
     label: "Field Notes",
@@ -55,13 +78,11 @@ export const publicSections: Record<PublicSectionKey, PublicSection> = {
   },
   cases: {
     label: "Cases",
-    proposition: "Evidence begins where the system meets consequence.",
-    introduction: "Cases document the original constraint, structural intervention, resulting system, evidence, and limits—not only the polished surface.",
+    proposition: "Built with the Facework discipline, in production.",
+    introduction: "These systems were built with the Facework discipline rather than through a full protocol run, so no conformance Level is claimed. The audited and Facework-run work — with its provenance and disclosures — lives on the proof record.",
     records: [
-      { id: "CASE-001", title: "GAMUT", description: "Creator-commerce infrastructure translated from founder logic into a portable operating system.", status: "Level 3 · retroactive self-audit", href: "/proof", action: "Inspect case" },
-      { id: "CASE-002", title: "Chefnic", description: "A real catering business given an AI-run back-office: a canonical routine registry, one invoicing system of record, and PII-safe operations built with the Facework discipline.", status: "Operating", href: "https://chefnic.com", action: "View business" },
-      { id: "CASE-003", title: "Club Volley", description: "A tennis-culture venture where strategy became a governed system — one canonical numbers source, a load-bearing design language, and a role-gated platform built with the Facework discipline.", status: "In build", href: "https://clubvolley.tennis", action: "View venture" },
-      { id: "FVA-600", title: "Lineage Inspector", description: "A product reference that makes upstream decisions and downstream consequences inspectable.", status: "Reference", href: "/proof", action: "Inspect evidence" },
+      { id: "CASE-001", title: "Chefnic", description: "A real catering business given an AI-run back-office: a canonical routine registry, one invoicing system of record, and PII-safe operations built with the Facework discipline.", status: "Operating", href: "https://chefnic.com", action: "View business" },
+      { id: "CASE-002", title: "Club Volley", description: "A tennis-culture venture where strategy became a governed system — one canonical numbers source, a load-bearing design language, and a role-gated platform built with the Facework discipline.", status: "In build", href: "https://clubvolley.tennis", action: "View venture" },
     ],
   },
   conversations: {

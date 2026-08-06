@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
-import { KnowledgeSection } from "@/components/KnowledgeSection";
+import { WorkSurface } from "@/components/WorkSurface";
 import { publicSections } from "@/data/knowledge";
 
 export const metadata: Metadata = { title: "Models" };
-export default function Page() { return <KnowledgeSection section={publicSections.models} />; }
+
+export default function Page() {
+  return <WorkSurface section={publicSections.models} />;
+}
