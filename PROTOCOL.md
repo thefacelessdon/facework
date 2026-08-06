@@ -671,12 +671,13 @@ A **Runtime Shell** is any system that operates a tenant world after Phases 1–
 produce it by consuming one or more Runtime Ports. A Runtime Shell is a
 *consumer* of the manifest, never its owner. This subsection generalizes the
 port model so it holds against runtimes Facework did not design. It was derived
-from three external validations spanning the corners — Buzz
+from four external validations spanning the corners — Buzz
 (github.com/block/buzz, a collaboration/execution/audit runtime), Letta
-(github.com/letta-ai/letta, a memory/context runtime), and OpenAI's hosted agent
-surface (Responses API + Agents SDK, a hosted/rented runtime) — recorded in
+(github.com/letta-ai/letta, a memory/context runtime), OpenAI's hosted agent
+surface (Responses API + Agents SDK, a hosted/rented runtime), and Claude Code /
+Agent SDK (a file-native local harness) — recorded in
 `standards/source/fs400-runtime-buzz-validation-2026-08-04.md` (deferred FS-400
-source input) and the three `methodology/runtime-ports-{buzz,letta,openai}-gap-*`
+source input) and the four `methodology/runtime-ports-{buzz,letta,openai,claude-code}-gap-*`
 notes. The runtimes host complementary port subsets and none hosts all four — the
 evidence for the partial conformance and split-runtime binding below.
 
@@ -740,6 +741,17 @@ from the third validation (OpenAI's hosted surface), where all four ports wire
 but the substrate is rented, closed, and non-relocatable. Enforced at the Phase 7
 gate.
 
+**Shell sovereignty decomposes by layer.** Own-vs-rent is not one verdict per
+shell — it decomposes into **harness** (the agent loop), **state** (memory,
+config, transcripts), and **model** (the LLM). A shell may be own-harness +
+own-state + rent-model (Claude Code / Agent SDK: an open harness running as a
+local subprocess, state on the tenant's disk, only model calls leaving) — a
+materially smaller ownership cost than rent-all (OpenAI, where harness, state, and
+model all live on the vendor). The Phase-7 waiver attaches to whichever layer is
+rented and scopes its mitigation to that layer, rather than flattening every
+hosted dependency to "rent with maximal blast radius." Derived from the fourth
+validation (Claude Code).
+
 ## 10) HarnessBundle (v1.2.0, additive)
 
 Runtime Ports (§9) declare YAML contracts. Some runtimes ingest YAML
@@ -750,6 +762,13 @@ Runtime Ports for those runtimes.
 
 The YAML manifests in §9 remain the source of truth. The HarnessBundle is
 regeneratable from them, one-way only in v1.2.0 (round-trip deferred).
+
+**Validation (0.0.22).** The fourth Runtime Ports validation — Claude Code /
+Agent SDK, a file-native local harness — is the first runtime whose on-disk
+layout maps cleanly onto this derived view (`soul.md` ← CLAUDE.md, `skills/` ←
+`.claude/skills/`, integrations ← `.claude/mcp.json`, governance ←
+`.claude/settings.json`). §10 was asserted for "file-based harnesses"; it now has
+a concrete target. See `methodology/runtime-ports-claude-code-gap-2026-08-05.md`.
 
 ### 10.1 Bundle layout
 

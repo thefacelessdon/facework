@@ -1,13 +1,14 @@
-# FS-400 Source Input — Runtime Shells validated (Buzz + Letta + OpenAI)
+# FS-400 Source Input — Runtime Shells validated (Buzz + Letta + OpenAI + Claude Code)
 
-Date: 2026-08-04 (Buzz), updated 2026-08-05 (Letta + OpenAI)
+Date: 2026-08-04 (Buzz), updated 2026-08-05 (Letta + OpenAI + Claude Code)
 Status: **Deferred / Not canonical.** Source input to the FS-400 Runtime
 specification, which activates with the standards track post-1.0 (see
 [`../README.md`](../README.md)).
 Companion working analyses:
 [`methodology/runtime-ports-buzz-gap-2026-08-04.md`](../../methodology/runtime-ports-buzz-gap-2026-08-04.md) (Buzz),
 [`methodology/runtime-ports-letta-gap-2026-08-05.md`](../../methodology/runtime-ports-letta-gap-2026-08-05.md) (Letta),
-[`methodology/runtime-ports-openai-gap-2026-08-05.md`](../../methodology/runtime-ports-openai-gap-2026-08-05.md) (OpenAI)
+[`methodology/runtime-ports-openai-gap-2026-08-05.md`](../../methodology/runtime-ports-openai-gap-2026-08-05.md) (OpenAI),
+[`methodology/runtime-ports-claude-code-gap-2026-08-05.md`](../../methodology/runtime-ports-claude-code-gap-2026-08-05.md) (Claude Code)
 
 ---
 
@@ -19,15 +20,16 @@ Runtime Ports (`PROTOCOL.md` §9) shipped at 0.0.5–0.0.8 as live artifacts; th
 abstract FS-400 specification did not. Reconciling them requires evidence that
 the ports describe a real runtime, not an imagined one.
 
-This memo supplies that evidence from **three external runtime shells the practice
+This memo supplies that evidence from **four external runtime shells the practice
 did not design, spanning the corners**: Buzz (github.com/block/buzz, a Nostr-relay
 collaboration/execution/audit runtime), Letta (github.com/letta-ai/letta, a
-memory/context runtime) — both Apache-2.0 and self-hostable — and OpenAI's hosted
+memory/context runtime) — both Apache-2.0 and self-hostable — OpenAI's hosted
 agent surface (Responses API + Agents SDK), chosen because it **fails the
-sovereignty port by construction**. Buzz facts are cited to source files; Letta
-and OpenAI to their docs and repo schemas.
+sovereignty port by construction**, and Claude Code / Agent SDK, a **file-native
+local harness** (the corner §10's HarnessBundle targets). Buzz facts are cited to
+source files; the rest to their docs and repo schemas.
 
-It proposes six concepts FS-400 should adopt, binds each Runtime Port to the
+It proposes seven concepts FS-400 should adopt, binds each Runtime Port to the
 runtimes, and lists the §9 refinements the exercise surfaced. The runtimes host
 **complementary** port subsets — none hosts all four — the core evidence for
 partial conformance and split-runtime binding; the third also tests whether the
@@ -46,10 +48,14 @@ no home for `MemoryMap` structure or `ContextManifest` composition; Letta hosts
 (labeled, budgeted context units) natively but lacks native triggers, crypto
 identity, and tamper-evident audit. OpenAI's hosted surface wires all four ports
 but is the sovereignty-failing corner — the runtime shell itself is rented,
-closed, and non-relocatable — which is what forces FS-400.6 below. The correct
-binding is a **split runtime** with the Facework manifest as the cross-substrate
-contract, and the shell itself must be sovereignty-classified. FS-400 should
-*expect* partial, multi-substrate conformance, not a single monolithic runtime.
+closed, and non-relocatable — which is what forces FS-400.6 below. Claude Code /
+Agent SDK is the file-native local corner: it hosts `ContextManifest` +
+`IntegrationManifest` natively and 3/4 `SkillManifest` triggers, and its
+sovereignty is **layer-split** — own-harness + own-state + rent-model — which
+forces FS-400.7. The correct binding is a **split runtime** with the Facework
+manifest as the cross-substrate contract, and the shell itself must be
+sovereignty-classified, per layer. FS-400 should *expect* partial, multi-substrate
+conformance, not a single monolithic runtime.
 
 ---
 
@@ -58,8 +64,8 @@ contract, and the shell itself must be sovereignty-classified. FS-400 should
 ### FS-400.1 — Runtime Shell (definition)
 A **Runtime Shell** is any system that operates a tenant world after Phases 1–8
 produce it, by consuming one or more Runtime Ports. A Runtime Shell is a
-*consumer* of the manifest, never its owner. Buzz, Letta, and OpenAI's hosted
-surface are the reference examples.
+*consumer* of the manifest, never its owner. Buzz, Letta, OpenAI's hosted
+surface, and Claude Code / Agent SDK are the reference examples.
 
 ### FS-400.2 — Partial Conformance
 A Runtime Shell **MAY** host a proper subset of the four ports. Conformance is
@@ -134,6 +140,19 @@ the shell provides, and where tenant state and audit live.
 This is the only FS-400 concept about *rejection* rather than *fit*: the spec
 does not (and should not) reject a rented runtime, but it must force the ownership
 decision into the open.
+
+### FS-400.7 — Shell sovereignty decomposes by layer (harness / state / model)
+FS-400.6 classified the shell as a single own/rent dependency. The fourth
+validation (Claude Code / Agent SDK) shows that verdict is too coarse: sovereignty
+decomposes into three layers — **harness** (the agent loop), **state** (memory,
+config, transcripts), and **model** (the LLM). Claude Code is **own-harness +
+own-state + rent-model**: an open harness running as a local subprocess, all state
+on the tenant's disk and portable, with only model API calls leaving. That is a
+materially smaller ownership cost than OpenAI's **rent-all** (harness, state, and
+model all vendor-hosted, non-relocatable). The Phase-7 waiver attaches to
+whichever layer is actually rented and scopes its mitigation there, rather than
+flattening every hosted dependency to "rent with maximal blast radius." A binding
+records the per-layer verdict, not one own/rent stamp for the whole shell.
 
 ---
 
@@ -319,9 +338,50 @@ first principle.
 
 ---
 
+## Fourth validation: Claude Code / Agent SDK (file-native local corner)
+
+Claude Code was the first target chosen and audited **by the encoded skill itself**
+(`/runtime-validation-pass` + the `runtime-ports-auditor` agent) — the program
+dogfooding its own method. Full port-by-port:
+`methodology/runtime-ports-claude-code-gap-2026-08-05.md`. It occupies the
+file-native local corner none of the first three did (Buzz = relay, Letta =
+memory-server, OpenAI = hosted). It hosts `ContextManifest` (CLAUDE.md hierarchy +
+path-scoped rules) and `IntegrationManifest` (MCP + permissions) natively, 3/4
+`SkillManifest` triggers (Skills/Hooks/Routines), partial `MemoryMap` (CLAUDE.md +
+auto-memory; file+grep, no boundary), and no crypto identity/audit.
+
+Two findings it alone produced:
+- **FS-400.7** (above) — sovereignty decomposes by layer; Claude Code is
+  own-harness + own-state + rent-model, distinct from OpenAI's rent-all.
+- **HarnessBundle (§10) validated** — its on-disk layout (CLAUDE.md,
+  `.claude/skills/`, `.claude/mcp.json`, settings) is the first real target for
+  §10's derived markdown view, which had been asserted but never exercised. A
+  HarnessBundle → Claude Code converter is the obvious next prototype.
+
+Four-runtime synthesis:
+
+| | Buzz | Letta | OpenAI | Claude Code |
+|---|---|---|---|---|
+| Corner | collab/audit | memory/context | hosted/rented | file-native/local |
+| `MemoryMap` | ❌ keyword | ✅ semantic+boundary | 🟡 rented | 🟡 file+grep |
+| `ContextManifest` | ❌ | ✅ blocks | ❌ | ✅ file hierarchy |
+| `SkillManifest` triggers | ✅ full | ❌ | ❌ | 🟡 3/4 |
+| identity / audit | ✅ / ✅ | ❌ / ❌ | ❌ / ❌ | ❌ / ❌ |
+| sovereignty | own | own | rent-all | own-harness+state / rent-model |
+
+Confirmed across all four: descriptive governance metadata is homeless everywhere
+(FS-400.4); enforceable gates are partially hostable everywhere; crypto identity +
+tamper-evident audit remain Buzz-only; `ContextManifest` is hostable natively by
+two distinct mechanisms (Letta blocks, Claude Code file hierarchy). §9.2's
+three-tenant bar was met at 0.0.18; this fourth pass adds the file-native corner
+and the layer-decomposed sovereignty view. What remains before universal-MUST is
+the conformance-profile format (FS-400.6 + FS-400.7 are now in canon).
+
+---
+
 ## §9 refinements — status
 
-All six FS-400 concepts are folded into `PROTOCOL.md` as additive text:
+All seven FS-400 concepts are folded into `PROTOCOL.md` as additive text:
 
 - **Applied 0.0.15** (Buzz pass): §9.1 substrate-agnostic + ports-bind-to-
   different-substrates; §9.4 `MemoryMap` filesystem-first with non-filesystem
@@ -334,6 +394,10 @@ All six FS-400 concepts are folded into `PROTOCOL.md` as additive text:
   guarantee-can-be-liability (FS-400.6); a **calibrated Phase 7 gate line**
   requiring a non-self-hostable shell to carry an explicit waiver (no-op when no
   Runtime Shell is declared, so it does not break port-less projects).
+- **Applied 0.0.22** (Claude Code pass): §9.11 shell sovereignty **decomposes by
+  layer** (harness/state/model — FS-400.7); §10 HarnessBundle validation note (a
+  file-native runtime maps cleanly onto the derived view). First pass produced by
+  the `/runtime-validation-pass` skill itself.
 
 None break existing conformance; all are additive clarifications. A v0.1.0 pass
 may formalize the conformance-profile format (per-attribute gate/metadata
@@ -360,7 +424,11 @@ classification; which gate binds which mechanism; the shell-waiver contents).
   Responses/Conversations API; File search + vector stores; Skills (`/v1/skills`);
   MCP connectors; Your data (retention/training/ZDR/residency); Agents SDK
   (handoffs/guardrails/sessions/tracing).
+- Claude Code / Agent SDK (code.claude.com/docs, Aug 2026): skills, hooks,
+  routines, memory (CLAUDE.md + auto-memory), rules, MCP, permissions, Agent SDK
+  hosting (subprocess + local session storage).
 - Flagged reported-not-source-verified: Buzz approval-executor wiring gap and
   rate-limit non-enforcement; Letta "no native trigger" (inferred from schema
   absence) and exact context-window ordering; OpenAI `truncation:auto` middle-drop
-  (thin docs) and enterprise residency legal page (403 to fetch).
+  (thin docs) and enterprise residency legal page (403 to fetch); Claude Code no
+  crypto identity/audit (inferred from absence in docs).
