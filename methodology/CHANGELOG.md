@@ -1,3 +1,32 @@
+# 0.0.22 — 2026-08-05 (Runtime Ports — fourth runtime, Claude Code; FS-400.7)
+
+**What changed:**
+- Fourth validation of §9 + §9.11 — and the **first produced by the
+  `/runtime-validation-pass` skill** (0.0.20) + its `runtime-ports-auditor` agent
+  (0.0.21), i.e. the program dogfooding its own method. Target: **Claude Code /
+  Agent SDK**, the file-native local corner. New analysis:
+  `methodology/runtime-ports-claude-code-gap-2026-08-05.md`.
+- **New spec content (additive), from two findings this runtime alone produced:**
+  - §9.11 **FS-400.7** — shell sovereignty **decomposes by layer** (harness /
+    state / model). Claude Code is own-harness + own-state + rent-model, a
+    materially smaller ownership cost than OpenAI's rent-all. The Phase-7 waiver
+    scopes to the rented layer, not the whole shell. Sharpens FS-400.6's binary
+    own/rent.
+  - §10 **HarnessBundle validation note** — Claude Code's on-disk layout
+    (CLAUDE.md, `.claude/skills/`, `mcp.json`, settings) is the first real target
+    for §10's derived markdown view, which had been asserted but never exercised.
+- Promoted the FS-400 source memo to four runtimes (FS-400.1–.7; four-runtime
+  synthesis). Also: `ContextManifest` is now confirmed hostable natively by two
+  distinct mechanisms (Letta blocks, Claude Code file hierarchy).
+- **Why:** the fourth corner (file-native/local) tested the one sovereignty shape
+  the first three couldn't — a shell whose harness and state are fully owned while
+  only the model is rented — proving own/rent is per-layer, not per-shell. And it
+  gave §10 its first concrete runtime.
+
+Additive and docs-only; no existing conformance changed.
+
+---
+
 # 0.0.21 — 2026-08-05 (Paired agent — runtime-ports-auditor)
 
 **What changed:**
