@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 620" role="img" aria-labelledby="title desc">
+  <title id="title">Facework knowledge lineage example</title><desc id="desc">Observation becomes field note, model, framework, standard, application, and evidence through directional dependencies.</desc>
+  <rect width="1400" height="620" fill="#11110F"/>
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace"><text x="64" y="68" font-size="18" letter-spacing="2" fill="#9C9890">FVI-300 / LINEAGE MAP</text><text x="64" y="112" font-size="36" fill="#F4F3EE">Knowledge remains connected to what made it possible.</text></g>
+  <g transform="translate(64 220)" font-family="ui-monospace, monospace">
+    <path d="M108 70H228M294 70H414M480 70H600M666 70H786M852 70H972M1038 70H1158" stroke="#8FAFFF" stroke-width="2" fill="none"/>
+    <g fill="none" stroke="#8FAFFF" stroke-width="2"><path d="M218 62L228 70L218 78M404 62L414 70L404 78M590 62L600 70L590 78M776 62L786 70L776 78M962 62L972 70L962 78M1148 62L1158 70L1148 78"/></g>
+    <g fill="#1A1917" stroke="#34322D">
+      <rect width="108" height="140"/><rect x="186" width="108" height="140"/><rect x="372" width="108" height="140"/><rect x="558" width="108" height="140"/><rect x="744" width="108" height="140"/><rect x="930" width="108" height="140"/><rect x="1116" width="108" height="140"/>
+    </g>
+    <g fill="none" stroke="#F4F3EE" stroke-width="2"><circle cx="54" cy="54" r="18"/><circle cx="54" cy="54" r="5" fill="#F4F3EE"/><path d="M218 34H262V78H218ZM228 44H252M404 34H448V78H404ZM414 44H438M590 34H634V78H590ZM600 44H624M776 34H820V78H776ZM786 44H810M962 34H1006V78H962ZM972 44H996"/><circle cx="1170" cy="54" r="18"/><circle cx="1170" cy="54" r="5" fill="#62DFAE" stroke="none"/></g>
+    <g font-size="13" fill="#F4F3EE" text-anchor="middle"><text x="54" y="112">Observation</text><text x="240" y="112">Field note</text><text x="426" y="112">Model</text><text x="612" y="112">Framework</text><text x="798" y="112">Standard</text><text x="984" y="112">Application</text><text x="1170" y="112">Evidence</text></g>
+    <path d="M54 180V242H1170V180" stroke="#B69AE8" stroke-width="2" stroke-dasharray="7 7" fill="none"/>
+    <text x="612" y="280" font-size="14" fill="#B69AE8" text-anchor="middle">evidence returns to the system · lineage is a loop, not a funnel</text>
+  </g>
+</svg>

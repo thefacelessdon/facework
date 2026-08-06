@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { primitives, lerpPalette, type PrimitiveConfig } from "@/lib/primitives";
+import { primitives, type PrimitiveConfig } from "@/lib/primitives";
 
 function PrimitiveCanvas({
   config,
@@ -161,7 +161,7 @@ function SpecimenArtboard({ config, index }: { config: PrimitiveConfig; index: n
 
       {/* Footer */}
       <div className="absolute bottom-12 left-16 right-16 flex justify-between text-[10px] opacity-30">
-        <span>FACEWORK PROTOCOL v2</span>
+        <span>FACEWORK SYSTEM / PROTOCOL v2</span>
         <span>PRIMITIVE {String(index + 1).padStart(2, "0")} / {primitives.length}</span>
       </div>
     </div>

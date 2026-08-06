@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-labelledby="title desc">
+  <title id="title">Strand Lock</title>
+  <desc id="desc">Four paired signal strands tighten toward a stable central axis, with the lowest pair exchanging sides.</desc>
+  <g fill="currentColor">
+    <path d="M8 12C43 16 78 27 110 44V57C76 40 42 30 9 27Z"/>
+    <path d="M15 43C50 48 82 61 110 76V89C78 73 48 62 20 58Z"/>
+    <path d="M30 77C58 83 85 95 110 109V123C81 107 57 97 38 93Z"/>
+    <path d="M19 146C55 134 84 118 110 98V114C81 136 51 151 14 159Z"/>
+  </g>
+  <g fill="currentColor" transform="translate(240 0) scale(-1 1)">
+    <path d="M8 12C43 16 78 27 110 44V57C76 40 42 30 9 27Z"/>
+    <path d="M15 43C50 48 82 61 110 76V89C78 73 48 62 20 58Z"/>
+    <path d="M30 77C58 83 85 95 110 109V123C81 107 57 97 38 93Z"/>
+    <path d="M19 146C55 134 84 118 110 98V114C81 136 51 151 14 159Z"/>
+  </g>
+</svg>

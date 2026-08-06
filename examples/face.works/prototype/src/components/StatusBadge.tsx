@@ -17,7 +17,7 @@ export function StatusBadge({ status }: { status: Status }) {
     <span
       role="status"
       aria-label={labels[status]}
-      className={`inline-block px-2 py-0.5 border rounded text-xs tracking-wide ${styles[status]}`}
+      className={`inline-block px-2 py-0.5 border  text-xs tracking-wide ${styles[status]}`}
     >
       {labels[status]}
     </span>

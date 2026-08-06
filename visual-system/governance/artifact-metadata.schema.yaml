@@ -1,0 +1,74 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://face.works/schemas/visual-artifact-metadata.schema.yaml"
+title: "Facework Visual Artifact Metadata"
+type: object
+additionalProperties: false
+required: [artifact, lineage, implementation, evaluation, governance]
+
+properties:
+  artifact:
+    type: object
+    additionalProperties: false
+    required: [id, name, type, purpose, status, version]
+    properties:
+      id: { type: string, minLength: 1 }
+      name: { type: string, minLength: 1 }
+      type: { type: string, minLength: 1 }
+      purpose: { type: string, minLength: 1 }
+      audience:
+        type: array
+        items: { type: string }
+      status:
+        enum: [proposed, experimental, canonical, deprecated, superseded]
+      version:
+        type: string
+        pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+
+  lineage:
+    type: object
+    additionalProperties: false
+    required: [derived_from, principles, primitives, governing_specifications]
+    properties:
+      derived_from: { type: array, items: { type: string } }
+      principles: { type: array, items: { type: string } }
+      primitives:
+        type: array
+        items:
+          enum: [Axis, Balance, Tension, Flow, Module, Scale, Continuity]
+      governing_specifications: { type: array, items: { type: string } }
+      reference_studies: { type: array, items: { type: string } }
+      supersedes: { type: [string, "null"] }
+      superseded_by: { type: [string, "null"] }
+
+  implementation:
+    type: object
+    additionalProperties: false
+    required: [medium, constraints, accessibility_requirements]
+    properties:
+      medium: { type: string, minLength: 1 }
+      source_path: { type: string }
+      outputs: { type: array, items: { type: string } }
+      dependencies: { type: array, items: { type: string } }
+      constraints: { type: array, items: { type: string } }
+      accessibility_requirements: { type: array, items: { type: string } }
+
+  evaluation:
+    type: object
+    additionalProperties: false
+    required: [result, findings, known_exceptions, evidence]
+    properties:
+      evaluated_at: { type: [string, "null"], format: date-time }
+      evaluator: { type: [string, "null"] }
+      result: { enum: [pending, pass, conditional, fail] }
+      findings: { type: array, items: { type: string } }
+      known_exceptions: { type: array, items: { type: string } }
+      evidence: { type: array, items: { type: string } }
+
+  governance:
+    type: object
+    additionalProperties: false
+    required: [owner, created, revised]
+    properties:
+      owner: { type: string, minLength: 1 }
+      created: { type: string, format: date }
+      revised: { type: string, format: date }

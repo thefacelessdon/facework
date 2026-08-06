@@ -12,7 +12,7 @@ export interface ProtocolDoc {
   slug: string;
   title: string;
   subtitle: string;
-  category: "theory" | "methodology" | "spec" | "conformance";
+  category: "theory" | "discipline" | "practice" | "governance";
   order: number;
   content: string; // markdown
 }
@@ -27,10 +27,28 @@ export interface CaseStudy {
   status: "audit-complete" | "case-study" | "in-progress";
   conformanceLevel: 1 | 2 | 3 | 4;
   summary: string;
+  structuralChanges: StructuralChange[];
+  practicalImpact: PracticalImpact[];
+  handoffReadiness: HandoffReadiness[];
   artifacts: ArtifactCount;
   extractionCheckPassed: boolean;
   publicReference: boolean;
   date: string; // ISO 8601
+}
+
+export interface StructuralChange {
+  title: string;
+  detail: string;
+}
+
+export interface PracticalImpact {
+  label: string;
+  detail: string;
+}
+
+export interface HandoffReadiness {
+  label: string;
+  detail: string;
 }
 
 export interface ArtifactCount {

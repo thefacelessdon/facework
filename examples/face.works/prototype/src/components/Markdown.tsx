@@ -16,7 +16,7 @@ function renderInline(text: string) {
     }
     if (part.startsWith("`") && part.endsWith("`")) {
       return (
-        <code key={i} className="text-clarity text-[0.85em] px-1 py-0.5 bg-surface rounded">
+        <code key={i} className="text-clarity text-[0.85em] px-1 py-0.5 bg-surface ">
           {part.slice(1, -1)}
         </code>
       );
@@ -46,7 +46,7 @@ export function Markdown({ content }: { content: string }) {
       elements.push(
         <pre
           key={elements.length}
-          className="bg-surface border border-border rounded p-4 overflow-x-auto my-6 text-sm leading-relaxed"
+          className="bg-surface border border-border  p-4 overflow-x-auto my-6 text-sm leading-relaxed"
         >
           <code className={lang ? `language-${lang}` : ""}>
             {codeLines.join("\n")}
@@ -108,7 +108,7 @@ export function Markdown({ content }: { content: string }) {
     // Blockquote (single line for now)
     if (line.startsWith("> ")) {
       elements.push(
-        <blockquote key={elements.length} className="border-l-2 border-clarity/40 pl-4 my-4 text-muted italic">
+        <blockquote key={elements.length} className="border border-clarity/40 bg-clarity/5 p-4 my-4 text-muted italic">
           {renderInline(line.slice(2))}
         </blockquote>
       );
@@ -135,7 +135,7 @@ export function Markdown({ content }: { content: string }) {
     if (line.startsWith("- ")) {
       elements.push(
         <p key={elements.length} className="ml-4 my-1.5 text-sm text-muted flex gap-2">
-          <span className="text-muted/50" aria-hidden="true">·</span>
+          <span className="text-muted" aria-hidden="true">·</span>
           <span>{renderInline(line.slice(2))}</span>
         </p>
       );

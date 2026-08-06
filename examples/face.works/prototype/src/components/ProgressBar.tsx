@@ -16,13 +16,13 @@ export function ProgressBar({
       aria-valuemin={0}
       aria-valuemax={max}
       aria-label={label}
-      className="w-full bg-stone rounded-sm h-1"
+      className="w-full bg-stone  h-1"
     >
       <div
-        className="bg-coherence h-1 rounded-sm"
+        className="bg-coherence h-1 w-full origin-left"
         style={{
-          width: `${percentage}%`,
-          transition: `width var(--duration-slow) var(--ease-settle)`,
+          transform: `scaleX(${Math.min(100, Math.max(0, percentage)) / 100})`,
+          transition: "transform var(--duration-standard) var(--ease-resolve)",
         }}
       />
     </div>

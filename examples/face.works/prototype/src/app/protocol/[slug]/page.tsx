@@ -4,6 +4,13 @@ import Link from "next/link";
 import { protocolDocs } from "@/data/demo";
 import { Markdown } from "@/components/Markdown";
 
+const categoryLabels = {
+  theory: "Theory",
+  discipline: "Discipline",
+  practice: "Practice",
+  governance: "Governance + Conformance",
+} as const;
+
 export function generateStaticParams() {
   return protocolDocs.map((doc) => ({ slug: doc.slug }));
 }
@@ -17,7 +24,7 @@ export async function generateMetadata({
   const doc = protocolDocs.find((d) => d.slug === slug);
   if (!doc) return { title: "Not Found" };
   return {
-    title: `${doc.title} — Facework Protocol`,
+    title: `${doc.title} — Facework System`,
     description: doc.subtitle,
   };
 }
@@ -38,12 +45,12 @@ export default async function ProtocolDocPage({
         className="text-sm text-muted hover:text-foreground inline-flex items-center gap-2"
       >
         <span aria-hidden="true">&larr;</span>
-        <span>Protocol</span>
+        <span>System</span>
       </Link>
 
       <div className="space-y-3">
         <p className="text-xs tracking-[0.2em] uppercase text-muted">
-          {doc.category}
+          {categoryLabels[doc.category]}
         </p>
         <h1 className="text-2xl md:text-3xl font-normal tracking-tight">{doc.title}</h1>
         <p className="text-muted text-sm md:text-base">{doc.subtitle}</p>

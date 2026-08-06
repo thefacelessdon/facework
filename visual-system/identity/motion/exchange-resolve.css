@@ -1,0 +1,67 @@
+:root {
+  --fw-motion-immediate: 120ms;
+  --fw-motion-quick: 180ms;
+  --fw-motion-standard: 300ms;
+  --fw-motion-signature: 520ms;
+  --fw-motion-hold: 900ms;
+  --fw-motion-ambient: 8s;
+  --fw-ease-resolve: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.fw-exchange-resolve__left,
+.fw-exchange-resolve__right {
+  opacity: 0.56;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation-duration: var(--fw-motion-signature);
+  animation-timing-function: var(--fw-ease-resolve);
+  animation-fill-mode: both;
+  animation-iteration-count: 1;
+}
+
+.fw-exchange-resolve__left {
+  animation-name: fw-resolve-left;
+}
+
+.fw-exchange-resolve__right {
+  animation-name: fw-resolve-right;
+}
+
+.fw-exchange-resolve__axis {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: fw-axis-signal var(--fw-motion-signature) linear both;
+}
+
+@keyframes fw-resolve-left {
+  from { opacity: 0.56; transform: translateX(-10px); }
+  72% { opacity: 1; }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fw-resolve-right {
+  from { opacity: 0.56; transform: translateX(10px); }
+  72% { opacity: 1; }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fw-axis-signal {
+  0%, 48% { opacity: 0; transform: scale(0.5); }
+  64% { opacity: 0.8; transform: scale(1); }
+  82%, 100% { opacity: 0; transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fw-exchange-resolve__left,
+  .fw-exchange-resolve__right,
+  .fw-exchange-resolve__axis {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .fw-exchange-resolve__axis {
+    opacity: 0;
+  }
+}

@@ -8,10 +8,14 @@ import type {
 // --- Navigation ---
 
 export const navigation: NavItem[] = [
-  { label: "Protocol", href: "/protocol", description: "The open standard" },
-  { label: "Proof", href: "/proof", description: "Case studies and audits" },
-  { label: "Status", href: "/status", description: "Live coherence tracker" },
-  { label: "Engage", href: "/engage", description: "Work with Facework" },
+  { label: "Field Notes", href: "/field-notes", description: "Living observations" },
+  { label: "Models", href: "/models", description: "Ways of seeing" },
+  { label: "Frameworks", href: "/frameworks", description: "Reusable structures" },
+  { label: "Cases", href: "/cases", description: "Evidence in practice" },
+  { label: "Conversations", href: "/conversations", description: "Dialogue and refinement" },
+  { label: "Experiments", href: "/experiments", description: "Prototypes under pressure" },
+  { label: "Library", href: "/library", description: "Sources and lineage" },
+  { label: "About", href: "/about", description: "Practice and institution" },
 ];
 
 // --- Protocol Docs ---
@@ -49,12 +53,45 @@ The new paradigm treats culture as an energy system to be sustained. An extracti
 **The shift is not moral. It is architectural.**`,
   },
   {
+    slug: "coherence-design",
+    title: "Coherence Design",
+    subtitle:
+      "The discipline of designing systems that preserve identity under growth, pressure, and handoff",
+    category: "discipline",
+    order: 2,
+    content: `Coherence Design is the discipline that sits between theory and execution. Cultural Physics explains why energy is extracted or preserved. Coherence Design translates that understanding into build rules.
+
+## What the Discipline Does
+
+A coherent system must:
+
+- preserve identity as it scales
+- keep strategic decisions legible
+- make ownership visible
+- survive handoff without losing its governing signal
+- reject growth paths that depend on extraction
+
+## Design Questions
+
+Every serious build should be answerable at the design layer before implementation begins:
+
+1. What signal is irreducible here?
+2. Where does the system derive its energy?
+3. Who controls the current, and who only rents access to it?
+4. Which structures preserve coherence under pressure?
+5. Which dependencies increase entropy even if they increase convenience?
+
+## Why This Layer Matters
+
+Without a design discipline, theory stays abstract and operations become improvised. The job of Coherence Design is to make structure intentional before it becomes expensive to change.`,
+  },
+  {
     slug: "coherence-operating-system",
     title: "The Coherence Operating System",
     subtitle:
       "Maintaining structural alignment inside systems that would otherwise fracture under pressure",
-    category: "theory",
-    order: 2,
+    category: "practice",
+    order: 3,
     content: `Every product, company, and system lives or dies by its structural alignment. When coherence is present, the system holds its shape under pressure. When coherence is missing, the system drifts, contradicts itself, and eventually collapses.
 
 ## The Primitive Stack
@@ -76,12 +113,37 @@ Seven forces govern the coherence of any system being built:
 **Coherence** — The integrating force. Packaging everything so the system holds its shape when handed to someone who wasn't there when it was built.`,
   },
   {
+    slug: "constitution",
+    title: "Constitution",
+    subtitle:
+      "The governing boundaries that keep the practice aligned when conditions change",
+    category: "practice",
+    order: 4,
+    content: `The Constitution defines what Facework will and will not do in practice. It exists so speed does not override principle and commercial pressure does not silently rewrite the work.
+
+## What It Governs
+
+- sovereignty boundaries
+- extraction refusals
+- quality and taste obligations
+- openness commitments
+- how protocol work is separated from commercial implementation
+
+## Why It Exists
+
+Protocols can evolve. A constitution exists so the practice does not mutate every time the market asks it to. It keeps the work coherent across engagements, collaborators, and future versions of the system.
+
+## Practical Effect
+
+If a request produces short-term output at the cost of long-term coherence, the Constitution is the mechanism that says no.`,
+  },
+  {
     slug: "protocol-v1",
     title: "Facework Protocol v1",
     subtitle:
       "An open standard for turning cultural signal into coherent, ownable business systems",
-    category: "spec",
-    order: 3,
+    category: "practice",
+    order: 5,
     content: `## Design Principles
 
 - Signal before scale.
@@ -115,8 +177,8 @@ Each phase has required outputs and pass/fail gates. A project is minimally conf
     slug: "build-methodology",
     title: "Build Methodology",
     subtitle: "From idea to handoff-ready architecture in days, not months",
-    category: "methodology",
-    order: 4,
+    category: "practice",
+    order: 6,
     content: `## The Human + Agent Operating Model
 
 This methodology was developed and validated building GAMUT (creator commerce infrastructure) across 4 days. The agent runs the protocol. The human provides taste, judgment, relationship, and extraction checks.
@@ -151,8 +213,8 @@ The deeper difference: most build processes are culturally neutral — which in 
     slug: "conformance-model",
     title: "Conformance Model",
     subtitle: "What 'Facework Protocol Conformant' means — and how it's verified",
-    category: "conformance",
-    order: 5,
+    category: "governance",
+    order: 7,
     content: `## Conformance Levels
 
 **Level 1: Phase-Complete** — All required canonical objects exist.
@@ -178,6 +240,31 @@ If any answer reveals extraction, it's flagged as a structural concern. Extracti
 
 Anyone can audit their own system against this model — the conformance criteria are open. The commercial layer is Facework running the audit and issuing the "Facework Protocol Conformant" mark.`,
   },
+  {
+    slug: "standards-track",
+    title: "Standards Track",
+    subtitle:
+      "How formal standards fit into the system, and why that layer is intentionally deferred",
+    category: "governance",
+    order: 8,
+    content: `Facework distinguishes between the working practice and the formal standards layer. The practice is active now. The standards track exists to stabilize what should become auditable, transferable, and eventually certifiable.
+
+## Current Status
+
+The standards layer is deferred by design. The protocol, constitution, and conformance model need to prove themselves through repeated use before they are frozen into a broader standards architecture.
+
+## What Eventually Belongs Here
+
+- canonical terminology
+- standards taxonomy
+- conformance pathways
+- evidence requirements
+- mark / certification rules
+
+## Why Defer It
+
+Premature standardization turns live practice into paperwork. Facework only wants to standardize what has already survived real projects, real pressure, and real handoff conditions.`,
+  },
 ];
 
 // --- Case Studies ---
@@ -192,6 +279,57 @@ export const caseStudies: CaseStudy[] = [
     conformanceLevel: 2,
     summary:
       "Creator commerce infrastructure giving established creators the operational layer to sell physical products at national retail scale. Built using the Facework methodology in 4 days. Retroactive conformance audit in progress.",
+    structuralChanges: [
+      {
+        title: "Governance became explicit",
+        detail:
+          "Core economic, rights, and ownership decisions were locked before implementation, reducing downstream drift and negotiation-by-surprise.",
+      },
+      {
+        title: "Operations became portable",
+        detail:
+          "Architecture specs and workflow playbooks turned tacit founder knowledge into a handoff-ready operating layer another builder can pick up quickly.",
+      },
+      {
+        title: "Retail scale stopped depending on improvisation",
+        detail:
+          "The system moved from concept pressure to buildable structure: channel logic, product operations, and prototype flows were specified as one coherent stack.",
+      },
+    ],
+    practicalImpact: [
+      {
+        label: "Faster handoff",
+        detail:
+          "A new engineer can enter through specs and playbooks instead of reconstructing founder logic from meetings and scattered context.",
+      },
+      {
+        label: "Cleaner decision-making",
+        detail:
+          "Strategic debates move upstream into explicit governance and direction, which reduces rework once execution begins.",
+      },
+      {
+        label: "More credible scale path",
+        detail:
+          "Retail expansion becomes a designed operating path rather than a fragile ambition held together by improvisation.",
+      },
+    ],
+    handoffReadiness: [
+      {
+        label: "Decision trail exists",
+        detail:
+          "A replacement builder can see why core choices were made instead of inheriting conclusions without reasoning.",
+      },
+      {
+        label: "Operational ownership is legible",
+        detail:
+          "Workflows, responsibilities, and system boundaries are documented clearly enough for another operator to step in.",
+      },
+      {
+        label: "Build entry is immediate",
+        detail:
+          "Specs, playbooks, and prototype flows reduce the need for founder-led oral transfer before execution can start.",
+      },
+    ],
     artifacts: {
       governanceDocs: 6,
       decisionRecords: 7,
@@ -217,14 +355,14 @@ export const coherenceSnapshot: CoherenceSnapshot = {
       label: "MVP — Services Phase",
       status: "active",
       description:
-        "Running the protocol directly for creators and cultural brands.",
+        "Running the Facework practice directly for creators and cultural brands.",
       exitCriteria: [
         {
           description: "Revenue at $5K+/month for 3 consecutive months",
           status: "not-started",
         },
         {
-          description: "3 completed protocol runs with documented outcomes",
+          description: "3 completed practice engagements with documented outcomes",
           status: "in-progress",
           evidence: "GAMUT audit in progress (1 of 3)",
         },
@@ -239,11 +377,11 @@ export const coherenceSnapshot: CoherenceSnapshot = {
       label: "Beta — Transfer Phase",
       status: "upcoming",
       description:
-        "The protocol becomes transferable. Studios license the methodology.",
+        "The practice becomes transferable. Studios license the method and can run it without founder dependence.",
       exitCriteria: [
         {
           description:
-            "1 studio successfully running protocol under license",
+            "1 studio successfully running the practice under license",
           status: "not-started",
         },
         {
@@ -262,7 +400,7 @@ export const coherenceSnapshot: CoherenceSnapshot = {
       label: "Scale — Standard Phase",
       status: "upcoming",
       description:
-        "The protocol is a recognized standard with certification and ecosystem.",
+        "The practice has matured into a recognized standard with certification and ecosystem support.",
       exitCriteria: [
         {
           description: "Certification program launched and operational",
@@ -296,7 +434,7 @@ export const coherenceSnapshot: CoherenceSnapshot = {
     {
       type: "hard",
       description:
-        "Author sole source of protocol credibility after 12 months",
+        "Author remains the sole source of practice credibility after 12 months",
       status: "clear",
       detail: "Clock starts at first paid engagement",
     },
@@ -321,10 +459,10 @@ export const coherenceSnapshot: CoherenceSnapshot = {
     targetMonthsAtFloor: 3,
   },
   nonNegotiables: [
-    "Protocol stays open — theory, methodology, spec always freely available",
+    "The protocol stays open — theory, discipline, and core method remain freely available",
     "Creator sovereignty is absolute — they own all output, exit is clean",
     "No lock-in — deliverables in open formats, no proprietary dependencies",
     "Conduits, not containers — Facework never controls creator infrastructure",
-    "Energy transfer within 12 months — protocol must not depend solely on author",
+    "Energy transfer within 12 months — the practice must not depend solely on the author",
   ],
 };

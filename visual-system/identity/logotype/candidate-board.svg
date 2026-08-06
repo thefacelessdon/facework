@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 1080" role="img" aria-labelledby="title desc">
+  <title id="title">Facework logotype candidate board</title>
+  <desc id="desc">Five logotype directions are compared for ownership, legibility, mark fit, authority, and humanity.</desc>
+  <defs>
+    <filter id="inverse"><feColorMatrix values="-1 0 0 0 1  0 -1 0 0 1  0 0 -1 0 1  0 0 0 1 0"/></filter>
+  </defs>
+  <rect width="1500" height="1080" fill="#FAFAF8"/>
+  <style>
+    .label{font-family:'Berkeley Mono Trial','JetBrains Mono',monospace;font-size:18px;fill:#1A1917;letter-spacing:1px}
+    .meta{font-family:'Berkeley Mono Trial','JetBrains Mono',monospace;font-size:13px;fill:#6B6861}
+    .panel{fill:#F4F3EE;stroke:#E5E3DC;stroke-width:1}
+  </style>
+  <text x="70" y="64" class="label" font-size="24">FVI-100 / FACEWORK LOGOTYPE / ROUND 01</text>
+  <text x="70" y="92" class="meta">Historic reference · two custom constructions · open interval study · licensed-type study</text>
+
+  <g transform="translate(70 135)">
+    <rect class="panel" width="660" height="245" rx="4"/>
+    <image href="candidates/00-historic-typeset.svg" x="35" y="48" width="590" height="95"/>
+    <text x="28" y="190" class="label">00 / HISTORIC TYPESET</text>
+    <text x="28" y="215" class="meta">Recovered register · heavy mono · reference only</text>
+  </g>
+  <g transform="translate(770 135)">
+    <rect class="panel" width="660" height="245" rx="4"/>
+    <image href="candidates/04-structural-typeset.svg" x="35" y="48" width="590" height="95"/>
+    <text x="28" y="190" class="label">04 / STRUCTURAL TYPESET</text>
+    <text x="28" y="215" class="meta">Berkeley Mono Trial · excellent voice · not ownable</text>
+  </g>
+
+  <g transform="translate(70 420)">
+    <rect class="panel" width="1360" height="245" rx="4"/>
+    <image href="candidates/01-register.svg" x="60" y="46" width="840" height="120"/>
+    <text x="950" y="84" class="label">01 / REGISTER</text>
+    <text x="950" y="112" class="meta">Custom · calibrated · human/mechanical</text>
+    <text x="950" y="139" class="meta">Variable width · open counters · owned paths</text>
+  </g>
+
+  <g transform="translate(70 705)">
+    <rect class="panel" width="660" height="245" rx="4"/>
+    <image href="candidates/02-ledger.svg" x="35" y="50" width="590" height="91"/>
+    <text x="28" y="190" class="label">02 / LEDGER</text>
+    <text x="28" y="215" class="meta">Custom · compact · rectilinear</text>
+  </g>
+  <g transform="translate(770 705)">
+    <rect class="panel" width="660" height="245" rx="4"/>
+    <image href="candidates/03-interval.svg" x="35" y="54" width="590" height="79"/>
+    <text x="28" y="190" class="label">03 / INTERVAL</text>
+    <text x="28" y="215" class="meta">Custom · wide · separated joins</text>
+  </g>
+
+  <text x="70" y="1012" class="meta">Criteria: ownership · name legibility · mark compatibility · institutional authority · humanity · small-scale survival</text>
+  <line x1="70" y1="1035" x2="1430" y2="1035" stroke="#E5E3DC"/>
+</svg>

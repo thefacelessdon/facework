@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-labelledby="title desc">
+  <title id="title">Convergence</title>
+  <desc id="desc">Two systems of three angular forces approach a central interval and continue as a shared lower structure.</desc>
+  <g fill="currentColor">
+    <path d="M8 18L56 18L110 49V64L52 32L8 32Z"/>
+    <path d="M8 54L52 54L110 82V97L48 68L8 68Z"/>
+    <path d="M8 91L48 91L110 116V131L44 105L8 105Z"/>
+    <path d="M44 142L82 124L110 107V123L87 138L53 155Z"/>
+  </g>
+  <g fill="currentColor" transform="translate(240 0) scale(-1 1)">
+    <path d="M8 18L56 18L110 49V64L52 32L8 32Z"/>
+    <path d="M8 54L52 54L110 82V97L48 68L8 68Z"/>
+    <path d="M8 91L48 91L110 116V131L44 105L8 105Z"/>
+    <path d="M44 142L82 124L110 107V123L87 138L53 155Z"/>
+  </g>
+</svg>

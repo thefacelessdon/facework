@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 920" role="img" aria-labelledby="title desc">
+  <title id="title">Coherence Mark candidate board</title>
+  <desc id="desc">Historic and derived Coherence Mark candidates compared across paper and field modes.</desc>
+  <defs>
+    <filter id="inverse"><feColorMatrix values="-1 0 0 0 1  0 -1 0 0 1  0 0 -1 0 1  0 0 0 1 0"/></filter>
+  </defs>
+  <rect width="1400" height="920" fill="#FAFAF8"/>
+  <style>
+    .label{font-family:'Berkeley Mono','JetBrains Mono',monospace;font-size:18px;fill:#1A1917;letter-spacing:1px}
+    .meta{font-family:'Berkeley Mono','JetBrains Mono',monospace;font-size:13px;fill:#6B6861}
+    .inverse-label{font-family:'Berkeley Mono','JetBrains Mono',monospace;font-size:18px;fill:#F4F3EE;letter-spacing:1px}
+    .inverse-meta{font-family:'Berkeley Mono','JetBrains Mono',monospace;font-size:13px;fill:#9C9890}
+    .panel{fill:#F4F3EE;stroke:#E5E3DC;stroke-width:1}
+    .dark{fill:#11110F}
+  </style>
+  <text x="70" y="64" class="label" font-size="24">FVI-001 / COHERENCE MARK DERIVATION / ROUND 01</text>
+  <text x="70" y="92" class="meta">Historic baseline + four derived families · monochrome · common 3:2 field</text>
+
+  <g transform="translate(70 130)">
+    <rect class="panel" width="400" height="290" rx="4"/>
+    <image href="candidates/00-historic-reconstruction.svg" x="80" y="45" width="240" height="160"/>
+    <text x="24" y="242" class="label">00 / HISTORIC RECONSTRUCTION</text>
+    <text x="24" y="266" class="meta">Baseline · five paired strands</text>
+  </g>
+  <g transform="translate(500 130)">
+    <rect class="panel" width="400" height="290" rx="4"/>
+    <image href="candidates/01-strand-lock.svg" x="80" y="45" width="240" height="160"/>
+    <text x="24" y="242" class="label">01 / STRAND LOCK</text>
+    <text x="24" y="266" class="meta">Simplified inheritance · four paired strands</text>
+  </g>
+  <g transform="translate(930 130)">
+    <rect class="panel" width="400" height="290" rx="4"/>
+    <image href="candidates/02-axis-fold.svg" x="80" y="45" width="240" height="160"/>
+    <text x="24" y="242" class="label">02 / AXIS FOLD</text>
+    <text x="24" y="266" class="meta">Engineered planes · hard geometry</text>
+  </g>
+
+  <g transform="translate(70 460)">
+    <rect class="panel" width="400" height="290" rx="4"/>
+    <image href="candidates/03-convergence.svg" x="80" y="45" width="240" height="160"/>
+    <text x="24" y="242" class="label">03 / CONVERGENCE</text>
+    <text x="24" y="266" class="meta">Reduced butterfly cue · stronger system reading</text>
+  </g>
+  <g transform="translate(500 460)">
+    <rect class="panel" width="400" height="290" rx="4"/>
+    <image href="candidates/04-continuity.svg" x="80" y="45" width="240" height="160"/>
+    <text x="24" y="242" class="label">04 / CONTINUITY</text>
+    <text x="24" y="266" class="meta">Monoline behavior · motion-ready</text>
+  </g>
+  <g transform="translate(930 460)">
+    <rect class="dark" width="400" height="290" rx="4"/>
+    <image href="candidates/03-convergence.svg" x="80" y="45" width="240" height="160" filter="url(#inverse)"/>
+    <text x="24" y="242" class="inverse-label">03 / FIELD MODE</text>
+    <text x="24" y="266" class="inverse-meta">Negative expression preview</text>
+  </g>
+
+  <text x="70" y="824" class="meta">Criteria: derivability · bilateral meaning · distinctiveness · small-scale survival · motion potential · continuity</text>
+  <line x1="70" y1="850" x2="1330" y2="850" stroke="#E5E3DC"/>
+  <text x="70" y="882" class="meta">Status: experimental / no candidate is canonical until scale and adjacency tests pass</text>
+</svg>

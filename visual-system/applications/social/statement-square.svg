@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080" role="img" aria-labelledby="title desc">
+  <title id="title">Facework statement social template</title><desc id="desc">A square paper field presents one statement with source and status on a strict left datum.</desc>
+  <rect width="1080" height="1080" fill="#FAFAF8"/><path d="M72 72h936M72 1008h936" stroke="#1A1917" stroke-width="2"/>
+  <text x="72" y="120" font-family="JetBrains Mono,monospace" font-size="20" letter-spacing="2" fill="#6B6861">FACEWORK / FIELD NOTE 027</text>
+  <rect x="946" y="94" width="14" height="14" fill="#8FAFFF" stroke="#1A1917" stroke-width="2"/><text x="972" y="108" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="17" fill="#1A1917">DEVELOPING</text>
+  <text x="72" y="348" font-family="Helvetica Neue,Arial,sans-serif" font-size="82" font-weight="500" letter-spacing="-3.8" fill="#1A1917"><tspan x="72" dy="0">A system becomes</tspan><tspan x="72" dy="89">trustworthy when its</tspan><tspan x="72" dy="89">decisions remain visible</tspan><tspan x="72" dy="89">after its author leaves.</tspan></text>
+  <line x1="72" y1="804" x2="1008" y2="804" stroke="#E5E3DC" stroke-width="2"/>
+  <text x="72" y="854" font-family="JetBrains Mono,monospace" font-size="18" fill="#6B6861">OBSERVATION → MODEL</text>
+  <text x="72" y="970" font-family="Helvetica Neue,Arial,sans-serif" font-size="25" fill="#2C2B27">Read the full record at face.works/notes/027</text>
+  <text x="1008" y="970" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="18" fill="#6B6861">01 / 01</text>
+</svg>

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 80" role="img" aria-labelledby="title desc">
+  <title id="title">Ledger logotype candidate</title>
+  <desc id="desc">A compact custom uppercase Facework wordmark constructed from rectilinear strokes and clipped corners.</desc>
+  <g fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M8 70V10H46M8 38H41"/>
+    <path d="M59 70L80 10L101 70M67 48H93"/>
+    <path d="M161 18L153 10H130L119 21V59L130 70H153L161 62"/>
+    <path d="M182 10V70M182 10H220M182 39H215M182 70H220"/>
+    <path d="M239 10L248 70L268 38L288 70L297 10"/>
+    <path d="M329 10H350L361 21V59L350 70H329L318 59V21Z"/>
+    <path d="M383 70V10H405L417 22V37L405 49H383M404 49L422 70"/>
+    <path d="M447 10V70M488 10L447 48M465 32L494 70"/>
+  </g>
+</svg>

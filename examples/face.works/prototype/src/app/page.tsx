@@ -1,163 +1,85 @@
 import Link from "next/link";
-import { PatternField } from "@/components/PatternField";
+import { ArtifactRecord } from "@/components/ArtifactRecord";
+
+const knowledgePath = [
+  { order: "01 / NOW", title: "Field Notes", note: "What we notice before it hardens.", href: "/field-notes" },
+  { order: "02", title: "Models", note: "Ways of seeing made inspectable.", href: "/models" },
+  { order: "03", title: "Frameworks", note: "Reusable structures for judgment.", href: "/frameworks" },
+  { order: "04", title: "Standards", note: "What has earned permanence.", href: "/frameworks" },
+  { order: "05 / PROOF", title: "Cases", note: "Where the ideas met reality.", href: "/cases" },
+];
 
 export default function Home() {
   return (
-    <div className="mx-auto max-w-5xl px-6 md:px-8 lg:px-20">
-      {/* Hero with pattern background */}
-      <section className="pt-16 md:pt-24 pb-16 md:pb-20 space-y-8 relative">
-        <div className="absolute inset-0 -mx-6 md:-mx-8 lg:-mx-20 overflow-hidden pointer-events-none">
-          <PatternField opacity={0.15} speed={0.3} />
-        </div>
-        <div className="relative space-y-8">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-normal leading-[1.15] tracking-tight max-w-3xl">
-          An open protocol for turning cultural signal into coherent, ownable
-          business systems.
-        </h1>
-
-        <p className="text-base md:text-lg text-muted max-w-xl leading-relaxed">
-          For creators and cultural brands who need infrastructure they
-          control — not platforms that control them.
-        </p>
-
-        <div className="text-sm text-muted border border-border bg-background/80 backdrop-blur-sm rounded px-5 py-3 inline-block">
-          <span className="text-muted">Coherence</span>{" "}
-          <span className="text-foreground">=</span>{" "}
-          <span className="text-foreground">(Flow × Resonance)</span>{" "}
-          <span className="text-muted">/</span>{" "}
-          <span className="text-foreground">(1 + Entropy)</span>
-        </div>
+    <>
+      <section className="threshold" aria-labelledby="hero-title">
+        <p className="eyebrow">Facework / Public record / Foundation active</p>
+        <h1 id="hero-title">Coherence is not sameness. It is relationship held under pressure.</h1>
+        <div className="threshold-foot">
+          <p>Facework is a discipline for seeing, designing, and maintaining the structures that let identity carry weight over time.</p>
+          <Link href="#current-attention">Enter the current field ↓</Link>
         </div>
       </section>
 
-      <hr />
-
-      {/* The Physics */}
-      <section className="py-12 md:py-16 space-y-6">
-        <p className="text-xs tracking-[0.2em] uppercase text-muted">
-          The Physics
-        </p>
-        <div className="space-y-5 max-w-2xl">
-          <p className="text-base md:text-lg leading-relaxed">
-            When the people who generate the energy do not control the
-            infrastructure through which it flows, the energy is extracted.
-          </p>
-          <p className="text-sm md:text-base text-muted leading-relaxed">
-            This has been true for jazz, hip hop, fashion, and social media.
-            The communities generate the culture. External systems capture
-            the current.
-          </p>
-          <p className="text-sm md:text-base leading-relaxed">
-            Facework is the counter-architecture. Every phase of the build
-            sequence asks:{" "}
-            <span className="text-clarity">
-              whose energy powers this system, and who controls the
-              infrastructure it flows through?
-            </span>
-          </p>
-        </div>
-      </section>
-
-      <hr />
-
-      {/* What You Get */}
-      <section className="py-12 md:py-16 space-y-8">
-        <p className="text-xs tracking-[0.2em] uppercase text-muted">
-          What the protocol produces
-        </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {[
-            {
-              title: "Governance & Economics",
-              body: "Business model, ownership structure, exit guarantee, extraction check. The governing truth documented before anything is designed.",
-            },
-            {
-              title: "Strategic Direction",
-              body: "Every dilemma surfaced and resolved. Decision records with reasoning. No unresolved forks consuming energy.",
-            },
-            {
-              title: "Architecture & Playbooks",
-              body: "Implementable specs for every system. Operational playbooks for every workflow. Human + agent readable.",
-            },
-            {
-              title: "Working Prototype",
-              body: "Demo mode that proves the UX. Typed schema, test suite, design language spec. Hand it to an engineer — they build, not design.",
-            },
-          ].map((item) => (
-            <div
-              key={item.title}
-              className="border border-border rounded p-6 space-y-3"
-            >
-              <h3 className="text-sm font-medium tracking-wide">{item.title}</h3>
-              <p className="text-sm text-muted leading-relaxed">{item.body}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <hr />
-
-      {/* Non-negotiables */}
-      <section className="py-12 md:py-16 space-y-8">
-        <p className="text-xs tracking-[0.2em] uppercase text-muted">
-          Non-negotiables
-        </p>
-        <div className="space-y-5">
-          {[
-            {
-              principle: "Protocol stays open",
-              detail:
-                "Theory, methodology, spec — always freely available. Anyone can build a conformant system without paying Facework.",
-            },
-            {
-              principle: "Creator sovereignty is absolute",
-              detail:
-                "You own everything produced. All artifacts, all code, all data. Exit is clean and immediate.",
-            },
-            {
-              principle: "Conduits, not containers",
-              detail:
-                "Facework never controls your infrastructure, distribution, data, or economic current.",
-            },
-            {
-              principle: "No lock-in",
-              detail:
-                "Deliverables in open formats. No proprietary dependencies. Your system works without Facework.",
-            },
-          ].map((item) => (
-            <div key={item.principle} className="flex gap-4 items-start">
-              <span className="text-coherence mt-1 text-xs" aria-hidden="true">●</span>
-              <div>
-                <p className="text-sm font-medium">{item.principle}</p>
-                <p className="text-sm text-muted mt-1">{item.detail}</p>
+      <section className="ledger" id="current-attention" aria-labelledby="attention-title">
+        <header className="section-head"><p>01 / Current attention</p><p>Observation → Model</p></header>
+        <div className="claim">
+          <p className="claim-meta">Field Note 027<br />06 August 2026<br />Status / Developing</p>
+          <div className="claim-body">
+            <h2 id="attention-title" className="display-title">A system becomes trustworthy when its decisions remain visible after its author leaves.</h2>
+            <p className="lead">We are studying how lineage changes the quality of inheritance: not as administrative metadata, but as part of the artifact itself.</p>
+            <details className="trace">
+              <summary>Trace this idea</summary>
+              <div className="trace-panel">
+                <p><span>Related model</span><Link href="/models">Inheritance Field / FM-014</Link></p>
+                <p><span>Formalized through</span><Link href="/frameworks">FVS-100 Visual Constitution</Link></p>
+                <p><span>Applied in</span><Link href="/cases">Lineage Inspector / FVA-600</Link></p>
+                <p><span>Evidence</span><Link href="#artifact-record">Application Translation evaluation</Link></p>
               </div>
-            </div>
+            </details>
+          </div>
+        </div>
+        <div className="evidence-strip" aria-label="Evidence summary">
+          <p><span>Observed</span>Decisions disappear inside polished deliverables.</p>
+          <p><span>Testing</span>Visible status, source, and dependency at the point of use.</p>
+          <p><span>Limit</span>Transparency cannot replace judgment or stewardship.</p>
+        </div>
+      </section>
+
+      <section className="ledger" aria-labelledby="path-title">
+        <header className="section-head"><p>02 / Knowledge path</p><p>Fast signal → durable knowledge</p></header>
+        <h2 id="path-title" className="display-title knowledge-path-title">The pace slows as an idea earns permanence.</h2>
+        <ol className="path-list">
+          {knowledgePath.map((item) => (
+            <li key={`${item.order}-${item.title}`}>
+              <span>{item.order}</span>
+              <Link href={item.href}><strong>{item.title}</strong><small>{item.note}</small></Link>
+            </li>
           ))}
+        </ol>
+      </section>
+
+      <section className="ledger" id="artifact-record" aria-labelledby="record-title">
+        <header className="section-head"><p>03 / Artifact record</p><p>Claim / type / status / lineage</p></header>
+        <ArtifactRecord />
+      </section>
+
+      <section className="ledger" aria-labelledby="dialogue-title">
+        <header className="section-head"><p>04 / Practice in dialogue</p><p>Conversations ↔ experiments</p></header>
+        <div className="bilateral">
+          <div><p className="kicker">Conversation 008</p><h2 id="dialogue-title" className="display-title">What becomes visible when two disciplines share a field?</h2></div>
+          <div><p className="kicker">Experiment 012</p><p className="lead">Dialogue and prototypes expose a model to pressure before it becomes a standard.</p><Link className="text-link" href="/conversations">Follow the intellectual lineage ↗</Link></div>
         </div>
       </section>
 
-      <hr />
-
-      {/* CTA */}
-      <section className="py-16 md:py-24 text-center space-y-6">
-        <p className="text-xl md:text-2xl font-normal tracking-tight">
-          Control the frequency. Own the current.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Link
-            href="/protocol"
-            className="border border-border rounded px-6 py-3 text-sm tracking-wide hover:border-muted text-center"
-          >
-            Read the protocol
-          </Link>
-          <Link
-            href="/engage"
-            className="bg-soft text-ink rounded px-6 py-3 text-sm tracking-wide hover:opacity-90 text-center"
-          >
-            Work with Facework
-          </Link>
+      <section className="about-band" aria-labelledby="about-title">
+        <p className="eyebrow">05 / About Facework</p>
+        <h2 id="about-title" className="display-title">Identity is the capacity to remain intelligible through change.</h2>
+        <div className="about-copy">
+          <p>Facework develops theory, standards, and tools for coherence across organizations, products, environments, and public life.</p>
+          <p className="meta">FACEWORK / FVS 0.1 / PRODUCTION CANDIDATE</p>
         </div>
       </section>
-    </div>
+    </>
   );
 }

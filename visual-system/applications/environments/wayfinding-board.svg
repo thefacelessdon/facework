@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1200" viewBox="0 0 1800 1200" role="img" aria-labelledby="title desc">
+  <title id="title">Facework wayfinding board design intent</title><desc id="desc">A horizontal decision-point sign prioritizes three destinations and directional arrows over identity.</desc>
+  <rect width="1800" height="1200" fill="#FAFAF8"/><text x="90" y="88" font-family="JetBrains Mono,monospace" font-size="22" letter-spacing="2" fill="#6B6861">FACEWORK / DECISION POINT B</text><line x1="90" y1="130" x2="1710" y2="130" stroke="#1A1917" stroke-width="4"/>
+  <g font-family="Helvetica Neue,Arial,sans-serif" fill="#1A1917"><text x="90" y="330" font-size="76" font-weight="500">Assembly</text><text x="90" y="414" font-size="34" fill="#6B6861">East Field / 200 capacity</text><path d="M1450 330h180m-64-64 64 64-64 64" fill="none" stroke="#1A1917" stroke-width="12"/>
+  <line x1="90" y1="500" x2="1710" y2="500" stroke="#E5E3DC" stroke-width="3"/><text x="90" y="690" font-size="76" font-weight="500">Evidence library</text><text x="90" y="774" font-size="34" fill="#6B6861">Quiet reading / accessible entrance</text><path d="M1630 690H1450m64-64-64 64 64 64" fill="none" stroke="#1A1917" stroke-width="12"/>
+  <line x1="90" y1="860" x2="1710" y2="860" stroke="#E5E3DC" stroke-width="3"/><text x="90" y="1042" font-size="76" font-weight="500">Field studio</text><path d="M1540 1080V930m-64 64 64-64 64 64" fill="none" stroke="#1A1917" stroke-width="12"/></g>
+</svg>

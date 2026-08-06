@@ -1,0 +1,177 @@
+version: "2.0.0"
+system: "Facework Visual Specification"
+updated: "2026-08-06"
+
+documents:
+  - { id: FVS-000, path: ../FVS-000-framework.md, authority: canonical, status: canonical }
+  - { id: FVS-100, path: ../FVS-100-constitution.md, authority: constitutional, status: ratified }
+  - { id: FVS-110, path: ../FVS-110-lexicon.md, authority: normative, status: normative }
+  - { id: FVS-200, path: ../FVS-200-primitives.md, authority: normative, status: normative }
+  - { id: FVS-300, path: ../FVS-300-geometry.md, authority: normative, status: normative }
+  - { id: FVS-400, path: ../FVS-400-composition.md, authority: normative, status: normative }
+  - { id: FVS-500, path: ../FVS-500-typography.md, authority: normative, status: normative }
+  - { id: FVS-600, path: ../FVS-600-color.md, authority: normative, status: normative }
+  - { id: FVS-700, path: ../FVS-700-interaction.md, authority: normative, status: normative }
+  - { id: FVS-800, path: ../FVS-800-motion.md, authority: normative, status: normative }
+  - { id: FVS-900, path: ../FVS-900-applications.md, authority: normative, status: normative }
+
+reference_studies:
+  - { id: FVR-000, path: ../references/FVR-000-atlas.md, status: active-research-program }
+  - { id: FVR-101, path: ../references/FVR-101-bilateral-systems.md, status: initial-synthesis }
+  - { id: FVR-102, path: ../references/FVR-102-information-architecture.md, status: initial-synthesis }
+  - { id: FVR-103, path: ../references/FVR-103-knowledge-artifacts.md, status: initial-synthesis }
+  - { id: FVR-104, path: ../references/FVR-104-scientific-visualization.md, status: initial-synthesis }
+  - { id: FVR-105, path: ../references/FVR-105-living-systems.md, status: initial-synthesis }
+
+identity_artifacts:
+  - id: coherence-mark
+    name: "Axis Exchange / Facework Coherence Mark"
+    status: canonical
+    version: "0.1.0"
+    record: ../identity/FVI-001-coherence-mark-derivation.md
+    source: ../identity/coherence-mark/coherence-mark.svg
+    micro_source: ../identity/coherence-mark/coherence-mark-micro.svg
+    next_gate: "Formal trademark clearance before registration or high-cost rollout"
+  - id: facework-logotype
+    name: "Register / Facework logotype"
+    status: canonical
+    version: "0.1.0"
+    record: ../identity/FVI-100-facework-logotype.md
+    source: ../identity/logotype/facework-logotype.svg
+    horizontal_lockup: ../identity/logotype/facework-lockup-horizontal.svg
+    stacked_lockup: ../identity/logotype/facework-lockup-stacked.svg
+    next_gate: "Formal trademark review before registration or high-cost rollout"
+  - id: identity-spatial-protocol
+    name: "Facework responsive signature and spatial protocol"
+    status: canonical
+    version: "0.1.0"
+    record: ../identity/FVI-200-lockups-spatial-protocol.md
+    construction: ../identity/lockups/construction-grid.svg
+    responsive_reference: ../identity/lockups/responsive-system.svg
+    placement_reference: ../identity/lockups/placement-zones.svg
+    next_gate: "Physical-production and partner-lockup testing"
+  - id: symbol-diagram-grammar
+    name: "Facework symbol and diagram grammar"
+    status: canonical
+    version: "0.1.0"
+    record: ../identity/FVI-300-symbol-diagram-grammar.md
+    source: ../identity/diagram/symbol-library.svg
+    lineage_reference: ../identity/diagram/lineage-map.svg
+    test_reference: ../identity/diagram/grammar-test.svg
+    symbols:
+      - ../identity/diagram/symbols/observation.svg
+      - ../identity/diagram/symbols/artifact.svg
+      - ../identity/diagram/symbols/boundary.svg
+      - ../identity/diagram/symbols/connection.svg
+      - ../identity/diagram/symbols/dependency.svg
+      - ../identity/diagram/symbols/exchange.svg
+      - ../identity/diagram/symbols/transformation.svg
+    next_gate: "Application testing with real protocol, evidence, and data diagrams"
+  - id: exchange-resolve-motion
+    name: "Exchange Resolve / Facework motion signature"
+    status: canonical
+    version: "0.1.0"
+    record: ../identity/FVI-400-motion-signature.md
+    source: ../identity/motion/coherence-mark-exchange-resolve.svg
+    stylesheet: ../identity/motion/exchange-resolve.css
+    reference: ../identity/motion/reference.html
+    storyboard: ../identity/motion/storyboard.svg
+    next_gate: "Representative device, projection, and video-export testing"
+
+application_artifacts:
+  - id: application-foundation
+    name: "Open Ledger / Facework application foundation"
+    status: canonical
+    version: "1.0.0"
+    record: ../applications/FVA-000-application-foundation.md
+    tokens: ../applications/shared/tokens.json
+  - id: faceworks-public-interface
+    name: "face.works public knowledge interface"
+    status: reference
+    version: "1.0.0"
+    record: ../applications/FVA-100-website.md
+    source: ../applications/web/reference/index.html
+    next_gate: "Content-model integration and representative user evaluation"
+  - id: publication-reference
+    name: "Facework field note publication"
+    status: reference
+    version: "1.0.0"
+    record: ../applications/FVA-200-publications.md
+    source: ../applications/publications/facework-field-note-reference.docx
+    next_gate: "Offset and office-print production testing"
+  - id: presentation-reference
+    name: "Facework identity reference presentation"
+    status: reference
+    version: "1.0.0"
+    record: ../applications/FVA-300-presentations.md
+    source: ../applications/presentations/facework-identity-reference.pptx
+    next_gate: "Projection testing in representative rooms"
+  - id: social-reference
+    name: "Facework social translation set"
+    status: reference
+    version: "1.0.0"
+    record: ../applications/FVA-400-social.md
+    sources:
+      - ../applications/social/statement-square.svg
+      - ../applications/social/evidence-portrait.svg
+      - ../applications/social/sequence-landscape.svg
+    next_gate: "Platform crop and compression testing"
+  - id: environment-reference
+    name: "Facework environmental design intent set"
+    status: reference
+    version: "1.0.0"
+    record: ../applications/FVA-500-environments.md
+    sources:
+      - ../applications/environments/threshold-sign.svg
+      - ../applications/environments/wayfinding-board.svg
+      - ../applications/environments/artifact-plaque.svg
+    next_gate: "Site, code, material, tactile, and fabrication review"
+  - id: lineage-inspector-reference
+    name: "Facework Lineage Inspector product surface"
+    status: reference
+    version: "1.0.0"
+    record: ../applications/FVA-600-product.md
+    source: ../applications/product/reference/index.html
+    next_gate: "Runtime data integration and practitioner usability testing"
+  - id: facework-field
+    name: "Facework Field reflective experience"
+    status: experimental-reference
+    version: "0.1.0"
+    record: ../applications/FVA-610-facework-field.md
+    source: ../applications/field/reference/index.html
+    next_gate: "Prompt comprehension, repeated-use, real-device accessibility, privacy, and scientific-language review"
+
+implementation_candidates:
+  - id: faceworks-prototype
+    path: ../../examples/face.works/prototype
+    status: experimental
+    note: "Must be evaluated and reconciled against FVS before promotion."
+  - id: faceworks-design-infrastructure
+    path: ../../examples/face.works/design-infrastructure
+    status: experimental
+    note: "Token and type choices predate FVS and are not automatically normative."
+
+production_program:
+  - id: production-integration
+    name: "Production Integration and Validation"
+    status: active-program
+    version: "0.1.0"
+    record: ../production/FVP-000-production-integration.md
+  - id: design-source-authority
+    name: "Facework design source authority"
+    status: normative-for-integration
+    version: "0.1.0"
+    record: ../production/FVP-100-source-authority.md
+  - id: faceworks-runtime-integration
+    name: "face.works runtime integration"
+    status: validated-implementation-candidate
+    version: "0.1.0"
+    record: ../production/FVP-200-runtime-integration.md
+    source: ../../examples/face.works/prototype
+    next_gate: "Manual assistive-technology, real-device, content, privacy, and deployment review"
+  - id: production-validation
+    name: "face.works production validation"
+    status: validated-implementation-candidate
+    version: "0.1.0"
+    record: ../production/FVP-300-production-validation.md
+    next_gate: "Resolve remaining manual and deployment gates before public production classification"

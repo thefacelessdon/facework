@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-labelledby="title desc">
+  <title id="title">Axis Exchange</title>
+  <desc id="desc">Four paired structural layers move from distributed outer conditions toward an open center; the lowest layer changes direction under tension.</desc>
+  <g fill="currentColor">
+    <path d="M8 13C44 18 78 29 109 45V58C76 42 42 32 9 28Z"/>
+    <path d="M14 44C48 50 81 62 109 77V90C78 75 48 64 19 59Z"/>
+    <path d="M27 76C57 83 84 95 109 109V123C81 107 57 97 36 92Z"/>
+    <path d="M18 146C55 134 84 118 109 98V114C81 136 51 152 13 159Z"/>
+  </g>
+  <g fill="currentColor" transform="translate(240 0) scale(-1 1)">
+    <path d="M8 13C44 18 78 29 109 45V58C76 42 42 32 9 28Z"/>
+    <path d="M14 44C48 50 81 62 109 77V90C78 75 48 64 19 59Z"/>
+    <path d="M27 76C57 83 84 95 109 109V123C81 107 57 97 36 92Z"/>
+    <path d="M18 146C55 134 84 118 109 98V114C81 136 51 152 13 159Z"/>
+  </g>
+</svg>

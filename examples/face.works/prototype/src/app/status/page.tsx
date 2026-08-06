@@ -5,20 +5,57 @@ import { ProgressBar } from "@/components/ProgressBar";
 export default function StatusPage() {
   const { stages, noGoLines, metrics, nonNegotiables, date } =
     coherenceSnapshot;
+  const activeStage =
+    stages.find((stage) => stage.status === "active") ?? stages[0];
 
   return (
     <div className="mx-auto max-w-5xl px-6 md:px-8 lg:px-20 py-16 md:py-20 space-y-12">
       <div className="space-y-4">
         <h1 className="text-2xl md:text-3xl font-normal tracking-tight">Status</h1>
         <p className="text-sm md:text-base text-muted max-w-xl leading-relaxed">
-          Facework&apos;s own coherence tracker. If the protocol demands
-          transparency and sovereignty from the systems it builds, it must
-          practice the same.
+          Facework&apos;s own coherence tracker. If the practice asks other
+          systems to be transparent, sovereign, and structurally honest, it has
+          to submit itself to the same test.
         </p>
         <p className="text-xs text-muted tracking-wide">
-          Last updated: {date}
+          Evidence snapshot: {date} / verify before publication
         </p>
       </div>
+
+      <section className="border border-border  overflow-hidden">
+        {[
+          {
+            label: "Snapshot Phase",
+            detail: activeStage.label,
+          },
+          {
+            label: "What This Measures",
+            detail:
+              "Whether the practice is becoming transferable, referencable, and economically real without violating its own boundaries.",
+          },
+          {
+            label: "Governance Rule",
+            detail:
+              "The same standards Facework applies to client systems apply here too: visibility, sovereignty, clean transfer, and no hidden dependencies.",
+          },
+        ].map((item, index) => (
+          <div
+            key={item.label}
+            className={`grid grid-cols-1 md:grid-cols-[180px_1fr] gap-4 p-5 md:p-6 ${
+              index < 2 ? "border-b border-border" : ""
+            }`}
+          >
+            <p className="text-xs tracking-[0.2em] uppercase text-muted">
+              {item.label}
+            </p>
+            <p className="text-sm text-muted leading-relaxed max-w-2xl">
+              {item.detail}
+            </p>
+          </div>
+        ))}
+      </section>
+
+      <hr />
 
       {/* Progress Metrics */}
       <section className="space-y-4">
@@ -27,11 +64,11 @@ export default function StatusPage() {
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {[
-            { label: "Protocol Runs", value: metrics.completedRuns, max: metrics.targetRuns, suffix: "" },
+            { label: "Practice Runs", value: metrics.completedRuns, max: metrics.targetRuns, suffix: "" },
             { label: "Public References", value: metrics.publicReferences, max: metrics.targetReferences, suffix: "" },
             { label: "Revenue Floor", value: metrics.monthsAtFloor, max: metrics.targetMonthsAtFloor, suffix: " mo" },
           ].map((metric) => (
-            <div key={metric.label} className="border border-border rounded p-5 space-y-3">
+            <div key={metric.label} className="border border-border  p-5 space-y-3">
               <p className="text-xs tracking-[0.15em] uppercase text-muted">{metric.label}</p>
               <p className="text-2xl md:text-3xl font-normal">
                 {metric.value}
@@ -54,9 +91,9 @@ export default function StatusPage() {
           {stages.map((stage) => (
             <div
               key={stage.stage}
-              className={`border rounded p-5 space-y-4 ${
+              className={`border  p-5 space-y-4 ${
                 stage.status === "active"
-                  ? "border-coherence/30 border-l-2 border-l-coherence"
+                  ? "border-coherence/50 bg-coherence/5"
                   : "border-border"
               }`}
             >
@@ -85,16 +122,16 @@ export default function StatusPage() {
                           ? "text-coherence"
                           : item.status === "in-progress"
                             ? "text-resonance"
-                            : "text-muted/40"
+                            : "text-muted"
                       }`}
                       aria-hidden="true"
                     >
                       {item.status === "complete" ? "●" : item.status === "in-progress" ? "◐" : "○"}
                     </span>
-                    <div>
+                    <div className="space-y-0.5">
                       <p className="text-muted">{item.description}</p>
                       {item.evidence && (
-                        <p className="text-xs text-muted/60 mt-0.5">{item.evidence}</p>
+                        <p className="text-xs text-muted">Evidence: {item.evidence}</p>
                       )}
                     </div>
                   </div>
@@ -110,14 +147,19 @@ export default function StatusPage() {
         <h2 className="text-xs tracking-[0.2em] uppercase text-muted">
           No-Go Lines
         </h2>
+        <p className="text-sm text-muted max-w-2xl leading-relaxed">
+          These are the conditions that would signal drift, stalled transfer,
+          or a breakdown between the stated practice and the reality of how it
+          operates.
+        </p>
         <div className="space-y-2">
           {noGoLines.map((line, i) => (
             <div
               key={i}
-              className="flex flex-col sm:flex-row sm:items-start gap-3 border border-border rounded p-4"
+              className="flex flex-col sm:flex-row sm:items-start gap-3 border border-border  p-4"
             >
               <span
-                className={`text-xs tracking-wide px-1.5 py-0.5 rounded border w-fit ${
+                className={`text-xs tracking-wide px-1.5 py-0.5  border w-fit ${
                   line.type === "hard"
                     ? "text-entropy border-entropy/30"
                     : "text-resonance border-resonance/30"
@@ -128,7 +170,7 @@ export default function StatusPage() {
               <div className="flex-1">
                 <p className="text-sm text-muted">{line.description}</p>
                 {line.detail && (
-                  <p className="text-xs text-muted/60 mt-1">{line.detail}</p>
+                  <p className="text-xs text-muted mt-1">{line.detail}</p>
                 )}
               </div>
               <span
@@ -152,6 +194,10 @@ export default function StatusPage() {
         <h2 className="text-xs tracking-[0.2em] uppercase text-muted">
           Non-Negotiables
         </h2>
+        <p className="text-sm text-muted max-w-2xl leading-relaxed">
+          These are the boundaries the system is not allowed to violate, even
+          if doing so would make growth or monetization easier.
+        </p>
         <div className="space-y-3">
           {nonNegotiables.map((item, i) => (
             <div key={i} className="flex gap-3 items-start">

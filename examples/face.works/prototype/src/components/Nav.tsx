@@ -1,37 +1,50 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 import { navigation } from "@/data/demo";
 
 export function Nav() {
   const pathname = usePathname();
+  const [open, setOpen] = useState(false);
 
   return (
-    <nav className="border-b border-border">
-      <div className="mx-auto max-w-5xl px-6 md:px-8 lg:px-20 py-4 md:py-5 flex items-center justify-between">
-        <Link
-          href="/"
-          className="text-xs md:text-sm tracking-[0.2em] uppercase text-foreground hover:text-clarity"
-        >
-          face.works
-        </Link>
-        <div className="flex gap-4 md:gap-8">
-          {navigation.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`text-xs md:text-sm tracking-wide ${
-                pathname.startsWith(item.href)
-                  ? "text-foreground"
-                  : "text-muted hover:text-foreground"
-              }`}
-            >
+    <header className="site-rail" aria-label="Site header">
+      <Link className="site-identity" href="/" aria-label="Facework home">
+        <Image
+          src="/identity/facework-lockup-horizontal.svg"
+          width={165}
+          height={24}
+          priority
+          alt="Facework"
+        />
+      </Link>
+      <button
+        className="site-menu"
+        type="button"
+        aria-expanded={open}
+        aria-controls="site-nav"
+        onClick={() => setOpen((current) => !current)}
+      >
+        Index <span aria-hidden="true">{open ? "−" : "+"}</span>
+      </button>
+      <nav id="site-nav" className="site-nav" data-open={open} aria-label="Primary">
+        {navigation.map((item) => {
+          const current = pathname === item.href || pathname.startsWith(`${item.href}/`);
+          return (
+            <Link key={item.href} href={item.href} aria-current={current ? "page" : undefined} onClick={() => setOpen(false)}>
               {item.label}
             </Link>
-          ))}
-        </div>
-      </div>
-    </nav>
+          );
+        })}
+      </nav>
+      <p className="site-rail-note">
+        <span className="status-signal" aria-hidden="true" /> System status
+        <br />
+        <strong>Foundation active</strong>
+      </p>
+    </header>
   );
 }

@@ -9,6 +9,71 @@ export default function EngagePage() {
         </p>
       </div>
 
+      {/* Trust Signals */}
+      <section className="border border-border  overflow-hidden">
+        {[
+          {
+            label: "Entry Point",
+            detail:
+              "The first conversation is a diagnostic, not a funnel. Fit is determined before scope is sold.",
+          },
+          {
+            label: "Qualification Boundary",
+            detail:
+              "If the work would reinforce extraction, hide dependency risk, or arrive too early for the stage, Facework says no.",
+          },
+          {
+            label: "Transfer Model",
+            detail:
+              "The output is meant to outlive the engagement: docs, code, and system logic move into your control at handoff.",
+          },
+        ].map((item, index) => (
+          <div
+            key={item.label}
+            className={`grid grid-cols-1 md:grid-cols-[180px_1fr] gap-4 p-5 md:p-6 ${
+              index < 2 ? "border-b border-border" : ""
+            }`}
+          >
+            <p className="text-xs tracking-[0.2em] uppercase text-muted">
+              {item.label}
+            </p>
+            <p className="text-sm text-muted leading-relaxed max-w-2xl">
+              {item.detail}
+            </p>
+          </div>
+        ))}
+      </section>
+
+      <hr />
+
+      {/* What You Leave With */}
+      <section className="space-y-5">
+        <h2 className="text-xs tracking-[0.2em] uppercase text-muted">
+          What you leave with
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {[
+            {
+              title: "Locked direction",
+              detail:
+                "Governance, strategic decisions, and architecture logic documented clearly enough to prevent drift when the build starts.",
+            },
+            {
+              title: "Transferable system",
+              detail:
+                "Specs, playbooks, prototype logic, and handoff materials structured so another builder can continue without starting from oral history.",
+            },
+          ].map((item) => (
+            <div key={item.title} className="border border-border  p-6 space-y-3">
+              <p className="text-sm font-medium tracking-wide">{item.title}</p>
+              <p className="text-sm text-muted leading-relaxed">{item.detail}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <hr />
+
       {/* Pricing Philosophy */}
       <section className="space-y-5">
         <h2 className="text-xs tracking-[0.2em] uppercase text-muted">
@@ -39,28 +104,35 @@ export default function EngagePage() {
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="border border-border rounded p-6 space-y-4">
+          <div className="border border-border  p-6 space-y-4">
             <div>
-              <h3 className="text-sm font-medium tracking-wide">Full Protocol</h3>
+              <h3 className="text-sm font-medium tracking-wide">Full System Build</h3>
               <p className="text-xs text-muted mt-1 tracking-wide">5–8 days</p>
             </div>
             <p className="text-sm text-muted leading-relaxed">
               Governance, strategic direction, architecture specs, operational
               playbooks, design language, working prototype, engineering review,
-              handoff package. Everything needed to hand to an engineer and build.
+              handoff package. Everything needed to move from worldview to a
+              build-ready system.
+            </p>
+            <p className="text-xs tracking-[0.15em] uppercase text-muted">
+              Best when prototype, architecture, and handoff all need to happen together.
             </p>
             <p className="text-sm text-muted">$15K – $25K</p>
           </div>
 
-          <div className="border border-border rounded p-6 space-y-4">
+          <div className="border border-border  p-6 space-y-4">
             <div>
-              <h3 className="text-sm font-medium tracking-wide">Foundation Only</h3>
+              <h3 className="text-sm font-medium tracking-wide">Foundation Layer</h3>
               <p className="text-xs text-muted mt-1 tracking-wide">3–5 days</p>
             </div>
             <p className="text-sm text-muted leading-relaxed">
               Governance, strategic direction, architecture specs, operational
               playbooks. No prototype. For creators who have an engineer ready
-              to build and need the architecture, not the demo.
+              to build and need the architecture, not the prototype layer.
+            </p>
+            <p className="text-xs tracking-[0.15em] uppercase text-muted">
+              Best when execution capacity already exists and the missing piece is structural clarity.
             </p>
             <p className="text-sm text-muted">$10K – $15K</p>
           </div>
@@ -103,7 +175,7 @@ export default function EngagePage() {
               step: "04",
               title: "Build",
               detail:
-                "The protocol runs. You participate in review sessions. The agent generates, you steer, we build your system.",
+                "The Facework practice runs. You participate in review sessions. The agent generates, you steer, we build your system.",
             },
             {
               step: "05",
@@ -152,7 +224,7 @@ export default function EngagePage() {
       <hr />
 
       {/* Contact */}
-      <section className="border border-border rounded p-8 md:p-12 text-center space-y-5">
+      <section className="border border-border  p-8 md:p-12 text-center space-y-5">
         <p className="text-lg md:text-xl font-normal tracking-tight">
           What problem are you trying to make coherent?
         </p>
@@ -162,7 +234,7 @@ export default function EngagePage() {
         </p>
         <a
           href="mailto:hello@face.works"
-          className="inline-block bg-soft text-ink rounded px-6 py-3 text-sm tracking-wide hover:opacity-90"
+          className="inline-block bg-soft text-ink  px-6 py-3 text-sm tracking-wide hover:opacity-90"
         >
           hello@face.works
         </a>

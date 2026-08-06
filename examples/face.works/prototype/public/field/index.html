@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Facework Field is a private weekly ritual for reflecting on how identity moves.">
+  <title>Facework Field — Small acts shape the pattern</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M2 5l8 4v2L2 8zm0 6l8 2v2l-8-1zm20-6l-8 4v2l8-3zm0 6l-8 2v2l8-1zM2 17l8-3v3l-8 3zm20 0l-8-3v3l8 3z'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#ritual">Skip to the ritual</a>
+  <canvas id="field" aria-hidden="true"></canvas>
+  <header class="site-head">
+    <a href="#start" aria-label="Facework Field home" class="field-name" data-action="start"><img src="/identity/facework-lockup-horizontal.svg" alt=""><span>Field / 0.1</span></a>
+    <button class="privacy-toggle" type="button" aria-expanded="false" aria-controls="privacy">Privacy / local</button>
+  </header>
+
+  <aside id="privacy" class="privacy" hidden>
+    <p class="label">Data boundary</p>
+    <h2>This reference sends nothing.</h2>
+    <p>Inputs remain in this browser. A trace enters local storage only when you choose Save. The collective view is synthetic.</p>
+    <button type="button" class="privacy-close">Close</button>
+  </aside>
+
+  <main id="ritual">
+    <section class="screen active" id="start" data-screen="start" aria-labelledby="start-title">
+      <div class="orientation"><p class="label">Experimental reflection instrument</p><p>FVA-610 / local-first</p></div>
+      <div class="opening">
+        <h1 id="start-title">Small acts shape the pattern.</h1>
+        <p>Three questions. One bounded system. A record you control.</p>
+        <div class="entry-actions"><button type="button" class="primary" data-action="begin">Trace this week</button><button type="button" class="secondary" data-action="collective">View a simulated field</button></div>
+      </div>
+      <p class="disclaimer">A reflective representation—not a diagnosis, score, or biometric identity.</p>
+    </section>
+
+    <section class="screen prompt-screen" data-screen="presence" aria-labelledby="presence-title" hidden>
+      <div class="prompt-count"><span>01</span><span>Embodied presence</span></div>
+      <div class="prompt-copy"><h2 id="presence-title" data-screen-title tabindex="-1">How present were you with other people this week?</h2><p>Choose the point that feels honest. The number changes spread, not worth.</p></div>
+      <div class="response"><output for="presence">50</output><input id="presence" type="range" min="0" max="100" value="50"><div class="range-labels"><span>Withdrawn</span><span>Fully present</span></div><button type="button" class="primary" data-next="expression">Continue</button></div>
+    </section>
+
+    <section class="screen prompt-screen" data-screen="expression" aria-labelledby="expression-title" hidden>
+      <div class="prompt-count"><span>02</span><span>Digital expression</span></div>
+      <div class="prompt-copy"><h2 id="expression-title" data-screen-title tabindex="-1">How did you choose to appear online this week?</h2><p>Different stages call for different faces. None of these is the correct one.</p></div>
+      <fieldset class="choices"><legend class="sr-only">Digital expression</legend><label><input type="radio" name="expression" value="reserved" checked><span>Reserved<small>Deliberately quiet</small></span></label><label><input type="radio" name="expression" value="instrumental"><span>Instrumental<small>Purpose-led</small></span></label><label><input type="radio" name="expression" value="expressive"><span>Expressive<small>Openly authored</small></span></label><label><input type="radio" name="expression" value="porous"><span>Porous<small>Context crossing</small></span></label><button type="button" class="primary" data-next="stability">Continue</button></fieldset>
+    </section>
+
+    <section class="screen prompt-screen" data-screen="stability" aria-labelledby="stability-title" hidden>
+      <div class="prompt-count"><span>03</span><span>Infrastructural stability</span></div>
+      <div class="prompt-copy"><h2 id="stability-title" data-screen-title tabindex="-1">How well did the systems supporting you hold this week?</h2><p>Think time, files, routines, permissions, commitments, and care.</p></div>
+      <div class="response"><output for="stability">50</output><input id="stability" type="range" min="0" max="100" value="50"><div class="range-labels"><span>Under strain</span><span>Holding well</span></div><button type="button" class="primary" data-action="generate">Generate the trace</button></div>
+    </section>
+
+    <section class="screen result" data-screen="result" aria-labelledby="reflection" hidden>
+      <div class="result-copy"><p class="label">This week / <span id="result-date"></span></p><h2 id="reflection" data-screen-title tabindex="-1">A balanced field, held with quiet tension.</h2><p class="result-note">The pattern reflects your inputs. It does not explain you.</p></div>
+      <div class="mapping" aria-label="Input mapping"><p><span>Presence</span><strong id="presence-value">50</strong></p><p><span>Expression</span><strong id="expression-value">Reserved</strong></p><p><span>Stability</span><strong id="stability-value">50</strong></p><button class="mapping-toggle" type="button" aria-expanded="false" aria-controls="math">Show the mapping</button><div id="math" hidden><code>σ 10.00</code><code>ρ 28.00</code><code>β 2.70</code><code>seed local</code></div></div>
+      <form class="note-form"><label for="face-note">Optional Face Note</label><input id="face-note" maxlength="120" placeholder="One line you want to remember"><div><button type="submit" class="primary">Save locally</button><button type="button" class="secondary" data-action="restart">Trace again</button></div></form>
+      <p class="save-status" aria-live="polite"></p>
+    </section>
+
+    <section class="screen collective" data-screen="collective" aria-labelledby="collective-title" hidden>
+      <div class="collective-copy"><p class="label">Collective Field / simulation</p><h2 id="collective-title" data-screen-title tabindex="-1">No people are represented here.</h2><p>This synthetic constellation demonstrates how many traces might share a field without profiles, likes, rankings, or individual comparison.</p><div class="entry-actions"><button class="primary" type="button" data-action="begin">Trace privately</button><button class="secondary" type="button" data-action="start">Return</button></div></div>
+      <div class="collective-stats" aria-label="Simulation state"><p><span>Traces</span><strong>24 synthetic</strong></p><p><span>Network</span><strong>None</strong></p><p><span>Participant data</span><strong>None</strong></p></div>
+    </section>
+  </main>
+
+  <aside class="archive" aria-labelledby="archive-title"><div><p class="label">Local archive</p><h2 id="archive-title">Previous traces</h2></div><div id="archive-list"><p class="empty">Nothing saved yet. Your first trace will begin the record.</p></div><button type="button" class="clear" hidden>Clear archive</button></aside>
+  <footer><p>Facework Field / experimental reference</p><button type="button" data-action="archive">Archive <span id="archive-count">0</span></button></footer>
+</body>
+</html>
