@@ -375,8 +375,11 @@ Confirmed across all four: descriptive governance metadata is homeless everywher
 tamper-evident audit remain Buzz-only; `ContextManifest` is hostable natively by
 two distinct mechanisms (Letta blocks, Claude Code file hierarchy). §9.2's
 three-tenant bar was met at 0.0.18; this fourth pass adds the file-native corner
-and the layer-decomposed sovereignty view. What remains before universal-MUST is
-the conformance-profile format (FS-400.6 + FS-400.7 are now in canon).
+and the layer-decomposed sovereignty view. **Resolved at 0.0.25:** universal-MUST
+landed as a **runtime-conformance tier** (§9.2) — base conformance stays
+evidence-calibrated (§3 preserved), and the universal MUST applies inside an
+opt-in runtime-conformance claim; the conformance-profile format is now the
+canonical `RuntimeConformanceProfile` (§9.12), formalizing FS-400.4/.6/.7.
 
 ---
 
@@ -399,10 +402,19 @@ All seven FS-400 concepts are folded into `PROTOCOL.md` as additive text:
   layer** (harness/state/model — FS-400.7); §10 HarnessBundle validation note (a
   file-native runtime maps cleanly onto the derived view). First pass produced by
   the `/runtime-validation-pass` skill itself.
+- **Applied 0.0.25** (universal-MUST pass): §9.2 **runtime-conformance tier**
+  (universal MUST inside an opt-in claim, base conformance still §3-calibrated);
+  new §9.12 **`RuntimeConformanceProfile`** canonical object (formalizes FS-400.4
+  gate/metadata classification + gate→mechanism binding, FS-400.6 shell waiver,
+  FS-400.7 per-layer sovereignty); worked example from the Claude Code binding;
+  Phase-5/7 gate extensions. Manifest schema 1.5.0.
 
-None break existing conformance; all are additive clarifications. A v0.1.0 pass
-may formalize the conformance-profile format (per-attribute gate/metadata
-classification; which gate binds which mechanism; the shell-waiver contents).
+None break existing conformance; all are additive. This 0.0.25 pass landed the
+conformance-profile format (§9.12); it was designed from four validations + one
+end-to-end demo, not a production tenant binding — the remaining calibration risk
+is that a live production binding may surface profile fields not yet anticipated.
+(0.0.25 is a PATCH capability; the `0.1.0` release stays reserved for the first
+external protocol run per ROADMAP.)
 
 ---
 
