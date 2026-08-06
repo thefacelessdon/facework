@@ -49,47 +49,83 @@ Maps methodology changelog iterations to release versions.
 | 0.0.12 | — | Jul 2026 | **Loop Model refinement.** Renamed the top loop **oversight → Sovereignty loop** (ownership, not supervision; distinguished from the Sovereignty primitive as one force at two altitudes). Clarified the promotion path: folds into the COS doc as "The Loops," gated on a validating run — not a new theory file. Docs-only. |
 | 0.0.13 | — | Jul 2026 | **Loop Model → canon.** The 14th & Co loop-instrumented protocol run cleared the promotion bar: folded "The Loops" into `theories/the-coherence-operating-system.md` §VII. Only 2 of 8 task-loop instances closed cleanly on their named signal — the other 6 hit *predicted* failure modes, so the run validated the model by diagnosing real debt. Added the earned sub-rule (a closing signal must produce an artifact), the validation doc, and retro 007 (first retro run as a system loop). Validated on one track/operator; cross-track is future work. |
 | 0.0.14 | — | Jul 2026 | **Sovereignty-loop guard-rail.** An agent may recommend a Sovereignty-loop exit but must never record it as decided — it stays open (RECOMMENDED, not RESOLVED) until the human rules. Earned when the 14th & Co run pre-wrote the founder's ADR-015 scope cull as ratified before he'd decided. Added to §VII and loop-model.md. Docs-only. |
+| 0.0.15 | — | Aug 2026 | **Runtime Ports validated against a first external runtime — Buzz.** Added PROTOCOL.md §9.11 "Runtime Shells and substrate binding." The four ports partition into a collaboration/execution/audit group (strong fit on Buzz) and a knowledge/coherence/governance group (no host; stays authoring-side). First external evidence the machine contracts port to a runtime Facework didn't design. |
+| 0.0.16 | — | Aug 2026 | **PROTOCOL.md release-version drift fix.** Removed the hardcoded `Version: 0.0.8` header (stale ~7 releases); the spec now points to `VERSION` as the single source of truth. The manifest-schema axis (1.x) is untouched — a real versioning line, not drift. Docs-only. |
+| 0.0.17 | — | Aug 2026 | **Runtime Ports — second runtime, Letta** (opposite corner: memory-first). `MemoryMap.boundary` is behavioral, not only structural; §9.11 governance splits into enforceable gates vs descriptive metadata; the split-runtime binding is a complementary pair (neither runtime hosts all four ports). |
+| 0.0.18 | — | Aug 2026 | **Runtime Ports — third runtime, OpenAI** (the sovereignty-failing corner). §9.2's three-reference-tenant bar met. FS-400.6: the Runtime Shell is itself a `SovereigntyMap` dependency; a non-self-hostable shell is `rent` with maximal blast radius, requiring a Phase-7 waiver. First finding that tests the spec's *rejection* behavior, not its fit. |
+| 0.0.19 | — | Aug 2026 | **Retro 008 — Runtime Ports validation program.** System-loop retro for the Buzz→Letta→OpenAI program; names the reusable "Runtime Validation Pass" procedure, a source-verification requirement for canon-bound claims, and git-native ship guidance for this docs/spec repo. Docs-only. |
+| 0.0.20 | — | Aug 2026 | **`/runtime-validation-pass` skill.** Encodes the proven pass as a reusable skill and introduces a new **system-loop skill** class (evolves the methodology; neither phase primitive nor Posture). Registered in `OPERATING_SKILLS.md` and the installer. |
+| 0.0.21 | — | Aug 2026 | **Paired agent — `runtime-ports-auditor`.** The specialist agent for `/runtime-validation-pass` (per-port + §9.11 sovereignty audit; source-verifies canon-bound claims). Closes the last operating skill that lacked a paired specialist. |
+| 0.0.22 | — | Aug 2026 | **Runtime Ports — fourth runtime, Claude Code; FS-400.7** — and the first validation produced by the 0.0.20/0.0.21 skill+agent (the program dogfooding its method). Shell sovereignty **decomposes by layer** (harness/state/model): Claude Code is own-harness + own-state + rent-model. Gave §10 HarnessBundle its first concrete runtime target. |
+| 0.0.23 | — | Aug 2026 | **HarnessBundle → Claude Code converter** (`bin/harness-to-claude-code`). First concrete §10 consumer: reads a bundle, emits a runnable `.claude/` layout (composed CLAUDE.md, skills, MCP scaffolds; secrets never emitted). One-way; the YAML manifests stay source of truth. |
+| 0.0.24 | — | Aug 2026 | **End-to-end run — converter output boots in Claude Code.** The generated bundle auto-discovered all 7 skills and a headless `claude -p` answered from the composed CLAUDE.md. Converter correctness fix (SKILL.md port fields → `metadata` for hosted-upload portability). A tenant world now compiles to a runtime that boots as itself. |
+| 0.0.25 | — | Aug 2026 | **Runtime-conformance tier — the "universal MUST" pass** (manifest schema 1.5.0). Base conformance stays evidence-calibrated; **runtime conformance** is an opt-in additive claim requiring all four ports + a new `RuntimeConformanceProfile` (§9.12). Corrected §9.2's stale "universal-MUST at v0.1.0" phrasing. No existing v1.0.0–v1.4.0 manifest affected. |
 
 ---
 
 ## Roadmap
 
-### 0.1.0 — First External Run
+> **Reality check (0.0.25).** This ladder was written assuming zero external
+> runs. That assumption is stale. Full 8-phase protocol runs on external
+> projects have happened — **FACTORY** (retro 006, outside-in) and **14th & Co**
+> (retro 007, loop-instrumented, every phase gated) — plus informal deliveries
+> across the run history (Her Set Her Sound, Hop in Real Estate, Banng and The
+> Gang, Chefnic, and others). The run-count milestones below are **met**. What
+> no run has cleared is **independence**: every run to date was operated and
+> scored by the protocol author. That — not "a first external run" — is the real
+> frontier, and the rungs below are reframed around it.
 
-The next minor version ships when the protocol has been validated on a project
-that isn't Facework itself.
+### 0.1.0 — Independent Validation
 
-**Criteria:**
-- [ ] Complete protocol run (Phases 1–8) on an external project
-- [ ] Coherence diagnostic produces actionable methodology updates
-- [ ] No phase was skipped or run out of order due to skill confusion
-- [ ] Handoff package reviewed by someone who wasn't in the room
+**First external run: met** (FACTORY, 14th & Co, and others — see run history and
+the reality-check note above). Redefined milestone: the next minor ships when the
+protocol clears the one bar every external run so far has *not* — **operation or
+review by someone who isn't the protocol author.**
 
-**Expected methodology changes:**
-- Phase timing estimates validated against real (non-self) project
-- Playbook templates tested against real production workflows
-- Intake (Step 0) tested on a project with existing artifacts
+**Original criteria (status):**
+- [x] Complete protocol run (Phases 1–8) on an external project — FACTORY, 14th & Co
+- [x] Coherence diagnostic produces actionable methodology updates — the 14th & Co diagnostic promoted the Loop Model to canon (0.0.13) and earned the "a closing signal must produce an artifact" rule
+- [x] No phase was skipped or run out of order due to skill confusion — 14th & Co gated all 8 in order; the proxy-closes it surfaced were *missing formal signals*, not skill confusion
+- [ ] Handoff package reviewed by someone who wasn't in the room ← **the open gate**
+
+**The redefined milestone (still open):**
+- [ ] A run whose handoff package is reviewed by someone who wasn't in the room, **or**
+- [ ] A diagnostic scored independently — two scorers land in the same zone
 
 ### 0.2.0 — Multi-Run Patterns
 
-**Criteria:**
-- [ ] 2+ external protocol runs completed
-- [ ] Cross-project patterns identified in coherence tracker
+**Status (0.0.25): run-count met; independence + tracker formalization open.**
+Multiple external runs exist and cross-project patterns are already visible in the
+retros (outside-in mode, re-pass / loop-closure-audit mode). What remains is the
+same independence bar plus formalizing the patterns in the tracker.
+
+- [x] 2+ external protocol runs completed
+- [ ] Cross-project patterns identified in coherence tracker — visible in retros; not yet formalized in the tracker
 - [ ] Skill refinements from at least 2 different project types (creator, brand, tool, etc.)
-- [ ] Compliance scoring tested by someone other than the protocol author
+- [ ] Compliance scoring tested by someone other than the protocol author — the independence bar
 
 ### 0.3.0 — Automation & Distribution
 
-**Criteria:**
+**Status (0.0.25): advanced by the Runtime Ports program, not yet complete.** The
+0.0.15–0.0.25 work validated the manifest schema against four reference runtimes
+(Buzz, Letta, OpenAI, Claude Code) and shipped a converter that boots a tenant
+world in Claude Code (0.0.23–0.0.24). Installer/update validation and cross-surface
+skill coverage remain.
+
 - [ ] Protocol can be installed and run without manual intervention beyond `install.sh`
 - [ ] Update system validated (user received and applied an update)
-- [ ] Manifest schema validated against 3+ real manifests
+- [x] Manifest schema validated against real runtimes — four reference runtimes + the face.works worked example (0.0.15–0.0.25)
 - [ ] Skills work across Claude Code CLI, desktop, and web
 
 ### 1.0.0 — Stable
 
-See "What 1.0.0 means" above. No speculative date. Gets there when the
-criteria are met.
+See "What 1.0.0 means" above. **Status (0.0.25):** the count-based criteria are
+effectively met — 3+ external runs completed, the 8-phase sequence has not
+reordered since 0.0.3, and all 12 primitives were exercised in FACTORY and
+14th & Co (not separately instrumented). 1.0.0 now hinges on the two
+**independence** criteria: reproducible diagnostic scores (two scorers, same zone)
+and a new builder running the protocol from the repo without live guidance.
+Neither has been tested. No speculative date.
 
 ---
 

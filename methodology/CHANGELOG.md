@@ -1,3 +1,37 @@
+# 0.0.26 — 2026-08-06 (Docs — ROADMAP drift reconciliation)
+
+**What changed:**
+- **Backfilled the Version History table** in `ROADMAP.md` with 0.0.15–0.0.25
+  (it had stalled at 0.0.14, ~11 releases behind). The new rows cover the Runtime
+  Ports validation program (Buzz / Letta / OpenAI / Claude Code), the PROTOCOL.md
+  version-drift fix, retro 008, the `/runtime-validation-pass` skill +
+  `runtime-ports-auditor` agent, the HarnessBundle→Claude Code converter and its
+  end-to-end run, and the runtime-conformance tier. Sourced row-by-row from this
+  CHANGELOG.
+- **Reconciled the stale "First External Run" gate.** The 0.1.0 ladder was written
+  assuming zero external runs; that framing is stale (per the run-history record).
+  Full 8-phase external runs have happened — FACTORY (retro 006, outside-in) and
+  14th & Co (retro 007, loop-instrumented), plus informal deliveries. Added a
+  reality-check note, marked the run-count milestones **met**, and **redefined
+  0.1.0** ("First External Run" → "Independent Validation") around the one bar no
+  run has cleared: **independence** — operation or review by someone who isn't the
+  protocol author.
+- **Confirmed the 1.0.0 criteria against reality.** Annotated status: the
+  count-based criteria (3+ external runs, settled 8-phase sequence, all 12
+  primitives exercised) are effectively met; 1.0.0 now hinges on the two
+  independence criteria (reproducible scoring; a new builder running unaided).
+  Added the same status framing to 0.2.0 and 0.3.0 so the ladder is internally
+  consistent — 0.3.0's manifest-schema criterion is marked met (four reference
+  runtimes + the face.works example).
+- **Why:** the ROADMAP contradicted both the CHANGELOG and the run history — it
+  read as "pre-first-run" while the practice is battle-tested across many runs.
+  The drift was flagged during the 0.0.25 runtime-conformance work and explicitly
+  deferred to this separate cleanup.
+
+Docs-only; no protocol behavior changed.
+
+---
+
 # 0.0.25 — 2026-08-06 (Runtime-conformance tier — the "universal MUST" pass)
 
 **What changed:**
