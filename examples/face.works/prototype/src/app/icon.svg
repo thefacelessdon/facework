@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 230 176" role="img" aria-label="Facework">
+  <!-- Micro Coherence Mark: the resting/open-center form, thickened with a
+       matching stroke so the four strands survive at favicon sizes. Favicons
+       cannot inherit currentColor, so ink is fixed at #171512. -->
+  <g fill="#171512" stroke="#171512" stroke-width="6" stroke-linejoin="round">
+    <path d="M8 16C46 21 80 31 106 46V57C78 44 44 35 9 31Z"/>
+    <path d="M16 47C50 53 82 62 106 76V87C80 74 50 65 21 62Z"/>
+    <path d="M28 79C58 85 84 94 106 106V117C82 104 58 96 36 94Z"/>
+    <path d="M18 150C58 138 92 120 104 100V112C90 122 56 150 16 160Z"/>
+  </g>
+  <g fill="#171512" stroke="#171512" stroke-width="6" stroke-linejoin="round" transform="translate(230 0) scale(-1 1)">
+    <path d="M8 16C46 21 80 31 106 46V57C78 44 44 35 9 31Z"/>
+    <path d="M16 47C50 53 82 62 106 76V87C80 74 50 65 21 62Z"/>
+    <path d="M28 79C58 85 84 94 106 106V117C82 104 58 96 36 94Z"/>
+    <path d="M18 150C58 138 92 120 104 100V112C90 122 56 150 16 160Z"/>
+  </g>
+</svg>

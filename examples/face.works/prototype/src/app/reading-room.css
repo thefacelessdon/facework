@@ -317,19 +317,12 @@
   outline-offset: 2px;
 }
 
-/* CoherenceMarkState — the mark as state machine (§8) */
+/* CoherenceMark — the governing equation drawn (§8). The center is ALWAYS
+   open (coherence is the relationship, never a filled node); the mark carries
+   no state node. Inherits ink on Record, signal-light on Field. */
 .rr-mark {
   display: inline-block;
   color: var(--rr-text-strong, currentColor); /* rests in ink, even off-register */
-}
-.rr-mark__band {
-  fill: currentColor;
-}
-.rr-mark__node--open {
-  /* square = open/unsettled — no radius */
-}
-.rr-mark__node--settled {
-  /* circle handled by <circle> element */
 }
 
 /* =========================================================================

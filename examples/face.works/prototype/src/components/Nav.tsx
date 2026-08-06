@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { navigation } from "@/data/demo";
-import { CoherenceMarkState } from "@/components/rr";
+import { CoherenceMark, FaceworkWordmark } from "@/components/rr";
 
 // The Work (Record register) is the front door; its type routes are sub-surfaces.
 const WORK_PATHS = [
@@ -40,8 +40,10 @@ export function Nav() {
   return (
     <header className="site-rail" aria-label="Site header">
       <Link className="site-identity" href="/" aria-label="Facework — The Work">
-        <CoherenceMarkState size={34} title="Facework" />
-        <span className="site-identity__word">Facework</span>
+        {/* Horizontal lockup: Coherence Mark leads the Register wordmark. The
+            link is already labeled, so both SVGs are decorative here. */}
+        <CoherenceMark size={30} decorative />
+        <FaceworkWordmark height={16} decorative />
       </Link>
       <button
         className="site-menu"

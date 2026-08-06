@@ -156,12 +156,19 @@ and a caption that carries the claim.
 
 ## 8. The mark
 
-Keep the **Coherence Mark** (four bands = the four constructs, open axis =
-coherence; derived in `visual-system/identity/FVI-001`). Adopt the shape-law
-discipline: the mark is a **state machine** — its center encodes a *true* coherence
-state (square while open, circle when settled), colored by status only where real.
-The mark never lies. It rests in ink almost everywhere; it earns color only when a
-genuine state is present.
+The **Coherence Mark** is the governing equation drawn — Coherence = (Flow ×
+Resonance)/(1 + Entropy) (derived in `visual-system/identity/FVI-001`). Four
+strands sweep toward the center (Flow in the sweep, Resonance in the rhythm); the
+lowest strand crosses under tension (Entropy); the center stays **open** —
+Coherence is the relationship, **never a filled node**. Open-center is the only
+logo form: the mark carries no center dot in any state. It rests in ink on Record
+and inherits signal-light on Field via `currentColor`. Implemented as the
+`CoherenceMark` component (`micro` adds stroke weight for ≤20px use).
+
+The identity lockup leads with the mark, then the **Register** wordmark — the
+custom monoline logotype (FVI-100), real letterforms, not a font, implemented as
+`FaceworkWordmark`. The 0.0.29 filled-center-dot mark and Schibsted-text wordmark
+are both superseded.
 
 ## 9. Motion
 
@@ -192,7 +199,7 @@ modes; nothing floats.
 - Core test (§2): would this reading hold if inherited cold?
 - Every visual is one of the five instruments, or argues its way in.
 - Color only classifies. CTAs are ink. Verdigris marks active/attended only.
-- The mark encodes a true state — never decoration.
+- The mark is the equation drawn, open center — never decoration, never a filled node.
 - **Banned:** gradient text, side-stripe accent borders (>1px), glassmorphism,
   card-inside-card, repeated equal card grids, hero-metric templates, bounce
   easing, decorative sparklines, monospace-as-"techy" shorthand, centered-
