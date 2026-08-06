@@ -4,6 +4,8 @@
  * No external dependencies — just string parsing.
  */
 
+import { parseTableRow } from "@/lib/markdown-table";
+
 function renderInline(text: string) {
   const parts = text.split(/(\*\*.*?\*\*|`[^`]+`)/);
   return parts.map((part, i) => {
@@ -16,7 +18,7 @@ function renderInline(text: string) {
     }
     if (part.startsWith("`") && part.endsWith("`")) {
       return (
-        <code key={i} className="text-clarity text-[0.85em] px-1 py-0.5 bg-surface ">
+        <code key={i} className="text-clarity text-[0.85em] px-1 py-0.5 bg-surface">
           {part.slice(1, -1)}
         </code>
       );
@@ -46,7 +48,7 @@ export function Markdown({ content }: { content: string }) {
       elements.push(
         <pre
           key={elements.length}
-          className="bg-surface border border-border  p-4 overflow-x-auto my-6 text-sm leading-relaxed"
+          className="bg-surface border border-border p-4 overflow-x-auto my-6 text-sm leading-relaxed"
         >
           <code className={lang ? `language-${lang}` : ""}>
             {codeLines.join("\n")}
@@ -58,11 +60,11 @@ export function Markdown({ content }: { content: string }) {
 
     // Table
     if (line.startsWith("|") && lines[i + 1]?.match(/^\|[\s-:|]+\|/)) {
-      const headerCells = line.split("|").filter(Boolean).map(c => c.trim());
+      const headerCells = parseTableRow(line);
       i += 2; // skip header + separator
       const rows: string[][] = [];
       while (i < lines.length && lines[i].startsWith("|")) {
-        rows.push(lines[i].split("|").filter(Boolean).map(c => c.trim()));
+        rows.push(parseTableRow(lines[i]));
         i++;
       }
       elements.push(
