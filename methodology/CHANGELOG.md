@@ -1,3 +1,22 @@
+# 0.0.21 — 2026-08-05 (Paired agent — runtime-ports-auditor)
+
+**What changed:**
+- Added the paired specialist agent for `/runtime-validation-pass`:
+  `agents/runtime-ports-auditor.md`. It audits an external runtime shell against
+  the four Runtime Ports (§9), source-verifies canon-bound claims, and classifies
+  the shell's own sovereignty (§9.11 FS-400.6). Matches the house agent format
+  (Mission / Review Focus / Output Contract; `model: sonnet`).
+- Registered the pairing in `skills/OPERATING_SKILLS.md` ("Paired Specialist
+  Agents"): `/runtime-validation-pass -> runtime-ports-auditor`, marked as the
+  system-loop skill's specialist.
+- **Why:** every operating skill has a paired specialist agent for deep analysis;
+  the new system-loop skill was the only one without one. This closes that gap so
+  the pass can delegate the heavy per-port + sovereignty audit consistently.
+
+Docs + tooling; no protocol behavior changed.
+
+---
+
 # 0.0.20 — 2026-08-05 (Skill — Runtime Validation Pass)
 
 **What changed:**

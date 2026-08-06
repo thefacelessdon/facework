@@ -36,6 +36,7 @@ are not Postures (and are not required by `facework-doctor`, like the primitives
 - `/weekly-upgrade` -> `weekly-systems-coach`
 - `/evidence-debug` -> `evidence-investigator`
 - `/launch-ops` -> `launch-commander`
+- `/runtime-validation-pass` -> `runtime-ports-auditor` (system-loop skill)
 
 ## Recommended Operating Loop
 1. Plan scope with `/mvp-cut`
