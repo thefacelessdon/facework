@@ -9,3 +9,6 @@ out/
 .vercel
 *.tsbuildinfo
 .gstack/
+
+# Local scratch output from bin/harness-to-claude-code (converter test runs)
+scratch-fw-claude/
