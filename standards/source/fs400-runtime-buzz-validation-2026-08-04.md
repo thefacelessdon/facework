@@ -1,12 +1,13 @@
-# FS-400 Source Input — Runtime Shells validated (Buzz + Letta)
+# FS-400 Source Input — Runtime Shells validated (Buzz + Letta + OpenAI)
 
-Date: 2026-08-04 (Buzz), updated 2026-08-05 (Letta)
+Date: 2026-08-04 (Buzz), updated 2026-08-05 (Letta + OpenAI)
 Status: **Deferred / Not canonical.** Source input to the FS-400 Runtime
 specification, which activates with the standards track post-1.0 (see
 [`../README.md`](../README.md)).
 Companion working analyses:
 [`methodology/runtime-ports-buzz-gap-2026-08-04.md`](../../methodology/runtime-ports-buzz-gap-2026-08-04.md) (Buzz),
-[`methodology/runtime-ports-letta-gap-2026-08-05.md`](../../methodology/runtime-ports-letta-gap-2026-08-05.md) (Letta)
+[`methodology/runtime-ports-letta-gap-2026-08-05.md`](../../methodology/runtime-ports-letta-gap-2026-08-05.md) (Letta),
+[`methodology/runtime-ports-openai-gap-2026-08-05.md`](../../methodology/runtime-ports-openai-gap-2026-08-05.md) (OpenAI)
 
 ---
 
@@ -18,17 +19,19 @@ Runtime Ports (`PROTOCOL.md` §9) shipped at 0.0.5–0.0.8 as live artifacts; th
 abstract FS-400 specification did not. Reconciling them requires evidence that
 the ports describe a real runtime, not an imagined one.
 
-This memo supplies that evidence from **two external runtime shells the practice
-did not design, chosen as opposite corners**: Buzz (github.com/block/buzz, a
-Nostr-relay collaboration/execution/audit runtime) and Letta
-(github.com/letta-ai/letta, a memory/context runtime). Both are Apache-2.0 and
-self-hostable. Buzz facts are cited to source files; Letta facts to
-docs.letta.com and repo schemas.
+This memo supplies that evidence from **three external runtime shells the practice
+did not design, spanning the corners**: Buzz (github.com/block/buzz, a Nostr-relay
+collaboration/execution/audit runtime), Letta (github.com/letta-ai/letta, a
+memory/context runtime) — both Apache-2.0 and self-hostable — and OpenAI's hosted
+agent surface (Responses API + Agents SDK), chosen because it **fails the
+sovereignty port by construction**. Buzz facts are cited to source files; Letta
+and OpenAI to their docs and repo schemas.
 
-It proposes five concepts FS-400 should adopt, binds each Runtime Port to the
-runtimes, and lists the §9 refinements the exercise surfaced. The two runtimes
-host **complementary** port subsets — neither hosts all four — which is the core
-evidence for partial conformance and split-runtime binding.
+It proposes six concepts FS-400 should adopt, binds each Runtime Port to the
+runtimes, and lists the §9 refinements the exercise surfaced. The runtimes host
+**complementary** port subsets — none hosts all four — the core evidence for
+partial conformance and split-runtime binding; the third also tests whether the
+spec correctly catches a runtime that violates the ownership thesis.
 
 ---
 
@@ -41,8 +44,11 @@ triggers, `IntegrationManifest` wiring, identity, tamper-evident audit) and has
 no home for `MemoryMap` structure or `ContextManifest` composition; Letta hosts
 `MemoryMap` (semantic store + shared/read-only memory units) and `ContextManifest`
 (labeled, budgeted context units) natively but lacks native triggers, crypto
-identity, and tamper-evident audit. The correct binding is a **split runtime**
-with the Facework manifest as the cross-substrate contract. FS-400 should
+identity, and tamper-evident audit. OpenAI's hosted surface wires all four ports
+but is the sovereignty-failing corner — the runtime shell itself is rented,
+closed, and non-relocatable — which is what forces FS-400.6 below. The correct
+binding is a **split runtime** with the Facework manifest as the cross-substrate
+contract, and the shell itself must be sovereignty-classified. FS-400 should
 *expect* partial, multi-substrate conformance, not a single monolithic runtime.
 
 ---
@@ -52,8 +58,8 @@ with the Facework manifest as the cross-substrate contract. FS-400 should
 ### FS-400.1 — Runtime Shell (definition)
 A **Runtime Shell** is any system that operates a tenant world after Phases 1–8
 produce it, by consuming one or more Runtime Ports. A Runtime Shell is a
-*consumer* of the manifest, never its owner. Buzz and Letta are the reference
-examples.
+*consumer* of the manifest, never its owner. Buzz, Letta, and OpenAI's hosted
+surface are the reference examples.
 
 ### FS-400.2 — Partial Conformance
 A Runtime Shell **MAY** host a proper subset of the four ports. Conformance is
@@ -103,6 +109,31 @@ autonomously rewrite shared memory. A conformant binding declares the mitigation
 (read-only tenant blocks; no autonomous write to the tenant store). This is the
 Sovereignty-loop floor (COS §VII) at the memory tier — the same class as the
 14th & Co ADR-015 counterfeit that 0.0.14's guard-rail closed, one layer down.
+
+### FS-400.6 — The Runtime Shell is itself a SovereigntyMap dependency
+The first two runtimes were self-hostable, so sovereignty only ever bit
+integrations *inside* the tenant. OpenAI's hosted surface is the first where the
+**shell itself** is the rented dependency: models, execution, vector stores,
+stored state, and the audit log are OpenAI-hosted and non-relocatable; only the
+client SDK is open. Tracing this against the spec exposed the gap — nothing
+classified the runtime shell itself.
+
+A **Runtime Shell that is not self-hostable is a `rent` dependency with maximal
+blast radius** — the substrate for all four ports at once. Phase 7 MUST classify
+the shell in the `SovereigntyMap`; a non-self-hostable shell requires an explicit
+waiver with a mitigation path: exit/export plan (can tenant state relocate to
+another shell?), data posture (retention, training, residency), and a recorded
+owner ruling (a Sovereignty-loop decision, not a default). Facework does not
+forbid a rented runtime — it forbids a *silent* one.
+
+Corollary: a **runtime-provided guarantee can be a liability.** OpenAI's hosted
+state and tracing are observability guarantees that are simultaneously ownership
+costs (mutable, remote, non-portable). A conformance profile records both — what
+the shell provides, and where tenant state and audit live.
+
+This is the only FS-400 concept about *rejection* rather than *fit*: the spec
+does not (and should not) reject a rented runtime, but it must force the ownership
+decision into the open.
 
 ---
 
@@ -247,14 +278,50 @@ goes dark on the ports Buzz aced. It confirms FS-400.2/.3 from the opposite side
 and surfaced FS-400.4 (governance split) and FS-400.5 (behavioral boundary)
 above. Two runtimes now agree that descriptive governance metadata is homeless —
 inherently authoring-layer. Letta is the **second of §9.2's three reference
-tenants**; a third — a hosted/rented runtime that fails the sovereignty port —
-completes the set.
+tenants**; the third (OpenAI, below) completes the set.
+
+---
+
+## Third validation: OpenAI hosted surface (sovereignty-failing corner)
+
+OpenAI's hosted agent surface (Responses API + vector stores + Agents SDK) was
+chosen to test the spec's *rejection* behavior, not its fit. Full port-by-port:
+`methodology/runtime-ports-openai-gap-2026-08-05.md`. It wires all four ports —
+function calling + a versioned `/v1/skills` registry (a near-match to
+`SkillManifest` + playbook), vector stores + `file_search` (semantic memory),
+first-class MCP — but with the same structural gaps as the others (no native
+triggers, imperative context, no tenant/agent boundary primitive, governance
+metadata homeless) plus the decisive one: **sovereignty fails by construction.**
+The runtime is 100% OpenAI-hosted and non-relocatable; only the client SDK is
+open; identity is org/API-key (no crypto); audit is mutable traces. Live proof of
+the lock-in risk: OpenAI's own Assistants API sunsets 2026-08-26 and Agent Builder
+is deprecated — the hosted agent artifact is disposable.
+
+Three-runtime synthesis (§9.2 bar met):
+
+| | Buzz | Letta | OpenAI hosted |
+|---|---|---|---|
+| Corner | collaboration/audit | memory/context | hosted/rented |
+| `MemoryMap` | ❌ keyword | ✅ semantic + boundary | 🟡 semantic, no boundary, rented |
+| `ContextManifest` | ❌ imperative | ✅ declarative blocks | ❌ imperative |
+| triggers | ✅ | ❌ | ❌ |
+| identity / audit | ✅ keypairs + hash-chain | ❌ | ❌ |
+| sovereignty | ✅ self-host | ✅ self-host | ❌ fails by construction |
+
+Confirmed across all three: descriptive governance metadata is homeless
+everywhere (FS-400.4 — authoring-layer, high confidence now); enforceable gates
+are partially hostable on all three; native triggers are Buzz-only; declarative
+context composition is Letta-only; crypto identity + tamper-evident audit are
+Buzz-only. The ports held across all three corners. The one thing that must land
+before Runtime Ports go universal-MUST is **FS-400.6** — otherwise the spec would
+bless a fully-rented runtime with no ownership accounting, contradicting its own
+first principle.
 
 ---
 
 ## §9 refinements — status
 
-All five FS-400 concepts are folded into `PROTOCOL.md` as additive text:
+All six FS-400 concepts are folded into `PROTOCOL.md` as additive text:
 
 - **Applied 0.0.15** (Buzz pass): §9.1 substrate-agnostic + ports-bind-to-
   different-substrates; §9.4 `MemoryMap` filesystem-first with non-filesystem
@@ -263,10 +330,14 @@ All five FS-400 concepts are folded into `PROTOCOL.md` as additive text:
 - **Applied 0.0.17** (Letta pass): §9.4 behavioral-boundary check (FS-400.5);
   §9.11 governance split into gates vs metadata (FS-400.4), complementary-pair
   binding, and Letta-side runtime guarantees.
+- **Applied 0.0.18** (OpenAI pass): §9.11 shell-is-a-SovereigntyMap-dependency +
+  guarantee-can-be-liability (FS-400.6); a **calibrated Phase 7 gate line**
+  requiring a non-self-hostable shell to carry an explicit waiver (no-op when no
+  Runtime Shell is declared, so it does not break port-less projects).
 
 None break existing conformance; all are additive clarifications. A v0.1.0 pass
 may formalize the conformance-profile format (per-attribute gate/metadata
-classification; which gate binds which mechanism).
+classification; which gate binds which mechanism; the shell-waiver contents).
 
 ---
 
@@ -284,6 +355,12 @@ classification; which gate binds which mechanism).
   `schemas/agent_file.py`; MCP `schemas/mcp.py`; folders/sources
   `schemas/folder.py`; tenancy `schemas/identity.py`; compaction + sleep-time
   agents + HITL tool approval (guides).
+- OpenAI (developers.openai.com/api/docs + openai.github.io/openai-agents-python,
+  Aug 2026): Deprecations (Assistants sunset 2026-08-26; Agent Builder 2026-11-30);
+  Responses/Conversations API; File search + vector stores; Skills (`/v1/skills`);
+  MCP connectors; Your data (retention/training/ZDR/residency); Agents SDK
+  (handoffs/guardrails/sessions/tracing).
 - Flagged reported-not-source-verified: Buzz approval-executor wiring gap and
   rate-limit non-enforcement; Letta "no native trigger" (inferred from schema
-  absence) and exact context-window component ordering (JS-rendered docs).
+  absence) and exact context-window ordering; OpenAI `truncation:auto` middle-drop
+  (thin docs) and enterprise residency legal page (403 to fetch).

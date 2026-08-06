@@ -182,6 +182,12 @@ Required outputs:
 
 Gate:
 - Dependencies classified as own/rent/mitigate.
+- If the tenant declares a Runtime Shell (§9.11), the shell itself is classified
+  in the `SovereigntyMap`. A non-self-hostable shell is `rent` with maximal blast
+  radius (substrate for all four ports) and requires an explicit waiver with a
+  mitigation path — exit/export plan, data posture (retention, training,
+  residency), and a recorded owner ruling. (No Runtime Shell declared → this
+  bullet does not apply.)
 - No unresolved cross-artifact contradictions.
 - Extraction review passed.
 - All critical gaps addressed.
@@ -665,14 +671,14 @@ A **Runtime Shell** is any system that operates a tenant world after Phases 1–
 produce it by consuming one or more Runtime Ports. A Runtime Shell is a
 *consumer* of the manifest, never its owner. This subsection generalizes the
 port model so it holds against runtimes Facework did not design. It was derived
-from two external validations chosen as opposite corners — Buzz
-(github.com/block/buzz, a collaboration/execution/audit runtime) and Letta
-(github.com/letta-ai/letta, a memory/context runtime) — recorded in
+from three external validations spanning the corners — Buzz
+(github.com/block/buzz, a collaboration/execution/audit runtime), Letta
+(github.com/letta-ai/letta, a memory/context runtime), and OpenAI's hosted agent
+surface (Responses API + Agents SDK, a hosted/rented runtime) — recorded in
 `standards/source/fs400-runtime-buzz-validation-2026-08-04.md` (deferred FS-400
-source input), `methodology/runtime-ports-buzz-gap-2026-08-04.md`, and
-`methodology/runtime-ports-letta-gap-2026-08-05.md`. The two runtimes host
-complementary port subsets and neither hosts all four — the evidence for the
-partial conformance and split-runtime binding below.
+source input) and the three `methodology/runtime-ports-{buzz,letta,openai}-gap-*`
+notes. The runtimes host complementary port subsets and none hosts all four — the
+evidence for the partial conformance and split-runtime binding below.
 
 **Partial conformance.** A Runtime Shell MAY host a proper subset of the four
 ports. Conformance is declared **per port**, not globally. A shell that hosts
@@ -715,7 +721,24 @@ execution log gives `DecisionLedger` and `ConsonanceCheck` a runtime home they
 otherwise lack; Letta's context compaction, tool-rule sequencing, and semantic
 archival retrieval back the token-budget, ordering, and `query`-source hints the
 ports only declare. Such guarantees are cataloged in the shell's conformance
-profile, not required by the ports.
+profile, not required by the ports. A guarantee can also be a **liability**: a
+hosted runtime's stored state and audit trail are observability guarantees that
+are simultaneously ownership costs (mutable, remote, non-portable). The
+conformance profile records both — what the shell provides, and where tenant
+state and audit live.
+
+**Sovereignty of the shell itself.** The Runtime Shell is itself a
+`SovereigntyMap` dependency (Phase 7), not merely a host for the ports. A shell
+that is **not self-hostable is `rent` with maximal blast radius** — it is the
+substrate for all four ports at once (all memory, all execution, all stored
+state, the audit log). Facework does not forbid a rented runtime; it forbids a
+*silent* one. A non-self-hostable shell therefore requires an **explicit waiver
+with a mitigation path**: an exit/export plan (can tenant state be relocated to
+another shell?), a data posture (retention, training, residency), and a recorded
+owner ruling — a Sovereignty-loop (COS §VII) decision, not a default. Derived
+from the third validation (OpenAI's hosted surface), where all four ports wire
+but the substrate is rented, closed, and non-relocatable. Enforced at the Phase 7
+gate.
 
 ## 10) HarnessBundle (v1.2.0, additive)
 
