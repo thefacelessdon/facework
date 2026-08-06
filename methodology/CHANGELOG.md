@@ -1,3 +1,26 @@
+# 0.0.27 — 2026-08-06 (Docs — ROADMAP self-consistency fix)
+
+**What changed:**
+- Follow-up to the 0.0.26 ROADMAP reconciliation, from a review of that PR (#28):
+  - **Added the 0.0.26 + 0.0.27 rows** to the Version History table. 0.0.26
+    backfilled 0.0.15–0.0.25 but omitted its own row, leaving the table one behind
+    again — the exact drift it was fixing. Now current through this release.
+  - **Softened the 0.3.0 manifest-schema criterion** from a clean `[x]` back to
+    `[ ]` + a **partial** note. 0.0.26 had reworded "validated against 3+ real
+    manifests" → "four reference runtimes + the face.works example" and checked it.
+    But that changes what the criterion measures: the 4 runtimes are *portability*
+    validations, and only **one real project manifest** exists (Facework's own) —
+    the 3+ bar is not met. Restored the original criterion text and marked it an
+    honest partial.
+- **Why:** the same over-claim discipline the 0.0.25 pass used (shipping PATCH, not
+  a v0.1.0 milestone) applies to roadmap checkboxes — a criterion isn't met just
+  because adjacent work is impressive. Everything else in #28 was accurate and
+  merged as-is.
+
+Docs-only; no protocol behavior changed.
+
+---
+
 # 0.0.26 — 2026-08-06 (Docs — ROADMAP drift reconciliation)
 
 **What changed:**

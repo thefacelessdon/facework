@@ -60,6 +60,8 @@ Maps methodology changelog iterations to release versions.
 | 0.0.23 | — | Aug 2026 | **HarnessBundle → Claude Code converter** (`bin/harness-to-claude-code`). First concrete §10 consumer: reads a bundle, emits a runnable `.claude/` layout (composed CLAUDE.md, skills, MCP scaffolds; secrets never emitted). One-way; the YAML manifests stay source of truth. |
 | 0.0.24 | — | Aug 2026 | **End-to-end run — converter output boots in Claude Code.** The generated bundle auto-discovered all 7 skills and a headless `claude -p` answered from the composed CLAUDE.md. Converter correctness fix (SKILL.md port fields → `metadata` for hosted-upload portability). A tenant world now compiles to a runtime that boots as itself. |
 | 0.0.25 | — | Aug 2026 | **Runtime-conformance tier — the "universal MUST" pass** (manifest schema 1.5.0). Base conformance stays evidence-calibrated; **runtime conformance** is an opt-in additive claim requiring all four ports + a new `RuntimeConformanceProfile` (§9.12). Corrected §9.2's stale "universal-MUST at v0.1.0" phrasing. No existing v1.0.0–v1.4.0 manifest affected. |
+| 0.0.26 | — | Aug 2026 | **ROADMAP drift reconciliation.** Backfilled the Version History table (0.0.15–0.0.25) and reconciled the stale "First External Run" gate — external 8-phase runs (FACTORY, 14th & Co) are done, so 0.1.0 was redefined to **Independent Validation** (operation/review by a non-author). Docs-only. |
+| 0.0.27 | — | Aug 2026 | **ROADMAP self-consistency fix.** Added the 0.0.26/0.0.27 rows the prior pass omitted (the table was one behind again) and softened the 0.3.0 manifest-schema criterion from a clean ✓ to an honest partial (4-runtime portability + 1 worked-example tenant ≠ 3+ independent project manifests). Docs-only. |
 
 ---
 
@@ -114,7 +116,7 @@ skill coverage remain.
 
 - [ ] Protocol can be installed and run without manual intervention beyond `install.sh`
 - [ ] Update system validated (user received and applied an update)
-- [x] Manifest schema validated against real runtimes — four reference runtimes + the face.works worked example (0.0.15–0.0.25)
+- [ ] Manifest schema validated against 3+ real manifests — **partial:** validated for *portability* across four reference runtimes (Buzz/Letta/OpenAI/Claude Code) + one worked-example tenant (face.works, 0.0.15–0.0.25). Only one real *project* manifest exists (Facework's own), so the 3+ bar is not yet met. Strong robustness evidence; not the letter of the criterion.
 - [ ] Skills work across Claude Code CLI, desktop, and web
 
 ### 1.0.0 — Stable
