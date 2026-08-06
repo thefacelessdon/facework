@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 1120" role="img" aria-labelledby="title desc">
+  <title id="title">Facework logotype and lockup test</title>
+  <desc id="desc">Primary, stacked, word-only, and name-architecture expressions are tested across paper and field modes.</desc>
+  <defs><filter id="inverse"><feColorMatrix values="-1 0 0 0 1  0 -1 0 0 1  0 0 -1 0 1  0 0 0 1 0"/></filter></defs>
+  <rect width="1500" height="1120" fill="#FAFAF8"/>
+  <style>
+    .label{font-family:'Berkeley Mono Trial','JetBrains Mono',monospace;font-size:18px;fill:#1A1917;letter-spacing:1px}
+    .meta{font-family:'Berkeley Mono Trial','JetBrains Mono',monospace;font-size:13px;fill:#6B6861}
+    .inv-label{font-family:'Berkeley Mono Trial','JetBrains Mono',monospace;font-size:18px;fill:#F4F3EE;letter-spacing:1px}
+    .inv-meta{font-family:'Berkeley Mono Trial','JetBrains Mono',monospace;font-size:13px;fill:#9C9890}
+  </style>
+  <text x="70" y="64" class="label" font-size="24">FVI-100 / REGISTER / LOCKUP TEST</text>
+  <text x="70" y="92" class="meta">Custom wordmark · Axis Exchange · paper and field · word-only · public-domain distinction</text>
+
+  <g transform="translate(70 145)">
+    <text x="0" y="0" class="meta">PRIMARY HORIZONTAL</text>
+    <image href="../facework-lockup-horizontal.svg" x="0" y="45" width="990" height="144"/>
+  </g>
+
+  <g transform="translate(70 390)">
+    <text x="0" y="0" class="meta">WORD ONLY</text>
+    <image href="../facework-logotype.svg" x="0" y="38" width="700" height="100"/>
+    <text x="0" y="190" class="meta">Use when the mark is already established or space is horizontally constrained.</text>
+  </g>
+
+  <g transform="translate(930 360)">
+    <text x="0" y="0" class="meta">STACKED</text>
+    <image href="../facework-lockup-stacked.svg" x="70" y="35" width="350" height="153"/>
+  </g>
+
+  <g transform="translate(70 650)">
+    <rect width="1360" height="255" rx="4" fill="#11110F"/>
+    <text x="32" y="40" class="inv-meta">FIELD MODE</text>
+    <image href="../facework-lockup-horizontal.svg" x="40" y="72" width="825" height="120" filter="url(#inverse)"/>
+    <image href="../facework-logotype.svg" x="970" y="95" width="350" height="50" filter="url(#inverse)"/>
+  </g>
+
+  <g transform="translate(70 965)">
+    <text x="0" y="0" class="meta">NAME ARCHITECTURE</text>
+    <text x="0" y="48" class="label" font-size="32">FACEWORK</text>
+    <text x="260" y="48" class="meta">LOGOTYPE / PRACTICE</text>
+    <text x="690" y="48" class="label" font-size="32">face.works</text>
+    <text x="950" y="48" class="meta">DOMAIN / PUBLIC INTERFACE</text>
+  </g>
+</svg>

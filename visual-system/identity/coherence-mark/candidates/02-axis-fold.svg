@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-labelledby="title desc">
+  <title id="title">Axis Fold</title>
+  <desc id="desc">Three folded planes approach an open center, then exchange direction across the lower field.</desc>
+  <g fill="currentColor">
+    <path d="M6 12L62 25L110 49V63L58 39L9 28Z"/>
+    <path d="M17 49L66 61L110 82V96L62 75L23 66Z"/>
+    <path d="M34 86L73 96L110 115V130L67 110L43 104Z"/>
+    <path d="M18 147L62 132L110 103V119L68 146L13 160Z"/>
+  </g>
+  <g fill="currentColor" transform="translate(240 0) scale(-1 1)">
+    <path d="M6 12L62 25L110 49V63L58 39L9 28Z"/>
+    <path d="M17 49L66 61L110 82V96L62 75L23 66Z"/>
+    <path d="M34 86L73 96L110 115V130L67 110L43 104Z"/>
+    <path d="M18 147L62 132L110 103V119L68 146L13 160Z"/>
+  </g>
+</svg>

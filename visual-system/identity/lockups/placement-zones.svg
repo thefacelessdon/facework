@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 820" role="img" aria-labelledby="title desc">
+  <title id="title">Facework identity placement zones</title>
+  <desc id="desc">Examples demonstrate preferred structural placement and prohibited decorative placement.</desc>
+  <rect width="1200" height="820" fill="#FAFAF8"/>
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace">
+    <text x="64" y="66" font-size="18" letter-spacing="2" fill="#6B6861">FVI-200 / PLACEMENT</text>
+    <text x="64" y="110" font-size="36" fill="#1A1917">Place identity on a datum, not in empty space.</text>
+  </g>
+  <g transform="translate(64 170)" font-family="ui-monospace, monospace">
+    <g><rect width="520" height="250" fill="#F4F3EE" stroke="#E5E3DC"/><path d="M24 54H496M168 24V226" stroke="#8FAFFF" stroke-dasharray="5 6"/><text x="24" y="32" font-size="13" fill="#6B6861">PASS · STRUCTURAL CORNER</text><text x="24" y="86" font-size="22" fill="#1A1917">FACEWORK</text><text x="24" y="208" font-size="13" fill="#6B6861">identity and content share a datum</text></g>
+    <g transform="translate(552)"><rect width="520" height="250" fill="#F4F3EE" stroke="#E5E3DC"/><path d="M24 196H496M260 24V226" stroke="#8FAFFF" stroke-dasharray="5 6"/><text x="24" y="32" font-size="13" fill="#6B6861">PASS · THRESHOLD CENTER</text><text x="260" y="120" text-anchor="middle" font-size="22" fill="#1A1917">FACEWORK</text><text x="260" y="208" text-anchor="middle" font-size="13" fill="#6B6861">singular opening or conclusion</text></g>
+    <g transform="translate(0 282)"><rect width="520" height="250" fill="#F4F3EE" stroke="#E5E3DC"/><text x="24" y="32" font-size="13" fill="#E66F70">FAIL · DECORATIVE WATERMARK</text><text x="260" y="155" text-anchor="middle" font-size="62" fill="#E5E3DC">FACEWORK</text><g fill="#1A1917" font-size="13"><text x="30" y="83">Evidence should remain legible.</text><text x="30" y="108">The signature cannot become texture.</text><text x="30" y="133">Identity does not sit behind content.</text></g></g>
+    <g transform="translate(552 282)"><rect width="520" height="250" fill="#F4F3EE" stroke="#E5E3DC"/><text x="24" y="32" font-size="13" fill="#E66F70">FAIL · REPEATED STAMPING</text><g font-size="18" fill="#6B6861"><text x="28" y="84">FACEWORK</text><text x="330" y="102">FACEWORK</text><text x="112" y="158">FACEWORK</text><text x="346" y="206">FACEWORK</text></g><text x="24" y="226" font-size="13" fill="#6B6861">presence without communicative purpose</text></g>
+  </g>
+  <text x="64" y="756" font-family="ui-monospace, monospace" font-size="14" fill="#6B6861">Preferred: corners, axes, thresholds. Avoid: watermarks, patterns, and automatic repetition.</text>
+</svg>

@@ -1,34 +1,51 @@
-import type { Metadata } from "next";
-import { JetBrains_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
-import { PrimitivesBar } from "@/components/PrimitivesBar";
+import "@fontsource-variable/public-sans";
+import "@fontsource/jetbrains-mono/400.css";
+import "@fontsource/jetbrains-mono/500.css";
 import "./globals.css";
 
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-berkeley",
-  subsets: ["latin"],
-  weight: ["400", "500"],
-});
+// Private preview: noindex by default. Set NEXT_PUBLIC_ALLOW_INDEX=true to
+// allow indexing once the site is cleared for public release.
+const allowIndex = process.env.NEXT_PUBLIC_ALLOW_INDEX === "true";
 
 export const metadata: Metadata = {
-  title: "Facework — A Coherence Practice for Building Things",
+  metadataBase: new URL("https://face.works"),
+  title: {
+    default: "Facework — A public record of attention",
+    template: "%s — Facework",
+  },
   description:
-    "An open protocol for turning cultural signal into coherent, ownable business systems for creators and cultural brands.",
+    "Facework develops theory, standards, and tools for coherence across identity, behavior, and infrastructure.",
+  applicationName: "Facework",
+  openGraph: {
+    type: "website",
+    siteName: "Facework",
+    title: "Facework — A public record of attention",
+    description:
+      "A living discipline for seeing, designing, and maintaining coherent systems.",
+  },
+  robots: { index: allowIndex, follow: allowIndex },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export const viewport: Viewport = {
+  colorScheme: "light",
+  themeColor: "#fafaf8",
+};
+
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${jetbrainsMono.variable} h-full`}>
-      <body className="min-h-full flex flex-col bg-background text-foreground">
+    <html lang="en">
+      <body>
+        <a className="skip-link" href="#main-content">Skip to content</a>
         <Nav />
-        <PrimitivesBar />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <div className="site-frame">
+          <main id="main-content" className="site-main" tabIndex={-1}>
+            {children}
+          </main>
+          <Footer />
+        </div>
       </body>
     </html>
   );

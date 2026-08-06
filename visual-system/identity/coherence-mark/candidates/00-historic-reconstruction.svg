@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-labelledby="title desc">
+  <title id="title">Historic Facework mark reconstruction</title>
+  <desc id="desc">Three paired upper strands and two crossing lower strands converge around an open vertical center.</desc>
+  <g fill="currentColor">
+    <path d="M4 8C42 15 79 29 111 47V61C76 42 40 29 7 23Z"/>
+    <path d="M11 39C47 47 81 62 111 79V93C78 74 45 60 18 53Z"/>
+    <path d="M28 72C60 82 87 96 111 111V126C82 108 57 95 38 89Z"/>
+    <path d="M23 144C59 132 87 116 111 99V115C84 135 54 151 18 159Z"/>
+    <path d="M46 105C70 96 91 86 111 75V91C91 104 72 114 37 128Z"/>
+  </g>
+  <g fill="currentColor" transform="translate(240 0) scale(-1 1)">
+    <path d="M4 8C42 15 79 29 111 47V61C76 42 40 29 7 23Z"/>
+    <path d="M11 39C47 47 81 62 111 79V93C78 74 45 60 18 53Z"/>
+    <path d="M28 72C60 82 87 96 111 111V126C82 108 57 95 38 89Z"/>
+    <path d="M23 144C59 132 87 116 111 99V115C84 135 54 151 18 159Z"/>
+    <path d="M46 105C70 96 91 86 111 75V91C91 104 72 114 37 128Z"/>
+  </g>
+</svg>

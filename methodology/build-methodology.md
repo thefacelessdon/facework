@@ -17,7 +17,7 @@ status: Living Document
 
 How to take an idea from zero to a fully architected, spec'd, prototyped, and handoff-ready
 product using Claude Code as an operating partner. This methodology was developed and validated
-building GAMUT (creator commerce infrastructure) across 4 days.
+building GAMUT (creator commerce infrastructure) with the Facework methodology and AI-agent teams.
 
 This is not a theory document. Every step below was executed, and the artifacts exist in the
 GAMUT repo as proof. The methodology is designed to be:
@@ -592,7 +592,6 @@ that you've already done the hard thinking — they just need to execute.
 
 | Metric | Value |
 |--------|-------|
-| Idea to handoff-ready | 4 days |
 | Architecture specs produced | 10 (6,500+ lines) |
 | Operational playbooks | 9 (3,500+ lines) |
 | Strategic decisions resolved | 7 |

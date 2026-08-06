@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>FVI-400 — Exchange Resolve Reference</title>
+  <link rel="stylesheet" href="exchange-resolve.css">
+  <style>
+    :root{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#11110f;color:#f4f3ee}*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:32px}.frame{width:min(960px,100%);border:1px solid #34322d;padding:clamp(24px,6vw,72px);background:#1a1917}.meta{color:#9c9890;font-size:12px;letter-spacing:.12em;text-transform:uppercase}.stage{display:grid;place-items:center;min-height:360px;color:#f4f3ee}.mark{width:min(420px,75vw);height:auto}.controls{display:flex;align-items:center;gap:16px;flex-wrap:wrap;border-top:1px solid #34322d;padding-top:20px}button{min-height:44px;border:1px solid #f4f3ee;background:transparent;color:inherit;padding:10px 18px;font:inherit;cursor:pointer}button:focus-visible{outline:3px solid #8fafff;outline-offset:3px}.note{color:#9c9890;font-size:13px;line-height:1.5;max-width:62ch}@media(prefers-reduced-motion:reduce){.motion-status::after{content:"Reduced motion: resolved static state"}}@media(prefers-reduced-motion:no-preference){.motion-status::after{content:"Motion enabled: 520 ms Exchange Resolve"}}
+  </style>
+</head>
+<body>
+  <main class="frame">
+    <p class="meta">FVI-400 / canonical reference implementation</p>
+    <section class="stage" aria-label="Exchange Resolve demonstration">
+      <svg id="signature" class="mark" viewBox="0 0 240 160" role="img" aria-labelledby="mark-title mark-desc">
+        <title id="mark-title">Facework Coherence Mark</title>
+        <desc id="mark-desc">Two counterparts resolve around an open shared axis.</desc>
+        <g fill="currentColor"><g class="fw-exchange-resolve__left"><path d="M8 13C44 18 78 29 109 45V58C76 42 42 32 9 28Z"/><path d="M14 44C48 50 81 62 109 77V90C78 75 48 64 19 59Z"/><path d="M27 76C57 83 84 95 109 109V123C81 107 57 97 36 92Z"/><path d="M18 146C55 134 84 118 109 98V114C81 136 51 152 13 159Z"/></g><g class="fw-exchange-resolve__right"><g transform="translate(240) scale(-1 1)"><path d="M8 13C44 18 78 29 109 45V58C76 42 42 32 9 28Z"/><path d="M14 44C48 50 81 62 109 77V90C78 75 48 64 19 59Z"/><path d="M27 76C57 83 84 95 109 109V123C81 107 57 97 36 92Z"/><path d="M18 146C55 134 84 118 109 98V114C81 136 51 152 13 159Z"/></g></g><circle class="fw-exchange-resolve__axis" cx="120" cy="104" r="5" fill="#62DFAE"/></g>
+      </svg>
+    </section>
+    <div class="controls">
+      <button id="replay" type="button">Replay signature</button>
+      <p class="note motion-status" aria-live="polite"></p>
+    </div>
+  </main>
+  <script>
+    const button=document.querySelector('#replay');
+    button.addEventListener('click',()=>{
+      const signature=document.querySelector('#signature');
+      const replacement=signature.cloneNode(true);
+      signature.replaceWith(replacement);
+    });
+  </script>
+</body>
+</html>

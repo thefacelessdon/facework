@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-labelledby="title desc">
+  <title id="title">Continuity</title>
+  <desc id="desc">Paired continuous ribbons move from distributed outer origins through a central exchange into a stable lower field.</desc>
+  <g fill="none" stroke="currentColor" stroke-width="13" stroke-linecap="butt" stroke-linejoin="miter">
+    <path d="M7 20C48 25 83 39 110 57M233 20C192 25 157 39 130 57"/>
+    <path d="M14 58C50 63 83 76 110 92M226 58C190 63 157 76 130 92"/>
+    <path d="M29 95C58 101 84 113 110 129M211 95C182 101 156 113 130 129"/>
+    <path d="M18 151C57 139 87 121 110 101M222 151C183 139 153 121 130 101"/>
+  </g>
+</svg>

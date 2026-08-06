@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" aria-labelledby="title desc">
+  <title id="title">Facework Coherence Mark, micro form</title>
+  <desc id="desc">A simplified three-strand form preserving the open axis and lower change of direction at small sizes.</desc>
+  <g fill="currentColor">
+    <path d="M1 3L6.2 4.2L11 6.7V8.7L5.7 6.1L1 5.1Z"/>
+    <path d="M2 8.2L6.5 9.3L11 11.6V13.6L6 11.2L2 10.3Z"/>
+    <path d="M1.5 21L6.2 19L11 15.7V18L6.8 20.8L1 23Z"/>
+  </g>
+  <g fill="currentColor" transform="translate(24 0) scale(-1 1)">
+    <path d="M1 3L6.2 4.2L11 6.7V8.7L5.7 6.1L1 5.1Z"/>
+    <path d="M2 8.2L6.5 9.3L11 11.6V13.6L6 11.2L2 10.3Z"/>
+    <path d="M1.5 21L6.2 19L11 15.7V18L6.8 20.8L1 23Z"/>
+  </g>
+</svg>

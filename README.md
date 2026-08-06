@@ -2,6 +2,18 @@
 
 An open protocol for turning ideas into coherent, ownable, runtime-portable systems.
 
+Facework's own visual identity is governed separately by the
+[Facework Visual Specification](visual-system/README.md), a contract-first system
+for making the practice's knowledge visible across documents, interfaces,
+diagrams, identity, and motion.
+
+The maintained `face.works` implementation candidate lives in
+`examples/face.works/prototype/` and is integrated through
+`visual-system/production/FVP-000-production-integration.md`. Early site,
+pattern, artboard, and design-infrastructure material is historical evidence;
+the current source-authority boundary is recorded in
+`visual-system/production/FVP-100-source-authority.md`.
+
 Facework declares what a coherent tenant world contains, exposes, and emits — through 8 lifecycle phases that produce 20 canonical artifacts, plus a runtime portability layer (manifest schema v1.4.0) that lets any agent harness ingest the result without rebuilding context. The methodology was developed building [GAMUT](https://github.com/thefacelessdon/GAMUT) and refined across multiple protocol runs including [HUE Unlimited](https://github.com/thefacelessdon/hue-unlimited).
 
 ---

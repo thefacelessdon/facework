@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 80" role="img" aria-labelledby="title desc">
+  <title id="title">Interval logotype candidate</title>
+  <desc id="desc">A wide uppercase Facework wordmark with visibly separated stroke junctions and an open structural rhythm.</desc>
+  <g fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M8 70V10M17 10H58M17 39H51"/>
+    <path d="M76 70L99 10L122 70M85 47H113"/>
+    <path d="M199 22C191 13 182 10 171 10C153 10 144 21 144 40C144 59 153 70 171 70C182 70 191 67 199 58"/>
+    <path d="M226 10V70M235 10H278M235 39H271M235 70H278"/>
+    <path d="M302 10L313 70L336 37L359 70L370 10"/>
+    <path d="M417 10C399 10 390 21 390 40C390 59 399 70 417 70C435 70 444 59 444 40C444 21 435 10 417 10Z"/>
+    <path d="M472 70V10M481 10H505C520 10 528 18 528 30C528 42 520 49 505 49H481M505 49L532 70"/>
+    <path d="M557 10V70M594 10L557 47M574 32L598 70"/>
+  </g>
+</svg>

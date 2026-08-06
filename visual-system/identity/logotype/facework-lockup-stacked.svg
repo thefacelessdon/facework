@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 245" role="img" aria-labelledby="title desc">
+  <title id="title">Facework stacked identity lockup</title>
+  <desc id="desc">The Axis Exchange Coherence Mark centered above the custom uppercase Facework logotype.</desc>
+  <g fill="currentColor" transform="translate(190 0) scale(.75)">
+    <path d="M8 13C44 18 78 29 109 45V58C76 42 42 32 9 28Z"/><path d="M14 44C48 50 81 62 109 77V90C78 75 48 64 19 59Z"/><path d="M27 76C57 83 84 95 109 109V123C81 107 57 97 36 92Z"/><path d="M18 146C55 134 84 118 109 98V114C81 136 51 152 13 159Z"/>
+  </g>
+  <g fill="currentColor" transform="translate(370 0) scale(-.75 .75)">
+    <path d="M8 13C44 18 78 29 109 45V58C76 42 42 32 9 28Z"/><path d="M14 44C48 50 81 62 109 77V90C78 75 48 64 19 59Z"/><path d="M27 76C57 83 84 95 109 109V123C81 107 57 97 36 92Z"/><path d="M18 146C55 134 84 118 109 98V114C81 136 51 152 13 159Z"/>
+  </g>
+  <g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter" transform="translate(0 160)">
+    <path d="M8 70V10H50M8 39H43"/><path d="M67 70L90 10L113 70M76 47H104"/><path d="M183 22C176 13 168 10 157 10C140 10 131 21 131 40C131 59 140 70 157 70C168 70 176 67 183 58"/><path d="M207 10V70M207 10H251M207 39H245M207 70H251"/><path d="M273 10L284 70L305 38L326 70L337 10"/><path d="M382 10C365 10 356 21 356 40C356 59 365 70 382 70C399 70 408 59 408 40C408 21 399 10 382 10Z"/><path d="M433 70V10H458C473 10 481 18 481 30C481 42 473 49 458 49H433M458 49L484 70"/><path d="M509 10V70M551 10L509 48M526 33L554 70"/>
+  </g>
+</svg>
