@@ -1,4 +1,9 @@
 import { caseStudies } from "@/data/demo";
+import type {
+  StructuralChange,
+  PracticalImpact,
+  HandoffReadiness,
+} from "@/data/schema";
 
 const levelLabels: Record<number, string> = {
   1: "Level 1 — Phase-Complete",
@@ -13,6 +18,39 @@ const auditLabels = {
   "in-progress": "Audit in progress",
 } as const;
 
+const provenanceLabels = {
+  "self-audit": "Retroactive self-audit",
+  "facework-run": "Facework protocol run",
+  "facework-informed": "Built with the Facework discipline",
+} as const;
+
+type Row = StructuralChange | PracticalImpact | HandoffReadiness | string;
+
+function RecordRows({ items }: { items: Row[] }) {
+  return (
+    <>
+      {items.map((item, i) => {
+        const heading =
+          typeof item === "string"
+            ? null
+            : "title" in item
+              ? item.title
+              : item.label;
+        const body = typeof item === "string" ? item : item.detail;
+        return (
+          <article className="section-record" key={i}>
+            <p className="artifact-id">{String(i + 1).padStart(2, "0")}</p>
+            <div>
+              {heading ? <h2>{heading}</h2> : null}
+              <p>{body}</p>
+            </div>
+          </article>
+        );
+      })}
+    </>
+  );
+}
+
 export default function ProofPage() {
   return (
     <div className="section-page">
@@ -22,13 +60,15 @@ export default function ProofPage() {
           Proof is structural consequence, not portfolio theater.
         </h1>
         <p className="section-intro">
-          Every system built through the Facework practice is audited against
-          the conformance model. These are the results.
+          Systems built with the Facework practice are held to the conformance
+          model. These are the results — each with its provenance stated
+          plainly, so a self-report is never mistaken for a client-ratified
+          audit.
         </p>
       </section>
 
       {caseStudies.length === 0 ? (
-        <p className="policy-note">No completed audits yet.</p>
+        <p className="policy-note">No cases yet.</p>
       ) : (
         caseStudies.map((study) => {
           const metrics = [
@@ -41,12 +81,14 @@ export default function ProofPage() {
             { label: "Tests", count: study.artifacts.testCases, caption: `test cases across ${study.artifacts.testFiles} files` },
           ];
 
+          const isAudit = study.status === "audit-complete";
+
           return (
             <div key={study.slug}>
               {/* Case header + summary */}
               <section
                 className="section-records"
-                aria-label={`${study.title} audit`}
+                aria-label={`${study.title} case`}
               >
                 <header className="section-head">
                   <p>
@@ -56,9 +98,15 @@ export default function ProofPage() {
                 </header>
                 <article className="section-record">
                   <p className="artifact-id">
-                    {levelLabels[study.conformanceLevel]}
-                    <br />
-                    {study.date}
+                    {study.conformanceLevel
+                      ? levelLabels[study.conformanceLevel]
+                      : "No conformance Level assigned"}
+                    {study.date ? (
+                      <>
+                        <br />
+                        {study.date}
+                      </>
+                    ) : null}
                   </p>
                   <div>
                     <h2>{study.title}</h2>
@@ -67,38 +115,64 @@ export default function ProofPage() {
                 </article>
               </section>
 
-              <p className="policy-note">
-                This is a retroactive self-audit authorized by Decision 003 — a
-                conformance audit of an already-built system, not a paid
-                practice engagement. Paid practice runs toward the MVP gate
-                remain at 0 of 3 (see Status).
-              </p>
+              {/* Provenance + honest disclosure (all non-audit cases) */}
+              {study.provenance ? (
+                <div className="evidence-strip" aria-label="Provenance">
+                  <p>
+                    <span>Provenance</span>
+                    {provenanceLabels[study.provenance]}
+                  </p>
+                  <p>
+                    <span>Conformance</span>
+                    {study.conformanceLevel
+                      ? `${levelLabels[study.conformanceLevel]} (self-reported)`
+                      : "Self-reported, no Level assigned"}
+                  </p>
+                </div>
+              ) : null}
 
-              {/* Verdict */}
-              <div className="evidence-strip" aria-label="Audit verdict">
-                <p>
-                  <span>Conformance</span>
-                  {levelLabels[study.conformanceLevel]}
-                </p>
-                <p>
-                  <span>Extraction check</span>
-                  <span
-                    className={
-                      study.extractionCheckPassed
-                        ? "text-coherence"
-                        : "text-entropy"
-                    }
-                  >
-                    {study.extractionCheckPassed ? "Passed" : "Failed"}
-                  </span>
-                </p>
-                <p>
-                  <span>Reference visibility</span>
-                  {study.publicReference
-                    ? "Public reference available"
-                    : "Private reference only"}
-                </p>
-              </div>
+              {study.conformanceNote ? (
+                <p className="policy-note">{study.conformanceNote}</p>
+              ) : null}
+
+              {/* GAMUT self-audit disclosure + audit verdict */}
+              {isAudit ? (
+                <>
+                  <p className="policy-note">
+                    This is a retroactive self-audit authorized by Decision
+                    003 — a conformance audit of an already-built system, not a
+                    paid practice engagement. Paid practice runs toward the MVP
+                    gate remain at 0 of 3 (see Status).
+                  </p>
+
+                  <div className="evidence-strip" aria-label="Audit verdict">
+                    <p>
+                      <span>Conformance</span>
+                      {study.conformanceLevel
+                        ? levelLabels[study.conformanceLevel]
+                        : "No Level assigned"}
+                    </p>
+                    <p>
+                      <span>Extraction check</span>
+                      <span
+                        className={
+                          study.extractionCheckPassed
+                            ? "text-coherence"
+                            : "text-entropy"
+                        }
+                      >
+                        {study.extractionCheckPassed ? "Passed" : "Failed"}
+                      </span>
+                    </p>
+                    <p>
+                      <span>Reference visibility</span>
+                      {study.publicReference
+                        ? "Public reference available"
+                        : "Private reference only"}
+                    </p>
+                  </div>
+                </>
+              ) : null}
 
               {/* Structural change */}
               <section
@@ -109,15 +183,7 @@ export default function ProofPage() {
                   <p>What changed structurally</p>
                   <p>Governable · portable · buildable</p>
                 </header>
-                {study.structuralChanges.map((change, i) => (
-                  <article className="section-record" key={change.title}>
-                    <p className="artifact-id">{String(i + 1).padStart(2, "0")}</p>
-                    <div>
-                      <h2>{change.title}</h2>
-                      <p>{change.detail}</p>
-                    </div>
-                  </article>
-                ))}
+                <RecordRows items={study.structuralChanges} />
               </section>
 
               {/* Practical impact */}
@@ -126,15 +192,7 @@ export default function ProofPage() {
                   <p>Why it mattered</p>
                   <p>Operate · hand off · scale</p>
                 </header>
-                {study.practicalImpact.map((impact, i) => (
-                  <article className="section-record" key={impact.label}>
-                    <p className="artifact-id">{String(i + 1).padStart(2, "0")}</p>
-                    <div>
-                      <h2>{impact.label}</h2>
-                      <p>{impact.detail}</p>
-                    </div>
-                  </article>
-                ))}
+                <RecordRows items={study.practicalImpact} />
               </section>
 
               {/* Handoff readiness */}
@@ -146,15 +204,7 @@ export default function ProofPage() {
                   <p>Handoff readiness</p>
                   <p>Survives its authors</p>
                 </header>
-                {study.handoffReadiness.map((item, i) => (
-                  <article className="section-record" key={item.label}>
-                    <p className="artifact-id">{String(i + 1).padStart(2, "0")}</p>
-                    <div>
-                      <h2>{item.label}</h2>
-                      <p>{item.detail}</p>
-                    </div>
-                  </article>
-                ))}
+                <RecordRows items={study.handoffReadiness} />
               </section>
 
               {/* Artifacts produced */}
@@ -178,8 +228,8 @@ export default function ProofPage() {
               </section>
 
               <p className="policy-note">
-                36,000+ lines of specification across architecture, decisions,
-                playbooks, governance, platform docs, and briefs.
+                {study.linesCaption ??
+                  "36,000+ lines of specification across architecture, decisions, playbooks, governance, platform docs, and briefs."}
               </p>
             </div>
           );

@@ -25,15 +25,33 @@ export interface CaseStudy {
   creator: string;
   domain: string;
   status: "audit-complete" | "case-study" | "in-progress";
-  conformanceLevel: 1 | 2 | 3 | 4;
+  /**
+   * Assigned conformance Level. Optional: not every case carries a ratified
+   * Level (e.g. a Facework run whose conformance is self-reported, or a case
+   * where no Level is claimed at all).
+   */
+  conformanceLevel?: 1 | 2 | 3 | 4;
+  /**
+   * How the system relates to Facework:
+   * - "self-audit": already-built system audited retroactively against the model
+   * - "facework-run": built through a full/partial Facework protocol run
+   * - "facework-informed": built with the Facework discipline, not a formal run
+   */
+  provenance?: "self-audit" | "facework-run" | "facework-informed";
+  /** Short honest disclosure about what the conformance claim does and does not mean. */
+  conformanceNote?: string;
+  /** Human-readable caption for the lines-of-work summary shown on the proof card. */
+  linesCaption?: string;
   summary: string;
-  structuralChanges: StructuralChange[];
-  practicalImpact: PracticalImpact[];
-  handoffReadiness: HandoffReadiness[];
+  // Object rows carry an explicit title/label + detail (as GAMUT does).
+  // Plain strings carry a single self-contained statement, rendered verbatim.
+  structuralChanges: Array<StructuralChange | string>;
+  practicalImpact: Array<PracticalImpact | string>;
+  handoffReadiness: Array<HandoffReadiness | string>;
   artifacts: ArtifactCount;
   extractionCheckPassed: boolean;
   publicReference: boolean;
-  date: string; // ISO 8601
+  date: string; // ISO 8601 (empty string when no date is claimed)
 }
 
 export interface StructuralChange {

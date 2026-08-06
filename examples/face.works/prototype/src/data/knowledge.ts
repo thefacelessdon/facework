@@ -58,7 +58,9 @@ export const publicSections: Record<PublicSectionKey, PublicSection> = {
     proposition: "Evidence begins where the system meets consequence.",
     introduction: "Cases document the original constraint, structural intervention, resulting system, evidence, and limits—not only the polished surface.",
     records: [
-      { id: "CASE-001", title: "GAMUT", description: "Creator-commerce infrastructure translated from founder logic into a portable operating system.", status: "Audit complete", href: "/proof", action: "Inspect case" },
+      { id: "CASE-001", title: "GAMUT", description: "Creator-commerce infrastructure translated from founder logic into a portable operating system.", status: "Level 3 · retroactive self-audit", href: "/proof", action: "Inspect case" },
+      { id: "CASE-002", title: "Chefnic", description: "A real catering business given an AI-run back-office: a canonical routine registry, one invoicing system of record, and PII-safe operations built with the Facework discipline.", status: "Operating", href: "https://chefnic.com", action: "View business" },
+      { id: "CASE-003", title: "Club Volley", description: "A tennis-culture venture where strategy became a governed system — one canonical numbers source, a load-bearing design language, and a role-gated platform built with the Facework discipline.", status: "In build", href: "https://clubvolley.tennis", action: "View venture" },
       { id: "FVA-600", title: "Lineage Inspector", description: "A product reference that makes upstream decisions and downstream consequences inspectable.", status: "Reference", href: "/proof", action: "Inspect evidence" },
     ],
   },

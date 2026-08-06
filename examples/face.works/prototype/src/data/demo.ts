@@ -351,6 +351,93 @@ export const caseStudies: CaseStudy[] = [
     publicReference: false,
     date: "2026-03",
   },
+  {
+    slug: "14th-and-co",
+    title: "14th & Co",
+    creator: "14th & Co",
+    domain: "People & operations infrastructure firm",
+    status: "case-study",
+    conformanceLevel: 3,
+    provenance: "facework-run",
+    conformanceNote:
+      "Full Facework protocol run (8/8 gates). Level 3 is self-reported by the practice and pending client ratification; one runtime sub-gate remains open.",
+    summary:
+      "A people-and-operations firm rebuilt as an owned operating system: a live client workbench plus a governed specification layer that turns tacit founder knowledge into handoff-ready infrastructure.",
+    structuralChanges: [
+      "Governance became explicit — 17 numbered decision records with rationale, alternatives, and owner sign-off replaced negotiation-by-surprise.",
+      "Operations became portable — 14 architecture specs and 8 playbooks turned founder knowledge into a handoff-ready operating layer.",
+      "Client sovereignty was designed in — a sovereignty map specifies per-asset ownership and a clean, open-format exit path.",
+    ],
+    practicalImpact: [
+      "A replacement builder can enter through specs and playbooks instead of reconstructing logic from meetings.",
+      "Strategic debates move upstream into explicit governance, reducing rework during execution.",
+      "Enterprise engagement content is held privately; only the operating system itself is exposed.",
+    ],
+    handoffReadiness: [
+      "Decision trail exists with reasoning, not just conclusions.",
+      "Operational ownership and boundaries are documented for another operator.",
+      "A live client workbench shipped, backed by a small automated test suite.",
+    ],
+    artifacts: {
+      governanceDocs: 4,
+      decisionRecords: 17,
+      architectureSpecs: 14,
+      playbooks: 8,
+      prototypePages: 23,
+      routes: 28,
+      components: 53,
+      testFiles: 5,
+      testCases: 24,
+    },
+    extractionCheckPassed: false,
+    publicReference: false,
+    date: "",
+    linesCaption:
+      "~43,000 lines of governed specification + a ~26,000-line client workbench application",
+  },
+  {
+    slug: "hue-unlimited",
+    title: "HUE Unlimited",
+    creator: "HUE Unlimited",
+    domain: "Embedded creative partner / cultural agency OS",
+    status: "case-study",
+    provenance: "facework-run",
+    conformanceNote:
+      "Built through a phase-tagged Facework run (Frequency through Coherence) with entropy audits. Conformance is self-reported; no formal Level assigned.",
+    summary:
+      "A creative agency's cultural authority encoded into a governed operating system — codifying founder taste into schema, guaranteeing talent sovereignty, and taking a prototype to a production platform.",
+    structuralChanges: [
+      "Founder taste was codified into 23 governed content schemas so quality could scale beyond the founders.",
+      "Talent and community sovereignty were made contractual through explicit exit-guarantee and governance documents.",
+      "11 strategic decisions were locked with rationale, including hard sub-brand and architecture calls that removed hidden coupling.",
+    ],
+    practicalImpact: [
+      "Award-winning cultural campaigns (multiple Telly Awards and a Gold Clio) sit behind the practice as pre-existing public proof of the team's craft.",
+      "A documented prototype became a real auth-gated production platform.",
+      "Quality review became a defined gate rather than founder intuition.",
+    ],
+    handoffReadiness: [
+      "A 35-minute orientation brief plus per-app engineering guides let a new builder continue without live context.",
+      "A single canonical task and pricing source keeps numbers from drifting.",
+      "Phase-tagged tracker records what was done and why at each stage.",
+    ],
+    artifacts: {
+      governanceDocs: 3,
+      decisionRecords: 11,
+      architectureSpecs: 33,
+      playbooks: 11,
+      prototypePages: 37,
+      routes: 46,
+      components: 105,
+      testFiles: 13,
+      testCases: 0,
+    },
+    extractionCheckPassed: false,
+    publicReference: false,
+    date: "",
+    linesCaption:
+      "~24,000 lines of governed specification + ~30,000 lines of application across three products",
+  },
 ];
 
 // --- Coherence Tracker ---
