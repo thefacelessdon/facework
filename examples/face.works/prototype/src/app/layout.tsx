@@ -1,10 +1,14 @@
 import type { Metadata, Viewport } from "next";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
-import "@fontsource-variable/public-sans";
 import "@fontsource/jetbrains-mono/400.css";
 import "@fontsource/jetbrains-mono/500.css";
+// Reading Room type trio (self-hosted, CSP-safe; variable weight axis).
+import "@fontsource-variable/literata/wght.css";
+import "@fontsource-variable/schibsted-grotesk/wght.css";
+import "@fontsource-variable/spline-sans-mono/wght.css";
 import "./globals.css";
+import "./reading-room.css";
 
 // Private preview: noindex by default. Set NEXT_PUBLIC_ALLOW_INDEX=true to
 // allow indexing once the site is cleared for public release.

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { RecordLabel, SectionHead } from "@/components/rr";
 
 export const metadata: Metadata = {
   title: "Privacy",
@@ -26,26 +27,40 @@ const practices = [
 
 export default function PrivacyPage() {
   return (
-    <div className="section-page policy-page">
-      <section className="section-threshold" aria-labelledby="privacy-title">
-        <p className="eyebrow">Facework / Operational note 01</p>
-        <h1 id="privacy-title">Privacy should be visible in the behavior.</h1>
-        <p className="section-intro">
-          This note describes the current implementation. If the website begins
-          collecting or transmitting information, this record must change before
-          that behavior ships.
+    <div className="rr rr-page section-page">
+      <div className="rr-column">
+        <header className="rr-masthead">
+          <RecordLabel tick>Operating record · Privacy</RecordLabel>
+          <h1 className="rr-display">Privacy should be visible in the behavior.</h1>
+          <p className="rr-lede">
+            This note describes the current implementation. If the website
+            begins collecting or transmitting information, this record must
+            change before that behavior ships.
+          </p>
+        </header>
+
+        <section className="rr-section" aria-label="Privacy practices">
+          <SectionHead label="Privacy practices" title="What the site does with information" />
+          <ul className="rr-rows">
+            {practices.map((practice, i) => (
+              <li className="rr-rows__item" key={practice.title}>
+                <span className="rr-rows__meta">
+                  <strong>{String(i + 1).padStart(2, "0")}</strong>
+                </span>
+                <div className="rr-rows__body">
+                  <h2 className="rr-rows__title">{practice.title}</h2>
+                  <p className="rr-rows__note">{practice.body}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <p className="rr-note rr-note--record">
+          Effective 6 August 2026 · operational statement, not a substitute for
+          jurisdiction-specific legal review.
         </p>
-      </section>
-      <section className="policy-records" aria-label="Privacy practices">
-        {practices.map((practice, index) => (
-          <article className="policy-record" key={practice.title}>
-            <p className="artifact-id">0{index + 1}</p>
-            <h2>{practice.title}</h2>
-            <p>{practice.body}</p>
-          </article>
-        ))}
-      </section>
-      <p className="policy-note">Effective 6 August 2026 · operational statement, not a substitute for jurisdiction-specific legal review.</p>
+      </div>
     </div>
   );
 }

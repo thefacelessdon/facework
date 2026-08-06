@@ -7,18 +7,15 @@ import type {
 
 // --- Navigation ---
 
+// Two-mode spine (DESIGN.md §10). The Work is the Record register (published
+// readings); The Practice is the Field register (how to work with Facework —
+// currently /engage, rebuilt in a later pass). Type routes (field notes,
+// models, frameworks, experiments) are sub-surfaces reached from The Work.
+// Status / Privacy / Accessibility live in the Footer.
 export const navigation: NavItem[] = [
-  { label: "Field Notes", href: "/field-notes", description: "Living observations" },
-  { label: "Models", href: "/models", description: "Ways of seeing" },
-  { label: "Frameworks", href: "/frameworks", description: "Reusable structures" },
-  { label: "Cases", href: "/cases", description: "Evidence in practice" },
-  { label: "Conversations", href: "/conversations", description: "Dialogue and refinement" },
-  { label: "Experiments", href: "/experiments", description: "Prototypes under pressure" },
-  { label: "Library", href: "/library", description: "Sources and lineage" },
+  { label: "The Work", href: "/", description: "The published record" },
+  { label: "The Practice", href: "/engage", description: "Work with Facework" },
   { label: "About", href: "/about", description: "Practice and institution" },
-  { label: "Protocol", href: "/protocol", description: "The open system" },
-  { label: "Proof", href: "/proof", description: "Audited results" },
-  { label: "Engage", href: "/engage", description: "Work with Facework" },
 ];
 
 // --- Protocol Docs ---

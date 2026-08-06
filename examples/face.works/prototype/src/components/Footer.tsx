@@ -1,11 +1,15 @@
 import Link from "next/link";
+import { RecordLabel } from "@/components/rr";
 
 export function Footer() {
   return (
     <footer className="site-footer">
-      <p>Facework</p>
-      <p>Knowledge should outlive the interface.</p>
-      <nav aria-label="Operational information">
+      <div className="site-footer__brand">
+        <RecordLabel tick>Facework · A public record of attention</RecordLabel>
+        <p className="site-footer__line">Knowledge should outlive the interface.</p>
+      </div>
+      <nav className="site-footer__nav" aria-label="Operating records">
+        <RecordLabel as="span">Operating records</RecordLabel>
         <Link href="/status">Status</Link>
         <Link href="/accessibility">Accessibility</Link>
         <Link href="/privacy">Privacy</Link>

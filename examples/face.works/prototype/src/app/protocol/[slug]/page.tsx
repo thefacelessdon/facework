@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { protocolDocs } from "@/data/demo";
 import { Markdown } from "@/components/Markdown";
+import { RecordLabel } from "@/components/rr";
 
 const categoryLabels = {
   theory: "Theory",
@@ -39,21 +40,18 @@ export default async function ProtocolDocPage({
   if (!doc) return notFound();
 
   return (
-    <div className="section-page">
-      <section className="section-threshold" aria-labelledby="doc-title">
-        <p className="eyebrow">Facework / {categoryLabels[doc.category]}</p>
-        <h1 id="doc-title">{doc.title}</h1>
-        <p className="section-intro">{doc.subtitle}</p>
-      </section>
-
-      <div className="section-records">
-        <header className="section-head">
-          <p>
-            <Link href="/protocol">← The System</Link>
-          </p>
-          <p>{categoryLabels[doc.category]}</p>
+    <div className="rr rr-page section-page">
+      <div className="rr-column">
+        <header className="rr-masthead">
+          <RecordLabel tick>Facework · {categoryLabels[doc.category]}</RecordLabel>
+          <h1 className="rr-display">{doc.title}</h1>
+          <p className="rr-lede">{doc.subtitle}</p>
+          <Link className="rr-link" href="/protocol">
+            ← The System
+          </Link>
         </header>
-        <article style={{ maxWidth: "var(--fw-measure)", padding: "48px 0 0" }}>
+
+        <article className="rr-reading__body">
           <Markdown content={doc.content} />
         </article>
       </div>

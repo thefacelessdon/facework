@@ -1,85 +1,93 @@
-import Link from "next/link";
-import { ArtifactRecord } from "@/components/ArtifactRecord";
+import {
+  RecordLabel,
+  SectionHead,
+  Reading,
+  CoherenceVerdict,
+  ReadingIndex,
+  InkCTA,
+} from "@/components/rr";
+import { publicSections, verdictForStatus } from "@/data/knowledge";
 
-const knowledgePath = [
-  { order: "01 / NOW", title: "Field Notes", note: "What we notice before it hardens.", href: "/field-notes" },
-  { order: "02", title: "Models", note: "Ways of seeing made inspectable.", href: "/models" },
-  { order: "03", title: "Frameworks", note: "Reusable structures for judgment.", href: "/frameworks" },
-  { order: "04", title: "Standards", note: "What has earned permanence.", href: "/frameworks" },
-  { order: "05 / PROOF", title: "Cases", note: "Where the ideas met reality.", href: "/cases" },
-];
+// The current reading = the latest field note; recent readings span the four
+// Work types; the browse index lets every type surface be reached from here.
+const current = publicSections["field-notes"].records[0]; // FN-027 · Visible lineage
+const currentVerdict = verdictForStatus(current.status);
+
+const recent = [
+  publicSections["field-notes"].records[1], // FN-026
+  publicSections.models.records[0], // FM-001 · Cultural Physics
+  publicSections.frameworks.records[1], // FCD-001 · Coherence Design
+  publicSections.experiments.records[0], // FVA-610 · Facework Field
+].map((r) => ({
+  id: r.id,
+  title: r.title,
+  note: r.description,
+  href: r.href,
+  status: r.status,
+  state: verdictForStatus(r.status).state,
+}));
+
+const browse = (
+  ["field-notes", "models", "frameworks", "experiments", "conversations", "library"] as const
+).map((key) => {
+  const s = publicSections[key];
+  return { title: s.label, note: s.proposition, href: `/${key}` };
+});
 
 export default function Home() {
   return (
-    <>
-      <section className="threshold" aria-labelledby="hero-title">
-        <p className="eyebrow">Facework / Public record / Foundation active</p>
-        <h1 id="hero-title">Coherence is not sameness. It is relationship held under pressure.</h1>
-        <div className="threshold-foot">
-          <p>Facework is a discipline for seeing, designing, and maintaining the structures that let identity carry weight over time.</p>
-          <Link href="#current-attention">Enter the current field ↓</Link>
-        </div>
-      </section>
+    <div className="rr rr-page section-page">
+      <div className="rr-column">
+        <header className="rr-masthead">
+          <RecordLabel tick>Facework · A public record of attention</RecordLabel>
+          <h1 className="rr-display">It doesn&rsquo;t decorate. It reads.</h1>
+          <p className="rr-lede">
+            Facework is a discipline for seeing, designing, and maintaining the
+            structures that let identity carry weight over time. Every surface
+            here is a reading of a real system &mdash; what it carries, whether it
+            holds under pressure, and what survives its author.
+          </p>
+        </header>
 
-      <section className="ledger" id="current-attention" aria-labelledby="attention-title">
-        <header className="section-head"><p>01 / Current attention</p><p>Observation → Model</p></header>
-        <div className="claim">
-          <p className="claim-meta">Field Note 027<br />06 August 2026<br />Status / Developing</p>
-          <div className="claim-body">
-            <h2 id="attention-title" className="display-title">A system becomes trustworthy when its decisions remain visible after its author leaves.</h2>
-            <p className="lead">We are studying how lineage changes the quality of inheritance: not as administrative metadata, but as part of the artifact itself.</p>
-            <details className="trace">
-              <summary>Trace this idea</summary>
-              <div className="trace-panel">
-                <p><span>Related model</span><Link href="/models">Inheritance Field / FM-014</Link></p>
-                <p><span>Formalized through</span><Link href="/frameworks">FVS-100 Visual Constitution</Link></p>
-                <p><span>Applied in</span><Link href="/cases">Lineage Inspector / FVA-600</Link></p>
-                <p><span>Evidence</span><Link href="#artifact-record">Application Translation evaluation</Link></p>
-              </div>
-            </details>
+        <section id="current-attention" className="rr-section" aria-label="Current reading">
+          <SectionHead label="Current reading" title="What has our attention now" />
+          <Reading tick label={`Field Note · ${current.id}`} title={current.title}>
+            <p>{current.description}</p>
+            <p>
+              A reading is finished not when it looks resolved, but when it would
+              still hold if someone inherited it cold. Decision history is the
+              part most often polished away &mdash; and the part a future
+              maintainer most needs to see.
+            </p>
+          </Reading>
+          <CoherenceVerdict
+            score={currentVerdict.score}
+            state={currentVerdict.state}
+            label={currentVerdict.label}
+          />
+        </section>
+
+        <section className="rr-section" aria-label="Recent readings">
+          <SectionHead label="Recent readings" title="Across the record" />
+          <ReadingIndex items={recent} label="Recent readings across the record" />
+        </section>
+
+        <section className="rr-section" aria-label="Browse The Work">
+          <SectionHead label="The Work" title="Browse by type" />
+          <ReadingIndex items={browse} showStatus={false} label="The Work by type" />
+        </section>
+
+        <section className="rr-section" aria-label="The Practice">
+          <SectionHead label="The Practice" title="Work with Facework" />
+          <p className="rr-lede">
+            The other mode: how to work with Facework &mdash; the proof, the
+            method, and what an engagement costs and delivers.
+          </p>
+          <div>
+            <InkCTA href="/engage">Enter the practice</InkCTA>
           </div>
-        </div>
-        <div className="evidence-strip" role="group" aria-label="Evidence summary">
-          <p><span>Observed</span>Decisions disappear inside polished deliverables.</p>
-          <p><span>Testing</span>Visible status, source, and dependency at the point of use.</p>
-          <p><span>Limit</span>Transparency cannot replace judgment or stewardship.</p>
-        </div>
-      </section>
-
-      <section className="ledger" aria-labelledby="path-title">
-        <header className="section-head"><p>02 / Knowledge path</p><p>Fast signal → durable knowledge</p></header>
-        <h2 id="path-title" className="display-title knowledge-path-title">The pace slows as an idea earns permanence.</h2>
-        <ol className="path-list">
-          {knowledgePath.map((item) => (
-            <li key={`${item.order}-${item.title}`}>
-              <span>{item.order}</span>
-              <Link href={item.href}><strong>{item.title}</strong><small>{item.note}</small></Link>
-            </li>
-          ))}
-        </ol>
-      </section>
-
-      <section className="ledger" id="artifact-record" aria-labelledby="record-title">
-        <header className="section-head"><p>03 / Artifact record</p><p>Claim / type / status / lineage</p></header>
-        <ArtifactRecord />
-      </section>
-
-      <section className="ledger" aria-labelledby="dialogue-title">
-        <header className="section-head"><p>04 / Practice in dialogue</p><p>Conversations ↔ experiments</p></header>
-        <div className="bilateral">
-          <div><p className="kicker">Conversation 008</p><h2 id="dialogue-title" className="display-title">What becomes visible when two disciplines share a field?</h2></div>
-          <div><p className="kicker">Experiment 012</p><p className="lead">Dialogue and prototypes expose a model to pressure before it becomes a standard.</p><Link className="text-link" href="/conversations">Follow the intellectual lineage ↗</Link></div>
-        </div>
-      </section>
-
-      <section className="about-band" aria-labelledby="about-title">
-        <p className="eyebrow">05 / About Facework</p>
-        <h2 id="about-title" className="display-title">Identity is the capacity to remain intelligible through change.</h2>
-        <div className="about-copy">
-          <p>Facework develops theory, standards, and tools for coherence across organizations, products, environments, and public life.</p>
-          <p className="meta">FACEWORK / FVS 0.1 / PRODUCTION CANDIDATE</p>
-        </div>
-      </section>
-    </>
+        </section>
+      </div>
+    </div>
   );
 }

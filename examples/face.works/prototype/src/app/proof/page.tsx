@@ -1,9 +1,17 @@
+import type { Metadata } from "next";
+import { RecordLabel, SectionHead, Reading } from "@/components/rr";
 import { caseStudies } from "@/data/demo";
 import type {
   StructuralChange,
   PracticalImpact,
   HandoffReadiness,
 } from "@/data/schema";
+
+export const metadata: Metadata = {
+  title: "Proof",
+  description:
+    "Systems built with the Facework practice, each with its provenance stated plainly — so a self-report is never mistaken for a client-ratified audit.",
+};
 
 const levelLabels: Record<number, string> = {
   1: "Level 1 — Phase-Complete",
@@ -26,9 +34,9 @@ const provenanceLabels = {
 
 type Row = StructuralChange | PracticalImpact | HandoffReadiness | string;
 
-function RecordRows({ items }: { items: Row[] }) {
+function FindingRows({ items }: { items: Row[] }) {
   return (
-    <>
+    <ul className="rr-rows">
       {items.map((item, i) => {
         const heading =
           typeof item === "string"
@@ -38,203 +46,176 @@ function RecordRows({ items }: { items: Row[] }) {
               : item.label;
         const body = typeof item === "string" ? item : item.detail;
         return (
-          <article className="section-record" key={i}>
-            <p className="artifact-id">{String(i + 1).padStart(2, "0")}</p>
-            <div>
-              {heading ? <h2>{heading}</h2> : null}
-              <p>{body}</p>
+          <li className="rr-rows__item" key={i}>
+            <span className="rr-rows__meta">
+              <strong>{String(i + 1).padStart(2, "0")}</strong>
+            </span>
+            <div className="rr-rows__body">
+              {heading ? <h3 className="rr-rows__title">{heading}</h3> : null}
+              <p className="rr-rows__note">{body}</p>
             </div>
-          </article>
+          </li>
         );
       })}
-    </>
+    </ul>
   );
 }
 
 export default function ProofPage() {
   return (
-    <div className="section-page">
-      <section className="section-threshold" aria-labelledby="proof-title">
-        <p className="eyebrow">Facework / Proof</p>
-        <h1 id="proof-title">
-          Proof is structural consequence, not portfolio theater.
-        </h1>
-        <p className="section-intro">
-          Systems built with the Facework practice are held to the conformance
-          model. These are the results — each with its provenance stated
-          plainly, so a self-report is never mistaken for a client-ratified
-          audit.
-        </p>
-      </section>
+    <div className="rr-field rr-page section-page">
+      <div className="rr-column rr-column--wide">
+        <header className="rr-masthead">
+          <RecordLabel tick>The Practice · Proof</RecordLabel>
+          <h1 className="rr-display">
+            Proof is structural consequence, not portfolio theater.
+          </h1>
+          <p className="rr-lede">
+            Systems built with the Facework practice are held to the conformance
+            model. These are the results &mdash; each with its provenance stated
+            plainly, so a self-report is never mistaken for a client-ratified
+            audit.
+          </p>
+        </header>
 
-      {caseStudies.length === 0 ? (
-        <p className="policy-note">No cases yet.</p>
-      ) : (
-        caseStudies.map((study) => {
-          const metrics = [
-            { label: "Governance", count: study.artifacts.governanceDocs, caption: "governance documents" },
-            { label: "Decisions", count: study.artifacts.decisionRecords, caption: "decision records" },
-            { label: "Specs", count: study.artifacts.architectureSpecs, caption: "architecture specifications" },
-            { label: "Playbooks", count: study.artifacts.playbooks, caption: "operational playbooks" },
-            { label: "Pages", count: study.artifacts.prototypePages, caption: `App Router pages · ${study.artifacts.routes} routes` },
-            { label: "Components", count: study.artifacts.components, caption: "React components" },
-            { label: "Tests", count: study.artifacts.testCases, caption: `test cases across ${study.artifacts.testFiles} files` },
-          ];
+        {caseStudies.length === 0 ? (
+          <p className="rr-note">No cases yet.</p>
+        ) : (
+          caseStudies.map((study) => {
+            const metrics = [
+              { label: "Governance", count: study.artifacts.governanceDocs, caption: "governance documents" },
+              { label: "Decisions", count: study.artifacts.decisionRecords, caption: "decision records" },
+              { label: "Specs", count: study.artifacts.architectureSpecs, caption: "architecture specifications" },
+              { label: "Playbooks", count: study.artifacts.playbooks, caption: "operational playbooks" },
+              { label: "Pages", count: study.artifacts.prototypePages, caption: `App Router pages · ${study.artifacts.routes} routes` },
+              { label: "Components", count: study.artifacts.components, caption: "React components" },
+              { label: "Tests", count: study.artifacts.testCases, caption: `test cases across ${study.artifacts.testFiles} files` },
+            ];
 
-          const isAudit = study.status === "audit-complete";
+            const isAudit = study.status === "audit-complete";
 
-          return (
-            <div key={study.slug}>
-              {/* Case header + summary */}
-              <section
-                className="section-records"
-                aria-label={`${study.title} case`}
-              >
-                <header className="section-head">
-                  <p>
-                    {study.title} · {study.domain}
-                  </p>
-                  <p>{auditLabels[study.status]}</p>
-                </header>
-                <article className="section-record">
-                  <p className="artifact-id">
-                    {study.conformanceLevel
-                      ? levelLabels[study.conformanceLevel]
-                      : "No conformance Level assigned"}
-                    {study.date ? (
-                      <>
-                        <br />
-                        {study.date}
-                      </>
-                    ) : null}
-                  </p>
-                  <div>
-                    <h2>{study.title}</h2>
+            return (
+              <article className="rr-case" key={study.slug}>
+                <section className="rr-section" aria-label={`${study.title} case`}>
+                  <SectionHead
+                    label={`${study.title} · ${study.domain}`}
+                    title={auditLabels[study.status]}
+                  />
+                  <Reading
+                    tick
+                    label={
+                      study.conformanceLevel
+                        ? `${levelLabels[study.conformanceLevel]}${study.date ? ` · ${study.date}` : ""}`
+                        : `No conformance Level assigned${study.date ? ` · ${study.date}` : ""}`
+                    }
+                    title={study.title}
+                  >
                     <p>{study.summary}</p>
-                  </div>
-                </article>
-              </section>
+                  </Reading>
+                </section>
 
-              {/* Provenance + honest disclosure (all non-audit cases) */}
-              {study.provenance ? (
-                <div className="evidence-strip" role="group" aria-label="Provenance">
-                  <p>
-                    <span>Provenance</span>
-                    {provenanceLabels[study.provenance]}
-                  </p>
-                  <p>
-                    <span>Conformance</span>
-                    {study.conformanceLevel
-                      ? `${levelLabels[study.conformanceLevel]} (self-reported)`
-                      : "Self-reported, no Level assigned"}
-                  </p>
-                </div>
-              ) : null}
-
-              {study.conformanceNote ? (
-                <p className="policy-note">{study.conformanceNote}</p>
-              ) : null}
-
-              {/* GAMUT self-audit disclosure + audit verdict */}
-              {isAudit ? (
-                <>
-                  <p className="policy-note">
-                    This is a retroactive self-audit authorized by Decision
-                    003 — a conformance audit of an already-built system, not a
-                    paid practice engagement. Paid practice runs toward the MVP
-                    gate remain at 0 of 3 (see Status).
-                  </p>
-
-                  <div className="evidence-strip" role="group" aria-label="Audit verdict">
-                    <p>
-                      <span>Conformance</span>
-                      {study.conformanceLevel
-                        ? levelLabels[study.conformanceLevel]
-                        : "No Level assigned"}
-                    </p>
-                    <p>
-                      <span>Extraction check</span>
-                      <span
-                        className={
-                          study.extractionCheckPassed
-                            ? "text-coherence"
-                            : "text-entropy"
-                        }
-                      >
-                        {study.extractionCheckPassed ? "Passed" : "Failed"}
-                      </span>
-                    </p>
-                    <p>
-                      <span>Reference visibility</span>
-                      {study.publicReference
-                        ? "Public reference available"
-                        : "Private reference only"}
-                    </p>
-                  </div>
-                </>
-              ) : null}
-
-              {/* Structural change */}
-              <section
-                className="section-records"
-                aria-label="What changed structurally"
-              >
-                <header className="section-head">
-                  <p>What changed structurally</p>
-                  <p>Governable · portable · buildable</p>
-                </header>
-                <RecordRows items={study.structuralChanges} />
-              </section>
-
-              {/* Practical impact */}
-              <section className="section-records" aria-label="Why it mattered">
-                <header className="section-head">
-                  <p>Why it mattered</p>
-                  <p>Operate · hand off · scale</p>
-                </header>
-                <RecordRows items={study.practicalImpact} />
-              </section>
-
-              {/* Handoff readiness */}
-              <section
-                className="section-records"
-                aria-label="Handoff readiness"
-              >
-                <header className="section-head">
-                  <p>Handoff readiness</p>
-                  <p>Survives its authors</p>
-                </header>
-                <RecordRows items={study.handoffReadiness} />
-              </section>
-
-              {/* Artifacts produced */}
-              <section
-                className="section-records"
-                aria-label="Artifacts produced"
-              >
-                <header className="section-head">
-                  <p>Artifacts produced</p>
-                  <p>Curated corpus</p>
-                </header>
-                {metrics.map((metric) => (
-                  <article className="section-record" key={metric.label}>
-                    <p className="artifact-id">{metric.label}</p>
-                    <div>
-                      <h2>{metric.count}</h2>
-                      <p>{metric.caption}</p>
+                {/* Provenance + honest disclosure */}
+                {study.provenance ? (
+                  <dl className="rr-strip" aria-label="Provenance">
+                    <div className="rr-strip__pair">
+                      <dt className="rr-strip__term">Provenance</dt>
+                      <dd className="rr-strip__desc">
+                        {provenanceLabels[study.provenance]}
+                      </dd>
                     </div>
-                  </article>
-                ))}
-              </section>
+                    <div className="rr-strip__pair">
+                      <dt className="rr-strip__term">Conformance</dt>
+                      <dd className="rr-strip__desc">
+                        {study.conformanceLevel
+                          ? `${levelLabels[study.conformanceLevel]} (self-reported)`
+                          : "Self-reported, no Level assigned"}
+                      </dd>
+                    </div>
+                  </dl>
+                ) : null}
 
-              <p className="policy-note">
-                {study.linesCaption ??
-                  "36,000+ lines of specification across architecture, decisions, playbooks, governance, platform docs, and briefs."}
-              </p>
-            </div>
-          );
-        })
-      )}
+                {study.conformanceNote ? (
+                  <p className="rr-note">{study.conformanceNote}</p>
+                ) : null}
+
+                {/* GAMUT self-audit disclosure + audit verdict */}
+                {isAudit ? (
+                  <>
+                    <p className="rr-note">
+                      This is a retroactive self-audit authorized by Decision
+                      003 &mdash; a conformance audit of an already-built system,
+                      not a paid practice engagement. Paid practice runs toward
+                      the MVP gate remain at 0 of 3 (see Status).
+                    </p>
+
+                    <dl className="rr-strip" aria-label="Audit verdict">
+                      <div className="rr-strip__pair">
+                        <dt className="rr-strip__term">Conformance</dt>
+                        <dd className="rr-strip__desc">
+                          {study.conformanceLevel
+                            ? levelLabels[study.conformanceLevel]
+                            : "No Level assigned"}
+                        </dd>
+                      </div>
+                      <div className="rr-strip__pair">
+                        <dt className="rr-strip__term">Extraction check</dt>
+                        <dd
+                          className={`rr-strip__desc ${study.extractionCheckPassed ? "rr-strip__desc--settled" : "rr-strip__desc--exposure"}`}
+                        >
+                          {study.extractionCheckPassed ? "Passed" : "Failed"}
+                        </dd>
+                      </div>
+                      <div className="rr-strip__pair">
+                        <dt className="rr-strip__term">Reference visibility</dt>
+                        <dd className="rr-strip__desc">
+                          {study.publicReference
+                            ? "Public reference available"
+                            : "Private reference only"}
+                        </dd>
+                      </div>
+                    </dl>
+                  </>
+                ) : null}
+
+                <section className="rr-section" aria-label="What changed structurally">
+                  <SectionHead
+                    label="What changed structurally"
+                    title="Governable · portable · buildable"
+                  />
+                  <FindingRows items={study.structuralChanges} />
+                </section>
+
+                <section className="rr-section" aria-label="Why it mattered">
+                  <SectionHead label="Why it mattered" title="Operate · hand off · scale" />
+                  <FindingRows items={study.practicalImpact} />
+                </section>
+
+                <section className="rr-section" aria-label="Handoff readiness">
+                  <SectionHead label="Handoff readiness" title="Survives its authors" />
+                  <FindingRows items={study.handoffReadiness} />
+                </section>
+
+                <section className="rr-section" aria-label="Artifacts produced">
+                  <SectionHead label="Artifacts produced" title="Curated corpus" />
+                  <ul className="rr-metrics">
+                    {metrics.map((metric) => (
+                      <li className="rr-metric" key={metric.label}>
+                        <span className="rr-metric__label">{metric.label}</span>
+                        <span className="rr-metric__value">{metric.count}</span>
+                        <span className="rr-metric__caption">{metric.caption}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="rr-note rr-note--record">
+                    {study.linesCaption ??
+                      "36,000+ lines of specification across architecture, decisions, playbooks, governance, platform docs, and briefs."}
+                  </p>
+                </section>
+              </article>
+            );
+          })
+        )}
+      </div>
     </div>
   );
 }
