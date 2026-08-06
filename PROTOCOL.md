@@ -1,7 +1,7 @@
 # Facework Protocol
 
 Status: Draft
-Release version: tracked in [`VERSION`](VERSION); see ROADMAP.md for versioning rules. Manifest schema 1.0.0 (baseline), 1.1.0 (Runtime Ports, §9), 1.2.0 (HarnessBundle, §10), 1.3.0 (DesignInfrastructure, §11), 1.4.0 (efficiency hints + skill polish — amendments throughout §9–§11, new §12 Observability Interface).
+Release version: tracked in [`VERSION`](VERSION); see ROADMAP.md for versioning rules. Manifest schema 1.0.0 (baseline), 1.1.0 (Runtime Ports, §9), 1.2.0 (HarnessBundle, §10), 1.3.0 (DesignInfrastructure, §11), 1.4.0 (efficiency hints + skill polish — amendments throughout §9–§11, new §12 Observability Interface), 1.5.0 (RuntimeConformanceProfile + runtime-conformance tier, §9.2/§9.12).
 
 Facework Protocol is an open standard for turning cultural signal into coherent, ownable business systems for creators and cultural brands.
 
@@ -46,6 +46,7 @@ A conforming implementation MUST produce these objects:
 - `IntegrationManifest` (v1.1.0 — Runtime Ports, §9)
 - `HarnessBundle` (v1.2.0 — derived markdown view of Runtime Ports, §10)
 - `DesignInfrastructure` (v1.3.0 — active design system + design-eye evaluator, §11)
+- `RuntimeConformanceProfile` (v1.5.0 — how the ports bind to a runtime + shell sovereignty, §9.12; required only when runtime conformance is claimed)
 
 ## 3) Prerequisites
 
@@ -349,6 +350,22 @@ runtime_ports:
     manifest: "define/integration-manifest.yaml"
 ```
 
+**Claiming runtime conformance (0.0.25).** A project declares the claim by adding
+a `conformance` block under `runtime_ports`:
+
+```yaml
+runtime_ports:
+  # ...the four port refs above...
+  conformance:
+    claimed: true
+    runtime: "claude-code"          # the target runtime shell (free-form label)
+    profile: "define/runtime-conformance-profile.yaml"   # RuntimeConformanceProfile, §9.12
+```
+
+When `conformance.claimed` is `true`, the §9.2 runtime-conformance MUSTs apply and
+`profile` MUST resolve to a valid `RuntimeConformanceProfile`. Omitting the block
+(or `claimed: false`) leaves the project at base conformance — nothing changes.
+
 Each port manifest is a separate YAML file. The main manifest declares paths
 only; per-port validation loads each file and checks against the relevant
 `$defs` schema. Paths are resolved relative to the directory of the main
@@ -360,18 +377,42 @@ substrate, and the four ports MAY bind to *different* substrates in one
 deployment (see §9.11). The manifest is the integration contract across those
 substrates; it is never owned by the runtime.
 
-### 9.2 Conformance — evidence-level calibrated
+### 9.2 Conformance — two tiers (v1.5.0)
 
-A project's `project.evidence_level` (from §3 Demand Gate) calibrates how
-many ports MUST be emitted:
+Runtime Ports have two conformance tiers. **Base conformance stays
+evidence-calibrated** — "signal before scale" (§3) is preserved, so a
+thesis-level project is never forced to emit validated-level artifact volume:
 
-| Evidence level | Conformance |
+| Evidence level | Base conformance (emission) |
 |---|---|
 | Validated | MUST emit all four port manifests |
 | Signaled | SHOULD emit all four; minimum: `SkillManifest` + `MemoryMap` |
 | Thesis | MAY emit a minimal `SkillManifest` only |
 
-This evolves to universal MUST in v0.1.0 once three reference tenants exist.
+**Runtime conformance (0.0.25 — the universal MUST).** A project MAY *claim
+runtime conformance*: a declaration that its tenant world targets a runtime shell
+(§9.11) and is ready to be operated. When claimed (via
+`runtime_ports.conformance`, §9.1), these are MUST **regardless of evidence
+level**:
+
+1. All four port manifests are emitted and validate against their `$defs` schema.
+2. All cross-manifest references (§9.7) resolve.
+3. A `RuntimeConformanceProfile` (§9.12) is emitted, declaring how each port binds
+   to the target runtime and how the shell's sovereignty is classified.
+
+This is where "universal MUST" lives — universal *within the runtime-conformance
+claim*, not imposed on every project. The claim is **opt-in and additive**: a
+project that does not claim it remains conformant at the base tier above, and no
+existing v1.0.0–v1.4.0 manifest is affected. The rationale: Runtime Ports become
+mandatory exactly where they are meaningful — a tenant actually being operated on
+a runtime — not for a thesis-level project still validating demand, which has no
+runtime to conform to.
+
+The runtime-conformance capability was earned by four reference-runtime
+validations (Buzz, Letta, OpenAI, Claude Code); see
+`standards/source/fs400-runtime-buzz-validation-2026-08-04.md`. (This is a PATCH
+capability, not the `0.1.0` release — ROADMAP reserves `0.1.0` for the first
+external protocol run.)
 
 ### 9.3 SkillManifest
 
@@ -641,12 +682,15 @@ as gate failures.
 
 Adding to existing Phase 5 gate criteria:
 
-- Per `project.evidence_level`, §9.2 conformance is satisfied.
+- Per `project.evidence_level`, §9.2 base conformance is satisfied.
 - All four port manifests (when emitted) validate against their `$defs`
   schema in `facework.manifest.schema.json`.
 - All cross-manifest references (§9.7) resolve.
 - `MemoryMap.boundary` block is present.
 - No raw secrets present in `IntegrationManifest`.
+- **When runtime conformance is claimed (§9.2):** all four ports are emitted and
+  valid, and a `RuntimeConformanceProfile` (§9.12) is present, validates, and
+  covers all four ports. (No claim → this line does not apply.)
 
 ### 9.9 Track-aware skeletons (deferred to v0.0.6)
 
@@ -751,6 +795,66 @@ model all live on the vendor). The Phase-7 waiver attaches to whichever layer is
 rented and scopes its mitigation to that layer, rather than flattening every
 hosted dependency to "rent with maximal blast radius." Derived from the fourth
 validation (Claude Code).
+
+### 9.12 RuntimeConformanceProfile (v1.5.0, additive)
+
+Declares **how** a tenant world satisfies the Runtime Ports on a specific runtime
+shell. REQUIRED when a project claims runtime conformance (§9.2). It is the
+conformance-profile format formalized from the FS-400 concepts validated across
+four runtimes — the machine record of what §9.11 describes in prose.
+
+**Required top-level keys:** `version`, `tenant`, `runtime` (label of the target
+shell), `port_bindings[]`, `shell_sovereignty`, `governance[]`.
+
+**`port_bindings[]`** — one entry per port (`skills`, `memory`, `context`,
+`connections`):
+- `port` — which port.
+- `status` — `native` (the runtime hosts it directly) | `partial` | `authoring_side`
+  (not hosted; stays in the authoring layer / Facework manifest).
+- `mechanism` — the runtime primitive that hosts it (e.g. `claude-code:.claude/skills`),
+  or `authoring-layer` when `authoring_side`.
+- `notes` (optional).
+
+**`shell_sovereignty`** (FS-400.6 + FS-400.7) — sovereignty **decomposed by
+layer**, each classified `own | rent | mitigate`:
+- `harness` — the agent loop.
+- `state` — memory, config, transcripts.
+- `model` — the LLM.
+- `waiver` — REQUIRED if any layer is `rent` or `mitigate`. Fields: `layers[]`
+  (which layers the waiver covers), `exit_plan` (can tenant state relocate?),
+  `data_posture` (`retention`, `training`, `residency`), `owner_ruling` (who ruled,
+  and when — a recorded Sovereignty-loop decision). A fully self-hostable shell
+  (all layers `own`) omits `waiver`.
+
+**`governance[]`** (FS-400.4) — one entry per governance attribute the project
+relies on (`trust_boundary`, `verifier_skill_id`, `escalation`, `pii`,
+`rate_limits`, `data_residency`, `sponsors`, …):
+- `attribute` — the manifest field.
+- `kind` — `gate` (enforceable — the runtime can act on it) | `metadata`
+  (descriptive — inherently authoring-layer).
+- `binds_to` — for `gate`, the runtime mechanism that enforces it (e.g.
+  `claude-code:permissions`); OR `unenforced: true` when the runtime cannot enforce
+  it (declared, delegated to the authoring layer or human process — NOT a gate
+  failure, per §9.11).
+
+**Validation:**
+1. Every `port` in `port_bindings` is one of the four; each resolves to a declared
+   port manifest (or is `authoring_side`).
+2. Every `rent`/`mitigate` layer in `shell_sovereignty` is covered by a `waiver`
+   with a non-empty `exit_plan` and `owner_ruling`.
+3. Each `governance[]` entry is classified `gate` or `metadata`; every `gate`
+   either sets `binds_to` or is marked `unenforced`.
+
+**Phase gates:**
+- **Phase 5** — when runtime conformance is claimed, the profile is present and
+  validates; `port_bindings` cover all four ports.
+- **Phase 7** — `shell_sovereignty` is consistent with the `SovereigntyMap`; every
+  `rent`/`mitigate` layer's `waiver` matches a recorded owner ruling (this is the
+  machine form of the §9.11 Phase-7 gate line).
+
+Formal schema: `$defs.runtimeConformanceProfile`. Worked example:
+`examples/face.works/runtime-ports/runtime-conformance-profile.yaml` (the Claude
+Code binding from the fourth validation).
 
 ## 10) HarnessBundle (v1.2.0, additive)
 

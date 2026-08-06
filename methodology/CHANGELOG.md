@@ -1,3 +1,39 @@
+# 0.0.25 — 2026-08-06 (Runtime-conformance tier — the "universal MUST" pass)
+
+**What changed:**
+- Resolved the long-standing §9.2 "evolves to universal MUST" note as a
+  **runtime-conformance tier** (manifest schema 1.5.0):
+  - **Base conformance stays evidence-calibrated** (§3 "signal before scale"
+    preserved) — a thesis project is never forced to emit validated-level volume.
+  - **Runtime conformance (the universal MUST)** is an **opt-in, additive claim**
+    (`runtime_ports.conformance`): a project declaring it targets a runtime MUST
+    emit all four ports + a `RuntimeConformanceProfile`, regardless of evidence
+    level. Universal *within the claim*, not imposed on every project. No existing
+    v1.0.0–v1.4.0 manifest is affected.
+- New canonical object **`RuntimeConformanceProfile`** (§9.12) — formalizes the
+  FS-400 concepts: per-port binding (native/partial/authoring_side + mechanism);
+  shell sovereignty **decomposed by layer** (harness/state/model, each own/rent/
+  mitigate, with a waiver on rented layers — FS-400.6/.7); governance split into
+  enforceable **gates** (with runtime mechanism) vs descriptive **metadata**
+  (FS-400.4). Worked example: the Claude Code binding from the end-to-end run
+  (`examples/face.works/runtime-ports/runtime-conformance-profile.yaml`).
+- Phase-5/7 gate extensions (calibrated: apply only when the claim is made).
+  Added to §2 canonical objects and the manifest-schema note.
+- **Version note:** this is a **PATCH** capability, NOT the `0.1.0` release.
+  §9.2's old text loosely pinned universal-MUST to "v0.1.0", but ROADMAP reserves
+  `0.1.0` for the first external protocol run. §9.2 phrasing corrected. ROADMAP
+  drift (stale Version History table 0.0.14→ and a stale "0 external runs" gate,
+  per the run-history record) is flagged for a **separate cleanup**, not touched
+  here.
+- **Why:** four reference-runtime validations (Buzz, Letta, OpenAI, Claude Code) +
+  the end-to-end run earned the capability; the tier makes Runtime Ports mandatory
+  exactly where they're meaningful (a tenant actually being operated) without
+  overriding "signal before scale."
+
+Additive; no existing conformance or protocol behavior changed.
+
+---
+
 # 0.0.24 — 2026-08-05 (End-to-end run — converter output boots in Claude Code)
 
 **What changed:**
