@@ -148,10 +148,15 @@ skills_src.each do |path|
     description = "#{cut}…"
   end
 
-  # Claude Code SKILL.md frontmatter: name + description are the load-bearing
-  # keys; carry the port-level fields through as extra keys for fidelity.
+  # Claude Code SKILL.md frontmatter: `name` (display-only) + `description` are
+  # the load-bearing keys; the skill id comes from the directory name. Port-level
+  # fields go under `metadata` (a spec-allowed key) — NOT as top-level keys, which
+  # hard-error on claude.ai / Skills-API upload. (Confirmed in the 0.0.24
+  # end-to-end run: local Claude Code tolerated extra keys, but upload would not.)
   fm_out = { 'name' => name, 'description' => description }
-  %w[trigger ownership tags model_tier].each { |k| fm_out[k] = fm[k] unless fm[k].nil? }
+  meta = {}
+  %w[trigger ownership tags model_tier].each { |k| meta[k] = fm[k] unless fm[k].nil? }
+  fm_out['metadata'] = meta unless meta.empty?
 
   skill_md = +""
   skill_md << fm_out.to_yaml # includes leading '---'

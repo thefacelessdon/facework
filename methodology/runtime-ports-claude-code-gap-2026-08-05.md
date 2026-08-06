@@ -106,6 +106,20 @@ is its first evidence. A HarnessBundle → Claude Code converter (read
 servers → `.mcp.json` + `settings.json` permission scaffolds (endpoints/secrets
 excluded by design, filled from `.claude/MCP-SETUP.md`).
 
+**End-to-end verified (0.0.24).** The converter output *boots as a real runtime*,
+not just valid files: writing the bundle into a live Claude Code tree
+auto-discovered all 7 skills (registered by dir-slug id with the generated
+descriptions), and a headless `claude -p` rooted in the output answered from the
+composed `CLAUDE.md` across four sections (`face.works | agency_studio | $5,000 |
+vault/`). The run also caught two things the paper mapping missed: (1) SKILL.md
+`name` is display-only — the id comes from the directory, so a human-readable
+`name` is correct, not a bug; (2) carried-through port fields as *top-level*
+frontmatter keys load locally but **hard-error on claude.ai / Skills-API upload**
+— fixed by nesting them under the spec-allowed `metadata` key, so bundles are
+portable to hosted upload, not only local Claude Code. Verify-before-fix: the
+suspected name bug was disproved; the real (upload-portability) defect was only
+visible from the frontmatter spec, not the local load.
+
 ---
 
 ## Four-runtime synthesis
