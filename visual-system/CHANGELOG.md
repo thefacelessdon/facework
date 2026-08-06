@@ -1,5 +1,38 @@
 # Facework Visual Specification Changelog
 
+## Unreleased — 2026-08-06 (coherence cleanup pass)
+
+### Resolved
+
+- **Coherence Mark four-layer model bound to canon (not minted as new).** FVI-001's
+  "Truth / Expression / Behavior / Infrastructure" was a plain-language restatement
+  of the four constructs the Theory of Cultural Physics already governs — **Signal,
+  Frequency, Current, Stability** — the four Coherence synchronizes in its governing
+  equation, with **Coherence itself as the mark's open central axis**. Minting a new
+  named model would have duplicated an existing concept (Constitution Article XII)
+  and split single concepts across two names (Article X), *increasing* incoherence.
+  Instead: (1) Cultural Physics §VII now names those four constructs as the layers
+  Coherence holds in alignment (no new vocabulary; reconciles the Theory stack with
+  Coherence Design §IV's "alignment across layers"); and (2) FVI-001 was rewritten so
+  the derivation reads *meaning (the four constructs) → geometry (four bands + open
+  axis) → mark*. The four-count is now genuinely motivated, witnessed independently
+  by Theory and Discipline. Distinct from the Article III five-layer standards
+  architecture and the four Runtime Ports; names do not collide.
+- Primitive derivation narrowed to the load-bearing **Axis + Balance + Tension**
+  (FVS-200 "Bilateral field"); Flow, Scale, and Continuity reclassified as supporting.
+
+### Fixed (token source-authority)
+
+- Non-canonical green `#62A987` in `identity/diagram/grammar-test.svg` replaced with the
+  governed Flow token `#62DFAE`.
+- `applications/web/reference/` nav controls raised to the 44px minimum FVA-100 requires.
+- `applications/field/reference/` de-forked: OKLCH palette and hardcoded "Avenir Next"
+  now consume `--fw-*` tokens; no per-app typeface substitution remains.
+- `applications/shared/tokens.{css,json}` completed with the full FVI-400 motion set and
+  inverse-panel / print color tokens.
+- Added `bin/validate-tokens` enforcing FVP-100: palette parity across token files, the
+  FVI-400 motion set, and no raw color/font literals in application references.
+
 ## 0.1.0 — 2026-08-06
 
 ### Added

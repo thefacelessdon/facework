@@ -16,7 +16,8 @@ created: 2026-08-06
 version 0.1.0.
 
 The mark retains the inherited bilateral structure while reducing the historic
-artifact from five visually competing strands to four semantic layers. It is a
+artifact from five visually competing strands to four semantic layers — the four
+constructs Coherence holds in relationship (Cultural Physics §VII). It is a
 butterfly only at first glance. Its governing reading is two fields maintaining
 relationship through an open center under tension.
 
@@ -44,16 +45,20 @@ illustrated butterfly.
 
 ### The four layers
 
-The four core strands represent the layers coherence must keep in relationship:
+The four core strands are the four constructs Coherence holds in relationship,
+defined canonically in [The Theory of Cultural
+Physics](../../theories/cultural-physics.md) §VII, "The four constructs of
+Coherence." Each strand is one construct (plain-language gloss in parentheses):
 
-1. **Truth** — what the system is.
-2. **Expression** — how the system becomes perceptible.
-3. **Behavior** — what the system repeatedly does.
-4. **Infrastructure** — what allows the system to hold under pressure.
+1. **Signal** (Truth) — what the system is.
+2. **Frequency** (Expression) — how the system becomes perceptible.
+3. **Current** (Behavior) — what the system repeatedly does.
+4. **Stability** (Infrastructure) — what allows the system to hold under pressure.
 
 The strands are not separate departments or a fixed top-to-bottom hierarchy.
-They are distinct layers whose alignment determines whether identity can carry
-weight over time.
+They are the distinct constructs whose alignment determines whether identity can
+carry weight over time. The mark does not introduce a new model; it renders the
+one the Theory already governs.
 
 ### The bilateral field
 
@@ -66,9 +71,11 @@ diagram.
 
 ### The open axis
 
-The center is intentionally unfilled. Coherence is not a thing placed between
-the forces; it is the maintained relationship that keeps them in intelligible
-alignment.
+The center is intentionally unfilled. It is Coherence itself — the fifth term in
+the Theory's stack, which the governing equation defines as the *synchronization*
+of the other four, not a thing placed between them. Coherence is not an element
+set between the forces; it is the maintained relationship that keeps them in
+intelligible alignment.
 
 The interval also prevents the mark from becoming a literal insect body, neural
 column, or closed institutional seal.
@@ -83,19 +90,25 @@ the world.
 ## Primitive derivation
 
 ```text
-Meaning
-  Coherence maintains relationship across layers and counterforces.
+Meaning (canonical)
+  Coherence is the synchronization of four constructs — Signal, Frequency,
+  Current, and Stability. See Cultural Physics §VII, "The four constructs of
+  Coherence."
 
 Principles
   Meaning precedes expression.
   Relationships precede objects.
   Identity survives variation.
 
-Primitives
-  Axis + Balance + Tension + Flow + Module + Scale + Continuity
+Primitives (load-bearing)
+  Axis + Balance + Tension
+  The Bilateral field combination (FVS-200): "show related forces around a
+  shared center." Flow, Scale, and Continuity are supporting, not generative —
+  the lower exchange, the micro reduction, and the historic lineage respectively.
 
 Geometry
-  Bilateral 3:2 field + four repeated bands + open central interval
+  Bilateral 3:2 field + four bands (one per construct) + open central axis
+  (Coherence)
 
 Artifact
   Axis Exchange / Facework Coherence Mark
@@ -235,13 +248,13 @@ must remain still. FVS-800 governs timing and reduced-motion behavior.
 
 | Dimension | Result | Evidence |
 |---|---|---|
-| Meaning | pass | Four layers, bilateral field, axis, and exchange are defined. |
+| Meaning | pass | Four layers bind to the four canonical constructs (Cultural Physics §VII); bilateral field, axis, and exchange are defined. |
 | Structure | pass | One mirrored half and a controlled center generate the whole. |
 | Coherence | pass | Every element participates in alignment under tension. |
-| Necessity | pass | Five historic layers reduced to four; no literal insect detail. |
+| Necessity | pass | Five historic strands reduced to four; four matches the constructs Coherence holds, not an arbitrary count. No literal insect detail. |
 | Legibility | pass | Core and micro forms preserve the relationship across scale. |
 | Continuity | pass | Historic silhouette and open center remain recognizable. |
-| Traceability | pass | Derivation maps to FVS-200, FVS-300, FVS-900, and FVR-101. |
+| Traceability | pass | Derivation maps to Cultural Physics §VII, FVS-200, FVS-300, FVS-900, and FVR-101. |
 | Accessibility | pass | Monochrome; no meaning depends on color or motion. |
 | Durability | pass | Standalone SVG source with no font or runtime dependency. |
 

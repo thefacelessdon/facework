@@ -39,28 +39,24 @@ export default async function ProtocolDocPage({
   if (!doc) return notFound();
 
   return (
-    <div className="mx-auto max-w-5xl px-6 md:px-8 lg:px-20 py-16 md:py-20 space-y-8">
-      <Link
-        href="/protocol"
-        className="text-sm text-muted hover:text-foreground inline-flex items-center gap-2"
-      >
-        <span aria-hidden="true">&larr;</span>
-        <span>System</span>
-      </Link>
+    <div className="section-page">
+      <section className="section-threshold" aria-labelledby="doc-title">
+        <p className="eyebrow">Facework / {categoryLabels[doc.category]}</p>
+        <h1 id="doc-title">{doc.title}</h1>
+        <p className="section-intro">{doc.subtitle}</p>
+      </section>
 
-      <div className="space-y-3">
-        <p className="text-xs tracking-[0.2em] uppercase text-muted">
-          {categoryLabels[doc.category]}
-        </p>
-        <h1 className="text-2xl md:text-3xl font-normal tracking-tight">{doc.title}</h1>
-        <p className="text-muted text-sm md:text-base">{doc.subtitle}</p>
+      <div className="section-records">
+        <header className="section-head">
+          <p>
+            <Link href="/protocol">← The System</Link>
+          </p>
+          <p>{categoryLabels[doc.category]}</p>
+        </header>
+        <article style={{ maxWidth: "var(--fw-measure)", padding: "48px 0 0" }}>
+          <Markdown content={doc.content} />
+        </article>
       </div>
-
-      <hr />
-
-      <article className="max-w-2xl">
-        <Markdown content={doc.content} />
-      </article>
     </div>
   );
 }

@@ -6,6 +6,10 @@ import "@fontsource/jetbrains-mono/400.css";
 import "@fontsource/jetbrains-mono/500.css";
 import "./globals.css";
 
+// Private preview: noindex by default. Set NEXT_PUBLIC_ALLOW_INDEX=true to
+// allow indexing once the site is cleared for public release.
+const allowIndex = process.env.NEXT_PUBLIC_ALLOW_INDEX === "true";
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://face.works"),
   title: {
@@ -22,7 +26,7 @@ export const metadata: Metadata = {
     description:
       "A living discipline for seeing, designing, and maintaining coherent systems.",
   },
-  robots: { index: true, follow: true },
+  robots: { index: allowIndex, follow: allowIndex },
 };
 
 export const viewport: Viewport = {

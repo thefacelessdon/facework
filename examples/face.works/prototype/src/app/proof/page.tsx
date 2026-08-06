@@ -1,5 +1,4 @@
 import { caseStudies } from "@/data/demo";
-import { StatusBadge } from "@/components/StatusBadge";
 
 const levelLabels: Record<number, string> = {
   1: "Level 1 — Phase-Complete",
@@ -9,208 +8,182 @@ const levelLabels: Record<number, string> = {
 };
 
 const auditLabels = {
-  "audit-complete": "Audit complete",
+  "audit-complete": "Conformance audit complete",
   "case-study": "Case study",
   "in-progress": "Audit in progress",
 } as const;
 
 export default function ProofPage() {
   return (
-    <div className="mx-auto max-w-5xl px-6 md:px-8 lg:px-20 py-16 md:py-20 space-y-12">
-      <div className="space-y-4">
-        <h1 className="text-2xl md:text-3xl font-normal tracking-tight">Proof</h1>
-        <p className="text-sm md:text-base text-muted max-w-xl leading-relaxed">
+    <div className="section-page">
+      <section className="section-threshold" aria-labelledby="proof-title">
+        <p className="eyebrow">Facework / Proof</p>
+        <h1 id="proof-title">
+          Proof is structural consequence, not portfolio theater.
+        </h1>
+        <p className="section-intro">
           Every system built through the Facework practice is audited against
-          the conformance model. These are the results: structural consequence,
-          not portfolio theater.
+          the conformance model. These are the results.
         </p>
-      </div>
+      </section>
 
       {caseStudies.length === 0 ? (
-        <div className="border border-border  p-12 text-center">
-          <p className="text-muted text-sm">No completed audits yet.</p>
-        </div>
+        <p className="policy-note">No completed audits yet.</p>
       ) : (
-        <div className="space-y-6">
-          {caseStudies.map((study) => (
-            <div
-              key={study.slug}
-              className="border border-border  overflow-hidden"
-            >
-              {/* Header */}
-              <div className="p-5 md:p-6 flex items-start justify-between border-b border-border">
-                <div>
-                  <h2 className="text-base md:text-lg font-medium tracking-wide">{study.title}</h2>
-                  <p className="text-sm text-muted mt-1">{study.domain}</p>
-                </div>
-                <StatusBadge
-                  status={
-                    study.status === "audit-complete" ||
-                    study.status === "case-study"
-                      ? "complete"
-                      : "in-progress"
-                  }
-                />
-              </div>
+        caseStudies.map((study) => {
+          const metrics = [
+            { label: "Governance", count: study.artifacts.governanceDocs, caption: "governance documents" },
+            { label: "Decisions", count: study.artifacts.decisionRecords, caption: "decision records" },
+            { label: "Specs", count: study.artifacts.architectureSpecs, caption: "architecture specifications" },
+            { label: "Playbooks", count: study.artifacts.playbooks, caption: "operational playbooks" },
+            { label: "Pages", count: study.artifacts.prototypePages, caption: `App Router pages · ${study.artifacts.routes} routes` },
+            { label: "Components", count: study.artifacts.components, caption: "React components" },
+            { label: "Tests", count: study.artifacts.testCases, caption: `test cases across ${study.artifacts.testFiles} files` },
+          ];
 
-              {/* Summary */}
-              <div className="p-5 md:p-6 border-b border-border">
-                <p className="text-sm text-muted leading-relaxed">{study.summary}</p>
-              </div>
-
-              {/* Trust Signals */}
-              <div className="p-5 md:p-6 border-b border-border">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div className="space-y-1">
-                    <p className="text-xs tracking-[0.15em] uppercase text-muted">
-                      Audit State
-                    </p>
-                    <p className="text-sm">{auditLabels[study.status]}</p>
+          return (
+            <div key={study.slug}>
+              {/* Case header + summary */}
+              <section
+                className="section-records"
+                aria-label={`${study.title} audit`}
+              >
+                <header className="section-head">
+                  <p>
+                    {study.title} · {study.domain}
+                  </p>
+                  <p>{auditLabels[study.status]}</p>
+                </header>
+                <article className="section-record">
+                  <p className="artifact-id">
+                    {levelLabels[study.conformanceLevel]}
+                    <br />
+                    {study.date}
+                  </p>
+                  <div>
+                    <h2>{study.title}</h2>
+                    <p>{study.summary}</p>
                   </div>
-                  <div className="space-y-1">
-                    <p className="text-xs tracking-[0.15em] uppercase text-muted">
-                      Reference Visibility
-                    </p>
-                    <p className="text-sm">
-                      {study.publicReference ? "Public reference available" : "Private reference only"}
-                    </p>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs tracking-[0.15em] uppercase text-muted">
-                      Audit Context
-                    </p>
-                    <p className="text-sm text-muted">{study.creator}</p>
-                  </div>
-                </div>
-              </div>
+                </article>
+              </section>
 
-              {/* Structural Change */}
-              <div className="p-5 md:p-6 border-b border-border space-y-4">
-                <div className="space-y-1">
-                  <p className="text-xs tracking-[0.15em] uppercase text-muted">
-                    What changed structurally
-                  </p>
-                  <p className="text-sm text-muted leading-relaxed max-w-2xl">
-                    The point is not that artifacts were produced. The point is
-                    that the system became more governable, portable, and
-                    buildable.
-                  </p>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {study.structuralChanges.map((change) => (
-                    <div
-                      key={change.title}
-                      className="border border-border  p-4 space-y-2"
-                    >
-                      <p className="text-sm font-medium tracking-wide">{change.title}</p>
-                      <p className="text-sm text-muted leading-relaxed">
-                        {change.detail}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <p className="policy-note">
+                This is a retroactive self-audit authorized by Decision 003 — a
+                conformance audit of an already-built system, not a paid
+                practice engagement. Paid practice runs toward the MVP gate
+                remain at 0 of 3 (see Status).
+              </p>
 
-              {/* Practical Impact */}
-              <div className="p-5 md:p-6 border-b border-border space-y-4">
-                <div className="space-y-1">
-                  <p className="text-xs tracking-[0.15em] uppercase text-muted">
-                    Why it mattered
-                  </p>
-                  <p className="text-sm text-muted leading-relaxed max-w-2xl">
-                    Structural change only counts if it produces a better way to
-                    operate, hand off, and scale.
-                  </p>
-                </div>
-                <div className="space-y-3">
-                  {study.practicalImpact.map((impact) => (
-                    <div
-                      key={impact.label}
-                      className="grid grid-cols-1 md:grid-cols-[160px_1fr] gap-2 md:gap-4"
-                    >
-                      <p className="text-sm font-medium tracking-wide">
-                        {impact.label}
-                      </p>
-                      <p className="text-sm text-muted leading-relaxed">
-                        {impact.detail}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Handoff Readiness */}
-              <div className="p-5 md:p-6 border-b border-border space-y-4">
-                <div className="space-y-1">
-                  <p className="text-xs tracking-[0.15em] uppercase text-muted">
-                    Handoff readiness
-                  </p>
-                  <p className="text-sm text-muted leading-relaxed max-w-2xl">
-                    Proof gets stronger when a system can survive the people who
-                    originally shaped it.
-                  </p>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {study.handoffReadiness.map((item) => (
-                    <div
-                      key={item.label}
-                      className="border border-border  p-4 space-y-2"
-                    >
-                      <p className="text-sm font-medium tracking-wide">{item.label}</p>
-                      <p className="text-sm text-muted leading-relaxed">
-                        {item.detail}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Metrics */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-border">
-                <div className="p-5 md:p-6 space-y-1">
-                  <p className="text-xs tracking-[0.15em] uppercase text-muted">Conformance</p>
-                  <p className="text-sm">{levelLabels[study.conformanceLevel]}</p>
-                </div>
-                <div className="p-5 md:p-6 space-y-1">
-                  <p className="text-xs tracking-[0.15em] uppercase text-muted">Extraction Check</p>
-                  <p className="text-sm">
-                    {study.extractionCheckPassed ? (
-                      <span className="text-coherence">Passed</span>
-                    ) : (
-                      <span className="text-entropy">Failed</span>
-                    )}
-                  </p>
-                </div>
-                <div className="p-5 md:p-6 space-y-1">
-                  <p className="text-xs tracking-[0.15em] uppercase text-muted">Date</p>
-                  <p className="text-sm">{study.date}</p>
-                </div>
-              </div>
-
-              {/* Artifacts */}
-              <div className="border-t border-border p-5 md:p-6">
-                <p className="text-xs tracking-[0.15em] uppercase text-muted mb-4">
-                  Artifacts Produced
+              {/* Verdict */}
+              <div className="evidence-strip" aria-label="Audit verdict">
+                <p>
+                  <span>Conformance</span>
+                  {levelLabels[study.conformanceLevel]}
                 </p>
-                <div className="grid grid-cols-3 md:grid-cols-6 gap-4 text-center">
-                  {[
-                    { label: "Governance", count: study.artifacts.governanceDocs },
-                    { label: "Decisions", count: study.artifacts.decisionRecords },
-                    { label: "Specs", count: study.artifacts.architectureSpecs },
-                    { label: "Playbooks", count: study.artifacts.playbooks },
-                    { label: "Pages", count: study.artifacts.prototypePages },
-                    { label: "Tests", count: study.artifacts.tests },
-                  ].map((item) => (
-                    <div key={item.label} className="space-y-1">
-                      <p className="text-lg md:text-xl font-normal">{item.count}</p>
-                      <p className="text-[10px] md:text-xs text-muted">{item.label}</p>
-                    </div>
-                  ))}
-                </div>
+                <p>
+                  <span>Extraction check</span>
+                  <span
+                    className={
+                      study.extractionCheckPassed
+                        ? "text-coherence"
+                        : "text-entropy"
+                    }
+                  >
+                    {study.extractionCheckPassed ? "Passed" : "Failed"}
+                  </span>
+                </p>
+                <p>
+                  <span>Reference visibility</span>
+                  {study.publicReference
+                    ? "Public reference available"
+                    : "Private reference only"}
+                </p>
               </div>
+
+              {/* Structural change */}
+              <section
+                className="section-records"
+                aria-label="What changed structurally"
+              >
+                <header className="section-head">
+                  <p>What changed structurally</p>
+                  <p>Governable · portable · buildable</p>
+                </header>
+                {study.structuralChanges.map((change, i) => (
+                  <article className="section-record" key={change.title}>
+                    <p className="artifact-id">{String(i + 1).padStart(2, "0")}</p>
+                    <div>
+                      <h2>{change.title}</h2>
+                      <p>{change.detail}</p>
+                    </div>
+                  </article>
+                ))}
+              </section>
+
+              {/* Practical impact */}
+              <section className="section-records" aria-label="Why it mattered">
+                <header className="section-head">
+                  <p>Why it mattered</p>
+                  <p>Operate · hand off · scale</p>
+                </header>
+                {study.practicalImpact.map((impact, i) => (
+                  <article className="section-record" key={impact.label}>
+                    <p className="artifact-id">{String(i + 1).padStart(2, "0")}</p>
+                    <div>
+                      <h2>{impact.label}</h2>
+                      <p>{impact.detail}</p>
+                    </div>
+                  </article>
+                ))}
+              </section>
+
+              {/* Handoff readiness */}
+              <section
+                className="section-records"
+                aria-label="Handoff readiness"
+              >
+                <header className="section-head">
+                  <p>Handoff readiness</p>
+                  <p>Survives its authors</p>
+                </header>
+                {study.handoffReadiness.map((item, i) => (
+                  <article className="section-record" key={item.label}>
+                    <p className="artifact-id">{String(i + 1).padStart(2, "0")}</p>
+                    <div>
+                      <h2>{item.label}</h2>
+                      <p>{item.detail}</p>
+                    </div>
+                  </article>
+                ))}
+              </section>
+
+              {/* Artifacts produced */}
+              <section
+                className="section-records"
+                aria-label="Artifacts produced"
+              >
+                <header className="section-head">
+                  <p>Artifacts produced</p>
+                  <p>Curated corpus</p>
+                </header>
+                {metrics.map((metric) => (
+                  <article className="section-record" key={metric.label}>
+                    <p className="artifact-id">{metric.label}</p>
+                    <div>
+                      <h2>{metric.count}</h2>
+                      <p>{metric.caption}</p>
+                    </div>
+                  </article>
+                ))}
+              </section>
+
+              <p className="policy-note">
+                36,000+ lines of specification across architecture, decisions,
+                playbooks, governance, platform docs, and briefs.
+              </p>
             </div>
-          ))}
-        </div>
+          );
+        })
       )}
     </div>
   );

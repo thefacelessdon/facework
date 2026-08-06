@@ -1,5 +1,4 @@
 import { coherenceSnapshot } from "@/data/demo";
-import { StatusBadge } from "@/components/StatusBadge";
 import { ProgressBar } from "@/components/ProgressBar";
 
 export default function StatusPage() {
@@ -8,204 +7,190 @@ export default function StatusPage() {
   const activeStage =
     stages.find((stage) => stage.status === "active") ?? stages[0];
 
+  const progress = [
+    {
+      label: "Practice Runs",
+      value: metrics.completedRuns,
+      max: metrics.targetRuns,
+      suffix: "",
+    },
+    {
+      label: "Public References",
+      value: metrics.publicReferences,
+      max: metrics.targetReferences,
+      suffix: "",
+    },
+    {
+      label: "Revenue Floor",
+      value: metrics.monthsAtFloor,
+      max: metrics.targetMonthsAtFloor,
+      suffix: " mo",
+    },
+  ];
+
   return (
-    <div className="mx-auto max-w-5xl px-6 md:px-8 lg:px-20 py-16 md:py-20 space-y-12">
-      <div className="space-y-4">
-        <h1 className="text-2xl md:text-3xl font-normal tracking-tight">Status</h1>
-        <p className="text-sm md:text-base text-muted max-w-xl leading-relaxed">
+    <div className="section-page">
+      <section className="section-threshold" aria-labelledby="status-title">
+        <p className="eyebrow">Facework / Coherence tracker</p>
+        <h1 id="status-title">The practice submits to its own test.</h1>
+        <p className="section-intro">
           Facework&apos;s own coherence tracker. If the practice asks other
           systems to be transparent, sovereign, and structurally honest, it has
           to submit itself to the same test.
         </p>
-        <p className="text-xs text-muted tracking-wide">
-          Evidence snapshot: {date} / verify before publication
+      </section>
+
+      <div className="evidence-strip" aria-label="Snapshot summary">
+        <p>
+          <span>Snapshot phase</span>
+          {activeStage.label}
+        </p>
+        <p>
+          <span>What this measures</span>
+          Whether the practice is becoming transferable, referencable, and
+          economically real without violating its own boundaries.
+        </p>
+        <p>
+          <span>Governance rule</span>
+          The same standards Facework applies to client systems apply here:
+          visibility, sovereignty, clean transfer, and no hidden dependencies.
         </p>
       </div>
 
-      <section className="border border-border  overflow-hidden">
-        {[
-          {
-            label: "Snapshot Phase",
-            detail: activeStage.label,
-          },
-          {
-            label: "What This Measures",
-            detail:
-              "Whether the practice is becoming transferable, referencable, and economically real without violating its own boundaries.",
-          },
-          {
-            label: "Governance Rule",
-            detail:
-              "The same standards Facework applies to client systems apply here too: visibility, sovereignty, clean transfer, and no hidden dependencies.",
-          },
-        ].map((item, index) => (
-          <div
-            key={item.label}
-            className={`grid grid-cols-1 md:grid-cols-[180px_1fr] gap-4 p-5 md:p-6 ${
-              index < 2 ? "border-b border-border" : ""
-            }`}
-          >
-            <p className="text-xs tracking-[0.2em] uppercase text-muted">
-              {item.label}
-            </p>
-            <p className="text-sm text-muted leading-relaxed max-w-2xl">
-              {item.detail}
-            </p>
-          </div>
+      <p className="policy-note">Evidence snapshot: {date}.</p>
+
+      {/* MVP progress */}
+      <section className="section-records" aria-label="MVP progress">
+        <header className="section-head">
+          <p>MVP progress</p>
+          <p>Practice runs · references · revenue floor</p>
+        </header>
+        {progress.map((metric) => (
+          <article className="section-record" key={metric.label}>
+            <p className="artifact-id">{metric.label}</p>
+            <div>
+              <h2>
+                {metric.value}
+                <span style={{ color: "var(--fw-muted)" }}>
+                  /{metric.max}
+                  {metric.suffix}
+                </span>
+              </h2>
+              <div style={{ marginTop: "var(--space-lg)", maxWidth: "24rem" }}>
+                <ProgressBar
+                  value={metric.value}
+                  max={metric.max}
+                  label={metric.label}
+                />
+              </div>
+            </div>
+          </article>
         ))}
       </section>
 
-      <hr />
-
-      {/* Progress Metrics */}
-      <section className="space-y-4">
-        <h2 className="text-xs tracking-[0.2em] uppercase text-muted">
-          MVP Progress
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {[
-            { label: "Practice Runs", value: metrics.completedRuns, max: metrics.targetRuns, suffix: "" },
-            { label: "Public References", value: metrics.publicReferences, max: metrics.targetReferences, suffix: "" },
-            { label: "Revenue Floor", value: metrics.monthsAtFloor, max: metrics.targetMonthsAtFloor, suffix: " mo" },
-          ].map((metric) => (
-            <div key={metric.label} className="border border-border  p-5 space-y-3">
-              <p className="text-xs tracking-[0.15em] uppercase text-muted">{metric.label}</p>
-              <p className="text-2xl md:text-3xl font-normal">
-                {metric.value}
-                <span className="text-muted text-base md:text-lg">
-                  /{metric.max}{metric.suffix}
-                </span>
-              </p>
-              <ProgressBar value={metric.value} max={metric.max} label={metric.label} />
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Stage Boundaries */}
-      <section className="space-y-4">
-        <h2 className="text-xs tracking-[0.2em] uppercase text-muted">
-          Stage Boundaries
-        </h2>
-        <div className="space-y-3">
-          {stages.map((stage) => (
-            <div
-              key={stage.stage}
-              className={`border  p-5 space-y-4 ${
-                stage.status === "active"
-                  ? "border-coherence/50 bg-coherence/5"
-                  : "border-border"
-              }`}
-            >
-              <div className="flex items-center justify-between gap-4">
-                <h3 className="text-sm font-medium tracking-wide">{stage.label}</h3>
-                <StatusBadge
-                  status={
-                    stage.status === "active"
-                      ? "in-progress"
-                      : stage.status === "complete"
-                        ? "complete"
-                        : "not-started"
-                  }
-                />
-              </div>
-              <p className="text-sm text-muted">{stage.description}</p>
-              <div className="space-y-2">
-                <p className="text-xs tracking-[0.15em] uppercase text-muted">
-                  Exit Criteria
-                </p>
+      {/* Stage boundaries */}
+      <section className="section-records" aria-label="Stage boundaries">
+        <header className="section-head">
+          <p>Stage boundaries</p>
+          <p>MVP → Beta → Scale</p>
+        </header>
+        {stages.map((stage) => (
+          <article className="section-record" key={stage.stage}>
+            <p className="artifact-id">
+              {stage.status === "active" ? "Active" : "Upcoming"}
+            </p>
+            <div>
+              <h2>{stage.label}</h2>
+              <p>{stage.description}</p>
+              <dl style={{ marginTop: "var(--space-xl)" }}>
                 {stage.exitCriteria.map((item, i) => (
-                  <div key={i} className="flex items-start gap-3 text-sm">
+                  <div
+                    key={i}
+                    style={{
+                      display: "flex",
+                      gap: "var(--space-md)",
+                      alignItems: "flex-start",
+                      padding: "var(--space-sm) 0",
+                    }}
+                  >
                     <span
-                      className={`mt-0.5 text-xs ${
+                      aria-hidden="true"
+                      className={
                         item.status === "complete"
                           ? "text-coherence"
                           : item.status === "in-progress"
                             ? "text-resonance"
                             : "text-muted"
-                      }`}
-                      aria-hidden="true"
+                      }
                     >
-                      {item.status === "complete" ? "●" : item.status === "in-progress" ? "◐" : "○"}
+                      {item.status === "complete"
+                        ? "●"
+                        : item.status === "in-progress"
+                          ? "◐"
+                          : "○"}
                     </span>
-                    <div className="space-y-0.5">
-                      <p className="text-muted">{item.description}</p>
+                    <div>
+                      <p style={{ margin: 0 }}>{item.description}</p>
                       {item.evidence && (
-                        <p className="text-xs text-muted">Evidence: {item.evidence}</p>
+                        <p
+                          style={{
+                            margin: "4px 0 0",
+                            fontSize: ".82rem",
+                          }}
+                        >
+                          Evidence: {item.evidence}
+                        </p>
                       )}
                     </div>
                   </div>
                 ))}
-              </div>
+              </dl>
             </div>
-          ))}
-        </div>
+          </article>
+        ))}
       </section>
 
-      {/* No-Go Lines */}
-      <section className="space-y-4">
-        <h2 className="text-xs tracking-[0.2em] uppercase text-muted">
-          No-Go Lines
-        </h2>
-        <p className="text-sm text-muted max-w-2xl leading-relaxed">
-          These are the conditions that would signal drift, stalled transfer,
-          or a breakdown between the stated practice and the reality of how it
-          operates.
-        </p>
-        <div className="space-y-2">
-          {noGoLines.map((line, i) => (
-            <div
-              key={i}
-              className="flex flex-col sm:flex-row sm:items-start gap-3 border border-border  p-4"
-            >
+      {/* No-go lines */}
+      <section className="policy-records" aria-label="No-go lines">
+        <header className="section-head">
+          <p>No-go lines</p>
+          <p>Conditions that signal drift</p>
+        </header>
+        {noGoLines.map((line, i) => (
+          <article className="policy-record" key={i}>
+            <p className="artifact-id">
+              {line.type}
+              <br />
               <span
-                className={`text-xs tracking-wide px-1.5 py-0.5  border w-fit ${
-                  line.type === "hard"
-                    ? "text-entropy border-entropy/30"
-                    : "text-resonance border-resonance/30"
-                }`}
-              >
-                {line.type}
-              </span>
-              <div className="flex-1">
-                <p className="text-sm text-muted">{line.description}</p>
-                {line.detail && (
-                  <p className="text-xs text-muted mt-1">{line.detail}</p>
-                )}
-              </div>
-              <span
-                className={`text-xs tracking-wide ${
+                className={
                   line.status === "clear"
                     ? "text-coherence"
                     : line.status === "approaching"
                       ? "text-resonance"
                       : "text-entropy"
-                }`}
+                }
               >
                 {line.status}
               </span>
-            </div>
-          ))}
-        </div>
+            </p>
+            <h2>{line.description}</h2>
+            {line.detail && <p>{line.detail}</p>}
+          </article>
+        ))}
       </section>
 
-      {/* Non-Negotiables */}
-      <section className="space-y-4">
-        <h2 className="text-xs tracking-[0.2em] uppercase text-muted">
-          Non-Negotiables
-        </h2>
-        <p className="text-sm text-muted max-w-2xl leading-relaxed">
-          These are the boundaries the system is not allowed to violate, even
-          if doing so would make growth or monetization easier.
-        </p>
-        <div className="space-y-3">
-          {nonNegotiables.map((item, i) => (
-            <div key={i} className="flex gap-3 items-start">
-              <span className="text-coherence mt-0.5 text-xs" aria-hidden="true">●</span>
-              <p className="text-sm text-muted">{item}</p>
-            </div>
-          ))}
-        </div>
+      {/* Non-negotiables */}
+      <section className="policy-records" aria-label="Non-negotiables">
+        <header className="section-head">
+          <p>Non-negotiables</p>
+          <p>Boundaries the system cannot violate</p>
+        </header>
+        {nonNegotiables.map((item, i) => (
+          <article className="policy-record" key={i}>
+            <p className="artifact-id">{String(i + 1).padStart(2, "0")}</p>
+            <h2>{item}</h2>
+          </article>
+        ))}
       </section>
     </div>
   );

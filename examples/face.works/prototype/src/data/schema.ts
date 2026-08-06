@@ -57,7 +57,10 @@ export interface ArtifactCount {
   architectureSpecs: number;
   playbooks: number;
   prototypePages: number;
-  tests: number;
+  routes: number;
+  components: number;
+  testFiles: number;
+  testCases: number;
 }
 
 // --- Coherence Tracker ---

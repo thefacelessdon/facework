@@ -1,12 +1,12 @@
 :root {
-  --field-reading: "Avenir Next", "Helvetica Neue", sans-serif;
-  --field-structural: "Berkeley Mono", "JetBrains Mono", ui-monospace, monospace;
-  --surface: oklch(18% .008 95);
-  --surface-raised: oklch(23% .009 95);
-  --ink: oklch(94% .01 95);
-  --muted: oklch(68% .012 95);
-  --rule: oklch(35% .012 95);
-  --signal: oklch(79% .09 254);
+  --field-reading: var(--fw-font-reading);
+  --field-structural: var(--fw-font-structural);
+  --surface: var(--fw-field, oklch(18% .008 95));
+  --surface-raised: var(--fw-field-raised, oklch(23% .009 95));
+  --ink: var(--fw-signal-light, oklch(94% .01 95));
+  --muted: var(--fw-muted-dark, oklch(68% .012 95));
+  --rule: var(--fw-rule-dark, oklch(35% .012 95));
+  --signal: var(--fw-clarity, oklch(79% .09 254));
   --ease: cubic-bezier(.22,1,.36,1);
 }
 
@@ -31,7 +31,7 @@ a { color: inherit; }
 .privacy-toggle, footer button, .clear, .archive-delete { min-height: 44px; border: 0; background: transparent; font: 10px var(--field-structural); letter-spacing: .07em; text-transform: uppercase; }
 
 .privacy { position: fixed; z-index: 20; top: 72px; right: 0; width: min(440px,100%); padding: 40px; background: var(--ink); color: var(--surface); border-bottom: 1px solid var(--surface); }
-.privacy .label { color: oklch(43% .012 95); }
+.privacy .label { color: var(--fw-muted-inverse, oklch(43% .012 95)); }
 .privacy h2 { margin: 40px 0 16px; font-size: 34px; line-height: 1.02; letter-spacing: -.04em; font-weight: 500; }
 .privacy p:not(.label) { font-size: 16px; line-height: 1.6; }
 .privacy-close { min-height: 44px; margin-top: 24px; padding: 0; border: 0; border-bottom: 1px solid currentColor; background: transparent; color: var(--surface); }
@@ -95,12 +95,12 @@ input[type="range"] { width: 100%; height: 44px; margin: 0; accent-color: var(--
 .archive { position: fixed; z-index: 15; top: 72px; right: 0; bottom: 52px; width: min(480px,100%); padding: 36px; background: var(--ink); color: var(--surface); transform: translateX(100%); transition: transform 300ms var(--ease); overflow: auto; }
 body.archive-open .archive { transform: translateX(0); }
 .archive h2 { margin: 12px 0 32px; font-size: 34px; letter-spacing: -.04em; font-weight: 500; }
-.archive .label { color: oklch(43% .012 95); }
-.archive-item { padding: 20px 0; border-top: 1px solid oklch(78% .01 95); }
+.archive .label { color: var(--fw-muted-inverse, oklch(43% .012 95)); }
+.archive-item { padding: 20px 0; border-top: 1px solid var(--fw-rule-inverse, oklch(78% .01 95)); }
 .archive-item p { margin: 6px 0; }
-.archive-item small { font: 10px var(--field-structural); color: oklch(43% .012 95); text-transform: uppercase; }
+.archive-item small { font: 10px var(--field-structural); color: var(--fw-muted-inverse, oklch(43% .012 95)); text-transform: uppercase; }
 .archive-delete { display: block; margin-top: 12px; padding: 0; color: var(--surface); text-decoration: underline; text-underline-offset: 4px; }
-.empty { color: oklch(43% .012 95); line-height: 1.5; }
+.empty { color: var(--fw-muted-inverse, oklch(43% .012 95)); line-height: 1.5; }
 .clear { margin-top: 24px; padding: 0; color: var(--surface); border-bottom: 1px solid var(--surface); }
 
 footer { position: fixed; z-index: 9; inset: auto 0 0; height: 52px; display: flex; align-items: center; justify-content: space-between; padding: 0 clamp(20px,3vw,48px); border-top: 1px solid var(--rule); color: var(--muted); font: 10px var(--field-structural); text-transform: uppercase; letter-spacing: .06em; }

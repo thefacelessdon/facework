@@ -16,6 +16,9 @@ export const navigation: NavItem[] = [
   { label: "Experiments", href: "/experiments", description: "Prototypes under pressure" },
   { label: "Library", href: "/library", description: "Sources and lineage" },
   { label: "About", href: "/about", description: "Practice and institution" },
+  { label: "Protocol", href: "/protocol", description: "The open system" },
+  { label: "Proof", href: "/proof", description: "Audited results" },
+  { label: "Engage", href: "/engage", description: "Work with Facework" },
 ];
 
 // --- Protocol Docs ---
@@ -181,7 +184,7 @@ Each phase has required outputs and pass/fail gates. A project is minimally conf
     order: 6,
     content: `## The Human + Agent Operating Model
 
-This methodology was developed and validated building GAMUT (creator commerce infrastructure) across 4 days. The agent runs the protocol. The human provides taste, judgment, relationship, and extraction checks.
+This methodology was developed and validated building GAMUT (creator commerce infrastructure) with the Facework methodology and AI-agent teams. The agent runs the protocol. The human provides taste, judgment, relationship, and extraction checks.
 
 ## The Seven Phases
 
@@ -202,12 +205,15 @@ The deeper difference: most build processes are culturally neutral — which in 
 
 | Metric | Value |
 |--------|-------|
-| Idea to handoff-ready | 4 days |
-| Architecture specs | 10 (6,500+ lines) |
-| Operational playbooks | 9 (3,500+ lines) |
-| Strategic decisions resolved | 7 |
-| Tests passing | 28 |
-| Lines of specification | 36,000+ |`,
+| Architecture specs | 14 |
+| Operational playbooks | 9 |
+| Decision records | 20 |
+| App Router pages | 51 (66 routes) |
+| Components | 89 |
+| Tests | 174 across 42 files |
+| Lines of specification | 36,000+ |
+
+Line count is the curated corpus: architecture + decisions + playbooks + governance + platform docs + briefs.`,
   },
   {
     slug: "conformance-model",
@@ -276,9 +282,9 @@ export const caseStudies: CaseStudy[] = [
     creator: "Audit pending",
     domain: "Creator Commerce Infrastructure",
     status: "audit-complete",
-    conformanceLevel: 2,
+    conformanceLevel: 3,
     summary:
-      "Creator commerce infrastructure giving established creators the operational layer to sell physical products at national retail scale. Built using the Facework methodology in 4 days. Retroactive conformance audit in progress.",
+      "Creator commerce infrastructure giving established creators the operational layer to sell physical products at national retail scale. Built with the Facework methodology and AI-agent teams, then retroactively audited to Level 3 (Sovereignty-Verified) in a self-audit authorized by Decision 003.",
     structuralChanges: [
       {
         title: "Governance became explicit",
@@ -332,11 +338,14 @@ export const caseStudies: CaseStudy[] = [
     ],
     artifacts: {
       governanceDocs: 6,
-      decisionRecords: 7,
-      architectureSpecs: 10,
+      decisionRecords: 20,
+      architectureSpecs: 14,
       playbooks: 9,
-      prototypePages: 12,
-      tests: 28,
+      prototypePages: 51,
+      routes: 66,
+      components: 89,
+      testFiles: 42,
+      testCases: 174,
     },
     extractionCheckPassed: true,
     publicReference: false,
@@ -347,7 +356,7 @@ export const caseStudies: CaseStudy[] = [
 // --- Coherence Tracker ---
 
 export const coherenceSnapshot: CoherenceSnapshot = {
-  date: "2026-03-23",
+  date: "2026-08-06",
   monthsSinceFirstEngagement: null,
   stages: [
     {
@@ -363,8 +372,9 @@ export const coherenceSnapshot: CoherenceSnapshot = {
         },
         {
           description: "3 completed practice engagements with documented outcomes",
-          status: "in-progress",
-          evidence: "GAMUT audit in progress (1 of 3)",
+          status: "not-started",
+          evidence:
+            "GAMUT conformance audit complete (Level 3, retroactive self-audit) — a self-audit is not a paid practice run. Practice runs: 0 of 3.",
         },
         {
           description: "At least 1 public reference",

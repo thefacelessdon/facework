@@ -204,6 +204,33 @@ Stability doesn't appear in the governing equation by name because it's the prec
 
 When Frequency (identity) and Current (infrastructure) vibrate in rhythm, they create Coherence — a state where creativity scales without losing its soul.
 
+### The four constructs of Coherence
+
+Signal, Frequency, Current, and Stability are not four independent ideas with
+Coherence added as a fifth. They are the four constructs Coherence holds in
+relationship. Coherence is not a thing placed beside them; it is the state that
+exists when the other four stay aligned:
+
+- **Signal** — the truth the system carries.
+- **Frequency** — the field by which that truth becomes perceptible.
+- **Current** — the movement of that truth through systems and networks.
+- **Stability** — the infrastructure that lets it hold under pressure.
+
+Remove any one and coherence cannot form: truth with no frequency is inert;
+frequency with no current does not travel; current with no stability burns out;
+stability with no truth is rigidity. This is why the governing equation measures
+a *relationship* rather than a quantity — Coherence is what synchronizes the
+four.
+
+Because these four are the constructs every coherent system must keep in
+alignment, identity and design work may treat them as a system's four **layers
+of alignment**. The Discipline names the same structure from the practice side —
+the coherence designer is responsible for "alignment across layers — strategy,
+architecture, operations, and surface" ([Coherence Design](coherence-design.md)
+§IV). The two vocabularies describe one structure: what the system *is* (Signal
+/ strategy), how it is *perceived* (Frequency / surface), what it *does* (Current
+/ operations), and what *carries its weight* (Stability / architecture).
+
 ---
 
 ## VIII. THE PHILOSOPHY — LAWS OF DESIGN

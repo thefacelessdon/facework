@@ -15,12 +15,19 @@
   --fw-flow: #62dfae;
   --fw-entropy: #e66f70;
   --fw-boundary: #b69ae8;
+  --fw-muted-inverse: oklch(43% .012 95);
+  --fw-rule-inverse: oklch(78% .01 95);
+  --fw-ink-print: #333;
   --fw-font-structural: "Berkeley Mono", "JetBrains Mono", ui-monospace, monospace;
   --fw-font-reading: Inter, "Helvetica Neue", Arial, sans-serif;
   --fw-measure: 68ch;
   --fw-gutter: clamp(20px, 4vw, 64px);
+  --fw-motion-immediate: 120ms;
   --fw-motion-quick: 180ms;
   --fw-motion-standard: 300ms;
+  --fw-motion-signature: 520ms;
+  --fw-motion-hold: 900ms;
+  --fw-motion-ambient: 8s;
   --fw-ease-resolve: cubic-bezier(.2,.8,.2,1);
 }
 

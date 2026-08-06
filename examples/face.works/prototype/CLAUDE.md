@@ -31,9 +31,9 @@ src/
 
 | Layer | Technology |
 |-------|-----------|
-| Framework | Next.js (App Router, static export) |
+| Framework | Next.js (App Router; not static export — no `output: 'export'`, ships security headers via `next.config.ts` `headers()`, pages prerendered and served by the Next runtime) |
 | Styling | Tailwind CSS v4 |
-| Typography | Berkeley Mono (JetBrains Mono fallback) |
+| Typography | Public Sans (reading); JetBrains Mono (structural/mono) |
 | Language | TypeScript (strict) |
 | Data | Typed demo data (no database at MVP) |
 
@@ -43,23 +43,25 @@ The VLS is defined in `globals.css` and enforced across all pages.
 Source docs: `../original site exploration reference/`
 
 **Rules you must follow:**
-- Dark palette only: Ink Black, Graphite, Stone, Soft White
+- Light paper palette (`globals.css` sets `color-scheme: light`): Paper, Paper-quiet, Rule, Muted, Graphite, Ink
 - Accents are system states, not decoration: clarity (blue), resonance (amber), entropy (red), flow/coherence (green)
 - Never more than one accent per screen section
 - Never use accent as background color
-- All transitions use `var(--ease-settle)` — slow stabilization, no bounce
+- All transitions use `var(--ease-resolve)` — slow stabilization, no bounce
 - 4 layout types only: single-column narrative, split 50/50, full-width stacked, OS diagram
 - Section headers: `text-xs tracking-[0.2em] uppercase text-muted`
 - Body text: 18px base, tight tracking, weight used sparingly
 
-**Colors as states (from `globals.css`):**
+**Colors as states (from `globals.css`, light-mode `--fw-*` tokens):**
 ```
---state-clarity:   var(--field-blue)      #8FAFFF
---state-resonance: var(--signal-amber)    #FFD089
---state-entropy:   var(--pulse-red)       #FF7C7C
---state-flow:      var(--emergence-green) #7AFFC4
---state-coherence: var(--emergence-green) #7AFFC4
+clarity   -> --fw-clarity   / --fw-clarity-text     (blue)
+resonance -> --fw-resonance / --fw-resonance-text   (amber)
+flow      -> --fw-flow      / --fw-flow-text         (green; also coherence)
+entropy   -> --fw-entropy   / --fw-entropy-text     (red)
 ```
+Values are OKLCH, not hex. The `--fw-*-text` variants are the AA-contrast versions for
+text on paper; the base variants are for fills/marks. Mapped to `--color-*` aliases in the
+`@theme` block.
 
 ## Data Pattern
 
@@ -77,11 +79,16 @@ Update this object as real metrics change.
 ## How to Add a New Page
 
 1. Create `src/app/{slug}/page.tsx`
-2. Use the layout pattern: `<div className="mx-auto max-w-5xl px-8 lg:px-20 py-20 space-y-16">`
-3. Section headers: `<h2 className="text-xs tracking-[0.2em] uppercase text-muted">`
-4. Section separators: `<hr />`
-5. Follow VLS rules (dark palette, accent-as-state, 4 layout types)
-6. If data-driven, add schema to `data/schema.ts` and demo data to `data/demo.ts`
+2. Use the VLS grammar, not generic centered cards. Wrap in `.section-page` with a
+   `.section-threshold` header (`.eyebrow` / `<h1>` / `.section-intro`). Mirror the closest
+   existing page — `privacy`, `accessibility`, `proof`, `status`, or `KnowledgeSection`.
+3. Structure content with VLS primitives from `globals.css`: `.section-records`/`.section-record`
+   with `.section-head` bands and `.artifact-id` columns (ledger/record rows), `.policy-records`/
+   `.policy-record` (boundary/rule lists), `.evidence-strip` (verdict/summary rows), and
+   `.claim`/`.display-title`/`.lead`/`.text-link` for statements. Do not reintroduce the
+   `mx-auto max-w-5xl … space-y-*` bordered-card idiom.
+4. Follow VLS rules (light paper palette, accent-as-state, one accent per section).
+5. If data-driven, add schema to `data/schema.ts` and demo data to `data/demo.ts`.
 
 ## How to Run
 

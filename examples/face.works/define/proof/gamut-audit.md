@@ -340,9 +340,9 @@ institutional stakeholder relationships.
 │  Zone: DEEP GREEN                                       │
 │                                                         │
 │  Verdict: GAMUT is the strongest proof-of-protocol.     │
-│  Built in 4 days, it demonstrates the methodology at    │
-│  production depth. The only gaps are phases that didn't  │
-│  exist yet — which validates the protocol evolution.     │
+│  It demonstrates the methodology at production          │
+│  depth. The only gaps are phases that didn't            │
+│  exist yet — which validates the protocol evolution.    │
 └─────────────────────────────────────────────────────────┘
 ```
 

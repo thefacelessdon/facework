@@ -16,7 +16,7 @@ export function ProgressBar({
       aria-valuemin={0}
       aria-valuemax={max}
       aria-label={label}
-      className="w-full bg-stone  h-1"
+      className="w-full bg-stone h-1"
     >
       <div
         className="bg-coherence h-1 w-full origin-left"

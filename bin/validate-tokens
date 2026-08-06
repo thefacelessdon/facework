@@ -1,0 +1,168 @@
+#!/bin/bash
+set -euo pipefail
+
+# validate-tokens — enforces FVP-100 source-authority for the Facework
+# visual-system tokens. Asserts that:
+#   (a) every palette hex in applications/shared/tokens.css matches the
+#       corresponding value in tokens.json;
+#   (b) the motion token set in tokens.css / tokens.json matches the six
+#       canonical durations declared in identity/FVI-400-motion-signature.md;
+#   (c) no CSS file under applications/*/reference/ forks a raw color hex,
+#       OKLCH/RGB/HSL value, or font-family outside a var(--fw-*) reference.
+# Exits non-zero on any violation.
+
+ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+VS_DIR="$ROOT_DIR/visual-system"
+TOKENS_CSS="$VS_DIR/applications/shared/tokens.css"
+TOKENS_JSON="$VS_DIR/applications/shared/tokens.json"
+MOTION_DOC="$VS_DIR/identity/FVI-400-motion-signature.md"
+REFERENCE_GLOB="$VS_DIR/applications"
+
+for f in "$TOKENS_CSS" "$TOKENS_JSON" "$MOTION_DOC"; do
+  if [ ! -f "$f" ]; then
+    echo "[error] required file not found: $f"
+    exit 1
+  fi
+done
+
+if ! command -v ruby >/dev/null 2>&1; then
+  echo "[error] ruby is required (uses stdlib JSON parser)."
+  exit 1
+fi
+
+echo "Facework token validator"
+echo "Repo: $ROOT_DIR"
+echo
+
+ruby - "$TOKENS_CSS" "$TOKENS_JSON" "$MOTION_DOC" "$REFERENCE_GLOB" <<'RUBY'
+# encoding: utf-8
+require "json"
+
+Encoding.default_external = Encoding::UTF_8
+Encoding.default_internal = Encoding::UTF_8
+
+tokens_css_path, tokens_json_path, motion_doc_path, reference_root = ARGV
+
+violations = 0
+def fail!(msg)
+  puts "[fail] #{msg}"
+end
+
+css = File.read(tokens_css_path)
+json = JSON.parse(File.read(tokens_json_path))
+motion_doc = File.read(motion_doc_path)
+
+# --- Parse --fw-* custom properties from tokens.css -------------------------
+css_vars = {}
+css.scan(/--fw-([a-z0-9-]+)\s*:\s*([^;]+);/i) do |name, value|
+  css_vars[name.strip] = value.strip
+end
+
+# kebab (post --fw-) -> camelCase, matching the tokens.json color keys.
+def camel(name)
+  parts = name.split("-")
+  parts[0] + parts[1..].map { |p| p.capitalize }.join
+end
+
+# --- (a) palette hex parity: tokens.css <-> tokens.json ---------------------
+json_colors = json.fetch("color", {})
+hex_re = /\A#[0-9a-fA-F]{3,8}\z/
+css_hex = css_vars.select { |_, v| v =~ hex_re }
+
+if css_hex.empty?
+  fail!("(a) no hex palette custom properties found in tokens.css")
+  violations += 1
+end
+
+css_hex.each do |name, hex|
+  key = camel(name)
+  jval = json_colors.dig(key, "value")
+  if jval.nil?
+    fail!("(a) tokens.css defines --fw-#{name} (#{hex}) but tokens.json has no color.#{key}")
+    violations += 1
+  elsif jval.to_s.upcase != hex.upcase
+    fail!("(a) palette mismatch for #{key}: tokens.css=#{hex} tokens.json=#{jval}")
+    violations += 1
+  end
+end
+
+# --- (b) motion set matches FVI-400 -----------------------------------------
+# Source of authority: the FVI-400 timing table.
+expected_motion = {}
+motion_doc.scan(/`--fw-motion-([a-z]+)`\s*\|\s*([0-9]+\s*m?s)/i) do |name, value|
+  expected_motion[name.downcase] = value.gsub(/\s+/, "").downcase
+end
+
+REQUIRED_MOTION = %w[immediate quick standard signature hold ambient]
+missing_in_doc = REQUIRED_MOTION - expected_motion.keys
+unless missing_in_doc.empty?
+  fail!("(b) FVI-400 motion table is missing: #{missing_in_doc.join(', ')}")
+  violations += 1
+end
+
+json_motion = json.fetch("motion", {})
+expected_motion.each do |name, value|
+  css_val = css_vars["motion-#{name}"]
+  if css_val.nil?
+    fail!("(b) tokens.css missing --fw-motion-#{name} (FVI-400 = #{value})")
+    violations += 1
+  elsif css_val.gsub(/\s+/, "").downcase != value
+    fail!("(b) motion mismatch for #{name}: tokens.css=#{css_val} FVI-400=#{value}")
+    violations += 1
+  end
+
+  jmotion = json_motion.dig(name, "value")
+  if jmotion.nil?
+    fail!("(b) tokens.json missing motion.#{name} (FVI-400 = #{value})")
+    violations += 1
+  elsif jmotion.to_s.gsub(/\s+/, "").downcase != value
+    fail!("(b) motion mismatch for #{name}: tokens.json=#{jmotion} FVI-400=#{value}")
+    violations += 1
+  end
+end
+
+# --- (c) reference CSS must not fork raw color / font-family ----------------
+# A declaration is allowed to carry a raw color/font literal only when its
+# value is sourced through a var(...) reference (canonical token or fallback).
+raw_color_re = /#[0-9a-fA-F]{3,8}\b|\boklch\(|\brgba?\(|\bhsla?\(/i
+font_family_re = /font(?:-family)?\s*:/i
+quoted_font_re = /["'][^"']+["']/
+
+Dir.glob(File.join(reference_root, "*", "reference", "**", "*.css")).sort.each do |file|
+  rel = file.sub(reference_root + "/", "applications/")
+  text = File.read(file)
+  # Strip block comments so commented examples don't trip the scan.
+  text = text.gsub(%r{/\*.*?\*/}m, "")
+  # Split into individual declarations (property: value).
+  text.scan(/([-a-zA-Z]+)\s*:\s*([^;{}]+)/) do |prop, value|
+    prop = prop.strip
+    value = value.strip
+    next if prop.start_with?("--fw-") # canonical token definition (not expected here)
+    has_var = value.include?("var(")
+
+    if value =~ raw_color_re && !has_var
+      fail!("(c) #{rel}: raw color literal outside a token — #{prop}: #{value}")
+      violations += 1
+    end
+
+    if prop =~ font_family_re && value =~ quoted_font_re && !has_var
+      fail!("(c) #{rel}: raw font-family outside a token — #{prop}: #{value}")
+      violations += 1
+    end
+  end
+end
+
+puts
+if violations.zero?
+  puts "[ok] tokens.css / tokens.json palette parity"
+  puts "[ok] motion token set matches FVI-400 (#{REQUIRED_MOTION.length} durations)"
+  puts "[ok] reference CSS sources all colors and fonts from --fw-* tokens"
+  puts
+  puts "All token source-authority checks passed."
+  exit 0
+else
+  puts
+  puts "#{violations} token source-authority violation(s) found."
+  exit 1
+end
+RUBY
