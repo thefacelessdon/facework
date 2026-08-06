@@ -1,3 +1,30 @@
+# 0.0.23 — 2026-08-05 (Tooling — HarnessBundle → Claude Code converter)
+
+**What changed:**
+- Built `bin/harness-to-claude-code` (Ruby, stdlib-only) — the first concrete
+  **HarnessBundle consumer** (§10). Reads a bundle directory and emits a runnable
+  Claude Code `.claude/` layout:
+  - `boundary`/`identity`/`soul`/`purpose`/`memory`/`tools` .md → a composed
+    `CLAUDE.md` (project memory), boundary-first, with provenance header.
+  - `skills/{id}.md` → `.claude/skills/{id}/SKILL.md` (frontmatter → Claude Code
+    `name`/`description`; port fields carried through; body preserved).
+  - MCP servers in `tools.md` → `.mcp.json` + `.claude/settings.json` permission
+    scaffolds + `.claude/MCP-SETUP.md`. Endpoints/secrets are **never emitted**
+    (the bundle excludes them by design); the operator fills them in.
+- **Verified** against `examples/face.works/harness-bundle/`: 7 skills, 6 composed
+  sections, 5 MCP servers, both JSON outputs valid. One-way only (§10.6); the YAML
+  manifests remain source of truth.
+- Marked the converter **built** (was "flagged, not built") in the Claude Code gap
+  note, the FS-400 memo, and the §10 validation note — closing the doc loop retro
+  008 warns about.
+- **Why:** the fourth validation (0.0.22) proved the bundle layout maps onto Claude
+  Code on paper; this turns that into an executable port — the first time a Facework
+  tenant world can be compiled to a runnable runtime, not just described.
+
+Tooling + docs; no protocol behavior changed.
+
+---
+
 # 0.0.22 — 2026-08-05 (Runtime Ports — fourth runtime, Claude Code; FS-400.7)
 
 **What changed:**

@@ -356,7 +356,8 @@ Two findings it alone produced:
 - **HarnessBundle (§10) validated** — its on-disk layout (CLAUDE.md,
   `.claude/skills/`, `.claude/mcp.json`, settings) is the first real target for
   §10's derived markdown view, which had been asserted but never exercised. A
-  HarnessBundle → Claude Code converter is the obvious next prototype.
+  HarnessBundle → Claude Code converter is **built** (`bin/harness-to-claude-code`,
+  0.0.23) and verified against the face.works bundle.
 
 Four-runtime synthesis:
 

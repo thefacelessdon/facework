@@ -768,7 +768,9 @@ Agent SDK, a file-native local harness — is the first runtime whose on-disk
 layout maps cleanly onto this derived view (`soul.md` ← CLAUDE.md, `skills/` ←
 `.claude/skills/`, integrations ← `.claude/mcp.json`, governance ←
 `.claude/settings.json`). §10 was asserted for "file-based harnesses"; it now has
-a concrete target. See `methodology/runtime-ports-claude-code-gap-2026-08-05.md`.
+a concrete target, and a reference consumer — `bin/harness-to-claude-code`
+converts a bundle into a runnable Claude Code `.claude/` layout (0.0.23). See
+`methodology/runtime-ports-claude-code-gap-2026-08-05.md`.
 
 ### 10.1 Bundle layout
 

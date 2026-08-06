@@ -100,8 +100,11 @@ first runtime to actually exercise the file-based ingest §10 describes:
 The bundle is fully reconstructible from the file structure, portable, and
 user-controlled. §10 was asserted ("some runtimes prefer file-based ingest"); this
 is its first evidence. A HarnessBundle → Claude Code converter (read
-`soul.md`/`skills/` → emit `CLAUDE.md`/`.claude/skills/`) is the obvious next
-prototype — flagged, not built.
+`soul.md`/`skills/` → emit `CLAUDE.md`/`.claude/skills/`) — **built** as
+`bin/harness-to-claude-code` (0.0.23), verified against this bundle: 7 skills →
+`.claude/skills/{id}/SKILL.md`, six sections → a composed `CLAUDE.md`, 5 MCP
+servers → `.mcp.json` + `settings.json` permission scaffolds (endpoints/secrets
+excluded by design, filled from `.claude/MCP-SETUP.md`).
 
 ---
 

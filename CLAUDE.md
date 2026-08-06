@@ -41,7 +41,7 @@ Facework/
 ├── standards/           ← deferred post-1.0 standards track (FS/FOS/FRS) — NOT canonical yet
 ├── examples/            ← reference output from completed runs (NOT active project)
 │   └── face.works/      ← first protocol run (Facework's own infrastructure)
-└── bin/                 ← validation tooling
+└── bin/                 ← validation + conversion tooling (incl. harness-to-claude-code)
 ```
 
 The five-layer model (per the Facework Standards Architecture): **Theory**
