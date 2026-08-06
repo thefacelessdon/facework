@@ -84,7 +84,7 @@ export default function EngagePage() {
         </p>
       </section>
 
-      <div className="evidence-strip" aria-label="How engagement works">
+      <div className="evidence-strip" role="group" aria-label="How engagement works">
         <p>
           <span>Entry point</span>
           The first conversation is a diagnostic, not a funnel. Fit is

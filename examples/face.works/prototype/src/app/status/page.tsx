@@ -40,7 +40,7 @@ export default function StatusPage() {
         </p>
       </section>
 
-      <div className="evidence-strip" aria-label="Snapshot summary">
+      <div className="evidence-strip" role="group" aria-label="Snapshot summary">
         <p>
           <span>Snapshot phase</span>
           {activeStage.label}
@@ -102,9 +102,15 @@ export default function StatusPage() {
             <div>
               <h2>{stage.label}</h2>
               <p>{stage.description}</p>
-              <dl style={{ marginTop: "var(--space-xl)" }}>
+              <ul
+                style={{
+                  marginTop: "var(--space-xl)",
+                  padding: 0,
+                  listStyle: "none",
+                }}
+              >
                 {stage.exitCriteria.map((item, i) => (
-                  <div
+                  <li
                     key={i}
                     style={{
                       display: "flex",
@@ -142,9 +148,9 @@ export default function StatusPage() {
                         </p>
                       )}
                     </div>
-                  </div>
+                  </li>
                 ))}
-              </dl>
+              </ul>
             </div>
           </article>
         ))}

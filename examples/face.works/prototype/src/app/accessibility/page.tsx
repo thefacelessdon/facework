@@ -34,7 +34,7 @@ export default function AccessibilityPage() {
         ))}
       </section>
       <div className="policy-note">
-        <p><strong>Current status:</strong> automated audits pass on representative routes. Manual VoiceOver, NVDA, iOS Safari, and Android Chrome review remains a named release gate.</p>
+        <p><strong>Current status:</strong> the latest automated audit (2026-08-06, axe-core 4.11.1, WCAG 2.2 A/AA ruleset) reports 0 violations across 16 representative routes of the production build. Automated checks catch only part of what matters; manual VoiceOver, NVDA, iOS Safari, and Android Chrome review remains a named release gate.</p>
         <p>Report an access barrier at <a href="mailto:hello@face.works">hello@face.works</a>.</p>
       </div>
     </div>

@@ -30,7 +30,7 @@ export function ArtifactRecord() {
     <>
       <div className="record-intro">
         <h2 id="record-title" className="display-title">The work, with its state attached.</h2>
-        <div className="filter-row" aria-label="Filter artifacts">
+        <div className="filter-row" role="group" aria-label="Filter artifacts">
           {(["all", "canonical", "developing", "experimental"] as const).map((value) => (
             <button
               key={value}

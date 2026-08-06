@@ -117,7 +117,7 @@ export default function ProofPage() {
 
               {/* Provenance + honest disclosure (all non-audit cases) */}
               {study.provenance ? (
-                <div className="evidence-strip" aria-label="Provenance">
+                <div className="evidence-strip" role="group" aria-label="Provenance">
                   <p>
                     <span>Provenance</span>
                     {provenanceLabels[study.provenance]}
@@ -145,7 +145,7 @@ export default function ProofPage() {
                     gate remain at 0 of 3 (see Status).
                   </p>
 
-                  <div className="evidence-strip" aria-label="Audit verdict">
+                  <div className="evidence-strip" role="group" aria-label="Audit verdict">
                     <p>
                       <span>Conformance</span>
                       {study.conformanceLevel

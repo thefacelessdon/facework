@@ -39,7 +39,7 @@ export default function Home() {
             </details>
           </div>
         </div>
-        <div className="evidence-strip" aria-label="Evidence summary">
+        <div className="evidence-strip" role="group" aria-label="Evidence summary">
           <p><span>Observed</span>Decisions disappear inside polished deliverables.</p>
           <p><span>Testing</span>Visible status, source, and dependency at the point of use.</p>
           <p><span>Limit</span>Transparency cannot replace judgment or stewardship.</p>
