@@ -1,3 +1,26 @@
+# 0.0.20 — 2026-08-05 (Skill — Runtime Validation Pass)
+
+**What changed:**
+- Encoded the reusable procedure from retro 008 as a skill:
+  `skills/runtime-validation-pass/SKILL.md` (`/runtime-validation-pass`). It
+  validates §9 Runtime Ports against one external runtime shell and folds new
+  findings into spec canon — the loop proven across Buzz, Letta, and OpenAI
+  (opposite-corner selection → two-stage source-verified research → port-by-port
+  gap note → additive refinement → one PR).
+- **New skill class: system-loop skills.** This is neither a phase primitive
+  (`fw-*`, establish-coherence) nor a Posture (product-loop maintenance) — it
+  evolves the methodology. Registered under a new "System-loop skills" section in
+  `skills/OPERATING_SKILLS.md`, added to `bin/install-skills` (installed, but not
+  a primitive and not required by `facework-doctor`, consistent with Postures),
+  and reflected in `CLAUDE.md`'s repo map.
+- **Why:** the pass ran identically three times this program; a proven, repeated
+  loop should be a skill, not tribal memory. Encoding it means the fourth runtime
+  validation starts from the procedure instead of rediscovering it.
+
+Docs + tooling; no protocol behavior changed.
+
+---
+
 # 0.0.19 — 2026-08-05 (Retro 008 — Runtime Ports validation program)
 
 **What changed:**
