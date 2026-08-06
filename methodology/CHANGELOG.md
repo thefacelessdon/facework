@@ -1,3 +1,24 @@
+# 0.0.19 — 2026-08-05 (Retro 008 — Runtime Ports validation program)
+
+**What changed:**
+- Added `methodology/retros/008-runtime-ports-validation-program.md` — the
+  system-loop retro for the Buzz → Letta → OpenAI validation program (a
+  methodology-development session, not a client run; second observable instance
+  of the system loop closing on the toolkit itself, after 007).
+- **Methodology updates it records:** a named **"Runtime Validation Pass"**
+  procedure (opposite-corner selection → two-stage source-verified research →
+  port-by-port note → additive refinement → PR); a **source-verification
+  requirement** for externally-sourced claims that land as canon; and documented
+  **git-native ship guidance for this docs/spec repo** (gstack `/ship`'s
+  code-pipeline gates don't fit).
+- **Carry-forwards:** validate against the space not agreement; source-verify
+  before canon; kill silent defaults (FS-400.6 and the version-drift fix are the
+  same lesson).
+
+Docs-only; no protocol behavior changed.
+
+---
+
 # 0.0.18 — 2026-08-05 (Runtime Ports — third runtime, the sovereignty-failing corner)
 
 **What changed:**
