@@ -1,3 +1,28 @@
+# 0.0.24 — 2026-08-05 (End-to-end run — converter output boots in Claude Code)
+
+**What changed:**
+- **End-to-end verified** the 0.0.23 converter: its output is a working runtime,
+  not just valid files. Writing the generated bundle into a live Claude Code tree
+  auto-discovered all 7 skills (by dir-slug id, with the generated descriptions),
+  and a headless `claude -p` rooted in the output answered from the composed
+  `CLAUDE.md` across four sections (`face.works | agency_studio | $5,000 | vault/`).
+  This closes the loop: a Facework tenant world now compiles to a runtime that
+  boots and answers as itself.
+- **Converter correctness fix** (the run's real finding): SKILL.md port fields
+  (`trigger`, `ownership`, `tags`, `model_tier`) moved from top-level frontmatter
+  to the spec-allowed `metadata` key. Top-level extras load locally but
+  **hard-error on claude.ai / Skills-API upload** — so bundles are now portable to
+  hosted upload, not only local Claude Code.
+- Recorded a **verify-before-fix** note: a suspected `name` bug (display name vs
+  dir slug) was *disproved* by the SKILL.md spec (`name` is display-only; the id
+  comes from the directory). The real defect was only visible from the frontmatter
+  spec, not the local load — the live run and the source-verify pass caught
+  different halves.
+
+Tooling + docs; no protocol behavior changed.
+
+---
+
 # 0.0.23 — 2026-08-05 (Tooling — HarnessBundle → Claude Code converter)
 
 **What changed:**
