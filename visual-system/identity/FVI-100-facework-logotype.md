@@ -22,6 +22,13 @@ create an ownable relationship with Axis Exchange.
 This decision establishes the visual logotype. It does not change how the proper
 name is capitalized in prose and does not constitute legal trademark clearance.
 
+**Restored (decision A).** Register is the canonical logotype and the
+record-voice wordmark that leads the primary horizontal lockup: Coherence Mark,
+then Register. The 0.0.29 redesign, which substituted plain Schibsted-Grotesk
+text for the custom letterforms in the nav, is **superseded** — the wordmark is
+the real Register SVG (font-independent monoline paths), implemented in the
+`FaceworkWordmark` runtime component and `public/identity/facework-lockup-horizontal.svg`.
+
 ## Name architecture
 
 | Form | Meaning | Use |

@@ -21,6 +21,14 @@ constructs Coherence holds in relationship (Cultural Physics §VII). It is a
 butterfly only at first glance. Its governing reading is two fields maintaining
 relationship through an open center under tension.
 
+**The mark is the governing equation drawn.** Coherence = (Flow × Resonance) /
+(1 + Entropy). The four strands sweep toward the center — Flow read in the
+sweep, Resonance in the rhythm of the layers. The lowest strand crosses under
+tension: Entropy, the friction held rather than erased. And the center stays
+**open** — Coherence is the relationship the equation resolves to, never a term
+placed between the others and never a filled node. The resting form therefore
+has **no node at all**; open-center is the only logo form.
+
 This decision establishes a design direction and production asset. It is not a
 legal trademark clearance or a guarantee of registrability.
 
@@ -60,6 +68,11 @@ They are the distinct constructs whose alignment determines whether identity can
 carry weight over time. The mark does not introduce a new model; it renders the
 one the Theory already governs.
 
+Read against the governing equation, the same four strands carry its dynamic
+terms: **Flow** is the sweep of the strands toward the center, **Resonance** is
+the rhythm across the layers, and (below) **Entropy** is the crossing held under
+tension. The strands are the constructs; the equation is how they behave.
+
 ### The bilateral field
 
 The two sides do not have permanent labels. They may express internal/external,
@@ -69,23 +82,26 @@ Their constitutional meaning is **counterforce in relationship**.
 Assigning permanent labels would turn a transferable relationship into a narrow
 diagram.
 
-### The open axis
+### The open center (Coherence)
 
-The center is intentionally unfilled. It is Coherence itself — the fifth term in
-the Theory's stack, which the governing equation defines as the *synchronization*
-of the other four, not a thing placed between them. Coherence is not an element
-set between the forces; it is the maintained relationship that keeps them in
-intelligible alignment.
+The center is intentionally unfilled, and stays unfilled in every form. It is
+**Coherence** itself — the term the governing equation resolves to, the
+*synchronization* of the others, not a thing placed between them. Coherence is
+not an element set between the forces; it is the maintained relationship that
+keeps them in intelligible alignment. **It is never a filled node.** The resting
+mark carries no center dot, square, or circle: the relationship, not a point, is
+the meaning.
 
 The interval also prevents the mark from becoming a literal insect body, neural
 column, or closed institutional seal.
 
-### The exchange
+### The exchange (Entropy)
 
-The lowest layer changes direction toward the center. This is the visible tension
-that prevents symmetry from becoming static. It represents feedback,
-transformation, and the fact that infrastructure must adapt when a system meets
-the world.
+The lowest layer changes direction toward the center. This is **Entropy** in the
+equation — the friction the system holds under tension rather than erases. It is
+the visible tension that prevents symmetry from becoming static, and it
+represents feedback, transformation, and the fact that infrastructure must adapt
+when a system meets the world.
 
 ## Primitive derivation
 
@@ -116,7 +132,15 @@ Artifact
 
 ## Geometry
 
-The core asset uses a `240 × 160` viewBox.
+> **Production geometry supersedes the values below.** The canonical resting
+> mark now uses a `230 × 176` viewBox and the four-strand-per-side path set
+> shipped in `public/identity/coherence-mark.svg` and the `CoherenceMark`
+> runtime component. It carries **no center node** in any state — open-center is
+> the only logo form. The `240 × 160` figures in this section are retained as
+> the original derivation record; the ratios (bilateral field, four layers per
+> side, open center, lower exchange) hold, the exact coordinates do not.
+
+The historic derivation used a `240 × 160` viewBox.
 
 | Relationship | Value |
 |---|---:|
