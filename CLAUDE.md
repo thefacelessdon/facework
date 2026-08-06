@@ -37,7 +37,7 @@ Facework/
 ├── SETUP.md             ← zero-to-ready setup guide (tiered by when you need it)
 ├── theories/            ← Theory (Cultural Physics) + Discipline (Coherence Design) + COS
 ├── methodology/         ← build system (retros, changelog, decisions, archive)
-├── skills/              ← 12 protocol skills + 8 operating skills (Postures)
+├── skills/              ← 12 protocol skills + 8 operating skills (Postures) + system-loop skills
 ├── standards/           ← deferred post-1.0 standards track (FS/FOS/FRS) — NOT canonical yet
 ├── examples/            ← reference output from completed runs (NOT active project)
 │   └── face.works/      ← first protocol run (Facework's own infrastructure)

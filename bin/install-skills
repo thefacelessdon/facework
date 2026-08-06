@@ -31,6 +31,7 @@ SKILLS=(
   weekly-upgrade
   evidence-debug
   launch-ops
+  runtime-validation-pass
 )
 
 PRIMITIVES=(

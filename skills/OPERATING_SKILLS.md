@@ -17,6 +17,16 @@ fires on a closing signal (drift → `/contract-sync`, broken behavior →
 - `/evidence-debug` - Debug from hard evidence and close with prevention.
 - `/launch-ops` - Execute release and verify post-launch health.
 
+## System-loop skills (methodology evolution — NOT Postures)
+
+These evolve the practice itself rather than maintain a tenant system. They fire
+on the **system loop**, not the product loop, so they live here for discovery but
+are not Postures (and are not required by `facework-doctor`, like the primitives).
+
+- `/runtime-validation-pass` - Validate Runtime Ports (§9) against one external
+  runtime shell and fold new findings into spec canon. Proven across Buzz, Letta,
+  and OpenAI; see `methodology/retros/008-runtime-ports-validation-program.md`.
+
 ## Paired Specialist Agents
 - `/mvp-cut` -> `mvp-scope-architect`
 - `/beta-hardening` -> `beta-reliability-auditor`
