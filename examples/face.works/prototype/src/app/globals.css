@@ -78,9 +78,12 @@ a { color: inherit; text-underline-offset: .22em; }
 .site-main { flex: 1; }
 
 .site-rail { position: fixed; z-index: 30; inset: 0 auto 0 0; width: 224px; padding: 28px 24px; display: flex; flex-direction: column; background: var(--rr-paper); border-right: 1px solid var(--rr-rule); }
+/* Identity lockup: Coherence Mark + Register wordmark, both inheriting
+   --rr-ink via currentColor. Gap ≈ ¼ the mark width (FVI-200); optically
+   centered by align-items (not baseline). The wordmark is now the SVG
+   logotype, so the old Schibsted-text .site-identity__word rule is retired. */
 .site-identity { min-height: 44px; display: flex; align-items: center; gap: 10px; color: var(--rr-ink); text-decoration: none; }
-.site-identity__word { font-family: var(--rr-font-structure); font-weight: 600; font-size: 1.05rem; line-height: 1; letter-spacing: -.01em; }
-.site-identity img { display: block; width: 100%; height: auto; }
+.site-identity svg { display: block; }
 .site-menu { display: none; }
 .site-nav { display: grid; margin-top: var(--space-4xl); }
 .site-nav a { min-height: 44px; display: flex; align-items: center; border-top: 1px solid var(--rr-rule); font: 500 .67rem/1 var(--rr-font-structure); letter-spacing: .07em; text-decoration: none; text-transform: uppercase; color: var(--rr-ink); }
