@@ -177,7 +177,7 @@ export default function ProofPage() {
                   </>
                 ) : null}
 
-                <section className="rr-section" aria-label="What changed structurally">
+                <section className="rr-section">
                   <SectionHead
                     label="What changed structurally"
                     title="Governable · portable · buildable"
@@ -185,17 +185,17 @@ export default function ProofPage() {
                   <FindingRows items={study.structuralChanges} />
                 </section>
 
-                <section className="rr-section" aria-label="Why it mattered">
+                <section className="rr-section">
                   <SectionHead label="Why it mattered" title="Operate · hand off · scale" />
                   <FindingRows items={study.practicalImpact} />
                 </section>
 
-                <section className="rr-section" aria-label="Handoff readiness">
+                <section className="rr-section">
                   <SectionHead label="Handoff readiness" title="Survives its authors" />
                   <FindingRows items={study.handoffReadiness} />
                 </section>
 
-                <section className="rr-section" aria-label="Artifacts produced">
+                <section className="rr-section">
                   <SectionHead label="Artifacts produced" title="Curated corpus" />
                   <ul className="rr-metrics">
                     {metrics.map((metric) => (
