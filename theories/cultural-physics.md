@@ -79,7 +79,9 @@ A jazz band, a forest, a community — all coherent systems that let energy move
 
 In Cultural Physics, coherence is what happens when creative energy (ideas, emotion, participation) flows through form (infrastructure, distribution, technology) without being distorted by friction or noise.
 
-It's measurable as stability, feelable as harmony.
+It's measurable as stability, feelable as harmony. For the detector set that makes
+the measurable half of that claim real — one instrument per force below — see
+[The Instrumentation of Coherence](coherence-instrumentation.md).
 
 We define it through the governing equation:
 
