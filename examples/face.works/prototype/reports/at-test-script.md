@@ -1,11 +1,16 @@
 # Facework — Manual Assistive-Technology Test Script
 
-Companion to the automated audit (`accessibility-audit-2026-08-06.md`). The axe-core
-pass reports 0 violations across 16 routes, but automated tools can't judge
-screen-reader semantics, focus management, single-page-app route announcements, or
-real-device reflow. This script covers exactly that. It is the "manual VoiceOver,
-NVDA, iOS Safari, and Android Chrome review" named as an open release gate on
-`/accessibility`.
+Companion to the automated audit. The axe-core pass reports 0 violations across
+every route, but automated tools can't judge screen-reader semantics, focus
+management, single-page-app route announcements, or real-device reflow. This
+script covers exactly that. It is the "manual VoiceOver, NVDA, iOS Safari, and
+Android Chrome review" named as an open release gate on `/accessibility`.
+
+> **Re-run the automated half first:** `./reports/a11y-audit.sh` builds the
+> production bundle, serves it, and runs axe-core over every sitemap route at a
+> pinned desktop viewport (0 violations = clean). Do the manual rows below only
+> after that passes — they start where automation stops. See the script header
+> for why the viewport must be pinned.
 
 Budget ~30–45 min for a full pass.
 
