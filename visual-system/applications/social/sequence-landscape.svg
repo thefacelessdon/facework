@@ -1,8 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" role="img" aria-labelledby="title desc">
-  <title id="title">Facework sequence social template</title><desc id="desc">A landscape frame shows observation becoming a durable standard through a five-step knowledge path.</desc>
-  <rect width="1920" height="1080" fill="#FAFAF8"/><text x="96" y="90" font-family="JetBrains Mono,monospace" font-size="22" letter-spacing="2" fill="#6B6861">FACEWORK / KNOWLEDGE PATH / 03 OF 05</text>
-  <text x="96" y="290" font-family="Helvetica Neue,Arial,sans-serif" font-size="92" font-weight="500" letter-spacing="-4" fill="#1A1917"><tspan x="96">Ideas should earn</tspan><tspan x="96" dy="98">permanence.</tspan></text>
-  <g transform="translate(96 635)"><line x1="0" y1="0" x2="1728" y2="0" stroke="#1A1917" stroke-width="3"/><circle cx="0" cy="0" r="11" fill="#FAFAF8" stroke="#1A1917" stroke-width="3"/><circle cx="432" cy="0" r="11" fill="#FAFAF8" stroke="#1A1917" stroke-width="3"/><rect x="853" y="-11" width="22" height="22" fill="#8FAFFF" stroke="#1A1917" stroke-width="3"/><circle cx="1296" cy="0" r="11" fill="#FAFAF8" stroke="#1A1917" stroke-width="3"/><circle cx="1728" cy="0" r="11" fill="#FAFAF8" stroke="#1A1917" stroke-width="3"/>
-  <g font-family="JetBrains Mono,monospace" font-size="19" fill="#6B6861"><text x="0" y="56">OBSERVATION</text><text x="432" y="56">FIELD NOTE</text><text x="864" y="56" text-anchor="middle" fill="#1A1917">MODEL</text><text x="1296" y="56">FRAMEWORK</text><text x="1728" y="56" text-anchor="end">STANDARD</text></g></g>
-  <line x1="96" y1="928" x2="1824" y2="928" stroke="#E5E3DC" stroke-width="2"/><text x="96" y="988" font-family="Helvetica Neue,Arial,sans-serif" font-size="26" fill="#2C2B27">Each transition records what changed, why, and what remains.</text><text x="1824" y="988" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="20" fill="#6B6861">face.works</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" role="img" aria-labelledby="t d">
+<title id="t">Facework sequence social template</title><desc id="d">A landscape frame shows observation becoming a durable standard through a five-step knowledge path.</desc>
+<style>.serif{font-family:'Literata Variable',Georgia,serif;}.mono{font-family:'Spline Sans Mono Variable',ui-monospace,monospace;}</style>
+<rect width="1920" height="1080" fill="#F5F3ED"/>
+<g transform="translate(96 60) scale(0.1705)"><g fill="#221C15"><g><path d="M8 16C46 21 80 31 106 46V57C78 44 44 35 9 31Z"/><path d="M16 47C50 53 82 62 106 76V87C80 74 50 65 21 62Z"/><path d="M28 79C58 85 84 94 106 106V117C82 104 58 96 36 94Z"/><path d="M18 150C58 138 92 120 104 100V112C90 122 56 150 16 160Z"/></g><g transform="translate(230 0) scale(-1 1)"><path d="M8 16C46 21 80 31 106 46V57C78 44 44 35 9 31Z"/><path d="M16 47C50 53 82 62 106 76V87C80 74 50 65 21 62Z"/><path d="M28 79C58 85 84 94 106 106V117C82 104 58 96 36 94Z"/><path d="M18 150C58 138 92 120 104 100V112C90 122 56 150 16 160Z"/></g></g></g>
+<text x="148" y="82" class="mono" font-size="22" letter-spacing="2" fill="#7A736A">FACEWORK / KNOWLEDGE PATH / 03 OF 05</text>
+<text x="96" y="300" class="serif" font-size="88" font-weight="520" letter-spacing="-1.5" fill="#221C15"><tspan x="96">Ideas should earn</tspan><tspan x="96" dy="96">permanence.</tspan></text>
+<g transform="translate(96 640)"><line x1="0" y1="0" x2="1728" y2="0" stroke="#221C15" stroke-width="3"/>
+<circle cx="0" cy="0" r="11" fill="#F5F3ED" stroke="#221C15" stroke-width="3"/>
+<circle cx="432" cy="0" r="11" fill="#F5F3ED" stroke="#221C15" stroke-width="3"/>
+<rect x="853" y="-11" width="22" height="22" fill="#2F8A80"/>
+<circle cx="1296" cy="0" r="11" fill="#F5F3ED" stroke="#221C15" stroke-width="3"/>
+<circle cx="1728" cy="0" r="11" fill="#F5F3ED" stroke="#221C15" stroke-width="3"/>
+<g class="mono" font-size="19" letter-spacing="1" fill="#7A736A"><text x="0" y="56">OBSERVATION</text><text x="432" y="56">FIELD NOTE</text><text x="864" y="56" text-anchor="middle" fill="#2F8A80">MODEL</text><text x="1296" y="56">FRAMEWORK</text><text x="1728" y="56" text-anchor="end">STANDARD</text></g></g>
+<line x1="96" y1="928" x2="1824" y2="928" stroke="#CBC5B9" stroke-width="2"/>
+<text x="96" y="988" class="serif" font-size="27" fill="#3B342B">Each transition records what changed, why, and what remains.</text>
+<text x="1824" y="988" text-anchor="end" class="mono" font-size="20" fill="#7A736A">face.works</text>
 </svg>
