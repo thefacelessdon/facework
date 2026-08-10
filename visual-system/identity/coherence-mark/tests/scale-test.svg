@@ -4,45 +4,45 @@
   <defs>
     <filter id="inverse"><feColorMatrix values="-1 0 0 0 1  0 -1 0 0 1  0 0 -1 0 1  0 0 0 1 0"/></filter>
   </defs>
-  <rect width="1400" height="900" fill="#FAFAF8"/>
+  <rect width="1400" height="900" fill="#F5F3ED"/>
   <style>
-    .label{font-family:'Berkeley Mono','JetBrains Mono',monospace;font-size:18px;fill:#1A1917;letter-spacing:1px}
-    .meta{font-family:'Berkeley Mono','JetBrains Mono',monospace;font-size:13px;fill:#6B6861}
+    .label{font-family:'Spline Sans Mono',ui-monospace,monospace;font-size:18px;fill:#221C15;letter-spacing:1px}
+    .meta{font-family:'Spline Sans Mono',ui-monospace,monospace;font-size:13px;fill:#7A736A}
   </style>
-  <text x="70" y="64" class="label" font-size="24">FVI-001 / AXIS EXCHANGE / SCALE TEST</text>
+  <text x="70" y="64" class="label" font-size="24">FVI-001 / COHERENCE MARK / SCALE TEST</text>
   <text x="70" y="92" class="meta">Core mark at common display sizes · micro mark at interface sizes · positive and negative</text>
 
   <text x="70" y="148" class="label">CORE</text>
   <g transform="translate(70 180)">
-    <image href="../candidates/05-axis-exchange.svg" x="0" y="0" width="288" height="192"/>
-    <image href="../candidates/05-axis-exchange.svg" x="360" y="64" width="192" height="128"/>
-    <image href="../candidates/05-axis-exchange.svg" x="620" y="96" width="144" height="96"/>
-    <image href="../candidates/05-axis-exchange.svg" x="840" y="128" width="96" height="64"/>
-    <image href="../candidates/05-axis-exchange.svg" x="1020" y="144" width="72" height="48"/>
-    <image href="../candidates/05-axis-exchange.svg" x="1180" y="160" width="48" height="32"/>
+    <image href="../coherence-mark.svg" x="0" y="0" width="288" height="192"/>
+    <image href="../coherence-mark.svg" x="360" y="64" width="192" height="128"/>
+    <image href="../coherence-mark.svg" x="620" y="96" width="144" height="96"/>
+    <image href="../coherence-mark.svg" x="840" y="128" width="96" height="64"/>
+    <image href="../coherence-mark.svg" x="1020" y="144" width="72" height="48"/>
+    <image href="../coherence-mark.svg" x="1180" y="160" width="48" height="32"/>
     <text x="0" y="224" class="meta">288 × 192</text><text x="360" y="224" class="meta">192 × 128</text>
     <text x="620" y="224" class="meta">144 × 96</text><text x="840" y="224" class="meta">96 × 64</text>
     <text x="1020" y="224" class="meta">72 × 48</text><text x="1180" y="224" class="meta">48 × 32</text>
   </g>
 
-  <line x1="70" y1="460" x2="1330" y2="460" stroke="#E5E3DC"/>
+  <line x1="70" y1="460" x2="1330" y2="460" stroke="#CBC5B9"/>
   <text x="70" y="510" class="label">MICRO</text>
   <g transform="translate(70 545)">
-    <image href="../candidates/06-axis-exchange-micro.svg" x="0" y="0" width="64" height="64"/>
-    <image href="../candidates/06-axis-exchange-micro.svg" x="130" y="16" width="48" height="48"/>
-    <image href="../candidates/06-axis-exchange-micro.svg" x="240" y="32" width="32" height="32"/>
-    <image href="../candidates/06-axis-exchange-micro.svg" x="330" y="40" width="24" height="24"/>
-    <image href="../candidates/06-axis-exchange-micro.svg" x="410" y="48" width="16" height="16"/>
+    <image href="../coherence-mark-micro.svg" x="0" y="0" width="64" height="64"/>
+    <image href="../coherence-mark-micro.svg" x="130" y="16" width="48" height="48"/>
+    <image href="../coherence-mark-micro.svg" x="240" y="32" width="32" height="32"/>
+    <image href="../coherence-mark-micro.svg" x="330" y="40" width="24" height="24"/>
+    <image href="../coherence-mark-micro.svg" x="410" y="48" width="16" height="16"/>
     <text x="0" y="100" class="meta">64</text><text x="130" y="100" class="meta">48</text>
     <text x="240" y="100" class="meta">32</text><text x="330" y="100" class="meta">24</text><text x="410" y="100" class="meta">16</text>
   </g>
 
   <g transform="translate(650 525)">
-    <rect width="680" height="190" rx="4" fill="#11110F"/>
-    <image href="../candidates/05-axis-exchange.svg" x="40" y="28" width="192" height="128" filter="url(#inverse)"/>
-    <image href="../candidates/06-axis-exchange-micro.svg" x="300" y="60" width="64" height="64" filter="url(#inverse)"/>
-    <image href="../candidates/06-axis-exchange-micro.svg" x="420" y="76" width="32" height="32" filter="url(#inverse)"/>
-    <image href="../candidates/06-axis-exchange-micro.svg" x="510" y="84" width="16" height="16" filter="url(#inverse)"/>
+    <rect width="680" height="190" rx="4" fill="#191712"/>
+    <image href="../coherence-mark.svg" x="40" y="28" width="192" height="128" filter="url(#inverse)"/>
+    <image href="../coherence-mark-micro.svg" x="300" y="60" width="64" height="64" filter="url(#inverse)"/>
+    <image href="../coherence-mark-micro.svg" x="420" y="76" width="32" height="32" filter="url(#inverse)"/>
+    <image href="../coherence-mark-micro.svg" x="510" y="84" width="16" height="16" filter="url(#inverse)"/>
   </g>
 
   <text x="70" y="804" class="meta">Core minimum target: 32 px high. Micro target: 16-31 px. Never mechanically shrink core below target.</text>
