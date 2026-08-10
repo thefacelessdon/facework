@@ -24,7 +24,7 @@
   --fw-flow-text: oklch(40% 0.11 164);
   --fw-entropy-text: oklch(46% 0.16 24);
   --fw-font-reading: var(--rr-font-reading);
-  --fw-font-structural: "Berkeley Mono", "JetBrains Mono", ui-monospace, monospace;
+  --fw-font-structural: var(--rr-font-record);
   --fw-gutter: clamp(20px, 4vw, 64px);
   --space-xs: 4px;
   --space-sm: 8px;

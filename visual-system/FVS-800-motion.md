@@ -1,7 +1,7 @@
 ---
 id: FVS-800
 title: Facework Motion
-version: 0.1.0
+version: 0.1.1
 status: normative
 authority: normative
 parents: [FVS-100, FVS-200, FVS-700]
@@ -75,10 +75,11 @@ change generally takes longer. No interface should feel delayed to perform calm.
 
 ## Easing
 
-The default curve is controlled and non-elastic:
+The default curve is controlled and non-elastic — the Reading Room settle curve,
+`--rr-ease-settle`:
 
 ```text
-cubic-bezier(0.2, 0.8, 0.2, 1)
+cubic-bezier(0.22, 1, 0.36, 1)
 ```
 
 Use deceleration for arrival, acceleration for departure, and symmetric curves
@@ -91,8 +92,11 @@ Protocol visualizations may begin in noise, separation, or instability and move
 toward legibility. They must preserve the initial condition long enough to be
 understood and avoid presenting “coherence” as cosmetic tidiness.
 
-The Coherence Mark may assemble or stabilize, but no canonical animation is
-approved until the mark itself is derived and ratified.
+The Coherence Mark is now derived and ratified (FVI-001), and its canonical
+animation is Exchange Resolve (FVI-400). The four strands may distribute, the
+shared axis and its counterforce may appear under tension, and the mark settles
+into its resting `230 × 176` open-center geometry. It never resolves onto a
+filled center node: the resting state is always the static open-center mark.
 
 ## Reduced motion
 

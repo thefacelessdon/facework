@@ -1,7 +1,7 @@
 ---
 id: FVI-300
 title: Symbol and Diagram Grammar
-version: 0.1.0
+version: 0.1.1
 status: canonical
 authority: canonical-reference-implementation
 parents: [FVS-200, FVS-300, FVS-400, FVS-600, FVI-001]
@@ -18,7 +18,7 @@ and **what changes**. Visual character comes from consistent construction,
 interval, and line behavior—not from decorating every concept with a unique
 symbol.
 
-Axis Exchange remains the identity mark. It is not a generic diagram node.
+The Coherence Mark remains the identity mark. It is not a generic diagram node.
 
 ## Base geometry
 
@@ -116,21 +116,24 @@ remain interpretable in monochrome and when printed at its intended size.
 
 ## State color
 
-Semantic accents follow FVS-600:
+Verdigris is the single brand and identity accent. It is not a diagram state
+color and never classifies a node's condition.
 
-- Clarity identifies explained or available structure.
-- Resonance identifies meaningful fit or amplification.
-- Flow identifies active healthy transmission.
-- Entropy identifies contradiction, failure, risk, or degradation.
-- Boundary identifies protected or explicitly limited scope.
+Diagram state color follows the FVS-600 status set:
+
+- Settled identifies owned, healthy, or resolved structure.
+- Attention identifies structure that needs attention.
+- Exposure identifies weak, at-risk, or failing structure.
+- Archive identifies archived, out-of-scope, or wayfinding structure.
 
 Color applies to the smallest sufficient carrier: a point, line, label, or local
-field. Pair it with a word, symbol, position, or pattern. Do not recolor all nodes
-to make a diagram appear energetic.
+field. Pair it with a word, symbol, position, or pattern. Every diagram must
+remain legible in monochrome. Do not recolor all nodes to make a diagram appear
+energetic.
 
 ## Identity relationship
 
-The grammar shares four behaviors with Axis Exchange: paired forces, open
+The grammar shares four behaviors with the Coherence Mark: paired forces, open
 intervals, direct strokes, and visible direction change. It does not reuse the
 mark's silhouette. The mark may appear as publisher identity outside the diagram
 field, never as shorthand for “coherence achieved.”

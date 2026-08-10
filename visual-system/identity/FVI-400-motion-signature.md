@@ -1,7 +1,7 @@
 ---
 id: FVI-400
 title: Motion Signature
-version: 0.1.0
+version: 0.1.1
 status: canonical
 authority: canonical-reference-implementation
 parents: [FVS-700, FVS-800, FVI-001, FVI-200, FVI-300]
@@ -14,7 +14,7 @@ created: 2026-08-06
 
 The canonical Facework motion signature is **Exchange Resolve**: two legible
 counterparts enter relation, establish the shared interval, and settle without
-merging. It is a temporal expression of Axis Exchange, not a logo reveal effect.
+merging. It is a temporal expression of the Coherence Mark, not a logo reveal effect.
 
 The signature has four phases:
 
@@ -33,7 +33,7 @@ Exchange Resolve may be used to:
 - confirm that two or more system states have entered a coherent relationship;
 - bridge a loading state into an available state;
 - close a film, presentation, or interactive narrative;
-- demonstrate the motion behavior of Axis Exchange.
+- demonstrate the motion behavior of the Coherence Mark.
 
 It must not loop beside sustained reading, replace progress information, or
 celebrate ordinary interface actions.
@@ -68,16 +68,20 @@ immediately repeat.
 
 | Token | Value | Purpose |
 |---|---:|---|
-| `--fw-motion-immediate` | 120 ms | local acknowledgement |
-| `--fw-motion-quick` | 180 ms | hover or focus support |
-| `--fw-motion-standard` | 300 ms | small reconfiguration |
-| `--fw-motion-signature` | 520 ms | Exchange Resolve |
-| `--fw-motion-hold` | 900 ms | minimum resolved-state hold |
-| `--fw-motion-ambient` | 8 s | rare non-task living state |
+| `--rr-motion-immediate` | 120 ms | local acknowledgement |
+| `--rr-motion-quick` | 180 ms | hover or focus support |
+| `--rr-motion-standard` | 300 ms | small reconfiguration |
+| `--rr-motion-signature` | 520 ms | Exchange Resolve |
+| `--rr-motion-hold` | 900 ms | minimum resolved-state hold |
+| `--rr-motion-ambient` | 8 s | rare non-task living state |
 
-The signature uses `cubic-bezier(0.2, 0.8, 0.2, 1)`. It may be extended to 600
-ms for large-format film or projection, but not shortened below 420 ms: below
-that threshold the phases become a generic slide.
+The signature uses `--rr-ease-settle` = `cubic-bezier(0.22, 1, 0.36, 1)`, the
+Reading Room settle curve. It may be extended to 600 ms for large-format film or
+projection, but not shortened below 420 ms: below that threshold the phases
+become a generic slide.
+
+The signature always settles to the resting open-center mark — the final frame
+is the canonical open-center geometry, never a filled node.
 
 ## Spatial values
 
@@ -90,7 +94,7 @@ that threshold the phases become a generic slide.
 
 ## Sequencing with the logotype
 
-When the full signature appears, Axis Exchange resolves first. Register becomes
+When the full signature appears, the Coherence Mark resolves first. Register becomes
 available 80–120 ms after the mark begins resolving, using a short opacity change
 with no letter-by-letter animation. The name is one identity object, not a title
 to be typed on.
@@ -117,7 +121,7 @@ silent, captioned, and reduced-sensory contexts.
 
 Reduced motion is a canonical alternate expression:
 
-1. render Axis Exchange in its resolved geometry immediately;
+1. render the Coherence Mark in its resolved geometry immediately;
 2. use no travel, drawing, pulse, or sequential letter appearance;
 3. if state change needs acknowledgement, use an instantaneous visual state or
    a dissolve no longer than 120 ms;
@@ -162,4 +166,4 @@ layout measurement, network dependency, or runtime font dependency.
 | Necessity | pass | Motion is limited to thresholds and system-state transitions. |
 | Accessibility | pass | Reduced motion preserves state without travel. |
 | Performance | pass | Transform and opacity only; no runtime dependency. |
-| Traceability | pass | Derived from FVS-700, FVS-800, and Axis Exchange. |
+| Traceability | pass | Derived from FVS-700, FVS-800, and the Coherence Mark. |

@@ -1,7 +1,7 @@
 ---
 id: FVP-200
 title: face.works Runtime Integration
-version: 0.1.0
+version: 0.1.1
 status: validated-implementation-candidate
 parents: [FVP-000, FVP-100, FVA-100, FVA-610]
 runtime: ../../examples/face.works/prototype
@@ -11,7 +11,7 @@ runtime: ../../examples/face.works/prototype
 
 ## Integrated decisions
 
-- The canonical Axis Exchange / Register lockup identifies the public runtime.
+- The canonical Coherence Mark / Register lockup identifies the public runtime.
 - The FVA-100 eight-path architecture governs top-level navigation.
 - Paper mode carries reading, comparison, evidence, and deep records.
 - Field mode is reserved for the homepage threshold and Facework Field.

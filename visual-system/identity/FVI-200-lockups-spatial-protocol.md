@@ -1,7 +1,7 @@
 ---
 id: FVI-200
 title: Identity Lockups and Spatial Protocol
-version: 0.1.0
+version: 0.1.1
 status: canonical
 authority: canonical-reference-implementation
 parents: [FVS-300, FVS-400, FVI-001, FVI-100]
@@ -22,8 +22,14 @@ FVI-100. This protocol defines when and how they occupy a field.
 
 ## Governing unit
 
-The identity unit **x** is the open central interval of Axis Exchange. At native
-mark scale, x is 22 units. All signature spacing derives from x.
+The identity unit **x** is the open central interval of the Coherence Mark — the gap
+the four strands sweep toward but never close. All signature spacing derives from
+x as a ratio, so it holds at any scale.
+
+The locked mark uses the `230 × 176` open-center geometry shipped in
+`coherence-mark/coherence-mark.svg`; x is measured from that production asset. The
+superseded `240 × 160` derivation construction fixed x at 22 units — that figure
+is historical; the ratios in the table below are unchanged.
 
 | Relationship | Canonical value | Tolerance |
 |---|---:|---:|
@@ -40,7 +46,7 @@ compress the identity until it fits.
 
 ### Primary signature
 
-Axis Exchange precedes Register on one horizontal axis. This is the default when
+The Coherence Mark precedes Register on one horizontal axis. This is the default when
 the available width is at least seven times the mark width and the rendered
 height is at least 24 CSS pixels.
 
@@ -49,19 +55,19 @@ and first identity encounters.
 
 ### Stacked signature
 
-Axis Exchange centers above Register. Use in square and portrait fields, on
+The Coherence Mark centers above Register. Use in square and portrait fields, on
 ceremonial openings, and where the primary signature would be undersized. The
 minimum rendered height is 48 CSS pixels.
 
 ### Word signature
 
-Register appears alone when Axis Exchange is already visible in the same field,
+Register appears alone when the Coherence Mark is already visible in the same field,
 when a narrow horizontal measure favors the name, or when repeated mark use would
 become ornamental. Minimum height is 18 CSS pixels.
 
 ### Mark signature
 
-Axis Exchange appears alone only where Facework is named through adjacent text,
+The Coherence Mark appears alone only where Facework is named through adjacent text,
 established interface convention, or accessible labeling. Below 32 CSS pixels,
 use the micro mark.
 
@@ -113,7 +119,7 @@ reading order must be stated by the composition.
 
 Do not:
 
-- join Axis Exchange to another organization's mark;
+- join the Coherence Mark to another organization's mark;
 - recolor one identity to imitate the other;
 - use the central interval as a container for a partner mark;
 - imply endorsement through scale or proximity;

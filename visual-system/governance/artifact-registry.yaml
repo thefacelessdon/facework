@@ -25,7 +25,7 @@ reference_studies:
 
 identity_artifacts:
   - id: coherence-mark
-    name: "Axis Exchange / Facework Coherence Mark"
+    name: "Facework Coherence Mark"
     status: canonical
     version: "0.1.0"
     record: ../identity/FVI-001-coherence-mark-derivation.md

@@ -1,7 +1,7 @@
 ---
 id: FVA-000
 title: Facework Application Foundation
-version: 1.0.0
+version: 1.0.1
 status: canonical
 authority: canonical-reference-implementation
 parents: [FVS-000, FVS-900, FVI-001, FVI-100, FVI-200, FVI-300, FVI-400]
@@ -39,22 +39,30 @@ Five behaviors make the direction recognizable without a logo:
 
 ## Typography
 
-- **Identity:** Register, supplied only as canonical vector artwork.
-- **Structural:** Berkeley Mono when licensed; JetBrains Mono or platform mono
-  as the portable implementation.
-- **Reading:** Inter or an equivalent durable neutral sans. System fallbacks are
-  `Helvetica Neue`, `Arial`, then `sans-serif`.
+Three self-hosted voices, each in a fixed role:
 
-The reading voice is intentionally sans serif. Serif editorial styling from the
-first application pass is not part of this foundation.
+- **Identity:** the Register wordmark, supplied only as canonical vector artwork
+  (real letterforms, not a font).
+- **Reading:** Literata — the sustained long-form reading voice (body and
+  reading titles). System fallbacks are `Georgia`, then `serif`.
+- **Structure:** Schibsted Grotesk — display, section heads, navigation, and UI.
+  System fallbacks are `system-ui`, then `sans-serif`.
+- **Record:** Spline Sans Mono — labels, IDs, metadata, verdicts, tables, and
+  Field instruments. System fallbacks are `ui-monospace`, then `monospace`.
+
+Serif *reads*, grotesque *structures*, mono *certifies*. The neutral-sans
+reading voice (Inter / Public Sans) and the Berkeley/JetBrains mono direction
+from the first application pass are superseded by this trio.
 
 ## Color
 
-Paper and Field are the two base conditions from FVS-600. Color appears only
-when a semantic state is present. Clarity is the dominant signal in the
-reference implementations because the applications chiefly expose available,
-explained structure. Flow, Resonance, Boundary, and Entropy are reserved for
-their named states.
+The Record (warm paper) and the Field (warm obsidian) are the two base
+conditions — two states of one system. Color appears only when a semantic state
+is present: it classifies, it does not decorate. There is a single brand
+accent — **Verdigris** (hue ~190) — which marks the active / attended state and
+links only; primary actions are ink, never colored. The reserved status palette
+(settled, attention, exposure, archive) is permanently spoken-for and never
+becomes a brand color. The earlier single Clarity signal is retired.
 
 ## Composition
 

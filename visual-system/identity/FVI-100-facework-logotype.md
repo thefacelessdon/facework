@@ -1,7 +1,7 @@
 ---
 id: FVI-100
 title: Facework Logotype
-version: 0.1.0
+version: 0.1.1
 status: canonical
 authority: canonical-reference-implementation
 parents: [FVS-300, FVS-500, FVS-900, FVI-001]
@@ -17,7 +17,7 @@ created: 2026-08-06
 Register is a custom uppercase construction. It is not typeset from a commercial
 font and carries no runtime font dependency. The name remains completely
 legible, but its proportion, `W`, open counters, and calibrated stroke system
-create an ownable relationship with Axis Exchange.
+create an ownable relationship with the Coherence Mark.
 
 This decision establishes the visual logotype. It does not change how the proper
 name is capitalized in prose and does not constitute legal trademark clearance.
@@ -140,7 +140,7 @@ Repeats the `F` logic and closes the first syllabic field: `FACE`.
 ### W
 
 The signature letter. Two outer forces descend and redirect toward a raised
-interior axis before expanding again. It echoes the behavior of Axis Exchange
+interior axis before expanding again. It echoes the behavior of the Coherence Mark
 without inserting the mark into the word.
 
 The `W` is the transition between `FACE` and `WORK`: identity meeting practice.
@@ -160,7 +160,7 @@ introduces motion without turning the wordmark into italic or speed typography.
 Ends with divergence from one stem into two directions. The terminal remains
 open, allowing the name to conclude with possibility rather than closure.
 
-## Relationship to Axis Exchange
+## Relationship to the Coherence Mark
 
 The mark and wordmark share behavior rather than shapes:
 
@@ -178,7 +178,7 @@ Repetition would turn a relationship into a motif.
 
 ### Primary horizontal
 
-Axis Exchange precedes Register. The lockup uses a mark-to-word gap approximately
+The Coherence Mark precedes Register. The lockup uses a mark-to-word gap approximately
 equal to one quarter of the mark width. The mark and cap field are optically
 centered, not baseline aligned.
 
@@ -186,7 +186,7 @@ Use for headers, covers, title cards, signage, and primary identity moments.
 
 ### Stacked
 
-Axis Exchange is centered above Register. Use where the field is narrow, square,
+The Coherence Mark is centered above Register. Use where the field is narrow, square,
 or ceremonial. Do not use the stacked lockup as a generic centered-page device.
 
 ### Word only
@@ -215,12 +215,12 @@ independently for fill-in, stroke loss, and material spread.
 For word-only use, maintain at least the height of the `F` middle arm above,
 below, and beside the wordmark.
 
-For lockups, maintain at least one central interval from Axis Exchange on every
+For lockups, maintain at least one central interval from the Coherence Mark on every
 outer side. More space is preferred in covers, signage, and institutional use.
 
 ## Color
 
-Register and Axis Exchange always share one foreground color inside a lockup.
+Register and the Coherence Mark always share one foreground color inside a lockup.
 Canonical base expressions are Ink on Paper and Signal Light on Field.
 
 Do not:
