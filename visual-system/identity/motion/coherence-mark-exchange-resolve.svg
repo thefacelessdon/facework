@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 230 176" role="img" aria-labelledby="title desc">
   <title id="title">Facework Exchange Resolve motion signature</title>
   <desc id="desc">Two counterparts approach a shared open axis and settle into the Facework Coherence Mark. Motion is removed when reduced motion is preferred.</desc>
   <style>
@@ -10,8 +10,8 @@
     @media(prefers-reduced-motion:reduce){.left,.right,.axis{animation:none;opacity:1;transform:none}.axis{opacity:0}}
   </style>
   <g fill="currentColor">
-    <g class="left"><path d="M8 13C44 18 78 29 109 45V58C76 42 42 32 9 28Z"/><path d="M14 44C48 50 81 62 109 77V90C78 75 48 64 19 59Z"/><path d="M27 76C57 83 84 95 109 109V123C81 107 57 97 36 92Z"/><path d="M18 146C55 134 84 118 109 98V114C81 136 51 152 13 159Z"/></g>
-    <g class="right"><g transform="translate(240) scale(-1 1)"><path d="M8 13C44 18 78 29 109 45V58C76 42 42 32 9 28Z"/><path d="M14 44C48 50 81 62 109 77V90C78 75 48 64 19 59Z"/><path d="M27 76C57 83 84 95 109 109V123C81 107 57 97 36 92Z"/><path d="M18 146C55 134 84 118 109 98V114C81 136 51 152 13 159Z"/></g></g>
-    <circle class="axis" cx="120" cy="104" r="5" fill="#62DFAE"/>
+    <g class="left"><path d="M8 16C46 21 80 31 106 46V57C78 44 44 35 9 31Z"/><path d="M16 47C50 53 82 62 106 76V87C80 74 50 65 21 62Z"/><path d="M28 79C58 85 84 94 106 106V117C82 104 58 96 36 94Z"/><path d="M18 150C58 138 92 120 104 100V112C90 122 56 150 16 160Z"/></g>
+    <g class="right"><g transform="translate(230) scale(-1 1)"><path d="M8 16C46 21 80 31 106 46V57C78 44 44 35 9 31Z"/><path d="M16 47C50 53 82 62 106 76V87C80 74 50 65 21 62Z"/><path d="M28 79C58 85 84 94 106 106V117C82 104 58 96 36 94Z"/><path d="M18 150C58 138 92 120 104 100V112C90 122 56 150 16 160Z"/></g></g>
+    <circle class="axis" cx="115" cy="105" r="5" fill="#62DFAE"/>
   </g>
 </svg>

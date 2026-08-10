@@ -1,11 +1,11 @@
 :root {
-  --fw-motion-immediate: 120ms;
-  --fw-motion-quick: 180ms;
-  --fw-motion-standard: 300ms;
-  --fw-motion-signature: 520ms;
-  --fw-motion-hold: 900ms;
-  --fw-motion-ambient: 8s;
-  --fw-ease-resolve: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --rr-motion-immediate: 120ms;
+  --rr-motion-quick: 180ms;
+  --rr-motion-standard: 300ms;
+  --rr-motion-signature: 520ms;
+  --rr-motion-hold: 900ms;
+  --rr-motion-ambient: 8s;
+  --rr-ease-settle: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .fw-exchange-resolve__left,
@@ -13,8 +13,8 @@
   opacity: 0.56;
   transform-box: fill-box;
   transform-origin: center;
-  animation-duration: var(--fw-motion-signature);
-  animation-timing-function: var(--fw-ease-resolve);
+  animation-duration: var(--rr-motion-signature);
+  animation-timing-function: var(--rr-ease-settle);
   animation-fill-mode: both;
   animation-iteration-count: 1;
 }
@@ -31,7 +31,7 @@
   opacity: 0;
   transform-box: fill-box;
   transform-origin: center;
-  animation: fw-axis-signal var(--fw-motion-signature) linear both;
+  animation: fw-axis-signal var(--rr-motion-signature) linear both;
 }
 
 @keyframes fw-resolve-left {

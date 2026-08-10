@@ -5,17 +5,17 @@
   <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="#1A1917">
     <text x="64" y="70" font-size="18" letter-spacing="2">FVI-200 / CONSTRUCTION</text>
     <text x="64" y="112" font-size="38">One interval governs the signature.</text>
-    <text x="64" y="151" font-size="16" fill="#6B6861">x = the open center of Axis Exchange · protected space ≥ 1x</text>
+    <text x="64" y="151" font-size="16" fill="#6B6861">x = the open center of the Coherence Mark · protected space ≥ 1x</text>
   </g>
   <g transform="translate(100 250) scale(1.25)" fill="#1A1917">
-    <path d="M8 13C44 18 78 29 109 45V58C76 42 42 32 9 28Z"/><path d="M14 44C48 50 81 62 109 77V90C78 75 48 64 19 59Z"/><path d="M27 76C57 83 84 95 109 109V123C81 107 57 97 36 92Z"/><path d="M18 146C55 134 84 118 109 98V114C81 136 51 152 13 159Z"/>
-    <g transform="translate(240) scale(-1 1)"><path d="M8 13C44 18 78 29 109 45V58C76 42 42 32 9 28Z"/><path d="M14 44C48 50 81 62 109 77V90C78 75 48 64 19 59Z"/><path d="M27 76C57 83 84 95 109 109V123C81 107 57 97 36 92Z"/><path d="M18 146C55 134 84 118 109 98V114C81 136 51 152 13 159Z"/></g>
+    <path d="M8 16C46 21 80 31 106 46V57C78 44 44 35 9 31Z"/><path d="M16 47C50 53 82 62 106 76V87C80 74 50 65 21 62Z"/><path d="M28 79C58 85 84 94 106 106V117C82 104 58 96 36 94Z"/><path d="M18 150C58 138 92 120 104 100V112C90 122 56 150 16 160Z"/>
+    <g transform="translate(230) scale(-1 1)"><path d="M8 16C46 21 80 31 106 46V57C78 44 44 35 9 31Z"/><path d="M16 47C50 53 82 62 106 76V87C80 74 50 65 21 62Z"/><path d="M28 79C58 85 84 94 106 106V117C82 104 58 96 36 94Z"/><path d="M18 150C58 138 92 120 104 100V112C90 122 56 150 16 160Z"/></g>
   </g>
   <g stroke="#E66F70" fill="none" stroke-width="2">
-    <path d="M236 223V489M264 223V489" stroke-dasharray="6 6"/>
-    <path d="M236 212H264M236 204V220M264 204V220"/>
+    <path d="M233 223V489M255 223V489" stroke-dasharray="6 6"/>
+    <path d="M233 212H255M233 204V220M255 204V220"/>
   </g>
-  <text x="244" y="196" font-family="ui-monospace, monospace" font-size="18" fill="#E66F70">x</text>
+  <text x="238" y="196" font-family="ui-monospace, monospace" font-size="18" fill="#E66F70">x</text>
   <g transform="translate(457 286) scale(.76)" fill="none" stroke="#1A1917" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter">
     <path d="M8 70V10H50M8 39H43"/><path d="M67 70L90 10L113 70M76 47H104"/><path d="M183 22C176 13 168 10 157 10C140 10 131 21 131 40C131 59 140 70 157 70C168 70 176 67 183 58"/><path d="M207 10V70M207 10H251M207 39H245M207 70H251"/><path d="M273 10L284 70L305 38L326 70L337 10"/><path d="M382 10C365 10 356 21 356 40C356 59 365 70 382 70C399 70 408 59 408 40C408 21 399 10 382 10Z"/><path d="M433 70V10H458C473 10 481 18 481 30C481 42 473 49 458 49H433M458 49L484 70"/><path d="M509 10V70M551 10L509 48M526 33L554 70"/>
   </g>

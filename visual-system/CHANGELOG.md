@@ -1,5 +1,17 @@
 # Facework Visual Specification Changelog
 
+## Unreleased — 2026-08-10 (brand reconciliation, Phase 1)
+
+### Reconciled
+
+- Brand reconciliation — aligned the 0.0.28 visual system to the identity locked
+  at 0.0.29–0.0.31: locked type trio (FVS-500), OKLCH/verdigris color (FVS-600),
+  230×176 open-center mark geometry + regenerated lockup/motion assets (FVI-200,
+  FVS-800), motion signature re-namespaced `--fw-*`→`--rr-*` on `--rr-ease-settle`
+  (FVI-400), "Coherence Mark" as canonical name (Axis Exchange retained as
+  derivation codename in FVI-001), two-mode Reading Room IA (FVA-100), and FVA/FVS
+  reconciliations.
+
 ## Unreleased — 2026-08-06 (coherence cleanup pass)
 
 ### Resolved

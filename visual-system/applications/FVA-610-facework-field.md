@@ -1,7 +1,7 @@
 ---
 id: FVA-610
 title: Facework Field
-version: 0.1.0
+version: 0.1.1
 status: experimental-reference
 authority: experimental
 parents: [FVA-000, FVA-600, FVS-700, FVS-800, FVI-001, FVI-400]
@@ -30,9 +30,9 @@ assessment, biometric signature, identity score, or scientific inference about
 the participant. Three self-reported inputs modulate a declared mathematical
 system. The result may prompt interpretation; it cannot validate one.
 
-The Lorenz attractor is an application-specific visual instrument. Axis Exchange
-remains the canonical Facework identity mark. Their bilateral resemblance does
-not make them interchangeable.
+The Lorenz attractor is an application-specific visual instrument. The Coherence
+Mark remains the canonical Facework identity mark. Their bilateral resemblance
+does not make them interchangeable.
 
 ## Core ritual
 
@@ -111,11 +111,13 @@ claimed solely because a username is absent.
 ## Visual translation
 
 - Field mode is appropriate because the primary object is a time-based system.
-- Structural mono carries prompts, values, mappings, and privacy state.
-- The neutral sans carries reflection and explanation.
+- The record voice (Spline Sans Mono) carries prompts, values, mappings, and
+  privacy state.
+- The reading voice (Literata) carries reflection and explanation.
 - Generated trajectories use one analytic hue at a time; FVS semantic state
   colors remain reserved for system meaning.
-- Axis Exchange identifies Facework at the threshold but never becomes a trace.
+- The Coherence Mark identifies Facework at the threshold but never becomes a
+  trace.
 - The canvas is the field; controls remain ordinary, visible, and inspectable.
 
 ## Motion

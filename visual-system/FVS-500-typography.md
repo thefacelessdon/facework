@@ -1,7 +1,7 @@
 ---
 id: FVS-500
 title: Facework Typography
-version: 0.1.0
+version: 0.1.1
 status: normative
 authority: normative
 parents: [FVS-100, FVS-300, FVS-400]
@@ -11,53 +11,68 @@ parents: [FVS-100, FVS-300, FVS-400]
 
 Typography is the principal carrier of Facework's knowledge. It must support two
 simultaneous registers: the precision of a specification and the humanity of a
-strategist's notebook.
+strategist's notebook. The type system carries this with **three faces, three
+voices** — serif *reads*, grotesque *structures*, mono *certifies*.
 
 ## Typographic roles
 
-### Structural voice
-
-A monospaced face is used for identifiers, navigation labels, metadata, system
-states, diagrams, tables, code, and short structural statements.
-
-**Preferred implementation:** Berkeley Mono where licensed and available.
-**Portable fallback:** JetBrains Mono, then a platform monospace.
-
-Monospace is identity-bearing, but it is not required for every word. Long-form
-reading must not be sacrificed to perform the idea of a system.
+The system is a **locked trio** of three variable families, each self-hosted via
+`@fontsource` (no CDN, CSP-safe) and bound to a semantic token. Each family serves
+one voice; a fourth face is introduced only if evidence shows these three cannot
+carry a required cultural or emotional register.
 
 ### Reading voice
 
-A neutral, durable sans serif is used for sustained prose, explanatory text,
-interface copy, and accessibility-critical content.
+A humanist serif carries sustained prose, explanatory text, article and reading
+titles, and accessibility-critical long-form content. This is the reading room:
+the thinking speaks.
 
-**Reference implementation:** Inter or an equivalent highly legible sans serif.
-The selection must offer broad language support, true weights, clear punctuation,
-and reliable rendering.
+**Family:** `"Literata Variable", Georgia, serif`
+**Token:** `--rr-font-reading`
 
-### Display voice
+### Structure voice
 
-Display type may use the structural or reading family at larger optical scale.
-A separate display face is introduced only if evidence shows that the existing
-families cannot carry the required cultural or emotional register.
+A grotesque sans serif carries display type, section and structural headings,
+navigation, interface copy, and UI labels. This is the publication: the system
+speaks, with editorial authority.
+
+**Family:** `"Schibsted Grotesk Variable", system-ui, sans-serif`
+**Token:** `--rr-font-structure`
+
+Display type uses this family at larger optical scale; there is no separate
+display face.
+
+### Record voice
+
+A monospaced face carries identifiers, eyebrows and record labels (the `.fig`
+eyebrow), metadata, verdicts, tabular data, system states, and Field instruments.
+This is the record: it certifies, and it holds numbers in tabular figures.
+
+**Family:** `"Spline Sans Mono Variable", ui-monospace, monospace`
+**Token:** `--rr-font-record`
+
+Monospace is identity-bearing, but it is not required for every word. Long-form
+reading stays in the Reading voice; the Record voice marks and certifies, it does
+not narrate.
 
 ## Hierarchy
 
-Reference screen scale:
+Locked screen scale (as shipped in the reference implementation):
 
-| Role | Range | Leading | Default family |
-|---|---:|---:|---|
-| Display | 48–80 px | 1.0–1.1 | structural or reading |
-| H1 | 40–64 px | 1.05–1.15 | structural or reading |
-| H2 | 28–40 px | 1.15–1.25 | reading |
-| H3 | 20–28 px | 1.25–1.35 | reading |
-| Body large | 18–22 px | 1.45–1.65 | reading |
-| Body | 16–19 px | 1.5–1.75 | reading |
-| Label | 11–14 px | 1.25–1.5 | structural |
-| Data/code | 12–16 px | 1.35–1.6 | structural |
+| Role | Size | Leading | Family / weight |
+|---|---|---:|---|
+| Display | `clamp(2.5rem, 6vw, 4.5rem)`, ls −0.02em | 1.02 | Structure (Schibsted) 800 |
+| Reading title (H1) | `clamp(1.9rem, 4vw, 2.9rem)`, balance | 1.1 | Reading (Literata) 600 |
+| Section head | `clamp(1.4rem, 2.4vw, 1.7rem)`, ls −0.005em | 1.15 | Structure (Schibsted) 600 |
+| Body | `1.0625rem`, measure 68ch | 1.65 | Reading (Literata) 400 |
+| Record label (`.fig`) | `0.6875rem`, uppercase, ls 0.1em | — | Record (Spline Sans Mono) 500 |
+| Data / verdict | `0.8125rem`, tabular figures | — | Record (Spline Sans Mono) |
 
-Sizes are responsive ranges, not fixed commands. Print and spatial media derive
-their scale from viewing distance and measure.
+Maintain at least a 1.25 ratio between steps. Sizes on content headings are fluid
+`clamp()` ranges; dense UI uses fixed rem. Print and spatial media derive their
+scale from viewing distance and measure. Light-on-dark text — the Field register —
+adds 0.05–0.1 to line-height (body goes from 1.65 to 1.72) to hold legibility on
+the dark ground.
 
 ## Weight and emphasis
 
@@ -112,9 +127,16 @@ Facework documents use visible structure:
 - generic gradient or outlined display text;
 - arbitrary letter spacing used as a substitute for hierarchy.
 
-## Open validation
+## Validation status
 
-The exact licensed font stack remains **provisional** until FVR studies and
-reference implementations test it across web, print, slides, diagrams, and
-long-form reading. The roles and behavioral requirements are normative even if
-the named typeface changes.
+The font stack is **locked** as of the 0.0.29–0.0.31 identity. The three families —
+Literata (Reading), Schibsted Grotesk (Structure), Spline Sans Mono (Record) — are
+self-hosted via `@fontsource` variable packages, shipped in the reference
+implementation, and are not to be re-opened without a new locked decision. None is
+a reflex default, and none is shared with adjacent runs (e.g. 14th & Co's
+Archivo/Azeret).
+
+Still open: cross-medium rendering of the trio in print, slides, diagrams, and
+spatial media has not yet been validated by FVR. The roles, tokens, and behavioral
+requirements above are normative in all media; only the per-medium optical tuning
+(measure, leading, optical size) remains to be studied.
