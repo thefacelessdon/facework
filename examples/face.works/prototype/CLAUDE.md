@@ -5,26 +5,31 @@ enables creator engagement, and tracks Facework's own coherence in public.
 
 ## Architecture
 
+The IA is two modes of one system (see `DESIGN.md`): **The Work** (the Record /
+light register) and **The Practice** (the Field / dark register).
+
 ```
 src/
-├── app/                    ← Next.js App Router pages
-│   ├── page.tsx            ← Home (identity + equation + CTA)
+├── app/                        ← Next.js App Router pages
+│   ├── page.tsx                ← Home — The Work front door (Record register)
+│   ├── field-notes|models|frameworks|experiments|conversations|library/
+│   │                             ← The Work: type sub-surfaces
+│   ├── engage/page.tsx         ← The Practice hub (Field register)
+│   ├── proof/, cases/          ← proof + cases (fold into The Practice)
 │   ├── protocol/
-│   │   ├── page.tsx        ← Browsable doc index
-│   │   └── [slug]/page.tsx ← Individual doc reader
-│   ├── proof/page.tsx      ← Case studies + audit results
-│   ├── status/page.tsx     ← Live coherence tracker
-│   ├── engage/page.tsx     ← Engagement entry point
-│   ├── layout.tsx          ← Root layout (Nav + Footer)
-│   └── globals.css         ← Visual Language System (VLS)
-├── components/             ← Shared components
-│   ├── Nav.tsx             ← Site navigation (client component)
-│   ├── Footer.tsx          ← Footer with tagline
-│   ├── StatusBadge.tsx     ← Status indicators (accessible)
-│   └── ProgressBar.tsx     ← Accessible progress bars
-└── data/                   ← Typed data layer
-    ├── schema.ts           ← TypeScript interfaces
-    └── demo.ts             ← Demo data (realistic, not lorem ipsum)
+│   │   ├── page.tsx            ← The System — browsable doc index
+│   │   └── [slug]/page.tsx     ← Individual doc reader
+│   ├── about|status|accessibility|privacy/   ← standing pages
+│   ├── opengraph-image.png, icon.svg         ← share image + favicon
+│   ├── layout.tsx              ← Root layout (Nav + Footer)
+│   ├── reading-room.css        ← The Reading Room design language (--rr-* tokens) — SOURCE OF TRUTH
+│   └── globals.css             ← base reset + legacy --fw-* aliases repointed to the locked type trio
+├── components/
+│   ├── Nav.tsx, Footer.tsx, Markdown.tsx, WorkSurface.tsx
+│   └── rr/                     ← Reading Room primitives: CoherenceMark, FaceworkWordmark,
+│                                 Reading, ReadingIndex, SectionHead, RecordLabel, InkCTA,
+│                                 CoherenceVerdict, StructureLineage, Trace
+└── data/                       ← Typed data layer (schema.ts interfaces + demo.ts data)
 ```
 
 ## Stack
@@ -33,35 +38,44 @@ src/
 |-------|-----------|
 | Framework | Next.js (App Router; not static export — no `output: 'export'`, ships security headers via `next.config.ts` `headers()`, pages prerendered and served by the Next runtime) |
 | Styling | Tailwind CSS v4 |
-| Typography | Public Sans (reading); JetBrains Mono (structural/mono) |
+| Typography | Self-hosted `@fontsource` variable trio — Literata (reading), Schibsted Grotesk (structure/display), Spline Sans Mono (record voice) |
 | Language | TypeScript (strict) |
 | Data | Typed demo data (no database at MVP) |
 
-## Visual Language System
+## Design Language — The Reading Room
 
-The VLS is defined in `globals.css` and enforced across all pages.
-Source docs: `../original site exploration reference/`
+The design language is **The Reading Room**, defined in `reading-room.css` with
+`--rr-*` tokens (OKLCH only). Its binding contract is `DESIGN.md` (+ `.impeccable.md`);
+the mark and wordmark derive from `../../../visual-system/identity/` (FVI-001,
+FVI-100). `globals.css` is only the base reset plus legacy `--fw-*` aliases that
+now point at the Reading Room stack (`--fw-font-reading → --rr-font-reading`,
+`--fw-font-structural → --rr-font-record`) — treat `--rr-*` as canonical.
+
+**Two registers of one system** (governing metaphor: *it doesn't decorate — it reads*):
+- **The Record** (`.rr`) — light warm paper. This is **The Work**.
+- **The Field** (`.rr-field`) — dark warm obsidian. This is **The Practice**.
+
+A page opts into a register on its root wrapper (`.rr` or `.rr-field`), then
+`.rr-page`. Primitives style themselves via register-neutral aliases
+(`--rr-ground`, `--rr-text`, `--rr-accent`…) so the same primitive works in either
+register unchanged.
 
 **Rules you must follow:**
-- Light paper palette (`globals.css` sets `color-scheme: light`): Paper, Paper-quiet, Rule, Muted, Graphite, Ink
-- Accents are system states, not decoration: clarity (blue), resonance (amber), entropy (red), flow/coherence (green)
-- Never more than one accent per screen section
-- Never use accent as background color
-- All transitions use `var(--ease-resolve)` — slow stabilization, no bounce
-- 4 layout types only: single-column narrative, split 50/50, full-width stacked, OS diagram
-- Section headers: `text-xs tracking-[0.2em] uppercase text-muted`
-- Body text: 18px base, tight tracking, weight used sparingly
+- **Type roles:** `--rr-font-reading` (Literata) for reading/claims; `--rr-font-structure`
+  (Schibsted Grotesk) for display/headings/UI; `--rr-font-record` (Spline Sans Mono)
+  for eyebrows, metadata, figure/artifact IDs.
+- **Color classifies, never decorates.** The single **brand accent is verdigris**
+  (`--rr-verdigris` / `--rr-verdigris-text` for AA text; `--rr-verdigris-field` on dark).
+  Primary CTAs are **ink** (`--rr-ink`), never verdigris.
+- **Status colors are classification only** (not brand): `--rr-settled` (green),
+  `--rr-attention` (amber), `--rr-exposure` (red), `--rr-archive` (violet), each with
+  `-text`/field-lifted tiers. Never more than one accent per section.
+- **Motion:** `--rr-ease-settle: cubic-bezier(0.22, 1, 0.36, 1)`; respect
+  `prefers-reduced-motion`. (The legacy `--ease-resolve` in `globals.css` is superseded.)
+- **4pt spacing scale** (`--rr-sp-*`); reading measure `--rr-measure` (68ch).
 
-**Colors as states (from `globals.css`, light-mode `--fw-*` tokens):**
-```
-clarity   -> --fw-clarity   / --fw-clarity-text     (blue)
-resonance -> --fw-resonance / --fw-resonance-text   (amber)
-flow      -> --fw-flow      / --fw-flow-text         (green; also coherence)
-entropy   -> --fw-entropy   / --fw-entropy-text     (red)
-```
-Values are OKLCH, not hex. The `--fw-*-text` variants are the AA-contrast versions for
-text on paper; the base variants are for fills/marks. Mapped to `--color-*` aliases in the
-`@theme` block.
+**The mark:** use the `CoherenceMark` component — open-center, **no filled node in any
+state**; `micro` variant ≤31px. Never reintroduce a center dot.
 
 ## Data Pattern
 
@@ -78,16 +92,20 @@ Update this object as real metrics change.
 
 ## How to Add a New Page
 
-1. Create `src/app/{slug}/page.tsx`
-2. Use the VLS grammar, not generic centered cards. Wrap in `.section-page` with a
-   `.section-threshold` header (`.eyebrow` / `<h1>` / `.section-intro`). Mirror the closest
-   existing page — `privacy`, `accessibility`, `proof`, `status`, or `KnowledgeSection`.
-3. Structure content with VLS primitives from `globals.css`: `.section-records`/`.section-record`
-   with `.section-head` bands and `.artifact-id` columns (ledger/record rows), `.policy-records`/
-   `.policy-record` (boundary/rule lists), `.evidence-strip` (verdict/summary rows), and
-   `.claim`/`.display-title`/`.lead`/`.text-link` for statements. Do not reintroduce the
-   `mx-auto max-w-5xl … space-y-*` bordered-card idiom.
-4. Follow VLS rules (light paper palette, accent-as-state, one accent per section).
+1. Create `src/app/{slug}/page.tsx`.
+2. Pick the register for the mode: **The Work** → `.rr` (Record); **The Practice** →
+   `.rr-field` (Field). Wrap the page root in that register class, then `.rr-page`
+   (and `.section-page` for the legacy layout reset). Mirror the closest existing
+   page — `page.tsx` (Work) or `engage`/`proof` (Practice).
+3. Build with the Reading Room primitives (`reading-room.css` + `components/rr/`):
+   `.rr-column` / `.rr-masthead` for the threshold, `.rr-display`/`.rr-lede` for the
+   opening statement, `.rr-section` + `SectionHead` for sections, `.rr-prose` for
+   long-form reading, `RecordLabel` (`.rr-label`) for mono eyebrows, `Reading`/
+   `ReadingIndex` for record rows, `InkCTA` for actions, `CoherenceVerdict` for
+   status. Do **not** reintroduce the old `.section-records`/`.artifact-id` primitives
+   (removed) or the `mx-auto max-w-5xl … space-y-*` bordered-card idiom.
+4. Follow the design-language rules above (register tokens, verdigris-as-brand /
+   status-as-classification, one accent per section, ink CTAs).
 5. If data-driven, add schema to `data/schema.ts` and demo data to `data/demo.ts`.
 
 ## How to Run
