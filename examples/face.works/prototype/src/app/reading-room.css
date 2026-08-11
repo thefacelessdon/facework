@@ -372,6 +372,10 @@
   flex-direction: column;
   gap: var(--rr-sp-6);
 }
+/* An ink CTA is an action, not a banner — it never stretches to the column. */
+.rr-feature > .rr-cta {
+  align-self: flex-start;
+}
 
 /* ReadingIndex — hairline record rows (§6) */
 .rr-index {
@@ -438,15 +442,18 @@
   white-space: nowrap;
   color: var(--rr-muted);
 }
-.rr-index__marker {
+/* ShapeMarker — the ONE rendering of the shape law (§7), shared by the
+   record rows and the ledger legend so they can never drift. */
+.rr-marker {
+  display: inline-block;
   width: 0.6em;
   height: 0.6em;
   flex: none;
 }
-.rr-index__marker--open {
+.rr-marker--open {
   background: var(--rr-muted);
 } /* square = open */
-.rr-index__marker--settled {
+.rr-marker--settled {
   background: var(--rr-settled);
   border-radius: 50%;
 } /* circle = settled */
@@ -722,6 +729,173 @@
 @media (prefers-reduced-motion: reduce) {
   .rr-meter__fill {
     transition: none;
+  }
+}
+
+/* =========================================================================
+   The Holdings Ledger — bucket surfaces as ledger pages (CONSTITUTION
+   Art. VI; FW-DEC-002). Two-track composition at >=1100px: the reading
+   column keeps its measure; the right margin rail carries the apparatus —
+   canon anchor, holdings line, sibling wayfinding. The rail is typographic:
+   ONE hairline separator, no background, no card, no shadow. Below 1100px
+   the apparatus folds inline (`.rr-ledger__fold` copies show; rail hides).
+   ========================================================================= */
+
+.rr-ledger {
+  display: flex;
+  flex-direction: column;
+}
+
+/* The record group: holdings sits tight above the index, the legend sits
+   tight under it — the ledger and its instrument lines read as one body,
+   distinct from the section rhythm around them. */
+.rr-ledger-record {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rr-sp-3);
+}
+
+/* Holdings line — record voice, muted, counts in ink. The tick square is
+   the same classification mark that opens a record label. Each count segment
+   holds together; the line breaks only at its separators, and the tick stays
+   on the first line when it does. */
+.rr-ledger-holdings {
+  margin: 0;
+  align-items: flex-start;
+}
+.rr-ledger-holdings .rr-label__tick {
+  margin-top: 0.55em;
+}
+.rr-ledger-holdings__read {
+  line-height: 1.7;
+}
+.rr-ledger-holdings__part {
+  white-space: nowrap;
+}
+.rr-ledger-holdings strong {
+  color: var(--rr-text-strong);
+  font-weight: 500;
+}
+
+/* Canon anchor — mono citation eyebrow + Literata italic epigram. */
+.rr-ledger-anchor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rr-sp-2);
+}
+.rr-ledger-anchor__epigram {
+  margin: 0;
+  max-width: var(--rr-measure);
+  font-family: var(--rr-font-reading);
+  font-style: italic;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--rr-text);
+}
+
+/* Legend — the shape-law grammar teaching itself, in the exact voice of the
+   row status captions (mono 0.6875rem, 0.08em tracking). */
+.rr-ledger-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rr-sp-2) var(--rr-sp-6);
+  margin: 0;
+  font-family: var(--rr-font-record);
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--rr-muted);
+}
+.rr-ledger-legend__item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rr-sp-2);
+  white-space: nowrap;
+}
+
+/* See also — mono labels, plain links; no chevrons, no icons. */
+.rr-ledger-seealso {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rr-sp-3);
+}
+.rr-ledger-seealso__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--rr-sp-2);
+}
+.rr-ledger-seealso__link {
+  font-family: var(--rr-font-record);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--rr-text-strong);
+  text-decoration: none;
+  transition: color 160ms var(--rr-ease-settle);
+}
+.rr-ledger-seealso__link:hover {
+  color: var(--rr-accent-text);
+}
+.rr-ledger-seealso__link:focus-visible {
+  outline: 2px solid var(--rr-accent);
+  outline-offset: 2px;
+}
+
+/* Inline fold — the see-also links run horizontally when folded into the
+   reading column; the anchor earns a little air under the lede. */
+.rr-ledger-seealso.rr-ledger__fold .rr-ledger-seealso__list {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--rr-sp-2) var(--rr-sp-6);
+}
+.rr-ledger__fold--anchor {
+  margin-top: var(--rr-sp-2);
+}
+
+/* The margin rail (>=1100px). */
+.rr-ledger__rail {
+  display: none;
+}
+
+@media (min-width: 1100px) {
+  .rr-ledger {
+    display: grid;
+    grid-template-columns: minmax(0, 74ch) 14rem;
+    column-gap: clamp(var(--rr-sp-12), 6vw, 7rem);
+    justify-content: center;
+    align-items: start;
+  }
+  .rr-ledger > .rr-column {
+    margin: 0;
+  }
+  .rr-ledger__rail {
+    display: flex;
+    flex-direction: column;
+    gap: var(--rr-sp-8);
+    position: sticky;
+    top: var(--rr-sp-12);
+    /* Optically align the rail's first eyebrow with the masthead label. */
+    padding-top: 2px;
+  }
+  /* In the rail the holdings instrument reads total, then breakdown — a
+     deliberate two-line composition, never a mid-thought wrap. */
+  .rr-ledger__rail .rr-ledger-holdings__detail {
+    display: block;
+  }
+  .rr-ledger__rail .rr-ledger-holdings__sep--lead {
+    display: none;
+  }
+  /* The single hairline separator the rail is allowed. */
+  .rr-ledger__rail .rr-ledger-seealso {
+    border-top: 1px solid var(--rr-line);
+    padding-top: var(--rr-sp-6);
+  }
+  .rr-ledger__fold {
+    display: none;
   }
 }
 

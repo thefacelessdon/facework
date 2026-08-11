@@ -1,6 +1,13 @@
 import { describe, it, expect } from "vitest";
 import { protocolDocs } from "./canon";
-import { publicSections, workBuckets, postures } from "./knowledge";
+import {
+  publicSections,
+  workBuckets,
+  postures,
+  postureEntries,
+  holdingsFor,
+  verdictForStatus,
+} from "./knowledge";
 
 // Mirror of the categoryLabels keys used by the protocol doc reader at
 // src/app/protocol/[slug]/page.tsx. If that set changes, this must change too.
@@ -123,5 +130,59 @@ describe("The Work taxonomy (working-canon shape)", () => {
       expect(p.name).toBeTruthy();
       expect(p.purpose).toBeTruthy();
     }
+  });
+});
+
+describe("The Holdings Ledger (CONSTITUTION Art. VI)", () => {
+  it("counts every holding through the shape-law verdict, never by hand", () => {
+    for (const key of ["theories", "runs", "methodology"] as const) {
+      const section = publicSections[key];
+      const h = holdingsFor(section);
+      expect(h.total).toBe(section.records.length);
+      expect(h.settled + h.open).toBe(h.total);
+      expect(h.settled).toBe(
+        section.records.filter(
+          (r) => verdictForStatus(r.status).state === "settled"
+        ).length
+      );
+    }
+  });
+
+  it("reads the current record honestly (regression on the real data)", () => {
+    expect(holdingsFor(publicSections.theories)).toEqual({
+      total: 3,
+      settled: 2,
+      open: 1,
+    });
+    expect(holdingsFor(publicSections.runs)).toEqual({
+      total: 4,
+      settled: 1,
+      open: 3,
+    });
+    expect(holdingsFor(publicSections.methodology)).toEqual({
+      total: 5,
+      settled: 3,
+      open: 2,
+    });
+  });
+
+  it("the Postures ledger derives from its real (empty) entry record", () => {
+    expect(postures.length).toBe(8);
+    expect(postureEntries).toHaveLength(0);
+  });
+
+  it("every browse bucket carries a canon anchor; single-doc buckets do not", () => {
+    const cited = workBuckets.filter((b) => b.citation);
+    expect(cited.map((b) => b.title)).toEqual([
+      "Theories",
+      "Postures",
+      "Runs & Evidence",
+      "Methodology",
+    ]);
+    for (const b of cited) {
+      expect(b.citation).toMatch(/^Constitution · Art\. [IVX]+$/);
+    }
+    expect(workBuckets.find((b) => b.title === "Constitution")?.citation).toBeUndefined();
+    expect(workBuckets.find((b) => b.title === "Protocol")?.citation).toBeUndefined();
   });
 });

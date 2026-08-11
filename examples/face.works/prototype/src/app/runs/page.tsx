@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { WorkSurface } from "@/components/WorkSurface";
 import { SectionHead, Trace, InkCTA, RecordLabel, ReadingIndex } from "@/components/rr";
-import { publicSections } from "@/data/knowledge";
+import { holdingsFor, publicSections } from "@/data/knowledge";
 
 export const metadata: Metadata = { title: "Runs & Evidence" };
 
@@ -50,5 +50,15 @@ export default function Page() {
     </section>
   );
 
-  return <WorkSurface section={rest} exemplar feature={feature} after={after} />;
+  // The ledger counts the FULL section — the Field is displayed above as the
+  // live instrument, so it is still a holding of this record.
+  return (
+    <WorkSurface
+      section={rest}
+      exemplar
+      feature={feature}
+      after={after}
+      holdings={holdingsFor(section)}
+    />
+  );
 }
