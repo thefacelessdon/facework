@@ -75,7 +75,11 @@ a { color: inherit; text-underline-offset: .22em; }
 .skip-link { position: fixed; z-index: 50; top: -80px; left: 16px; min-height: 44px; padding: 12px 16px; background: var(--rr-ink); color: var(--rr-paper); font: 600 .75rem var(--rr-font-structure); text-transform: uppercase; letter-spacing: .06em; }
 .skip-link:focus { top: 16px; }
 .site-frame { min-height: 100svh; margin-left: 224px; display: flex; flex-direction: column; }
-.site-main { flex: 1; }
+.site-main { flex: 1; display: flex; flex-direction: column; }
+/* The register ground (.rr paper / .rr-field obsidian) fills main so it meets
+   the footer with no seam of the legacy --fw-paper showing through on short
+   pages. Legacy .section-page divs sit on the body ground and need no rule. */
+.site-main > .rr, .site-main > .rr-field { flex: 1 0 auto; }
 
 .site-rail { position: fixed; z-index: 30; inset: 0 auto 0 0; width: 224px; padding: 28px 24px; display: flex; flex-direction: column; background: var(--rr-paper); border-right: 1px solid var(--rr-rule); }
 /* Identity lockup: Coherence Mark + Register wordmark, both inheriting
