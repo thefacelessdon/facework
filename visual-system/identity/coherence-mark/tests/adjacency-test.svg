@@ -1,42 +1,42 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 900" role="img" aria-labelledby="title desc">
   <title id="title">Coherence Mark adjacency test</title>
-  <desc id="desc">Axis Exchange appears beside Facework names, a document header, and a dark field.</desc>
+  <desc id="desc">Coherence Mark appears beside Facework names, a document header, and a dark field.</desc>
   <defs>
     <filter id="inverse"><feColorMatrix values="-1 0 0 0 1  0 -1 0 0 1  0 0 -1 0 1  0 0 0 1 0"/></filter>
   </defs>
-  <rect width="1400" height="900" fill="#FAFAF8"/>
+  <rect width="1400" height="900" fill="#F5F3ED"/>
   <style>
-    .brand{font-family:'Berkeley Mono','JetBrains Mono',monospace;font-weight:500;fill:#1A1917;letter-spacing:2px}
-    .label{font-family:'Berkeley Mono','JetBrains Mono',monospace;font-size:18px;fill:#1A1917;letter-spacing:1px}
-    .meta{font-family:'Berkeley Mono','JetBrains Mono',monospace;font-size:13px;fill:#6B6861}
+    .brand{font-family:'Spline Sans Mono',ui-monospace,monospace;font-weight:500;fill:#221C15;letter-spacing:2px}
+    .label{font-family:'Spline Sans Mono',ui-monospace,monospace;font-size:18px;fill:#221C15;letter-spacing:1px}
+    .meta{font-family:'Spline Sans Mono',ui-monospace,monospace;font-size:13px;fill:#7A736A}
   </style>
-  <text x="70" y="64" class="label" font-size="24">FVI-001 / AXIS EXCHANGE / ADJACENCY TEST</text>
+  <text x="70" y="64" class="label" font-size="24">FVI-001 / COHERENCE MARK / ADJACENCY TEST</text>
   <text x="70" y="92" class="meta">Not a final logotype · testing mark behavior beside canonical names and document structures</text>
 
   <g transform="translate(80 150)">
-    <image href="../candidates/05-axis-exchange.svg" x="0" y="0" width="144" height="96"/>
+    <image href="../coherence-mark.svg" x="0" y="0" width="144" height="96"/>
     <text x="190" y="63" class="brand" font-size="54">FACEWORK</text>
   </g>
 
   <g transform="translate(80 310)">
-    <image href="../candidates/05-axis-exchange.svg" x="0" y="0" width="96" height="64"/>
+    <image href="../coherence-mark.svg" x="0" y="0" width="96" height="64"/>
     <text x="130" y="45" class="brand" font-size="36">face.works</text>
     <text x="130" y="78" class="meta">THE PUBLIC INTERFACE TO FACEWORK</text>
   </g>
 
   <g transform="translate(80 460)">
-    <rect width="1240" height="280" fill="#F4F3EE" stroke="#E5E3DC"/>
-    <image href="../candidates/06-axis-exchange-micro.svg" x="36" y="32" width="32" height="32"/>
+    <rect width="1240" height="280" fill="#ECEAE2" stroke="#CBC5B9"/>
+    <image href="../coherence-mark-micro.svg" x="36" y="32" width="32" height="32"/>
     <text x="92" y="56" class="label">FVS-100 / FACEWORK VISUAL CONSTITUTION</text>
-    <line x1="36" y1="92" x2="1204" y2="92" stroke="#1A1917"/>
+    <line x1="36" y1="92" x2="1204" y2="92" stroke="#221C15"/>
     <text x="36" y="138" class="brand" font-size="30">MEANING PRECEDES EXPRESSION.</text>
     <text x="36" y="180" class="meta">Every artifact begins with what it exists to communicate, enable, or preserve.</text>
     <text x="36" y="236" class="meta">FACEWORK VISUAL SPECIFICATION · VERSION 0.1</text>
   </g>
 
   <g transform="translate(1030 145)">
-    <rect width="290" height="220" rx="4" fill="#11110F"/>
-    <image href="../candidates/05-axis-exchange.svg" x="49" y="30" width="192" height="128" filter="url(#inverse)"/>
-    <text x="54" y="190" class="meta" fill="#9C9890">FIELD MODE</text>
+    <rect width="290" height="220" rx="4" fill="#191712"/>
+    <image href="../coherence-mark.svg" x="49" y="30" width="192" height="128" filter="url(#inverse)"/>
+    <text x="54" y="190" class="meta" fill="#A49D90">FIELD MODE</text>
   </g>
 </svg>
