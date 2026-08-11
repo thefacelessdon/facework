@@ -8,9 +8,9 @@ import "@fontsource-variable/spline-sans-mono/wght.css";
 import "./globals.css";
 import "./reading-room.css";
 
-// Private preview: noindex by default. Set NEXT_PUBLIC_ALLOW_INDEX=true to
-// allow indexing once the site is cleared for public release.
-const allowIndex = process.env.NEXT_PUBLIC_ALLOW_INDEX === "true";
+// Publicly launched (0.0.33, 2026-08-10): indexing is ON by default. Set
+// NEXT_PUBLIC_DISABLE_INDEX=true only for private preview environments.
+const allowIndex = process.env.NEXT_PUBLIC_DISABLE_INDEX !== "true";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://face.works"),
