@@ -152,6 +152,117 @@ function foldContinuation(
   return [text, j];
 }
 
+// --- Heading anchors + document apparatus (the Reading Margin) ---
+
+/** Plain text of an inline run — markdown syntax stripped, content kept. */
+export function inlineText(tokens: InlineToken[]): string {
+  return tokens
+    .map((t) =>
+      t.type === "text" || t.type === "code" ? t.text : inlineText(t.children)
+    )
+    .join("");
+}
+
+/**
+ * Slug for a heading anchor: inline markdown stripped, lowercased,
+ * non-alphanumeric runs collapsed to single hyphens. Empty headings fall
+ * back to "section" so an anchor always exists.
+ */
+export function slugifyHeading(text: string): string {
+  const slug = inlineText(parseInline(text))
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, "-")
+    .replace(/^-+|-+$/g, "");
+  return slug || "section";
+}
+
+/**
+ * Per-document id factory: same heading text twice yields `slug`, `slug-2`,
+ * `slug-3`… The renderer and the extraction helper each create one factory
+ * and walk the same block order, so their ids can never drift.
+ */
+export function createHeadingIdFactory(): (text: string) => string {
+  const seen = new Map<string, number>();
+  return (text: string) => {
+    const slug = slugifyHeading(text);
+    const n = (seen.get(slug) ?? 0) + 1;
+    seen.set(slug, n);
+    return n === 1 ? slug : `${slug}-${n}`;
+  };
+}
+
+/** Depth-first walk in render order (quote children before later siblings). */
+function* walkBlocks(blocks: Block[]): Generator<Block> {
+  for (const block of blocks) {
+    yield block;
+    if (block.type === "quote") yield* walkBlocks(block.children);
+  }
+}
+
+export type DocHeading = { text: string; id: string };
+
+/**
+ * The document's h2 headings in order — text as plain reading text (inline
+ * markdown stripped), id matching the anchor the renderer emits. h2 only:
+ * the margin carries the document's spine, not its full outline.
+ */
+export function extractHeadings(content: string): DocHeading[] {
+  const id = createHeadingIdFactory();
+  const headings: DocHeading[] = [];
+  for (const block of walkBlocks(parseBlocks(content))) {
+    if (block.type === "heading" && block.level === 2) {
+      headings.push({ text: inlineText(parseInline(block.text)), id: id(block.text) });
+    }
+  }
+  return headings;
+}
+
+/**
+ * Word count of the rendered document: every text-bearing block (prose,
+ * lists, headings, quotes, tables, code) with markdown syntax stripped.
+ * A word is a whitespace-separated token containing a letter or digit.
+ */
+export function countWords(content: string): number {
+  const texts: string[] = [];
+  for (const block of walkBlocks(parseBlocks(content))) {
+    switch (block.type) {
+      case "code":
+        texts.push(block.code);
+        break;
+      case "table":
+        texts.push(...block.header, ...block.rows.flat());
+        break;
+      case "term-item":
+        texts.push(block.term, block.detail);
+        break;
+      case "heading":
+      case "list-item":
+      case "strongline":
+      case "em-p":
+      case "p":
+        texts.push(block.text);
+        break;
+      default:
+        break; // quote counts via its walked children; hr/gap carry no words
+    }
+  }
+  return texts
+    .map((t) => inlineText(parseInline(t)))
+    .join(" ")
+    .split(/\s+/)
+    .filter((w) => /[\p{L}\p{N}]/u.test(w)).length;
+}
+
+/**
+ * Honest rounding for the reading-length line: nearest 50 under 1,000 words,
+ * nearest 100 above — always presented with a leading `~`, never as a
+ * precise figure, and never converted into a reading-time estimate.
+ */
+export function approxWords(n: number): number {
+  const step = n < 1000 ? 50 : 100;
+  return Math.round(n / step) * step;
+}
+
 export function parseBlocks(content: string): Block[] {
   const lines = content.split("\n");
   const blocks: Block[] = [];

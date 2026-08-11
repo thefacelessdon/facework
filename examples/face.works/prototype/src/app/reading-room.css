@@ -901,6 +901,156 @@
 }
 
 /* =========================================================================
+   The Reading Margin — /protocol/[slug] as a record with its apparatus in
+   the margin, extending the Holdings Ledger grammar from holdings to
+   document. Rail order: record block (kind · provenance · reading length) —
+   ONE hairline — wayfinding (contents, then see-also). Below 1100px the
+   contents fold to a native <details>; provenance stays in its inline slot.
+   ========================================================================= */
+
+/* Provenance — now span-structured so the rail can stack it; inline it must
+   read exactly as the single record line it always was, so the paragraph
+   flows as text (not flex items). */
+.rr-provenance {
+  display: block;
+}
+
+/* A document column carries wide records (tables, code) that scroll inside
+   their own wrappers. In the folded flex mode the column's `margin: 0 auto`
+   suppresses stretch and shrink-to-fit sizing floors at those records'
+   min-content — the page would inherit a table's width on small screens. A
+   definite width restores block behavior (fill, capped at 74ch, records
+   scrolling inside their own wrappers). The >=1100px grid already guards
+   via minmax(0, 74ch). */
+.rr-ledger > .rr-column {
+  width: 100%;
+  min-width: 0;
+}
+
+/* The record block: kind, source, length — one canon-voice body. */
+.rr-margin-record {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rr-sp-3);
+}
+.rr-margin-record .rr-provenance {
+  line-height: 1.8;
+}
+/* Reading length — the count sits in ink, like every ledger count. */
+.rr-margin-record__length strong {
+  color: var(--rr-text-strong);
+  font-weight: 500;
+}
+
+/* The wayfinding group carries the rail's ONE hairline, whether or not a
+   contents block exists above the see-also. */
+.rr-margin-way {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rr-sp-8);
+  border-top: 1px solid var(--rr-line);
+  padding-top: var(--rr-sp-6);
+}
+.rr-margin-way .rr-ledger-seealso {
+  border-top: 0;
+  padding-top: 0;
+}
+
+/* Contents — the document's h2 spine as anchors, record voice. The flex
+   layout lives on the rail nav ONLY: the fold is a <details> and must keep
+   default flow so `.rr-ledger__fold { display: none }` can retire it at rail
+   width (a display here would win by source order and pin it open). */
+nav.rr-contents {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rr-sp-3);
+}
+.rr-contents__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--rr-sp-2);
+}
+.rr-contents__link {
+  display: inline-block;
+  font-family: var(--rr-font-record);
+  font-size: 0.71rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1.5;
+  color: var(--rr-muted);
+  text-decoration: none;
+  transition: color 160ms var(--rr-ease-settle);
+}
+.rr-contents__link:hover {
+  color: var(--rr-accent-text);
+}
+.rr-contents__link:focus-visible {
+  outline: 2px solid var(--rr-accent);
+  outline-offset: 2px;
+}
+
+/* The inline fold (<1100px): a quiet native disclosure between the lede and
+   the article. Hairlines only; the native marker is the whole affordance.
+   (No display here — the block must stay overridable by the ledger's
+   `.rr-ledger__fold { display: none }` at rail width.) */
+.rr-contents--fold {
+  border-top: 1px solid var(--rr-line);
+  border-bottom: 1px solid var(--rr-line);
+}
+.rr-contents__summary {
+  cursor: pointer;
+  padding: var(--rr-sp-4) 0;
+  font-family: var(--rr-font-record);
+  font-weight: 500;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--rr-muted);
+}
+.rr-contents__summary::marker {
+  color: var(--rr-muted);
+}
+.rr-contents--fold .rr-contents__list {
+  padding-bottom: var(--rr-sp-4);
+}
+
+@media (min-width: 1100px) {
+  /* In the rail the provenance record stacks: kind, source, status — each on
+     its own line; the source path may break anywhere (a 60-char path is one
+     token, and the record must stay inside its margin). */
+  .rr-ledger__rail .rr-provenance > span {
+    display: block;
+  }
+  .rr-ledger__rail .rr-provenance .rr-provenance__sep {
+    display: none;
+  }
+  .rr-ledger__rail .rr-provenance__src {
+    overflow-wrap: anywhere;
+  }
+  /* Rail length discipline: every entry is always present (no truncation, no
+     dead links); on short viewports the rail scrolls internally with the
+     browser's own quiet chrome. Links inside keep the region reachable. */
+  .rr-ledger--doc .rr-ledger__rail {
+    max-height: calc(100svh - var(--rr-sp-12) - var(--rr-sp-6));
+    overflow-y: auto;
+  }
+}
+
+/* Anchored headings respect the fixed chrome: air above on desktop, the
+   72px sticky header + air below 980px. */
+.rr-prose__h2 {
+  scroll-margin-top: var(--rr-sp-8);
+}
+@media (max-width: 980px) {
+  .rr-prose__h2 {
+    scroll-margin-top: calc(72px + var(--rr-sp-4));
+  }
+}
+
+/* =========================================================================
    Markdown renderer — the protocol / theory reading surface (§5, §6).
    Restyle only: the element tree is emitted by src/components/Markdown.tsx and
    is preserved exactly. Body reads in Literata; headings speak in Schibsted;
