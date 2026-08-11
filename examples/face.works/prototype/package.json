@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
+    "sync-canon": "node scripts/sync-canon.mjs",
     "og": "node scripts/build-og.mjs"
   },
   "dependencies": {

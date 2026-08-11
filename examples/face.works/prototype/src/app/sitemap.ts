@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { protocolDocs } from "@/data/demo";
+import { protocolDocs } from "@/data/canon";
 
 const origin = "https://face.works";
 

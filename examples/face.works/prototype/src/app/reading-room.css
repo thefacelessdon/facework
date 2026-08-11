@@ -765,6 +765,14 @@
   outline-offset: 2px;
 }
 
+/* Provenance line — record voice under the masthead lede. Keeps the .rr-label
+   voice but preserves the source path's real casing (paths are records, not
+   display type). */
+.rr-provenance {
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+
 /* Heading — the system speaks (Schibsted) */
 .rr-prose__h2 {
   font-family: var(--rr-font-structure);
@@ -775,6 +783,38 @@
   color: var(--rr-text-strong);
   margin-top: var(--rr-sp-12);
   margin-bottom: var(--rr-sp-4);
+}
+.rr-prose__h3 {
+  font-family: var(--rr-font-structure);
+  font-weight: 600;
+  font-size: clamp(1.1rem, 1.8vw, 1.25rem);
+  line-height: 1.25;
+  letter-spacing: -0.005em;
+  color: var(--rr-text-strong);
+  margin-top: var(--rr-sp-8);
+  margin-bottom: var(--rr-sp-3);
+}
+.rr-prose__h4 {
+  font-family: var(--rr-font-structure);
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.3;
+  color: var(--rr-text-strong);
+  margin-top: var(--rr-sp-6);
+  margin-bottom: var(--rr-sp-2);
+}
+
+/* Horizontal rule — a hairline stop between movements of a long document */
+.rr-prose__hr {
+  border: 0;
+  border-top: 1px solid var(--rr-line);
+  margin-top: var(--rr-sp-8);
+  margin-bottom: var(--rr-sp-8);
+}
+
+/* Italic paragraph — epigraphs and editorial notes in the reading voice */
+.rr-prose__note {
+  color: var(--rr-muted);
 }
 
 /* Standalone bold line — a sub-label in the reading voice */
@@ -808,7 +848,9 @@
   font-family: inherit;
 }
 
-/* Blockquote — a hairline-bounded aside, not a card (§11) */
+/* Blockquote — a hairline-bounded aside, not a card (§11). Canon docs quote
+   whole structures (notes with tables, multi-paragraph asides), so the quote
+   holds blocks; record-voice structure inside stays upright. */
 .rr-prose__quote {
   margin-top: var(--rr-sp-4);
   margin-bottom: var(--rr-sp-4);
@@ -816,6 +858,17 @@
   border-left: 1px solid var(--rr-accent);
   color: var(--rr-muted);
   font-style: italic;
+}
+.rr-prose__quote > * {
+  margin: 0;
+}
+.rr-prose__quote > * + * {
+  margin-top: var(--rr-sp-2);
+}
+.rr-prose__quote .rr-prose__table,
+.rr-prose__quote .rr-prose__pre,
+.rr-prose__quote .rr-prose__code {
+  font-style: normal;
 }
 
 /* List items — reading-voice, hanging structure */
@@ -841,6 +894,10 @@
 }
 .rr-prose__bullet {
   color: var(--rr-accent-text);
+  font-variant-numeric: tabular-nums;
+}
+.rr-prose__li--nested {
+  margin-left: var(--rr-sp-8);
 }
 
 /* Gap — preserves the blank-line rhythm of the source renderer */

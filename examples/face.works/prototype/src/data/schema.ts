@@ -14,7 +14,21 @@ export interface ProtocolDoc {
   subtitle: string;
   category: "theory" | "discipline" | "practice" | "governance";
   order: number;
-  content: string; // markdown
+  content: string; // markdown — the FULL canonical document, not an excerpt
+  /**
+   * Repo-relative path of the canonical source document this page serves
+   * (e.g. "theories/cultural-physics.md"). Present on every doc whose content
+   * is a derived copy synced from canon (scripts/sync-canon.mjs).
+   */
+  sourcePath?: string;
+  /** Git short SHA of the last commit touching the canonical source. */
+  sourceSha?: string;
+  /**
+   * True only when a doc has NO canonical source document and its content is
+   * site-authored summary text. Canon-backed docs omit this. Rendered as an
+   * honest disclosure, never silently.
+   */
+  excerpt?: boolean;
 }
 
 // --- Proof / Case Studies ---

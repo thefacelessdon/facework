@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { protocolDocs } from "@/data/demo";
+import { protocolDocs } from "@/data/canon";
 import { Markdown } from "@/components/Markdown";
 import { RecordLabel } from "@/components/rr";
 
@@ -46,6 +46,15 @@ export default async function ProtocolDocPage({
           <RecordLabel tick>Facework · {categoryLabels[doc.category]}</RecordLabel>
           <h1 className="rr-display">{doc.title}</h1>
           <p className="rr-lede">{doc.subtitle}</p>
+          {doc.sourcePath && doc.sourceSha ? (
+            <p className="rr-label rr-provenance">
+              Full canonical text · {doc.sourcePath} @ {doc.sourceSha}
+            </p>
+          ) : doc.excerpt ? (
+            <p className="rr-label rr-provenance">
+              Site summary · no canonical source document
+            </p>
+          ) : null}
           <Link className="rr-link" href="/protocol">
             ← The System
           </Link>

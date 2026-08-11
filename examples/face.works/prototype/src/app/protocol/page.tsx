@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { RecordLabel, SectionHead, ReadingIndex } from "@/components/rr";
 import type { ReadingIndexItem } from "@/components/rr";
-import { protocolDocs } from "@/data/demo";
+import { protocolDocs } from "@/data/canon";
 
 export const metadata: Metadata = {
   title: "The System",
