@@ -155,6 +155,7 @@
   letter-spacing: -0.005em;
   color: var(--rr-text-strong);
   margin: 0;
+  text-wrap: balance; /* no widowed last words on masthead propositions */
 }
 
 /* Reading — the unit: eyebrow → Literata title → body (§6) */
