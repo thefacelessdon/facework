@@ -1,4 +1,4 @@
-<!-- DERIVED COPY — do not edit. Source: PROTOCOL.md @ 672da0e. Regenerate: npm run sync-canon -->
+<!-- DERIVED COPY — do not edit. Source: PROTOCOL.md @ 672da0e+dirty. Regenerate: npm run sync-canon -->
 # Facework Protocol
 
 Status: Draft
@@ -226,7 +226,7 @@ The terms "MUST", "MUST NOT", "SHOULD", and "MAY" in this document are used as d
 
 ## 7) Minimum Conformance
 
-A project is minimally conformant with Facework Protocol v2 only if:
+A project is minimally conformant with the Facework Protocol only if:
 - all required primitive artifacts are present,
 - all phase gates are explicitly marked pass/fail with evidence,
 - manifest validates against schema,
