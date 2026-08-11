@@ -15,6 +15,7 @@
 
 import Link from "next/link";
 import {
+  createHeadingIdFactory,
   parseBlocks,
   parseInline,
   resolveCanonHref,
@@ -61,7 +62,15 @@ function renderInline(text: string): React.ReactNode[] {
   return renderTokens(parseInline(text));
 }
 
-function renderBlocks(blocks: Block[]): React.ReactNode[] {
+/**
+ * `anchorId` assigns stable, de-duplicated ids to h2 headings (the Reading
+ * Margin's contents anchors). One factory per document, threaded through the
+ * recursion so its walk order matches extractHeadings exactly.
+ */
+function renderBlocks(
+  blocks: Block[],
+  anchorId: (text: string) => string
+): React.ReactNode[] {
   return blocks.map((block, i) => {
     switch (block.type) {
       case "code":
@@ -118,7 +127,7 @@ function renderBlocks(blocks: Block[]): React.ReactNode[] {
           );
         }
         return (
-          <h2 key={i} className="rr-prose__h2">
+          <h2 key={i} id={anchorId(block.text)} className="rr-prose__h2">
             {renderInline(block.text)}
           </h2>
         );
@@ -126,7 +135,7 @@ function renderBlocks(blocks: Block[]): React.ReactNode[] {
       case "quote":
         return (
           <blockquote key={i} className="rr-prose__quote">
-            {renderBlocks(block.children)}
+            {renderBlocks(block.children, anchorId)}
           </blockquote>
         );
       case "term-item":
@@ -177,5 +186,9 @@ function renderBlocks(blocks: Block[]): React.ReactNode[] {
 }
 
 export function Markdown({ content }: { content: string }) {
-  return <div className="rr-prose">{renderBlocks(parseBlocks(content))}</div>;
+  return (
+    <div className="rr-prose">
+      {renderBlocks(parseBlocks(content), createHeadingIdFactory())}
+    </div>
+  );
 }

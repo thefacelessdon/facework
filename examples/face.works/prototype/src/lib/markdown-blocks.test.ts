@@ -1,8 +1,13 @@
 import { describe, it, expect } from "vitest";
 import {
+  approxWords,
+  countWords,
+  createHeadingIdFactory,
+  extractHeadings,
   parseBlocks,
   parseInline,
   resolveCanonHref,
+  slugifyHeading,
   type Block,
 } from "./markdown-blocks";
 
@@ -179,6 +184,114 @@ describe("parseInline — full-canon extensions", () => {
     const tokens = parseInline(block.text);
     expect(tokens.some((t) => t.type === "link")).toBe(true);
     expect(tokens.some((t) => t.type === "strong")).toBe(true);
+  });
+});
+
+describe("slugifyHeading — stable anchor ids", () => {
+  it("lowercases and collapses punctuation runs to single hyphens", () => {
+    expect(slugifyHeading("I. THE LENS — CULTURE IS ENERGY")).toBe(
+      "i-the-lens-culture-is-energy"
+    );
+    expect(slugifyHeading("9) Runtime Ports (v1.1.0, additive)")).toBe(
+      "9-runtime-ports-v1-1-0-additive"
+    );
+  });
+
+  it("strips inline markdown but keeps its reading text", () => {
+    expect(slugifyHeading("The `governance[]` **contract**")).toBe(
+      "the-governance-contract"
+    );
+    expect(slugifyHeading("See [Cultural Physics](cultural-physics.md)")).toBe(
+      "see-cultural-physics"
+    );
+  });
+
+  it("falls back to 'section' when nothing survives", () => {
+    expect(slugifyHeading("—")).toBe("section");
+  });
+});
+
+describe("createHeadingIdFactory — de-duplication", () => {
+  it("suffixes repeats in encounter order and stays stable", () => {
+    const id = createHeadingIdFactory();
+    expect(id("Scope")).toBe("scope");
+    expect(id("Scope")).toBe("scope-2");
+    expect(id("Scope")).toBe("scope-3");
+    // A fresh factory reproduces the same sequence — stability across the
+    // renderer and the extraction helper.
+    const again = createHeadingIdFactory();
+    expect([again("Scope"), again("Scope")]).toEqual(["scope", "scope-2"]);
+  });
+
+  it("does not collide with a literal '-2' heading written in the source", () => {
+    const id = createHeadingIdFactory();
+    expect(id("Scope 2")).toBe("scope-2");
+    expect(id("Scope")).toBe("scope");
+    // The duplicate lands on -2 which is taken as literal text; ids stay
+    // unique because encounter order still disambiguates downstream anchors.
+    expect(id("Scope 2")).toBe("scope-2-2");
+  });
+});
+
+describe("extractHeadings — the document's h2 spine", () => {
+  it("returns h2s only, in document order, with plain reading text", () => {
+    const doc =
+      "## One\ntext\n### Sub\n## Two — *emphasised*\n#### Deep\n## `code` head";
+    expect(extractHeadings(doc)).toEqual([
+      { text: "One", id: "one" },
+      { text: "Two — emphasised", id: "two-emphasised" },
+      { text: "code head", id: "code-head" },
+    ]);
+  });
+
+  it("de-duplicates repeated h2 text", () => {
+    expect(extractHeadings("## Scope\n\n## Scope")).toEqual([
+      { text: "Scope", id: "scope" },
+      { text: "Scope", id: "scope-2" },
+    ]);
+  });
+
+  it("walks into blockquotes in render order", () => {
+    const doc = "## A\n> ## A\n## B";
+    expect(extractHeadings(doc).map((h) => h.id)).toEqual(["a", "a-2", "b"]);
+  });
+
+  it("returns an empty list for a doc without h2s", () => {
+    expect(extractHeadings("Just a paragraph.\n\n### Only h3")).toEqual([]);
+  });
+});
+
+describe("countWords — reading length of the rendered document", () => {
+  it("counts words with markdown syntax stripped", () => {
+    expect(countWords("Plain **bold** and [a link](x.md) here.")).toBe(6);
+  });
+
+  it("counts across block types and ignores pure punctuation", () => {
+    const doc = [
+      "## Two words", // 2
+      "- **Term** — a detail", // 3
+      "> quoted line", // 2
+      "| A | B |\n|---|---|\n| one | two |", // 4
+      "```\ncode word\n```", // 2
+      "---", // 0 (hr)
+    ].join("\n\n");
+    expect(countWords(doc)).toBe(13);
+  });
+
+  it("does not double-count quoted content", () => {
+    expect(countWords("> one two\n> three")).toBe(3);
+  });
+});
+
+describe("approxWords — honest rounding", () => {
+  it("rounds to the nearest 50 under 1,000 words", () => {
+    expect(approxWords(373)).toBe(350);
+    expect(approxWords(876)).toBe(900);
+  });
+
+  it("rounds to the nearest 100 at 1,000 words and above", () => {
+    expect(approxWords(2842)).toBe(2800);
+    expect(approxWords(7561)).toBe(7600);
   });
 });
 

@@ -35,3 +35,10 @@ export type {
   SeeAlsoItem,
   SeeAlsoProps,
 } from "./Ledger";
+export {
+  ContentsNav,
+  ContentsFold,
+  MarginRecord,
+  MarginWayfinding,
+} from "./Margin";
+export type { ContentsProps } from "./Margin";
