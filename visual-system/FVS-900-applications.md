@@ -75,6 +75,16 @@ The homepage behaves as a public record of attention: what Facework is noticing,
 connecting, testing, and learning. It should feel curated and alive, never
 careless or continuously animated.
 
+> **Superseded (2026-08-11).** The phrase "a public record of attention" and
+> the navigation type list above are retired. In canon (cultural-physics
+> §I/§III) attention is the extracted commodity, so the line inverts the
+> theory; the ratified replacement is **"a public record of coherence"**, and
+> face.works navigation follows the working-canon shape (Constitution ·
+> Theories · Protocol · Postures · Runs & Evidence · Methodology). See
+> [`methodology/decisions/DECISION-002-standards-first-experience-language.md`](../methodology/decisions/DECISION-002-standards-first-experience-language.md).
+> The historical text is preserved above per CONSTITUTION Art. XI
+> (traceability); where this document conflicts with canon, canon governs.
+
 ## Documents and standards
 
 - Prefer durable text-first source formats.

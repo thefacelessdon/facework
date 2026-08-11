@@ -1,176 +1,181 @@
 /**
- * Simple markdown renderer for protocol docs.
- * Handles: headings, paragraphs, bold, code blocks, lists, tables, blockquotes.
- * No external dependencies — just string parsing.
+ * Markdown renderer for the canonical protocol docs.
+ * No external dependencies — parsing lives in src/lib/markdown-blocks.ts
+ * (pure, vitest-covered); this component owns only the element tree.
  *
  * Styling is the Reading Room "Record" register (DESIGN.md §5/§6): body in
  * Literata, headings in Schibsted, code/table cells in Spline Mono, hairline
- * rules — driven entirely by `.rr-prose` in reading-room.css. Parsing and
- * output structure are unchanged.
+ * rules — driven entirely by `.rr-prose` in reading-room.css.
+ *
+ * Grown from the excerpt-era renderer to carry the FULL canon files:
+ * h3/h4, horizontal rules, ordered/nested lists, multi-line blockquotes
+ * (with tables inside), links (canon-relative links resolve to site routes;
+ * unresolvable targets render as plain text, never dead links), *emphasis*.
  */
 
-import { parseTableRow } from "@/lib/markdown-table";
+import Link from "next/link";
+import {
+  parseBlocks,
+  parseInline,
+  resolveCanonHref,
+  type Block,
+  type InlineToken,
+} from "@/lib/markdown-blocks";
 
-function renderInline(text: string) {
-  const parts = text.split(/(\*\*.*?\*\*|`[^`]+`)/);
-  return parts.map((part, i) => {
-    if (part.startsWith("**") && part.endsWith("**")) {
-      return <strong key={i}>{part.slice(2, -2)}</strong>;
+function renderTokens(tokens: InlineToken[]): React.ReactNode[] {
+  return tokens.map((token, i) => {
+    switch (token.type) {
+      case "strong":
+        return <strong key={i}>{renderTokens(token.children)}</strong>;
+      case "em":
+        return <em key={i}>{renderTokens(token.children)}</em>;
+      case "code":
+        return (
+          <code key={i} className="rr-prose__code">
+            {token.text}
+          </code>
+        );
+      case "link": {
+        const href = resolveCanonHref(token.href);
+        if (!href) return <span key={i}>{renderTokens(token.children)}</span>;
+        if (href.startsWith("/")) {
+          return (
+            <Link key={i} href={href}>
+              {renderTokens(token.children)}
+            </Link>
+          );
+        }
+        return (
+          <a key={i} href={href} rel="noreferrer">
+            {renderTokens(token.children)}
+          </a>
+        );
+      }
+      default:
+        return <span key={i}>{token.text}</span>;
     }
-    if (part.startsWith("`") && part.endsWith("`")) {
-      return (
-        <code key={i} className="rr-prose__code">
-          {part.slice(1, -1)}
-        </code>
-      );
+  });
+}
+
+function renderInline(text: string): React.ReactNode[] {
+  return renderTokens(parseInline(text));
+}
+
+function renderBlocks(blocks: Block[]): React.ReactNode[] {
+  return blocks.map((block, i) => {
+    switch (block.type) {
+      case "code":
+        // tabIndex: wide canon code blocks scroll horizontally
+        // (overflow-x: auto), and a scrollable region must be reachable by
+        // keyboard (axe: scrollable-region-focusable).
+        return (
+          <pre key={i} className="rr-prose__pre" tabIndex={0}>
+            <code className={block.lang ? `language-${block.lang}` : ""}>
+              {block.code}
+            </code>
+          </pre>
+        );
+      case "table":
+        return (
+          <div key={i} className="rr-prose__tablewrap">
+            <table className="rr-prose__table">
+              <thead>
+                <tr>
+                  {block.header.map((cell, j) => (
+                    <th key={j} className="rr-prose__th">
+                      {cell}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {block.rows.map((row, j) => (
+                  <tr key={j}>
+                    {row.map((cell, k) => (
+                      <td key={k} className="rr-prose__td">
+                        {renderInline(cell)}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        );
+      case "heading": {
+        if (block.level === 3) {
+          return (
+            <h3 key={i} className="rr-prose__h3">
+              {renderInline(block.text)}
+            </h3>
+          );
+        }
+        if (block.level === 4) {
+          return (
+            <h4 key={i} className="rr-prose__h4">
+              {renderInline(block.text)}
+            </h4>
+          );
+        }
+        return (
+          <h2 key={i} className="rr-prose__h2">
+            {renderInline(block.text)}
+          </h2>
+        );
+      }
+      case "quote":
+        return (
+          <blockquote key={i} className="rr-prose__quote">
+            {renderBlocks(block.children)}
+          </blockquote>
+        );
+      case "term-item":
+        return (
+          <p key={i} className="rr-prose__item">
+            <span className="rr-prose__term">{block.term}</span>
+            <span className="rr-prose__detail"> — {renderInline(block.detail)}</span>
+          </p>
+        );
+      case "list-item":
+        return (
+          <p
+            key={i}
+            className={
+              block.nested ? "rr-prose__li rr-prose__li--nested" : "rr-prose__li"
+            }
+          >
+            <span className="rr-prose__bullet" aria-hidden="true">
+              {block.marker}
+            </span>
+            <span>{renderInline(block.text)}</span>
+          </p>
+        );
+      case "strongline":
+        return (
+          <p key={i} className="rr-prose__strongline">
+            {renderInline(block.text)}
+          </p>
+        );
+      case "em-p":
+        return (
+          <p key={i} className="rr-prose__note">
+            <em>{renderInline(block.text)}</em>
+          </p>
+        );
+      case "hr":
+        return <hr key={i} className="rr-prose__hr" />;
+      case "gap":
+        return <div key={i} className="rr-prose__gap" />;
+      default:
+        return (
+          <p key={i} className="rr-prose__p">
+            {renderInline(block.text)}
+          </p>
+        );
     }
-    return <span key={i}>{part}</span>;
   });
 }
 
 export function Markdown({ content }: { content: string }) {
-  const lines = content.split("\n");
-  const elements: React.ReactNode[] = [];
-  let i = 0;
-
-  while (i < lines.length) {
-    const line = lines[i];
-
-    // Code block
-    if (line.startsWith("```")) {
-      const lang = line.slice(3).trim();
-      const codeLines: string[] = [];
-      i++;
-      while (i < lines.length && !lines[i].startsWith("```")) {
-        codeLines.push(lines[i]);
-        i++;
-      }
-      i++; // skip closing ```
-      elements.push(
-        <pre key={elements.length} className="rr-prose__pre">
-          <code className={lang ? `language-${lang}` : ""}>
-            {codeLines.join("\n")}
-          </code>
-        </pre>
-      );
-      continue;
-    }
-
-    // Table
-    if (line.startsWith("|") && lines[i + 1]?.match(/^\|[\s-:|]+\|/)) {
-      const headerCells = parseTableRow(line);
-      i += 2; // skip header + separator
-      const rows: string[][] = [];
-      while (i < lines.length && lines[i].startsWith("|")) {
-        rows.push(parseTableRow(lines[i]));
-        i++;
-      }
-      elements.push(
-        <div key={elements.length} className="rr-prose__tablewrap">
-          <table className="rr-prose__table">
-            <thead>
-              <tr>
-                {headerCells.map((cell, j) => (
-                  <th key={j} className="rr-prose__th">
-                    {cell}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row, j) => (
-                <tr key={j}>
-                  {row.map((cell, k) => (
-                    <td key={k} className="rr-prose__td">
-                      {renderInline(cell)}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      );
-      continue;
-    }
-
-    // Heading
-    if (line.startsWith("## ")) {
-      elements.push(
-        <h2 key={elements.length} className="rr-prose__h2">
-          {line.slice(3)}
-        </h2>
-      );
-      i++;
-      continue;
-    }
-
-    // Blockquote (single line for now)
-    if (line.startsWith("> ")) {
-      elements.push(
-        <blockquote key={elements.length} className="rr-prose__quote">
-          {renderInline(line.slice(2))}
-        </blockquote>
-      );
-      i++;
-      continue;
-    }
-
-    // List item (- **Bold** — detail pattern)
-    if (line.startsWith("- **")) {
-      const match = line.match(/- \*\*(.+?)\*\*\s*[—–-]\s*(.+)/);
-      if (match) {
-        elements.push(
-          <p key={elements.length} className="rr-prose__item">
-            <span className="rr-prose__term">{match[1]}</span>
-            <span className="rr-prose__detail"> — {match[2]}</span>
-          </p>
-        );
-        i++;
-        continue;
-      }
-    }
-
-    // Simple list item
-    if (line.startsWith("- ")) {
-      elements.push(
-        <p key={elements.length} className="rr-prose__li">
-          <span className="rr-prose__bullet" aria-hidden="true">
-            ·
-          </span>
-          <span>{renderInline(line.slice(2))}</span>
-        </p>
-      );
-      i++;
-      continue;
-    }
-
-    // Standalone bold line
-    if (line.startsWith("**") && line.endsWith("**") && !line.includes("**", 2)) {
-      elements.push(
-        <p key={elements.length} className="rr-prose__strongline">
-          {line.slice(2, -2)}
-        </p>
-      );
-      i++;
-      continue;
-    }
-
-    // Empty line
-    if (line.trim() === "") {
-      elements.push(<div key={elements.length} className="rr-prose__gap" />);
-      i++;
-      continue;
-    }
-
-    // Regular paragraph
-    elements.push(
-      <p key={elements.length} className="rr-prose__p">
-        {renderInline(line)}
-      </p>
-    );
-    i++;
-  }
-
-  return <div className="rr-prose">{elements}</div>;
+  return <div className="rr-prose">{renderBlocks(parseBlocks(content))}</div>;
 }

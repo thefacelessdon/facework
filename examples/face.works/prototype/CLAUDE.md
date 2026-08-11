@@ -12,8 +12,9 @@ light register) and **The Practice** (the Field / dark register).
 src/
 ├── app/                        ← Next.js App Router pages
 │   ├── page.tsx                ← Home — The Work front door (Record register)
-│   ├── field-notes|models|frameworks|experiments|conversations|library/
-│   │                             ← The Work: type sub-surfaces
+│   ├── theories|postures|runs|methodology/
+│   │                             ← The Work: working-canon browse surfaces
+│   │                               (Constitution + Protocol link straight to /protocol)
 │   ├── engage/page.tsx         ← The Practice hub (Field register)
 │   ├── proof/, cases/          ← proof + cases (fold into The Practice)
 │   ├── protocol/
@@ -89,6 +90,20 @@ To update site content (e.g., new case study, updated metrics):
 
 The coherence tracker on `/status` reads from `coherenceSnapshot` in demo.ts.
 Update this object as real metrics change.
+
+**Protocol docs are canon, not demo data.** Every `/protocol/[slug]` page serves
+the FULL canonical document (theories/, CONSTITUTION.md, PROTOCOL.md, …), never
+an excerpt. The pipeline:
+
+- `scripts/sync-canon.mjs` copies the mapped canon files into `content/canon/`
+  as committed DERIVED COPIES (Vercel only uploads this directory, so the build
+  must be hermetic). Regenerate with `npm run sync-canon`; drift fails
+  `npm run sync-canon -- --check` and `src/data/canon-sync.test.ts`.
+- `src/data/canon.ts` (server-only — never import from client components) reads
+  the copies at build time and exposes `protocolDocs` with `sourcePath`/
+  `sourceSha` provenance, shown as a record line on the doc page.
+- **Never edit `content/canon/*.md` or paste doc text back into demo.ts** —
+  edit the canonical source in the repo, then re-run `npm run sync-canon`.
 
 ## How to Add a New Page
 

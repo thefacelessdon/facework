@@ -15,6 +15,8 @@ export type WorkSurfaceProps = {
   exemplar?: boolean;
   /** Optional instrument block rendered above the index (e.g. the Field). */
   feature?: ReactNode;
+  /** Optional block rendered below the index (e.g. wayfinding to sibling records). */
+  after?: ReactNode;
 };
 
 /**
@@ -28,6 +30,7 @@ export function WorkSurface({
   eyebrow = "The Work",
   exemplar = false,
   feature,
+  after,
 }: WorkSurfaceProps) {
   const lead = exemplar ? section.records[0] : undefined;
   const rest = exemplar ? section.records.slice(1) : section.records;
@@ -71,6 +74,8 @@ export function WorkSurface({
             state: verdictForStatus(r.status).state,
           }))}
         />
+
+        {after}
       </div>
     </div>
   );

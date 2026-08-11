@@ -17,6 +17,20 @@ const contentSecurityPolicy = [
 ].join("; ");
 
 const nextConfig: NextConfig = {
+  // The GPT-era type taxonomy (six FVS-900 types) was retired in favor of the
+  // working-canon shape — see methodology/decisions/
+  // DECISION-002-standards-first-experience-language.md. Old routes redirect
+  // to their nearest new home.
+  async redirects() {
+    return [
+      { source: "/field-notes", destination: "/runs", permanent: true },
+      { source: "/models", destination: "/theories", permanent: true },
+      { source: "/frameworks", destination: "/theories", permanent: true },
+      { source: "/experiments", destination: "/runs", permanent: true },
+      { source: "/conversations", destination: "/methodology", permanent: true },
+      { source: "/library", destination: "/methodology", permanent: true },
+    ];
+  },
   async headers() {
     return [
       {
