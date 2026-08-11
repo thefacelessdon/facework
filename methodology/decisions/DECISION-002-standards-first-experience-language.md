@@ -33,8 +33,8 @@ Three phrases and one taxonomy were audited for canonical provenance:
 |---|---|---|
 | Tagline "A public record of attention" | GPT-era FVS-900 coinage | **RETIRED** |
 | The Work's six types (Field Notes / Models / Frameworks / Experiments / Conversations / Library) | GPT-era FVS-900 taxonomy | **RETIRED** |
-| Hero "It doesn't decorate. It reads." | Site-authored | **RE-EARNED** |
-| Footer "Knowledge should outlive the interface." | Site-authored | **RE-EARNED** |
+| Hero "It doesn't decorate. It reads." | Reading Room derivation (0.0.29) | **RE-EARNED** |
+| Footer "Knowledge should outlive the interface." | GPT-era program (0.0.28) | **RE-EARNED** |
 
 ## Retired items
 
