@@ -15,7 +15,7 @@ const allowIndex = process.env.NEXT_PUBLIC_ALLOW_INDEX === "true";
 export const metadata: Metadata = {
   metadataBase: new URL("https://face.works"),
   title: {
-    default: "Facework — A public record of attention",
+    default: "Facework — A public record of coherence",
     template: "%s — Facework",
   },
   description:
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "Facework",
-    title: "Facework — A public record of attention",
+    title: "Facework — A public record of coherence",
     description:
       "A living discipline for seeing, designing, and maintaining coherent systems.",
   },

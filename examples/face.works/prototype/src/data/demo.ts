@@ -4,8 +4,9 @@ import type { CaseStudy, CoherenceSnapshot, NavItem } from "./schema";
 
 // Two-mode spine (DESIGN.md §10). The Work is the Record register (published
 // readings); The Practice is the Field register (how to work with Facework —
-// currently /engage, rebuilt in a later pass). Type routes (field notes,
-// models, frameworks, experiments) are sub-surfaces reached from The Work.
+// currently /engage, rebuilt in a later pass). The Work browses by the
+// working-canon shape (Constitution · Theories · Protocol · Postures ·
+// Runs & Evidence · Methodology) — sub-surfaces reached from The Work.
 // Status / Privacy / Accessibility live in the Footer.
 export const navigation: NavItem[] = [
   { label: "The Work", href: "/", description: "The published record" },

@@ -50,6 +50,8 @@ function svgFor(reg) {
 <path d="M433 70V10H458C473 10 481 18 481 30C481 42 473 49 458 49H433M458 49L484 70"/>
 <path d="M509 10V70M551 10L509 48M526 33L554 70"/></g>`;
   return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+<title>Facework — a public record of coherence</title>
+<desc>The Coherence Mark and Register wordmark with the practice line: it doesn&#8217;t decorate, it reads.</desc>
 <style>
 @font-face{font-family:'Literata';font-weight:200 900;src:url(data:font/woff2;base64,${literata}) format('woff2');}
 @font-face{font-family:'Spline Sans Mono';font-weight:300 700;src:url(data:font/woff2;base64,${spline}) format('woff2');}
@@ -61,7 +63,7 @@ function svgFor(reg) {
 <g transform="translate(90 52)"><g transform="scale(0.204)">${mark}</g></g>
 <g transform="translate(150 55) scale(0.36)">${wordmark}</g>
 <rect x="90" y="146" width="10" height="10" fill="${c.verd}"/>
-<text x="112" y="156" class="mono" font-size="19" letter-spacing="2.5" fill="${c.meta}">A PUBLIC RECORD OF ATTENTION</text>
+<text x="112" y="156" class="mono" font-size="19" letter-spacing="2.5" fill="${c.meta}">A PUBLIC RECORD OF COHERENCE</text>
 <text x="88" y="326" class="serif" font-size="72" font-weight="560" fill="${c.ink}">It doesn&#8217;t</text>
 <text x="88" y="414" class="serif" font-size="72" font-weight="560" fill="${c.ink}">decorate. It reads.</text>
 <text x="90" y="576" class="mono" font-size="20" letter-spacing="1.5" fill="${c.meta}">face.works</text>

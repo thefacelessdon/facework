@@ -13,6 +13,14 @@ materials in `original site exploration reference/` and implementation-specific
 files under `examples/face.works/` are retained as evidence and reference
 implementations. Where those materials conflict with this directory, FVS governs.
 
+**Governance.** Under the five-layer Standards Architecture (CONSTITUTION.md
+Article III: Theory → Discipline → Practice → Implementation → Runtime), the
+visual system is an **Implementation-layer** artifact. Authority flows downward
+only: where FVS content conflicts with the canon above it (the Constitution,
+the theory layer, the Protocol), **canon governs**. Recorded supersessions are
+annotated in place (see FVS-900 and
+[`methodology/decisions/DECISION-002-standards-first-experience-language.md`](../methodology/decisions/DECISION-002-standards-first-experience-language.md)).
+
 The foundational specification is at **version 0.1**. Constitutional and
 normative documents govern exploration. The Facework identity program is
 complete at **version 1.0**, establishing the canonical mark, logotype, spatial

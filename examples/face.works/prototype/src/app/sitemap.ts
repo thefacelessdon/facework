@@ -5,13 +5,11 @@ const origin = "https://face.works";
 
 const routes = [
   "",
-  "/field-notes",
-  "/models",
-  "/frameworks",
+  "/theories",
+  "/postures",
+  "/runs",
+  "/methodology",
   "/cases",
-  "/conversations",
-  "/experiments",
-  "/library",
   "/about",
   "/privacy",
   "/accessibility",

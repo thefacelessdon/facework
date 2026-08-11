@@ -12,8 +12,9 @@ light register) and **The Practice** (the Field / dark register).
 src/
 ├── app/                        ← Next.js App Router pages
 │   ├── page.tsx                ← Home — The Work front door (Record register)
-│   ├── field-notes|models|frameworks|experiments|conversations|library/
-│   │                             ← The Work: type sub-surfaces
+│   ├── theories|postures|runs|methodology/
+│   │                             ← The Work: working-canon browse surfaces
+│   │                               (Constitution + Protocol link straight to /protocol)
 │   ├── engage/page.tsx         ← The Practice hub (Field register)
 │   ├── proof/, cases/          ← proof + cases (fold into The Practice)
 │   ├── protocol/

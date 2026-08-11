@@ -6,14 +6,13 @@ import { useState } from "react";
 import { navigation } from "@/data/demo";
 import { CoherenceMark, FaceworkWordmark } from "@/components/rr";
 
-// The Work (Record register) is the front door; its type routes are sub-surfaces.
+// The Work (Record register) is the front door; its browse surfaces follow the
+// working-canon shape (Constitution and Protocol link straight to /protocol).
 const WORK_PATHS = [
-  "/field-notes",
-  "/models",
-  "/frameworks",
-  "/experiments",
-  "/conversations",
-  "/library",
+  "/theories",
+  "/postures",
+  "/runs",
+  "/methodology",
 ];
 
 // The Practice (Field register) — /engage is the hub; proof + cases fold in.

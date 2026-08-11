@@ -49,6 +49,7 @@ export default async function ProtocolDocPage({
           {doc.sourcePath && doc.sourceSha ? (
             <p className="rr-label rr-provenance">
               Full canonical text · {doc.sourcePath} @ {doc.sourceSha}
+              {doc.sourceStatus ? <> · Source status: {doc.sourceStatus}</> : null}
             </p>
           ) : doc.excerpt ? (
             <p className="rr-label rr-provenance">

@@ -6,18 +6,19 @@ import {
   ReadingIndex,
   InkCTA,
 } from "@/components/rr";
-import { publicSections, verdictForStatus } from "@/data/knowledge";
+import { publicSections, workBuckets, verdictForStatus } from "@/data/knowledge";
 
-// The current reading = the latest field note; recent readings span the four
-// Work types; the browse index lets every type surface be reached from here.
-const current = publicSections["field-notes"].records[0]; // FN-027 · Visible lineage
+// The current reading = the latest run evidence; recent readings span the Work
+// buckets; the browse index walks the working canon (Constitution · Theories ·
+// Protocol · Postures · Runs & Evidence · Methodology).
+const current = publicSections.runs.records[0]; // FN-027 · Visible lineage
 const currentVerdict = verdictForStatus(current.status);
 
 const recent = [
-  publicSections["field-notes"].records[1], // FN-026
-  publicSections.models.records[0], // FM-001 · Cultural Physics
-  publicSections.frameworks.records[1], // FCD-001 · Coherence Design
-  publicSections.experiments.records[0], // FVA-610 · Facework Field
+  publicSections.runs.records[1], // FN-026
+  publicSections.theories.records[0], // FM-001 · Cultural Physics
+  publicSections.theories.records[1], // FCD-001 · Coherence Design
+  publicSections.runs.records[2], // FVA-610 · Facework Field
 ].map((r) => ({
   id: r.id,
   title: r.title,
@@ -27,19 +28,18 @@ const recent = [
   state: verdictForStatus(r.status).state,
 }));
 
-const browse = (
-  ["field-notes", "models", "frameworks", "experiments", "conversations", "library"] as const
-).map((key) => {
-  const s = publicSections[key];
-  return { title: s.label, note: s.proposition, href: `/${key}` };
-});
+const browse = workBuckets.map((b) => ({
+  title: b.title,
+  note: b.note,
+  href: b.href,
+}));
 
 export default function Home() {
   return (
     <div className="rr rr-page section-page">
       <div className="rr-column">
         <header className="rr-masthead">
-          <RecordLabel tick>Facework · A public record of attention</RecordLabel>
+          <RecordLabel tick>Facework · A public record of coherence</RecordLabel>
           <h1 className="rr-display">It doesn&rsquo;t decorate. It reads.</h1>
           <p className="rr-lede">
             Facework is a discipline for seeing, designing, and maintaining the
@@ -51,7 +51,7 @@ export default function Home() {
 
         <section id="current-attention" className="rr-section" aria-label="Current reading">
           <SectionHead label="Current reading" title="What has our attention now" />
-          <Reading tick label={`Field Note · ${current.id}`} title={current.title}>
+          <Reading tick label={`Runs & Evidence · ${current.id}`} title={current.title}>
             <p>{current.description}</p>
             <p>
               A reading is finished not when it looks resolved, but when it would
@@ -73,8 +73,8 @@ export default function Home() {
         </section>
 
         <section className="rr-section" aria-label="Browse The Work">
-          <SectionHead label="The Work" title="Browse by type" />
-          <ReadingIndex items={browse} showStatus={false} label="The Work by type" />
+          <SectionHead label="The Work" title="Browse the working canon" />
+          <ReadingIndex items={browse} showStatus={false} label="The Work by canon shape" />
         </section>
 
         <section className="rr-section" aria-label="The Practice">

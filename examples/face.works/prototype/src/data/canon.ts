@@ -119,8 +119,16 @@ function loadCanonDoc(meta: CanonDocMeta): ProtocolDoc {
   const [, sourcePath, sourceSha] = headerMatch;
   let body = raw.slice(headerMatch[0].length);
 
-  // YAML frontmatter
-  body = body.replace(/^---\n[\s\S]*?\n---\n/, "");
+  // YAML frontmatter — stripped from the body, but the status the source
+  // declares for itself is kept and surfaced verbatim on the doc page
+  // (honesty: a Working Draft must read as a Working Draft).
+  let sourceStatus: string | undefined;
+  const frontmatter = body.match(/^---\n([\s\S]*?)\n---\n/);
+  if (frontmatter) {
+    const statusLine = frontmatter[1].match(/^status:\s*(?:"([^"]*)"|(.+))$/im);
+    if (statusLine) sourceStatus = (statusLine[1] ?? statusLine[2]).trim();
+    body = body.slice(frontmatter[0].length);
+  }
 
   // The document's own H1 — the masthead already renders the title.
   body = body.replace(/^\s*# .*\n/, "");
@@ -146,7 +154,7 @@ function loadCanonDoc(meta: CanonDocMeta): ProtocolDoc {
   // masthead — trim until real content starts.
   body = body.replace(/^(\s*\n|---\n)+/, "");
 
-  return { ...meta, content: body.trimEnd(), sourcePath, sourceSha };
+  return { ...meta, content: body.trimEnd(), sourcePath, sourceSha, sourceStatus };
 }
 
 export const protocolDocs: ProtocolDoc[] = canonDocMeta.map(loadCanonDoc);

@@ -24,6 +24,13 @@ export interface ProtocolDoc {
   /** Git short SHA of the last commit touching the canonical source. */
   sourceSha?: string;
   /**
+   * The status the canonical source declares for ITSELF in its YAML
+   * frontmatter (e.g. "Canonical", "Living Document", "Working Draft").
+   * Surfaced verbatim on the doc page — the record does not upgrade a
+   * source's own claim. Absent when the source declares no frontmatter status.
+   */
+  sourceStatus?: string;
+  /**
    * True only when a doc has NO canonical source document and its content is
    * site-authored summary text. Canon-backed docs omit this. Rendered as an
    * honest disclosure, never silently.
