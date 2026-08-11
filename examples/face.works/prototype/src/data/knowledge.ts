@@ -58,6 +58,12 @@ export type WorkBucket = {
   /** Canon-anchored epigram (one line). */
   note: string;
   href: string;
+  /**
+   * Canon anchor citation for the bucket's ledger apparatus (rendered
+   * uppercase in record voice, e.g. "CONSTITUTION · ART. VI"). Only browse
+   * surfaces carry one — single-doc buckets ARE the canon they would cite.
+   */
+  citation?: string;
 };
 
 export const workBuckets: WorkBucket[] = [
@@ -70,6 +76,7 @@ export const workBuckets: WorkBucket[] = [
     title: "Theories",
     note: "No element of the practice may contradict the principles it stands on.",
     href: "/theories",
+    citation: "Constitution · Art. III",
   },
   {
     title: "Protocol",
@@ -80,18 +87,37 @@ export const workBuckets: WorkBucket[] = [
     title: "Postures",
     note: "The standing operating modes through which coherence is maintained after it is established.",
     href: "/postures",
+    citation: "Constitution · Art. V",
   },
   {
     title: "Runs & Evidence",
     note: "Every meaningful action performed through the practice produces persistent evidence.",
     href: "/runs",
+    citation: "Constitution · Art. VI",
   },
   {
     title: "Methodology",
     note: "Evolution strengthens coherence rather than increasing novelty.",
     href: "/methodology",
+    citation: "Constitution · Art. XII",
   },
 ];
+
+// --- The Holdings Ledger — the ledger counts itself (CONSTITUTION Art. VI) --
+// Every count shown on a bucket surface derives from the real records above,
+// through verdictForStatus — never restated by hand. Records carry no dates,
+// so the ledger shows none.
+
+export type Holdings = { total: number; settled: number; open: number };
+
+export function holdingsFor(section: PublicSection): Holdings {
+  const states = section.records.map((r) => verdictForStatus(r.status).state);
+  return {
+    total: states.length,
+    settled: states.filter((s) => s === "settled").length,
+    open: states.filter((s) => s === "open").length,
+  };
+}
 
 // --- Postures (canon: CONSTITUTION.md Article V) ----------------------------
 // The published posture record is young: the eight Postures are documented as
@@ -107,6 +133,14 @@ export type Posture = {
 /** Canon definition, quoted from CONSTITUTION.md Article V. */
 export const posturesDefinition =
   "Postures are the standing operating modes through which coherence is maintained after it is established.";
+
+/**
+ * Published posture readings — entries issued into the posture record.
+ * The collection is real and currently empty: the index is established, and
+ * entries publish as the practice operates. The Postures ledger counts this
+ * (8 postures defined · 0 entries issued) rather than fabricating history.
+ */
+export const postureEntries: PublicRecord[] = [];
 
 /** The eight Postures, as documented in skills/OPERATING_SKILLS.md. */
 export const postures: Posture[] = [

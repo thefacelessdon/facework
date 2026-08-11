@@ -6,7 +6,13 @@ import {
   ReadingIndex,
   InkCTA,
 } from "@/components/rr";
-import { publicSections, workBuckets, verdictForStatus } from "@/data/knowledge";
+import {
+  publicSections,
+  workBuckets,
+  verdictForStatus,
+  holdingsFor,
+  postures,
+} from "@/data/knowledge";
 
 // The current reading = the latest run evidence; recent readings span the Work
 // buckets; the browse index walks the working canon (Constitution · Theories ·
@@ -28,10 +34,21 @@ const recent = [
   state: verdictForStatus(r.status).state,
 }));
 
+// Each browse row carries its bucket's real holding count in record voice —
+// derived from the same data the bucket's own ledger counts. Single-document
+// buckets (Constitution, Protocol) are not record collections; no count.
+const bucketCaptions: Record<string, string> = {
+  Theories: `${holdingsFor(publicSections.theories).total} records`,
+  Postures: `${postures.length} postures`,
+  "Runs & Evidence": `${holdingsFor(publicSections.runs).total} records`,
+  Methodology: `${holdingsFor(publicSections.methodology).total} records`,
+};
+
 const browse = workBuckets.map((b) => ({
   title: b.title,
   note: b.note,
   href: b.href,
+  caption: bucketCaptions[b.title],
 }));
 
 export default function Home() {

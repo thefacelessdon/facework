@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { RecordLabel } from "./RecordLabel";
+import { ShapeMarker } from "./ShapeMarker";
 import type { ReadingState } from "@/data/knowledge";
 
 export type ReadingIndexItem = {
@@ -15,6 +16,12 @@ export type ReadingIndexItem = {
   state?: ReadingState;
   /** Mono status caption shown next to the marker. */
   status?: string;
+  /**
+   * Record-voice caption without a shape-law state (e.g. a bucket's real
+   * holding count on the home browse index). Renders even when the status
+   * marker column is off.
+   */
+  caption?: string;
 };
 
 export type ReadingIndexProps = {
@@ -72,14 +79,16 @@ export function ReadingIndex({
                 {inner}
               </Link>
             )}
-            {showStatus && item.state ? (
+            {(showStatus && item.state) || item.caption ? (
               <span className="rr-index__status">
-                <span
-                  className={`rr-index__marker rr-index__marker--${item.state}`}
-                  aria-hidden="true"
-                />
-                {item.status ? (
+                {showStatus && item.state ? (
+                  <ShapeMarker state={item.state} />
+                ) : null}
+                {showStatus && item.status ? (
                   <span className="rr-index__statuslabel">{item.status}</span>
+                ) : null}
+                {item.caption ? (
+                  <span className="rr-index__statuslabel">{item.caption}</span>
                 ) : null}
               </span>
             ) : null}

@@ -18,3 +18,20 @@ export { FaceworkWordmark } from "./FaceworkWordmark";
 export type { FaceworkWordmarkProps } from "./FaceworkWordmark";
 export { ReadingIndex } from "./ReadingIndex";
 export type { ReadingIndexProps, ReadingIndexItem } from "./ReadingIndex";
+export { ShapeMarker } from "./ShapeMarker";
+export type { ShapeMarkerProps } from "./ShapeMarker";
+export {
+  HoldingsLine,
+  CanonAnchor,
+  SeeAlso,
+  seeAlsoFor,
+  LedgerLegend,
+  LedgerRail,
+} from "./Ledger";
+export type {
+  HoldingsPart,
+  HoldingsLineProps,
+  CanonAnchorProps,
+  SeeAlsoItem,
+  SeeAlsoProps,
+} from "./Ledger";
