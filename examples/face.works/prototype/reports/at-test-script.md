@@ -14,6 +14,28 @@ Android Chrome review" named as an open release gate on `/accessibility`.
 
 Budget ~30–45 min for a full pass.
 
+---
+
+## The ten-minute targeted walk (post-0.0.43)
+
+The full pass below still stands, but automated coverage (axe, 0 violations) and
+programmatic checks are done. This walk covers only what changed since — the
+surfaces no machine can judge: what the screen reader *says*. macOS Safari +
+VoiceOver (⌘F5); NVDA browse-mode equivalents in parentheses. In order:
+
+| # | Surface | Do | Pass when |
+|---|---------|----|-----------|
+| T1 | Nav lockup (any page) | VO to the identity link | Announced as one link, "Facework — The Work" — no SVG/image noise, no double announcement |
+| T2 | Route change | Activate "The Practice" in the nav | New page announced (title/heading spoken); not silence |
+| T3 | `/proof` | Rotor → Landmarks (NVDA `D`) | Three distinct case regions: "GAMUT case", "14th & Co case", "HUE Unlimited case" |
+| T4 | `/theories` (ledger) | Read the page top to bottom | Order: masthead → holdings counts ("3 records, 2 settled, 1 open" intelligible) → record rows (id, title, note, status each spoken) → legend; the margin rail (canon anchor / see also) does not interrupt the column mid-read |
+| T5 | `/protocol/cultural-physics` (reading margin) | Rotor → Links → a CONTENTS entry; activate it | Link names are the section titles; activating moves reading position to that heading (not lost, not top-of-page) |
+| T6 | Same page, phone width or iOS | Find the CONTENTS fold | Toggle announced as expanded/collapsed (native `<details>`); entries reachable when open |
+| T7 | `/runs` (Field instrument) | Read through the instrument | The live trace is skippable/labeled — never a silent focus trap or an unlabeled canvas dead-end |
+
+Record ✅/❌/⚠ per row + what the AT actually said. Any ❌ here is a
+release-gating bug in the newest surfaces; file it with the utterance.
+
 ## Where to run
 
 The Vercel preview is SSO-gated, so run against a local **production** build (not
