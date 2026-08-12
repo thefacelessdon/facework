@@ -137,6 +137,13 @@ content is truly tabular. Section heads carry a mono record-label and an index
 Self-adjusting grids via `repeat(auto-fit, minmax(…, 1fr))`; container queries for
 components, viewport queries for page layout.
 
+**The margin is apparatus, not dead field.** At ≥1100px, ledger and document
+surfaces run two tracks: the reading column (68ch) plus a sticky right margin
+rail (`.rr-ledger` grid) carrying canon-voice apparatus. The rail is
+typographic — at most **one hairline**, no background, no card. Below 1100px its
+content folds inline into sensible slots (never hidden); document Contents folds
+to a native `<details>` — no JS, no scroll-spy.
+
 ## 7. Instrument library (derived from Cultural Physics)
 
 Every visual is one of these, or argues its way in. No stock, no decorative icons,
@@ -152,7 +159,26 @@ no illustration for its own sake — the instrument *is* the illustration.
 
 Shared grammar: **square = open/unsettled, circle = settled/issued** everywhere;
 color classifies only where a real state exists; every figure gets a mono label
-and a caption that carries the claim.
+and a caption that carries the claim. The shape law has **one rendering** — the
+`ShapeMarker` component — shared by record rows and the ledger-foot legend, so
+markers and legend cannot drift by construction.
+
+**Ledger & margin apparatus (0.0.41 / 0.0.43).** Two instruments extend the
+library on the browse and document surfaces:
+
+- **The Holdings line** — the ledger counts itself (CONSTITUTION Art. VI:
+  persistent evidence): a record-voice instrument (`■ 3 RECORDS / 2 SETTLED ·
+  1 OPEN`) derived from the records via one helper (`holdingsFor()`), never
+  restated, never dated (records carry no dates — none are fabricated). Counts
+  render in ink, units muted. Thin collections state their condition without
+  apology (`8 POSTURES DEFINED · 0 ENTRIES ISSUED`).
+- **The Reading margin** — a document's record apparatus (`Margin.tsx`,
+  `.rr-margin*`): kind eyebrow, provenance (source path @ SHA + source status —
+  one component, two slots: inline below 1100px, rail above), an honest
+  **~word count** (no reading-time estimates), **Contents** from the document's
+  own h2 spine (anchor ids emitted by the same factory the extractor walks —
+  drift-proof; omitted entirely under 2 h2s), and see-also siblings. Rail
+  grammar: canon voice above the one hairline, wayfinding below it.
 
 ## 8. The mark
 
@@ -183,9 +209,14 @@ motion` shows the settled state instantly, everywhere.
 
 Fixes "I don't know where things start and end." Two modes, one clear entry each.
 
-- **The Work** (Record register) — the published thinking + research: field notes,
-  models, frameworks, and experiments, presented as issued readings. This is the
-  front door and the reason to return.
+- **The Work** (Record register) — the published thinking + research, browsed in
+  the **working-canon shape** (ratified in `methodology/decisions/DECISION-002`):
+  Constitution · Theories · Protocol · Postures · Runs & Evidence · Methodology,
+  presented as issued readings on ledger surfaces. The canonical documents are
+  served in full on `/protocol/[slug]` with the Reading margin. This is the front
+  door and the reason to return. (The pre-FW-DEC-002 six-type taxonomy — field
+  notes / models / frameworks / experiments / conversations / library — is
+  superseded.)
 - **The Practice** (Field register) — how to work with Facework: proof, cases, and
   engage. One page that answers *what it is, what it costs, what you get.*
 
