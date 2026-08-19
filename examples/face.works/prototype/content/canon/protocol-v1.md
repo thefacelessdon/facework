@@ -1,8 +1,8 @@
-<!-- DERIVED COPY — do not edit. Source: PROTOCOL.md @ 672da0e+dirty. Regenerate: npm run sync-canon -->
+<!-- DERIVED COPY — do not edit. Source: PROTOCOL.md @ 3473fe4. Regenerate: npm run sync-canon -->
 # Facework Protocol
 
 Status: Draft
-Release version: tracked in [`VERSION`](VERSION); see ROADMAP.md for versioning rules. Manifest schema 1.0.0 (baseline), 1.1.0 (Runtime Ports, §9), 1.2.0 (HarnessBundle, §10), 1.3.0 (DesignInfrastructure, §11), 1.4.0 (efficiency hints + skill polish — amendments throughout §9–§11, new §12 Observability Interface), 1.5.0 (RuntimeConformanceProfile + runtime-conformance tier, §9.2/§9.12).
+Release version: tracked in [`VERSION`](VERSION); see ROADMAP.md for versioning rules. Manifest schema 1.0.0 (baseline), 1.1.0 (Runtime Ports, §9), 1.2.0 (HarnessBundle, §10), 1.3.0 (DesignInfrastructure, §11), 1.4.0 (efficiency hints + skill polish — amendments throughout §9–§11, new §12 Observability Interface), 1.5.0 (RuntimeConformanceProfile + runtime-conformance tier, §9.2/§9.12), 1.6.0 (multi-harness shells — `shell_sovereignty.harness_options`, §9.11/§9.12).
 
 Facework Protocol is an open standard for turning cultural signal into coherent, ownable business systems for creators and cultural brands.
 
@@ -786,6 +786,33 @@ from the third validation (OpenAI's hosted surface), where all four ports wire
 but the substrate is rented, closed, and non-relocatable. Enforced at the Phase 7
 gate.
 
+**A shell's harness layer MAY be plural and late-bound.** The four validating
+runtimes above are each one shell with one agent loop, so classifying the shell
+classified the loop. A **multi-harness shell** breaks that: one set of primitives
+fronts several interchangeable agent loops, and the loop is selected *per
+invocation* rather than per install (Berd — goose / Claude Code / Codex / Copilot /
+Amp, chosen at session creation; the fifth validation). This is distinct from
+split-runtime binding above: split-runtime is one port bound to one substrate each,
+whereas here **all four ports bind to one shell** and only the execution underneath
+varies. Two consequences: `shell_sovereignty.harness` is then the shell's own
+classification *plus* the set of loops it can bind (§9.12 `harness_options`), and
+the arrangement is a **sovereignty hedge** — the rented model layer can be swapped
+by switching harness, with no re-authoring, which is the strongest available
+evidence for the ports-as-contract claim. Derived from the fifth validation (Berd).
+
+**Context MAY compose at more than one scope, and the split is by lifetime.** A
+Runtime Shell MAY expose several context vehicles with different lifetimes — e.g. a
+workspace-scoped instruction file that reaches every session with that workspace
+attached, project-scoped instructions, and a per-session persona that is swappable
+per invocation. When it does, `ContextManifest` content MUST be assigned by
+lifetime, not by topic: anything that must hold **regardless of which agent runs**
+(above all `MemoryMap.boundary`) belongs to the longest-lived vehicle, and the
+tenant contract that describes a particular agent belongs to the persona. A rule
+duplicated across two vehicles is drift, not redundancy — the shorter-lived vehicle
+SHOULD point at the longer-lived one. Derived from the fifth validation (Berd),
+where the boundary binds to `AGENTS.md` per workspace while soul/identity/purpose
+bind to a swappable persona.
+
 **Shell sovereignty decomposes by layer.** Own-vs-rent is not one verdict per
 shell — it decomposes into **harness** (the agent loop), **state** (memory,
 config, transcripts), and **model** (the LLM). A shell may be own-harness +
@@ -796,6 +823,18 @@ model all live on the vendor). The Phase-7 waiver attaches to whichever layer is
 rented and scopes its mitigation to that layer, rather than flattening every
 hosted dependency to "rent with maximal blast radius." Derived from the fourth
 validation (Claude Code).
+
+**The state layer classifies on portability, not locality.** State decomposes once
+more — into **authoring state** (the tenant's agents, skills, instruction files) and
+**operational state** (project definitions, session transcripts, integration
+wiring). A shell MAY hold both entirely on local disk and still be `own` for one and
+`mitigate` for the other, when only the authoring half is plain, relocatable files
+and the operational half is reachable only through the app (Berd — `~/.agents/*.md`
+vs app-internal project/session/connection state). "Does it leave the machine" is
+therefore the wrong test; the Phase-7 exit plan depends on **whether tenant state
+can be relocated**, so that is what `shell_sovereignty.state` classifies. When the
+two halves differ, classify `state` by the *weaker* half and say so in the waiver's
+`exit_plan`. Derived from the fifth validation (Berd).
 
 ### 9.12 RuntimeConformanceProfile (v1.5.0, additive)
 
@@ -818,9 +857,17 @@ shell), `port_bindings[]`, `shell_sovereignty`, `governance[]`.
 
 **`shell_sovereignty`** (FS-400.6 + FS-400.7) — sovereignty **decomposed by
 layer**, each classified `own | rent | mitigate`:
-- `harness` — the agent loop.
-- `state` — memory, config, transcripts.
+- `harness` — the agent loop. For a **multi-harness shell** this classifies the
+  shell itself; the loops it can bind go in `harness_options` below.
+- `state` — memory, config, transcripts. Classified on **portability, not
+  locality**: when authoring state (agents, skills, instruction files) and
+  operational state (projects, sessions, integration wiring) differ, classify by
+  the weaker half and say so in the waiver's `exit_plan` (§9.11).
 - `model` — the LLM.
+- `harness_options[]` (v1.6.0, optional) — for a multi-harness shell, the agent
+  loops it can bind, each `{ harness, posture, notes? }`. Present only when the
+  loop is selected per invocation rather than fixed at install; MUST list ≥2
+  when present. Omitting it means the shell is single-harness (§9.11).
 - `waiver` — REQUIRED if any layer is `rent` or `mitigate`. Fields: `layers[]`
   (which layers the waiver covers), `exit_plan` (can tenant state relocate?),
   `data_posture` (`retention`, `training`, `residency`), `owner_ruling` (who ruled,
@@ -842,7 +889,8 @@ relies on (`trust_boundary`, `verifier_skill_id`, `escalation`, `pii`,
 1. Every `port` in `port_bindings` is one of the four; each resolves to a declared
    port manifest (or is `authoring_side`).
 2. Every `rent`/`mitigate` layer in `shell_sovereignty` is covered by a `waiver`
-   with a non-empty `exit_plan` and `owner_ruling`.
+   with a non-empty `exit_plan` and `owner_ruling`. `harness_options`, when
+   present, lists ≥2 loops, each with a valid `posture`.
 3. Each `governance[]` entry is classified `gate` or `metadata`; every `gate`
    either sets `binds_to` or is marked `unenforced`.
 
@@ -853,9 +901,11 @@ relies on (`trust_boundary`, `verifier_skill_id`, `escalation`, `pii`,
   `rent`/`mitigate` layer's `waiver` matches a recorded owner ruling (this is the
   machine form of the §9.11 Phase-7 gate line).
 
-Formal schema: `$defs.runtimeConformanceProfile`. Worked example:
+Formal schema: `$defs.runtimeConformanceProfile`. Worked examples:
 `examples/face.works/runtime-ports/runtime-conformance-profile.yaml` (the Claude
-Code binding from the fourth validation).
+Code binding from the fourth validation) and
+`runtime-conformance-profile-berd.yaml` (the multi-harness binding from the fifth,
+exercising `harness_options` and the authoring-vs-operational state split).
 
 ## 10) HarnessBundle (v1.2.0, additive)
 
