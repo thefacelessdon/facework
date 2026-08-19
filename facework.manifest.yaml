@@ -1,6 +1,14 @@
 protocol_version: "1.5.0"
 
 project:
+  # v0.0.56 (FW-DEC-005) — this file demonstrates the schema; it is NOT a
+  # conformance claim. The toolkit repo has never run the protocol on itself, so
+  # six of the ten canonical artifacts below have no real counterpart to point at
+  # (no SignalThesis, AudienceFieldMap, TasteContract, LaunchPlan, SovereigntyMap
+  # or DiagnosticReport exists). Their paths are illustrative. Everything that CAN
+  # point at real files — runtime_ports, bundle, design_infrastructure — does, and
+  # is fully enforced. See PROTOCOL.md §7.
+  manifest_role: reference
   name: "Example Cultural Brand"
   domain: "creator-commerce"
   stage: "mvp"

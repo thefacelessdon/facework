@@ -1,4 +1,4 @@
-<!-- DERIVED COPY — do not edit. Source: PROTOCOL.md @ 2e938b5+dirty. Regenerate: npm run sync-canon -->
+<!-- DERIVED COPY — do not edit. Source: PROTOCOL.md @ f944bc5+dirty. Regenerate: npm run sync-canon -->
 # Facework Protocol
 
 Status: Draft
@@ -227,7 +227,8 @@ The terms "MUST", "MUST NOT", "SHOULD", and "MAY" in this document are used as d
 ## 7) Minimum Conformance
 
 A project is minimally conformant with the Facework Protocol only if:
-- all required primitive artifacts are present,
+- all required primitive artifacts are present **and their declared paths
+  resolve to real files** (clarified v0.0.56 — see below),
 - all phase gates are explicitly marked pass/fail with evidence,
 - manifest validates against schema,
 - compliance score is computed,
@@ -236,6 +237,29 @@ A project is minimally conformant with the Facework Protocol only if:
 A v1.1.0 manifest is additionally conformant only if Runtime Ports satisfy
 §9.2 (evidence-level calibrated emission) and §9.7 (cross-manifest
 references resolve bidirectionally).
+
+**Manifest role — `tenant` vs `reference` (v1.6.0, additive).** "Artifacts are
+present" was unenforceable as written, because a manifest can name a path without
+the file existing, and the validator checked only that the key was set. It is now
+checked. But one manifest legitimately cannot satisfy it: the protocol toolkit's
+own `facework.manifest.yaml`, which demonstrates the schema without being a tenant
+world — it has never run the protocol on itself and therefore has no `SignalThesis`,
+`AudienceFieldMap`, `TasteContract`, `LaunchPlan`, `SovereigntyMap` or
+`DiagnosticReport` to point at.
+
+A manifest therefore declares `project.manifest_role`:
+
+- **`tenant`** (default, and the assumption when the key is absent) — every path in
+  `artifacts` MUST resolve. This is the conformance rule.
+- **`reference`** — the manifest illustrates the schema and is **not a conformance
+  claim**. Artifact paths are illustrative and are not required to resolve.
+  Validators MUST report the exemption in their output rather than passing
+  silently, and a `reference` manifest MUST NOT be cited as evidence of
+  conformance.
+
+The exemption is declared, visible, and narrow — the treatment §9.11 gives an
+`unenforced: true` governance gate, applied to conformance itself. A silent pass
+would be the defect this clarification removes.
 
 ## 8) Stage Gate Profiles (Constrained v1)
 

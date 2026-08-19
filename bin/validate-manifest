@@ -694,6 +694,12 @@ begin
   inputs = require_hash!(manifest, "inputs")
   require_string!(inputs, "hunch")
 
+  # §7 (v0.0.56) — manifest_role decides whether artifact paths must resolve.
+  # 'tenant' (default / absent) is the conformance rule; 'reference' is an
+  # illustration and is exempt, but the exemption is REPORTED, never silent.
+  manifest_role = project["manifest_role"] || "tenant"
+  raise "project.manifest_role must be 'tenant' or 'reference'" unless %w[tenant reference].include?(manifest_role)
+
   artifacts = require_hash!(manifest, "artifacts")
   %w[
     signal_thesis
@@ -707,6 +713,20 @@ begin
     sovereignty_map
     diagnostic_report
   ].each { |k| require_string!(artifacts, k) }
+
+  # §7 — "all required primitive artifacts are present" now means the file exists,
+  # not merely that the key is set. Until 0.0.56 this was key-presence only, so a
+  # manifest could name ten paths that resolved to nothing and still pass.
+  missing_artifacts = []
+  if manifest_role == "tenant"
+    artifacts.each do |key, rel|
+      next unless rel.is_a?(String) && !rel.strip.empty?
+      missing_artifacts << "#{key} -> #{rel}" unless File.exist?(File.expand_path(rel, manifest_dir))
+    end
+    unless missing_artifacts.empty?
+      raise "artifact paths do not resolve (§7): #{missing_artifacts.join('; ')}"
+    end
+  end
 
   gates = require_hash!(manifest, "gates")
   %w[
@@ -1011,6 +1031,12 @@ begin
 
   puts "[ok] manifest valid: #{manifest_path}"
   puts "[ok] protocol_version: #{protocol_version}"
+  if manifest_role == "reference"
+    puts "[ok] manifest_role: reference — schema illustration, NOT a conformance claim"
+    puts "     §7 artifact-path resolution is exempt here and MUST NOT be cited as conformance"
+  else
+    puts "[ok] manifest_role: tenant (#{artifacts.size} artifact paths resolve, §7)"
+  end
   puts "[ok] stage: #{stage}#{evidence_level ? " (evidence_level: #{evidence_level})" : ""}#{track ? " (track: #{track})" : ""}"
   puts "[ok] compliance: #{total} (#{level})"
   puts "[ok] runtime_ports: #{ports_summary}"
