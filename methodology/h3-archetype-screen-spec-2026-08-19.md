@@ -102,3 +102,98 @@ Spec only. Running it needs a filings data source and the three thresholds fixed
 The order matters: **fix X, Y, Z and the universe first, in a dated commit, then
 run.** Fixing thresholds after seeing the data is the same defect this repo closed
 at 0.0.59 — a check that cannot be verified is decoration.
+
+---
+
+# Fixed parameters — FROZEN 2026-08-19
+
+Per the disposition above, these are fixed **before** any data is touched. Nothing
+has been run. After this commit they may not be revisited; tuning them against
+observed outcomes voids the exercise and must be reported as void.
+
+These are **judgment calls with stated reasoning, not empirically derived
+optima.** That is the honest description, and stating it is what stops a later
+reader mistaking them for calibration.
+
+## X — extraction intensity
+
+**X = 25% of the entity's operating cash flow, three-year average.**
+
+Below roughly 15%, transfers to a parent are plausibly genuine shared services,
+management cost allocation, or ordinary group treasury. At 25% sustained over three
+years, a quarter of the cash the entity produces leaves for the parent
+*persistently* — which is the BHS signature: systematic extraction across years,
+not a single dividend. The three-year average is doing as much work as the number;
+it excludes one-off distributions and requires a pattern.
+
+## Y — obligation share of liabilities
+
+**Y = 20% of total liabilities.**
+
+At a fifth of total liabilities, a diffuse holder obligation dominates the liability
+structure in a way an ordinary payables balance never does. Below that it is a line
+item; above it, it is the company's shape.
+
+## Z — obligation against cash generation
+
+**Z = 2.0× annual operating cash flow.**
+
+The "unfunded" part made concrete: at 2× or more, the obligation cannot be
+discharged from two full years of operating cash generation. Ofo needed ~¥1.2bn
+against negative operating cash flow — an unbounded multiple. BHS carried a £571m
+deficit against cash generation that had been extracted for years.
+
+## Criterion tightening (also frozen here)
+
+**The unfunded-promise obligation must be cash-redeemable or cash-settleable at the
+holder's demand or on a fixed schedule.** Deferred revenue for a service still being
+delivered normally is **not** an unfunded promise, and without this qualifier every
+subscription business with healthy prepayments would flag. The distinction is
+whether the holder can demand *cash* — Ofo's deposits could be, gift balances can
+be, a pension is owed. A month of undelivered SaaS cannot.
+
+## Universe
+
+**Jurisdictions:** US SEC annual filers (10-K) **and** UK Companies House filers of
+audited annual accounts.
+
+Companies House is not optional. BHS was **private**, and the extractive-parent
+archetype concentrates in private subsidiaries where a listed-only universe cannot
+see it. A US-listed-only screen would systematically miss the archetype's natural
+habitat.
+
+**Period:** flag on as-filed accounts for financial years 2010–2019. Outcomes
+observed to 2024, five years forward per flag.
+
+**Size floor:** revenue ≥ £10m / $10m in the flag year, to keep the universe from
+drowning in micro-entities.
+
+## Exclusions — and why these two are decisive
+
+1. **Regulated deposit-takers and insurers are excluded.** A bank's deposits are a
+   diffuse, cash-redeemable obligation at many multiples of operating cash flow with
+   no segregated funding vehicle. The unfunded-promise criterion would flag **every
+   bank on earth** and the screen would be measuring "is a bank." Insurers fail the
+   same way through technical provisions.
+2. **Government and quasi-government entities are excluded** — their obligations are
+   backed by taxation, which is precisely the segregated-funding condition the
+   criterion tests for.
+3. Vine, BHS and Ofo remain excluded as the derivation set, per Controls above.
+
+## Matching and reporting
+
+- **Matched control:** same 2-digit sector code, same revenue quartile, same flag
+  year, not flagged by either archetype.
+- **The two archetypes are reported separately.** They are different mechanisms and
+  pooling them would hide a case where one works and one does not.
+- **Minimum n = 30 flagged entities per archetype** to report a rate. Below that the
+  result is reported in these words: *n too small to quote.* Same discipline as
+  `h2-checkpoint-protocol.md`.
+- **Material discount** (adverse-outcome definition) = **≥ 50% below the valuation
+  three years prior.**
+
+## What is now needed to run
+
+A filings data source covering both jurisdictions. Nothing else is open — every
+judgment call the screen requires is fixed above, in this commit, dated, before
+contact with data.
