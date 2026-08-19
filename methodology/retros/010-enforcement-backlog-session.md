@@ -157,15 +157,72 @@ worse than no gate, because it launders real failures as known noise.
 - Nothing. No step proved counterproductive.
 
 ### Open, unresolved
-- **`Co-Authored-By` erased by squash merge.** Needs a ruling: preserve the
-  trailer in PR bodies (so squash carries it), accept the loss, or change the
-  merge method. Currently the record is wrong by 7×.
-- **The `--fw-*` color layer** in `visual-system/applications/shared/` is still
-  the retired accent scheme (`--fw-clarity: #8fafff`, superseded by verdigris per
-  FVS-600). Re-derivation is design work with no mechanical mapping; deliberately
-  left rather than guessed.
-- **§1–§8** have not been enforcement-audited. Expected yield is
-  reclassification, not new checks.
+
+> **Amended 2026-08-19 (0.0.56 close).** The session continued past this retro's
+> first writing; two of the three items below were closed by later releases the
+> same night. Annotated in place rather than rewritten, per the 0.0.39 precedent.
+
+**Closed since first writing:**
+
+- ~~The `--fw-*` color layer~~ — **CLOSED at 0.0.53** (FW-DEC-004). Re-derived from
+  FVS-600; check (a) of `bin/validate-tokens` now verifies against the spec rather
+  than against a sibling copy. The mapping fear was justified but misplaced: the
+  colors mapped cleanly, and the thing that genuinely could not be guessed turned
+  out to be the *artifacts* block (below).
+- ~~§1–§8 not enforcement-audited~~ — **CLOSED at 0.0.55**. The prediction held —
+  the yield was reclassification, not new checks. But it also produced the
+  session's worst single finding: all ten artifact paths in
+  `facework.manifest.yaml` resolving to nothing, passing `make protocol-check` for
+  51 releases (ruled at 0.0.56, FW-DEC-005).
+
+**Still open at close — ranked:**
+
+1. **§2's three orphaned MUSTs.** `DesignLanguageSpec`, `ConsonanceCheck` and
+   `HandoffPackage` are declared MUST in `PROTOCOL.md` §2 and have no manifest slot
+   at all. Options: optional slots + warn, promote to required (breaking), or scope
+   §2's MUST to what the manifest models. Evidence:
+   `methodology/section1-8-enforcement-audit-2026-08-19.md`.
+   **Route this to a different session than the one that wrote the enforcement
+   rules.** Three consecutive canon rulings (FW-DEC-003/004/005) were delegated to
+   the same agent; a fourth concentrates constitution-writing in the party that is
+   also auditing it. Reassigning also closes the independence gap in item 2 at no
+   extra cost.
+
+2. **Promotion of the two standing rules into the COS.**
+   - *"A rule lands enforced or declared"* — survived the §1–§8 falsification test
+     (0.0.55) with a scope refinement: §1 and §6 are non-normative and must be
+     marked so. **Caveat recorded in that audit: the rule's author ran its test**,
+     so a clean result is partly self-confirmation.
+   - *"A gate must prove it ran"* (0.0.52) — never independently applied; §1–§8
+     declares no gates that execute.
+
+   The inherited bar is `loop-model.md` §Promotion (a validating run, cleared once
+   at 0.0.13). It was argued that this bar is a category error for these two — a
+   client protocol run exercises neither — and that *independent application* is
+   the right substitute. **That reframing is itself unratified.**
+
+3. **`Co-Authored-By` erased by squash merge.** Survived on 1 of 8 releases;
+   GitHub replaces the commit body with the PR description. The git record
+   under-reports AI authorship by roughly 7×. Needs a ruling: preserve the trailer
+   in PR bodies, accept the loss, or change the merge method.
+
+4. **Housekeeping — four items, all the same shape (state nobody has ruled on):**
+   - `.agents/skills/` is not in `.gitignore`; 56 untracked directories sit one
+     `git add -A` away from being committed.
+   - Three uncommitted files in `methodology/` dated 2026-06-29
+     (`chat-routing-memo`, `standards-integration-edit-sequence`, `patches/`) —
+     either canon that never landed or drafts that should move out.
+   - The parallel-session rule this session's collision earned (see "What didn't").
+   - 13 merged branches still on the remote.
+
+### Outside the repo
+
+The `review` CI gate has still **never posted a review**. PR #61 cleared workflow
+validation and errored at 292 ms with `total_cost_usd: 0` and no error text.
+Unresolved between three causes: key, org credit, or `claude-sonnet-5` model
+access. Requires Harper's hands (minting keys, setting secrets). The decision point
+on any retry is whether cost is nonzero — **not whether the check turns green**,
+which this session learned the hard way.
 
 ## Top 3 things to carry forward
 
@@ -183,8 +240,14 @@ worse than no gate, because it launders real failures as known noise.
 
 ## Note for the next session
 
-Do not open another audit. §1–§8 will yield reclassification, not bugs, and the
-backlog that mattered is closed. The next *build* task is the `--fw-*` color
-layer re-derivation from FVS-600, and it wants Harper's design judgment, not an
-agent's inference — the mapping is not mechanical and guessing it is precisely
-what `validate-tokens` exists to prevent.
+~~Do not open another audit.~~ **Superseded 2026-08-19.** Both recommendations in
+this note were executed the same night: the `--fw-*` re-derivation shipped at
+0.0.53, and §1–§8 *was* audited at 0.0.55 — commissioned not as a bug hunt but as
+the falsification test for the standing rule, a purpose this note did not
+anticipate.
+
+**The standing advice now:** stop auditing. §9–§12 and §1–§8 are done and the
+enforcement backlog is closed. Everything left in "Open, unresolved" is a *ruling*,
+not an implementation — and this session generated open questions faster than it
+closed them, which is its own kind of drift. The next agent's most valuable act is
+to close item 1 or 2, not to open a fifth front.
