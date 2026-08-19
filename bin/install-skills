@@ -166,9 +166,12 @@ echo "Canonical clone recorded: $MARKER"
 # Copied, not symlinked: the hook must still run when this clone is what vanished.
 if cp "$ROOT_DIR/bin/facework-session-check" "$HOOK_DEST" 2>/dev/null; then
   chmod +x "$HOOK_DEST"
-  echo "Session hook installed: $HOOK_DEST"
+  echo "Session hook copied: $HOOK_DEST"
+  # Copying is not installing. Claude Code only fires a hook that is declared in a
+  # settings.json hooks block, so registration is a separate, required step.
+  "$ROOT_DIR/bin/facework-register-hook"
 else
-  echo "[warn] could not install session hook to $HOOK_DEST"
+  echo "[warn] could not copy session hook to $HOOK_DEST — hook not installed"
 fi
 
 INSTALL_COMPLETE=1

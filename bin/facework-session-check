@@ -13,25 +13,34 @@
 
 MARKER="$HOME/.claude/skills/.facework-canonical"
 
-# Emit a SessionStart hook payload. systemMessage is shown to the user;
-# additionalContext tells the agent, so it can offer the fix without being asked.
+# Emit a SessionStart hook payload.
+#
+# Pure shell on purpose: an interpreter dependency here would reintroduce exactly
+# the failure this hook exists to close — a diagnosis that vanishes quietly. If
+# JSON cannot be produced, the message still goes out as plain text (Claude Code
+# reads SessionStart stdout as context) and to stderr. It is never swallowed.
+json_escape() {
+  printf '%s' "$1" \
+    | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g' -e 's/\t/\\t/g' \
+    | awk 'BEGIN { ORS = "" } { if (NR > 1) printf "\\n"; print }'
+}
+
 emit() {
   msg="$1"
-  python3 - "$msg" <<'PY' 2>/dev/null || true
-import json, sys
-msg = sys.argv[1]
-print(json.dumps({
-    "systemMessage": msg,
-    "suppressOutput": True,
-    "hookSpecificOutput": {
-        "hookEventName": "SessionStart",
-        "additionalContext": (
-            "The Facework protocol skills are not loadable this session, so no "
-            "/fw-* slash commands are available. Diagnosis:\n" + msg
-        ),
-    },
-}))
-PY
+  ctx="The Facework protocol skills are not loadable this session, so no /fw-* slash commands are available. Diagnosis:
+$msg"
+
+  esc_msg="$(json_escape "$msg" 2>/dev/null)"
+  esc_ctx="$(json_escape "$ctx" 2>/dev/null)"
+
+  if [ -n "$esc_msg" ] && [ -n "$esc_ctx" ]; then
+    printf '{"systemMessage":"%s","suppressOutput":true,"hookSpecificOutput":{"hookEventName":"SessionStart","additionalContext":"%s"}}\n' \
+      "$esc_msg" "$esc_ctx"
+  else
+    # Escaping failed (no sed/awk?). Say it anyway, unstructured.
+    printf '%s\n' "$msg"
+    printf '%s\n' "$msg" >&2
+  fi
 }
 
 # Facework isn't installed on this machine — stay silent rather than nag.
