@@ -1,4 +1,4 @@
-<!-- DERIVED COPY — do not edit. Source: examples/face.works/define/architecture/conformance-model.md @ 184124b. Regenerate: npm run sync-canon -->
+<!-- DERIVED COPY — do not edit. Source: examples/face.works/define/architecture/conformance-model.md @ blob:ae9e0033. Regenerate: npm run sync-canon -->
 ---
 title: "Protocol Conformance Model"
 type: Technical Architecture

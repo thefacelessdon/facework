@@ -1,4 +1,4 @@
-<!-- DERIVED COPY — do not edit. Source: theories/the-coherence-operating-system.md @ af761d7. Regenerate: npm run sync-canon -->
+<!-- DERIVED COPY — do not edit. Source: theories/the-coherence-operating-system.md @ blob:61deb227. Regenerate: npm run sync-canon -->
 ---
 title: "FACEWORK: A Coherence Practice for Building Things"
 version: 1.0

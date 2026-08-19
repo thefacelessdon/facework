@@ -39,23 +39,41 @@ export const CANON_SOURCES = {
   "standards-track": "standards/README.md",
 };
 
-function gitShortSha(repoRelPath) {
+/**
+ * Provenance identifier for a source file: the git BLOB hash of its content.
+ *
+ * This was a commit SHA until 0.0.59, and a commit SHA is wrong under this
+ * repo's own workflow in two independent ways:
+ *
+ *  1. DIRTY SOURCE. AGENTS.md documents "edit canon, run sync-canon, commit the
+ *     regenerated copy", so the stamp is taken while the source is uncommitted.
+ *     That produced `<sha>+dirty` — naming a real commit whose content is NOT
+ *     what was derived (found at 0.0.58: `PROTOCOL.md @ f944bc5+dirty`).
+ *  2. SQUASH MERGE. Releases land via `gh pr merge --squash`, so the branch
+ *     commit the copy recorded is orphaned the moment the PR merges and its
+ *     branch is deleted (found at 0.0.59: `cultural-physics.md @ 6e6efe1`,
+ *     unreachable from main).
+ *
+ * A blob hash is invariant across commit, squash, rebase and branch deletion —
+ * it identifies the exact bytes derived from, and stays true forever. Verify
+ * any stamp with `git hash-object <source-path>`; `--check` does exactly that.
+ */
+function sourceProvenance(repoRelPath) {
   try {
-    const sha = execFileSync(
-      "git",
-      ["log", "-n", "1", "--format=%h", "--", repoRelPath],
-      { cwd: REPO_ROOT, encoding: "utf8" }
-    ).trim();
-    if (!sha) return "uncommitted";
-    const dirty = execFileSync(
-      "git",
-      ["status", "--porcelain", "--", repoRelPath],
-      { cwd: REPO_ROOT, encoding: "utf8" }
-    ).trim();
-    return dirty ? `${sha}+dirty` : sha;
+    return `blob:${blobHash(repoRelPath)}`;
   } catch {
     return "unknown";
   }
+}
+
+/** Git blob hash of the file as it currently sits on disk, short form. */
+function blobHash(repoRelPath) {
+  return execFileSync("git", ["hash-object", "--", repoRelPath], {
+    cwd: REPO_ROOT,
+    encoding: "utf8",
+  })
+    .trim()
+    .slice(0, 8);
 }
 
 function header(repoRelPath, sha) {
@@ -97,12 +115,25 @@ for (const [slug, repoRelPath] of Object.entries(CANON_SOURCES)) {
       );
       failed = true;
     } else {
+      // A provenance line that cannot be checked is decoration. A `blob:` stamp
+      // names an exact content hash, so verify it against the source on disk.
+      const stamped = /Source: \S+ @ (\S+)\./.exec(copy.split("\n")[0] ?? "")?.[1];
+      if (stamped) {
+        const actual = `blob:${blobHash(repoRelPath)}`;
+        if (stamped !== actual) {
+          console.error(
+            `✗ ${slug}: provenance stamp ${stamped} does not match ${repoRelPath} (${actual}) — run: npm run sync-canon`
+          );
+          failed = true;
+          continue;
+        }
+      }
       console.log(`✓ ${slug}: in sync with ${repoRelPath}`);
     }
     continue;
   }
 
-  const next = header(repoRelPath, gitShortSha(repoRelPath)) + source;
+  const next = header(repoRelPath, sourceProvenance(repoRelPath)) + source;
   const prev = fs.existsSync(outPath) ? fs.readFileSync(outPath, "utf8") : null;
   if (prev === next) {
     console.log(`= ${slug}: unchanged`);

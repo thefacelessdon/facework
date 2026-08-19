@@ -1,4 +1,4 @@
-<!-- DERIVED COPY — do not edit. Source: theories/coherence-design.md @ 83762d8. Regenerate: npm run sync-canon -->
+<!-- DERIVED COPY — do not edit. Source: theories/coherence-design.md @ blob:2ec41fce. Regenerate: npm run sync-canon -->
 ---
 title: "Coherence Design: The Discipline"
 version: 1.0

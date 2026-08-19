@@ -1,4 +1,4 @@
-<!-- DERIVED COPY — do not edit. Source: theories/cultural-physics.md @ 6e6efe1. Regenerate: npm run sync-canon -->
+<!-- DERIVED COPY — do not edit. Source: theories/cultural-physics.md @ blob:ee8b0b2e. Regenerate: npm run sync-canon -->
 ---
 title: "The Theory of Cultural Physics"
 version: 1.0

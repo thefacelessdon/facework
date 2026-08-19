@@ -1,4 +1,4 @@
-<!-- DERIVED COPY — do not edit. Source: methodology/build-methodology.md @ 7c7d2a8. Regenerate: npm run sync-canon -->
+<!-- DERIVED COPY — do not edit. Source: methodology/build-methodology.md @ blob:d761f882. Regenerate: npm run sync-canon -->
 ---
 title: "Build Methodology: GAMUT Case Study"
 type: Internal Reference

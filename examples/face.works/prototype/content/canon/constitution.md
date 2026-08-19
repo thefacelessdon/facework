@@ -1,4 +1,4 @@
-<!-- DERIVED COPY — do not edit. Source: CONSTITUTION.md @ 83762d8. Regenerate: npm run sync-canon -->
+<!-- DERIVED COPY — do not edit. Source: CONSTITUTION.md @ blob:c7bad5d9. Regenerate: npm run sync-canon -->
 ---
 title: "The Constitution of Facework"
 version: 1.0
