@@ -1,0 +1,505 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# harness-to-berd
+#
+# Convert a Facework HarnessBundle (PROTOCOL.md §10 — the derived markdown view
+# of the Runtime Ports) into a runnable Berd bundle.
+#
+# This is the second concrete HarnessBundle consumer, built during the fifth
+# Runtime Ports validation (Berd — the first *multi-harness* shell: one set of
+# primitives fronting goose / claude-acp / codex-acp / copilot-acp / amp-acp).
+# See:
+#   methodology/runtime-ports-berd-gap-2026-08-18.md
+#   PROTOCOL.md §10  (HarnessBundle spec)
+#   bin/harness-to-claude-code  (the first consumer — single-harness, file-native)
+#
+# Mapping (bundle -> Berd):
+#   soul/identity/purpose/memory/tools/boundary .md  ->  .agents/agents/{tenant}.md (persona)
+#   boundary.md                                      ->  AGENTS.md (workspace instructions)
+#   skills/{id}.md                                   ->  .agents/skills/{id}/SKILL.md
+#   tools.md                                         ->  berd-install/connections.md (checklist)
+#   SkillManifest triggers + model_tier              ->  berd-install/launch.md (berdctl commands)
+#   (pointer to AGENTS.md)                           ->  berd-install/project-instructions.md
+#   (all of the above)                               ->  berd-install/INSTALL.md
+#
+# Berd composes context at three different scopes, and the bundle splits across
+# all three by lifetime — this is the finding that made §10's separate
+# boundary.md load-bearing here:
+#   workspace  -> AGENTS.md, walked per attached workspace dir and injected as
+#                 <workspace-instructions> (Berd src-tauri/src/commands/
+#                 workspace_context.rs; verified at Facework 0.0.44)
+#   project    -> project instructions, applied to every session in the project
+#   session    -> the agent persona, swappable per session
+#
+# Berd's agents and skills are portable files under `.agents/` (project-local) or
+# `~/.agents/` (personal). Projects, sessions, and connections are app-owned state
+# with no on-disk config, so those are emitted as `berdctl` commands and an
+# operator checklist rather than written files — see the gap note.
+#
+# One-way only (§10.6): the YAML manifests remain the source of truth. Secrets
+# are NEVER emitted — the bundle excludes them by design, and so does this tool.
+#
+# Usage:
+#   bin/harness-to-berd <bundle-dir> --out <dir> [--force] [--harness-id ID]
+#                       [--model-standard ID] [--model-advanced ID]
+#   bin/harness-to-berd examples/face.works/harness-bundle --out /tmp/fw-berd
+
+require 'yaml'
+require 'json'
+require 'fileutils'
+require 'optparse'
+
+# Bundle files are UTF-8 (em dashes, arrows). System Ruby may default the
+# external encoding to US-ASCII; force UTF-8 so reads/regex/writes are safe.
+Encoding.default_external = Encoding::UTF_8
+Encoding.default_internal = Encoding::UTF_8
+
+# ---- args -------------------------------------------------------------------
+
+options = {
+  force: false,
+  harness: 'claude-acp',
+  model_standard: 'default',
+  model_advanced: 'opus[1m]'
+}
+parser = OptionParser.new do |o|
+  o.banner = 'Usage: harness-to-berd <bundle-dir> --out <dir> [--force]'
+  o.on('--out DIR', 'Output directory for the generated Berd bundle') { |v| options[:out] = v }
+  o.on('--force', 'Overwrite the output directory if it already exists') { options[:force] = true }
+  o.on('--harness-id ID', 'Berd harness for generated session commands (berdctl info harnesses)') { |v| options[:harness] = v }
+  o.on('--model-standard ID', 'Model id for model_tier: standard (berdctl info models)') { |v| options[:model_standard] = v }
+  o.on('--model-advanced ID', 'Model id for model_tier: advanced') { |v| options[:model_advanced] = v }
+  o.on('-h', '--help') { puts o; exit 0 }
+end
+parser.parse!
+
+bundle_dir = ARGV[0]
+abort "error: no bundle directory given\n\n#{parser}" if bundle_dir.nil?
+abort "error: bundle directory not found: #{bundle_dir}" unless File.directory?(bundle_dir)
+abort "error: not a HarnessBundle (no CLAUDE.md): #{bundle_dir}" unless File.file?(File.join(bundle_dir, 'CLAUDE.md'))
+abort 'error: --out is required' if options[:out].nil?
+
+out_dir = options[:out]
+if File.exist?(out_dir) && !options[:force]
+  abort "error: output dir exists: #{out_dir} (use --force to overwrite)"
+end
+
+# ---- helpers ----------------------------------------------------------------
+
+# Split a markdown file into [frontmatter_hash, body_string].
+def split_frontmatter(text)
+  if text =~ /\A---\s*\n(.*?)\n---\s*\n?(.*)\z/m
+    fm = begin
+      YAML.safe_load(Regexp.last_match(1), permitted_classes: [], aliases: false) || {}
+    rescue StandardError
+      {}
+    end
+    [fm, Regexp.last_match(2)]
+  else
+    [{}, text]
+  end
+end
+
+def strip_leading_h1(body)
+  body.sub(/\A\s*#\s+.*\n+/, '')
+end
+
+def first_paragraph(body)
+  stripped = strip_leading_h1(body).strip
+  para = stripped.split(/\n\s*\n/).first.to_s
+  para.gsub(/\s+/, ' ').strip
+end
+
+# Berd slug rules (agent-builder / skill-builder SKILL.md): lowercase, non-
+# alphanumeric runs -> '-', collapse and trim '-', truncate to 64 chars.
+def slugify(name, fallback = 'agent')
+  slug = name.to_s.downcase.gsub(/[^a-z0-9]+/, '-').gsub(/\A-+|-+\z/, '')[0, 64].to_s
+  slug = slug.sub(/-+\z/, '')
+  slug.empty? ? fallback : slug
+end
+
+def read(bundle_dir, name)
+  path = File.join(bundle_dir, name)
+  File.file?(path) ? File.read(path) : nil
+end
+
+def truncate_words(text, limit)
+  return text if text.length <= limit
+
+  cut = text[0, limit - 3]
+  cut = cut[0, cut.rindex(' ') || (limit - 3)].rstrip
+  "#{cut}…"
+end
+
+# Trim to whole sentences so a generated description never ends mid-clause —
+# Berd matches a request against this string, so a clean, complete statement of
+# what the skill does reads better and triggers more predictably.
+def truncate_sentences(text, limit)
+  return text if text.length <= limit
+
+  window = text[0, limit]
+  cut = window.rindex(/[.!?](\s|\z)/)
+  return window[0, cut + 1] if cut
+
+  truncate_words(text, limit)
+end
+
+# ---- read bundle root -------------------------------------------------------
+
+root_fm, = split_frontmatter(File.read(File.join(bundle_dir, 'CLAUDE.md')))
+tenant   = root_fm['tenant'] || 'unknown-tenant'
+track    = root_fm['track']
+evidence = root_fm['evidence_level']
+src_man  = root_fm['source_manifest']
+tenant_slug = slugify(tenant, 'tenant')
+
+GENERATED_BY = 'facework bin/harness-to-berd'
+
+provenance = lambda do |comment_open, comment_close|
+  <<~PROV
+    #{comment_open} GENERATED by #{GENERATED_BY} from a Facework HarnessBundle (PROTOCOL.md §10).
+         Source of truth: #{src_man || 'the Runtime Port YAML manifests'}.
+         Do NOT hand-edit — edit the source artifacts and regenerate (§10.6, one-way). #{comment_close}
+  PROV
+end
+
+# ---- persona (Berd agent) ---------------------------------------------------
+
+# Reading order per the bundle's own navigation (boundary first — it is the
+# memory-boundary contract the runtime must respect before anything else).
+SECTIONS = [
+  ['boundary.md', 'Memory Boundary (read first)'],
+  ['identity.md', 'Identity'],
+  ['soul.md',     'Soul — Signal & Taste'],
+  ['purpose.md',  'Purpose — Locked Direction'],
+  ['memory.md',   'Memory Map'],
+  ['tools.md',    'Tools & Integrations']
+].freeze
+
+sections_present = SECTIONS.select { |file, _| read(bundle_dir, file) }
+
+persona_body = +''
+persona_body << provenance.call('<!--', '-->')
+persona_body << "\n"
+persona_body << "You operate the **#{tenant}** tenant world. Everything below is the tenant's\n"
+persona_body << "own contract — its boundary, identity, signal, locked direction, memory map,\n"
+persona_body << "and tools. Operate inside it; do not invent scope it does not declare.\n\n"
+persona_body << "- **Tenant:** #{tenant}\n"
+persona_body << "- **Track:** #{track}\n" if track
+persona_body << "- **Evidence level:** #{evidence}\n" if evidence
+persona_body << "\n---\n\n"
+
+sections_present.each do |file, label|
+  persona_body << "## #{label}\n\n"
+  persona_body << strip_leading_h1(read(bundle_dir, file)).strip
+  persona_body << "\n\n---\n\n"
+end
+
+# Berd Agent Markdown: `name` + `description` are the required frontmatter keys;
+# any other keys are preserved on edit (agent-builder SKILL.md). Port-level facts
+# go under `metadata` rather than inventing top-level keys.
+persona_desc = "#{tenant} tenant world operator"
+persona_desc += " (#{track})" if track
+agent_fm = {
+  'name' => tenant,
+  'description' => persona_desc,
+  'metadata' => {
+    'generated_by' => GENERATED_BY,
+    'tenant' => tenant,
+    'source_manifest' => src_man
+  }.compact
+}
+agent_fm['metadata']['track'] = track if track
+agent_fm['metadata']['evidence_level'] = evidence if evidence
+
+agent_md = +''
+agent_md << agent_fm.to_yaml # includes leading '---'
+agent_md << "---\n\n"
+agent_md << persona_body.strip
+agent_md << "\n"
+
+# ---- skills -----------------------------------------------------------------
+
+skills_src = Dir.glob(File.join(bundle_dir, 'skills', '*.md')).sort
+skills = []
+
+skills_src.each do |path|
+  fm, body = split_frontmatter(File.read(path))
+  raw_id = fm['id'] || File.basename(path, '.md')
+  # Berd requires skill name == folder name, lowercase kebab-case, <= 64 chars
+  # (skill-builder SKILL.md). Unlike Claude Code, `name` is NOT display-only here.
+  id = slugify(raw_id, 'skill')
+  display_name = fm['name'] || raw_id
+  description = truncate_sentences(first_paragraph(body), 240)
+
+  # The description is Berd's trigger surface — a skill is matched against the
+  # request by description, so fold the firing condition into it.
+  trigger = fm['trigger']
+  ownership = fm['ownership']
+  # §9.3 declares `event` as an object; the derived bundle markdown flattens it to
+  # `event_name` / `event_source`. Accept either shape.
+  event_name = fm['event_name'] || (fm['event'].is_a?(Hash) ? fm['event']['name'] : fm['event'])
+  if trigger && !description.downcase.include?('use when')
+    hint = case trigger
+           when 'on_demand' then "Use when the operator asks for #{display_name.downcase}"
+           when 'scheduled' then "Runs on a schedule (#{fm['schedule'] || 'see playbook'}); use when running that cadence by hand"
+           when 'event' then "Fires on an event (#{event_name || 'see playbook'}); use when that event is being handled"
+           when 'continuous' then "Runs continuously; use when maintaining #{display_name.downcase}"
+           end
+    description = "#{description} #{hint}." if hint
+  end
+
+  meta = { 'generated_by' => GENERATED_BY, 'display_name' => display_name, 'tenant' => tenant }
+  %w[domain trigger ownership tags model_tier sponsors multiplayer verifier_skill_id
+     advisor_escalation schedule event event_name event_source].each { |k| meta[k] = fm[k] unless fm[k].nil? }
+
+  fm_out = { 'name' => id, 'description' => description, 'metadata' => meta }
+
+  skill_md = +''
+  skill_md << fm_out.to_yaml
+  skill_md << "---\n\n"
+  skill_md << body.strip
+  skill_md << "\n"
+
+  dest = File.join(out_dir, '.agents', 'skills', id)
+  FileUtils.mkdir_p(dest)
+  File.write(File.join(dest, 'SKILL.md'), skill_md)
+
+  skills << { id: id, display_name: display_name, trigger: trigger, ownership: ownership,
+              model_tier: fm['model_tier'] || 'standard', renamed: id != raw_id }
+end
+
+# ---- integrations (parsed from tools.md) ------------------------------------
+
+tools_md = read(bundle_dir, 'tools.md') || ''
+integrations = []
+tools_md.scan(/^###\s+(.+?)\s*$(.*?)(?=^###\s|^##\s|\z)/m) do |heading, block|
+  name = heading.strip
+  kind = name[/\(([^)]+)\)\s*\z/, 1]
+  label = name.sub(/\s*\([^)]+\)\s*\z/, '').strip
+  field = ->(key) { block[/\*\*#{key}:\*\*\s*(.+)/, 1]&.strip }
+
+  auth = field.call('Auth')
+  # Berd splits external tools two ways (berd-help references/connections-and-
+  # extensions.md): a *connection* is an OAuth sign-in from Berd's own catalog;
+  # an *extension* is a directly-configured tool (stdio / SSE / streamable HTTP /
+  # ACP / builtin). Local filesystem + CLI tools are neither — they are workspace
+  # attachments or shell tooling.
+  berd_kind =
+    if kind.to_s =~ /local|CLI/i then 'workspace'
+    elsif auth.to_s =~ /oauth/i then 'connection'
+    else 'extension'
+    end
+
+  integrations << {
+    label: label, slug: slugify(label, 'integration'), kind: kind, berd_kind: berd_kind,
+    purpose: field.call('Purpose'), auth: auth, trust: field.call('Trust boundary'),
+    scope: field.call('Scope'), rate: field.call('Rate limit'), failover: field.call('Failover')
+  }
+end
+
+# ---- berd-install/ ----------------------------------------------------------
+
+install_dir = File.join(out_dir, 'berd-install')
+FileUtils.mkdir_p(install_dir)
+
+# AGENTS.md — the workspace-scoped vehicle. Berd walks each attached workspace
+# dir for AGENTS.md and injects it as <workspace-instructions>, so it reaches
+# every session on every harness regardless of which persona is selected. That
+# makes it the right home for the one rule that must not depend on the agent:
+# the memory boundary (§9 MemoryMap.boundary / bundle boundary.md).
+boundary_md = read(bundle_dir, 'boundary.md')
+agents_md = +"# #{tenant} — workspace instructions\n\n"
+agents_md << provenance.call('<!--', '-->')
+agents_md << "\n"
+agents_md << "This file governs **every session with this workspace attached**, on any\n"
+agents_md << "harness and any persona. It carries the invariants that must not depend on\n"
+agents_md << "which agent is running — above all the memory boundary below.\n\n"
+agents_md << "- **Tenant:** #{tenant}#{track ? " (#{track})" : ''}\n"
+agents_md << "- **Persona:** `#{tenant_slug}` (`.agents/agents/#{tenant_slug}.md`) — the full tenant contract\n"
+agents_md << "- **Skills:** #{skills.size} in `.agents/skills/` — matched by description at session start\n"
+agents_md << "- **Integrations:** #{integrations.size} declared — wired by hand, see `berd-install/connections.md`\n\n"
+if boundary_md
+  agents_md << "---\n\n"
+  agents_md << strip_leading_h1(boundary_md).strip
+  agents_md << "\n"
+else
+  agents_md << "_No `boundary.md` in the source bundle — the memory boundary is UNDECLARED._\n"
+end
+File.write(File.join(out_dir, 'AGENTS.md'), agents_md)
+
+# project-instructions.md — the project-scoped vehicle, for a project spanning
+# more than one workspace. Deliberately a POINTER, not a second copy of the
+# boundary: two authoritative copies of the same rule is exactly the drift the
+# boundary exists to prevent.
+project_instructions = +''
+project_instructions << "# #{tenant} — Berd project instructions\n\n"
+project_instructions << provenance.call('<!--', '-->')
+project_instructions << "\n"
+project_instructions << "Paste this into `berdctl project create --instructions` (or the project's\n"
+project_instructions << "settings). It applies to every session in the project, including sessions\n"
+project_instructions << "whose attached workspaces do not carry the tenant's `AGENTS.md`.\n\n"
+project_instructions << "---\n\n"
+project_instructions << "You operate the #{tenant} tenant world#{track ? " (#{track} track)" : ''}.\n\n"
+project_instructions << "The governing contract is `AGENTS.md` at the root of the attached #{tenant}\n"
+project_instructions << "workspace — **read it before acting**. Its memory boundary is binding on every\n"
+project_instructions << "session regardless of persona: tenant content is written to tenant memory, and\n"
+project_instructions << "no tenant content is auto-promoted into runtime memory without explicit user\n"
+project_instructions << "action.\n\n"
+project_instructions << "Skills for this tenant live in `.agents/skills/`; the full tenant contract is\n"
+project_instructions << "the `#{tenant}` persona (`.agents/agents/#{tenant_slug}.md`).\n"
+File.write(File.join(install_dir, 'project-instructions.md'), project_instructions)
+
+# connections.md — Berd has no on-disk connections/extensions config, so this is
+# an operator checklist, not a generated config file. Auth *references* only.
+connections = +"# #{tenant} — Berd connections & extensions checklist\n\n"
+connections << provenance.call('<!--', '-->')
+connections << "\n"
+connections << "Berd configures external tools in **Settings → Connections**, which holds two\n"
+connections << "different things (berd-help `references/connections-and-extensions.md`):\n\n"
+connections << "- **Connection** — an OAuth sign-in to a service in Berd's own catalog.\n"
+connections << "- **Extension** — a directly-configured integration (stdio, SSE, streamable\n"
+connections << "  HTTP, ACP, or builtin) where you supply the command, URL, or config.\n\n"
+connections << "There is no on-disk connections config and no `berdctl` noun for it, so this\n"
+connections << "file is a **checklist a human works through in the UI** — nothing here is wired\n"
+connections << "automatically. Secret values are excluded by design (§10.3); resolve every\n"
+connections << "auth reference from your own secret store.\n\n"
+if integrations.empty?
+  connections << "_No integrations found in `tools.md`._\n"
+else
+  %w[connection extension workspace].each do |bk|
+    group = integrations.select { |i| i[:berd_kind] == bk }
+    next if group.empty?
+
+    heading = { 'connection' => 'Connections (OAuth — check Berd\'s catalog first)',
+                'extension' => 'Extensions (configure directly)',
+                'workspace' => 'Workspace / local tooling (not a Berd connection)' }[bk]
+    connections << "## #{heading}\n\n"
+    group.each do |i|
+      connections << "### #{i[:label]} (`#{i[:slug]}`#{i[:kind] ? ", #{i[:kind]}" : ''})\n\n"
+      connections << "- Purpose: #{i[:purpose] || 'n/a'}\n"
+      connections << "- Auth (reference only — never paste secrets here): #{i[:auth] || 'n/a'}\n"
+      connections << "- Trust boundary: #{i[:trust] || 'n/a'}\n"
+      connections << "- Scope: #{i[:scope] || 'n/a'}\n"
+      connections << "- Rate limit: #{i[:rate] || 'n/a'}\n" if i[:rate]
+      connections << "- Failover: #{i[:failover] || 'n/a'}\n" if i[:failover]
+      connections << "\n"
+    end
+  end
+  connections << "> If an integration is not in Berd's connection catalog, configure it as an\n"
+  connections << "> extension instead. `trust_boundary`, `rate_limits`, `pii`, and\n"
+  connections << "> `data_residency` have no enforcement point in Berd — they stay **declared**\n"
+  connections << "> in the manifest and delegated to the operator (PROTOCOL.md §9.11).\n"
+end
+File.write(File.join(install_dir, 'connections.md'), connections)
+
+# launch.md — how each skill actually gets fired on Berd.
+launch = +"# #{tenant} — launching skills on Berd\n\n"
+launch << provenance.call('<!--', '-->')
+launch << "\n"
+launch << "Berd fires work as **sessions**. `berdctl session create` starts one in the\n"
+launch << "background and returns its id immediately; the harness and model are chosen\n"
+launch << "per session (`berdctl info harnesses` / `berdctl info models`).\n\n"
+launch << "Generated for harness `#{options[:harness]}` — standard tier `#{options[:model_standard]}`,\n"
+launch << "advanced tier `#{options[:model_advanced]}` (override with `--harness-id`,\n"
+launch << "`--model-standard`, `--model-advanced`).\n\n"
+
+by_trigger = skills.group_by { |s| s[:trigger] || 'on_demand' }
+launch << "## Trigger coverage\n\n"
+launch << "| Trigger | Skills | Berd mechanism |\n|---|---|---|\n"
+launch << "| `on_demand` | #{by_trigger.fetch('on_demand', []).size} | session create / tag the skill in a chat — **native** |\n"
+launch << "| `scheduled` | #{by_trigger.fetch('scheduled', []).size} | Automations (built conversationally in the UI) — **partial**, no CLI |\n"
+launch << "| `event` | #{by_trigger.fetch('event', []).size} | no event/hook primitive — **no home**, fire by hand |\n"
+launch << "| `continuous` | #{by_trigger.fetch('continuous', []).size} | no home |\n\n"
+
+launch << "## Per-skill launch\n\n"
+skills.each do |s|
+  model = s[:model_tier] == 'advanced' ? options[:model_advanced] : options[:model_standard]
+  launch << "### `#{s[:id]}` — #{s[:display_name]}\n\n"
+  launch << "- Trigger: `#{s[:trigger] || 'on_demand'}` · Ownership: `#{s[:ownership] || 'n/a'}` · Model tier: `#{s[:model_tier]}`\n"
+  launch << "\n```sh\n"
+  launch << "berdctl session create \\\n"
+  launch << "  --project-id <project-id> \\\n"
+  launch << "  --agent-id ~/.agents/agents/#{tenant_slug}.md \\\n"
+  launch << "  --harness-id #{options[:harness]} \\\n"
+  launch << "  --model-id #{model} \\\n"
+  launch << "  --prompt \"Run the #{s[:id]} skill.\"\n"
+  launch << "```\n\n"
+end
+File.write(File.join(install_dir, 'launch.md'), launch)
+
+# INSTALL.md — the operator's entry point.
+install = +"# #{tenant} — install on Berd\n\n"
+install << provenance.call('<!--', '-->')
+install << "\n"
+install << "Berd is a **multi-harness shell**: one set of primitives (agents, skills,\n"
+install << "projects, sessions, connections) fronting several agent harnesses. This bundle\n"
+install << "installs the #{tenant} tenant world into those primitives.\n\n"
+install << "## What was generated\n\n"
+install << "| Path | Berd primitive | Scope | Port |\n|---|---|---|---|\n"
+install << "| `AGENTS.md` | workspace instructions | workspace | Memory boundary — binding on every session |\n"
+install << "| `.agents/agents/#{tenant_slug}.md` | agent (persona) | session | Context — soul/identity/purpose/memory/tools |\n"
+install << "| `.agents/skills/*/SKILL.md` | skills (#{skills.size}) | personal or project | Skills |\n"
+install << "| `berd-install/project-instructions.md` | project instructions | project | pointer to `AGENTS.md` |\n"
+install << "| `berd-install/connections.md` | connections / extensions | app | Connections — **manual, UI-only** |\n"
+install << "| `berd-install/launch.md` | sessions | per invocation | Skills — trigger + model-tier binding |\n\n"
+install << "Berd composes context at three scopes and the bundle splits across all three\n"
+install << "by lifetime: the boundary must hold for **any** agent (workspace), the tenant\n"
+install << "contract belongs to **this** agent (session), and the project instructions tie\n"
+install << "them together when a project spans more than one workspace.\n\n"
+install << "> If the target repo already has an `AGENTS.md`, **merge** — do not overwrite.\n"
+install << "> The generated file assumes it is the only workspace instruction set.\n\n"
+install << "## 1. Place the agent and skills\n\n"
+install << "Personal scope (portable across projects):\n\n"
+install << "```sh\n"
+install << "cp .agents/agents/#{tenant_slug}.md ~/.agents/agents/\n"
+install << "cp -R .agents/skills/. ~/.agents/skills/\n"
+install << "```\n\n"
+install << "Project scope (this repo only) — leave `.agents/` where it is; Berd reads\n"
+install << "`<project>/.agents/agents/` and `<project>/.agents/skills/`.\n\n"
+install << "`AGENTS.md` stays at the workspace root — Berd walks each attached workspace\n"
+install << "directory for it and injects it as `<workspace-instructions>`.\n\n"
+install << "## 2. Create the project\n\n"
+install << "```sh\n"
+install << "berdctl project create \\\n"
+install << "  --name \"#{tenant}\" \\\n"
+install << "  --instructions \"$(cat berd-install/project-instructions.md)\" \\\n"
+install << "  --working-dir \"$(pwd)\"\n"
+install << "```\n\n"
+install << "## 3. Wire connections by hand\n\n"
+install << "Work through `berd-install/connections.md` in Settings → Connections.\n"
+install << "#{integrations.size} integration(s) declared; none are wired automatically.\n\n"
+install << "## 4. Launch\n\n"
+install << "See `berd-install/launch.md` for the per-skill `berdctl session create`\n"
+install << "commands, with model tier mapped from `SkillManifest.model_tier`.\n\n"
+install << "## Not carried across\n\n"
+install << "- **Scheduled + event triggers.** Berd Automations are built conversationally\n"
+install << "  in the UI and have no `berdctl` noun; there is no event/hook primitive.\n"
+install << "  Those skills install fine but must be fired by hand.\n"
+install << "- **Governance metadata.** `trust_boundary`, `pii`, `rate_limits`,\n"
+install << "  `data_residency`, `sponsors`, `verifier_skill_id` have no enforcement point\n"
+install << "  in Berd — declared, not enforced (PROTOCOL.md §9.11).\n"
+install << "- **Secrets.** Excluded by design at every step.\n"
+File.write(File.join(install_dir, 'INSTALL.md'), install)
+
+# ---- write agent ------------------------------------------------------------
+
+FileUtils.mkdir_p(File.join(out_dir, '.agents', 'agents'))
+File.write(File.join(out_dir, '.agents', 'agents', "#{tenant_slug}.md"), agent_md)
+
+# ---- summary ----------------------------------------------------------------
+
+renamed = skills.select { |s| s[:renamed] }
+puts 'Converted HarnessBundle -> Berd bundle'
+puts "  bundle:  #{bundle_dir}"
+puts "  out:     #{out_dir}"
+puts "  tenant:  #{tenant}#{track ? " (#{track})" : ''}"
+puts "  agents.md: AGENTS.md (workspace instructions — memory boundary)"
+puts "  agent:   .agents/agents/#{tenant_slug}.md (#{sections_present.size} sections composed)"
+puts "  skills:  #{skills.size} -> .agents/skills/{id}/SKILL.md (#{skills.map { |s| s[:id] }.join(', ')})"
+puts "  renamed: #{renamed.map { |s| s[:id] }.join(', ')}" unless renamed.empty?
+puts "  connections: #{integrations.size} declared (#{integrations.group_by { |i| i[:berd_kind] }.map { |k, v| "#{v.size} #{k}" }.join(', ')}) — manual, UI-only"
+puts "  triggers: #{by_trigger.map { |t, v| "#{v.size} #{t}" }.join(', ')}"
+puts ''
+puts "Next: follow #{File.join(out_dir, 'berd-install', 'INSTALL.md')}."
