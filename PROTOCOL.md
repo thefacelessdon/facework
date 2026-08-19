@@ -675,8 +675,17 @@ A valid set of Runtime Ports satisfies these bidirectional references:
 6. `SkillManifest.skills[].depends_on_capabilities[]` → entries in
    `CapabilityMap` (existing Phase 5 artifact).
 
-`bin/validate-manifest` runs these checks and reports unresolved references
-as gate failures.
+`bin/validate-manifest` runs checks **1–5** and reports unresolved references as
+gate failures.
+
+**Rule 6 is authoring-layer, not validator-gated (clarified v0.0.49).** The
+`CapabilityMap` is a Phase 5 authoring artifact, not a port manifest — the
+validator has no path to load it, so it reports the count of declared capability
+references and delegates resolution to the authoring layer. This is the same
+declared-and-delegated treatment §9.12 gives a governance gate marked
+`unenforced: true`: the obligation is real, it is visible, and it is not silently
+presented as machine-checked. A validator that claims to run a check it cannot
+run is the defect this clarification removes.
 
 ### 9.8 Phase 5 gate — full extension
 
@@ -867,6 +876,12 @@ layer**, each classified `own | rent | mitigate`:
   loops it can bind, each `{ harness, posture, notes? }`. Present only when the
   loop is selected per invocation rather than fixed at install; MUST list ≥2
   when present. Omitting it means the shell is single-harness (§9.11).
+  **`harness_options` is descriptive, not a guarantee (clarified v0.0.49).** The
+  FS-400.8 sovereignty hedge is a property you *read off* the list — it holds only
+  when at least one loop is `own` — not something declaring the list asserts. A
+  shell whose every selectable loop is `rent` is still multi-harness and still
+  valid; it simply has no hedge, and validators SHOULD say so rather than let the
+  §9.11 framing imply otherwise.
 - `waiver` — REQUIRED if any layer is `rent` or `mitigate`. Fields: `layers[]`
   (which layers the waiver covers), `exit_plan` (can tenant state relocate?),
   `data_posture` (`retention`, `training`, `residency`), and `ruling` — the
