@@ -370,7 +370,7 @@ def memory_path_resolves?(skill_path, memory_paths)
 end
 
 # ----- RuntimeConformanceProfile (v1.5.0, PROTOCOL.md §9.12) ---------------
-def validate_conformance_profile!(data, declared_runtime)
+def validate_conformance_profile!(data, declared_runtime, claimed = true)
   raise "conformance profile must be an object" unless data.is_a?(Hash)
 
   %w[version tenant runtime].each do |k|
@@ -439,8 +439,47 @@ def validate_conformance_profile!(data, declared_runtime)
     raise "shell_sovereignty.waiver.layers has unknown layers: #{bad_layers.join(', ')}" unless bad_layers.empty?
     uncovered = unowned - wl
     raise "shell_sovereignty.waiver does not cover rent/mitigate layers: #{uncovered.join(', ')}" unless uncovered.empty?
-    %w[exit_plan owner_ruling].each do |k|
-      raise "shell_sovereignty.waiver.#{k} must be a non-empty string" unless waiver[k].is_a?(String) && !waiver[k].strip.empty?
+    raise "shell_sovereignty.waiver.exit_plan must be a non-empty string" unless waiver["exit_plan"].is_a?(String) && !waiver["exit_plan"].strip.empty?
+
+    # v1.7.0 — the Sovereignty-loop ruling. Structured so the Phase-7 gate can
+    # actually fail; free-text owner_ruling could satisfy it with the string
+    # "PENDING", which asserts the gate's own condition is unmet (§9.12).
+    has_ruling = waiver.key?("ruling")
+    has_legacy = waiver.key?("owner_ruling")
+    raise "shell_sovereignty.waiver must declare a ruling (v1.7.0) or the deprecated owner_ruling" unless has_ruling || has_legacy
+    raise "shell_sovereignty.waiver declares both ruling and owner_ruling — use ruling (owner_ruling is deprecated in v1.7.0)" if has_ruling && has_legacy
+
+    if has_legacy
+      legacy = waiver["owner_ruling"]
+      raise "shell_sovereignty.waiver.owner_ruling must be a non-empty string" unless legacy.is_a?(String) && !legacy.strip.empty?
+      warn "  [warn] shell_sovereignty.waiver.owner_ruling is deprecated (v1.7.0) — replace with ruling: { status, by, date }"
+      ruling_status = "ruled"
+    else
+      r = waiver["ruling"]
+      raise "shell_sovereignty.waiver.ruling must be an object" unless r.is_a?(Hash)
+      # YAML 1.1 parses a bare `on:` key as the boolean true. Name the trap before
+      # the generic unknown-key error, which would otherwise report "unknown keys: true".
+      raise "shell_sovereignty.waiver.ruling uses the key 'on', which YAML parses as the boolean true — use 'date'" if r.key?(true)
+      unknown_r = r.keys - %w[status by date note]
+      raise "shell_sovereignty.waiver.ruling has unknown keys: #{unknown_r.join(', ')}" unless unknown_r.empty?
+      ruling_status = r["status"]
+      raise "shell_sovereignty.waiver.ruling.status must be 'ruled' or 'pending'" unless %w[ruled pending].include?(ruling_status)
+      if ruling_status == "ruled"
+        %w[by date].each do |k|
+          raise "shell_sovereignty.waiver.ruling.#{k} is required when status is 'ruled'" unless r[k].is_a?(String) && !r[k].strip.empty?
+        end
+        raise "shell_sovereignty.waiver.ruling.date must be an ISO date (YYYY-MM-DD): #{r['date'].inspect}" unless r["date"] =~ /^\d{4}-\d{2}-\d{2}$/
+      else
+        present = %w[by date].select { |k| r.key?(k) }
+        raise "shell_sovereignty.waiver.ruling.status is 'pending' but declares #{present.join(' and ')} — a ruling is recorded or it is not" unless present.empty?
+      end
+    end
+
+    # Phase-7 gate (§9.12). Claiming runtime conformance asserts the tenant world
+    # is ready to be operated; a rented/mitigated shell cannot be until its owner
+    # has ruled. A pending profile stays valid as validation output.
+    if claimed && ruling_status == "pending"
+      raise "Phase-7 gate: shell_sovereignty.waiver.ruling.status is 'pending', so this profile is validation output and MUST NOT be reached through conformance.claimed: true (§9.12). Record the owner's ruling, or set claimed: false."
     end
     dp = waiver["data_posture"]
     raise "shell_sovereignty.waiver.data_posture must be an object" unless dp.is_a?(Hash)
@@ -482,6 +521,7 @@ def validate_conformance_profile!(data, declared_runtime)
     statuses: bindings.map { |b| [b["port"], b["status"]] }.to_h,
     sovereignty: layers.map { |l| [l, sov[l]] }.to_h.merge(sov["harness_options"] ? { "harness_options" => sov["harness_options"] } : {}),
     waived: unowned,
+    ruling: unowned.empty? ? "n/a" : (ruling_status == "ruled" ? "ruled #{(waiver["ruling"] || {})["date"] || "(legacy owner_ruling)"}" : "PENDING"),
     gates: gates,
     unenforced: unenforced,
     metadata: metadata
@@ -724,8 +764,25 @@ begin
         rescue => e
           raise "could not parse conformance profile at #{profile_path}: #{e.message}"
         end
-        conformance_summary = validate_conformance_profile!(profile_data, declared_runtime)
+        conformance_summary = validate_conformance_profile!(profile_data, declared_runtime, true)
         conformance_summary[:profile] = profile_rel
+      elsif conformance["profile"]
+        # v1.7.0 — claimed:false with a profile declared. The project stays at the
+        # base tier (no §9.2 MUSTs), but the profile is still structurally checked
+        # so validation output can be kept under review before it is claimed. The
+        # Phase-7 ruling gate does not apply here: a pending ruling is the honest
+        # state for a profile that is not yet an adoption decision (§9.12).
+        profile_rel = conformance["profile"]
+        profile_path = File.expand_path(profile_rel, manifest_dir)
+        raise "runtime_ports.conformance.profile not found: #{profile_path}" unless File.exist?(profile_path)
+        begin
+          profile_data = YAML.safe_load(File.read(profile_path), aliases: false)
+        rescue => e
+          raise "could not parse conformance profile at #{profile_path}: #{e.message}"
+        end
+        conformance_summary = validate_conformance_profile!(profile_data, conformance["runtime"], false)
+        conformance_summary[:profile] = profile_rel
+        conformance_summary[:unclaimed] = true
       end
     end
 
@@ -874,12 +931,13 @@ begin
     puts "  [ok] DesignInfrastructure: #{design_summary[:components_count]} components, evaluator skill '#{design_summary[:evaluator]}' (#{track_note})"
   end
   if conformance_summary
-    puts "  [ok] RuntimeConformance: claimed on '#{conformance_summary[:runtime]}' (§9.12 profile: #{conformance_summary[:profile]})"
+    claim_note = conformance_summary[:unclaimed] ? "NOT claimed — profile checked as validation output" : "claimed"
+    puts "  [ok] RuntimeConformance: #{claim_note} on '#{conformance_summary[:runtime]}' (§9.12 profile: #{conformance_summary[:profile]})"
     port_line = %w[skills memory context connections].map { |p| "#{p}=#{conformance_summary[:statuses][p]}" }.join(" / ")
     puts "    ports: #{port_line}"
     sov = conformance_summary[:sovereignty]
     waived = conformance_summary[:waived]
-    sov_note = waived.empty? ? "fully self-hostable, no waiver required" : "waiver covers: #{waived.join(', ')}"
+    sov_note = waived.empty? ? "fully self-hostable, no waiver required" : "waiver covers: #{waived.join(', ')} (ruling: #{conformance_summary[:ruling]})"
     puts "    shell sovereignty: harness=#{sov['harness']} / state=#{sov['state']} / model=#{sov['model']} — #{sov_note}"
     if (h_opts = sov["harness_options"])
       puts "    multi-harness shell: #{h_opts.size} selectable loops (#{h_opts.map { |o| "#{o['harness']}=#{o['posture']}" }.join(', ')})"

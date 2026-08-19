@@ -1,4 +1,4 @@
-version: "1.5.0"
+version: "1.7.0"
 tenant: "face.works"
 runtime: "claude-code"   # Claude Code / Agent SDK — the fourth reference runtime
 
@@ -40,7 +40,12 @@ shell_sovereignty:
       retention: "per Anthropic commercial terms; no tenant state persisted server-side beyond a request"
       training: "off (API data not used for training under commercial terms)"
       residency: "n/a for local state; model calls per Anthropic terms"
-    owner_ruling: "Harper (harper@face.works), 2026-08-05 — model-layer rent accepted; harness+state sovereign"
+    # v1.7.0 — structured so the Phase-7 gate is machine-checkable (§9.12).
+    ruling:
+      status: ruled
+      by: "Harper (harper@face.works)"
+      date: "2026-08-05"
+      note: "Model-layer rent accepted; harness and state remain sovereign."
 
 # Governance attributes split into enforceable gates vs descriptive metadata
 # (§9.12, FS-400.4). gate + binds_to = the runtime enforces it; gate + unenforced
