@@ -15,15 +15,15 @@
 # deciding the phase is done — never by this script.
 #
 # Usage:
-#   bin/fw-berd-launch <phase> --project <project-id> [options]
-#   bin/fw-berd-launch 4 --project proj_abc --dry-run
-#   bin/fw-berd-launch fw-taste --project proj_abc
+#   bin/fw-berd-launch <phase> --project <project-id> --agent <agent-id> [options]
+#   bin/fw-berd-launch 4 --project proj_abc --agent agent_abc --dry-run
+#   bin/fw-berd-launch fw-taste --project proj_abc --agent agent_abc
 #
 # Options:
 #   --project ID    Berd project id (from fw-berd-bootstrap)
 #   --model ID      Model for these sessions (berdctl info models). Default: the
 #                   app default — this tool never silently picks a tier for you.
-#   --agent ID      Persona (berdctl agent list). Default: the app default.
+#   --agent ID      Persona (berdctl agent list). Required; omission is an error.
 #   --harness ID    Harness (berdctl info harnesses). Default: claude-acp, the
 #                   only harness where the /fw-* skills are currently installed.
 #   --note TEXT     Extra context appended to each phase prompt.
@@ -50,10 +50,10 @@ PHASES = {
 
 options = { dry_run: false, harness: 'claude-acp' }
 parser = OptionParser.new do |o|
-  o.banner = 'Usage: fw-berd-launch <phase|skill> --project <project-id> [options]'
+  o.banner = 'Usage: fw-berd-launch <phase|skill> --project <project-id> --agent <agent-id> [options]'
   o.on('--project ID', 'Berd project id') { |v| options[:project] = v }
   o.on('--model ID', 'Model id (default: app default)') { |v| options[:model] = v }
-  o.on('--agent ID', 'Persona id (default: app default)') { |v| options[:agent] = v }
+  o.on('--agent ID', 'Persona id (required)') { |v| options[:agent] = v }
   o.on('--harness ID', 'Harness id (default: claude-acp)') { |v| options[:harness] = v }
   o.on('--note TEXT', 'Extra context appended to each prompt') { |v| options[:note] = v }
   o.on('--startup-name NAME', 'Branch/worktree name (default: the skill name)') { |v| options[:startup] = v }
@@ -65,6 +65,7 @@ parser.parse!
 arg = ARGV[0]
 abort "error: no phase given\n\n#{parser}" if arg.nil?
 abort "error: --project is required (run bin/fw-berd-bootstrap first)" if options[:project].nil?
+abort "error: --agent is required; choose a persona from `berdctl agent list`\n\n#{parser}" if options[:agent].nil? || options[:agent].empty?
 
 # Accept a phase number or a single skill name.
 phase_num = Integer(arg, exception: false)
@@ -100,7 +101,7 @@ puts label
 puts "  project: #{options[:project]}"
 puts "  harness: #{options[:harness]}"
 puts "  model:   #{options[:model] || '(app default)'}"
-puts "  agent:   #{options[:agent] || '(app default)'}"
+puts "  agent:   #{options[:agent]}"
 puts "  sessions to launch: #{skills.size}#{skills.size > 1 ? ' (concurrent)' : ''}"
 puts ''
 
@@ -112,7 +113,7 @@ skills.each do |skill|
           '--project-id', options[:project],
           '--harness-id', options[:harness]]
   args += ['--model-id', options[:model]] if options[:model]
-  args += ['--agent-id', options[:agent]] if options[:agent]
+  args += ['--agent-id', options[:agent]]
   # auto-worktree projects require a branch/worktree name per session. Without
   # it berdctl refuses with workspace_name_required — found on the first real
   # launch against a bootstrapped tenant.
