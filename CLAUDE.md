@@ -1,61 +1,21 @@
-# Facework — Protocol Toolkit
+# Facework — Claude Code
 
-This repo is a **protocol toolkit**, not a project workspace. It contains the
-Facework protocol spec, methodology, theories, and agent skills (`/fw-*` commands)
-for running the protocol on any project.
+**Read [`AGENTS.md`](AGENTS.md) first. It is the canonical agent instruction set
+for this repo and it governs.** This file holds only what is specific to Claude
+Code; everything about what Facework is, how the protocol runs, the authority
+model, the site, and ship discipline lives in `AGENTS.md`.
 
-## Running the protocol on a project
+Keeping one canonical guide is deliberate: harnesses that read `AGENTS.md`
+(Berd, goose, Codex) and harnesses that read `CLAUDE.md` must get the same
+instructions. Do not restate `AGENTS.md` content here — extend `AGENTS.md`
+instead, or the two drift.
 
-When someone runs `/fw-semantics` (or any `/fw-*` skill), they are starting a
-protocol run on **their** project — not on this repo. Every skill begins by
-reading the project's existing artifacts before asking questions.
-
-**Do NOT treat `examples/` as the active project.** It contains reference output
-from a completed protocol run (Face.works). It exists to show what the protocol
-produces. Ignore it when running the protocol on a new project.
-
-## Protocol Phases (canonical sequence)
-
-| Phase | Name | Skill(s) | Purpose |
-|-------|------|----------|---------|
-| — | Setup | `SETUP.md` | Prerequisite: get tools installed |
-| 1 | Semantics | `/fw-semantics` | Detect track, extract meaning and canonical language |
-| 2 | Field | `/fw-field` | Map social dynamics and adoption loops |
-| 3 | Taste | `/fw-taste` | Define quality governance and design language |
-| 4 | Strategy Lock | `/fw-frequency` + `/fw-current` | Lock economics and strategic direction |
-| 5 | Architecture & Flow | `/fw-flow` + `/fw-stability` | Document operations, then specify architecture |
-| 6 | Activation | `/fw-resonance` | Build working interfaces from declared capabilities |
-| 7 | Integrity | `/fw-entropy` + `/fw-sovereignty` + `/fw-consonance` | Pressure test, enforce boundaries, verify alignment |
-| 8 | Integration | `/fw-coherence` | Package for handoff + diagnostic + methodology evolution |
-
-## Repo structure
-
-```
-Facework/
-├── CONSTITUTION.md      ← governing authority of the practice (13 articles)
-├── PROTOCOL.md          ← open protocol spec (source of truth)
-├── SETUP.md             ← zero-to-ready setup guide (tiered by when you need it)
-├── theories/            ← Theory (Cultural Physics) + Discipline (Coherence Design) + COS
-├── methodology/         ← build system (retros, changelog, decisions, archive)
-├── skills/              ← 12 protocol skills + 8 operating skills (Postures) + system-loop skills
-├── standards/           ← deferred post-1.0 standards track (FS/FOS/FRS) — NOT canonical yet
-├── examples/            ← reference output from completed runs (NOT active project)
-│   └── face.works/      ← first protocol run (Facework's own infrastructure)
-└── bin/                 ← validation + conversion tooling (incl. harness-to-claude-code)
-```
-
-The five-layer model (per the Facework Standards Architecture): **Theory**
-(Cultural Physics) → **Discipline** (Coherence Design) → **Practice** (Facework)
-→ **Implementation** (Skills, Artifacts) → **Runtime**. The Protocol establishes
-coherence; Postures maintain it. See
-`methodology/architecture-reconciliation-2026-06.md`.
-
-## gstack
+## Browsing
 
 Use the `/browse` skill from gstack for **all web browsing**. Never use
 `mcp__claude-in-chrome__*` tools.
 
-### Available gstack skills
+## Available gstack skills
 
 | Skill | Purpose |
 |-------|---------|
@@ -73,3 +33,12 @@ Use the `/browse` skill from gstack for **all web browsing**. Never use
 | `/document-release` | Post-ship documentation update across all project docs |
 | `/design-consultation` | Design system research — typography, color, spacing, motion |
 | `/gstack-upgrade` | Upgrade gstack to the latest version |
+
+Note on `/ship`: it aborts on `main` and its code-pipeline gates do not fit a
+docs/spec repo. Follow the git-native ship path in `AGENTS.md` instead.
+
+## Previewing the site
+
+`.claude/launch.json` defines `face-works-prototype` (dev) and `face-works-prod`
+(production build) on port 3000. Use the Browser pane's `preview_start`, never
+Bash, to run them.
