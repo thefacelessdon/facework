@@ -31,10 +31,15 @@ Next.js site that publishes the protocol at face.works.
 2. **Release version lives in `VERSION` and nowhere else.** Never hardcode it
    into a document — that drift has been fixed twice already (0.0.16, 0.0.40)
    and the second time it survived seven releases. The **manifest schema**
-   version is a separate, real axis: the spec line is at **1.5.0**
-   (`RuntimeConformanceProfile`, PROTOCOL.md §9.12), while
-   `facework.manifest.yaml` declares `1.4.0` because runtime conformance is an
-   opt-in additive tier (§9.2). That is not drift. Do not "reconcile" them.
+   version is a separate, real axis (currently **1.5.0** — PROTOCOL.md
+   §9.2/§9.12). A manifest declares the schema version whose features it uses,
+   so manifests sitting on different versions is normal, not drift — never
+   "reconcile" them by bumping numbers. What must never disagree is **the spec
+   and its enforcement**: if `PROTOCOL.md` declares a schema feature,
+   `facework.manifest.schema.json` defines it and `bin/validate-manifest`
+   enforces it. That trio drifted once — the 1.5.0 runtime-conformance tier was
+   specified at 0.0.25 and unenforceable until 0.0.45 — so check all three
+   whenever you touch any one of them.
 
 3. **Authority flows one direction.** Where a lower layer conflicts with canon
    above it, **canon governs** — including `visual-system/`, which is an
