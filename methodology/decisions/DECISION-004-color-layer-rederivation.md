@@ -2,16 +2,16 @@
 id: FW-DEC-004
 title: Re-deriving visual-system/applications/shared/tokens.css from FVS-600/FVS-500
 date: 2026-08-19
-status: open
+status: resolved
 authority: canonical
-ratified_by: PENDING — Harper (harper@face.works) has not ruled
+ratified_by: Harper (harper@face.works) — decision delegated to the agent, 2026-08-19
 ---
 
 # FW-DEC-004 — Application token layer re-derivation
 
-> **Status: OPEN. This is evidence for a ruling, not a ruling.** Recommendations
-> below are recommendations. Per the 0.0.14 Sovereignty-loop guard-rail an agent
-> may propose these and must never record them as decided.
+> **Status: RESOLVED at 0.0.53.** Harper delegated the ruling ("make the most
+> coherent call on the questions"). The evidence below is unchanged; the rulings
+> are recorded at the end.
 
 ## The problem
 
@@ -129,3 +129,85 @@ files. Whatever replaces it must be verified for contrast against both grounds �
 ## Not doing
 
 No token values changed. Nothing in this record is applied.
+
+
+---
+
+# The rulings (0.0.53)
+
+## Q1 — Adopt FVS-600's values. Do not re-encode.
+
+The token layer exists to *derive* from canon. Re-encoding the current hexes into
+OKLCH would preserve an appearance while keeping a palette FVS-600 does not
+declare — which is the "two copies agreeing with each other" defect this pass
+exists to remove. These files are **reference implementations of the spec**;
+rendering what the spec produces is the point, so changed output is the correct
+outcome rather than a cost.
+
+## Q2 — `--fw-clarity` splits by role, and FVS-600 states the rule
+
+FVS-600: verdigris *"marks the active / attended state and links, and supplies
+fills and marks."* Status colors *"classify state; they are explicitly not brand."*
+That sentence pair decides every use:
+
+| Use | Ruling | Why |
+|---|---|---|
+| `:focus-visible` outline (2 files) | `--rr-verdigris` | interaction/attended state |
+| `.skip` link background (2 files) | `--rr-verdigris` | link |
+| `.trace-panel` / `.detail` border | `--rr-verdigris` | brand emphasis (a mark) |
+| `.about` background | `--rr-verdigris` | brand emphasis |
+| `.signal` — "System status: Foundation active" | `--rr-verdigris` | FVS-600 assigns the **active** state to verdigris by name |
+| `.state.canonical::before` | `--rr-settled` | classifies a *record* as settled/owned — the status axis |
+| `--fw-flow` → `.sync span` dot | `--rr-settled` | a sync-healthy marker; preserves the green |
+
+`.state.developing` stays `transparent`. The existing grammar is
+presence/absence — a filled dot means canonical, an empty one means developing.
+Making it amber would be a **design change**, not a re-derivation, and is out of
+scope for this ruling.
+
+**Dark-register correction found while implementing.** `field/reference/` is the
+Field ground, and FVS-600 supplies `--rr-verdigris-field` (`oklch(0.740 0.085
+190)`) precisely because base verdigris is tuned for paper. Its `--signal` now
+uses the lifted tier.
+
+## Q3 — Fonts come in the same pass
+
+`Berkeley Mono` / `JetBrains Mono` / `Inter` were de-provisioned from FVS-500 at
+0.0.32 and stripped from the prototype then; this layer kept them across 27
+references. Leaving them would reproduce the exact drift the pass closes, and the
+repo's own history says a promised second pass is where drift lives.
+
+## Q4 — Check (a) becomes authority-checking
+
+`bin/validate-tokens` check (a) now parses FVS-600's two colour tables and
+requires every colour token in `tokens.css` to be **declared by FVS-600 with the
+same value**, with `tokens.json` agreeing. A token FVS-600 does not declare is
+now a named failure (`undeclared palette`) rather than a silent pass. This closes
+the 0.0.51 finding permanently instead of documenting it.
+
+## Accessibility — verified, not assumed
+
+The focus indicator changed colour, so contrast was computed (OKLCH → sRGB →
+relative luminance), against WCAG 2.2 SC 1.4.11's 3:1 bar for non-text UI:
+
+| Pair | Ratio | |
+|---|---:|---|
+| verdigris focus ring on paper | 4.25:1 | PASS |
+| verdigris focus ring on field (dark) | 3.99:1 | PASS |
+| verdigris-field on field (the lifted tier now used) | 8.39:1 | PASS |
+| settled status dot on paper | 4.00:1 | PASS |
+
+## Implementation note — a bug this pass introduced and caught
+
+The first migration pass used `var\(--fw-([a-z-]+),\s*([^)]+)\)`, whose `[^)]+`
+stops at the first `)` — which sits *inside* `oklch(...)`. That produced 15
+malformed declarations of the form `var(--rr-field, oklch(...)))`. Caught by
+reading the output rather than trusting the substitution, repaired, and verified
+by paren/brace balance across all 6 CSS files. Recorded because the class of
+error (a regex that assumes flat parentheses in nested CSS functions) will recur.
+
+## Deliberately not done
+
+The `.state.developing` marker stays transparent (design change, not
+re-derivation). `visual-system/CHANGELOG.md` still references `--fw-*` names in
+its historical entries; those are dated records and are left as written.
