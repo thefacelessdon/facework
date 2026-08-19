@@ -273,6 +273,16 @@ for method calibration.
 division whose survival is subordinate to its parent's interests, with no boundary
 preventing extraction. Found by replication across Vine and BHS. This is a locus
 call that can be made on a *living* system, which is exactly what H2 needs.
+*Status — ROUND 1 PRE-REGISTERED, 19 Aug 2026
+(`methodology/h2-timestamped-locus-calls-2026-08-19.md`):* three calls locked with
+a 24-month window resolving **2028-08-19** — Twitch (Frequency + Sovereignty,
+extractive parent, declared **weak** on base rate), OpenAI Group PBC (Consonance,
+declared **strong**, and made on the healthiest-scoring subject in the programme),
+and Tecnobrega as a **"holds" negative control** so the round can fail in both
+directions. Scores, loci, windows and falsification criteria are frozen by
+pre-registration rule; corrections append, never substitute, and the git history is
+the proof. Three calls cannot produce a quotable hit rate — round 1's job is to
+start the clock and prove the discipline holds.
 
 **H3 — The score as an underwritable signal.**
 *Claim:* an L4 Sovereign score is a genuine risk signal to a third party with
