@@ -17,7 +17,7 @@
     "protocol_version": {
       "type": "string",
       "pattern": "^1\\.\\d+\\.\\d+$",
-      "description": "1.0.0 (v0.0.4 baseline), 1.1.0 (v0.0.5 Runtime Ports), 1.2.0 (v0.0.6 HarnessBundle), 1.3.0 (v0.0.7 DesignInfrastructure), 1.4.0 (v0.0.8 efficiency hints + skill polish), 1.5.0 (v0.0.25 runtime-conformance tier), 1.6.0 (v0.0.46 multi-harness shells), 1.7.0 (v0.0.48 enforceable owner ruling), and forward 1.x.x compatible."
+      "description": "1.0.0 (v0.0.4 baseline), 1.1.0 (v0.0.5 Runtime Ports), 1.2.0 (v0.0.6 HarnessBundle), 1.3.0 (v0.0.7 DesignInfrastructure), 1.4.0 (v0.0.8 efficiency hints + skill polish), 1.5.0 (v0.0.25 runtime-conformance tier), 1.6.0 (v0.0.46 multi-harness shells; v0.0.56 project.manifest_role), 1.7.0 (v0.0.48 enforceable owner ruling), and forward 1.x.x compatible."
     },
     "project": {
       "type": "object",
@@ -28,6 +28,12 @@
         "stage"
       ],
       "properties": {
+        "manifest_role": {
+          "type": "string",
+          "enum": ["tenant", "reference"],
+          "default": "tenant",
+          "description": "v1.6.0 — 'tenant' (default, and assumed when absent): every artifacts[] path MUST resolve to a real file (PROTOCOL.md §7). 'reference': the manifest illustrates the schema and is NOT a conformance claim; artifact paths are illustrative, validators MUST report the exemption rather than pass silently, and it MUST NOT be cited as evidence of conformance."
+        },
         "name": {
           "type": "string",
           "minLength": 1
