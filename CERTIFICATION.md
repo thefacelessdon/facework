@@ -13,6 +13,23 @@ Certification signals that a project used Facework Protocol to convert cultural 
 
 It is not a guarantee of business success. It is a guarantee of protocol discipline and artifact integrity.
 
+**It makes no survivability claim.** A Facework score measures whether a project
+was *built* coherently — it does not predict whether the system will endure, and
+it must never be represented as a durability, resilience or credit-style rating.
+This is a measured limit, not a disclaimer: the five compliance dimensions are not
+commensurable predictors of survival. **Taste Fidelity in particular is a
+quality-of-output dimension, not a survivability one**, yet it contributes 20 of
+the 100 points that gate eligibility below. A coherence autopsy of nine external
+systems found a durable, sovereign, self-reinforcing subject that scores in the
+highest zone on the governing equation while scoring roughly 3/20 on Taste
+Fidelity — low enough to threaten the score ≥ 60 required by §2. Certification and
+survival are different questions, and this document answers only the first.
+
+See `methodology/decisions/DECISION-006-coherence-autopsy-locus-over-score.md`
+(finding F4) and `methodology/coherence-tracker.md` for the evidence. Where a
+survivability read is wanted, the governing equation's **locus** — not this score —
+is the instrument, and FW-DEC-006 governs how it is reported.
+
 ## 2) Eligibility Requirements
 
 A project is eligible only if all conditions are met:
@@ -63,6 +80,8 @@ Projects MUST NOT claim "Powered by Facework" if:
 - required artifacts are missing
 - score is below `L2 Coherent`
 - sovereignty risks are omitted
+- the score is represented as a survivability, durability, resilience or
+  credit-style rating, or as evidence that the system will endure (§1)
 
 ## 6) Revocation Conditions
 

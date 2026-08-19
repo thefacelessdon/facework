@@ -95,6 +95,7 @@ Maps methodology changelog iterations to release versions.
 | 0.0.58 | — | Aug 2026 | **`theories/coherence-instrumentation.md` — The Instrumentation of Coherence, recovered and landed.** Written 2026-08-07 on `claude/spectrum-cultural-physics-crgnl9`, **never PR'd**, unreferenced by anything, and found only during the 0.0.57 branch sweep — which nearly deleted it, since squash-merge history makes `merge-base --is-ancestor` report every branch as unmerged. A measurement layer for Cultural Physics: one instrument per force (spectrometer for Signal, resonance probe for Frequency, ammeter for Flow, standing-wave meter for Resonance, calorimeter for Entropy, load test for Stability, ownership trace for Current sovereignty), a coherence budget, and a composite reading. **It extends canon rather than competing with it** — §VI reads the composite through the *existing* governing equation `(Flow × Resonance) / (1 + Entropy)`, adding only the rule that a zero in any of the four constructs collapses it; §VIII maps every instrument onto existing `/fw-*` skills and states plainly that the detector set **is not a new phase**. Landed **as written**, including the author's own hedge that a `/fw-spectrum` diagnostic follows only "if this document proves out." **Three things are deliberately unratified.** (1) **Placement.** `loop-model.md` set the bar for `theories/` — a new file must explain *why* systems cohere, or it is operating-model material that folds into the COS. This explains *how to detect* coherence, which is neither; it is a third category the existing test does not resolve. (2) **The ™** on "The Instrumentation of Coherence™" is a trademark claim, coupled to the `INVENTION-IP-MAP.md` commit that was **deliberately left on the branch** — counsel material should not ride in a canon review, and coupling them lets a legal question block a protocol one. (3) **Publication.** The file is *not* added to `sync-canon.mjs`'s route map or `knowledge.ts`, so it does not appear on the public site; both lists are hardcoded, so landing it publishes nothing. The `cultural-physics.md` cross-reference it adds resolves through `resolveCanonHref`'s allowlist, which returns `null` for unrouted targets and renders them as plain text — verified, so the published canon page degrades gracefully rather than carrying a dead link. Promotion should follow the 0.0.13 precedent: it lands as canon when a real run uses the detectors, not before. **Incidental fix:** `content/canon/protocol-v1.md` carried the provenance stamp `PROTOCOL.md @ f944bc5+dirty` — a source state that cannot be checked out or re-derived, written at 0.0.56 because the 0.0.47 rule ("edit canon, run sync-canon, commit the regenerated copy") takes the stamp while the source is still uncommitted. Corrected to `281db25`. The ordering hazard is general: whichever canon file you edit gets a `+dirty` stamp unless the source is committed before the sync. Worth a follow-up in `sync-canon.mjs` — a provenance line that records an unreproducible state is the same defect class this session has been closing all night. |
 | 0.0.59 | — | Aug 2026 | **Canon provenance stamps content, not commits — the derived-copy header stops lying.** Each `content/canon/*.md` carries a `DERIVED COPY — Source: <path> @ <sha>` line whose entire job is to prove where the copy came from. It was a commit SHA, and a commit SHA is wrong under this repo's own workflow in **two independent ways**. (1) **Dirty source:** `AGENTS.md` documents "edit canon, run `sync-canon`, commit the regenerated copy," so the stamp is taken while the source is still uncommitted — producing `<sha>+dirty`, which names a real commit whose content is *not* what was derived (found at 0.0.58: `PROTOCOL.md @ f944bc5+dirty`). (2) **Squash merge:** releases land via `gh pr merge --squash`, so the branch commit a copy records is **orphaned the moment the PR merges and its branch is deleted** — found here: `cultural-physics.md @ 6e6efe1`, unreachable from `main`. The second is the decisive one, because it means the stamp was invalidated *by the standard merge path*, not by an unusual state. **Fix:** stamp the git **blob hash** of the source (`blob:<8>`), which is invariant across commit, squash, rebase and branch deletion, identifies the exact bytes derived from, and stays true forever. All eight copies restamped; bodies unchanged, so no drift. **And the claim is now enforced rather than decorative:** `sync-canon --check` recomputes `git hash-object` for every source and fails on a mismatch — verified by tampering a stamp (`blob:deadbeef` → `✗ provenance stamp does not match`). Verified 8/8 against `git hash-object`. A provenance line that cannot be checked is decoration; one that records an unreproducible state is worse. Same defect class as the eleven closed at 0.0.44–0.0.56, this time in the tool that enforces the canon-sync rule itself. |
 | 0.0.60 | — | Aug 2026 | **A broken install stops being silent — SessionStart doctor + canonical guard.** The protocol ships as symlinks from `~/.claude/skills/` into a clone, and **Claude Code skips an unreadable skill directory without a word** — so moving or renaming the clone presents to the operator as *"the `/fw-*` commands stopped existing."* Found live: every one of the twelve primitive symlinks was dangling at `~/projects/TONL/facework/skills/*` after that directory moved under another project, **and** it had been linked from a project-local copy pinned at **0.0.3** while canon sat at 0.0.59 — the global skill namespace had been quietly owned by a stale checkout for 56 releases. `facework-doctor` already detected both, but **nothing ran it**, which is the whole defect: a diagnostic nobody invokes is not a guard. **Four changes.** (1) **`bin/facework-session-check`** — a SessionStart hook that runs the doctor and prints nothing when healthy, and on failure names the cause and the fix in one line, to the operator (`systemMessage`) *and* to the agent (`additionalContext`) so it can offer the repair unprompted. It is **copied** to `~/.claude/`, not symlinked, because the failure it exists to catch is the clone going missing — a check that lives inside the thing it checks cannot report that thing's absence. Its JSON is built in **pure shell**: an interpreter dependency here would reintroduce the very failure mode being closed, since a swallowed `python3` miss would put the hook back to quiet-on-failure; if escaping is impossible the message still goes out unstructured on stdout *and* stderr rather than being dropped. Always exits 0. (2) **`bin/facework-register-hook`** — **copying the script is not installing it.** Claude Code fires a hook only when it is declared in a `settings.json` `hooks.SessionStart` array; nothing is discovered by filename the way skills under `~/.claude/skills/` are. This merges the entry into `~/.claude/settings.json`, preserves any existing hooks and keys, is idempotent, backs the file up, and **refuses to touch settings it cannot parse** — printing the exact snippet to add by hand instead, since clobbering an operator's config is worse than an unregistered hook. `install-skills` now calls it, so a fresh `install.sh` yields a hook that actually fires. (3) **`bin/facework-doctor --quiet`** — silent when clean, and now distinguishes `[broken]` (symlink resolves nowhere) from `[missing]`, and reads the canonical marker so a wrong-clone run says *which* clone owns the namespace instead of listing twelve skills as broken with no reason. (4) **`bin/install-skills` canonical guard** — records the installing clone at `~/.claude/skills/.facework-canonical` and refuses a second clone (`--force` to adopt; automatic adoption when the recorded clone is gone, which is recovery rather than hijack). **The guard's limit is stated, not papered over:** it binds only clones running the patched installer — verified by pointing the old 0.0.3 copy at the namespace, which walked straight through, because a script written before the rule cannot obey it. **Detection is therefore the real defense and the guard is only the polite case** — which is why the hook, not the marker, is the load-bearing change. **Incidental fix:** `install-skills` backs a skill up and *then* relinks it, so an interrupted run leaves that skill **missing rather than merely stale** — hit for real when a `| head` sent SIGPIPE mid-loop and silently removed `fw-frequency`. Now trapped and reported on **stderr** (a closed stdout is the usual cause, so the warning cannot go there), once rather than twice for the EXIT+PIPE pair. **How this was verified, precisely:** the hook and installer were exercised by **direct invocation with synthesized SessionStart stdin**, not yet by an observed Claude Code session start — healthy run silent (exit 0); moved-clone diagnosed; valid JSON produced with **`python3` absent from `PATH`**; second clone refused; `--force` adopts and canon takes it back; interrupted run self-reports on stderr; registration verified against a missing settings file, a populated one (existing `Stop` hook, `theme` and `permissions` all preserved), a corrupt one (**left byte-identical**), and a repeat run (**stays one entry**). In-session firing is registered but unobserved, and is not claimed. `make protocol-check` green. **Incidental docs fix:** step 2 of "How to bump" above still directed entries to `methodology/CHANGELOG.md` — **closed to new entries at 0.0.47 by FW-DEC-003** — the same docs-drift class as 0.0.26/0.0.27. |
+| 0.0.61 | — | Aug 2026 | **Coherence autopsies: the diagnostic's finding is the locus, not the score.** A Horizon research track was added to this file (11 entries, four clusters, each carrying the falsification test that would kill it), then its cheapest entry was run to completion. **H1 — coherence autopsies:** nine external subjects scored from public record on the tracker's equation across five countries and four continents (Quibi, Vine, Friendster, Seattle grunge, BHS, Nokia smartphones, Ofo, plus survivor controls Craigslist, UK drum & bass, Tecnobrega/Belém). Method binds the locus to be named **before** insider accounts are consulted, and every batch to carry a survivor control. **Ten of ten locus calls held.** The claim split, so only half was promoted: the **scalar does not separate dead from alive** (grunge dissolved and reads AMBER), while the **locus discriminates** — five of the eight protocol phases appear as primary loci, and the three run-1 failures each sit in a different *term* of the equation (Quibi = Resonance, Vine = Flow, Friendster = Entropy). Run 1 overstated its own scalar finding and **run 2 retracts it**: three subjects clustering in RED was a sample artifact of three abrupt platform deaths, not a property of the equation. **FW-DEC-006** rules locus over score and is *enforced, not described*: `/fw-coherence` Step 8 now requires a failing term and primary locus, defines Flow at **loop** level not org level (F2), publishes locus base rates so a call in the modal layer (Frequency, 3/7) is reported as weak evidence (F9), and forbids a bare scalar at Resonance ≥ 4 where one Flow point moves the score ~2× across a zone boundary (F7) — this changes what every future run emits. `CERTIFICATION.md` now states it makes **no survivability claim**, with the measured reason (Taste Fidelity is a quality-of-output dimension contributing 20 of the 100 points that gate eligibility, yet a control subject scores the top zone on the equation and ~3/20 on it — F4), and §5 adds the matching prohibition, because a claim asserted in one section and unenforced in the section that enforces is the defect class closed at 0.0.59. Two findings outrank the ruling: a transferable thesis fell out of a matched control pair rather than out of the canon — *a scene survives commercial contact only if it owns the circuit its energy travels through* (grunge vs UK drum & bass, confirmed out-of-sample and non-Anglophone by Tecnobrega) — and replication produced the first named failure archetypes, both detectable in a **living** system: the **extractive parent** (Vine, BHS) and the **unfunded promise** (Ofo, BHS). H2's test statement is revised as a direct consequence: predict **where** a living system breaks, not who. No change to the equation, the zones, or the five compliance dimensions — nothing contradicted the equation's form, and Vine is positive evidence for its product numerator. |
 
 ---
 
@@ -161,6 +162,240 @@ reordered since 0.0.3, and all 12 primitives were exercised in FACTORY and
 **independence** criteria: reproducible diagnostic scores (two scorers, same zone)
 and a new builder running the protocol from the repo without live guidance.
 Neither has been tested. No speculative date.
+
+---
+
+## Horizon — research track (not a version ladder)
+
+**Status: speculative. Nothing here gates 1.0.0, and nothing here is canon.**
+The ladder above has exactly one job — closing the **independence** gate — and
+these entries must not be stapled to it. They are recorded here so range does
+not get lost, and so each idea carries the test that would kill it.
+
+**The claim underneath all ten.** Every entry below is downstream of one
+assertion the toolkit has already built machinery for and never stated
+directly:
+
+> **Coherence is measurable, portable, and transferable.**
+
+`COMPLIANCE.md` makes it measurable (100 points, five dimensions, L0–L4).
+Runtime Ports (§9) and the HarnessBundle (§10) make it portable. §12 makes it
+observable. Establishing coherence on a new project — the eight phases — is
+merely the *first* application of that claim, and it is the one application
+that requires the protocol author in the room. The Horizon is what the same
+machinery does when it stops needing him.
+
+**How an entry leaves the Horizon.** It passes its cheapest test, earns a
+decision record in `methodology/decisions/`, and *then* gets a version rung.
+Not before. An entry that has been sitting here through three retros without
+its test being run should be deleted, not deferred — the same discipline
+`standards/` is held to.
+
+### Cluster A — Coherence as a measurement discipline
+
+The scoring rubric currently only ever scores work the author built and
+scored. That is not a measurement discipline; it is a self-report. These four
+entries are what it takes to become one.
+
+**H1 — Coherence autopsies.**
+*Claim:* the governing equation `(Flow × Resonance) / (1 + Entropy)` explains
+failures retroactively, and the entropy locus is identifiable after the fact.
+*Cheapest test:* score three dead companies, products, or scenes from public
+record alone, naming the layer where entropy exceeded flow × resonance, then
+check the reconstruction against insider accounts.
+*Falsified if:* the scores cluster without discriminating, or the named locus
+disagrees with what people inside actually experienced. Forward runs can never
+falsify the equation — the outcome is authored. Autopsies can.
+*Note:* this is the cheapest entry on the whole Horizon. No new code, no
+counterparty, no permission.
+*Status — RUN, 19 Aug 2026 (`methodology/h1-coherence-autopsies-2026-08-19.md`):*
+**partially falsified, and the surviving half is the valuable half.** Three
+subjects (Quibi, Vine, Friendster) plus one survivor control (Craigslist). The
+scalar score failed exactly as the falsifier predicted — all three dead subjects
+clustered in RED, because conditioning on death guarantees it. The **locus**
+discriminated cleanly: three distinct failing terms (Resonance / Flow / Entropy)
+in three distinct protocol layers (Semantics / Frequency+Sovereignty /
+Stability), named before insider accounts were consulted, and all five locus
+calls held on check. Five findings recorded, including one defect in
+`COMPLIANCE.md`/`CERTIFICATION.md` surfaced by the control (Taste Fidelity is a
+quality term, not a survivability term, and should not sum into a single total
+that gates a certification claim). Revised claim proposed in the run doc §8: *the
+equation localises failure to a protocol layer.*
+*Status — RUN 2, 19 Aug 2026 (`methodology/h1-coherence-autopsies-run2-2026-08-19.md`):*
+**revised claim cleared; ready to promote.** Three subjects outside American
+software — Seattle grunge, BHS (UK retail), Nokia's smartphone business (Finland)
+— plus a *matched* survivor control (UK drum & bass, twinned to grunge). Results:
+**five of eight protocol phases now appear as primary loci** across six dead
+subjects in four domains and three countries, so run 1's "only three attractors"
+worry is retired; **ten of ten locus calls have now held** on insider-account
+check; the matched pair separated 2.7× and yielded a transferable thesis (*a scene
+survives commercial contact only if it owns the circuit its energy travels
+through*); and a first failure **archetype** was found by replication — the
+**extractive parent** (Vine and BHS share an identical locus pair across no shared
+industry, country or decade). **Run 1's scalar finding is partially retracted:**
+with six subjects the scalar spreads 0.5 → 2.0 and crosses a zone boundary, so the
+run-1 clustering was a sample artifact of three abrupt platform deaths, not a
+property of the equation. Two fixes now owed: the F7 instability band (one Flow
+point at high Resonance moves the score 2×, in exactly the band Facework's
+subjects occupy) and the still-open F4 commensurability defect.
+*Outstanding before promotion:* one subject whose primary record is **not in
+English**. All eight subjects to date are Global North and every source consulted
+is Anglophone, so cultural range remains unproven. Next action is a decision
+record in `methodology/decisions/`, not another batch.
+*Status — PROMOTED, 19 Aug 2026 →
+`methodology/decisions/DECISION-006-coherence-autopsy-locus-over-score.md`.*
+**H1 has left the Horizon.** Nine subjects, five countries, four continents, four
+domains, three controls, ten of ten locus calls held. The non-Anglophone gap was
+closed by A7 (Ofo, China) and C3 (Tecnobrega, Brazil); C3 also confirmed F6
+out-of-sample. FW-DEC-006 promotes the **revised** claim only — *the equation
+localises failure to a protocol layer* — demotes the scalar to a severity summary
+that may not be reported bare at Resonance ≥ 4, makes locus base rates mandatory
+(Frequency is modal at 3/7, so a Frequency call is weak evidence), and requires
+`/fw-coherence`'s Step 8 diagnostic to emit a locus rather than only
+Flow/Resonance/SI. This entry is retained here for lineage; it is no longer
+speculative.
+
+**H2 — Public timestamped scores (the seismograph).**
+*Claim:* the equation predicts, not just explains.
+*Cheapest test:* score living organisations from the outside, publish with the
+entropy locus named and a date attached, then say nothing and wait.
+*Falsified if:* the record shows no better than chance discrimination between
+predicted fracture and observed fracture over a defined window.
+*Revision required (H1 run, 19 Aug 2026):* this test statement is now known to be
+wrong. H1 showed the scalar cannot carry a prediction, so predicting *who* breaks
+is the wrong bet. H2 must predict **where**: name the layer a living system will
+break in, timestamp it, and check whether the break — when it comes — arrives
+there. Harder, more useful, and actually falsifiable.
+*Why it matters:* authority in a measurement discipline comes from having gone
+on the record early and survived, not from being unfalsifiable. Depends on H1
+for method calibration.
+*First candidate pattern (H1 run 2):* the **extractive parent** — a subsidiary or
+division whose survival is subordinate to its parent's interests, with no boundary
+preventing extraction. Found by replication across Vine and BHS. This is a locus
+call that can be made on a *living* system, which is exactly what H2 needs.
+
+**H3 — The score as an underwritable signal.**
+*Claim:* an L4 Sovereign score is a genuine risk signal to a third party with
+money exposed — acquirer, lender, insurer, investor — because it asserts the
+business survives its founder leaving and can be lifted onto another substrate.
+*Cheapest test:* put a scored handoff package in front of one such party and
+ask a single question: does this change how you price the risk?
+*Falsified if:* they cannot connect the score to any term they control. Then
+the rubric measures discipline, not survivability, and `CERTIFICATION.md`
+should stop implying otherwise.
+*Changes who pays:* not the founder. Whoever is betting on the founder.
+
+**H4 — Adversarial licensing.**
+*Claim:* if the entropy read predicts fracture, the most motivated buyers are
+the parties positioned to benefit from it, not the party trying to prevent it.
+*Cheapest test:* offer one read to one adversarially-positioned party and see
+whether they audit the method before paying. Friendly clients never do.
+*Falsified if:* the read survives no hostile audit of its method.
+*Recorded honestly:* this is plausibly the fastest revenue on the list and the
+most uncomfortable. Both facts belong in the record. Gated on H2 — selling a
+prediction with no public track record is selling nothing.
+
+**H5 — Entropy as a live vital sign.**
+*Claim:* entropy is a continuously observable quantity, not a phase-7 verdict.
+*Cheapest test:* wire the §12 event surface on one live tenant and see whether
+a threshold crossing precedes a problem the operator would independently
+recognise, rather than trailing it.
+*Falsified if:* the signal only ever confirms what the operator already knew.
+*Structural consequence:* the Protocol establishes coherence and Postures
+maintain it, human-driven. This makes maintenance instrumented. It is also the
+only entry where the revenue recurs because the physics recur.
+
+### Cluster B — The bundle as infrastructure, not a deliverable
+
+`soul.md`, `identity.md`, `purpose.md`, `memory.md`, `tools.md`,
+`boundary.md`, plus four port manifests. Read as protocol output, that is a
+handoff package. Read as a format, it is an answer to "what is an organisation,
+in a form a machine can inherit."
+
+**H6 — A well-known coherence endpoint.**
+*Claim:* `boundary.md` is more useful published than delivered. At a
+conventional public path, a third-party agent arriving to transact reads an
+organisation's boundaries *before* it is permitted to act, and interoperation
+is conditional on honouring them.
+*Cheapest test:* publish the Face.works bundle at a fixed path and have one
+external agent refuse a boundary-violating action on the strength of that file
+alone.
+*Falsified if:* honouring it cannot be made to fail closed — an advisory file
+no agent is obliged to read is decoration, the same defect class the canon
+provenance work closed at 0.0.59.
+*Ambition, stated plainly:* this is a standards play, with everything that
+implies about needing adopters who are not us.
+
+**H7 — The bundle as the transfer format.**
+*Claim:* the moment an organisation changes hands is the moment a portable,
+machine-readable operating identity is worth the most. Today an acquirer
+inherits a data room and a founder's memory. A conformant target hands over a
+bundle that boots.
+*Cheapest test:* run one diligence exercise against a bundle instead of a data
+room and time it against the conventional path.
+*Falsified if:* the acquiring side still has to reconstruct everything by
+interview, which means the bundle encodes the map and not the territory.
+*Depends on:* H3 (the same counterparty, one step earlier in the transaction).
+
+### Cluster C — What counts as a tenant
+
+Every artefact is currently written toward a company or a brand. But `soul`,
+`identity`, `purpose`, `memory`, `boundary` describe any **bounded system that
+must persist past whoever is currently holding it in their head.**
+
+**H8 — Non-company tenants.**
+*Claim:* the tenant model already generalises, and this has been demonstrated
+once without being recognised as a finding. The Berdia family plan is a family
+with a portable operating identity, a trustee console, and an audit log. It was
+filed as a client engagement.
+*Cheapest test:* run the intake and Phase 1 on a deliberately non-commercial
+bounded system — an estate, a co-op, a congregation, a band, a small public
+department — and record which artefacts survive contact and which are
+company-shaped assumptions in disguise.
+*Falsified if:* more than half the canonical artefacts need rewriting, in which
+case the protocol is commerce-specific and should say so.
+
+**H9 — Coherence past the person.**
+*Claim:* the floor case of a tenant is one mortal human, and the bundle's real
+test is executing when its author is permanently unreachable.
+*Cheapest test:* construct one single-person bundle whose explicit design
+constraint is operation without the author, and have a trustee run a real
+decision from it, cold.
+*Falsified if:* every non-trivial decision routes back to a person who is not
+there.
+*Note:* this is Article-level Sovereignty pointed at mortality, and the Berdia
+trustee console is its embryo. Handle with the seriousness it deserves; the
+failure mode here is not a bad score, it is a real family with no recourse.
+
+### Cluster D — Reflexive: the protocol applied to itself
+
+**H10 — Lineage instead of releases.**
+*Claim:* Phase 8 already mutates the methodology on every run, so descent is
+the more truthful unit than a linear trunk. The HUE, GAMUT, FACTORY and
+14th & Co runs each carried mutations; some took (the Loop Model, promoted at
+0.0.12) and most were never recorded as branch-level variation at all.
+*Cheapest test:* reconstruct the lineage of two past runs from the retros and
+check whether any inherited mutation is visible that the linear changelog
+cannot express.
+*Falsified if:* the changelog already captures everything and lineage adds only
+ceremony.
+
+**H11 — The independent operator does not have to be human.**
+*Claim:* this is the sharpest one, because the ladder above is already asking
+for it in a narrower form. Every open gate from 0.1.0 to 1.0.0 reduces to
+*operation or review by someone who isn't the protocol author.* That criterion
+never required a human.
+*Cheapest test:* hand an agent the HarnessBundle and nothing else — no author
+present, no live guidance — and have it run the protocol on a live project.
+*What it settles:* success closes the independence criteria in 0.1.0, 0.2.0 and
+1.0.0 by demonstrating the exact claim the protocol makes about itself. Failure
+proves the bundle was never a bundle, which is worth more than a friendly
+reviewer's notes.
+*Standing tension it addresses:* `FW-DEC-005` records that the toolkit has
+never run the protocol on itself, and six of ten canonical artefacts in the
+reference manifest have no real counterpart. Read through the Sovereignty lens,
+the toolkit's single largest dependency risk is its author. This entry is the
+only one that reduces it.
 
 ---
 
