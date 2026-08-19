@@ -878,6 +878,15 @@ begin
       missing_files = required_files.reject { |f| File.exist?(File.join(bundle_dir, f)) }
       raise "harness bundle missing required files (evidence_level=#{evidence_level || 'unset'}): #{missing_files.join(', ')}" unless missing_files.empty?
 
+      # §10.7 — boundary.md is present and non-empty WHENEVER the bundle exists,
+      # at every evidence level. §10.4's Signaled/Thesis minimums omit it, which
+      # reads as permission to skip; §10.7 is the stricter, governing rule. The
+      # boundary is the memory "one system of record" contract (§9.4) — a bundle
+      # that ships without it hands a runtime no ownership rule at all.
+      boundary_file = File.join(bundle_dir, "boundary.md")
+      raise "harness bundle missing boundary.md — required whenever a bundle exists, at every evidence level (§10.7)" unless File.exist?(boundary_file)
+      raise "harness bundle boundary.md is empty — the memory boundary contract must be stated (§10.7)" if File.read(boundary_file).strip.empty?
+
       # skills/ subdirectory: one file per skill (when SkillManifest exists)
       skills_dir = File.join(bundle_dir, "skills")
       missing_skill_files = []
@@ -904,6 +913,21 @@ begin
   # ----- DesignInfrastructure (v1.3.0) ------------------------------------
 
   design_infra = manifest["design_infrastructure"]
+
+  # §11.7 — DesignInfrastructure conformance is TRACK-aware, not evidence-aware:
+  # Cultural Brand MUST emit (brand IS the product), Creator / Athlete /
+  # Platform-Product SHOULD, Agency/Studio MAY. Until 0.0.50 the track was read
+  # only to print a label, so a cultural_brand manifest with no block at all
+  # passed silently — the one MUST in §11 was unenforced.
+  if design_infra.nil?
+    case track
+    when "cultural_brand"
+      raise "track=cultural_brand MUST emit design_infrastructure (§11.7 — brand is the product); none declared"
+    when "creator", "athlete", "platform_product"
+      warn "  [warn] track=#{track} SHOULD emit design_infrastructure (§11.7); none declared"
+    end
+  end
+
   if design_infra
     raise "design_infrastructure must be an object" unless design_infra.is_a?(Hash)
     %w[tokens components examples evaluator_skill_id].each do |k|
@@ -924,6 +948,27 @@ begin
       comp_data = YAML.safe_load(File.read(components_path), aliases: false)
       raise "components manifest must be an object" unless comp_data.is_a?(Hash)
       raise "components manifest must declare components[]" unless comp_data["components"].is_a?(Array) && !comp_data["components"].empty?
+      # §11.4 — each component declares its full contract. The rules are what the
+      # design-eye evaluator consumes when grading output; a component without
+      # contract.must / must_not grades nothing.
+      seen_comp_ids = []
+      comp_data["components"].each_with_index do |c, ci|
+        raise "components[#{ci}] must be an object" unless c.is_a?(Hash)
+        %w[id name purpose].each do |k|
+          raise "components[#{ci}].#{k} is required (§11.4)" unless c[k].is_a?(String) && !c[k].strip.empty?
+        end
+        raise "components[#{ci}].id pattern invalid: #{c['id']}" unless c["id"] =~ /^[a-z][a-z0-9-]*$/
+        raise "components[#{ci}] duplicate id: #{c['id']}" if seen_comp_ids.include?(c["id"])
+        seen_comp_ids << c["id"]
+        %w[variants states tokens_used].each do |k|
+          raise "components[#{ci}] (#{c['id']}).#{k} must be a non-empty array (§11.4)" unless c[k].is_a?(Array) && !c[k].empty?
+        end
+        contract = c["contract"]
+        raise "components[#{ci}] (#{c['id']}).contract is required (§11.4)" unless contract.is_a?(Hash)
+        %w[must must_not].each do |k|
+          raise "components[#{ci}] (#{c['id']}).contract.#{k} must be a non-empty array — it is what the evaluator grades against (§11.4)" unless contract[k].is_a?(Array) && !contract[k].empty?
+        end
+      end
     rescue => e
       raise "design_infrastructure.components did not parse cleanly: #{e.message}"
     end
@@ -937,9 +982,22 @@ begin
     missing_examples << "off-brand-anti-examples.md" unless File.exist?(off_brand)
     raise "design_infrastructure.examples directory missing required files: #{missing_examples.join(', ')}" unless missing_examples.empty?
 
+    # §11.9 — both example files must be non-empty. They are the evaluator's
+    # reference data; an empty file grades nothing.
+    [["on-brand-examples.md", on_brand], ["off-brand-anti-examples.md", off_brand]].each do |label, path|
+      raise "design_infrastructure.examples/#{label} is empty — it is the design-eye evaluator's reference data (§11.9)" if File.read(path).strip.empty?
+    end
+
     if skills_info
       eval_id = design_infra["evaluator_skill_id"]
       raise "design_infrastructure.evaluator_skill_id ('#{eval_id}') does not resolve to a Skill in SkillManifest" unless skills_info[:ids].include?(eval_id)
+      # §11.9 — the evaluator is not just any skill: it gates output, so it must
+      # be agent-owned and in the quality domain.
+      ev = (skills_info[:skills_data] || []).find { |sk| sk["id"] == eval_id }
+      if ev
+        raise "design_infrastructure.evaluator_skill_id ('#{eval_id}') must have domain: quality, not #{ev['domain'].inspect} (§11.9)" unless ev["domain"] == "quality"
+        raise "design_infrastructure.evaluator_skill_id ('#{eval_id}') must have ownership: agent, not #{ev['ownership'].inspect} (§11.9)" unless ev["ownership"] == "agent"
+      end
     end
 
     design_summary = {
@@ -998,7 +1056,11 @@ begin
     puts "  [ok] HarnessBundle: #{bundle_summary[:path]} (#{bundle_summary[:required_count]} required files, #{bundle_summary[:skill_files]} skill files)"
   end
   if design_summary
-    track_note = design_summary[:track_relevant] ? "track-relevant" : "track-optional"
+    track_note = case track
+                 when "cultural_brand" then "track-REQUIRED (§11.7 MUST)"
+                 when "creator", "athlete", "platform_product" then "track-recommended (§11.7 SHOULD)"
+                 else "track-optional (§11.7 MAY)"
+                 end
     puts "  [ok] DesignInfrastructure: #{design_summary[:components_count]} components, evaluator skill '#{design_summary[:evaluator]}' (#{track_note})"
   end
   if conformance_summary
