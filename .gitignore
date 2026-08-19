@@ -13,12 +13,21 @@ out/
 # Local scratch output from bin/harness-to-claude-code (converter test runs)
 scratch-fw-claude/
 
-# Local agent tooling. `.agents/` is Berd's / goose's global skill root; the copy
-# here is machine-local, not repo content. The configured gstack submodule is
+# Local agent tooling. `.agents/skills/` is Berd's / goose's machine-local skill
+# root, not repo content. The configured gstack submodule is
 # `.claude/skills/gstack` (see .gitmodules). `.agents/skills/gstack` had been a
 # gitlink with NO .gitmodules entry — unusable by anyone cloning, and the reason
 # `git status` was permanently dirty. Untracked at 0.0.57.
-.agents/
+#
+# `.agents/agents/` is the exception and is TRACKED (0.0.67). Berd discovers
+# project-local personas there, so committing them makes `git clone` the
+# distribution path. Blanket-ignoring `.agents/` also hid that channel.
+.agents/*
+!.agents/agents/
+
+# Nested `.agents/` copies in unrelated subtrees stay fully ignored; only the
+# repo-root one carries tracked personas.
+**/*/.agents/
 
 # Superseded build artifacts. The 402KB standards-integration patch was applied
 # on 2026-06-30 and shipped as 0.0.9; the diff is history, not source.

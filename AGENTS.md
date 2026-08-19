@@ -104,6 +104,7 @@ Facework/
 ├── methodology/                   ← build system: retros, decisions, changelog, archive
 ├── skills/                        ← 12 protocol + 8 Posture + system-loop skills
 ├── agents/                        ← 9 paired specialist agents
+├── .agents/agents/                ← 2 Berd personas — discovered on clone
 ├── visual-system/                 ← FVS/FVI/FVA/FVR/FVP identity spec (Implementation layer)
 ├── standards/                     ← deferred post-1.0 track — NOT canonical
 ├── examples/face.works/           ← reference output from a completed run (NOT the active project)
@@ -121,9 +122,19 @@ Facework/
 - **System-loop skills** (`runtime-validation-pass`) — a third class that evolves
   the methodology itself; neither phase primitive nor Posture.
 - **9 specialist agents** in `agents/`, one paired to each operating skill.
+- **2 Berd personas** in `.agents/agents/` — `protocol-operator` (runs one
+  `/fw-*` phase against a tenant repo; cannot edit canon) and `canon-keeper`
+  (edits this repo's canon; cannot run the protocol). A persona is the identity
+  a whole session runs as — a different thing from the subagents in `agents/`
+  that a session spawns.
 
-Skills and agents here are repo artifacts. They are **not** auto-discovered by
-Berd or goose, which read their own global skill/agent roots.
+Two roots, and only one of them is discovered. `skills/` and `agents/` are repo
+artifacts — **not** auto-discovered by Berd or goose, which read their own global
+roots. **`.agents/agents/` is the exception:** Berd discovers project-local
+personas there, so cloning this repo puts both personas in the operator's picker
+with no install step. `git clone` is therefore the distribution channel, and
+`bin/fw-berd-launch --agent <path>` takes one by path. Blanket-ignoring
+`.agents/` had hidden that channel until 0.0.67.
 
 ---
 
