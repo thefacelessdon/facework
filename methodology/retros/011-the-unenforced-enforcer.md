@@ -214,7 +214,20 @@ project's startup mode was `none` (all sessions share one checkout); it is now
 
 ### Open, unresolved
 
-1. **`ANTHROPIC_API_KEY` fails at `$0.00`.** Rotate, or check org credit.
+1. ~~**`ANTHROPIC_API_KEY` fails at `$0.00`.**~~ **RESOLVED in session.** Harper
+   rotated the token; the gate then reviewed for real — `is_error: false`, 37
+   turns, **$1.09**, 4m34s. First nonzero cost in the check's history, and the
+   exact positive execution signal this retro asks for. It still published
+   nothing: `Mode: agent` is never handed the comment tools
+   (`permission_denials_count: 7`). Fixed at 0.0.54 with `track_progress: true`,
+   which forces tag mode. **A further lesson, earned the hard way:** that input
+   was added at 0.0.52 on a hypothesis, removed the same release on a log line
+   from a run that *never reached the model*, and restored at 0.0.54 on evidence.
+   *Falsifying a hypothesis with a log from a failed run is not falsifying it* —
+   a run that dies before the work starts says nothing about what the work would
+   have done. Original triage retained below for the pattern:
+
+   Rotate, or check org credit.
    Distinguishable in one command: `curl -s https://api.anthropic.com/v1/models
    -H "x-api-key: $KEY" -H "anthropic-version: 2023-06-01"` — 401 means
    revoked, 400/402 means credit. **Harper's to run; do not guess.**
