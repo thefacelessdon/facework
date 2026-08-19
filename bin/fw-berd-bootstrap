@@ -1,0 +1,202 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# fw-berd-bootstrap
+#
+# Prepare a target project to run the Facework protocol as Berd sessions.
+# Idempotent: safe to re-run; reuses an existing Berd project for the same
+# working directory rather than creating a second one.
+#
+# What it does:
+#   1. Finds or creates a Berd project whose working dir is the tenant repo.
+#   2. Sets startup mode to auto-worktree, so parallel phase sessions get
+#      isolated git worktrees. (Two agents on one checkout collided twice in
+#      this repo's own history — see methodology/retros/011.)
+#   3. Seeds project instructions with the memory boundary, which must hold for
+#      every session in the project regardless of persona (PROTOCOL.md §9.11,
+#      FS-400.10 — context splits by lifetime, not topic).
+#   4. Writes AGENTS.md into the tenant repo ONLY if absent. Berd walks each
+#      attached workspace for AGENTS.md and injects it as <workspace-instructions>;
+#      an existing one is someone's canonical instruction set and is never
+#      clobbered.
+#
+# Usage:
+#   bin/fw-berd-bootstrap <project-path> [--name NAME] [--dry-run]
+#
+# Then launch phases with bin/fw-berd-launch.
+
+require 'json'
+require 'open3'
+require 'optparse'
+require 'fileutils'
+
+Encoding.default_external = Encoding::UTF_8
+Encoding.default_internal = Encoding::UTF_8
+
+options = { dry_run: false }
+parser = OptionParser.new do |o|
+  o.banner = 'Usage: fw-berd-bootstrap <project-path> [--name NAME] [--dry-run]'
+  o.on('--name NAME', 'Berd project name (default: the directory basename)') { |v| options[:name] = v }
+  o.on('--dry-run', 'Print what would happen; change nothing') { options[:dry_run] = true }
+  o.on('-h', '--help') { puts o; exit 0 }
+end
+parser.parse!
+
+target = ARGV[0]
+abort "error: no project path given\n\n#{parser}" if target.nil?
+abort "error: not a directory: #{target}" unless File.directory?(target)
+
+path = File.expand_path(target)
+name = options[:name] || File.basename(path)
+dry  = options[:dry_run]
+
+# Array-form exec: no shell, so backticks/quotes/newlines in instruction text
+# are data, never commands. (Shell interpolation executed `define/` as a command
+# on the first real run — content is not a command line.)
+def capture(*args)
+  out, status = Open3.capture2e(*args)
+  [out, status.success?]
+end
+
+def berd_json(*args)
+  out, ok = capture(*args)
+  return nil unless ok
+
+  JSON.parse(out)
+rescue JSON::ParserError
+  nil
+end
+
+git_repo = File.directory?(File.join(path, '.git'))
+
+puts "Facework → Berd bootstrap"
+puts "  tenant:  #{path}"
+puts "  name:    #{name}"
+puts "  git:     #{git_repo ? 'yes' : 'no (worktree isolation unavailable)'}"
+puts ''
+
+# ---- 1. find or create the project -----------------------------------------
+
+existing = nil
+listing = berd_json('berdctl', 'project', 'list', '--json')
+if listing && listing['projects']
+  existing = listing['projects'].find { |p| Array(p['working_dirs']).include?(path) }
+end
+
+instructions = <<~INSTR
+  This project is running the **Facework protocol** (an 8-phase coherence
+  protocol). Phases produce artifacts under `define/`; that directory is the
+  tenant's operational memory and the record of the run.
+
+  **Memory boundary — holds for every session here, on any harness and any
+  persona.** Tenant knowledge (decisions, artifacts, research, canonical
+  language) is written to the tenant's own tree — `define/` and the repo. The
+  runtime's cross-session memory holds ways of working, not tenant content. Do
+  not auto-promote tenant content into runtime memory without explicit user
+  action, and do not write runtime preferences into `define/`.
+
+  Read `AGENTS.md` at the workspace root before acting; it governs where a
+  lower-layer file disagrees with it.
+
+  Phases run as separate sessions. Do not run a phase this session was not
+  asked to run — the sequence is gated, and a later phase reads the earlier
+  phase's artifacts.
+INSTR
+
+if existing
+  project_id = existing['project_id']
+  puts "[ok] project exists: #{project_id} (reusing)"
+else
+  puts '[new] creating Berd project'
+  if dry
+    puts "  [dry-run] berdctl project create --name #{name.inspect} --instructions <boundary> --working-dir #{path.inspect}"
+    project_id = '<dry-run>'
+  else
+    out, ok = capture('berdctl', 'project', 'create', '--name', name,
+                      '--instructions', instructions, '--working-dir', path, '--json')
+    abort "error: could not create project\n#{out}" unless ok
+    parsed = begin
+      JSON.parse(out)
+    rescue JSON::ParserError
+      nil
+    end
+    project_id = parsed && parsed['project_id']
+    abort "error: no project_id in response\n#{out}" if project_id.nil?
+    puts "[ok] created: #{project_id}"
+  end
+end
+
+# ---- 2. startup mode -------------------------------------------------------
+
+if git_repo
+  if dry
+    puts "  [dry-run] berdctl project set-startup-mode --project-id #{project_id} --mode auto-worktree"
+  else
+    _o, ok = capture('berdctl', 'project', 'set-startup-mode', '--project-id', project_id,
+                     '--mode', 'auto-worktree', '--json')
+    abort 'error: could not set startup mode' unless ok
+    puts '[ok] startup mode: auto-worktree (parallel phases get isolated worktrees)'
+  end
+else
+  puts '[warn] not a git repo — startup mode left as-is; parallel phase sessions will share this directory'
+end
+
+# ---- 3. AGENTS.md ----------------------------------------------------------
+
+agents_md = File.join(path, 'AGENTS.md')
+if File.exist?(agents_md)
+  puts "[skip] AGENTS.md exists — not modified (it governs; merge by hand if the boundary belongs in it)"
+else
+  body = <<~MD
+    # #{name} — workspace instructions
+
+    This project is running the **Facework protocol**. These instructions apply to
+    every session with this workspace attached, on any harness and any persona.
+
+    ## Memory boundary (read first)
+
+    | Layer | Lives at | Owned by |
+    |---|---|---|
+    | Tenant memory | `define/` and this repo | the project |
+    | Runtime memory | the harness's own store | the runtime |
+
+    Tenant knowledge — decisions, artifacts, research, canonical language — is
+    written to the tenant tree. Runtime memory holds ways of working, not tenant
+    content. **Do not auto-promote tenant content into runtime memory without
+    explicit user action**, and do not write runtime preferences into `define/`.
+
+    ## How the run works
+
+    Eight phases, gated, each producing artifacts the next phase reads. Phases
+    run as separate sessions; do not run a phase this session was not asked to
+    run.
+
+    | Phase | Name | Skill(s) |
+    |---|---|---|
+    | 1 | Semantics | `/fw-semantics` |
+    | 2 | Field | `/fw-field` |
+    | 3 | Taste | `/fw-taste` |
+    | 4 | Strategy Lock | `/fw-frequency` + `/fw-current` |
+    | 5 | Architecture & Flow | `/fw-flow` + `/fw-stability` |
+    | 6 | Activation | `/fw-resonance` |
+    | 7 | Integrity | `/fw-entropy` + `/fw-sovereignty` + `/fw-consonance` |
+    | 8 | Integration | `/fw-coherence` |
+
+    Every phase begins by reading this project's existing artifacts before asking
+    questions. Decisions once locked are not relitigated without new evidence.
+
+    <!-- Seeded by bin/fw-berd-bootstrap. Edit freely — it is never overwritten. -->
+  MD
+
+  if dry
+    puts "  [dry-run] write #{agents_md} (#{body.lines.size} lines)"
+  else
+    File.write(agents_md, body)
+    puts "[ok] wrote #{agents_md}"
+  end
+end
+
+puts ''
+puts 'Next:'
+puts "  bin/fw-berd-launch 1 --project #{project_id}#{dry ? ' --dry-run' : ''}"
+puts '  (phases 4, 5 and 7 launch their parallel skills as concurrent sessions)'

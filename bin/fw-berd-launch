@@ -1,0 +1,154 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# fw-berd-launch
+#
+# Launch one Facework protocol phase as Berd session(s). Phases 4, 5 and 7 have
+# parallel skills; those become concurrent sessions, which is the whole reason
+# this exists rather than typing the slash command yourself.
+#
+# IMPORTANT — what this cannot do. `berdctl session create` is fire-and-forget:
+# it returns a session id immediately and the session runs in the background.
+# There is no structured return value and no completion signal. So this tool
+# LAUNCHES and REPORTS; it cannot await a phase or gate on its result. Phase
+# gating is done by reading artifacts on disk (`define/`) and by the human
+# deciding the phase is done — never by this script.
+#
+# Usage:
+#   bin/fw-berd-launch <phase> --project <project-id> [options]
+#   bin/fw-berd-launch 4 --project proj_abc --dry-run
+#   bin/fw-berd-launch fw-taste --project proj_abc
+#
+# Options:
+#   --project ID    Berd project id (from fw-berd-bootstrap)
+#   --model ID      Model for these sessions (berdctl info models). Default: the
+#                   app default — this tool never silently picks a tier for you.
+#   --agent ID      Persona (berdctl agent list). Default: the app default.
+#   --harness ID    Harness (berdctl info harnesses). Default: claude-acp, the
+#                   only harness where the /fw-* skills are currently installed.
+#   --note TEXT     Extra context appended to each phase prompt.
+#   --dry-run       Print the berdctl commands; launch nothing.
+
+require 'json'
+require 'open3'
+require 'optparse'
+
+Encoding.default_external = Encoding::UTF_8
+Encoding.default_internal = Encoding::UTF_8
+
+# Canonical sequence — AGENTS.md is the source of truth for this table.
+PHASES = {
+  1 => { name: 'Semantics',           skills: %w[fw-semantics] },
+  2 => { name: 'Field',               skills: %w[fw-field] },
+  3 => { name: 'Taste',               skills: %w[fw-taste] },
+  4 => { name: 'Strategy Lock',       skills: %w[fw-frequency fw-current] },
+  5 => { name: 'Architecture & Flow', skills: %w[fw-flow fw-stability] },
+  6 => { name: 'Activation',          skills: %w[fw-resonance] },
+  7 => { name: 'Integrity',           skills: %w[fw-entropy fw-sovereignty fw-consonance] },
+  8 => { name: 'Integration',         skills: %w[fw-coherence] }
+}.freeze
+
+options = { dry_run: false, harness: 'claude-acp' }
+parser = OptionParser.new do |o|
+  o.banner = 'Usage: fw-berd-launch <phase|skill> --project <project-id> [options]'
+  o.on('--project ID', 'Berd project id') { |v| options[:project] = v }
+  o.on('--model ID', 'Model id (default: app default)') { |v| options[:model] = v }
+  o.on('--agent ID', 'Persona id (default: app default)') { |v| options[:agent] = v }
+  o.on('--harness ID', 'Harness id (default: claude-acp)') { |v| options[:harness] = v }
+  o.on('--note TEXT', 'Extra context appended to each prompt') { |v| options[:note] = v }
+  o.on('--dry-run', 'Print commands; launch nothing') { options[:dry_run] = true }
+  o.on('-h', '--help') { puts o; puts "\nPhases:"; PHASES.each { |n, p| puts format('  %d  %-20s %s', n, p[:name], p[:skills].join(' + ')) }; exit 0 }
+end
+parser.parse!
+
+arg = ARGV[0]
+abort "error: no phase given\n\n#{parser}" if arg.nil?
+abort "error: --project is required (run bin/fw-berd-bootstrap first)" if options[:project].nil?
+
+# Accept a phase number or a single skill name.
+phase_num = Integer(arg, exception: false)
+if phase_num
+  entry = PHASES[phase_num]
+  abort "error: phase must be 1-8, got #{arg}" if entry.nil?
+  label = "Phase #{phase_num} — #{entry[:name]}"
+  skills = entry[:skills]
+else
+  skill = arg.start_with?('fw-') ? arg : "fw-#{arg}"
+  found = PHASES.find { |_, p| p[:skills].include?(skill) }
+  abort "error: unknown skill #{skill.inspect}. Run --help for the phase table." if found.nil?
+  label = "#{found[1][:name]} — #{skill}"
+  skills = [skill]
+end
+
+def prompt_for(skill, note)
+  base = <<~P
+    Run the #{skill} skill on this project.
+
+    Read the project's existing artifacts under `define/` before asking any
+    questions — a later phase reads what the earlier ones produced. Respect the
+    memory boundary in AGENTS.md: tenant content goes to the tenant tree, not to
+    runtime memory.
+
+    Do not run other phases. If this phase's inputs are missing, say so and stop
+    rather than producing them yourself.
+  P
+  note ? "#{base}\nAdditional context from the operator:\n#{note}\n" : base
+end
+
+puts label
+puts "  project: #{options[:project]}"
+puts "  harness: #{options[:harness]}"
+puts "  model:   #{options[:model] || '(app default)'}"
+puts "  agent:   #{options[:agent] || '(app default)'}"
+puts "  sessions to launch: #{skills.size}#{skills.size > 1 ? ' (concurrent)' : ''}"
+puts ''
+
+launched = []
+skills.each do |skill|
+  # Array-form exec: no shell. The prompt contains backticks (`define/`,
+  # `AGENTS.md`); interpolating it into a shell string executes them.
+  args = ['berdctl', 'session', 'create',
+          '--project-id', options[:project],
+          '--harness-id', options[:harness]]
+  args += ['--model-id', options[:model]] if options[:model]
+  args += ['--agent-id', options[:agent]] if options[:agent]
+  args += ['--prompt', prompt_for(skill, options[:note]), '--json']
+
+  if options[:dry_run]
+    preview = args.map { |a| a.include?("\n") ? '<prompt>' : a }.join(' ')
+    puts "  [dry-run] #{skill}"
+    puts "            #{preview}"
+    next
+  end
+
+  out, status = Open3.capture2e(*args)
+  unless status.success?
+    warn "  [fail] #{skill}: #{out.strip.lines.first}"
+    next
+  end
+  sid = begin
+    JSON.parse(out)['session_id']
+  rescue JSON::ParserError
+    nil
+  end
+  if sid
+    puts "  [launched] #{skill} → #{sid}"
+    launched << { skill: skill, session: sid }
+  else
+    warn "  [warn] #{skill}: launched but no session_id in response"
+  end
+end
+
+puts ''
+if options[:dry_run]
+  puts 'Dry run — nothing launched.'
+else
+  puts "Launched #{launched.size}/#{skills.size} session(s). They run in the background."
+  puts 'These are fire-and-forget: there is no completion signal. To follow them:'
+  puts "  berdctl session list --project-id #{options[:project]}"
+  launched.each { |l| puts "  berdctl session get --session-id #{l[:session]}   # #{l[:skill]}" }
+  puts ''
+  puts 'Gate the next phase on artifacts, not on this script:'
+  puts '  ls define/    # what the phase actually produced'
+  puts '  bin/validate-manifest <tenant>/facework.manifest.yaml   # if a manifest exists yet'
+end
