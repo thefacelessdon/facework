@@ -1,0 +1,92 @@
+#!/usr/bin/env sh
+# validate-release — enforce that release numbers are unique and monotonic.
+#
+# "Releases have unique numbers" was an unenforced claim until 0.0.63. It was
+# nearly violated at 0.0.60: origin/main landed a release while a branch was in
+# flight, both sides' VERSION read 0.0.60, and git merged them WITHOUT conflict —
+# two distinct releases would have shared one number silently. protocol-check
+# validated the manifest, not the release number. This closes that.
+set -eu
+
+VERSION_FILE="VERSION"
+HISTORY_FILE="ROADMAP.md"
+SEMVER='^[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$'
+fail=0
+
+if [ ! -f "$VERSION_FILE" ]; then
+  echo "[error] missing $VERSION_FILE"
+  exit 1
+fi
+version=$(tr -d ' \t\n\r' < "$VERSION_FILE")
+
+if ! echo "$version" | grep -Eq "$SEMVER"; then
+  echo "[error] VERSION is not semver: '$version'"
+  exit 1
+fi
+echo "[ok] VERSION: $version"
+
+if [ ! -f "$HISTORY_FILE" ]; then
+  echo "[error] missing $HISTORY_FILE"
+  exit 1
+fi
+
+# Version-history rows look like: | 0.0.62 | — | Aug 2026 | ...
+rows=$(sed -n 's/^| *\([0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\) *|.*/\1/p' "$HISTORY_FILE")
+
+if [ -z "$rows" ]; then
+  echo "[error] no version-history rows found in $HISTORY_FILE"
+  exit 1
+fi
+
+# 1) No release number may appear twice. This is the defect that nearly shipped.
+dupes=$(echo "$rows" | sort | uniq -d)
+if [ -n "$dupes" ]; then
+  echo "[error] duplicate release numbers in $HISTORY_FILE version history:"
+  echo "$dupes" | sed 's/^/          /'
+  echo "          two releases MUST NOT share a number — see ROADMAP.md 'How to bump'"
+  fail=1
+else
+  count=$(echo "$rows" | wc -l | tr -d ' ')
+  echo "[ok] version history: $count releases, all unique"
+fi
+
+# 2) The current VERSION must be documented, exactly once.
+here=$(echo "$rows" | grep -cx "$version" || true)
+if [ "$here" -eq 0 ]; then
+  echo "[error] VERSION $version has no row in $HISTORY_FILE version history"
+  echo "          every release must be documented — ROADMAP.md 'How to bump' step 3"
+  fail=1
+elif [ "$here" -gt 1 ]; then
+  echo "[error] VERSION $version appears $here times in the version history"
+  fail=1
+else
+  echo "[ok] VERSION $version documented in version history"
+fi
+
+# 3) Collision guard against the remote. Equal is fine when nothing is ahead of
+#    origin/main (the normal post-merge state on main); equal is a COLLISION when
+#    this branch carries commits the remote has not seen.
+remote=$(git show origin/main:VERSION 2>/dev/null | tr -d ' \t\n\r' || true)
+if [ -z "$remote" ]; then
+  echo "[warn] origin/main:VERSION unavailable — collision check skipped (offline or no remote)"
+else
+  ahead=$(git rev-list --count origin/main..HEAD 2>/dev/null || echo 0)
+  if [ "$ahead" -eq 0 ]; then
+    echo "[ok] nothing ahead of origin/main — collision check not applicable (remote: $remote)"
+  elif [ "$version" = "$remote" ]; then
+    echo "[error] VERSION $version already released on origin/main, and this branch is $ahead commit(s) ahead."
+    echo "          This is the 0.0.60 collision: VERSION will merge WITHOUT conflict and two"
+    echo "          distinct releases will silently share one number. Bump before merging."
+    fail=1
+  else
+    lowest=$(printf '%s\n%s\n' "$version" "$remote" | sort -V | head -1)
+    if [ "$lowest" = "$version" ]; then
+      echo "[error] VERSION $version is behind origin/main ($remote) — releases must increase"
+      fail=1
+    else
+      echo "[ok] VERSION $version > origin/main ($remote), $ahead commit(s) ahead"
+    fi
+  fi
+fi
+
+[ "$fail" -eq 0 ] || exit 1
