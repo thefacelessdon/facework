@@ -31,8 +31,8 @@ Next.js site that publishes the protocol at face.works.
 2. **Release version lives in `VERSION` and nowhere else.** Never hardcode it
    into a document — that drift has been fixed twice already (0.0.16, 0.0.40)
    and the second time it survived seven releases. The **manifest schema**
-   version is a separate, real axis (currently **1.5.0** — PROTOCOL.md
-   §9.2/§9.12). A manifest declares the schema version whose features it uses,
+   version is a separate, real axis (currently **1.6.0** — PROTOCOL.md
+   §9.2/§9.11/§9.12). A manifest declares the schema version whose features it uses,
    so manifests sitting on different versions is normal, not drift — never
    "reconcile" them by bumping numbers. What must never disagree is **the spec
    and its enforcement**: if `PROTOCOL.md` declares a schema feature,

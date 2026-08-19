@@ -25,7 +25,8 @@ are not Postures (and are not required by `facework-doctor`, like the primitives
 
 - `/runtime-validation-pass` - Validate Runtime Ports (§9) against one external
   runtime shell and fold new findings into spec canon. Proven across Buzz, Letta,
-  and OpenAI; see `methodology/retros/008-runtime-ports-validation-program.md`.
+  OpenAI, Claude Code, and Berd; see
+  `methodology/retros/008-runtime-ports-validation-program.md`.
 
 ## Paired Specialist Agents
 - `/mvp-cut` -> `mvp-scope-architect`
