@@ -76,7 +76,7 @@ def load_port!(manifest_dir, port_ref, port_name)
   end
 end
 
-def validate_skill_manifest!(data)
+def validate_skill_manifest!(data, manifest_dir = nil)
   raise "skill manifest must be an object" unless data.is_a?(Hash)
   require_string!(data, "version")
   require_string!(data, "tenant")
@@ -95,6 +95,7 @@ def validate_skill_manifest!(data)
   with_sponsors_count = 0
   verifier_refs = []     # v1.4.0: [{ skill_id, verifier_skill_id }]
   advisor_refs = []      # v1.4.0: [{ skill_id, advisor_skill_id }]
+  capability_refs = []
   valid_triggers = %w[on_demand scheduled event continuous]
   valid_ownership = %w[human agent hybrid]
   valid_model_tiers = %w[standard advanced]
@@ -116,9 +117,32 @@ def validate_skill_manifest!(data)
     when "hybrid" then hybrid_count += 1
     end
 
+    # §9.3 validation 2 — every playbook path resolves to an existing file.
+    if manifest_dir
+      pb = s["playbook"]
+      pb_path = File.expand_path(pb, manifest_dir)
+      raise "skills[#{i}] (#{s['id']}) playbook not found: #{pb} (§9.3)" unless File.exist?(pb_path)
+    end
+
+    # §9.7 rule 6 — depends_on_capabilities[] resolves against the CapabilityMap,
+    # a Phase-5 authoring artifact that is not a port manifest. The validator
+    # cannot load it, so this is reported, not gated (the same declared/delegated
+    # treatment §9.12 gives an `unenforced: true` governance gate).
+    caps = s["depends_on_capabilities"]
+    if caps
+      raise "skills[#{i}] (#{s['id']}).depends_on_capabilities must be an array" unless caps.is_a?(Array)
+      caps.each { |c| capability_refs << c if c.is_a?(String) && !c.strip.empty? }
+    end
+
     if s["trigger"] == "scheduled"
       sched = s["schedule"]
       raise "skills[#{i}].schedule required when trigger=scheduled" unless sched.is_a?(String) && !sched.strip.empty?
+      # §9.3 validation 4 — schedule is a cron expression. Accept the common
+      # macros plus standard 5-field (and 6-field seconds) cron.
+      macros = %w[@yearly @annually @monthly @weekly @daily @midnight @hourly @reboot]
+      unless macros.include?(sched.strip.downcase) || [5, 6].include?(sched.split(/\s+/).size)
+        raise "skills[#{i}] (#{s['id']}) schedule is not a cron expression: #{sched.inspect} (§9.3 — expected 5 or 6 fields, or a @macro)"
+      end
     end
     if s["trigger"] == "event"
       ev = s["event"]
@@ -173,8 +197,8 @@ def validate_skill_manifest!(data)
     advanced_tier: advanced_tier_count,
     with_sponsors: with_sponsors_count,
     verifier_refs: verifier_refs,
-    advisor_refs: advisor_refs
-  }
+    advisor_refs: advisor_refs,
+    capability_refs: capability_refs.uniq }
 end
 
 def validate_memory_map!(data)
@@ -210,10 +234,11 @@ def validate_memory_map!(data)
   end
   walk.call(structure)
 
-  { paths: paths, written_by_refs: written_by_refs.uniq, read_by_refs: read_by_refs.uniq, folder_count: paths.size, has_indexing: !(data["indexing"].nil? || data["indexing"].empty?) }
+  { paths: paths, written_by_refs: written_by_refs.uniq, read_by_refs: read_by_refs.uniq, folder_count: paths.size, has_indexing: !(data["indexing"].nil? || data["indexing"].empty?),
+    indexed_folders: (data["indexing"].is_a?(Array) ? data["indexing"].map { |ix| ix.is_a?(Hash) ? ix["folder"] : nil }.compact : []) }
 end
 
-def validate_context_manifest!(data)
+def validate_context_manifest!(data, manifest_dir = nil)
   raise "context manifest must be an object" unless data.is_a?(Hash)
   require_string!(data, "version")
   require_string!(data, "tenant")
@@ -229,6 +254,7 @@ def validate_context_manifest!(data)
 
   bundles = data["bundles"]
   raise "context manifest bundles must be an array" unless bundles.is_a?(Array)
+  query_against_refs = []
 
   ids = [global["id"]]
   conventional = %w[soul identity purpose]
@@ -259,8 +285,14 @@ def validate_context_manifest!(data)
         case kind
         when "file"
           raise "bundles[#{i}].load[#{j}] file source requires path" unless src["path"].is_a?(String)
+          # §9.5 validation 2 — every file source path resolves.
+          if manifest_dir
+            fp = File.expand_path(src["path"], manifest_dir)
+            raise "bundles[#{i}] (#{b['id']}) file source path not found: #{src['path']} (§9.5)" unless File.exist?(fp)
+          end
         when "query"
           raise "bundles[#{i}].load[#{j}] query source requires query+against" unless src["query"].is_a?(String) && src["against"].is_a?(String)
+          query_against_refs << [b["id"], src["against"]]
         when "live"
           int = src["integration"]
           raise "bundles[#{i}].load[#{j}] live source requires integration" unless int.is_a?(String)
@@ -272,7 +304,25 @@ def validate_context_manifest!(data)
     end
   end
 
-  { ids: ids, count: bundles.size + 1, conventional_present: conventional_present, live_integration_refs: live_integration_refs.uniq }
+  # §9.5 validation 1 — no cycles in composes. A cycle would make a runtime
+  # compose context forever; nothing else in the pipeline would catch it.
+  compose_graph = {}
+  bundles.each { |b| compose_graph[b["id"]] = (b["composes"] || []) }
+  state = {}
+  walk = lambda do |node, trail|
+    return if state[node] == :done
+    if state[node] == :open
+      cyc = trail[trail.index(node)..-1] + [node]
+      raise "context manifest composes cycle: #{cyc.join(' -> ')} (§9.5)"
+    end
+    state[node] = :open
+    (compose_graph[node] || []).each { |nxt| walk.call(nxt, trail + [node]) if compose_graph.key?(nxt) }
+    state[node] = :done
+  end
+  compose_graph.each_key { |id| walk.call(id, []) }
+
+  { ids: ids, count: bundles.size + 1, conventional_present: conventional_present,
+    live_integration_refs: live_integration_refs.uniq, query_against_refs: query_against_refs }
 end
 
 def validate_integration_manifest!(data)
@@ -582,6 +632,23 @@ def validate_cross_manifest!(ports, skills_info, memory_info, context_info, inte
     end
   end
 
+  # §9.5 validation 3 — every query source's `against` references an indexed
+  # folder in MemoryMap. Querying an unindexed folder silently returns nothing
+  # at runtime, so this is a real failure the pipeline could not otherwise see.
+  if context_info && memory_info
+    indexed = memory_info[:indexed_folders] || []
+    (context_info[:query_against_refs] || []).each do |bundle_id, against|
+      normalized = against.to_s.chomp("/")
+      hit = indexed.any? do |folder|
+        f = folder.to_s.chomp("/")
+        normalized == f || normalized.start_with?(f + "/")
+      end
+      unless hit
+        errors << "context bundle '#{bundle_id}' query source targets '#{against}', which is not an indexed MemoryMap folder (indexed: #{indexed.empty? ? 'none' : indexed.join(', ')})"
+      end
+    end
+  end
+
   # v1.4.0: verifier_skill_id and advisor_escalation must resolve to skills in same manifest
   if skills_info
     (skills_info[:verifier_refs] || []).each do |ref|
@@ -713,7 +780,7 @@ begin
     end
 
     if port_data["skills"]
-      info = validate_skill_manifest!(port_data["skills"])
+      info = validate_skill_manifest!(port_data["skills"], manifest_dir)
       info[:skills_data] = port_data["skills"]["skills"]
       skills_info = info
     end
@@ -721,7 +788,7 @@ begin
       memory_info = validate_memory_map!(port_data["memory"])
     end
     if port_data["context"]
-      context_info = validate_context_manifest!(port_data["context"])
+      context_info = validate_context_manifest!(port_data["context"], manifest_dir)
     end
     if port_data["connections"]
       integration_info = validate_integration_manifest!(port_data["connections"])
@@ -922,6 +989,10 @@ begin
   end
   if skills_info && (memory_info || context_info || integration_info)
     puts "  [ok] cross-manifest references resolve (§9.7)"
+    caps = skills_info[:capability_refs] || []
+    unless caps.empty?
+      puts "    §9.7 rule 6: #{caps.size} capability reference(s) declared — authoring-layer, not gated here (CapabilityMap is not a port manifest)"
+    end
   end
   if bundle_summary
     puts "  [ok] HarnessBundle: #{bundle_summary[:path]} (#{bundle_summary[:required_count]} required files, #{bundle_summary[:skill_files]} skill files)"
@@ -940,7 +1011,11 @@ begin
     sov_note = waived.empty? ? "fully self-hostable, no waiver required" : "waiver covers: #{waived.join(', ')} (ruling: #{conformance_summary[:ruling]})"
     puts "    shell sovereignty: harness=#{sov['harness']} / state=#{sov['state']} / model=#{sov['model']} — #{sov_note}"
     if (h_opts = sov["harness_options"])
+      own_loops = h_opts.count { |o| o["posture"] == "own" }
+      hedge = own_loops.zero? ? "NO HEDGE — every selectable loop is rent/mitigate" : "#{own_loops}/#{h_opts.size} own"
       puts "    multi-harness shell: #{h_opts.size} selectable loops (#{h_opts.map { |o| "#{o['harness']}=#{o['posture']}" }.join(', ')})"
+      puts "    harness hedge: #{hedge}"
+      warn "  [warn] harness_options declares a multi-harness shell but no loop is 'own' — FS-400.8's sovereignty hedge does not hold here" if own_loops.zero?
     end
     puts "    governance: #{conformance_summary[:gates]} enforced gate(s) / #{conformance_summary[:unenforced]} declared-unenforced / #{conformance_summary[:metadata]} metadata"
   end
