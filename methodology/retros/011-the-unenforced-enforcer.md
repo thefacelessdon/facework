@@ -236,7 +236,41 @@ project's startup mode was `none` (all sessions share one checkout); it is now
    outstanding.
 3. **Whether "a gate must prove it ran" is promoted into
    `theories/the-coherence-operating-system.md`.** Same gating as 010's
-   enforcement rule: hold it through one real protocol run first.
+   enforcement rule. **HELD as of 0.0.59, with the trigger made explicit** —
+   because "one real protocol run" is soft enough that a future system-loop
+   session will talk itself into qualifying, and the evidence for promotion is
+   now strong enough to make that tempting.
+
+   **The rules held for promotion, as a pair:**
+   - *A normative rule lands explicitly as **enforced** or as **declared
+     out-of-band**; there is no third state* (0.0.49).
+   - *A gate must prove it ran, not merely exit zero* (0.0.52).
+
+   They are the same rule at two altitudes — one governs normative sentences,
+   the other the mechanisms that check them — so they promote together or not
+   at all.
+
+   **The trigger. All four must hold:**
+   1. A `/fw-*` protocol run **on a project that is not Facework**, and not
+      `examples/`. A system-loop session on this repo does not qualify, however
+      many releases it ships.
+   2. Both rules **exercised against that project's artifacts** — a normative
+      rule there landing enforced-or-declared, and a gate there asked for a
+      positive execution signal.
+   3. **Someone other than the rules' author** operating or reviewing that run
+      (the unmet bar already named in ROADMAP's Independent Validation gate).
+   4. The outcome **recorded before the ruling**, in a decision doc, whether the
+      rules held or bent.
+
+   **Why the current evidence does not qualify, though it is the best we have.**
+   0.0.52's rule carries a measurement, which is rare: `total_cost_usd` of `0`
+   while the gate was dead, `$1.09` and `$0.98` once live, and a first posted
+   review on #63. Three confirmations — all produced by the sessions that wrote
+   the rule, on the repo that owns it. Ratifying on self-generated evidence
+   would make `COS` assert more than the practice has demonstrated outside its
+   own walls, which is precisely the defect this retro is about. The 0.0.14
+   guard-rail applies to rules as much as to rulings: **an agent may propose a
+   promotion and must never record it as decided.**
 4. **Berd project instructions are stale** (see above). Harper's field to edit.
 
 ---
