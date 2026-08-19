@@ -1,8 +1,17 @@
 #!/bin/bash
+# Verifies that the Facework skills in ~/.claude/skills resolve to THIS clone.
+# Usage: facework-doctor [--quiet]
+#   --quiet  print nothing when healthy; print only failures + the fix command.
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 SKILL_DIR="$HOME/.claude/skills"
+MARKER="$SKILL_DIR/.facework-canonical"
+
+QUIET=0
+if [ "${1:-}" = "--quiet" ]; then
+  QUIET=1
+fi
 
 REQUIRED=(
   fw-frequency
@@ -19,50 +28,81 @@ REQUIRED=(
   fw-sovereignty
 )
 
-echo "Facework doctor"
-echo "Repo: $ROOT_DIR"
-echo "Skills dir: $SKILL_DIR"
-echo
+# Collected failure lines — printed in both modes, and the ONLY output in quiet mode.
+problems=()
 
-missing=0
-noncanonical=0
+say() {
+  # Informational output. Suppressed entirely in quiet mode.
+  if [ "$QUIET" -eq 0 ]; then
+    echo "$@"
+  fi
+}
+
+say "Facework doctor"
+say "Repo: $ROOT_DIR"
+say "Skills dir: $SKILL_DIR"
+say
+
+# A recorded canonical clone that isn't this one means the global skills belong to
+# a different checkout. Running this doctor from the wrong clone would otherwise
+# report every skill as broken without explaining why.
+if [ -f "$MARKER" ]; then
+  recorded="$(tr -d '[:space:]' < "$MARKER")"
+  if [ -n "$recorded" ] && [ "$recorded" != "$ROOT_DIR" ]; then
+    if [ -d "$recorded" ]; then
+      problems+=("[canonical] global skills belong to $recorded, not this clone ($ROOT_DIR)")
+      problems+=("            run the doctor from there, or: $ROOT_DIR/bin/install-skills --force")
+    else
+      problems+=("[canonical] recorded clone $recorded no longer exists")
+      problems+=("            run: $ROOT_DIR/bin/install-skills")
+    fi
+  fi
+else
+  say "[note] no canonical marker yet — run bin/install-skills to record this clone."
+  say
+fi
+
 for skill in "${REQUIRED[@]}"; do
   path="$SKILL_DIR/$skill"
   expected="$ROOT_DIR/skills/$skill"
 
+  # -e follows symlinks, so a dangling link fails here — which is exactly the
+  # failure Claude Code itself reports silently.
   if [ ! -e "$path" ]; then
-    echo "[missing] $skill"
-    missing=1
+    if [ -L "$path" ]; then
+      problems+=("[broken] $skill -> $(readlink "$path") (target missing)")
+    else
+      problems+=("[missing] $skill")
+    fi
     continue
   fi
 
   if [ ! -L "$path" ]; then
-    echo "[noncanonical] $skill (exists but is not a symlink)"
-    noncanonical=1
+    problems+=("[noncanonical] $skill (exists but is not a symlink)")
     continue
   fi
 
   target="$(readlink "$path" || true)"
   if [ "$target" != "$expected" ]; then
-    echo "[noncanonical] $skill -> $target (expected $expected)"
-    noncanonical=1
+    problems+=("[noncanonical] $skill -> $target (expected $expected)")
     continue
   fi
 
-  echo "[ok] $skill"
+  say "[ok] $skill"
 done
 
-echo
-if [ "$missing" -eq 1 ]; then
-  echo "Some required skills are missing."
-  echo "Run: $ROOT_DIR/bin/install-skills"
+if [ "${#problems[@]}" -gt 0 ]; then
+  say
+  if [ "$QUIET" -eq 1 ]; then
+    echo "Facework skills are not loadable — Claude Code will show no /fw-* commands."
+  fi
+  for line in "${problems[@]}"; do
+    echo "$line"
+  done
+  echo "Fix: $ROOT_DIR/bin/install-skills"
   exit 1
 fi
 
-if [ "$noncanonical" -eq 1 ]; then
-  echo "Some required skills do not resolve to Facework canonical paths."
-  echo "Run: $ROOT_DIR/bin/install-skills"
-  exit 1
-fi
-
-echo "All required skills are installed."
+say
+say "All required skills are installed."
+exit 0

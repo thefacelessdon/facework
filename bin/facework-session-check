@@ -1,0 +1,72 @@
+#!/bin/bash
+# Claude Code SessionStart hook — surfaces a broken Facework install at session start.
+#
+# Claude Code skips unreadable skill directories silently, so a moved or deleted
+# clone presents to the user as "the /fw-* commands stopped existing". This turns
+# that into one line of text.
+#
+# Installed by bin/install-skills to ~/.claude/facework-session-check.sh — a COPY,
+# not a symlink, so it still runs when the canonical clone is exactly what went
+# missing. install-skills re-copies it every run.
+#
+# Never fails the session: always exits 0, prints nothing when healthy.
+
+MARKER="$HOME/.claude/skills/.facework-canonical"
+
+# Emit a SessionStart hook payload.
+#
+# Pure shell on purpose: an interpreter dependency here would reintroduce exactly
+# the failure this hook exists to close — a diagnosis that vanishes quietly. If
+# JSON cannot be produced, the message still goes out as plain text (Claude Code
+# reads SessionStart stdout as context) and to stderr. It is never swallowed.
+json_escape() {
+  printf '%s' "$1" \
+    | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g' -e 's/\t/\\t/g' \
+    | awk 'BEGIN { ORS = "" } { if (NR > 1) printf "\\n"; print }'
+}
+
+emit() {
+  msg="$1"
+  ctx="The Facework protocol skills are not loadable this session, so no /fw-* slash commands are available. Diagnosis:
+$msg"
+
+  esc_msg="$(json_escape "$msg" 2>/dev/null)"
+  esc_ctx="$(json_escape "$ctx" 2>/dev/null)"
+
+  if [ -n "$esc_msg" ] && [ -n "$esc_ctx" ]; then
+    printf '{"systemMessage":"%s","suppressOutput":true,"hookSpecificOutput":{"hookEventName":"SessionStart","additionalContext":"%s"}}\n' \
+      "$esc_msg" "$esc_ctx"
+  else
+    # Escaping failed (no sed/awk?). Say it anyway, unstructured.
+    printf '%s\n' "$msg"
+    printf '%s\n' "$msg" >&2
+  fi
+}
+
+# Facework isn't installed on this machine — stay silent rather than nag.
+[ -f "$MARKER" ] || exit 0
+
+REPO="$(tr -d '[:space:]' < "$MARKER" 2>/dev/null)"
+
+if [ -z "$REPO" ]; then
+  emit "Facework: canonical marker at $MARKER is empty. Re-run install.sh from your Facework clone."
+  exit 0
+fi
+
+if [ ! -d "$REPO" ]; then
+  emit "Facework: canonical clone $REPO no longer exists (moved or deleted), so every /fw-* skill symlink is dangling. Re-run ./bin/install-skills from wherever the clone now lives."
+  exit 0
+fi
+
+DOCTOR="$REPO/bin/facework-doctor"
+if [ ! -x "$DOCTOR" ]; then
+  emit "Facework: $DOCTOR is missing or not executable. Check out the repo again, then re-run ./bin/install-skills."
+  exit 0
+fi
+
+OUTPUT="$("$DOCTOR" --quiet 2>&1)"
+if [ -n "$OUTPUT" ]; then
+  emit "$OUTPUT"
+fi
+
+exit 0

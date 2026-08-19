@@ -1,0 +1,87 @@
+#!/bin/bash
+# Registers the Facework SessionStart hook in ~/.claude/settings.json.
+#
+# Claude Code does NOT auto-discover hooks by filename — a hook only fires if it
+# is declared in a settings.json `hooks.SessionStart` array. Copying the script
+# into ~/.claude/ is not enough; without this step the guard is inert.
+#
+# Merges. Never overwrites an existing hooks block, and is idempotent.
+set -uo pipefail
+
+SETTINGS="$HOME/.claude/settings.json"
+COMMAND='$HOME/.claude/facework-session-check.sh'
+
+SNIPPET='  "hooks": {
+    "SessionStart": [
+      { "matcher": "*", "hooks": [ { "type": "command", "command": "'"$COMMAND"'", "timeout": 10 } ] }
+    ]
+  }'
+
+manual_instructions() {
+  echo "[action needed] the SessionStart hook is NOT registered — it will not run."
+  echo "                Add this to $SETTINGS (merge into any existing \"hooks\" block):"
+  echo
+  echo "$SNIPPET"
+  echo
+}
+
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "[warn] python3 not found — cannot merge settings.json safely."
+  manual_instructions
+  exit 0
+fi
+
+python3 - "$SETTINGS" "$COMMAND" <<'PY'
+import json, os, shutil, sys
+
+settings_path, command = sys.argv[1], sys.argv[2]
+
+if os.path.exists(settings_path):
+    try:
+        with open(settings_path) as fh:
+            cfg = json.load(fh)
+    except (json.JSONDecodeError, OSError) as exc:
+        # Refuse to touch a file we cannot parse — clobbering a user's settings is
+        # far worse than leaving the hook unregistered.
+        print(f"[warn] {settings_path} is not readable JSON ({exc}) — not modified.")
+        sys.exit(3)
+    if not isinstance(cfg, dict):
+        print(f"[warn] {settings_path} is not a JSON object — not modified.")
+        sys.exit(3)
+    shutil.copy(settings_path, settings_path + ".bak-facework")
+else:
+    cfg = {}
+    os.makedirs(os.path.dirname(settings_path), exist_ok=True)
+
+entries = cfg.setdefault("hooks", {}).setdefault("SessionStart", [])
+if not isinstance(entries, list):
+    print("[warn] hooks.SessionStart is not an array — not modified.")
+    sys.exit(3)
+
+already = any(
+    h.get("command") == command
+    for entry in entries if isinstance(entry, dict)
+    for h in (entry.get("hooks") or []) if isinstance(h, dict)
+)
+
+if already:
+    print("[ok] SessionStart hook already registered")
+    sys.exit(0)
+
+entries.append({
+    "matcher": "*",
+    "hooks": [{"type": "command", "command": command, "timeout": 10}],
+})
+
+with open(settings_path, "w") as fh:
+    json.dump(cfg, fh, indent=2)
+    fh.write("\n")
+
+print(f"[ok] SessionStart hook registered in {settings_path}")
+PY
+
+status=$?
+if [ "$status" -ne 0 ]; then
+  manual_instructions
+fi
+exit 0
