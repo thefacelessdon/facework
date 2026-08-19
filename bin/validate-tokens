@@ -4,7 +4,10 @@ set -euo pipefail
 # validate-tokens — enforces FVP-100 source-authority for the Facework
 # visual-system tokens. Asserts that:
 #   (a) every palette hex in applications/shared/tokens.css matches the
-#       corresponding value in tokens.json;
+#       corresponding value in tokens.json. NOTE: this is INTERNAL PARITY between
+#       two derived files, not source-authority against FVS-600. Two copies of a
+#       superseded palette agreeing with each other pass (a). See the note the
+#       run emits, and ROADMAP 0.0.51;
 #   (b) the motion token set in tokens.css / tokens.json matches the six
 #       canonical durations declared in identity/FVI-400-motion-signature.md;
 #   (c) no CSS file under applications/*/reference/ forks a raw color hex,
@@ -54,7 +57,7 @@ motion_doc = File.read(motion_doc_path)
 
 # --- Parse --fw-* custom properties from tokens.css -------------------------
 css_vars = {}
-css.scan(/--fw-([a-z0-9-]+)\s*:\s*([^;]+);/i) do |name, value|
+css.scan(/--(?:fw|rr)-([a-z0-9-]+)\s*:\s*([^;]+);/i) do |name, value|
   css_vars[name.strip] = value.strip
 end
 
@@ -89,7 +92,7 @@ end
 # --- (b) motion set matches FVI-400 -----------------------------------------
 # Source of authority: the FVI-400 timing table.
 expected_motion = {}
-motion_doc.scan(/`--fw-motion-([a-z]+)`\s*\|\s*([0-9]+\s*m?s)/i) do |name, value|
+motion_doc.scan(/`--rr-motion-([a-z]+)`\s*\|\s*([0-9]+\s*m?s)/i) do |name, value|
   expected_motion[name.downcase] = value.gsub(/\s+/, "").downcase
 end
 
@@ -101,10 +104,38 @@ unless missing_in_doc.empty?
 end
 
 json_motion = json.fetch("motion", {})
+
+# (b2) the signature easing curve. FVI-400 states it in prose, not the timing
+# table, so the table scan above never reached it — tokens.css disagreed with
+# both the spec and tokens.json for eight releases and nothing compared them.
+ease_doc = motion_doc[/`--rr-ease-settle`\s*=\s*`([^`]+)`/, 1]
+if ease_doc.nil?
+  fail!("(b) FVI-400 does not state the --rr-ease-settle curve")
+  violations += 1
+else
+  want = ease_doc.gsub(/\s+/, "").downcase
+  css_ease = css_vars["ease-settle"]
+  if css_ease.nil?
+    fail!("(b) tokens.css missing --rr-ease-settle (FVI-400 = #{ease_doc})")
+    violations += 1
+  elsif css_ease.gsub(/\s+/, "").downcase != want
+    fail!("(b) ease mismatch: tokens.css=#{css_ease} FVI-400=#{ease_doc}")
+    violations += 1
+  end
+  json_ease = json_motion.dig("resolve", "value")
+  if json_ease.nil?
+    fail!("(b) tokens.json missing motion.resolve (FVI-400 = #{ease_doc})")
+    violations += 1
+  elsif json_ease.to_s.gsub(/\s+/, "").downcase != want
+    fail!("(b) ease mismatch: tokens.json=#{json_ease} FVI-400=#{ease_doc}")
+    violations += 1
+  end
+end
+
 expected_motion.each do |name, value|
   css_val = css_vars["motion-#{name}"]
   if css_val.nil?
-    fail!("(b) tokens.css missing --fw-motion-#{name} (FVI-400 = #{value})")
+    fail!("(b) tokens.css missing --rr-motion-#{name} (FVI-400 = #{value})")
     violations += 1
   elsif css_val.gsub(/\s+/, "").downcase != value
     fail!("(b) motion mismatch for #{name}: tokens.css=#{css_val} FVI-400=#{value}")
@@ -155,6 +186,8 @@ end
 puts
 if violations.zero?
   puts "[ok] tokens.css / tokens.json palette parity"
+puts "     note: (a) is css<->json parity, NOT authority against FVS-600 — the color"
+puts "     layer here is still the pre-0.0.32 --fw-* set and is pending re-derivation"
   puts "[ok] motion token set matches FVI-400 (#{REQUIRED_MOTION.length} durations)"
   puts "[ok] reference CSS sources all colors and fonts from --fw-* tokens"
   puts

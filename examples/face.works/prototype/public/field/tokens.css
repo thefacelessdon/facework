@@ -19,9 +19,9 @@
   --fw-font-reading: Inter, "Helvetica Neue", Arial, sans-serif;
   --fw-measure: 68ch;
   --fw-gutter: clamp(20px, 4vw, 64px);
-  --fw-motion-quick: 180ms;
-  --fw-motion-standard: 300ms;
-  --fw-ease-resolve: cubic-bezier(.2,.8,.2,1);
+  --rr-motion-quick: 180ms;
+  --rr-motion-standard: 300ms;
+  --rr-ease-settle: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 *, *::before, *::after { box-sizing: border-box; }
