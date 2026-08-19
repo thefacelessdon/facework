@@ -1,6 +1,6 @@
 ---
 name: fw-consonance
-version: 3.0.0
+version: 3.1.0
 description: |
   Consonance: Phase 7 of the Facework Protocol (Integrity — with /fw-entropy
   and /fw-sovereignty). Verify that strategy, narrative, architecture,
@@ -22,7 +22,9 @@ allowed-tools:
 **Phase 7 of the Facework Protocol (Integrity — with /fw-entropy and /fw-sovereignty).**
 Entry: LaunchPlan and working interfaces exist (Phase 6 gate).
 Exit: ConsonanceCheck with no unresolved high-severity contradictions.
-Co-skills: /fw-entropy and /fw-sovereignty run alongside this phase.
+Co-skills: /fw-entropy and /fw-sovereignty are the other two legs of Phase 7.
+**Run this leg FIRST (0.0.70)** — Entropy needs to audit the model that exists
+after reconciliation, and to price whatever a reconciliation cost (Step 4.5).
 
 You are running cross-layer contradiction analysis.
 This primitive ensures outputs from earlier phases still harmonize when combined.
@@ -98,10 +100,42 @@ Create contradiction entries with:
 
 No contradiction should remain unlabeled.
 
+## Step 4.5: Log the parameters you set (0.0.70)
+
+**Consonance is not only a checker. It is also a decider, and only one of those was
+ever gated.**
+
+Reconciling two artifacts often requires choosing a value — a cadence, a threshold,
+a term, a name, a count. That choice is a **decision**, and it must be recorded as
+one:
+
+- Write it to the **DecisionLedger** with the same rigour as a Current decision:
+  what was chosen, what the alternatives were, and what would falsify it.
+- Mark it **`origin: consonance-reconciliation`** so a later phase can see it was
+  set to resolve a conflict rather than derived from evidence.
+- If the value has **economic or operational consequences**, say so explicitly and
+  name the phase that should price it.
+
+**Why this is a step and not a note.** In the run that earned it, two source
+documents disagreed about a programme's duration. The reconciliation resolved them
+with the phrase *"eighteen months is the programme arc across ~3 cohorts."* That
+phrase was chosen for its reconciling power. It was never an operating decision —
+and it went on to size the largest cost line in the model and set a conversion
+ceiling at a third of the alternative, while appearing in two artifacts **2× apart**
+because nothing owned it.
+
+> **A parameter with no decision behind it is invisible to a decision ledger by
+> construction.** The ledger can only audit what was decided, so the phase that
+> sets a value while reconciling is the only phase that can put it on the record.
+
 ## Step 5: Consonance Gate
 
 Before marking complete:
 - no unresolved high-severity contradiction,
+- every parameter set while reconciling is logged as a decision (Step 4.5),
+- the four pre-gate checks pass (PROTOCOL.md §6.1) — **including check 4, mechanism
+  diff, which is the one this phase is most likely to need and least likely to run**,
+- if this phase wrote to a Runtime Port manifest, §9.7 was re-run (PROTOCOL.md §9.7.1),
 - all watch items have owners and timelines,
 - re-test protocol exists,
 - outputs are ready for launch/handoff without narrative or behavioral conflict.

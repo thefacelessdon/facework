@@ -1,6 +1,6 @@
 ---
 name: fw-sovereignty
-version: 3.0.0
+version: 3.1.0
 description: |
   Sovereignty: Phase 7 of the Facework Protocol (Integrity — with /fw-entropy
   and /fw-consonance). Enforce infrastructure autonomy through ownership clarity,
@@ -22,7 +22,9 @@ allowed-tools:
 **Phase 7 of the Facework Protocol (Integrity — with /fw-entropy and /fw-consonance).**
 Entry: LaunchPlan and working interfaces exist (Phase 6 gate).
 Exit: SovereigntyMap with dependencies classified as own/rent/mitigate; extraction review passed.
-Co-skills: /fw-entropy and /fw-consonance run alongside this phase.
+Co-skills: /fw-entropy and /fw-consonance are the other two legs of Phase 7.
+**Run this leg LAST (0.0.70)** — ownership questions sharpen once Consonance has
+reconciled the layers and Entropy has found which parts are load-bearing.
 
 You are validating whether the system preserves agency under scale pressure.
 This primitive turns sovereignty from principle into enforceable requirements.
@@ -78,6 +80,38 @@ Verify:
 
 If exit is punitive or unclear, mark fail.
 
+## Step 2.5: Succession of obligations (0.0.70)
+
+For **every participant protection in the system, ask one question: who inherits
+this if the person holding it leaves?**
+
+Separate protections into two kinds and treat them differently:
+
+| Kind | Example | Survives a departure? |
+|---|---|---|
+| **Instrument** | equity, a contract, a vested claim, a written agreement | **Yes** — the instrument is the successor |
+| **Practice** | findings returned before they travel upward, a disclosure made in the first meeting, a refusal to ship something that harms a contributor | **No, unless a successor is named** |
+
+**Every practice-based protection MUST name a custodian, and the custodian MUST be a
+role rather than a person.** Two constraints on the choice:
+
+- **It cannot be the role that changes hands.** If the protection exists because the
+  operator performs it, naming the operator as custodian is circular.
+- **Prefer a role that already touches the practice.** A custodian who is inheriting
+  something they already do is nearly free; one inheriting a new duty is a request.
+
+Then specify the **handover**: what transfers, and the rule that makes it real —
+**a handover is complete on the custodian's confirmed receipt, not on the document
+being written.** An unacknowledged handover is the same failure in a new folder.
+
+**Why this is a step.** In the run that earned it, every protection for the two
+participants with no economic stake was conduct performed by one named human, and
+**nothing in thirty-nine artifacts named who inherited any of it.** The retention
+policy said those records were *"governed by the agreement with each"* — and an
+agreement needs a party to honour it. This is how extraction re-enters a well-meant
+system: **not by decision, by turnover.** And the people who would discover the
+protections had lapsed are the ones with no standing to say so.
+
 ## Step 3: Dependency Risk Tiering
 
 List external dependencies and assign tiers:
@@ -100,6 +134,8 @@ Attach owner and verification method for each requirement.
 
 Before marking complete:
 - no unresolved critical ownership ambiguity,
+- every practice-based protection names a custodian role and a handover (Step 2.5),
+- the four pre-gate checks pass (PROTOCOL.md §6.1),
 - exit integrity proven at least at process level,
 - Tier 3 dependencies have mitigation plans,
 - launch criteria include sovereignty checks.

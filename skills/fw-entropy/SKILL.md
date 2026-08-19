@@ -1,6 +1,6 @@
 ---
 name: fw-entropy
-version: 4.0.0
+version: 4.1.0
 description: |
   Entropy: Phase 7 of the Facework Protocol (Integrity — with /fw-sovereignty
   and /fw-consonance). Reveal structural weakness. Systematic review across
@@ -23,7 +23,21 @@ allowed-tools:
 **Phase 7 of the Facework Protocol (Integrity — with /fw-sovereignty and /fw-consonance).**
 Entry: LaunchPlan and working interfaces exist (Phase 6 gate).
 Exit: Resolved issues, critical gap fixes, SovereigntyMap, and ConsonanceCheck.
-Co-skills: /fw-sovereignty and /fw-consonance run alongside this phase.
+Ordering within Phase 7 (0.0.70): **run `/fw-consonance` first, then `/fw-entropy`,
+then `/fw-sovereignty`.** Consonance and Sovereignty are co-skills of the same phase,
+not sequential phases — but the order inside the phase is no longer arbitrary.
+
+**Why Entropy comes after Consonance.** A reconciliation pass is not free. Making two
+artifacts agree requires choosing values, and **the agreement gets paid for somewhere
+— usually in a number nobody was watching.** Entropy is the only primitive that
+prices such a number. Run alongside, it audits a model that is about to change under
+it; run after, it audits the model that actually exists and can price what the
+reconciliation cost.
+
+Earned when a Consonance pass resolved a document conflict with a phrase that set an
+operating parameter as a side effect, and Entropy — running afterward — found it had
+capped the system's conversion rate at a third of the alternative. **Coherence passes
+can introduce entropy.**
 
 You are a senior architect finding every gap between "what's specified" and
 "what's needed to build." Entropy is generative — you don't just find problems,
@@ -55,6 +69,11 @@ alongside technical entropy.
 
 Before scoping the review, scan the project for prior work:
 - All artifacts from Phases 1–6 (SignalThesis through working interfaces)
+- **`ConsonanceCheck` — read it first.** Consonance runs before this phase (see
+  ordering above). Its contradiction register is your baseline: **do not
+  re-discover its findings**, and **do read what it *decided* while reconciling**
+  (its Step 4.5 log), because a parameter set to resolve a conflict is exactly the
+  kind of value this phase exists to price.
 - Prior audit reports, security reviews, or code quality assessments
 - Incident logs, bug reports, or known issue trackers
 - Performance benchmarks or load test results
@@ -93,6 +112,9 @@ apply to this product:
 - Prompt engineering review (structured output, eval strategy)
 - Context management review (token budgets, retrieval strategy)
 
+**If the system converts people into limited positions:**
+- Capacity denominator (Step 2.5) — is the ceiling set by the bar or by supply?
+
 **If the product will scale:**
 - Performance review (N+1 queries, caching, rate limits, cost modeling)
 
@@ -115,6 +137,38 @@ flow of the system. At each point where value moves, ask:
 
 Extraction patterns are entropy. They create dependency, which creates fragility,
 which creates collapse risk. Surface them with the same rigor as technical debt.
+
+## Step 2.5: Capacity denominators (0.0.70)
+
+**If the system converts people into a limited number of positions — residents into
+seats, applicants into cohorts, members into roles, contributors into maintainers —
+compute the denominator before auditing the selection criteria.**
+
+```
+CAPACITY   = positions the system can actually supply over a window
+THROUGHPUT = people it cycles through in the same window
+CEILING    = CAPACITY / THROUGHPUT
+```
+
+Then ask the question the arithmetic makes available:
+
+- **Is the ceiling set by the quality bar, or by supply?** If supply, **the bar is
+  not the binding constraint**, and every hour spent perfecting it is spent on the
+  wrong lever.
+- **Which term is a free variable?** Capacity is usually fixed by something
+  structural. Throughput is usually a **choice** — cohort size, intake cadence,
+  programme length — and therefore the actual lever.
+- **Can a participant see the ceiling?** If the system knows its own supply and the
+  participant does not, **that asymmetry is the extraction**, independent of anyone's
+  intent. Publish it or fix it.
+
+**Why this is a step.** In the run that earned it, four phases treated a readiness
+bar as the load-bearing artifact and specified it with real care. Entropy computed
+the denominator and found conversion was capped at 17–34% by **venture supply**,
+which does not increase when you run more cohorts — so tripling intake tripled the
+denominator and held the numerator constant. **12–15 of every 18 participants could
+not convert for reasons unrelated to their performance, and no artifact counted
+positions-available against people-eligible.** The bar was never the constraint.
 
 ## Step 3: Produce Implementation Artifacts
 

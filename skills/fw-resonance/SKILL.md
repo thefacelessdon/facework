@@ -1,6 +1,6 @@
 ---
 name: fw-resonance
-version: 5.0.0
+version: 5.1.0
 description: |
   Resonance: Phase 6 of the Facework Protocol (Activation). Build working
   interfaces composed from declared capabilities — not generic prototypes.
@@ -75,6 +75,34 @@ Summarize what you found. Identify:
 3. What strategy lock decisions constrain scope
 
 Do not rebuild what already exists and still holds.
+
+## Step 0.5: Re-check the phase weighting (0.0.70)
+
+`PROJECT-CONTEXT.md`'s `phase_emphasis` was set in Phase 1, on what was knowable
+then. **Five phases of evidence have landed since. Check whether it still holds for
+this phase — and if it does not, say so.**
+
+Two questions:
+
+1. **Was this phase weighted on a premise that later evidence overturned?** The
+   common one for Resonance is *"no software is being built, so there is no
+   interface to activate."* If the project's own thesis is that a **process or an
+   engine** is the product, then that engine has an interface — the surface through
+   which the people running it see its state — and specifying it is not an extra.
+2. **Did material evidence arrive after Phase 1 ran?** New prior art, a rendered
+   page, a source document. If it changed what this phase is for, the weighting was
+   set without it.
+
+**Record it as an amendment, never as an edit.** `PROJECT-CONTEXT.md` is locked.
+Write the amendment into this phase's output with the reasoning, and let
+`/fw-consonance` fold it in. That is the same pattern the protocol uses for
+revisiting a locked decision on new evidence.
+
+**Why this is a step.** In the run that earned it, Resonance was weighted `light` on
+the no-software premise and produced **the only artifact in the run that
+implemented a locked decision correctly** while seven other locations contradicted
+it. A phase scoped as an afterthought was carrying the most correct work in the
+project.
 
 ## Step 1: DESIGN.md — Design Language Spec
 

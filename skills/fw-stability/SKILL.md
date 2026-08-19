@@ -1,6 +1,6 @@
 ---
 name: fw-stability
-version: 4.1.0
+version: 4.2.0
 description: |
   Stability: Phase 5 of the Facework Protocol (with /fw-flow). Build the
   architectural foundation. Produce complete technical specs for every major
@@ -454,6 +454,18 @@ manifest — both inform conformance and port shape.
 
 Run `bin/validate-manifest` to confirm port references resolve cleanly
 before closing Stability.
+
+**And say so in the manifest: this check is not finished when Stability closes
+(0.0.70).** Per PROTOCOL.md §9.7.1, **any later phase that writes to a Runtime Port
+manifest must re-run §9.7 before its own gate.** Stability passing is not a
+standing guarantee — it is a snapshot of the manifest as this phase emitted it.
+
+The gap this closes is precise: in the run that earned the rule, Stability's check
+passed correctly, and a later phase then added a skill whose `reads_memory` entry
+was a **parent glob** rather than one of the declared child paths. Two subsequent
+phases read that manifest and neither re-validated it, because §9.7 was scoped to
+the phase that emitted the ports. A manifest is read by runtimes that cannot notice
+a dangling path, so **a stale port reference is silent by construction.**
 
 ## Step 6.5: Cold Read (Optional)
 
