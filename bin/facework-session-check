@@ -1,0 +1,63 @@
+#!/bin/bash
+# Claude Code SessionStart hook — surfaces a broken Facework install at session start.
+#
+# Claude Code skips unreadable skill directories silently, so a moved or deleted
+# clone presents to the user as "the /fw-* commands stopped existing". This turns
+# that into one line of text.
+#
+# Installed by bin/install-skills to ~/.claude/facework-session-check.sh — a COPY,
+# not a symlink, so it still runs when the canonical clone is exactly what went
+# missing. install-skills re-copies it every run.
+#
+# Never fails the session: always exits 0, prints nothing when healthy.
+
+MARKER="$HOME/.claude/skills/.facework-canonical"
+
+# Emit a SessionStart hook payload. systemMessage is shown to the user;
+# additionalContext tells the agent, so it can offer the fix without being asked.
+emit() {
+  msg="$1"
+  python3 - "$msg" <<'PY' 2>/dev/null || true
+import json, sys
+msg = sys.argv[1]
+print(json.dumps({
+    "systemMessage": msg,
+    "suppressOutput": True,
+    "hookSpecificOutput": {
+        "hookEventName": "SessionStart",
+        "additionalContext": (
+            "The Facework protocol skills are not loadable this session, so no "
+            "/fw-* slash commands are available. Diagnosis:\n" + msg
+        ),
+    },
+}))
+PY
+}
+
+# Facework isn't installed on this machine — stay silent rather than nag.
+[ -f "$MARKER" ] || exit 0
+
+REPO="$(tr -d '[:space:]' < "$MARKER" 2>/dev/null)"
+
+if [ -z "$REPO" ]; then
+  emit "Facework: canonical marker at $MARKER is empty. Re-run install.sh from your Facework clone."
+  exit 0
+fi
+
+if [ ! -d "$REPO" ]; then
+  emit "Facework: canonical clone $REPO no longer exists (moved or deleted), so every /fw-* skill symlink is dangling. Re-run ./bin/install-skills from wherever the clone now lives."
+  exit 0
+fi
+
+DOCTOR="$REPO/bin/facework-doctor"
+if [ ! -x "$DOCTOR" ]; then
+  emit "Facework: $DOCTOR is missing or not executable. Check out the repo again, then re-run ./bin/install-skills."
+  exit 0
+fi
+
+OUTPUT="$("$DOCTOR" --quiet 2>&1)"
+if [ -n "$OUTPUT" ]; then
+  emit "$OUTPUT"
+fi
+
+exit 0

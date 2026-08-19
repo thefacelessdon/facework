@@ -10,6 +10,37 @@ BACKUP_DIR="$BACKUP_ROOT/$RUN_ID"
 mkdir -p "$SKILL_DIR"
 mkdir -p "$BACKUP_ROOT"
 
+MARKER="$SKILL_DIR/.facework-canonical"
+HOOK_DEST="$HOME/.claude/facework-session-check.sh"
+
+FORCE=0
+if [ "${1:-}" = "--force" ]; then
+  FORCE=1
+fi
+
+# The global skill namespace can only belong to one clone. Without this guard any
+# project-local copy of Facework silently repoints every /fw-* skill at itself —
+# which is how a stale v0.0.3 checkout ended up owning the namespace once already.
+if [ -f "$MARKER" ]; then
+  RECORDED="$(tr -d '[:space:]' < "$MARKER")"
+  if [ -n "$RECORDED" ] && [ "$RECORDED" != "$ROOT_DIR" ]; then
+    if [ -d "$RECORDED" ] && [ "$FORCE" -ne 1 ]; then
+      echo "Refusing to install: the global Facework skills belong to another clone."
+      echo
+      echo "  canonical : $RECORDED"
+      echo "  this clone: $ROOT_DIR"
+      echo
+      echo "Install from the canonical clone instead, or make this one canonical with:"
+      echo "  $ROOT_DIR/bin/install-skills --force"
+      exit 1
+    fi
+    # Recorded clone is gone (moved/deleted), or --force was passed: adopt this one.
+    echo "Adopting $ROOT_DIR as the canonical Facework clone (was $RECORDED)."
+    echo
+  fi
+fi
+
+
 SKILLS=(
   fw-frequency
   fw-current
@@ -67,6 +98,28 @@ backup_path() {
   echo "[backup] $dst_path -> $BACKUP_DIR/$skill_name"
 }
 
+INSTALL_COMPLETE=0
+
+# A run killed partway through (SIGPIPE from `| head`, Ctrl-C) can leave a skill
+# backed up but not yet relinked — i.e. missing rather than merely stale. Say so
+# instead of exiting quietly into a half-installed namespace.
+ABORT_REPORTED=0
+report_abort() {
+  status=$?
+  # EXIT and PIPE can both fire for one interruption — report once.
+  if [ "$INSTALL_COMPLETE" -eq 0 ] && [ "$ABORT_REPORTED" -eq 0 ]; then
+    ABORT_REPORTED=1
+    # stderr, not stdout: the usual cause is a closed stdout pipe (`| head`).
+    echo >&2
+    echo "[abort] install did not finish (exit $status) — the skill set may be half-linked." >&2
+    echo "        Re-run: $ROOT_DIR/bin/install-skills" >&2
+    if [ -d "$BACKUP_DIR" ]; then
+      echo "        Backups from this run: $BACKUP_DIR" >&2
+    fi
+  fi
+}
+trap report_abort EXIT INT TERM PIPE
+
 echo "Installing Facework skills to $SKILL_DIR"
 
 for skill in "${SKILLS[@]}"; do
@@ -107,5 +160,17 @@ if [ -d "$BACKUP_DIR" ]; then
 else
   echo "No backups were needed."
 fi
+printf '%s\n' "$ROOT_DIR" > "$MARKER"
+echo "Canonical clone recorded: $MARKER"
+
+# Copied, not symlinked: the hook must still run when this clone is what vanished.
+if cp "$ROOT_DIR/bin/facework-session-check" "$HOOK_DEST" 2>/dev/null; then
+  chmod +x "$HOOK_DEST"
+  echo "Session hook installed: $HOOK_DEST"
+else
+  echo "[warn] could not install session hook to $HOOK_DEST"
+fi
+
+INSTALL_COMPLETE=1
 echo "Installed Facework skills."
 echo "Run: $ROOT_DIR/bin/facework-doctor"
