@@ -150,7 +150,7 @@ Non-negotiables:
   Never reintroduce a center dot in any state.
 - **`/protocol/[slug]` serves committed derived copies** of real canon docs with
   provenance (source path + SHA). Editing a canon doc without resyncing breaks
-  the drift gate — that gate has already caught a live canon edit (0.0.40).
+  the drift gate — it has caught two live canon edits (0.0.40, 0.0.46).
 
 Gates, run from `examples/face.works/prototype`:
 
@@ -159,6 +159,14 @@ npm run build
 npm test
 npm run sync-canon -- --check
 ```
+
+**If you edited a canon doc — `PROTOCOL.md`, `CONSTITUTION.md`, anything under
+`theories/`, `standards/README.md`, `methodology/build-methodology.md` — you must
+run `npm run sync-canon` and commit the regenerated copy, even when you never
+touched the site.** The derived copies are committed, so a canon edit alone turns
+the gate red. This is not site work; it is part of editing canon. 0.0.46 landed on
+`main` with the gate red for exactly this reason — a protocol-only change did not
+look like it needed a site command.
 
 Plus an axe-core WCAG 2.2 AA pass over all routes (0 violations is the standing
 bar) and a banned-pattern grep for superseded identity terms. Manual AT rows are
@@ -189,9 +197,11 @@ Pre-1.0 rule: any change that shapes the protocol is a **PATCH**. MINOR is
 reserved for validated capability milestones; `0.1.0` now means **Independent
 Validation** — operation or review by someone who is not the author.
 
-> `methodology/CHANGELOG.md` stopped at 0.0.27; 0.0.28 onward are recorded as
-> `ROADMAP.md` rows. Follow the ROADMAP path. The CHANGELOG backlog is known and
-> unresolved — do not silently backfill it.
+> `methodology/CHANGELOG.md` is a **closed archive** — do not add entries to it,
+> and do not backfill its 0.0.28–0.0.45 hole (that hole is deliberate; the
+> releases are in `ROADMAP.md`). Ruling: `methodology/decisions/DECISION-003`.
+> The release record is the ROADMAP row; methodology evolution goes in
+> `methodology/retros/`; rulings go in `methodology/decisions/`.
 
 ## Working style
 

@@ -1,3 +1,36 @@
+# Methodology Changelog — CLOSED ARCHIVE
+
+> **Status: closed.** This log is no longer maintained. Do not add entries.
+> Ruling: [`decisions/DECISION-003-methodology-changelog-disposition.md`](decisions/DECISION-003-methodology-changelog-disposition.md) (0.0.47).
+
+**What this file covers.** Methodology versions v1.0–v5.0 (March 2026) and
+releases 0.0.1–0.0.27, plus a final 0.0.46 entry written before this ruling.
+It is a record of what was believed at the time of writing — read it as history,
+not as current canon.
+
+**Where the record continues:**
+
+| For | Go to |
+|---|---|
+| What shipped, per release | [`../ROADMAP.md`](../ROADMAP.md) version history — complete, 0.0.1 onward |
+| What the methodology learned | [`retros/`](retros/) |
+| What was ruled, and why | [`decisions/`](decisions/) |
+| Runtime / port validation detail | `runtime-ports-*-gap-*.md` in this directory |
+
+**The 0.0.28–0.0.45 hole is deliberate and is not backfilled.** Those eighteen
+releases are recorded in `ROADMAP.md`. Reproducing them here would create a second
+authoritative record of facts that already have one — the drift this repo has
+already paid for twice (0.0.26 and 0.0.27 were both ROADMAP-drift repairs).
+FW-DEC-003 has the full derivation.
+
+**Superseded charter.** This file was opened with the instruction: *"Track every
+evolution of the build methodology. After each project retro, update the
+methodology and log what changed here."* That charter is superseded — retros now
+carry methodology evolution directly. It is preserved above as written, and its
+original position at the foot of the file is left in place.
+
+---
+
 # 0.0.46 — 2026-08-18 (Fifth Runtime Ports validation — Berd, the multi-harness corner)
 
 **What changed:**
@@ -1106,6 +1139,9 @@ update the methodology and log what changed here.
 
 - Defined: Governance → Pressure Testing → Architecture → Playbooks → Prototype → Technical Spine → Handoff
 - Validated: 4 days from idea to handoff-ready
+  <!-- SUPERSEDED (0.0.28): unsupported. Measured ground truth is 98 calendar days;
+       the "4 days" claim was retracted across all sources and this archived copy
+       was missed. Retained as written, annotated. -->
 - Produced: 10 specs, 9 playbooks, 7 decisions, working prototype, 75+ tracked work items
 - Documented: Agent encoding blueprints for all 7 phases
 
@@ -1174,15 +1210,8 @@ evaluation criteria that prevents this.
 
 ## Future entries
 
-After each change, add an entry using the release version:
+**None.** This log is closed — see the status header at the top of this file.
 
-```
-# 0.X.Y — [Date] ([Summary])
-
-**What changed:**
-- [Added/removed/modified step]
-- [New pattern discovered]
-- [Phase timing adjustment]
-
-**Triggered by:** [What evidence drove the change]
-```
+New releases are recorded as a version-history row in [`../ROADMAP.md`](../ROADMAP.md).
+Methodology evolution belongs in [`retros/`](retros/); rulings belong in
+[`decisions/`](decisions/).
