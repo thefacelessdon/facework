@@ -192,6 +192,31 @@ does not fit here:
 3. **Bump `VERSION`** (single semver) and **add a `ROADMAP.md` version-history
    row** stating what was *earned*, not merely what changed.
 4. **Open a PR.** Recent releases all land as reviewed PRs.
+5. **Never `--delete-branch` a PR that is another PR's base.** GitHub *closes*
+   the dependent PR, and a closed PR cannot be retargeted once its base is gone.
+
+## Parallel sessions — one agent per worktree
+
+More than one agent may be live in this repo. They do not share a branch, but on
+a single checkout they **share a working tree**, and a `git checkout` by one moves
+`HEAD` under the other.
+
+- **Default to an isolated worktree per agent** (`git worktree add`, or Berd's
+  per-session worktree startup mode). This is the structural fix; everything below
+  is the fallback for when it is not in place.
+- **Check `git branch --show-current` immediately before any `commit`, `amend`, or
+  `checkout`** when another session may be live. Verify it is still your branch.
+- **Never `git checkout --` to restore a fixture** while the thing under test is
+  uncommitted — it restores from `HEAD` and silently discards your own work. Back
+  up to a scratch file instead.
+- **Before dropping a stash, verify its SHA**, not its index. `stash@{0}` is
+  positional and shifts if another session stashes.
+- If you find foreign uncommitted changes in the tree, **stop and report**. Do not
+  stash, reset, or check out around them.
+
+Earned the hard way at 0.0.53: a tree switched mid-sequence, a release commit
+landed on another session's branch, and a `--amend` rewrote that session's commit.
+Nothing was lost, but only because git refused one checkout at the right moment.
 
 Pre-1.0 rule: any change that shapes the protocol is a **PATCH**. MINOR is
 reserved for validated capability milestones; `0.1.0` now means **Independent
