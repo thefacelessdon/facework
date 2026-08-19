@@ -414,6 +414,19 @@ def validate_conformance_profile!(data, declared_runtime)
   layers.each do |l|
     raise "shell_sovereignty.#{l} invalid: #{sov[l].inspect}" unless valid_posture.include?(sov[l])
   end
+  # v1.6.0 — harness_options[] declares a MULTI-HARNESS shell (§9.11/§9.12).
+  # Optional and additive: absent means single-harness, which is every profile
+  # written before 1.6.0.
+  if (opts = sov["harness_options"])
+    raise "shell_sovereignty.harness_options must be an array" unless opts.is_a?(Array)
+    raise "shell_sovereignty.harness_options must list >= 2 loops (it declares a multi-harness shell)" if opts.size < 2
+    opts.each_with_index do |o, i|
+      raise "harness_options[#{i}] must be an object" unless o.is_a?(Hash)
+      raise "harness_options[#{i}].harness must be a non-empty string" unless o["harness"].is_a?(String) && !o["harness"].strip.empty?
+      raise "harness_options[#{i}] (#{o['harness']}).posture invalid: #{o['posture'].inspect}" unless valid_posture.include?(o["posture"])
+    end
+  end
+
   unowned = layers.reject { |l| sov[l] == "own" }
   waiver = sov["waiver"]
   if unowned.empty?
@@ -467,7 +480,7 @@ def validate_conformance_profile!(data, declared_runtime)
     runtime: data["runtime"],
     tenant: data["tenant"],
     statuses: bindings.map { |b| [b["port"], b["status"]] }.to_h,
-    sovereignty: layers.map { |l| [l, sov[l]] }.to_h,
+    sovereignty: layers.map { |l| [l, sov[l]] }.to_h.merge(sov["harness_options"] ? { "harness_options" => sov["harness_options"] } : {}),
     waived: unowned,
     gates: gates,
     unenforced: unenforced,
@@ -552,7 +565,7 @@ begin
   raise "manifest root must be an object" unless manifest.is_a?(Hash)
 
   protocol_version = require_string!(manifest, "protocol_version")
-  raise "protocol_version must match 1.x.x (1.0.0 / 1.1.0 / 1.2.0 / 1.3.0 / 1.4.0 known)" unless protocol_version =~ /^1\.\d+\.\d+$/
+  raise "protocol_version must match 1.x.x (1.0.0 / 1.1.0 / 1.2.0 / 1.3.0 / 1.4.0 / 1.5.0 / 1.6.0 known)" unless protocol_version =~ /^1\.\d+\.\d+$/
 
   project = require_hash!(manifest, "project")
   require_string!(project, "name")
@@ -868,6 +881,9 @@ begin
     waived = conformance_summary[:waived]
     sov_note = waived.empty? ? "fully self-hostable, no waiver required" : "waiver covers: #{waived.join(', ')}"
     puts "    shell sovereignty: harness=#{sov['harness']} / state=#{sov['state']} / model=#{sov['model']} — #{sov_note}"
+    if (h_opts = sov["harness_options"])
+      puts "    multi-harness shell: #{h_opts.size} selectable loops (#{h_opts.map { |o| "#{o['harness']}=#{o['posture']}" }.join(', ')})"
+    end
     puts "    governance: #{conformance_summary[:gates]} enforced gate(s) / #{conformance_summary[:unenforced]} declared-unenforced / #{conformance_summary[:metadata]} metadata"
   end
 rescue => e

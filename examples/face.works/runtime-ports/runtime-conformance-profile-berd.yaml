@@ -1,0 +1,114 @@
+version: "1.6.0"
+tenant: "face.works"
+runtime: "berd"   # Berd (Block) — the fifth reference runtime, and the first
+                  # MULTI-HARNESS shell: one set of primitives fronting several
+                  # interchangeable agent loops, selected per session.
+
+# How each of the four Runtime Ports binds to Berd, from the fifth validation
+# (methodology/runtime-ports-berd-gap-2026-08-18.md) and the converter built in
+# that pass (bin/harness-to-berd). native = the runtime hosts it directly;
+# partial = hosted with gaps; authoring_side = stays in the Facework manifest.
+port_bindings:
+  - port: context
+    status: partial
+    mechanism: "berd:AGENTS.md-per-workspace + project-instructions + agent-persona"
+    notes: >
+      Three vehicles at three lifetimes (§9.11): AGENTS.md is walked per attached
+      workspace and injected as <workspace-instructions>; project instructions apply
+      to every session in the project; the persona is swappable per session. The
+      boundary binds to the longest-lived vehicle. Flat composition — no per-skill
+      bundles, no token budget, no ordering.
+  - port: skills
+    status: partial
+    mechanism: "berd:.agents/skills/{id}/SKILL.md + automations"
+    notes: >
+      Portable SKILL.md folders (personal ~/.agents/skills or project
+      <project>/.agents/skills), matched to a request by `description`. Skill name
+      MUST equal the folder name in kebab-case. on_demand is native (session create
+      / tagging a skill in a chat); scheduled has a UI-only home (Automations, no
+      berdctl noun); event and continuous have none. 1/4 triggers native.
+  - port: connections
+    status: authoring_side
+    mechanism: "authoring-layer"
+    notes: >
+      Connections (OAuth catalog) and Extensions (stdio/SSE/streamable HTTP/ACP/
+      builtin) are configured in the UI only — no on-disk config, no berdctl noun.
+      The converter emits an operator checklist, not wiring. First validated shell
+      where IntegrationManifest does not bind to a file, despite fronting
+      MCP-capable harnesses.
+  - port: memory
+    status: authoring_side
+    mechanism: "authoring-layer"
+    notes: >
+      No memory primitive at all — no store, no boundary, no per-project memory
+      directory. Weakest of the five reference runtimes. MemoryMap.boundary survives
+      only as prose in AGENTS.md, binding on the model rather than on a mechanism.
+
+# Sovereignty decomposed by layer (§9.12, FS-400.7), extended by the fifth
+# validation: the harness layer is plural and late-bound, and the state layer
+# classifies on portability rather than locality.
+shell_sovereignty:
+  harness: mitigate   # Berd itself: local desktop app, not self-hostable; the loop under it is chosen per session
+  state: mitigate     # split — authoring state is own+portable, operational state is app-internal (classified by the weaker half)
+  model: rent         # provider-hosted models, per whichever harness the session runs
+  # The six loops `berdctl info harnesses` reports, with their install status in
+  # the validating environment. Status is environment state, not sovereignty —
+  # an uninstalled loop is still a binding the shell can offer.
+  harness_options:
+    - harness: "claude-code"
+      posture: own
+      notes: "claude-acp (ready) — open Agent SDK as a local subprocess; own-harness+own-state+rent-model (fourth validation)."
+    - harness: "goose"
+      posture: own
+      notes: "goose (not_ready) — open-source Block agent loop, runs locally."
+    - harness: "codex"
+      posture: own
+      notes: "codex-acp (ready) — vendor CLI running locally; model layer rented."
+    - harness: "cursor-agent"
+      posture: rent
+      notes: "cursor-agent (ready) — vendor-controlled loop."
+    - harness: "copilot"
+      posture: rent
+      notes: "copilot-acp (not_installed) — vendor-controlled loop."
+    - harness: "amp"
+      posture: rent
+      notes: "amp-acp (not_installed) — vendor-controlled loop."
+  waiver:
+    layers: [harness, state, model]
+    exit_plan: >
+      Authoring state relocates by copying two directories — ~/.agents/agents/ and
+      ~/.agents/skills/ (or the project-local .agents/ tree) — plus AGENTS.md at the
+      workspace root; all are plain markdown and are the same files bin/harness-to-berd
+      regenerates from the manifests, so the authoring half is fully reproducible.
+      Operational state is the gap: project definitions, session transcripts, and
+      connection wiring are app-internal with no verified export path, so relocating
+      means re-running `berdctl project create`, re-wiring connections by hand, and
+      losing transcripts. The harness layer is the hedge that makes this acceptable —
+      the same generated bundle runs on Claude Code, Codex, or goose, so a rented
+      model can be swapped by switching harness with no re-authoring.
+    data_posture:
+      retention: "local — app data under ~/Library/Application Support/xyz.block.berd/ and ~/.agents/; model calls per the selected harness's provider terms"
+      training: "per the selected provider's terms; not controlled by the shell"
+      residency: "n/a for local state; model calls per provider terms"
+    owner_ruling: "PENDING — no Sovereignty-loop ruling recorded yet; this profile is validation output, not an adoption decision"
+
+# Governance attributes split into enforceable gates vs descriptive metadata
+# (§9.12, FS-400.4). Berd enforces less than Claude Code: there is no permissions
+# system exposed at the shell layer, so escalation loses the binding it had there.
+governance:
+  - attribute: escalation
+    kind: gate
+    binds_to: "berd:session send --if-running steer|queue"
+  - attribute: verifier_skill_id
+    kind: gate
+    unenforced: true   # no native "verifier gates output before publish"; the design-eye-evaluator skill runs as a delegated authoring-layer step
+  - attribute: trust_boundary
+    kind: metadata
+  - attribute: pii
+    kind: metadata
+  - attribute: data_residency
+    kind: metadata
+  - attribute: rate_limits
+    kind: metadata
+  - attribute: sponsors
+    kind: metadata
