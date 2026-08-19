@@ -197,3 +197,183 @@ drowning in micro-entities.
 A filings data source covering both jurisdictions. Nothing else is open — every
 judgment call the screen requires is fixed above, in this commit, dated, before
 contact with data.
+
+---
+
+# Correction — leverage comparator and pass mark — APPENDED 2026-08-19
+
+This correction is append-only. It does not alter the frozen block above. The
+statement that “nothing else is open” was false when written: the plain-leverage
+comparison was required but not specified, and “materially more” had no fixed
+pass mark. The definitions and decision rules below close those degrees of
+freedom before any data-source connection, candidate inspection, or outcome
+contact. After this append, only the filings data source remains open.
+
+The four numeric choices were independently reviewed by Pushback in Berd session
+`20260819_29` against commits `a921043f4dda` and `3a2e7dacabd9` before this
+handoff: **L1 = 4.0×**, **L2 = 1.5×**, **absolute adverse-event-rate gap = 15
+percentage points**, and **relative risk = 1.75×**. They are judgment calls with
+stated reasoning, not empirically derived optima. Tuning any of them after
+outcome contact voids the exercise and must be reported as void.
+
+## Frozen plain-leverage definitions
+
+All quantities use the same three fiscal years ending in the flag year.
+
+**L1 — debt load.** L1 is mean fiscal-year-end gross debt divided by mean annual
+EBITDA over the three years. It is never the mean of three annual ratios.
+
+- **L1-positive:** L1 ≥ 4.0×.
+- If aggregate EBITDA is ≤ 0 and mean gross debt is > 0, the entity is
+  L1-positive without dividing by a non-positive denominator.
+- If mean gross debt is 0, the entity is L1-negative.
+
+**L2 — interest coverage.** L2 is three-year aggregate EBIT divided by
+three-year aggregate gross interest expense. It is never the mean of three annual
+ratios.
+
+- **L2-positive:** L2 ≤ 1.5×.
+- If aggregate EBIT is ≤ 0 and aggregate gross interest expense is > 0, the
+  entity is L2-positive.
+- If aggregate gross interest expense is 0, the entity is L2-negative.
+- Negative interest expense is invalid/missing. Net interest income is never
+  substituted for gross interest expense.
+
+The component definitions are frozen across both jurisdictions:
+
+- **Gross debt** is current and non-current interest-bearing bank debt, bonds,
+  notes, and financing overdrafts at carrying value. It excludes trade payables,
+  provisions, pension deficits, preferred equity, and lease liabilities.
+- **Gross interest expense** is interest, coupon, and amortised financing cost on
+  the debt included above, before any interest income. It excludes lease interest,
+  pension interest, provision unwinds, capitalised interest, and every net finance
+  figure.
+- **EBIT** is operating profit before finance and tax, without management-defined
+  “adjusted” add-backs. **EBITDA** is that EBIT plus depreciation, amortisation,
+  and impairment of property, equipment, and finite-lived intangibles.
+- **Lease treatment:** lease liabilities and lease interest are excluded from L1
+  and L2. Where the filing recognises right-of-use depreciation and lease interest
+  instead of an operating lease expense, EBIT and EBITDA are restated to an
+  operating-lease basis using the disclosed period lease/rent expense: add back
+  right-of-use depreciation, subtract that lease/rent expense, then add back only
+  non-right-of-use depreciation and amortisation to reach EBITDA. If the needed
+  lease components are not disclosed, the observation is invalid/missing.
+
+Every annual component must be present and valid in all three years for both
+ratios. A missing or invalid component excludes the entity from the **common
+analysis universe**; it is never silently treated as unflagged and never imputed.
+Exclusions are reported by jurisdiction and archetype. The four joint leverage
+states are L1−/L2−, L1+/L2−, L1−/L2+, and L1+/L2+.
+
+## Frozen comparison and positive-result rule
+
+The L1-positive and L2-positive cohort rates are descriptive only. Raw
+superiority of an archetype-flagged cohort over either leverage cohort is **not**
+a pass gate.
+
+Each archetype remains separate, and the existing minimum **n = 30** rule remains.
+For an archetype to produce a positive result, its flagged adverse-event rate
+must satisfy **both** of these point thresholds against **each** comparator:
+
+1. an absolute rate gap of **at least 15 percentage points**, and
+2. a relative risk of **at least 1.75×**.
+
+The two comparators are:
+
+1. the unconditional adverse-event base rate in the common analysis universe;
+   and
+2. unflagged controls matched on 2-digit sector, revenue quartile, flag year, and
+   joint L1/L2 status.
+
+For each comparator, both point thresholds must pass and the 95% confidence
+interval must exclude no difference: the risk-difference interval excludes 0 and
+the relative-risk interval excludes 1. A miss on either threshold, either
+comparator, or either confidence-interval condition is not a positive result.
+
+## Append-only result discipline — FROZEN 2026-08-19
+
+Every frozen block in this H3 record remains unchanged. Results, later
+corrections, and dissents are appended after the frozen material with their own
+dates. No result may overwrite, silently reinterpret, or backfill a pre-registered
+rule.
+
+---
+
+# Correction — confidence-interval methods — APPENDED 2026-08-19
+
+The independently reviewed comparison rule above required 95% confidence
+intervals but did not name their calculation. Pushback identified and closed that
+remaining degree of freedom in the same pre-data Berd session `20260819_29`. This
+block is appended after, and does not alter, either frozen block above.
+
+Let `a/n1` be the flagged adverse-event rate, `c/n0` the comparator rate, and
+`z = 1.95996398454`.
+
+## Risk-difference interval
+
+Use the two-sided 95% **Newcombe hybrid-score interval (Method 10), without
+continuity correction**. For each proportion `p = x/n`, calculate its Wilson
+limits as:
+
+- `denominator = 1 + z²/n`
+- `centre = (p + z²/(2n)) / denominator`
+- `half-width = z × sqrt(p(1−p)/n + z²/(4n²)) / denominator`
+- `L = centre − half-width`; `U = centre + half-width`
+
+Call the flagged limits `(L1,U1)` and comparator limits `(L0,U0)`. For
+`RD = a/n1 − c/n0`:
+
+- `lower = RD − sqrt((a/n1 − L1)² + (U0 − c/n0)²)`
+- `upper = RD + sqrt((U1 − a/n1)² + (c/n0 − L0)²)`
+
+Wilson limits handle zero-event and all-event cells without adjustment.
+
+## Relative-risk interval
+
+Use the two-sided 95% **Katz log interval**. Ordinarily:
+
+- `RR = (a/n1) / (c/n0)`
+- `SE = sqrt(1/a − 1/n1 + 1/c − 1/n0)`
+- `CI = exp(log(RR) ± z × SE)`
+
+Write the 2×2 cells as flagged event/non-event `(a,b)` and comparator
+event/non-event `(c,d)`. If any cell is zero, add **0.5 to all four cells** before
+calculating the Katz interval, so the corrected rates are `(a+0.5)/(n1+1)` and
+`(c+0.5)/(n0+1)`. Report the uncorrected point RR and the corrected interval. If
+`a = c = 0`, RR is undefined and that comparison automatically fails.
+
+In addition to the frozen point thresholds, a positive result requires the
+risk-difference lower bound to be `> 0` and the relative-risk lower bound to be
+`> 1` against each comparator.
+
+## Review provenance clarification — APPENDED 2026-08-19
+
+“Pushback” is the external/global Berd persona recorded on session
+`20260819_29` at `/Users/facelessdon/.agents/agents/pushback.md`; it is not one of
+this repository's tracked Facework personas. Session metadata and the final
+verdict were verified read-only with:
+
+`berdctl session get --session-id 20260819_29 --messages 12 --json`
+
+The session title is “Review four proposed pre-registration,” its working tree is
+`h3-parameter-review`, and its final verdict accepts all four numbers, supplies
+the ratio edge cases and corrected incremental-value test above, and records that
+no files were edited. The Berd session is the review evidence; this repository
+does not contain a copy of the global persona or session transcript.
+
+---
+
+# Evidence qualification — APPENDED 2026-08-19
+
+The dated repository attestation is
+`methodology/h3-parameter-review-attestation-2026-08-19.md`. It records the
+session metadata, verdict, persona boundary, and evidence limit.
+
+“Independent review” means the parameters were challenged in a separate session
+and persona from the authoring sessions. It does **not** mean the machine-local
+transcript is independently downloadable. The human handoff designated Pushback;
+the reason Pushback was selected instead of the repo-tracked Adversary was not
+recorded and is not invented here. The Adversary did not perform this review, and
+none of its refusal-by-default or public-evidence properties are attributed to
+Pushback. The Adversary remains the repository's designated enforcement persona
+for a later H3 checkpoint or claimed result.

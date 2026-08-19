@@ -198,5 +198,5 @@ end
 
 puts ''
 puts 'Next:'
-puts "  bin/fw-berd-launch 1 --project #{project_id}#{dry ? ' --dry-run' : ''}"
+puts "  bin/fw-berd-launch 1 --project #{project_id} --agent AGENT_ID#{dry ? ' --dry-run' : ''}"
 puts '  (phases 4, 5 and 7 launch their parallel skills as concurrent sessions)'
