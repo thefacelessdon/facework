@@ -1,7 +1,7 @@
 # Facework Protocol
 
 Status: Draft
-Release version: tracked in [`VERSION`](VERSION); see ROADMAP.md for versioning rules. Manifest schema 1.0.0 (baseline), 1.1.0 (Runtime Ports, §9), 1.2.0 (HarnessBundle, §10), 1.3.0 (DesignInfrastructure, §11), 1.4.0 (efficiency hints + skill polish — amendments throughout §9–§11, new §12 Observability Interface), 1.5.0 (RuntimeConformanceProfile + runtime-conformance tier, §9.2/§9.12), 1.6.0 (multi-harness shells — `shell_sovereignty.harness_options`, §9.11/§9.12).
+Release version: tracked in [`VERSION`](VERSION); see ROADMAP.md for versioning rules. Manifest schema 1.0.0 (baseline), 1.1.0 (Runtime Ports, §9), 1.2.0 (HarnessBundle, §10), 1.3.0 (DesignInfrastructure, §11), 1.4.0 (efficiency hints + skill polish — amendments throughout §9–§11, new §12 Observability Interface), 1.5.0 (RuntimeConformanceProfile + runtime-conformance tier, §9.2/§9.12), 1.6.0 (multi-harness shells — `shell_sovereignty.harness_options`, §9.11/§9.12), 1.7.0 (enforceable Sovereignty-loop ruling — `waiver.ruling`, §9.12).
 
 Facework Protocol is an open standard for turning cultural signal into coherent, ownable business systems for creators and cultural brands.
 
@@ -869,9 +869,24 @@ layer**, each classified `own | rent | mitigate`:
   when present. Omitting it means the shell is single-harness (§9.11).
 - `waiver` — REQUIRED if any layer is `rent` or `mitigate`. Fields: `layers[]`
   (which layers the waiver covers), `exit_plan` (can tenant state relocate?),
-  `data_posture` (`retention`, `training`, `residency`), `owner_ruling` (who ruled,
-  and when — a recorded Sovereignty-loop decision). A fully self-hostable shell
-  (all layers `own`) omits `waiver`.
+  `data_posture` (`retention`, `training`, `residency`), and `ruling` — the
+  recorded Sovereignty-loop decision. A fully self-hostable shell (all layers
+  `own`) omits `waiver`.
+- `ruling` (v1.7.0) — `{ status, by?, date?, note? }`. `status` is `ruled` or
+  `pending`. **`ruled`** REQUIRES `by` (who ruled) and `date` (ISO `YYYY-MM-DD`).
+  **`pending`** REQUIRES that `by` and `date` be absent — a ruling is recorded or it
+  is not; there is no half-recorded state. The date field is `date`, not `on`:
+  YAML 1.1 parses a bare `on:` key as the boolean `true`, so `on` is unusable as a
+  manifest key. `pending` is the honest state for a
+  profile that is **validation output rather than an adoption decision**, and it
+  is what the 0.0.14 guard-rail requires an agent to write: an agent MAY record
+  `status: pending`, and MUST NEVER write `status: ruled` on a human's behalf.
+- `owner_ruling` (v1.5.0, **deprecated in v1.7.0**) — the original free-text form.
+  Still accepted and read as `status: ruled`, so every v1.5.0/v1.6.0 profile stays
+  valid. Exactly one of `ruling` or `owner_ruling` may be present. It was replaced
+  because free text cannot be gated: a profile could satisfy the Phase-7 gate with
+  the string `"PENDING — no ruling recorded yet"`, which asserts the gate's own
+  condition is unmet.
 
 **`governance[]`** (FS-400.4) — one entry per governance attribute the project
 relies on (`trust_boundary`, `verifier_skill_id`, `escalation`, `pii`,
@@ -888,7 +903,8 @@ relies on (`trust_boundary`, `verifier_skill_id`, `escalation`, `pii`,
 1. Every `port` in `port_bindings` is one of the four; each resolves to a declared
    port manifest (or is `authoring_side`).
 2. Every `rent`/`mitigate` layer in `shell_sovereignty` is covered by a `waiver`
-   with a non-empty `exit_plan` and `owner_ruling`. `harness_options`, when
+   with a non-empty `exit_plan` and a well-formed `ruling` (or the deprecated
+   `owner_ruling`). `harness_options`, when
    present, lists ≥2 loops, each with a valid `posture`.
 3. Each `governance[]` entry is classified `gate` or `metadata`; every `gate`
    either sets `binds_to` or is marked `unenforced`.
@@ -897,8 +913,13 @@ relies on (`trust_boundary`, `verifier_skill_id`, `escalation`, `pii`,
 - **Phase 5** — when runtime conformance is claimed, the profile is present and
   validates; `port_bindings` cover all four ports.
 - **Phase 7** — `shell_sovereignty` is consistent with the `SovereigntyMap`; every
-  `rent`/`mitigate` layer's `waiver` matches a recorded owner ruling (this is the
-  machine form of the §9.11 Phase-7 gate line).
+  `rent`/`mitigate` layer's `waiver` carries `ruling.status: ruled` with `by` and
+  `date` (this is the machine form of the §9.11 Phase-7 gate line). A profile whose
+  waiver is `pending` is valid as **validation output** but MUST NOT be reached
+  through a `conformance.claimed: true` manifest (§9.2) — claiming runtime
+  conformance asserts the tenant world is ready to be operated, which a rented or
+  mitigated shell cannot be until its owner has ruled. This is the gate that
+  v1.5.0–v1.6.0 declared but could not enforce.
 
 Formal schema: `$defs.runtimeConformanceProfile`. Worked examples:
 `examples/face.works/runtime-ports/runtime-conformance-profile.yaml` (the Claude

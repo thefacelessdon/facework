@@ -1,4 +1,4 @@
-version: "1.6.0"
+version: "1.7.0"
 tenant: "face.works"
 runtime: "berd"   # Berd (Block) — the fifth reference runtime, and the first
                   # MULTI-HARNESS shell: one set of primitives fronting several
@@ -90,7 +90,13 @@ shell_sovereignty:
       retention: "local — app data under ~/Library/Application Support/xyz.block.berd/ and ~/.agents/; model calls per the selected harness's provider terms"
       training: "per the selected provider's terms; not controlled by the shell"
       residency: "n/a for local state; model calls per provider terms"
-    owner_ruling: "PENDING — no Sovereignty-loop ruling recorded yet; this profile is validation output, not an adoption decision"
+    # v1.7.0 — the honest unruled state. Under v1.5.0 this was the free-text string
+    # "PENDING …", which satisfied the Phase-7 check while asserting the check's own
+    # condition was unmet. Now it is structural: this profile CANNOT be reached
+    # through a conformance.claimed: true manifest until Harper rules (§9.12).
+    ruling:
+      status: pending
+      note: "Validation output, not an adoption decision. No Sovereignty-loop ruling recorded. Per the 0.0.14 guard-rail an agent may record this state but must never record a ruling on Harper's behalf."
 
 # Governance attributes split into enforceable gates vs descriptive metadata
 # (§9.12, FS-400.4). Berd enforces less than Claude Code: there is no permissions
