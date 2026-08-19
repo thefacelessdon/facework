@@ -1,4 +1,4 @@
-<!-- DERIVED COPY — do not edit. Source: standards/README.md @ 83762d8. Regenerate: npm run sync-canon -->
+<!-- DERIVED COPY — do not edit. Source: standards/README.md @ blob:cc3b30a8. Regenerate: npm run sync-canon -->
 # Facework Standards Track (Post-1.0)
 
 **Status: Deferred. Not canonical.**

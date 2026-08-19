@@ -1,4 +1,4 @@
-<!-- DERIVED COPY — do not edit. Source: PROTOCOL.md @ 281db25. Regenerate: npm run sync-canon -->
+<!-- DERIVED COPY — do not edit. Source: PROTOCOL.md @ blob:8425dc3e. Regenerate: npm run sync-canon -->
 # Facework Protocol
 
 Status: Draft
