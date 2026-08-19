@@ -10,29 +10,96 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
+      # v1 requires this: it exchanges a GitHub OIDC token for the App token it
+      # posts review comments with. Without it the run fails three retries with
+      # "Unable to get ACTIONS_ID_TOKEN_REQUEST_URL env variable" — not an auth
+      # problem with ANTHROPIC_API_KEY. Not needed by the pre-v1 @beta line,
+      # which is why the old workflow never declared it.
+      id-token: write
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Claude Code Review
-        uses: anthropics/claude-code-action@beta
+        # Pinned to the stable v1 major. Do NOT use @beta — that tag is the
+        # pre-v1 line and was abandoned when v1 shipped; the action then failed
+        # at credential setup on every run for eight releases without reviewing
+        # anything (0.0.43 through 0.0.51). See ROADMAP 0.0.52.
+        #
+        # Anti-tampering, worth knowing before you debug a silent skip: v1
+        # refuses to run when this file differs from the copy on the default
+        # branch ("Workflow validation failed"), so a PR editing this workflow
+        # is never reviewed by it. That is by design — it stops a PR from
+        # rewriting the reviewer to exfiltrate secrets — and it means this gate
+        # cannot self-test. Verify a change to it on the NEXT PR, after merge.
+        uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          model: claude-sonnet-4-6
-          direct_prompt: |
-            Review this PR diff for:
-            1. Protocol consistency — PROTOCOL.md is source of truth, skills must match
-            2. Phase sequence — 8 phases, 12 primitives, canonical order must be preserved
-            3. Skill specification — every SKILL.md must state phase number, entry/exit criteria, inputs/outputs
-            4. Theory alignment — skills must trace to Cultural Physics and Coherence OS theories
-            5. Authority chain — Theory > Protocol > Methodology > Skills, never violated
-            6. Canonical objects — the 14 typed objects must stay consistent across all references
-            7. Stage gates — MVP/BETA/SCALE criteria must not weaken between versions
-            8. Methodology evolution — changes must be captured in CHANGELOG.md with version bump
+          # v1 has no `model` input — the model is a Claude CLI arg.
+          claude_args: --model claude-sonnet-5
+          # v1 renamed `direct_prompt` to `prompt`. Unknown `with:` keys are
+          # silently ignored by GitHub Actions, which is why the old workflow
+          # failed quietly instead of erroring.
+          prompt: |
+            Review this PR diff against Facework's own canon. Facework is a
+            protocol toolkit: the spec, methodology, and skills for running an
+            8-phase coherence protocol on other people's projects.
 
-            Context: Facework is an open coherence protocol for building cultural products.
-            The authority chain (Theory > Protocol > Methodology > Skills) is non-negotiable.
-            Every change must maintain structural coherence across all layers.
+            Read AGENTS.md first — it is the canonical agent guide for this repo
+            and governs where a lower-layer file conflicts with it.
 
-            Be direct. Flag real issues, skip style nitpicks. If it's clean, say so.
+            Check, in priority order:
+
+            1. Authority chain. Theory > Protocol > Methodology > Skills, and
+               canon governs lower layers. Flag any change that inverts this or
+               that cites `standards/` as governing (it is deferred post-1.0 and
+               is NOT canonical — Runtime Ports are the one exception).
+
+            2. Declared-vs-enforced. This is the repo's standing rule, earned at
+               0.0.49: a normative rule lands either as ENFORCED (the schema
+               defines it and `bin/validate-manifest` checks it) or as
+               explicitly DECLARED out-of-band. There is no third state, because
+               silence reads as "checked". If this diff adds a MUST/SHOULD to
+               PROTOCOL.md, verify the schema and validator were updated in the
+               same change, or that the diff says plainly why not.
+
+            3. Derived-copy sync. Editing PROTOCOL.md without regenerating the
+               derived canon copy leaves `canon-sync.test.ts` red on main. If
+               PROTOCOL.md changed, check that
+               `examples/face.works/prototype/content/canon/protocol-v1.md`
+               changed with it.
+
+            4. Canonical objects and phases stay consistent across every
+               reference. Do not assume a count — read the current lists in
+               PROTOCOL.md §2 (canonical objects) and the phase table in
+               CLAUDE.md. If a doc in this diff hardcodes a count of objects,
+               phases, or skills, flag it: counts drift, pointers do not.
+
+            5. Version discipline. Release version lives in VERSION and nowhere
+               else. The manifest schema version is a separate, real axis — a
+               manifest declaring an older schema than the spec line is NOT
+               drift and must not be "reconciled". What must never disagree is
+               spec, schema, and validator.
+
+            6. Release record. `methodology/CHANGELOG.md` is CLOSED as a
+               historical archive per FW-DEC-003 — do NOT ask for a CHANGELOG
+               entry. The release record continues in ROADMAP.md, methodology
+               evolution in `methodology/retros/`, and rulings in
+               `methodology/decisions/`.
+
+            7. Skill specification. Each SKILL.md should state its phase,
+               entry/exit criteria, and inputs/outputs, and trace to the theory
+               stack (Cultural Physics / Coherence OS).
+
+            8. Stage gates. MVP/BETA/SCALE criteria must not weaken between
+               versions.
+
+            9. Evidence discipline. Flag claims stated as verified that the diff
+               does not actually verify, and any owner ruling recorded on the
+               human's behalf — an agent may propose a Sovereignty-loop exit and
+               must never record it as decided (the 0.0.14 guard-rail).
+
+            Report every issue you find with file:line and your confidence.
+            Do not filter for severity — surface it and let the human rank it.
+            Be direct. Skip style nitpicks. If it's clean, say so plainly.
