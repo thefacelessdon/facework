@@ -3,15 +3,13 @@ set -euo pipefail
 
 # validate-tokens — enforces FVP-100 source-authority for the Facework
 # visual-system tokens. Asserts that:
-#   (a) every palette hex in applications/shared/tokens.css matches the
-#       corresponding value in tokens.json. NOTE: this is INTERNAL PARITY between
-#       two derived files, not source-authority against FVS-600. Two copies of a
-#       superseded palette agreeing with each other pass (a). See the note the
-#       run emits, and ROADMAP 0.0.51;
+#   (a) every color token in applications/shared/tokens.css is declared by
+#       FVS-600 with the same value, and tokens.json agrees. Authority-checked
+#       against the spec, not parity-checked against a sibling copy (0.0.53);
 #   (b) the motion token set in tokens.css / tokens.json matches the six
 #       canonical durations declared in identity/FVI-400-motion-signature.md;
 #   (c) no CSS file under applications/*/reference/ forks a raw color hex,
-#       OKLCH/RGB/HSL value, or font-family outside a var(--fw-*) reference.
+#       OKLCH/RGB/HSL value, or font-family outside a var(--rr-*) reference.
 # Exits non-zero on any violation.
 
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
@@ -19,6 +17,7 @@ VS_DIR="$ROOT_DIR/visual-system"
 TOKENS_CSS="$VS_DIR/applications/shared/tokens.css"
 TOKENS_JSON="$VS_DIR/applications/shared/tokens.json"
 MOTION_DOC="$VS_DIR/identity/FVI-400-motion-signature.md"
+COLOR_DOC="$VS_DIR/FVS-600-color.md"
 REFERENCE_GLOB="$VS_DIR/applications"
 
 for f in "$TOKENS_CSS" "$TOKENS_JSON" "$MOTION_DOC"; do
@@ -37,14 +36,14 @@ echo "Facework token validator"
 echo "Repo: $ROOT_DIR"
 echo
 
-ruby - "$TOKENS_CSS" "$TOKENS_JSON" "$MOTION_DOC" "$REFERENCE_GLOB" <<'RUBY'
+ruby - "$TOKENS_CSS" "$TOKENS_JSON" "$MOTION_DOC" "$COLOR_DOC" "$REFERENCE_GLOB" <<'RUBY'
 # encoding: utf-8
 require "json"
 
 Encoding.default_external = Encoding::UTF_8
 Encoding.default_internal = Encoding::UTF_8
 
-tokens_css_path, tokens_json_path, motion_doc_path, reference_root = ARGV
+tokens_css_path, tokens_json_path, motion_doc_path, color_doc_path, reference_root = ARGV
 
 violations = 0
 def fail!(msg)
@@ -54,6 +53,7 @@ end
 css = File.read(tokens_css_path)
 json = JSON.parse(File.read(tokens_json_path))
 motion_doc = File.read(motion_doc_path)
+color_doc = File.read(color_doc_path)
 
 # --- Parse --fw-* custom properties from tokens.css -------------------------
 css_vars = {}
@@ -67,24 +67,53 @@ def camel(name)
   parts[0] + parts[1..].map { |p| p.capitalize }.join
 end
 
-# --- (a) palette hex parity: tokens.css <-> tokens.json ---------------------
+# --- (a) color palette matches FVS-600 --------------------------------------
+# Source of authority: FVS-600, not tokens.json. Until 0.0.52 this check
+# compared tokens.css to tokens.json ONLY — so two copies of a superseded
+# palette agreed with each other and passed a check named "source-authority"
+# (recorded at 0.0.51, ruled in FW-DEC-004).
 json_colors = json.fetch("color", {})
-hex_re = /\A#[0-9a-fA-F]{3,8}\z/
-css_hex = css_vars.select { |_, v| v =~ hex_re }
 
-if css_hex.empty?
-  fail!("(a) no hex palette custom properties found in tokens.css")
+# FVS-600 declares colors in two tables: the neutral/field/accent table
+# (`--rr-name` | `oklch(...)`) and the status table (Name (hue) | base | text | field).
+canon_colors = {}
+color_doc.scan(/`--rr-([a-z-]+)`\s*\|\s*`(oklch\([^`]*\))`/i) do |name, value|
+  canon_colors[name.strip] = value.gsub(/\s+/, " ").strip
+end
+color_doc.scan(/^\|\s*(Settled|Attention|Exposure|Archive)\s*\([a-z]+\)\s*\|\s*`(oklch\([^`]*\))`/i) do |name, value|
+  canon_colors[name.downcase] = value.gsub(/\s+/, " ").strip
+end
+
+if canon_colors.empty?
+  fail!("(a) could not parse any --rr-* color values from FVS-600")
   violations += 1
 end
 
-css_hex.each do |name, hex|
+def norm_color(v)
+  v.to_s.downcase.gsub(/\s+/, " ").strip
+end
+
+# Every color token in tokens.css must be declared by FVS-600, with the same value.
+css_colors = css_vars.select { |_, v| v =~ /\A(oklch\(|#)/i }
+css_colors.each do |name, value|
+  canon = canon_colors[name]
+  if canon.nil?
+    fail!("(a) tokens.css defines --rr-#{name} (#{value}) which FVS-600 does not declare — undeclared palette")
+    violations += 1
+    next
+  end
+  if norm_color(value) != norm_color(canon)
+    fail!("(a) color mismatch for #{name}: tokens.css=#{value} FVS-600=#{canon}")
+    violations += 1
+  end
+
   key = camel(name)
   jval = json_colors.dig(key, "value")
   if jval.nil?
-    fail!("(a) tokens.css defines --fw-#{name} (#{hex}) but tokens.json has no color.#{key}")
+    fail!("(a) tokens.css defines --rr-#{name} but tokens.json has no color.#{key}")
     violations += 1
-  elsif jval.to_s.upcase != hex.upcase
-    fail!("(a) palette mismatch for #{key}: tokens.css=#{hex} tokens.json=#{jval}")
+  elsif norm_color(jval) != norm_color(canon)
+    fail!("(a) color mismatch for #{key}: tokens.json=#{jval} FVS-600=#{canon}")
     violations += 1
   end
 end
@@ -185,11 +214,9 @@ end
 
 puts
 if violations.zero?
-  puts "[ok] tokens.css / tokens.json palette parity"
-puts "     note: (a) is css<->json parity, NOT authority against FVS-600 — the color"
-puts "     layer here is still the pre-0.0.32 --fw-* set and is pending re-derivation"
+  puts "[ok] color palette matches FVS-600 (#{css_colors.size} tokens, css + json)"
   puts "[ok] motion token set matches FVI-400 (#{REQUIRED_MOTION.length} durations)"
-  puts "[ok] reference CSS sources all colors and fonts from --fw-* tokens"
+  puts "[ok] reference CSS sources all colors and fonts from --rr-* tokens"
   puts
   puts "All token source-authority checks passed."
   exit 0

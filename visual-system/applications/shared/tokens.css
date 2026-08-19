@@ -1,27 +1,47 @@
 :root {
-  --fw-paper: #fafaf8;
-  --fw-paper-quiet: #f4f3ee;
-  --fw-rule: #e5e3dc;
-  --fw-muted: #6b6861;
-  --fw-graphite: #2c2b27;
-  --fw-ink: #1a1917;
-  --fw-field: #11110f;
-  --fw-field-raised: #1a1917;
-  --fw-rule-dark: #34322d;
-  --fw-muted-dark: #9c9890;
-  --fw-signal-light: #f4f3ee;
-  --fw-clarity: #8fafff;
-  --fw-resonance: #ffd089;
-  --fw-flow: #62dfae;
-  --fw-entropy: #e66f70;
-  --fw-boundary: #b69ae8;
-  --fw-muted-inverse: oklch(43% .012 95);
-  --fw-rule-inverse: oklch(78% .01 95);
-  --fw-ink-print: #333;
-  --fw-font-structural: "Berkeley Mono", "JetBrains Mono", ui-monospace, monospace;
-  --fw-font-reading: Inter, "Helvetica Neue", Arial, sans-serif;
-  --fw-measure: 68ch;
-  --fw-gutter: clamp(20px, 4vw, 64px);
+  /* Derived from FVS-600 (color), FVS-500 (type) and FVI-400 (motion).
+     Values are canon, not local choices — bin/validate-tokens compares them
+     against FVS-600 directly (0.0.53). Do not edit a value here; edit the
+     spec and re-derive. */
+
+  /* Record register — FVS-600 §neutral field */
+  --rr-paper: oklch(0.967 0.008 85);
+  --rr-surface: oklch(0.936 0.010 84);
+  --rr-rule: oklch(0.800 0.013 82);
+  --rr-meta: oklch(0.515 0.012 80);
+  --rr-body: oklch(0.305 0.012 68);
+  --rr-ink: oklch(0.175 0.012 55);
+
+  /* Field register */
+  --rr-field: oklch(0.185 0.008 70);
+  --rr-field-panel: oklch(0.235 0.009 70);
+  --rr-field-raised: oklch(0.270 0.010 70);
+  --rr-field-line: oklch(0.340 0.010 70);
+  --rr-field-text: oklch(0.920 0.012 85);
+  --rr-field-mute: oklch(0.630 0.013 78);
+
+  /* The single brand accent. Verdigris marks the active/attended state and
+     links; it never becomes a primary CTA (FVS-600 rule 1). */
+  --rr-verdigris: oklch(0.55 0.075 190);
+  --rr-verdigris-text: oklch(0.47 0.070 190);
+  --rr-verdigris-field: oklch(0.740 0.085 190);
+
+  /* Status colors classify records; they are not brand. */
+  --rr-settled: oklch(0.56 0.12 150);
+  --rr-attention: oklch(0.70 0.13 75);
+  --rr-exposure: oklch(0.58 0.19 30);
+  --rr-archive: oklch(0.50 0.13 300);
+
+  /* Type — FVS-500 locked trio */
+  --rr-font-reading: "Literata Variable", Georgia, serif;
+  --rr-font-structure: "Schibsted Grotesk Variable", system-ui, sans-serif;
+  --rr-font-record: "Spline Sans Mono Variable", ui-monospace, monospace;
+
+  /* Layout */
+  --rr-measure: 68ch;
+  --rr-gutter: clamp(20px, 4vw, 64px);
+
+  /* Motion — FVI-400 timing table */
   --rr-motion-immediate: 120ms;
   --rr-motion-quick: 180ms;
   --rr-motion-standard: 300ms;
@@ -33,10 +53,10 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 html { color-scheme: light; scroll-behavior: smooth; }
-body { margin: 0; background: var(--fw-paper); color: var(--fw-ink); font-family: var(--fw-font-reading); }
+body { margin: 0; background: var(--rr-paper); color: var(--rr-ink); font-family: var(--rr-font-reading); }
 button, input, select, textarea { font: inherit; }
 a { color: inherit; text-underline-offset: .22em; }
-:focus-visible { outline: 3px solid var(--fw-clarity); outline-offset: 3px; }
+:focus-visible { outline: 3px solid var(--rr-verdigris); outline-offset: 3px; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
