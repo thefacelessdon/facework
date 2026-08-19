@@ -1,4 +1,4 @@
-protocol_version: "1.4.0"
+protocol_version: "1.5.0"
 
 project:
   name: "Example Cultural Brand"
@@ -72,6 +72,15 @@ runtime_ports:
   bundle:
     path: "examples/face.works/harness-bundle/"
     cache_affinity: stable
+  # v1.5.0 — runtime-conformance claim (PROTOCOL.md §9.2). Opt-in and additive:
+  # claiming it makes the three §9.2 MUSTs apply regardless of evidence_level —
+  # all four ports valid, cross-manifest refs resolve, and a RuntimeConformanceProfile
+  # present and valid. Claimed here against Claude Code, the fourth reference runtime
+  # (0.0.22), which is the binding the profile records.
+  conformance:
+    claimed: true
+    runtime: "claude-code"
+    profile: "examples/face.works/runtime-ports/runtime-conformance-profile.yaml"
 
 # v1.3.0 — DesignInfrastructure: tokens + components + examples + evaluator skill.
 # Track-aware conformance (PROTOCOL.md §11.7): face.works is agency_studio (MAY) but emits

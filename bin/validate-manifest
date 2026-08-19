@@ -369,6 +369,112 @@ def memory_path_resolves?(skill_path, memory_paths)
   end
 end
 
+# ----- RuntimeConformanceProfile (v1.5.0, PROTOCOL.md §9.12) ---------------
+def validate_conformance_profile!(data, declared_runtime)
+  raise "conformance profile must be an object" unless data.is_a?(Hash)
+
+  %w[version tenant runtime].each do |k|
+    raise "conformance profile missing required string '#{k}'" unless data[k].is_a?(String) && !data[k].strip.empty?
+  end
+  raise "conformance profile version invalid: #{data['version']}" unless data["version"] =~ /^1\.\d+\.\d+$/
+
+  if declared_runtime && data["runtime"] != declared_runtime
+    warn "  [warn] conformance profile runtime '#{data['runtime']}' does not match runtime_ports.conformance.runtime '#{declared_runtime}'"
+  end
+
+  # Rule 1 — every port binding names one of the four ports; all four are covered.
+  valid_ports = %w[skills memory context connections]
+  valid_status = %w[native partial authoring_side]
+  bindings = data["port_bindings"]
+  raise "conformance profile must declare port_bindings[]" unless bindings.is_a?(Array)
+  seen_ports = []
+  bindings.each_with_index do |b, i|
+    raise "port_bindings[#{i}] must be an object" unless b.is_a?(Hash)
+    port = b["port"]
+    raise "port_bindings[#{i}].port invalid: #{port.inspect}" unless valid_ports.include?(port)
+    raise "port_bindings[#{i}] duplicate port: #{port}" if seen_ports.include?(port)
+    seen_ports << port
+    status = b["status"]
+    raise "port_bindings[#{i}] (#{port}).status invalid: #{status.inspect}" unless valid_status.include?(status)
+    mech = b["mechanism"]
+    raise "port_bindings[#{i}] (#{port}).mechanism is required" unless mech.is_a?(String) && !mech.strip.empty?
+    if status == "authoring_side" && mech != "authoring-layer"
+      warn "  [warn] port_bindings (#{port}) is authoring_side but mechanism is '#{mech}' (§9.12 expects 'authoring-layer')"
+    end
+  end
+  missing_ports = valid_ports - seen_ports
+  raise "conformance profile port_bindings must cover all four ports (missing: #{missing_ports.join(', ')})" unless missing_ports.empty?
+
+  # Rule 2 — every rent/mitigate layer is covered by a waiver with a non-empty
+  # exit_plan and owner_ruling (§9.12 validation 2; the Phase-7 gate in machine form).
+  sov = data["shell_sovereignty"]
+  raise "conformance profile must declare shell_sovereignty" unless sov.is_a?(Hash)
+  layers = %w[harness state model]
+  valid_posture = %w[own rent mitigate]
+  layers.each do |l|
+    raise "shell_sovereignty.#{l} invalid: #{sov[l].inspect}" unless valid_posture.include?(sov[l])
+  end
+  unowned = layers.reject { |l| sov[l] == "own" }
+  waiver = sov["waiver"]
+  if unowned.empty?
+    warn "  [warn] shell_sovereignty declares a waiver but every layer is 'own'" if waiver
+  else
+    raise "shell_sovereignty has non-own layers (#{unowned.join(', ')}) but declares no waiver" unless waiver.is_a?(Hash)
+    wl = waiver["layers"]
+    raise "shell_sovereignty.waiver.layers must be a non-empty array" unless wl.is_a?(Array) && !wl.empty?
+    bad_layers = wl - layers
+    raise "shell_sovereignty.waiver.layers has unknown layers: #{bad_layers.join(', ')}" unless bad_layers.empty?
+    uncovered = unowned - wl
+    raise "shell_sovereignty.waiver does not cover rent/mitigate layers: #{uncovered.join(', ')}" unless uncovered.empty?
+    %w[exit_plan owner_ruling].each do |k|
+      raise "shell_sovereignty.waiver.#{k} must be a non-empty string" unless waiver[k].is_a?(String) && !waiver[k].strip.empty?
+    end
+    dp = waiver["data_posture"]
+    raise "shell_sovereignty.waiver.data_posture must be an object" unless dp.is_a?(Hash)
+    %w[retention training residency].each do |k|
+      raise "shell_sovereignty.waiver.data_posture.#{k} must be a non-empty string" unless dp[k].is_a?(String) && !dp[k].strip.empty?
+    end
+  end
+
+  # Rule 3 — each governance entry is gate|metadata; every gate either sets
+  # binds_to or is explicitly marked unenforced (§9.11: not a gate failure).
+  gov = data["governance"]
+  raise "conformance profile must declare governance[]" unless gov.is_a?(Array)
+  gates = 0
+  unenforced = 0
+  metadata = 0
+  gov.each_with_index do |g, i|
+    raise "governance[#{i}] must be an object" unless g.is_a?(Hash)
+    attr = g["attribute"]
+    raise "governance[#{i}].attribute is required" unless attr.is_a?(String) && !attr.strip.empty?
+    kind = g["kind"]
+    raise "governance[#{i}] (#{attr}).kind invalid: #{kind.inspect}" unless %w[gate metadata].include?(kind)
+    if kind == "gate"
+      has_binding = g["binds_to"].is_a?(String) && !g["binds_to"].strip.empty?
+      if has_binding
+        gates += 1
+      elsif g["unenforced"] == true
+        unenforced += 1
+      else
+        raise "governance[#{i}] (#{attr}) is a gate but sets neither binds_to nor unenforced: true"
+      end
+    else
+      metadata += 1
+    end
+  end
+
+  {
+    runtime: data["runtime"],
+    tenant: data["tenant"],
+    statuses: bindings.map { |b| [b["port"], b["status"]] }.to_h,
+    sovereignty: layers.map { |l| [l, sov[l]] }.to_h,
+    waived: unowned,
+    gates: gates,
+    unenforced: unenforced,
+    metadata: metadata
+  }
+end
+
 def validate_cross_manifest!(ports, skills_info, memory_info, context_info, integration_info)
   errors = []
 
@@ -530,12 +636,14 @@ begin
   integration_info = nil
   bundle_summary = nil
   design_summary = nil
+  conformance_summary = nil
 
   if runtime_ports
     raise "runtime_ports must be an object" unless runtime_ports.is_a?(Hash)
     valid_port_keys = %w[skills memory context connections]
     bundle_key = "bundle"
-    valid_keys = valid_port_keys + [bundle_key]
+    conformance_key = "conformance"
+    valid_keys = valid_port_keys + [bundle_key, conformance_key]
     unknown = runtime_ports.keys - valid_keys
     raise "runtime_ports has unknown keys: #{unknown.join(', ')}" unless unknown.empty?
 
@@ -571,6 +679,42 @@ begin
     end
 
     ports_summary = declared.join(", ")
+
+    # ----- Runtime conformance (v1.5.0, §9.2 + §9.12) --------------------
+    # Opt-in and additive: absent or claimed:false leaves the project at the
+    # evidence-calibrated base tier and nothing below runs.
+    conformance = runtime_ports[conformance_key]
+    if conformance
+      raise "runtime_ports.conformance must be an object" unless conformance.is_a?(Hash)
+      unknown_c = conformance.keys - %w[claimed runtime profile]
+      raise "runtime_ports.conformance has unknown keys: #{unknown_c.join(', ')}" unless unknown_c.empty?
+      claimed = conformance["claimed"]
+      raise "runtime_ports.conformance.claimed must be true or false" unless [true, false].include?(claimed)
+
+      if claimed
+        # §9.2 MUST 1 — all four ports emitted and valid, regardless of evidence_level.
+        missing_ports = valid_port_keys - declared
+        raise "runtime conformance claimed but ports are missing: #{missing_ports.join(', ')} (§9.2 applies regardless of evidence_level)" unless missing_ports.empty?
+
+        # §9.2 MUST 2 — cross-manifest references resolve. All four are present
+        # here, so validate_cross_manifest! above has already run and raised.
+
+        # §9.2 MUST 3 — a valid RuntimeConformanceProfile is emitted.
+        declared_runtime = conformance["runtime"]
+        raise "runtime_ports.conformance.runtime is required when claimed is true" unless declared_runtime.is_a?(String) && !declared_runtime.strip.empty?
+        profile_rel = conformance["profile"]
+        raise "runtime_ports.conformance.profile is required when claimed is true" unless profile_rel.is_a?(String) && !profile_rel.strip.empty?
+        profile_path = File.expand_path(profile_rel, manifest_dir)
+        raise "runtime_ports.conformance.profile not found: #{profile_path}" unless File.exist?(profile_path)
+        begin
+          profile_data = YAML.safe_load(File.read(profile_path), aliases: false)
+        rescue => e
+          raise "could not parse conformance profile at #{profile_path}: #{e.message}"
+        end
+        conformance_summary = validate_conformance_profile!(profile_data, declared_runtime)
+        conformance_summary[:profile] = profile_rel
+      end
+    end
 
     # ----- DesignInfrastructure (v1.3.0) declared at top level — set up later
 
@@ -715,6 +859,16 @@ begin
   if design_summary
     track_note = design_summary[:track_relevant] ? "track-relevant" : "track-optional"
     puts "  [ok] DesignInfrastructure: #{design_summary[:components_count]} components, evaluator skill '#{design_summary[:evaluator]}' (#{track_note})"
+  end
+  if conformance_summary
+    puts "  [ok] RuntimeConformance: claimed on '#{conformance_summary[:runtime]}' (§9.12 profile: #{conformance_summary[:profile]})"
+    port_line = %w[skills memory context connections].map { |p| "#{p}=#{conformance_summary[:statuses][p]}" }.join(" / ")
+    puts "    ports: #{port_line}"
+    sov = conformance_summary[:sovereignty]
+    waived = conformance_summary[:waived]
+    sov_note = waived.empty? ? "fully self-hostable, no waiver required" : "waiver covers: #{waived.join(', ')}"
+    puts "    shell sovereignty: harness=#{sov['harness']} / state=#{sov['state']} / model=#{sov['model']} — #{sov_note}"
+    puts "    governance: #{conformance_summary[:gates]} enforced gate(s) / #{conformance_summary[:unenforced]} declared-unenforced / #{conformance_summary[:metadata]} metadata"
   end
 rescue => e
   warn "[error] #{e.message}"
