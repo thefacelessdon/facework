@@ -42,7 +42,7 @@ h2 { margin: 0; font-size: clamp(36px, 5vw, 72px); line-height: 1.02; letter-spa
 .path-list { list-style: none; padding: 0; margin: 0; border-top: 2px solid var(--fw-ink); }
 .path-list li { display: grid; grid-template-columns: 80px 1fr; min-height: 112px; border-bottom: 1px solid var(--fw-rule); align-items: stretch; }
 .path-list li > span { padding-top: 24px; color: var(--fw-muted); font: 11px var(--fw-font-structural); }
-.path-list a { display: grid; grid-template-columns: 1fr 1fr; align-items: center; text-decoration: none; padding: 20px 0; transition: padding var(--fw-motion-quick) var(--fw-ease-resolve), background var(--fw-motion-quick); }
+.path-list a { display: grid; grid-template-columns: 1fr 1fr; align-items: center; text-decoration: none; padding: 20px 0; transition: padding var(--rr-motion-quick) var(--rr-ease-settle), background var(--rr-motion-quick); }
 .path-list a:hover { padding-left: 16px; background: var(--fw-paper-quiet); }
 .path-list strong { font-size: clamp(26px, 3vw, 44px); font-weight: 500; letter-spacing: -.03em; }
 .path-list small { font-size: 15px; color: var(--fw-muted); }
