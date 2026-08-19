@@ -56,6 +56,7 @@ parser = OptionParser.new do |o|
   o.on('--agent ID', 'Persona id (default: app default)') { |v| options[:agent] = v }
   o.on('--harness ID', 'Harness id (default: claude-acp)') { |v| options[:harness] = v }
   o.on('--note TEXT', 'Extra context appended to each prompt') { |v| options[:note] = v }
+  o.on('--startup-name NAME', 'Branch/worktree name (default: the skill name)') { |v| options[:startup] = v }
   o.on('--dry-run', 'Print commands; launch nothing') { options[:dry_run] = true }
   o.on('-h', '--help') { puts o; puts "\nPhases:"; PHASES.each { |n, p| puts format('  %d  %-20s %s', n, p[:name], p[:skills].join(' + ')) }; exit 0 }
 end
@@ -112,6 +113,10 @@ skills.each do |skill|
           '--harness-id', options[:harness]]
   args += ['--model-id', options[:model]] if options[:model]
   args += ['--agent-id', options[:agent]] if options[:agent]
+  # auto-worktree projects require a branch/worktree name per session. Without
+  # it berdctl refuses with workspace_name_required — found on the first real
+  # launch against a bootstrapped tenant.
+  args += ['--startup-name', options[:startup] || skill]
   args += ['--prompt', prompt_for(skill, options[:note]), '--json']
 
   if options[:dry_run]
