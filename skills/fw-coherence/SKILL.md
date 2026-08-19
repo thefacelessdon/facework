@@ -333,9 +333,14 @@ of the community it was built for?"
 
 ### Produce Coherence Scorecard
 
-Score three dimensions from evidence, not aspiration.
+Score three dimensions from evidence, not aspiration — **then name the locus.**
+Per **FW-DEC-006**, the locus is the finding and the scalar is a severity summary.
+A diagnostic that reports only a number and a zone is incomplete.
 
-**Flow (1-5):** How easily does energy move through the system?
+**Flow (1-5):** How easily does energy move through the system? **Score at loop
+level, not org level** — the question is whether energy completes a circuit and
+returns, not whether the team ships. A well-run system whose output cannot leave
+the building scores low (FW-DEC-006, finding F2).
 ```
 1 — Participants face constant friction; the system fights them
 2 — Major bottlenecks exist; workarounds are common
@@ -376,7 +381,37 @@ Coherence = (Flow × Resonance) / (1 + Entropy)
 5.0 – 12.5  DEEP GREEN   Self-reinforcing. Rare — the target, not the baseline.
 ```
 
-Present recommended scores to the user via AskUserQuestion and let them adjust.
+**Naming the locus (required):**
+
+The score says *how bad*. The locus says *where*, and that is what the client can
+act on. Two calls, both mandatory:
+
+1. **Failing term** — which of Flow, Resonance or Entropy is dragging the score.
+2. **Primary locus** — the protocol layer the failing term originates in
+   (Semantics, Field, Taste, Frequency, Current, Flow, Stability, Resonance,
+   Entropy, Sovereignty, Consonance). Name a secondary if one is real.
+
+Name the locus **from the score pattern, before** rationalising it against what
+the client has told you. Then check it against what people inside the system
+actually report. A locus that contradicts the insider account is wrong, however
+neat the arithmetic.
+
+**Publish the prior with the call (FW-DEC-006, finding F9).** Base rates across
+seven autopsied dead systems: **Frequency 3/7 (modal)**, Semantics 1/7, Field 1/7,
+Stability 1/7, Consonance 1/7. A Frequency call sits close to the prior and is
+therefore **weak** evidence — say so. A Field or Consonance call departs from the
+prior and is **strong**. Two known Frequency archetypes to check against: the
+**extractive parent** (survival subordinate to a parent's interests, no boundary
+preventing extraction) and the **unfunded promise** (a diffuse obligation to many
+holders, treated as working capital).
+
+**Do not report the scalar bare at Resonance ≥ 4 (finding F7).** In that band one
+Flow point moves the score ~2× and can cross a zone boundary, so the number is
+unstable exactly where culturally significant systems live. Report locus first,
+score second, and state the sensitivity.
+
+Present recommended scores **and the locus call** to the user via
+AskUserQuestion and let them adjust.
 
 ### Scorecard Output
 
@@ -393,6 +428,11 @@ Present recommended scores to the user via AskUserQuestion and let them adjust.
 │  Entropy = 6 - SI = [value]                            │
 │  Coherence = (F × R) / (1 + E) = [score]              │
 │  Zone: [RED / AMBER / GREEN / DEEP GREEN]              │
+│                                                         │
+│  Failing term:  [Flow / Resonance / Entropy]           │
+│  Primary locus: [protocol layer]                        │
+│  Secondary:     [layer, or none]                        │
+│  Prior:       [modal / rare → weak / strong evidence] │
 │                                                         │
 │  Verdict: [one sentence]                                │
 │  Key finding: [the single most important learning]     │
@@ -433,7 +473,7 @@ This is the only output shown directly. Keep it human, direct, and decisive.
 ### Tier 2 — Summary Card (written to `define/coherence-summary.md`)
 
 Write a summary card containing:
-- **Coherence scorecard** (Flow, Resonance, Structural Integrity scores + computed Coherence score and zone)
+- **Coherence scorecard** (Flow, Resonance, Structural Integrity scores + computed Coherence score and zone + **failing term and primary locus with its base-rate weight** — required by FW-DEC-006)
 - **Handoff readiness verdict:** Can someone start building from this without the original builder? Yes/No + 1-sentence explanation.
 - **Cultural coherence verdict:** Can the community this was built for operate this? Yes/No + 1-sentence explanation.
 - **Top 3 methodology learnings** from this run (what the practice should carry forward).
