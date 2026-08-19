@@ -1,3 +1,61 @@
+# 0.0.46 — 2026-08-18 (Fifth Runtime Ports validation — Berd, the multi-harness corner)
+
+**What changed:**
+- **Ran `/runtime-validation-pass` against Berd** (Block), the first *multi-harness*
+  shell to be validated: `goose`, `claude-acp`, `codex-acp`, `copilot-acp`, `amp-acp`
+  behind one set of primitives, with the loop chosen **per session**. Claude Code —
+  already reference runtime #4 — is one of the loops it hosts, so this pass tested
+  the ports one layer up: against a shell whose agent loop is a late-bound parameter.
+  Full port-by-port: `methodology/runtime-ports-berd-gap-2026-08-18.md`.
+- **Port map:** `ContextManifest` partial and scoped at three lifetimes (workspace
+  `AGENTS.md` → project instructions → swappable session persona); `SkillManifest`
+  partial, 1/4 triggers native; `MemoryMap` **absent** — no store, no boundary, the
+  weakest of the five; `IntegrationManifest` **authoring-side** — connections and
+  extensions are UI-only, with no config file and no `berdctl` noun. That last one
+  is the surprise: integrations had been native on all four prior runtimes, so their
+  hostability looked settled. A shell can front MCP-capable harnesses and still
+  expose no machine-writable integration surface of its own.
+- **Three new FS-400 concepts, folded into §9.11 as additive text:**
+  - **FS-400.8** — the harness layer can be **plural and late-bound**. Distinct from
+    split-runtime binding (one port → one substrate); here all four ports bind to one
+    shell and only the execution underneath varies. It is a sovereignty *hedge*: the
+    rented model layer can be swapped by switching harness with no re-authoring.
+  - **FS-400.9** — state classifies on **portability, not locality**. Berd's
+    authoring state (agents, skills) is portable markdown under `~/.agents/`; its
+    operational state (projects, sessions, connections) is app-internal. Both local;
+    only one relocatable — and the Phase-7 exit plan depends on relocatability.
+  - **FS-400.10** — multi-scope context splits **by lifetime, not by topic**. Whatever
+    must hold regardless of which agent runs (above all `MemoryMap.boundary`) binds to
+    the longest-lived vehicle; the shorter-lived one **points at it** rather than
+    copying it, because two authoritative copies of a rule is drift. First empirical
+    argument for §10.3 keeping `boundary.md` a separate file rather than a section.
+- **Manifest schema 1.6.0** — optional `shell_sovereignty.harness_options[]` on
+  `RuntimeConformanceProfile`, enforced in `bin/validate-manifest`, with a second
+  worked profile (`examples/face.works/runtime-ports/runtime-conformance-profile-berd.yaml`).
+  Additive and omittable: every 1.5.0 profile stays valid unchanged, verified by
+  re-validating the Claude Code profile against the amended validator.
+- **Second `HarnessBundle` (§10) consumer built** — `bin/harness-to-berd`, sibling to
+  `bin/harness-to-claude-code`. Emits `AGENTS.md` + `.agents/agents/{tenant}.md` +
+  `.agents/skills/{id}/SKILL.md` + a `berd-install/` operator kit (install steps,
+  project instructions, connections checklist, per-skill launch commands). Verified
+  against the face.works bundle (7 skills, 6 sections, 8 integrations) and confirmed
+  live: the generated persona and one generated skill were installed into `~/.agents/`,
+  discovered by `berdctl agent list` / `berdctl skill list`, then removed. Writing the
+  converter caught two format facts the paper mapping missed — a Berd skill's `name` is
+  load-bearing and must equal its folder name (the opposite of Claude Code, where
+  `name` is display-only), and `description` is the trigger surface, so the firing
+  condition has to be folded into it.
+- **Why:** §9.11's portability claim had only ever been tested against shells with a
+  fixed agent loop. A multi-harness shell is the case where "the ports are the
+  contract, the runtime is a consumer" either holds or does not — one generated bundle
+  now demonstrably runs on a shell that can execute it on Claude Code, Codex, or goose.
+
+Additive only; no existing conformance broken. Note: this file remains stalled
+between 0.0.27 and this entry — 0.0.28–0.0.45 are recorded in `ROADMAP.md`'s Version
+History table only (flagged for ruling at 0.0.44, still open).
+
+---
+
 # 0.0.27 — 2026-08-06 (Docs — ROADMAP self-consistency fix)
 
 **What changed:**

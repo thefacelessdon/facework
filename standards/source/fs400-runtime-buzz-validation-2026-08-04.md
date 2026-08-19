@@ -1,6 +1,6 @@
-# FS-400 Source Input — Runtime Shells validated (Buzz + Letta + OpenAI + Claude Code)
+# FS-400 Source Input — Runtime Shells validated (Buzz + Letta + OpenAI + Claude Code + Berd)
 
-Date: 2026-08-04 (Buzz), updated 2026-08-05 (Letta + OpenAI + Claude Code)
+Date: 2026-08-04 (Buzz), updated 2026-08-05 (Letta + OpenAI + Claude Code), 2026-08-18 (Berd)
 Status: **Deferred / Not canonical.** Source input to the FS-400 Runtime
 specification, which activates with the standards track post-1.0 (see
 [`../README.md`](../README.md)).
@@ -8,7 +8,8 @@ Companion working analyses:
 [`methodology/runtime-ports-buzz-gap-2026-08-04.md`](../../methodology/runtime-ports-buzz-gap-2026-08-04.md) (Buzz),
 [`methodology/runtime-ports-letta-gap-2026-08-05.md`](../../methodology/runtime-ports-letta-gap-2026-08-05.md) (Letta),
 [`methodology/runtime-ports-openai-gap-2026-08-05.md`](../../methodology/runtime-ports-openai-gap-2026-08-05.md) (OpenAI),
-[`methodology/runtime-ports-claude-code-gap-2026-08-05.md`](../../methodology/runtime-ports-claude-code-gap-2026-08-05.md) (Claude Code)
+[`methodology/runtime-ports-claude-code-gap-2026-08-05.md`](../../methodology/runtime-ports-claude-code-gap-2026-08-05.md) (Claude Code),
+[`methodology/runtime-ports-berd-gap-2026-08-18.md`](../../methodology/runtime-ports-berd-gap-2026-08-18.md) (Berd)
 
 ---
 
@@ -20,20 +21,24 @@ Runtime Ports (`PROTOCOL.md` §9) shipped at 0.0.5–0.0.8 as live artifacts; th
 abstract FS-400 specification did not. Reconciling them requires evidence that
 the ports describe a real runtime, not an imagined one.
 
-This memo supplies that evidence from **four external runtime shells the practice
+This memo supplies that evidence from **five external runtime shells the practice
 did not design, spanning the corners**: Buzz (github.com/block/buzz, a Nostr-relay
 collaboration/execution/audit runtime), Letta (github.com/letta-ai/letta, a
 memory/context runtime) — both Apache-2.0 and self-hostable — OpenAI's hosted
 agent surface (Responses API + Agents SDK), chosen because it **fails the
-sovereignty port by construction**, and Claude Code / Agent SDK, a **file-native
-local harness** (the corner §10's HarnessBundle targets). Buzz facts are cited to
-source files; the rest to their docs and repo schemas.
+sovereignty port by construction**, Claude Code / Agent SDK, a **file-native
+local harness** (the corner §10's HarnessBundle targets), and Berd, a
+**multi-harness shell** that fronts several interchangeable agent loops (including
+Claude Code) behind one set of primitives. Buzz facts are cited to source files;
+Berd's to its CLI, its bundled help references, and its on-disk files; the rest to
+their docs and repo schemas.
 
-It proposes seven concepts FS-400 should adopt, binds each Runtime Port to the
+It proposes ten concepts FS-400 should adopt, binds each Runtime Port to the
 runtimes, and lists the §9 refinements the exercise surfaced. The runtimes host
 **complementary** port subsets — none hosts all four — the core evidence for
 partial conformance and split-runtime binding; the third also tests whether the
-spec correctly catches a runtime that violates the ownership thesis.
+spec correctly catches a runtime that violates the ownership thesis, and the fifth
+tests whether the ports hold when the agent loop itself is a late-bound parameter.
 
 ---
 
@@ -153,6 +158,43 @@ model all vendor-hosted, non-relocatable). The Phase-7 waiver attaches to
 whichever layer is actually rented and scopes its mitigation there, rather than
 flattening every hosted dependency to "rent with maximal blast radius." A binding
 records the per-layer verdict, not one own/rent stamp for the whole shell.
+
+### FS-400.8 — The harness layer can be plural and late-bound (multi-harness shells)
+FS-400.1 through .7 all assume a shell *is* its agent loop, so classifying the
+shell classifies the loop. The fifth validation (Berd) breaks that: a
+**multi-harness shell** fronts several interchangeable loops behind one set of
+primitives, and the loop is selected **per invocation**, not per install. This is
+not FS-400.3 split-runtime binding — there, one port binds to one substrate each;
+here all four ports bind to one shell and only the execution underneath varies. Two
+consequences. (1) The harness slot holds a *set*: the shell's own classification
+plus a per-loop posture for each selectable harness (`shell_sovereignty.harness_options`,
+schema 1.6.0). (2) The arrangement is a **sovereignty hedge** — the rented model
+layer can be swapped by switching harness with no re-authoring, which is the
+strongest evidence yet for ports-as-contract, since one generated bundle is
+consumed by a shell that then runs it on Claude Code, Codex, or goose.
+
+### FS-400.9 — State classifies on portability, not locality
+FS-400.7's `state` layer was a single verdict because Claude Code keeps everything
+(CLAUDE.md, `.claude/`, transcripts, memory) in plain local files. Berd splits it:
+**authoring state** (agents, skills, instruction files) is portable markdown under
+`~/.agents/`, while **operational state** (project definitions, session transcripts,
+integration wiring) is app-internal with no file surface. Both are local — so "does
+it leave the machine" answers `own` for both — but only one is relocatable, and the
+Phase-7 exit plan depends on relocatability. Classify `state` by the weaker half and
+record the asymmetry in the waiver's `exit_plan`.
+
+### FS-400.10 — Context composes at multiple scopes; the split is by lifetime
+A Runtime Shell may expose several context vehicles with different lifetimes rather
+than one file. Berd has three: a workspace-scoped instruction file (`AGENTS.md`,
+walked per attached workspace and injected as `<workspace-instructions>`),
+project-scoped instructions, and a per-session persona that is **swappable per
+invocation**. When a shell is scoped this way, `ContextManifest` content is assigned
+by lifetime, not by topic: whatever must hold regardless of which agent runs — above
+all `MemoryMap.boundary` — binds to the longest-lived vehicle, while the tenant
+contract describing a particular agent binds to the persona. A rule duplicated
+across two vehicles is drift, not redundancy; the shorter-lived vehicle points at
+the longer-lived one. This is also the first empirical argument for §10.3 keeping
+`boundary.md` a separate file rather than a section of the root file.
 
 ---
 
@@ -383,9 +425,59 @@ canonical `RuntimeConformanceProfile` (§9.12), formalizing FS-400.4/.6/.7.
 
 ---
 
+## Fifth validation: Berd (the multi-harness corner)
+
+Full port-by-port: `methodology/runtime-ports-berd-gap-2026-08-18.md`. Berd (Block)
+is a desktop shell that fronts `goose`, `claude-acp`, `codex-acp`, `copilot-acp`,
+`amp-acp`, and `cursor-agent` behind one set of primitives, with the loop chosen
+**per session**. It is the first target that is not a runtime so much as a *shell
+around runtimes* — Claude Code, already a reference runtime, is one of the loops it
+hosts. That tests the ports one layer up: against a shell whose agent loop is a
+late-bound parameter.
+
+It hosts `ContextManifest` partially and **at three scopes** (workspace `AGENTS.md`
+→ project instructions → session persona), `SkillManifest` partially with the
+weakest trigger coverage of the five (portable `SKILL.md` folders, `on_demand`
+native, `scheduled` UI-only via Automations, no `event`/`continuous`), and neither
+`MemoryMap` (no primitive at all — weakest of five) nor `IntegrationManifest`
+(connections and extensions are UI-only, no config file, no CLI noun — the first
+shell where integrations do not bind to a file despite fronting MCP-capable
+harnesses). No crypto identity or tamper-evident audit.
+
+Three findings it alone produced — **FS-400.8** (plural, late-bound harness layer),
+**FS-400.9** (state classifies on portability, not locality), and **FS-400.10**
+(context composes at multiple scopes; split by lifetime) — plus a second
+`HarnessBundle` consumer: `bin/harness-to-berd` (0.0.46), verified against the
+face.works bundle and confirmed live (the generated persona and a generated skill
+were installed and discovered by `berdctl agent list` / `berdctl skill list`). The
+converter also surfaced two format facts the paper mapping missed: a Berd skill's
+`name` is load-bearing and must equal its folder name (the opposite of Claude Code,
+where `name` is display-only), and `description` is the trigger surface, so the
+firing condition has to be folded into it.
+
+Five-runtime synthesis:
+
+| | Buzz | Letta | OpenAI | Claude Code | Berd |
+|---|---|---|---|---|---|
+| Corner | collab/audit | memory/context | hosted/rented | file-native/local | multi-harness shell |
+| `MemoryMap` | ❌ keyword | ✅ semantic+boundary | 🟡 rented | 🟡 file+grep | ❌ none |
+| `ContextManifest` | ❌ | ✅ blocks | ❌ | ✅ file hierarchy | 🟡 scoped (3 vehicles) |
+| `SkillManifest` triggers | ✅ full | ❌ | ❌ | 🟡 3/4 | 🟡 1/4 native |
+| `IntegrationManifest` | ✅ | ✅ | ✅ | ✅ MCP file | ❌ UI-only |
+| identity / audit | ✅ / ✅ | ❌ / ❌ | ❌ / ❌ | ❌ / ❌ | ❌ / ❌ |
+| sovereignty | own | own | rent-all | own-harness+state / rent-model | plural harness / split state / rent-model |
+
+Newly stressed by the fifth pass: `IntegrationManifest` had been native on all four
+prior runtimes, so its hostability looked settled — Berd shows it is not, and that a
+shell can front MCP-capable harnesses while offering no machine-writable integration
+surface of its own. Confirmed a fifth time: descriptive governance metadata is
+homeless everywhere; crypto identity + tamper-evident audit remain Buzz-only.
+
+---
+
 ## §9 refinements — status
 
-All seven FS-400 concepts are folded into `PROTOCOL.md` as additive text:
+All ten FS-400 concepts are folded into `PROTOCOL.md` as additive text:
 
 - **Applied 0.0.15** (Buzz pass): §9.1 substrate-agnostic + ports-bind-to-
   different-substrates; §9.4 `MemoryMap` filesystem-first with non-filesystem
@@ -408,6 +500,11 @@ All seven FS-400 concepts are folded into `PROTOCOL.md` as additive text:
   gate/metadata classification + gate→mechanism binding, FS-400.6 shell waiver,
   FS-400.7 per-layer sovereignty); worked example from the Claude Code binding;
   Phase-5/7 gate extensions. Manifest schema 1.5.0.
+- **Applied 0.0.46** (Berd pass): §9.11 **plural, late-bound harness layer**
+  (FS-400.8) and **state classified on portability, not locality** (FS-400.9);
+  §9.11 **multi-scope context split by lifetime** (FS-400.10); §9.12 optional
+  `shell_sovereignty.harness_options[]`. Manifest schema 1.6.0 — additive and
+  omittable, so every 1.5.0 profile stays valid unchanged.
 
 None break existing conformance; all are additive. This 0.0.25 pass landed the
 conformance-profile format (§9.12); it was designed from four validations + one

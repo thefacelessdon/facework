@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://facework.dev/schemas/facework.manifest.schema.json",
   "title": "Facework Manifest",
-  "description": "Schema for Facework Protocol v1 project manifests. v1.1.0 adds runtime_ports; v1.2.0 adds HarnessBundle; v1.3.0 adds DesignInfrastructure; v1.4.0 adds optional efficiency hints + skill semantics polish (sponsors, verifier_skill_id, multiplayer, sensors/actuators, cache_affinity, load_mode, intermediate, compactable, model_tier, advisor_escalation). v1.5.0 adds the runtime-conformance tier: runtime_ports.conformance + RuntimeConformanceProfile (PROTOCOL.md §9.2/§9.12).",
+  "description": "Schema for Facework Protocol v1 project manifests. v1.1.0 adds runtime_ports; v1.2.0 adds HarnessBundle; v1.3.0 adds DesignInfrastructure; v1.4.0 adds optional efficiency hints + skill semantics polish (sponsors, verifier_skill_id, multiplayer, sensors/actuators, cache_affinity, load_mode, intermediate, compactable, model_tier, advisor_escalation). v1.5.0 adds the runtime-conformance tier: runtime_ports.conformance + RuntimeConformanceProfile (PROTOCOL.md §9.2/§9.12); v1.6.0 adds shell_sovereignty.harness_options for multi-harness shells (§9.11/§9.12).",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -17,7 +17,7 @@
     "protocol_version": {
       "type": "string",
       "pattern": "^1\\.\\d+\\.\\d+$",
-      "description": "1.0.0 (v0.0.4 baseline), 1.1.0 (v0.0.5 Runtime Ports), 1.2.0 (v0.0.6 HarnessBundle), 1.3.0 (v0.0.7 DesignInfrastructure), 1.4.0 (v0.0.8 efficiency hints + skill polish), 1.5.0 (v0.0.25 runtime-conformance tier), and forward 1.x.x compatible."
+      "description": "1.0.0 (v0.0.4 baseline), 1.1.0 (v0.0.5 Runtime Ports), 1.2.0 (v0.0.6 HarnessBundle), 1.3.0 (v0.0.7 DesignInfrastructure), 1.4.0 (v0.0.8 efficiency hints + skill polish), 1.5.0 (v0.0.25 runtime-conformance tier), 1.6.0 (v0.0.46 multi-harness shells), and forward 1.x.x compatible."
     },
     "project": {
       "type": "object",
@@ -360,11 +360,26 @@
       "type": "object",
       "required": ["harness", "state", "model"],
       "additionalProperties": false,
-      "description": "FS-400.6 + FS-400.7 — shell sovereignty decomposed by layer. A fully self-hostable shell (all layers 'own') omits waiver.",
+      "description": "FS-400.6 + FS-400.7 — shell sovereignty decomposed by layer. A fully self-hostable shell (all layers 'own') omits waiver. v1.6.0 adds harness_options for multi-harness shells (§9.11).",
       "properties": {
         "harness": { "$ref": "#/$defs/sovereigntyPosture" },
         "state": { "$ref": "#/$defs/sovereigntyPosture" },
         "model": { "$ref": "#/$defs/sovereigntyPosture" },
+        "harness_options": {
+          "type": "array",
+          "minItems": 2,
+          "description": "v1.6.0 (optional) — for a MULTI-HARNESS shell, the agent loops it can bind, each with its own posture. The loop is selected per invocation, so 'harness' above classifies the shell itself while these classify what it can run (PROTOCOL.md §9.11).",
+          "items": {
+            "type": "object",
+            "required": ["harness", "posture"],
+            "additionalProperties": false,
+            "properties": {
+              "harness": { "type": "string", "minLength": 1, "description": "Runtime label of the selectable agent loop (e.g. 'claude-code', 'goose')." },
+              "posture": { "$ref": "#/$defs/sovereigntyPosture" },
+              "notes": { "type": "string" }
+            }
+          }
+        },
         "waiver": { "$ref": "#/$defs/sovereigntyWaiver" }
       },
       "anyOf": [
