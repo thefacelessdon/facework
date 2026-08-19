@@ -36,6 +36,13 @@ jobs:
         uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Forces tag mode. Without it a `prompt` on pull_request runs in
+          # AGENT mode, which reviews thoroughly and is never given the
+          # comment tools — 0.0.53's run spent $1.09 over 37 turns and
+          # published nothing, with permission_denials_count: 7. A green
+          # check that reviewed and could not speak is the same defect this
+          # workflow exists to kill (retro 011).
+          track_progress: true
           # v1 has no `model` input — the model is a Claude CLI arg.
           claude_args: --model claude-sonnet-5
           # v1 renamed `direct_prompt` to `prompt`. Unknown `with:` keys are
