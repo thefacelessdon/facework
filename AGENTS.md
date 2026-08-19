@@ -81,7 +81,7 @@ build sequence *is* that equation, executed in order.
 | 4 | Strategy Lock | `/fw-frequency` + `/fw-current` | Lock economics and strategic direction |
 | 5 | Architecture & Flow | `/fw-flow` + `/fw-stability` | Operations, then architecture (+ four Runtime Port manifests) |
 | 6 | Activation | `/fw-resonance` | Build working interfaces from declared capabilities |
-| 7 | Integrity | `/fw-entropy` + `/fw-sovereignty` + `/fw-consonance` | Pressure test, enforce boundaries, verify alignment |
+| 7 | Integrity | `/fw-consonance` → `/fw-entropy` → `/fw-sovereignty` | Verify alignment, pressure test, enforce boundaries. **Ordered since 0.0.70** — a reconciliation pass sets values, and Entropy is the only primitive that prices them |
 | 8 | Integration | `/fw-coherence` | Handoff package + HarnessBundle + diagnostic + methodology evolution |
 
 Each phase has a **gate**. No phase advances without explicit pass/fail evidence.

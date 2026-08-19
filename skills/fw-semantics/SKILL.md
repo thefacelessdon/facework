@@ -1,6 +1,6 @@
 ---
 name: fw-semantics
-version: 4.0.0
+version: 4.1.0
 description: |
   Semantics: Phase 1 of the Facework Protocol. Detect project track, extract
   meaning from a cultural hunch, and define canonical language, interpretation
@@ -219,6 +219,33 @@ Create:
 
 This becomes a reusable vocabulary for docs, product copy, and strategic comms.
 
+## Step 5.5: Register the terms the RUN invents (0.0.70)
+
+Step 5's canonical language guide governs vocabulary the run **inherits** from the
+source. It has no rule about vocabulary the run **coins for its own use** — labels
+for readings, options, scenarios, phases of an argument — and that is where the
+most expensive naming failure actually happens.
+
+**Maintain an invented-term register.** For every label the run creates that is not
+in the source material:
+
+| Field | Why |
+|---|---|
+| **The term** | e.g. a label for one of two competing interpretations |
+| **What it denotes**, in one unambiguous sentence | The test: could a second phase read this and bind it to the opposite meaning? |
+| **Who coined it and in which artifact** | So a collision has an owner |
+| **Whether it may be spoken aloud** | Most invented scaffolding must not travel outside the run |
+
+**Prefer self-describing labels over indexical ones.** `TERM-6` and `TERM-18` cannot
+invert. `Reading A` and `Reading B` can, and did.
+
+**Why this is a step.** In the run that earned it, two phases independently coined
+*"Reading A"* for **opposite** interpretations of the same disputed figure, and both
+wrote *"we designed on Reading A."* Every downstream artifact inherited one meaning
+or the other with no way to tell which. It was the worst defect in an otherwise
+disciplined run, and Semantics had no rule that could have caught it — the phase
+governs borrowed language and this was invented language.
+
 ## Step 6: Semantic Gate
 
 Before marking complete, verify:
@@ -228,6 +255,12 @@ Before marking complete, verify:
 - no term conflicts with Frequency economics/ownership framing.
 
 If any fail, revise before handoff to next primitive.
+
+**Gate additions (0.0.70):**
+
+- Every term the run invented is in the register (Step 5.5), with one unambiguous
+  denotation and a ruling on whether it may be spoken aloud.
+- No invented label is **indexical** where a self-describing one would do.
 
 ## Output — Three-Tier Artifact Structure
 
