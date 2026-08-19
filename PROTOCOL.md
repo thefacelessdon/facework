@@ -1027,6 +1027,13 @@ The bundle is a **handoff artifact**, not a methodology artifact —
 conformance shifts with handoff-readiness rather than evidence depth
 alone.
 
+**`boundary.md` is required at every level (clarified v0.0.50).** The minimums
+above list content depth; they are not permission to omit the memory boundary.
+Per §10.7 the file is present and non-empty whenever a bundle exists, at Thesis
+as much as at Validated — it is the "one system of record" contract between
+tenant memory and runtime memory (§9.4), and a bundle that ships without it hands
+the runtime no ownership rule at all.
+
 ### 10.5 Generation
 
 The HarnessBundle is **derived** from the four Runtime Port manifests plus
@@ -1246,6 +1253,15 @@ This means: a dashboard that visualizes Facework runs — like the Claude
 Platform dev dashboard, Corey's runtime dashboard, or any tenant's
 custom UI — consumes the same event surface regardless of which runtime
 is producing the events. Facework specifies it; nothing builds it.
+
+**Enforcement class: runtime-layer (clarified v0.0.50).** Everything in §12 is an
+obligation on a *running* system — events emitted during operation — so no
+manifest validator can check it, and `bin/validate-manifest` does not try. The
+§12.4 gate is a `/fw-coherence` (Phase 8) responsibility discharged against a
+live runtime, not a manifest property. This is stated so the section is not read
+as machine-checked by omission, per the standing rule earned in the §9 audit
+(`methodology/section9-enforcement-audit-2026-08-19.md`): a normative rule lands
+explicitly as enforced or as declared out-of-band — silence reads as "checked."
 
 ### 12.1 Minimum event surface
 
