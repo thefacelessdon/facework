@@ -1,4 +1,4 @@
-<!-- DERIVED COPY — do not edit. Source: PROTOCOL.md @ blob:8425dc3e. Regenerate: npm run sync-canon -->
+<!-- DERIVED COPY — do not edit. Source: PROTOCOL.md @ blob:5d8aa036. Regenerate: npm run sync-canon -->
 # Facework Protocol
 
 Status: Draft
@@ -223,6 +223,37 @@ Recommended root keys:
 ## 6) Normative Terms
 
 The terms "MUST", "MUST NOT", "SHOULD", and "MAY" in this document are used as described in RFC 2119.
+
+### 6.1 Pre-gate checks (0.0.70)
+
+Four mechanical checks. Every phase SHOULD run all four before declaring its gate
+passed; they are cheap, they take under a minute, and each was earned by a defect
+that survived a phase which had read the artifacts carefully.
+
+1. **Version currency.** Every `reads:` frontmatter entry names the version of that
+   artifact **as it now exists**, not as it existed when the phase ran. A phase
+   composing against v1.1 content while declaring it read v1.0 is how a
+   cross-artifact contradiction stays invisible.
+2. **Citation resolution.** Every `§`-number citation resolves to the heading it
+   claims. Section renumbering between versions silently repoints a citation at
+   unrelated content, and the reader concludes the referenced material was never
+   written.
+3. **Count agreement.** Every count in frontmatter matches the body it summarises.
+   Machine-readable counts are what later phases and runtimes read without opening
+   the body.
+4. **Mechanism diff.** For any **mechanism** specified in more than one artifact,
+   **diff the mechanisms — not just the citations.**
+
+> Check 4 is the one that is not obvious, and it exists because checks 1–3 share a
+> blind spot. All three verify claims that trace back to a **locked decision**, so
+> they catch a phase contradicting something decided. They do not catch **two
+> phases independently designing the same mechanism two incompatible ways**, since
+> neither is contradicting anything on the record. In the run that earned this,
+> checks 1–3 found three defects and check 4 found the worst one: two phases had
+> specified the same vesting instrument with opposite outcomes for the same person,
+> and a full reconciliation pass had already run over both without noticing.
+>
+> **Agreement about what was decided is not agreement about what happens.**
 
 ## 7) Minimum Conformance
 
@@ -711,6 +742,23 @@ declared-and-delegated treatment §9.12 gives a governance gate marked
 `unenforced: true`: the obligation is real, it is visible, and it is not silently
 presented as machine-checked. A validator that claims to run a check it cannot
 run is the defect this clarification removes.
+
+#### 9.7.1 Re-validation trigger (0.0.70)
+
+Cross-manifest validation is **not a one-time Phase 5 check.** Any phase that
+**writes to a Runtime Port manifest** MUST re-run §9.7 before closing its own
+gate, and MUST record that it did.
+
+This closes a real gap rather than a theoretical one. In the run that earned this
+rule, `/fw-stability` ran §9.7 and passed correctly; a later phase then added a
+skill whose `reads_memory` entry was a **parent glob** (`define/records/`) rather
+than one of the declared child paths. Both Integrity phases read the manifest and
+neither re-validated it, because §9.7 was scoped to the phase that emitted the
+ports. `/fw-coherence` found it in seconds — three phases and one gate too late.
+
+A manifest is machine-read by runtimes that cannot notice a dangling path, so a
+stale port reference is silent by construction. **The phase that writes owns the
+re-validation.**
 
 ### 9.8 Phase 5 gate — full extension
 
