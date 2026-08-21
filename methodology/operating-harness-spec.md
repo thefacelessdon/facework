@@ -10,6 +10,9 @@ Harness v0.2.2 — bound, compiler-verified, running against 14th & Co)
 [`FW-DEC-007`](decisions/DECISION-007-harness-sense-disambiguation.md) — bare
 `harness` is reserved for the runtime sense; the carrier sense is always
 qualified and stays out of the manifest schema and validator
+**Falsification record:**
+[`operating-harness-adversary-findings-2026-08-21.md`](operating-harness-adversary-findings-2026-08-21.md)
+— append-only findings and resolution warrants
 **Constraint set:** private — SignalThesis + canonical-language guide for
 Harper-as-Operator, author-asserted as locked 2026-06-03. **Inlined as §A; not
 cited by path; lock date independently unverifiable.**
@@ -40,8 +43,12 @@ Four things this spec had to resolve, stated before the design:
    repo's enforcement-audit vocabulary plus the explicit no-gate status:
    **Enforced / Authoring-layer / Unwired / No gate by design**. §4 states what
    is missing.
-   This is the repo's recurring asserted-but-unenforced defect class, and the way
-   to not repeat it is to label rather than imply.
+   This is the repo's recurring asserted-but-unenforced defect class: eleven
+   instances were found across §9–§12
+   ([§10–§12 enforcement audit](section10-12-enforcement-audit-2026-08-19.md)),
+   and the later provenance and certification corrections are recorded in
+   [`ROADMAP.md`](../ROADMAP.md). The way not to repeat it is to label rather
+   than imply.
 
 2. **The current Berd runtime cannot fire a gate on a state change.** Berd has `on_demand` native,
    `scheduled` UI-only, and **no `event` and no `continuous` trigger at all**
@@ -98,7 +105,7 @@ requirement, not a caveat; several are made structural later in this spec.
 
 | # | Requirement | Where this spec enforces it |
 |---|---|---|
-| **N1** | **Not theater.** Every routine output is execution evidence, not a status report. | §5.3 r6, §7 r3 |
+| **N1** | **Not theater.** Every routine output is execution evidence, not a status report. | §5.3 r7 + terminal variants, §7 r3 |
 | **N2** | **Not a dashboard, tracker, or productivity tool.** Those are surfaces; the carrier and enforcer sit beneath them. | §7 r4 |
 | **N3** | **Not a duplicate of the Design Harness.** Different intent class. Same pattern, different subject. Always qualify which carrier is meant in writing. | §1 |
 | **N4** | **Not built-and-stale.** Anything built must compose with a running enforcer. **Documentation alone is not built.** | §3.4, §9 |
@@ -249,28 +256,41 @@ state (§7 refusal 4).
 ## 2. Lifecycle — reused, not reinvented
 
 §A.3 already declares the lifecycle as mirroring Design Harness v0.2.2. It is
-reused verbatim, with the *mechanism* and *output* columns subject-swapped.
+reused as the state vocabulary, with the *mechanism* and *output* columns
+subject-swapped. It has two legal paths because a read or narration cannot be
+forced to invent candidate advances and a proposed act:
+
+- **Proposal path** — for proposed `ship-gate` and `runtime-active` operations:
+  `intent-captured` → `context-bound` → `options-generated` →
+  `tableau-reviewed` → `artifact-proposed` → `authority-checked` →
+  `evidence-recorded`.
+- **Observation path** — for `diagnostic` and `emergent` operations:
+  `intent-captured` → `context-bound` → `evidence-recorded`. It terminates as
+  `narrated`, carries no Options, Tableau review, proposal, gate, or review, and
+  records only the returned Operation result plus back-links to examined inputs.
 
 | State | What happens | Mechanism in this practice | Output |
 |---|---|---|---|
 | `intent-captured` | An operating claim is stated for a node. | Field note ingest, review line, prior Operating Harness's open item. | Record exists with `intent.claim` + `intent.source`. |
 | `context-bound` | The claim is bound to node state and available compute. | Node state read, allocation budget, prior rulings, consent lookup. | `context` block + `allocation` set. |
-| `options-generated` | Candidate advances are produced, each sized. | Agent generates ≥1 candidate advance at Light / Medium / Heavy. | Non-empty Options table. |
-| `tableau-reviewed` | Options are scored, critiqued, or culled. **This is the compute-allocation call.** | Diagnostic operations only (§3). | Scored options + cull rationale. |
-| `artifact-proposed` | One option becomes a concrete proposed act. | A draft, a diff, a schedule change, a message. | `proposal` naming one operation kind + payload. |
-| `authority-checked` | The derived authority regime is resolved. | Automatic gate, human review, or explicit `not-applicable`, as the mode requires. | Settled mode-specific authority shape (§5.3). |
-| `evidence-recorded` | The result lands as a re-diffable artifact. | Terminal record committed to the store. | §6. |
+| `options-generated` | On the proposal path, candidate advances are produced, each sized. | Agent generates ≥1 candidate advance at Light / Medium / Heavy. | Non-empty Options table. |
+| `tableau-reviewed` | On the proposal path, options are scored, critiqued, or culled. **This is the compute-allocation call.** | Diagnostic operations used inside proposal review act as internal mechanisms; a standalone diagnostic record follows the observation path. | Scored options + cull rationale. |
+| `artifact-proposed` | On the proposal path, one option becomes a concrete proposed act. | A draft, a diff, a schedule change, a message. | `proposal` naming one operation kind + payload. |
+| `authority-checked` | On the proposal path, the derived authority regime is resolved. | Automatic gate or human review, as the proposed mode requires. | Settled mode-specific authority shape (§5.3). |
+| `evidence-recorded` | Either path lands a re-diffable result artifact. | Terminal record committed to the store. | `committed`/`refused` on the proposal path; `narrated` on the observation path (§6). |
 
 Two properties carried from v0.2.2's hard-won round 2:
 
-- **A terminal state may not carry an unresolved verdict.** `evidence-recorded`
-  requires a settled verdict, and `outcome` is tied to it (§5.3 rule 7). This is
+- **A terminal state may not carry an unresolved verdict.** Proposal-path
+  `evidence-recorded` requires a settled verdict, and `outcome` is tied to it;
+  observation-path narration has no verdict by design (§5.3 rule 7). This is
   P0-3 and it is the finding that killed v0.2.
 - **Transition order is not provable from the record.** A record that looks
-  well-formed for `evidence-recorded` carries no proof it passed through
-  `authority-checked`. The `transition` block makes the claimed step explicit;
-  git history supplies audit evidence, not proof (§6.2). Legal order remains an
-  authoring-layer invariant until a store enforces it.
+  well-formed for `evidence-recorded` carries no proof it followed its applicable
+  path — including `authority-checked` on the proposal path. The `transition`
+  block makes the claimed step explicit; git history supplies audit evidence,
+  not proof (§6.2). Legal order remains an authoring-layer invariant until a
+  store enforces it.
 
 ---
 
@@ -299,14 +319,19 @@ operations; their separate grammar and authority boundary live only in §3.3.
 | `emission` | A surface the operator owns that others can see — a repo, a published site, a scheduled job. | Target and payload named by the operation row. |
 | `cross-tenant` | Someone else's context — their inbox, repo, calendar, tool. | Target and scoped consent are required payload; review is required by the runtime-active state shape. |
 
-**Gate status** uses this repo's enforcement-audit vocabulary:
+**Gate status** starts from this repo's
+[`§9 enforcement-audit vocabulary`](section9-enforcement-audit-2026-08-19.md).
+`Enforced` and `Authoring-layer` retain that audit's meanings. This document adds
+two explicitly local labels rather than attributing them to the audit:
 
 - **Enforced** — an executable fails on violation.
 - **Authoring-layer** — the obligation is real and provably not machine-checkable.
   Legitimate, and must be *declared as such*.
-- **Unwired** — the gate is specified and nothing invokes it. The operation may
-  not execute automatically.
-- **No gate by design** — diagnostic or emergent; authority fields are forbidden.
+- **Unwired** — this document's name for the audit's defect state, **Declared but
+  unenforced**: a gate is specified and nothing invokes it. The operation may not
+  execute automatically. The local name aligns with §A.4's `unwired` vocabulary.
+- **No gate by design** — local to this document: a diagnostic or emergent
+  operation bears no gate, so authority fields are forbidden rather than missing.
 
 ### 3.2 Proposed subject-operation registry — single home
 
@@ -327,7 +352,7 @@ therefore do not appear as authority enforcers.
 | 8 | `narrate-week` | `emergent` | `internal` | `+week` | — | No gate by design |
 | 9 | `narrate-coherence` | `emergent` | `internal` | `+locus`, `+failing_term`, `+base_rate_ref`, `score_ref?` | — | No gate by design; FW-DEC-006 forbids a bare scalar |
 | 10 | `recommend-cull` | `emergent` | `internal` | `+node`, `+rationale` | — | No gate by design; Sovereignty ruling stays open |
-| 11 | `route-model-tier` | `runtime-active` | `internal` | `+requested_operation`, `+chosen_tier` | `operator-review` | **Authoring-layer** — Berd binds tier by human choice per session |
+| 11 | `route-model-tier` | `runtime-active` | `internal` | `+requested_operation`, `+chosen_tier` | `berd-session-create` | **Authoring-layer** — Berd binds tier by human choice per session |
 | 12 | `commit-allocation` | `runtime-active` | `internal` | `+week`, `+allocations` | `operator-review` | **Authoring-layer** — human ruling |
 | 13 | `advance-node` | `runtime-active` | `internal` | `+node`, `+advance`, `+evidence_refs` | `operator-review` | **Authoring-layer** — human ruling |
 | 14 | `emit-repo-change` | `runtime-active` | `emission` | `+repository`, `+ref`, `+diff_ref` | `operator-review` | **Authoring-layer** — quality gates do not prove authority |
@@ -402,7 +427,8 @@ only the record identified by `record_path`, and only to carry the transition
 payload, fields first introduced by the new state, and the mutable fields named
 in §5.3. Preserving prior fields requires history and is therefore explicitly
 authoring-layer until a store-level enforcer exists. It is not a subject operation
-and cannot be used to claim the subject changed. Until the validator exists,
+and grants no subject-operation authority. It **records** the claim carried by the
+new state; it does not authorize or verify that claim. Until the validator exists,
 every transition is authoring-layer evidence rather than an enforced fact. The
 three proposed `ship-gate` modes retain their prior status; moving them here does
 not ratify or change them.
@@ -511,7 +537,7 @@ operating/
 Recommending `operating/` on one argument: `harness-bundle/` (§10) is a **derived,
 one-way, regeneratable** view of the Runtime Ports whose files "do not propagate
 back." An Operating Harness record is the exact opposite — **authored,
-append-only, and the evidence itself.** Sharing a root would put a derived
+advanced in place, and the evidence itself.** Sharing a root would put a derived
 artifact and a source-of-record artifact under one name, which is how a hand-edit
 to a derived copy becomes plausible. A root that does not contain the word
 "harness" also preserves FW-DEC-007's sense boundary. The human may ratify,
@@ -582,18 +608,22 @@ review:
   at: 2026-08-21T00:40:00-05:00
 transition:
   action: record-transition
-  record_path: operating/node-alpha/2026-08-21-001-first-worked-flow.md
+  record_path: "<record-root>/node-alpha/2026-08-21-001-first-worked-flow.md"
   from: artifact-proposed
   to: authority-checked
   actor: operator
   at: 2026-08-21T00:40:00-05:00
-  result_ref: reviews/review-0NN.md
+  result_ref: review-artifacts/review-0NN.md
 ---
 ```
 
 Absent keys are meaningful. `mode`, `channel`, and `enforcer` never appear in a
 record. A diagnostic or emergent proposal has no `gate` or `review`; a narrated
 terminal does carry `outcome: narrated`.
+
+`<record-root>` is an explicit placeholder for the still-unruled directory in
+§5.1. It is replaced with the human-ratified root before validation; this example
+does not decide that root.
 
 ### 5.3 What makes a record valid
 
@@ -622,7 +652,11 @@ draft does not claim the second set can be proved by a file validator.
    `granted_by`, `granted_at` (ISO-8601), and `expires_at` (ISO-8601). The
    consent tenant equals
    `operation.payload.target.tenant`; target surface and action match one scope
-   entry; and `granted_at <= transition.at < expires_at`.
+   entry. A terminal `committed` cross-tenant record requires
+   `execution.at` (ISO-8601 with offset), and the chronology check is
+   `granted_at <= execution.at < expires_at`. A pre-execution transition cannot
+   settle that check; `transition.at` is carrier history, not the time of the
+   external act.
 6. **Backlink shape.** Each backlink is
    `{repository, path, blob: "blob:<full-object-id>"}`. `repository` resolves via
    the store's repository map; `path` is relative; the full object id equals
@@ -637,8 +671,8 @@ draft does not claim the second set can be proved by a file validator.
    is coupled to the derived authority mode and settled decision where that mode
    carries one.
 8. **One home per concept.** `node`, `allocation`, claim, context snapshot,
-   constraints, options, proposal payload, Operation result, and backlinks each
-   have the single homes named below. A second copy is invalid.
+   constraints, options, proposal payload, `execution.at`, Operation result, and
+   backlinks each have the single homes named below. A second copy is invalid.
 
 #### State matrix
 
@@ -650,16 +684,21 @@ prior state. `Context` is a snapshot reference, not copied node-state prose:
 
 | State | Required beyond Common | Forbidden |
 |---|---|---|
-| `intent-captured` | — | `context`, `allocation`, `operation`, `proposal`, `authority_check`, `gate`, `review`, `outcome`, `back_links` |
-| `context-bound` | `context`, `allocation` | `operation`, `proposal`, `authority_check`, `gate`, `review`, `outcome`, `back_links` |
-| `options-generated` | `context`, `allocation`; non-empty Constraints and Options tables | `operation`, `proposal`, `authority_check`, `gate`, `review`, `outcome`, `back_links` |
-| `tableau-reviewed` | prior fields; non-empty Tableau review | `operation`, `proposal`, `authority_check`, `gate`, `review`, `outcome`, `back_links` |
-| `artifact-proposed` | prior fields; `operation`; `proposal.option_id`; complete `operation.payload` | `authority_check`, `gate`, `review`, `outcome`, `back_links` |
-| `authority-checked` | prior fields; mode-specific `authority_check.status` and authority shape below | `outcome`, `back_links` |
-| `evidence-recorded` | prior fields; one terminal variant below | fields forbidden by that variant |
+| `intent-captured` | — | `context`, `allocation`, `operation`, `proposal`, `authority_check`, `gate`, `review`, `execution`, `outcome`, `back_links` |
+| `context-bound` — proposal path | `context`, `allocation` | `operation`, `proposal`, `authority_check`, `gate`, `review`, `execution`, `outcome`, `back_links` |
+| `context-bound` — observation path | `context`, `allocation`; complete `operation` whose derived mode is `diagnostic` or `emergent` | `proposal`, `authority_check`, `gate`, `review`, `execution`, `outcome`, `back_links`; Constraints, Options, Tableau review, Proposal rationale, and Operation result must be empty |
+| `options-generated` — proposal path | `context`, `allocation`; non-empty Constraints and Options tables | `operation`, `proposal`, `authority_check`, `gate`, `review`, `execution`, `outcome`, `back_links` |
+| `tableau-reviewed` — proposal path | prior proposal-path fields; non-empty Tableau review | `operation`, `proposal`, `authority_check`, `gate`, `review`, `execution`, `outcome`, `back_links` |
+| `artifact-proposed` — proposal path | prior proposal-path fields; `operation` whose derived mode is `ship-gate` or `runtime-active`; `proposal.option_id`; complete `operation.payload` | `authority_check`, `gate`, `review`, `execution`, `outcome`, `back_links` |
+| `authority-checked` — proposal path | prior proposal-path fields; mode-specific `authority_check.status` and authority shape below | `execution`, `outcome`, `back_links` |
+| `evidence-recorded` — proposal path | prior proposal-path fields; `committed` or `refused` terminal variant below | fields forbidden by that variant |
+| `evidence-recorded` — observation path | prior observation-path fields; `narrated` terminal variant below | `proposal`, `gate`, `review`, `execution`; Constraints, Options, Tableau review, and Proposal rationale must remain empty |
 
-The Operation result section is empty through `authority-checked`. Only
-`record-transition` may populate it while advancing to `evidence-recorded`.
+Legal transitions are exactly the two paths in §2. A record selects the
+observation path by introducing a `diagnostic`/`emergent` operation at
+`context-bound`; after that it cannot enter a proposal-path state. The Operation
+result section is empty until `evidence-recorded`. Only `record-transition` may
+populate it while advancing to that terminal state.
 
 Mode-specific authority shapes:
 
@@ -668,19 +707,25 @@ Mode-specific authority shapes:
 - `runtime-active`: `authority_check.status: settled` and
   `review.decision: confirmed | rejected`; no authored gate. If the human has not
   ruled, the record remains `artifact-proposed` and carries no authority check.
-- `diagnostic` or `emergent`: `authority_check.status: not-applicable`; no `gate`
-  and no `review`.
+- `diagnostic` or `emergent`: on the observation-path terminal only,
+  `authority_check.status: not-applicable`; no `gate` and no `review`.
 
 Terminal variants:
 
-- `committed`: only `ship-gate` with `pass|watch`, or `runtime-active` with
-  `confirmed`; requires non-empty `back_links`.
-- `refused`: only `ship-gate` with `refuse`, or `runtime-active` with `rejected`;
-  requires `refusal_reason`; backlinks optional.
-- `narrated`: only `diagnostic` or `emergent`; requires a non-empty Operation
-  result, `transition.result_ref: "#operation-result"`, and non-empty `back_links`
-  to the exact input bytes examined. It carries no `gate` or `review`. The
-  terminal record is the result artifact and does not self-hash.
+- `committed`: proposal path only; `ship-gate` with `pass|watch`, or
+  `runtime-active` with `confirmed`; requires non-empty `back_links`. A derived
+  `cross-tenant` operation additionally requires `execution.at` as the ISO-8601
+  timestamp of the external act; `execution` is forbidden for every other
+  committed operation.
+- `refused`: proposal path only; `ship-gate` with `refuse`, or `runtime-active`
+  with `rejected`; requires `refusal_reason`; backlinks optional; `execution` is
+  forbidden because no act occurred.
+- `narrated`: observation path only; `diagnostic` or `emergent`; requires
+  `authority_check.status: not-applicable`, a non-empty Operation result,
+  `transition.result_ref: "#operation-result"`, and non-empty `back_links` to the
+  exact input bytes examined. It carries no Options, Tableau review, proposal,
+  `gate`, `review`, or `execution`. The terminal record is the result artifact
+  and does not self-hash.
 
 #### Authoring-layer invariants
 
@@ -691,12 +736,13 @@ Terminal variants:
 - Once introduced, `artifact`, `record_schema`, `id`, `supersedes`, `node`,
   `intent`, `allocation`, `context`, Constraints, Options, Tableau review,
   Proposal rationale, Operation result once populated, `operation`, `proposal`,
-  `authority_check`, `gate`, and `review` remain byte-identical across later
-  revisions. A transition may change `revision`, `state`, and `transition`, may
-  append Enforcer-gap rows, and may add only fields first required by the new
-  state. This requires prior history and is not a whole-file check.
-- `transition.from → to` followed the seven-state sequence. Git can help audit
-  this but does not prove it.
+  `authority_check`, `gate`, `review`, and `execution` remain byte-identical once
+  introduced across later revisions. A transition may change `revision`, `state`,
+  and `transition`, may append Enforcer-gap rows, and may add only fields first
+  required by the new state. This requires prior history and is not a whole-file
+  check.
+- `transition.from → to` followed exactly one of §2's two legal paths. Git can
+  help audit this but does not prove it.
 - `revision` is monotonic across the lineage; `supersedes` resolves; concurrent
   forks do not occur under the single-writer restriction. The validator can
   compare history but cannot prove that no second writer acted outside it.
@@ -774,7 +820,9 @@ derived, and squash-merge orphans the branch commit the moment the PR lands.
 A blob hash is invariant across commit, squash, rebase, and branch deletion, and
 identifies the exact bytes. An Operating Harness's back-link has the same job —
 prove which bytes the advance produced — so it takes the same fix rather than
-re-learning it.
+re-learning it. The public record is the provenance correction in
+[`ROADMAP.md`](../ROADMAP.md), with the mechanism documented and enforced in
+[`sync-canon.mjs`](../examples/face.works/prototype/scripts/sync-canon.mjs).
 
 ### 6.2 What makes it re-diffable
 
@@ -803,7 +851,9 @@ transitions.
 
 One record closes one operating intent — the **task loop**. The **product loop**
 (the review) needs its own artifact or it stops rather than closes, by the same
-rule. Its closing artifact is a **review index** at
+rule. Authored review evidence lives under
+`<operating-root>/review-artifacts/`; derived period summaries never do. The
+product-loop closing artifact is a **review index** at
 `<operating-root>/reviews/<yyyy>-W<ww>.md`: the terminal records, their outcomes,
 and their enforcer-gap entries. It carries frontmatter
 `{week, generated_at, record_schema, source_records[]}` and a table
@@ -916,7 +966,7 @@ standalone validator is named as a gap.
 type AuthorityMode = "ship-gate" | "runtime-active" | "diagnostic" | "emergent"
 type ActionSize    = "light" | "medium" | "heavy"
 type Outcome       = "committed" | "refused" | "narrated"
-type EnforcerGap   = "manual-prompt-fallback" | "unwired-routine" | "missing-gate"
+type RecordEnforcerGap = "manual-prompt-fallback" | "unwired-routine" | "missing-gate"
 
 // RegistryKind and PayloadFor are generated from §3.2; they are not re-declared.
 // Mode, channel and enforcer derive from the same row and are not record fields.
@@ -970,7 +1020,10 @@ What promotion would oblige, stated so it is not discovered later:
   `bin/validate-operating-harness-record` enforces it. Those three move together
   or promotion refuses. The schema and executable **must remain separate from**
   `facework.manifest.schema.json` and `bin/validate-manifest`; the carrier format
-  must not enter `PROTOCOL.md` §9–§12.
+  must not enter `PROTOCOL.md` §9–§12. The prior runtime-conformance declaration
+  and validator disagreed for twenty releases; that history is public in
+  [`ROADMAP.md`](../ROADMAP.md) and the
+  [`§9 enforcement audit`](section9-enforcement-audit-2026-08-19.md).
 - `record_schema` versions the standalone carrier schema. It is not the Facework
   release version or manifest schema version, and none moves to match another.
 
@@ -986,11 +1039,13 @@ defects.
 
 ## 11. Draft check — P0 response, pending adversary falsification
 
-**This is a draft response, not falsification and not clearance.** An independent
-second pass refused the pinned shape at `981c83d`; it explicitly did not cover
-later commits. The author has corrected only its agent-resolvable findings and
-has not asked the same persona to grade those corrections. Status remains
-**pending adversary falsification**.
+**This is a draft response, not falsification and not clearance.** The append-only
+[`adversary findings record`](operating-harness-adversary-findings-2026-08-21.md)
+records three external passes. Round 3 issued WATCH against the pinned shape at
+`981c83d`; it explicitly did not cover later commits. The author's resolution
+entries carry weaker warrant than an external resolution. Status remains
+**pending adversary falsification**, and structural clearance remains separate
+from the human authority ruling.
 
 | Finding | Draft response | Where addressed | What remains for the adversary |
 |---|---|---|---|
@@ -999,6 +1054,7 @@ has not asked the same persona to grade those corrections. Status remains
 | **P0-3** — pending and settled gates conflated | A full state matrix and three terminal variants now couple mode, decision, and outcome. `narrated` is representable; an unresolved human decision remains `artifact-proposed`. | §5.3 state matrix | Challenge every required/forbidden field combination and proposal retention. |
 | **P0-5** — read-only operation can gate | The evidence-store carve-out is removed. Diagnostics/emergent operations return values without writing; separate `record-transition` persists them only in the canonical Operation result home. Their authority shapes carry no gate or review. | §3.3, §5.3, §5.4, §7 r1 | Challenge whether `record-transition` can still launder an Operation result into a subject-state claim. |
 | **P0-7** — carrier/runtime vocabulary collision | FW-DEC-007 governs. The record uses `artifact: OperatingHarness`; the binding path is a standalone carrier schema and validator. The carrier stays out of `PROTOCOL.md` §9–§12, the manifest schema, and the manifest validator. | §1, §4, §5.2–§5.3, §8, §10 | Grep the forbidden files after rebase and challenge every unqualified carrier-sense use. |
+| **P0-A** — narrated terminal forbidden by proposal lifecycle | The state vocabulary now has two legal paths. Diagnostic/emergent records take the short observation path from `context-bound` directly to `evidence-recorded/narrated`; Options, Tableau review, and proposal are forbidden on that path. Referential-integrity rule 4 is unchanged. | §2, §5.3 state matrix + terminal variants | Construct every diagnostic/emergent row through the observation path and prove none can enter a proposal-path terminal. |
 
 Additional draft-check results:
 
