@@ -47,9 +47,13 @@ Before changing the record, require all of the following:
    §5.3 requires. Do not infer confirmation from the request to close.
 4. The terminal candidate carries non-empty back-links. Resolve every repository
    slug and path, hash the cited bytes with `git hash-object`, and require exact
-   equality with the recorded full blob object id. Missing repositories, absent
-   objects, dirty ambiguity, or mismatches are failures; never rewrite a hash to
-   make it pass.
+   equality with the recorded full blob object id. At close time you are citing
+   bytes the advance just produced, so a mismatch here means the record is citing
+   the wrong thing — it is a failure, not a freshness note. Missing repositories,
+   absent objects, and dirty ambiguity are also failures. **Never rewrite a hash
+   to make it pass.** (Per FW-DEC-011, later re-validation of an already-closed
+   record enforces object existence instead and reports path divergence; that
+   leniency is for records this skill has already closed, never for closing one.)
 5. `bin/validate-operating-harness-record` exists, is executable, and validates
    the exact terminal candidate under the applicable store mapping. Capture its
    command, exit status, and output as validation evidence. A prose review,

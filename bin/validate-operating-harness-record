@@ -125,9 +125,10 @@ def canonical_timestamp(value)
 end
 
 class Validator
-  attr_reader :path, :root, :record, :sections, :tables
+  attr_reader :path, :root, :record, :sections, :tables, :notes
 
   def initialize(path)
+    @notes = []
     @path = File.realpath(path)
     @root = find_root!
     @store = load_store!
@@ -609,7 +610,18 @@ class Validator
     real
   end
 
-  def snapshot!(value, name)
+  # FW-DEC-011. A back-link's claim is "the advance produced exactly these bytes",
+  # and the permanent proof of that is that the blob OBJECT exists in the cited
+  # repository. Whether those bytes are still the current content at that path is
+  # a freshness claim the record never made, and enforcing it made every closed
+  # record decay to invalid as its evidence legitimately evolved — which put
+  # pressure on rewriting hashes, the one thing §5.3 rule 6 forbids absolutely.
+  #
+  # So: object existence is enforced; path divergence is reported. The exception is
+  # `parse: true`, used where the validator must READ the cited bytes
+  # (`options_snapshot_ref`). There a divergent path would mean parsing bytes other
+  # than the ones cited, so equality stays an error.
+  def snapshot!(value, name, parse: false)
     exact_keys!(value, %w[repository path blob], [], name)
     repo = repository_root!(value["repository"])
     relative_path!(value["path"], "#{name}.path")
@@ -621,9 +633,26 @@ class Validator
     fail!("could not determine object format for #{name}") unless status.success?
     expected_length = object_format.strip == "sha256" ? 64 : 40
     fail!("#{name}.blob must be a full #{expected_length}-character object id") unless /\Ablob:[0-9a-f]{#{expected_length}}\z/.match?(value["blob"])
+    object_id = value["blob"].delete_prefix("blob:")
+
     actual, hash_status = Open3.capture2("git", "-C", repo, "hash-object", real)
     fail!("could not hash #{name}.path") unless hash_status.success?
-    fail!("#{name}.blob does not match the cited bytes") unless value["blob"] == "blob:#{actual.strip}"
+    current = actual.strip
+
+    if parse
+      fail!("#{name}.blob does not match the cited bytes") unless current == object_id
+      return real
+    end
+
+    unless current == object_id
+      exists = system("git", "-C", repo, "cat-file", "-e", "#{object_id}^{blob}", out: File::NULL, err: File::NULL)
+      unless exists
+        fail!("#{name}.blob is neither the current bytes at that path nor an object in repository #{value['repository']} — the cited bytes cannot be shown to have existed")
+      end
+      notes << "#{name}: cited bytes are no longer current at #{value['path']} " \
+               "(cited #{object_id[0, 8]}, now #{current[0, 8]}); the object still exists, " \
+               "so provenance holds and the evidence has moved"
+    end
     real
   end
 
@@ -635,7 +664,7 @@ class Validator
   end
 
   def options_snapshot!(value, name)
-    file = snapshot!(value, name)
+    file = snapshot!(value, name, parse: true)
     cited_record, cited_sections = parse_record_file!(file)
     fail!("#{name} must cite a supported Operating Harness record") unless cited_record["artifact"] == "OperatingHarness" && cited_record["record_schema"] == SCHEMA_VERSION
     allowed = %w[options-generated tableau-reviewed artifact-proposed authority-checked evidence-recorded]
@@ -762,7 +791,9 @@ failed = false
 ARGV.each do |candidate|
   begin
     fail!("record not found: #{candidate}") unless File.file?(candidate)
-    Validator.new(candidate).validate!
+    validator = Validator.new(candidate)
+    validator.validate!
+    validator.notes.uniq.each { |note| puts "[note] #{candidate}: #{note}" }
     puts "[ok] Operating Harness record valid: #{candidate}"
   rescue Invalid, SystemCallError => e
     warn "[error] #{candidate}: #{e.message}"

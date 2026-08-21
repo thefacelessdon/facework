@@ -849,10 +849,23 @@ draft does not claim the second set can be proved by a file validator.
    `normalize(granted_at) <= normalize(execution.at) < normalize(expires_at)`.
    A pre-execution transition cannot settle that check; `transition.at` is
    carrier history, not the time of the external act.
-6. **Backlink shape.** Each backlink is
-   `{repository, path, blob: "blob:<full-object-id>"}`. `repository` resolves via
-   the store's repository map; `path` is relative; the full object id equals
-   `git hash-object` for the cited bytes. A mismatch is refused, never rewritten.
+6. **Backlink shape and what a backlink proves**
+   ([`FW-DEC-011`](decisions/DECISION-011-backlink-object-existence.md)). Each
+   backlink is `{repository, path, blob: "blob:<full-object-id>"}`. `repository`
+   resolves via the store's repository map and `path` is relative and must resolve
+   to a file. The **claim** a backlink makes is *the advance produced exactly
+   these bytes*, and the permanent proof of that is that the blob **object exists
+   in the cited repository**. That is what is enforced.
+   Whether those bytes are still the *current* content at that path is a
+   freshness claim the record never made. When the path has moved on, the
+   divergence is **reported and the record stays valid**; when the cited id is
+   neither the current bytes nor an object in that repository, it is **refused** —
+   bytes that cannot be shown to have existed cannot be evidence. A recorded hash
+   is never rewritten to make either outcome go away.
+   **One exception, and its reason:** `options_snapshot_ref` requires exact
+   equality with the current path bytes, because the validator *reads* that file
+   to resolve option ids. A divergent path there would mean parsing bytes other
+   than the ones cited.
    An observation-path terminal repeats every payload `SnapshotRef` input as an
    exactly equal backlink triple.
 7. **Transition, state shape, and outcome coupling.** `transition.action` is
@@ -1048,11 +1061,17 @@ transitions.
    uncommitted states, guarantee one transition per commit, or survive every
    amend/squash/force-push path. The explicit `transition` block makes the claimed
    step inspectable; legality remains authoring-layer until a store enforces it.
-3. **Back-links verify, or closure is void.** Hash the current cited path bytes
-   with `git hash-object` and compare them with the recorded full object id. A
-   mismatch proves the current path bytes differ from the cited bytes. An absent
-   object or unavailable repository makes provenance **unverifiable**; it is not
-   proof that the evidence changed. Either condition prevents closure.
+3. **Back-links verify, or closure is void — and verification is object
+   existence.** At close time the cited bytes are what the advance just produced,
+   so `git hash-object` on the path equals the recorded id and that equality is
+   what `harness-close` requires. Afterwards, the enforced test is that the blob
+   **object** still exists in the cited repository: an unavailable repository or a
+   phantom id makes provenance **unverifiable** and is refused, while a path whose
+   content has moved on is **reported**, because canon revising a file does not
+   retroactively falsify a record that cited it. This was ruled at FW-DEC-011
+   after release 0.0.76 invalidated a closed record by legitimately editing the
+   spec that record cited — the failure mode being that the cheapest repair is to
+   rewrite the recorded hash, which rule 6 forbids absolutely.
 4. **The next intent is a diff, not a memory.** The next run compares the terminal
    record's claim against current node state. Divergence is the next
    `intent-captured`, and it cites the prior record's `id`. No runtime memory is
