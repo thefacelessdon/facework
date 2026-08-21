@@ -191,12 +191,22 @@ class Validator
     expected = SECTIONS.map { |name| "## #{name}" }
     headings = body.lines.grep(/^## /).map(&:chomp)
     fail!("body sections must appear exactly once in the required order") unless headings == expected
+    # Index and slice in the SAME unit. `String#index` on a UTF-8 string returns a
+    # CHARACTER offset while `byteslice` takes BYTE offsets, so one non-ASCII
+    # character anywhere in the body (an em dash, a curly quote, an accented
+    # collaborator name) shifted every later section slice and the record was
+    # refused with a misleading "noncanonical header". Scan bytes throughout.
+    raw = body.dup.force_encoding(Encoding::BINARY)
     result = {}
     SECTIONS.each_with_index do |name, index|
-      start = body.index("## #{name}\n")
+      start = raw.index("## #{name}\n".b)
+      fail!("body section #{name} could not be located") if start.nil?
       content_start = start + name.bytesize + 4
-      finish = index + 1 < SECTIONS.length ? body.index("## #{SECTIONS[index + 1]}\n", content_start) : body.bytesize
-      result[name] = body.byteslice(content_start...finish)
+      finish = index + 1 < SECTIONS.length ? raw.index("## #{SECTIONS[index + 1]}\n".b, content_start) : raw.bytesize
+      fail!("body section #{name} is not terminated by the next section") if finish.nil?
+      slice = raw.byteslice(content_start...finish).force_encoding(Encoding::UTF_8)
+      fail!("body section #{name} is not valid UTF-8") unless slice.valid_encoding?
+      result[name] = slice
     end
     result
   end
