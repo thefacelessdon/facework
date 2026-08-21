@@ -6,14 +6,18 @@
 **Source pattern:** `gamut-ops/documents/design-harnesses-2026-04-27.md` (Design
 Harness v0.2.2 — bound, compiler-verified, running against 14th & Co)
 **Composition rule:** `gamut-ops/documents/the-practice-three-layers-2026-04-28.md`
+**Vocabulary ruling:**
+[`FW-DEC-007`](decisions/DECISION-007-harness-sense-disambiguation.md) — bare
+`harness` is reserved for the runtime sense; the carrier sense is always
+qualified and stays out of the manifest schema and validator
 **Constraint set:** private — SignalThesis + canonical-language guide for
 Harper-as-Operator, author-asserted as locked 2026-06-03. **Inlined as §A; not
 cited by path; lock date independently unverifiable.**
 
-> **Not canon.** This is a methodology note. It does not amend `PROTOCOL.md`,
-> `facework.manifest.schema.json`, or `bin/validate-manifest`, so the three-place
-> trio stays consistent. Promoting the record format to a protocol feature is
-> what would oblige all three to move together — see §10.
+> **Not canon.** This is a methodology note. Per FW-DEC-007, this carrier format
+> does not and must not enter `PROTOCOL.md` §9–§12,
+> `facework.manifest.schema.json`, or `bin/validate-manifest`. Its future binding
+> path is a standalone record schema and standalone validator — see §10.
 >
 > **Not falsified.** The P0 checklist in §11 is a *draft check* the author ran on
 > the author's own work. The Design Harness needed two rounds of real
@@ -30,9 +34,12 @@ Four things this spec had to resolve, stated before the design:
    21 proposed authority-bearing entries in §3 — 18 subject operations and three
    carrier checks — **zero** have a running automatic enforcer.
    Every gate is human-invoked or unwired. The
-   validator that would check the record format — `bin/validate-harness-record` —
-   **does not exist.** §3 labels every row with one of three states borrowed from
-   this repo's own enforcement-audit vocabulary, and §4 states what is missing.
+   validator that would check the record format —
+   `bin/validate-operating-harness-record` —
+   **does not exist.** §3 labels every row with one of four statuses, using this
+   repo's enforcement-audit vocabulary plus the explicit no-gate status:
+   **Enforced / Authoring-layer / Unwired / No gate by design**. §4 states what
+   is missing.
    This is the repo's recurring asserted-but-unenforced defect class, and the way
    to not repeat it is to label rather than imply.
 
@@ -93,7 +100,7 @@ requirement, not a caveat; several are made structural later in this spec.
 |---|---|---|
 | **N1** | **Not theater.** Every routine output is execution evidence, not a status report. | §5.3 r6, §7 r3 |
 | **N2** | **Not a dashboard, tracker, or productivity tool.** Those are surfaces; the carrier and enforcer sit beneath them. | §7 r4 |
-| **N3** | **Not a duplicate of the Design Harness.** Different intent class. Same pattern, different subject. Always qualify which harness in writing. | §1 |
+| **N3** | **Not a duplicate of the Design Harness.** Different intent class. Same pattern, different subject. Always qualify which carrier is meant in writing. | §1 |
 | **N4** | **Not built-and-stale.** Anything built must compose with a running enforcer. **Documentation alone is not built.** | §3.4, §9 |
 | **N5** | **Not operator-as-prompter.** Execution happens between reviews, not as a result of typing. | §5.4, §7 r6 |
 | **N6** | **Not a separate system from Facework.** It is Facework's Operational layer, dogfooded on the portfolio as its first tenant. | §10 |
@@ -200,6 +207,13 @@ instances.
 ---
 
 ## 1. Definition — the five parts
+
+**Vocabulary boundary.** FW-DEC-007 reserves unqualified `harness` for the
+runtime sense: the agent loop. This carrier is always **Operating Harness** in
+prose or `OperatingHarness` as a type/discriminator, never bare. It stays out of
+`PROTOCOL.md` §9–§12, `facework.manifest.schema.json`, and
+`bin/validate-manifest`. This specification therefore uses the qualified
+`artifact: OperatingHarness` discriminator and a standalone validation path.
 
 An **Operating Harness** is a typed operational frame around an operating claim.
 It is the sibling of GAMUT's **Design Harness**: same pattern, different subject.
@@ -311,7 +325,7 @@ therefore do not appear as authority enforcers.
 | 6 | `draft-message` | `diagnostic` | `internal` | `+audience`, `+subject_ref` | — | No gate by design |
 | 7 | `audit-consent` | `diagnostic` | `internal` | `+target`, `consent_ref?` | — | No gate by design |
 | 8 | `narrate-week` | `emergent` | `internal` | `+week` | — | No gate by design |
-| 9 | `narrate-coherence` | `emergent` | `internal` | `+score_ref` | — | No gate by design |
+| 9 | `narrate-coherence` | `emergent` | `internal` | `+locus`, `+failing_term`, `+base_rate_ref`, `score_ref?` | — | No gate by design; FW-DEC-006 forbids a bare scalar |
 | 10 | `recommend-cull` | `emergent` | `internal` | `+node`, `+rationale` | — | No gate by design; Sovereignty ruling stays open |
 | 11 | `route-model-tier` | `runtime-active` | `internal` | `+requested_operation`, `+chosen_tier` | `operator-review` | **Authoring-layer** — Berd binds tier by human choice per session |
 | 12 | `commit-allocation` | `runtime-active` | `internal` | `+week`, `+allocations` | `operator-review` | **Authoring-layer** — human ruling |
@@ -330,11 +344,13 @@ with no `..` whose resolved real path exists beneath the private store root.
 | Key(s) | Value shape |
 |---|---|
 | `node` | `NodeKey`: non-empty slug; registry membership is authoring-layer |
-| `source_ref`, `subject_ref`, `score_ref`, `message_ref`, `diff_ref`, `consent_ref` | `StoreRef`: relative POSIX path, no `..`, resolving to an existing file beneath the private store root |
+| `source_ref`, `subject_ref`, `score_ref`, `base_rate_ref`, `message_ref`, `diff_ref`, `consent_ref` | `StoreRef`: relative POSIX path, no `..`, resolving to an existing file beneath the private store root |
 | `option_id` | one unique Options-table id |
 | `option_ids` | non-empty array of unique Options-table ids |
 | `routine_id`, `audience`, `tool`, `runner`, `rationale`, `advance` | non-empty string |
 | `week` | ISO week string matching `^[0-9]{4}-W(0[1-9]|[1-4][0-9]|5[0-3])$` |
+| `locus` | one protocol layer: `semantics | field | taste | frequency | current | flow | stability | resonance | entropy | sovereignty | consonance` |
+| `failing_term` | `flow | resonance | entropy` |
 | `target` | `{tenant: <non-empty slug>, surface: <non-empty slug>}` |
 | `action` | `send-to-collaborator`: literal `send-message`; `operate-in-collaborator-context`: non-empty slug. Every cross-tenant value is compared exactly with consent scope. |
 | `requested_operation` | one subject-operation kind from this registry other than `route-model-tier` |
@@ -347,9 +363,13 @@ with no `..` whose resolved real path exists beneath the private store root.
 | `timezone` | IANA time-zone identifier |
 | `doc_path` | relative POSIX path with no `..`; the target may be new |
 
-No payload key outside the matching registry row is permitted. `consent_ref?` on
-`audit-consent` is optional so the diagnostic can report absence; every `+` key
-is present exactly once.
+No payload key outside the matching registry row is permitted. A `?` key is
+optional and appears at most once; every `+` key is present exactly once.
+`consent_ref?` lets `audit-consent` report absence. `score_ref?` is supporting
+evidence only:
+[`FW-DEC-006`](decisions/DECISION-006-coherence-autopsy-locus-over-score.md)
+makes `locus` the finding and requires the failing term and base-rate prior to
+accompany every call.
 
 `recommend-cull` records **RECOMMENDED / open**, never RESOLVED, until the human
 rules. `draft-message` is not sending; sending is operation 16.
@@ -362,10 +382,10 @@ separate carrier-maintenance action records what happened to the carrier:
 
 | Carrier action | Regime | Channel | Required payload | Enforcer | Gate status |
 |---|---|---|---|---|---|
-| `validate-record` | proposed `ship-gate` | `internal` | `+record_path` | `harness-record-validator` | **Unwired** — executable absent |
-| `reject-malformed-intent` | proposed `ship-gate` | `internal` | `+candidate_ids`, `+findings` | `harness-record-validator` | **Unwired** — executable absent |
-| `verify-back-links` | proposed `ship-gate` | `internal` | `+record_path` | `harness-record-validator` | **Unwired** — must refuse mismatch; never rewrites hashes |
-| `record-transition` | `carrier-write` — not an `AuthorityMode` | `internal` | `+record_path`, `+from`, `+to`, `+actor`, `+at`, `+result_ref` | `harness-record-validator` | **Unwired** — executable absent |
+| `validate-record` | proposed `ship-gate` | `internal` | `+record_path` | `operating-harness-record-validator` | **Unwired** — executable absent |
+| `reject-malformed-intent` | proposed `ship-gate` | `internal` | `+candidate_ids`, `+findings` | `operating-harness-record-validator` | **Unwired** — executable absent |
+| `verify-back-links` | proposed `ship-gate` | `internal` | `+record_path` | `operating-harness-record-validator` | **Unwired** — must refuse mismatch; never rewrites hashes |
+| `record-transition` | `carrier-write` — not an `AuthorityMode` | `internal` | `+record_path`, `+from`, `+to`, `+actor`, `+at`, `+result_ref` | `operating-harness-record-validator` | **Unwired** — executable absent |
 
 Carrier values are: `record_path` = a `StoreRef` resolving to the record being
 checked; `candidate_ids` = a non-empty array of unique non-empty identifiers;
@@ -416,9 +436,11 @@ machine-readable runtime surface. Across the original authority-bearing set,
 
 ## 4. The missing enforcer
 
-The proposed enforcer is `bin/validate-harness-record <path>...`. **It does not
-exist and is not wired into `make protocol-check`.** This spec therefore defines
-its future contract without calling any operation enforced.
+The proposed standalone enforcer is
+`bin/validate-operating-harness-record <path>...`. **It does not exist and is not
+wired into `make protocol-check`.** Per FW-DEC-007, it is separate from
+`bin/validate-manifest`. This spec therefore defines its future contract without
+calling any operation enforced.
 
 The executable would parse the registry and record grammars, exit non-zero on a
 violation, and run as a whole-file static check. §5 separates mechanically
@@ -476,9 +498,9 @@ private operating tree its own git repository. That choice is not ratified here;
 the human still owns it. A redacted index may later be published, but the records
 may not enter the public canon repo.
 
-**Which directory — deferred, with a recommendation.** Session A is ruling on the
-collision between `OperatingHarness` and `HarnessBundle` (`PROTOCOL.md` §10).
-**This spec creates no directory.** The convention:
+**Which directory — RECOMMENDED / open.** FW-DEC-007 has resolved the vocabulary
+collision between `OperatingHarness` and `HarnessBundle`; it deliberately made
+no directory ruling. **This spec creates no directory.** The recommendation is:
 
 ```
 operating/
@@ -492,8 +514,8 @@ back." An Operating Harness record is the exact opposite — **authored,
 append-only, and the evidence itself.** Sharing a root would put a derived
 artifact and a source-of-record artifact under one name, which is how a hand-edit
 to a derived copy becomes plausible. A root that does not contain the word
-"harness" dodges Session A's collision entirely rather than resolving it, which
-here is a feature. Session A may rule otherwise; the mkdir is a follow-up either
+"harness" also preserves FW-DEC-007's sense boundary. The human may ratify,
+reject, or replace this directory recommendation; the mkdir is a follow-up either
 way.
 
 Filename: `<yyyy>-<mm>-<dd>-<seq>-<slug>.md`. Date is the `intent-captured` date
@@ -528,7 +550,7 @@ One record, one operating intent, advancing in place. This example is
 
 ```yaml
 ---
-harness: OperatingHarness        # discriminates from a HarnessBundle file
+artifact: OperatingHarness       # qualified carrier discriminator (FW-DEC-007)
 record_schema: 0.1.0-draft       # THIS record's schema. Never the repo VERSION.
 id: oh-nodealpha-2026-08-21-001
 revision: 1
@@ -580,7 +602,7 @@ draft does not claim the second set can be proved by a file validator.
 
 #### Mechanically checkable core
 
-1. **Discriminator and identity.** `harness: OperatingHarness`, `record_schema`,
+1. **Discriminator and identity.** `artifact: OperatingHarness`, `record_schema`,
    `id`, non-negative `revision`, `state`, `node`, and `intent.claim/source` are
    present. A Facework release version is never copied into the record.
 2. **Registry derivation.** When `operation` is present, `operation.kind` resolves
@@ -666,7 +688,7 @@ Terminal variants:
 - The operation stayed within consent scope in the external system.
 - `node` resolves to the tenant's private registry and the context snapshot was
   the right one for the judgment.
-- Once introduced, `harness`, `record_schema`, `id`, `supersedes`, `node`,
+- Once introduced, `artifact`, `record_schema`, `id`, `supersedes`, `node`,
   `intent`, `allocation`, `context`, Constraints, Options, Tableau review,
   Proposal rationale, Operation result once populated, `operation`, `proposal`,
   `authority_check`, `gate`, and `review` remain byte-identical across later
@@ -882,12 +904,11 @@ is prose that resembles code, which is worse than prose, because it *looks*
 enforced. Writing it would reproduce this repo's recurring defect class in a new
 medium.
 
-There is a real binding target here, and it is not TypeScript. This repo already
-runs the three-place machinery — `PROTOCOL.md` declares, `facework.manifest.schema.json`
-defines, `bin/validate-manifest` enforces. If the record format is ever promoted
-to a protocol feature, **JSON Schema plus a validator is the shape that gets
-checked in this repo**. §5.3 distinguishes mechanically checkable structure from
-authoring-layer truth. Until then, §4's absent validator is named as a gap.
+There is a real binding target here, and it is not TypeScript. Per FW-DEC-007,
+the Operating Harness record uses a **standalone** JSON Schema and standalone
+validator; it never becomes a manifest feature. §5.3 distinguishes mechanically
+checkable structure from authoring-layer truth. Until then, §4's absent
+standalone validator is named as a gap.
 
 ```ts
 // NON-NORMATIVE sketch. Nothing compiles this. §5.3 is normative.
@@ -930,8 +951,9 @@ Honest status per part:
 
 Next increment, smallest first: falsify the proposed shape and resolve its
 findings, then ask the human to ratify or reject the 21 authored bindings. Only a
-surviving, human-ratified shape should become `bin/validate-harness-record`; only
-after that should a worked record be emitted.
+surviving, human-ratified shape should become
+`bin/validate-operating-harness-record`; only after that should a worked record
+be emitted.
 
 ---
 
@@ -939,25 +961,26 @@ after that should a worked record be emitted.
 
 This note is **not canon**. It is not in `CANON_SOURCES`
 (`examples/face.works/prototype/scripts/sync-canon.mjs`), so the `sync-canon` gate
-does not apply, and it amends no protocol file, so the three-place trio stays
-consistent.
+does not apply. FW-DEC-007 governs its separate namespace.
 
 What promotion would oblige, stated so it is not discovered later:
 
-- `PROTOCOL.md` declares the record format → `facework.manifest.schema.json`
-  defines it → `bin/validate-manifest` (or `validate-harness-record`, wired into
-  `make protocol-check`) enforces it. **All three, together.** The earlier
-  runtime-conformance gap left a declared feature unenforceable for twenty
-  releases; this format does not repeat that claim.
-- Manifest schema version moves only if the manifest gains a field. The record's
-  `record_schema` is a **third** axis and is not reconciled against either the
-  release version or the manifest schema version.
+- This document declares the carrier record → a standalone
+  `operating-harness-record.schema.json` defines it →
+  `bin/validate-operating-harness-record` enforces it. Those three move together
+  or promotion refuses. The schema and executable **must remain separate from**
+  `facework.manifest.schema.json` and `bin/validate-manifest`; the carrier format
+  must not enter `PROTOCOL.md` §9–§12.
+- `record_schema` versions the standalone carrier schema. It is not the Facework
+  release version or manifest schema version, and none moves to match another.
 
 **Bar for promotion:** one worked flow against a real node, closed to
 `evidence-recorded` with resolving back-links, plus the validator running in
-`make protocol-check`. Same bar the Design Harness cleared — a worked flow plus a
-mechanical check — and it should not be promoted on less, because the Design
-Harness's own round-1 shape looked finished and carried six P0 defects.
+its own gate (which may be invoked independently by `make protocol-check`, but
+never through `bin/validate-manifest`). Same bar the Design Harness cleared — a
+worked flow plus a mechanical check — and it should not be promoted on less,
+because the Design Harness's own round-1 shape looked finished and carried six P0
+defects.
 
 ---
 
@@ -975,6 +998,7 @@ has not asked the same persona to grade those corrections. Status remains
 | **P0-2** — authored authority can lie | Records author only `operation.kind` and payload. Mode, channel, and enforcer derive from the registry; their keys are forbidden. Cross-tenant consent derives from kind. | §3.1–§3.2, §5.3 rules 2/5 | The registry is prose until a validator exists; prove no alternate field can bypass derivation. |
 | **P0-3** — pending and settled gates conflated | A full state matrix and three terminal variants now couple mode, decision, and outcome. `narrated` is representable; an unresolved human decision remains `artifact-proposed`. | §5.3 state matrix | Challenge every required/forbidden field combination and proposal retention. |
 | **P0-5** — read-only operation can gate | The evidence-store carve-out is removed. Diagnostics/emergent operations return values without writing; separate `record-transition` persists them only in the canonical Operation result home. Their authority shapes carry no gate or review. | §3.3, §5.3, §5.4, §7 r1 | Challenge whether `record-transition` can still launder an Operation result into a subject-state claim. |
+| **P0-7** — carrier/runtime vocabulary collision | FW-DEC-007 governs. The record uses `artifact: OperatingHarness`; the binding path is a standalone carrier schema and validator. The carrier stays out of `PROTOCOL.md` §9–§12, the manifest schema, and the manifest validator. | §1, §4, §5.2–§5.3, §8, §10 | Grep the forbidden files after rebase and challenge every unqualified carrier-sense use. |
 
 Additional draft-check results:
 
@@ -987,6 +1011,9 @@ Additional draft-check results:
   longer misrepresented as authority enforcers.
 - **Concurrency:** the first implementation is now explicitly single-writer;
   multi-writer CAS/merge remains deferred.
+- **Coherence narration:** FW-DEC-006 now requires `locus`, `failing_term`, and
+  `base_rate_ref`; `score_ref` is optional supporting evidence and cannot stand
+  alone.
 
 ---
 
@@ -995,8 +1022,9 @@ Additional draft-check results:
 1. **P0-6 / authority ratification.** The 21 mode assignments rest on nothing
    equivalent to a closed tether map. The registry remains proposed and cannot
    authorize execution.
-2. **The directory** — Session A's call. §5.1 recommends `operating/` and creates
-   nothing.
+2. **The directory.** FW-DEC-007 resolved the vocabulary collision but did not
+   choose a directory. §5.1 leaves `operating/` RECOMMENDED / open and creates
+   nothing; the human owns the ruling.
 3. **`schedule-routine` has no machine surface** on the current runtime. Berd's Automations are
    UI-built with no CLI and no on-disk config, so nothing can read the schedule a
    `schedule-routine` operation produced.
