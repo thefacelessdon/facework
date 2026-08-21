@@ -172,3 +172,49 @@ The later external correction accounting identifies these round-1 findings:
   does **not** grant structural clearance and does not ratify the 21 authority
   bindings or any directory, concurrency, or private-repository choice. An
   independent external resolution is still required.
+
+---
+
+## Provenance dissent — r1/r2 reconstruction correction
+
+**Appended:** 2026-08-21
+**Warrant:** author correction — weaker
+**Disposition:** the original round-1 and round-2 blocks remain immutable; this
+entry corrects their provenance without overwriting them
+
+The round-1 and round-2 finding text above is **RECONSTRUCTED**, authored on
+2026-08-21 when this public artifact was first created. It was reconstructed from
+commit messages and diffs; it is not a contemporaneous record made during either
+pass. The preamble's disclosure was not sufficient because the individual entries
+could still be read as recovered wording.
+
+The only contemporaneous public support for those correction rounds is:
+
+| Commit | Authored at | What the commit itself claims |
+|---|---|---|
+| `22212c28282d255ff7dfbf74ad839d41098eb22f` | 2026-08-21 01:13:23 -0500 | `Operating Harness spec: answer adversary findings`; individual finding wording **not recoverable** from the commit message or diff |
+| `6ae8f9b85e5dd2f1a584cff2edb9e989b53a2a92` | 2026-08-21 01:23:33 -0500 | claims closure of `N-1`, `N-2`, and `N-3`; the diff shows the corrections, but the original finding wording is **not recoverable** |
+| `981c83dab4426509f58f4e6ecea06a9158333cbd` | 2026-08-21 01:24:50 -0500 | claims closure of `P1-11`, `P1-7`, and `P2-1`; the diff shows the corrections, but the original finding wording is **not recoverable** |
+
+Accordingly:
+
+- Every round-1 item `R1-1` through `R1-10` above is a later reconstruction.
+  Its actual contemporaneous wording is **not recoverable** from the public
+  record. The cited correction commits show what changed, not what an adversary
+  originally wrote.
+- Every round-2 finding block above is also a later reconstruction. Its actual
+  contemporaneous wording is **not recoverable** from the three commits and
+  their diffs. The block may be used as a dated reconstruction, never as proof of
+  preregistration.
+- The round-3 external findings were authored contemporaneously on 2026-08-21
+  against `981c83dab4426509f58f4e6ecea06a9158333cbd`. They were appended to this
+  repository later in commit `39b9003f581d92ed18343fe69e988b42dbda6aae`;
+  that later commit date must not be mistaken for the pass date.
+
+This file is append-only from its first commit. Later rounds and corrections
+append with their own dates. No entry is edited or overwritten. If a finding or
+provenance claim is disputed, the recourse is another appended dissent.
+
+Warrant remains asymmetric: an independent **external resolution** carries the
+stronger warrant; an **author resolution** carries the weaker warrant and cannot
+grant structural clearance or ratify any human-owned authority or storage ruling.
