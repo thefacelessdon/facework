@@ -256,10 +256,12 @@ P0-6 boundary: the shape is specified; the bindings remain proposed.
 
 ### 3.1 Reading the matrix
 
-The matrix is the single home for `kind → mode → channel → enforcer → required
-payload`. A record authors only `operation.kind` and its payload; it does **not** author
-`mode`, `channel`, or `enforcer`. Those values derive from the matching row. An
-unknown kind, a duplicate kind, or any authored authority field is invalid.
+The subject-operation registry in §3.2 is the single home for `kind → mode →
+channel → enforcer → required payload`. A record authors only `operation.kind`
+and its payload; it does **not** author `mode`, `channel`, or `enforcer`. Those
+values derive from the matching row. An unknown kind, a duplicate kind, or any
+authored authority field is invalid. Carrier-maintenance actions are not subject
+operations; their separate grammar and authority boundary live only in §3.3.
 
 **Channel** is the sovereignty axis:
 
@@ -278,7 +280,7 @@ unknown kind, a duplicate kind, or any authored authority field is invalid.
   not execute automatically.
 - **No gate by design** — diagnostic or emergent; authority fields are forbidden.
 
-### 3.2 Proposed registry — single home
+### 3.2 Proposed subject-operation registry — single home
 
 Payload keys marked with `+` are required. `consent_ref` resolves to the consent
 record grammar in §5.3; `target` names the tenant and surface. Repository quality
@@ -316,18 +318,27 @@ rules. `draft-message` is not sending; sending is operation 19.
 
 A diagnostic operation returns findings and changes **no state**, including the
 Operating Harness record. There is no evidence-store carve-out. A separate
-carrier-maintenance action, `record-transition`, writes the result into the
-record with `from`, `to`, `actor`, `at`, and `result_ref`. It is not a subject
-operation and cannot be used to claim the subject changed. Until the validator
-exists, `record-transition` is **unwired** and every transition is authoring-layer
-evidence rather than an enforced fact.
+carrier-maintenance action records what happened to the carrier:
+
+| Carrier action | Regime | Channel | Required payload | Enforcer | Gate status |
+|---|---|---|---|---|---|
+| `record-transition` | `carrier-write` — not an `AuthorityMode` | `internal` | `+record_path`, `+from`, `+to`, `+actor`, `+at`, `+result_ref` | `harness-record-validator` | **Unwired** — executable absent |
+
+`transition.action` must be `record-transition`. The action may write only the
+record identified by `record_path`, and only to carry the transition payload and
+the state shape required by §5.3. It is not a subject operation and cannot be
+used to claim the subject changed. Until the validator exists, every transition
+is authoring-layer evidence rather than an enforced fact. The §3.4 tally counts
+the 21 proposed subject operations only; this carrier action is separately
+declared unwired here.
 
 This split is the N8 boundary: diagnosis reads; recording records; neither name
 can launder the other.
 
-**When an operation does not clearly fit a kind, it is not run.** An unlisted
-operation requires a registry revision and human ruling first. Because this map
-is still proposed, none of its entries may be treated as bound authority.
+**When a subject operation does not clearly fit a kind, it is not run.** An
+unlisted subject operation requires a registry revision and human ruling first.
+Because this map is still proposed, none of its entries may be treated as bound
+authority.
 
 ### 3.4 Enforcement tally — stated, not implied
 
@@ -476,6 +487,8 @@ review:
   decision: confirmed
   at: 2026-08-21T00:40:00-05:00
 transition:
+  action: record-transition
+  record_path: operating/node-alpha/2026-08-21-001-first-worked-flow.md
   from: artifact-proposed
   to: authority-checked
   actor: operator
@@ -524,9 +537,11 @@ draft does not claim the second set can be proved by a file validator.
 
 #### State matrix
 
-`Common` means the fields in rule 1 plus `transition`. The first transition uses
-`from: null`; later transitions name the immediately prior state. `Context` is a
-snapshot reference, not copied node-state prose: `{repository, path, blob}`.
+`Common` means the fields in rule 1 plus `transition`, whose `action` is
+`record-transition` and whose `record_path` resolves to the record being checked.
+The first transition uses `from: null`; later transitions name the immediately
+prior state. `Context` is a snapshot reference, not copied node-state prose:
+`{repository, path, blob}`.
 
 | State | Required beyond Common | Forbidden |
 |---|---|---|
@@ -535,15 +550,17 @@ snapshot reference, not copied node-state prose: `{repository, path, blob}`.
 | `options-generated` | `context`, `allocation`; non-empty Constraints and Options tables | `operation`, `proposal`, `authority_check`, `gate`, `review`, `outcome`, `back_links` |
 | `tableau-reviewed` | prior fields; non-empty Tableau review | `operation`, `proposal`, `authority_check`, `gate`, `review`, `outcome`, `back_links` |
 | `artifact-proposed` | prior fields; `operation`; `proposal.option_id`; complete `operation.payload` | `authority_check`, `gate`, `review`, `outcome`, `back_links` |
-| `authority-checked` | prior fields; `authority_check.status: settled`; mode-specific authority shape below | `outcome`, `back_links` |
+| `authority-checked` | prior fields; mode-specific `authority_check.status` and authority shape below | `outcome`, `back_links` |
 | `evidence-recorded` | prior fields; one terminal variant below | fields forbidden by that variant |
 
 Mode-specific authority shapes:
 
-- `ship-gate`: `gate.verdict: pass | watch | refuse`; no `review`.
-- `runtime-active`: `review.decision: confirmed | rejected | deferred`; no
-  authored gate. `deferred` may remain `authority-checked` but is not terminal.
-- `diagnostic` or `emergent`: `authority_check.result: not-applicable`; no `gate`
+- `ship-gate`: `authority_check.status: settled` and
+  `gate.verdict: pass | watch | refuse`; no `review`.
+- `runtime-active`: `authority_check.status: settled` and
+  `review.decision: confirmed | rejected | deferred`; no authored gate.
+  `deferred` may remain `authority-checked` but is not terminal.
+- `diagnostic` or `emergent`: `authority_check.status: not-applicable`; no `gate`
   and no `review`.
 
 Terminal variants:
@@ -552,8 +569,10 @@ Terminal variants:
   `confirmed`; requires non-empty `back_links`.
 - `refused`: only `ship-gate` with `refuse`, or `runtime-active` with `rejected`;
   requires `refusal_reason`; backlinks optional.
-- `narrated`: only `diagnostic` or `emergent`; requires non-empty `back_links` and
-  carries no `gate` or `review`.
+- `narrated`: only `diagnostic` or `emergent`; requires non-empty `back_links` to
+  the exact input bytes examined or to a separate narration artifact produced by
+  the operation, and carries no `gate` or `review`. A pure read cites its inputs;
+  the terminal record is the closing artifact and does not self-hash.
 
 #### Authoring-layer invariants
 
@@ -831,7 +850,7 @@ falsification**.
 
 | Finding | Draft response | Where addressed | What remains for the adversary |
 |---|---|---|---|
-| **P0-1** — a concept with no single home | §3.2 is the single operation registry. Constraints, Options, context snapshot, proposal payload, and backlinks each have one named home. References resolve by id. | §3.2, §5.3 rules 4/8, §5.4 | Challenge whether body rationale silently duplicates payload or context. |
+| **P0-1** — a concept with no single home | §3.2 is the single subject-operation registry; §3.3 is the single carrier-action grammar. Constraints, Options, context snapshot, proposal payload, and backlinks each have one named home. References resolve by id. | §3.2–§3.3, §5.3 rules 4/8, §5.4 | Challenge whether body rationale silently duplicates payload or context. |
 | **P0-2** — authored authority can lie | Records author only `operation.kind` and payload. Mode, channel, and enforcer derive from the registry; their keys are forbidden. Cross-tenant consent derives from kind. | §3.1–§3.2, §5.3 rules 2/5 | The registry is prose until a validator exists; prove no alternate field can bypass derivation. |
 | **P0-3** — pending and settled gates conflated | A full state matrix and three terminal variants now couple mode, decision, and outcome. `narrated` is representable; `deferred` is non-terminal. | §5.3 state matrix | Challenge every required/forbidden field combination and proposal retention. |
 | **P0-5** — read-only operation can gate | The evidence-store carve-out is removed. Diagnostics change no state; separate `record-transition` writes carrier history. Diagnostic/emergent authority shapes carry no gate or review. | §3.3, §5.3, §7 r1 | Challenge whether `record-transition` can still launder a diagnostic result into a subject-state claim. |
