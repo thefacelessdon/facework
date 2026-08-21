@@ -591,7 +591,7 @@ PASS entries remain unchanged above.
 
 **Date:** 2026-08-21
 **Ruling:**
-[`FW-DEC-009`](decisions/DECISION-009-operating-harness-v0-ratification.md)
+[`FW-DEC-010`](decisions/DECISION-010-operating-harness-v0-ratification.md)
 **Status:** ratified for v0; structurally cleared; unwired
 **Authority:** Harper — explicit direct ruling
 

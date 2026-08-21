@@ -1,5 +1,5 @@
 ---
-id: FW-DEC-009
+id: FW-DEC-010
 title: The Operating Harness carrier shape, authority bindings, and private-store posture are ratified for v0
 date: 2026-08-21
 status: resolved
@@ -7,7 +7,7 @@ authority: canonical
 ratified_by: Harper (harper@face.works) — explicit direct ruling, 2026-08-21
 ---
 
-# FW-DEC-009 — Operating Harness v0 ratification
+# FW-DEC-010 — Operating Harness v0 ratification
 
 ## Finding
 

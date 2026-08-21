@@ -15,7 +15,7 @@ qualified and stays out of the manifest schema and validator
 — append-only findings and resolution warrants; external exact-byte structural
 PASS recorded at `55cd1c4`
 **V0 ratification:**
-[`FW-DEC-009`](decisions/DECISION-009-operating-harness-v0-ratification.md) — 21
+[`FW-DEC-010`](decisions/DECISION-010-operating-harness-v0-ratification.md) — 21
 authority bindings, `single-writer` / `writer_id: harper`, independent private
 `personal/` repository, records under `personal/operating/`
 **Constraint set:** private — SignalThesis + canonical-language guide for
@@ -30,7 +30,7 @@ cited by path; lock date independently unverifiable.**
 > **Structurally cleared and ratified for v0; not built.** An independent exact-byte recheck
 > found no remaining P0 or P1 on spec blob
 > `7d5689956d0759c531b39208fae42d2631e322e2`; the external warrant is appended
-> in the findings record. FW-DEC-009 separately ratifies the authority and
+> in the findings record. FW-DEC-010 separately ratifies the authority and
 > storage choices. No validator or running automatic enforcer exists.
 
 ---
@@ -282,7 +282,7 @@ forced to invent candidate advances and a proposed act:
 selected the short observation path from the adversary's two proposed repairs;
 an independent exact-byte recheck cleared its representability grammar. The
 absent standalone validator still does not enforce it. It determines which
-record shapes are legal; FW-DEC-009 separately ratifies the v0 mode, channel,
+record shapes are legal; FW-DEC-010 separately ratifies the v0 mode, channel,
 enforcer, repository, directory, and writer choices. Neither fact creates a
 validator or running enforcer.
 
@@ -315,7 +315,7 @@ Two properties carried from v0.2.2's hard-won round 2:
 
 There was no closed source map to copy. The matrix below was authored from the
 private constraint set's capability domains and the four authority modes in
-§A.3, then structurally cleared by independent exact-byte review. **FW-DEC-009
+§A.3, then structurally cleared by independent exact-byte review. **FW-DEC-010
 ratifies all 21 bindings as the v0 authority registry.** Each operation now bears
 exactly the authority its row states. Ratification does not make an absent
 enforcer run: every `Unwired` row remains unable to claim automatic enforcement.
@@ -470,7 +470,7 @@ can launder the other.
 
 **When a subject operation does not clearly fit a kind, it is not run.** An
 unlisted subject operation requires a registry revision and human ruling first.
-The listed v0 entries are bound by FW-DEC-009; no unlisted kind inherits that
+The listed v0 entries are bound by FW-DEC-010; no unlisted kind inherits that
 authority.
 
 ### 3.4 Enforcement tally — stated, not implied
@@ -554,14 +554,14 @@ admissible store because records name real collaborators and carry their deal
 states; **N10** makes that a sovereignty constraint. The required property is
 private, diffable git history.
 
-**Concrete repository — ratified for v0, not initialized here.** FW-DEC-009
+**Concrete repository — ratified for v0, not initialized here.** FW-DEC-010
 ratifies `personal/` as its own access-controlled private git repository. It is
 not content of the public Facework repository even when its checkout is nested
 beneath that working directory. This session does not create or initialize it. A
 redacted index may later be published, but the records may not enter the public
 canon repo.
 
-**Record directory — ratified for v0, not created here.** FW-DEC-009 ratifies
+**Record directory — ratified for v0, not created here.** FW-DEC-010 ratifies
 `personal/operating/` from the public checkout's view, which is `operating/` from
 the independent private repository root. **This spec creates no directory.** The
 v0 convention is:
@@ -600,7 +600,7 @@ repositories:
 
 Paths are local checkout paths and stay in the private store. A missing slug or
 missing checkout makes the reference unverifiable; the validator refuses it.
-FW-DEC-009 ratifies the first implementation as **single-writer for the entire
+FW-DEC-010 ratifies the first implementation as **single-writer for the entire
 store**, with `writer_id: harper`: only that identity may perform
 `record-transition`; every parallel session is read-only.
 `transition.actor` must equal `writer_id`. A writer handoff requires a clean,
@@ -1244,7 +1244,7 @@ preserves every REFUSE, WATCH, author response, and the final independent
 exact-byte **STRUCTURAL PASS** on spec blob
 `7d5689956d0759c531b39208fae42d2631e322e2`. Author resolutions remain weaker
 than external warrants. The structure is cleared; the authority bindings and
-storage choices are ratified for v0 by FW-DEC-009. That ruling does not change
+storage choices are ratified for v0 by FW-DEC-010. That ruling does not change
 the zero-enforcer status.
 
 | Finding | Structural response | Where addressed | Challenge exercised during falsification |
@@ -1261,7 +1261,7 @@ Additional draft-check results:
 - **P0-4:** no surface-agnostic claim is made; emission and cross-tenant rows
   require named target/payload shapes. The external exact-byte pass found no
   remaining P0 or P1.
-- **P0-6:** **closed by human ruling, not by falsification.** FW-DEC-009 ratifies
+- **P0-6:** **closed by human ruling, not by falsification.** FW-DEC-010 ratifies
   the 21 v0 bindings as written. Structural clearance did not and could not
   grant that authority.
 - **Enforcement:** zero rows are called enforced. Content-quality commands are no
