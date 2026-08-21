@@ -58,9 +58,21 @@ sense is enforced.**
 
 | Sense | Definition | Enforcement |
 |---|---|---|
-| **Runtime** — the agent loop | `PROTOCOL.md:892` — *"`harness` — the agent loop. For a multi-harness shell this classifies the shell itself; the loops it can bind go in `harness_options`"* | `facework.manifest.schema.json:371` `shell_sovereignty.harness → $defs/sovereigntyPosture`; `:374–384` `harness_options[]` with `harness` = *"Runtime label of the selectable agent loop (e.g. 'claude-code', 'goose')"*; `bin/validate-manifest:462–476` |
+| **Runtime** — the agent loop | `PROTOCOL.md` **§9.12** (line 940 at 0.0.71) — *"`harness` — the agent loop. For a multi-harness shell this classifies the shell itself; the loops it can bind go in `harness_options`"* | `facework.manifest.schema.json:371` `shell_sovereignty.harness → $defs/sovereigntyPosture`; `:374–384` `harness_options[]` with `harness` = *"Runtime label of the selectable agent loop (e.g. 'claude-code', 'goose')"*; `bin/validate-manifest:462–476` |
 | **Runtime, derived** — `HarnessBundle` | `PROTOCOL.md` §10 — *"the derived markdown view of the Runtime Ports"* for *"file-based harnesses"* | `bin/validate-manifest:899–923` (required bundle files, `boundary.md` non-empty at every evidence level, `skills/` contents); consumers `bin/harness-to-claude-code`, `bin/harness-to-berd` |
 | **Carrier** — `OperatingHarness` | *"Typed carrier for operating intent — the canonical instance in the Operational layer of the Practice. Parallel to Design Harness; different subject."* (`personal/define/canonical-language.md` §A) | **none in this repo.** `grep -rn "OperatingHarness\|Operating Harness"` over the tracked tree returns **zero** hits as of this ruling |
+
+**Citation form — section anchors govern, line numbers are advisory.** Every
+`PROTOCOL.md` reference above is anchored to its **section**, and that is
+deliberate. The first draft of this record cited `PROTOCOL.md:892`, verified
+correct against 0.0.68 — and the number went stale the moment this branch rebased
+onto 0.0.70, which inserted 48 lines upstream of it (§6.1, §9.7.1) and pushed the
+sentence to 940. The citation was true when written and false when read, with no
+edit in between. This is exactly the drift class 0.0.70's own §6.1 pre-gate check
+names, and **rebase is a vector that check does not cover**: nothing in the diff
+of either commit touched the other's content. A section anchor survives insertion;
+a line number does not. In a permanent record, cite the section and treat the line
+as a convenience that expires.
 
 The two are not near-synonyms that drifted. They are **different metaphors**:
 sense 1 is *the apparatus that runs the work* (a harness you put a horse in);
