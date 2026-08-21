@@ -378,3 +378,74 @@ One P0 remains unchanged. `score-allocation` and `critique-option` require `opti
 No structural clearance is granted. The 21 authority bindings, directory, private repository, and every other human-owned choice remain RECOMMENDED/open.
 
 ---
+
+## Structural recheck — external WATCH
+
+**Date:** 2026-08-21
+**Reviewed HEAD:** `07d36922e9ead8dfec4d41bdeded3a08242e16ce`
+**Required short identity:** `07d3692d`
+**Reviewed file:** `methodology/operating-harness-spec.md` in the attached
+`harness-carrier-adversary-r4` worktree only
+**Spec blob:** `08b454c8b8ecf03dbc32c081298459fa0f2b3d2d`
+**Latest spec-changing commit:** `1730df3502b9a34bfd47be7f43a45416c89ed018`
+**Structural verdict:** WATCH
+**Sovereignty verdict:** NOT RULED
+**Warrant:** external — stronger
+
+The reviewed worktree was clean; the HEAD tree blob and working-file hash
+matched. The prior external verdict present at the reviewed HEAD inspected
+`33bf279751c8e2d008a377a7cf1434918942b6eb`, not the current spec. It is stale,
+non-closing evidence. Its findings were rechecked against the current blob; its
+REFUSE verdict does not transfer to these bytes.
+
+No P0 remains on the reviewed bytes. Three P1 findings remain, so the structural
+verdict is WATCH, not PASS.
+
+### Remaining findings
+
+1. **P1-1 — Canonical serialization is absent.** Consent has semantic fields
+   and chronology but no file encoding, key order, normalization, or byte
+   serialization. Markdown sections and cells have semantics but no escaping or
+   deterministic serialization for table cells and arrays. Exact blob identity
+   makes that byte ambiguity material.
+2. **P1-2 — Authority evidence and frontmatter remain under-specified.** The
+   grammar does not close the complete frontmatter key set against unknown
+   keys. Gate/review decisions lack a normative typed evidence reference,
+   receipt, or blob provenance; the example is not a normative authority-
+   evidence grammar.
+3. **P1-3 — `refusal_reason` coverage remains incomplete.** The field is not
+   forbidden in every non-refused state and terminal variant, and the refused
+   variant gives it no value type.
+
+### Closed on the reviewed bytes
+
+- Round 2 P0-7: qualified OperatingHarness discriminator and standalone
+  namespace.
+- Round 2 P1-1: prior-field immutability is explicitly authoring-layer.
+- Round 2 P1-2: transition value and local coupling rules.
+- Round 2 P1-3: consent tenant/scope and execution-time chronology; execution is
+  immutable once introduced.
+- Round 2 P1-4: closed payload shapes and unique references. This does not close
+  the separate serialization finding above.
+- Round 2 P1-5: FW-DEC-006 locus/failing-term/base-rate payload.
+- Round 2 P1-6: structurally explicit single-writer policy and handoff. This is
+  not ratification of a writer identity.
+- Round 3 P0-A: legal observation path and narrated terminal.
+- Round 3 P1-A: `record-transition` explicitly records but does not authorize or
+  verify.
+- Round 3 P1-B: authored review artifacts and derived review indexes use
+  separate roots.
+- Round 3 P1-C: absence of a protected append-only store is honestly stated.
+- Round 3 P1-D: four-status vocabulary and exact tally.
+- Round 3 P1-E: local vocabulary extensions and public audit provenance.
+- Round 3 P1-F: the append-only findings artifact exists; its reconstruction
+  disclosure means rounds 1–2 cannot prove preregistration.
+- The stale verdict's P0-1 and P0-2 are closed by the current namespace and
+  execution-time consent rules.
+- The stale verdict's P1-4 is closed by the FW-DEC-006 payload.
+
+### Sovereignty disposition
+
+This WATCH does not ratify any of the 21 proposed authority bindings, the
+directory recommendation, the concrete repository choice, or the writer
+identity. Those human-owned choices remain RECOMMENDED/open.
