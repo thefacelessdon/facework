@@ -313,3 +313,52 @@ RECOMMENDED/open for the human
   entry cannot grant structural clearance. It does not ratify the 21 authority
   bindings or decide the directory, concurrency, or private-repository choices;
   those remain RECOMMENDED/open for the human.
+
+---
+
+## Round-three closure check — external findings
+
+**Date:** 2026-08-21
+**Reviewed snapshot:** `3bb693e3a0098005a9b3571e4992b601f4b02fd0`
+**Correction range:** `1c3e08e7db09b159b5368c1c43107bcb2879bc2c..3bb693e3a0098005a9b3571e4992b601f4b02fd0`
+**Structural verdict:** REFUSE
+**Authority/storage verdict:** NOT RULED — the 21 authority bindings, concrete
+private repository, and directory remain RECOMMENDED/open for the human
+**Warrant:** external — stronger
+
+1. **P0 — Two diagnostic operations remain structurally impossible.** In the
+   reviewed snapshot, `score-allocation` requires `option_ids` and
+   `critique-option` requires `option_id`; referential-integrity rule 4 requires
+   those ids to resolve to Options-table rows. The observation-path
+   `context-bound` shape simultaneously requires Options and the other
+   proposal-path sections to be empty and forbids entry into proposal-path
+   states. Those two operations therefore have no valid observation-path
+   record. They need a typed external/options-snapshot reference or another
+   legal read-only context source; rule 4 must not be relaxed.
+2. **P1-1 — The exact delta fails `git diff --check`.** The new findings
+   artifact contains trailing whitespace and a new blank line at EOF in the
+   reviewed range.
+3. **P1-2 — FW-DEC-007 citation remains broken.** The reviewed snapshot does
+   not contain the decision file and does not descend from canonical commit
+   `2b299f9`. It must be rebased or stacked onto the existing ruling, not copy
+   or recreate it.
+4. **P1-3 — Parsed structures lack canonical serialization.** Consent files and
+   array-valued Markdown table cells still lack deterministic serialization and
+   escaping rules.
+5. **P1-4 — Authority evidence and frontmatter remain under-specified.** The
+   reviewed grammar does not require typed reviewer identity/time or gate
+   evidence/version/time, and it does not reject every unknown frontmatter key.
+6. **P1-5 — Terminal-field exclusions remain incomplete.** `refusal_reason` is
+   not fully typed, forbidden in nonterminal states, or forbidden for committed
+   and narrated terminals.
+
+### Round-three closure disposition
+
+- Round three is **not resolved** by this entry. No structural clearance is
+  recorded. Any later author response carries weaker warrant until an
+  independent pass checks its exact commit.
+- The external pass reports that the other round-three corrections held in the
+  reviewed snapshot; that accounting does not close the surviving P0/P1 set
+  above.
+- The authority bindings and storage choices remain RECOMMENDED/open for the
+  human. This structural record neither accepts nor rejects them.
