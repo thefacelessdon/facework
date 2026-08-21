@@ -104,9 +104,9 @@ Facework/
 ├── facework.manifest.schema.json  ← JSON Schema for manifest validation
 ├── theories/                      ← Theory + Discipline + the Coherence OS
 ├── methodology/                   ← build system: retros, decisions, changelog, archive
-├── skills/                        ← 12 protocol + 8 Posture + system-loop skills
+├── skills/                        ← 12 protocol + 8 Posture + system-loop + diagnostic skills
 ├── agents/                        ← 9 paired specialist agents
-├── .agents/agents/                ← 3 Berd personas — discovered on clone
+├── .agents/agents/                ← 4 Berd personas — discovered on clone
 ├── visual-system/                 ← FVS/FVI/FVA/FVR/FVP identity spec (Implementation layer)
 ├── standards/                     ← deferred post-1.0 track — NOT canonical
 ├── examples/face.works/           ← reference output from a completed run (NOT the active project)
@@ -125,14 +125,22 @@ Facework/
   the methodology itself; neither phase primitive nor Posture.
 - **The 12 primitives adopted as live stances are not a ninth–twentieth Posture.**
   See *The two-layer check* below and `DECISION-008`.
+- **Diagnostic skills** (`fw-spectrum`) — a fourth class: read-only instrument
+  readers. `/fw-spectrum` runs one detector from
+  `theories/coherence-instrumentation.md` per invocation and emits a locus, never
+  a score. It changes no state, so it is not a Posture, and it reads what the
+  phases already produce, so it is not a phase (§VIII: "the detector set is not a
+  new phase").
 - **9 specialist agents** in `agents/`, one paired to each operating skill.
-- **3 Berd personas** in `.agents/agents/`, with non-overlapping authority —
+- **4 Berd personas** in `.agents/agents/`, with non-overlapping authority —
   `protocol-operator` (runs one `/fw-*` phase against a tenant repo; cannot edit
   canon), `canon-keeper` (edits this repo's canon; cannot run the protocol), and
   `adversary` (checks claims against their support — the H-track's
   pre-registration rules, and canon assertions that nothing enforces; finds but
-  never edits). A persona is the identity a whole session runs as — a different
-  thing from the subagents in `agents/` that a session spawns.
+  never edits), and `instrument-reader` (takes coherence readings — one band per
+  invocation, refuses a reading whose instrument is not coupled to the force it
+  names; reads but never writes). A persona is the identity a whole session runs
+  as — a different thing from the subagents in `agents/` that a session spawns.
 
 Two roots, and only one of them is discovered. `skills/` and `agents/` are repo
 artifacts — **not** auto-discovered by Berd or goose, which read their own global
