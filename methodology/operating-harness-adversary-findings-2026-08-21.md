@@ -266,3 +266,50 @@ grant structural clearance or ratify any human-owned authority or storage ruling
   independent pass checks the exact corrected commit. The 21 authority bindings
   and the directory, concurrency, and private-repository choices remain
   RECOMMENDED/open.
+
+---
+
+## Delta-only closure check — external findings
+
+**Date:** 2026-08-21
+**Reviewed snapshot:** `1c3e08e7db09b159b5368c1c43107bcb2879bc2c`
+**Correction range:** `33bf279751c8e2d008a377a7cf1434918942b6eb..1c3e08e7db09b159b5368c1c43107bcb2879bc2c`
+**Structural verdict:** REFUSE
+**Authority-matrix verdict:** NOT RATIFIED — all 21 bindings remain
+RECOMMENDED/open for the human
+**Warrant:** external — stronger
+
+1. **P0 — Consent still checks carrier-write time.** The reviewed snapshot tests
+   consent against `transition.at`, which timestamps the carrier mutation rather
+   than the external subject operation. A valid record therefore requires an
+   immutable subject-execution timestamp or receipt, and consent chronology must
+   be checked against that instant.
+2. **P1-1 — FW-DEC-007 citation unresolved.** The reviewed branch does not
+   descend from canonical commit `2b299f9`, so the cited decision file is absent
+   even though the prose follows its ruling. The branch must be rebased or
+   stacked onto the existing decision; the ruling must not be copied.
+3. **P1-2 — Parsed structures lack canonical serialization.** Consent and body
+   table values cannot be deterministically parsed without byte-level rules for
+   their file format, arrays, and escaping.
+4. **P1-3 — Authority evidence and frontmatter remain open-ended.** A record can
+   claim confirmation without typed reviewer/gate provenance, and unknown
+   frontmatter keys remain representable.
+5. **P1-4 — Terminal exclusions remain incomplete.** `refusal_reason` is not
+   fully typed or forbidden outside the refused terminal variant.
+
+### Delta-only closure resolution entries
+
+- No structural clearance is recorded. The external REFUSE above is the
+  stronger warrant until another independent pass checks the corrected exact
+  commit.
+- **2026-08-21 — author resolution, weaker warrant.** Rebased carrier commit
+  `2fbfc9ad37210e0bec59befc8d9178ce4a36bb09` carries the agent-resolvable
+  grammar corrections: consent is checked against immutable `execution.at`;
+  consent and Markdown table serialization are normative; gate and review
+  evidence are typed; frontmatter is closed-world; and `refusal_reason` is
+  non-empty and confined to the refused terminal. The branch now descends from
+  canonical FW-DEC-007 commit `2b299f906a5f85678e11f64f7a9b52a9b569de48`,
+  so the governing citation resolves without copying the ruling. This author
+  entry cannot grant structural clearance. It does not ratify the 21 authority
+  bindings or decide the directory, concurrency, or private-repository choices;
+  those remain RECOMMENDED/open for the human.
