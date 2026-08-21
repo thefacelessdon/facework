@@ -514,3 +514,30 @@ Structural PASS is refused because a P0 remains:
 Therefore both registered diagnostic operations remain structurally impossible. This is the same unresolved short-observation-lifecycle defect recorded earlier; later prose claiming the observation lifecycle structurally answered does not make the grammar satisfiable.
 
 Authority/storage verdict: NOT RULED. This review does not ratify the 21 authority bindings, directory, repository, writer identity, or any storage choice.
+
+### Exact-byte lifecycle REFUSE — author resolution entry
+
+**Date:** 2026-08-21
+**Correction commit:** `ba5709b2f5510311c63153ead6298e7de29678cf`
+**Corrected spec blob:** `7d5689956d0759c531b39208fae42d2631e322e2`
+**Warrant:** author resolution — weaker
+**Disposition:** pending independent exact-byte recheck; no structural PASS claimed
+
+The correction addresses only the surviving P0 above. `score-allocation` and
+`critique-option` now require one typed `options_snapshot_ref` identifying exact
+bytes of a proposal-path Operating Harness record with a non-empty Options table.
+Their `option_ids` or `option_id` resolve inside that cited table under the
+unchanged no-free-reference requirement; the observation record's local Options
+table remains empty. The snapshot triple is repeated as a terminal backlink, and
+blob/path mismatch is refused.
+
+Both operations remain `diagnostic`. They read only the blob-identified snapshot,
+return a diagnostic value, and cannot modify the cited record, its path, the
+observation record's subject, or external state. The short observation lifecycle,
+payload grammar, state matrix, validation rules, body ownership rule, and example
+now carry the same distinction between external snapshot input and local Options.
+
+This author entry does not supersede the external REFUSE or grant structural
+clearance. It does not ratify the 21 authority bindings or decide the directory,
+repository, writer identity, or any other human-owned storage choice; those remain
+RECOMMENDED/open.
