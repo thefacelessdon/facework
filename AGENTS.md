@@ -117,7 +117,8 @@ Facework/
 
 ### Skills and agents
 
-- **12 protocol skills** (`skills/fw-*`) — one per phase primitive.
+- **12 protocol skills** — one per phase primitive. The `/fw-*` namespace also
+  contains the diagnostic `/fw-spectrum`; the namespace is no longer a class.
 - **8 Postures** (`decision-log`, `evidence-debug`, `contract-sync`, `mvp-cut`,
   `beta-hardening`, `scale-readiness`, `launch-ops`, `weekly-upgrade`) — product-loop
   modes that cut across phases. See `skills/OPERATING_SKILLS.md`.
@@ -145,7 +146,7 @@ Facework/
 Two roots, and only one of them is discovered. `skills/` and `agents/` are repo
 artifacts — **not** auto-discovered by Berd or goose, which read their own global
 roots. **`.agents/agents/` is the exception:** Berd discovers project-local
-personas there, so cloning this repo puts both personas in the operator's picker
+personas there, so cloning this repo puts all four personas in the operator's picker
 with no install step. `git clone` is therefore the distribution channel, and
 `bin/fw-berd-launch --agent <path>` takes one by path. Blanket-ignoring
 `.agents/` had hidden that channel until 0.0.67.

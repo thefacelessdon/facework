@@ -161,7 +161,11 @@ score. Coherence has no absolute zero; it has drift, trend, and delta.
 - **Instrument:** An **ammeter** — trace a representative unit of work end to end
   and measure resistance: how many decisions get relitigated, how many handoffs
   lose context, how much rework precedes a shipped artifact. Flow is inversely
-  proportional to accumulated resistance.
+  proportional to accumulated resistance. **Declare the work path before the
+  reading** — representative unit, committed intent, and the point where usable
+  output completes the loop. Every resistance event inside that boundary belongs
+  to Flow and MUST NOT also be counted as Entropy in the same integrated reading
+  (FW-DEC-009).
 - **Reading:** *Throughput against resistance.* High Flow = energy moves from
   thought to expression with low resistance. Low Flow = high drag, energy
   dissipates as heat (rework) before it reaches expression.
@@ -204,9 +208,14 @@ score. Coherence has no absolute zero; it has drift, trend, and delta.
   the difference between energy the community puts in and value the community gets
   back.
 - **Instrument:** A **calorimeter** — measure the heat. Where is energy being
-  spent that produces no coherence? Relitigated decisions, context lost across
-  handoffs, activity scaling faster than alignment, value flowing out of the
-  source community. The theory's own tell: *friction reveals imbalance; entropy is
+  spent that produces no coherence? Activity scaling faster than alignment and
+  value flowing out of the source community are direct sites. Relitigated
+  decisions, context lost across handoffs, and rework belong here only when the
+  specific event sits **outside** the work path declared for the ammeter. An event
+  inside that path is Flow resistance and MUST NOT also be counted as Entropy in
+  the same integrated reading. If the evidence cannot place an event on one side
+  of the boundary, withhold the composite rather than count it twice
+  (FW-DEC-009). The theory's own tell: *friction reveals imbalance; entropy is
   signal.* The calorimeter is how you read that signal instead of just feeling the
   burn.
 - **Reading:** *Waste-heat fraction.* Low Entropy = most energy does work. High

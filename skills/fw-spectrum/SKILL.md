@@ -36,6 +36,8 @@ Source of truth for every instrument below: `theories/coherence-instrumentation.
 Source of truth for locus, base rates and the equation's known instability:
 `methodology/coherence-tracker.md` and
 `methodology/decisions/DECISION-006-coherence-autopsy-locus-over-score.md`.
+Source of truth for the Flow/Entropy measurement boundary:
+`methodology/decisions/DECISION-009-flow-entropy-measurement-boundary.md`.
 
 ## What this is not
 
@@ -206,6 +208,7 @@ SHAPE       trend | delta | comparison | BASELINE
 COUPLING    coupled | NO READING (+ what would produce one)
 CONTROL     <instrument outside the band> → null held | SPIKED (+ where the energy is)
 READING     <direction>, <the two ends it is measured between>
+BOUNDARY    n/a | <work unit, committed intent, loop-complete endpoint, event assignments>
 LOCUS       <layer> — <proximate mechanism, one sentence>
 TERM        Flow | Resonance | Entropy
 WEIGHT      WEAK (modal) | STRONG | UNPRECEDENTED — base rate <n>/7
@@ -302,6 +305,10 @@ Each card is what you actually execute. `Refuse if` is binding.
   **one representative unit of work** end to end and count: decisions
   relitigated, handoffs that lost context, rework preceding the shipped artifact.
   Flow is inversely proportional to accumulated resistance.
+- **Declare the FW-DEC-009 boundary before reading.** Name the work unit, the
+  point where intent was committed, and the point where usable output completed
+  the loop. Every resistance event inside that boundary belongs to Flow and may
+  not also raise Entropy in a later integration.
 - **Name your selection rule before you trace.** "Representative" is unspecified
   in the source, so selection bias is this instrument's live failure mode. State
   how you picked the unit and what you excluded, or the reading is not auditable.
@@ -316,8 +323,9 @@ Each card is what you actually execute. `Refuse if` is binding.
   volume with high resistance is a shorted circuit — running hot, delivering
   nothing.
 - **Default control:** the spectrometer (band 1). Expect null.
-- **Refuse if:** you cannot trace a specific unit of work end to end, or the only
-  available evidence is throughput counts.
+- **Refuse if:** you cannot trace a specific unit of work end to end, cannot
+  declare both boundary points, or the only available evidence is throughput
+  counts.
 
 ## 4. Resonance — the standing-wave meter
 
@@ -344,19 +352,17 @@ Each card is what you actually execute. `Refuse if` is binding.
 
 - **Absorbs:** energy leaving the system as waste heat rather than doing work —
   the gap between what the community puts in and what it gets back.
-- **Procedure:** find where energy is spent and produces no coherence. Four
-  sites named by the source: relitigated decisions, context lost across handoffs,
-  activity scaling faster than alignment, value flowing out of the source
-  community.
-- **Partition rule — mandatory.** Two of those four sites (relitigated decisions,
-  context lost across handoffs) are also the ammeter's observables. Two
-  instruments cannot both be coupled to the same observable and read distinct
-  forces (§II.1) — and because Entropy sits in the denominator while Flow sits in
-  the numerator, double-counting one observable moves the composite twice in the
-  same direction. So: **assign each observed site to exactly one instrument, in
-  writing, before reading.** Default partition — cost *inside* the path from
-  intent to output is Flow; energy spent *outside* that path, producing nothing,
-  is Entropy. State the partition you used.
+- **Procedure:** find where energy is spent and produces no coherence. The source
+  names activity scaling faster than alignment and value flowing out of the
+  source community as direct sites. Relitigation, context loss, and rework count
+  here only when the specific event sits outside the declared Flow path.
+- **Partition rule — mandatory and canonical (FW-DEC-009).** Declare one
+  representative unit of work, committed intent, and the point where usable
+  output completes the loop **before** reading. A specific relitigation,
+  context-loss, or rework event *inside* that path belongs to Flow. Waste
+  *outside* that path belongs to Entropy. Assign each observed event to exactly
+  one instrument in writing. If the evidence cannot place it, withhold the
+  composite; do not split it, count it twice, or choose the more convenient term.
 - **Reading — reduced form.** The source specifies a *waste-heat fraction*. A
   fraction needs a denominator (total energy) that no instrument in the set
   reads. Report **which sites are hot, and hotter or cooler than the comparison
@@ -431,7 +437,7 @@ Honest state of the seven, against
 | 3 | Ammeter | **Callable** | "Representative unit of work" is unspecified — mitigated by requiring a stated selection rule. |
 | 7 | Ownership trace | **Callable** | None. Most concrete of the seven; the only one with a natural unit. |
 | 4 | Standing-wave meter | **Reduced** | Specified as a *ratio*; no unit is defined for energy emitted or returned. Runs as a directional presence read. |
-| 5 | Calorimeter | **Reduced** | Specified as a *fraction* with no denominator; and two of its four observables are also the ammeter's, which violates §II.1 until partitioned. |
+| 5 | Calorimeter | **Reduced** | Specified as a *fraction* with no denominator. FW-DEC-009 resolves the observable overlap by a mandatory work-path boundary. |
 | 6 | Load test | **Out of scope here** | The specified method is interventional. A read-only diagnostic can only read past load — a different instrument. |
 | 2 | Resonance probe | **Not callable without primary data** | Absorbs a human reaction. No sample size, no stimulus rule, no operational definition of "registers as theirs." Every available proxy is its own wrong-instrument error. |
 | — | Budget meter (§V) | **Structural only** | Requires "the system's actual energy"; no detector in the set reads energy. |
