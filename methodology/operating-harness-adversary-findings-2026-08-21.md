@@ -449,3 +449,19 @@ verdict is WATCH, not PASS.
 This WATCH does not ratify any of the 21 proposed authority bindings, the
 directory recommendation, the concrete repository choice, or the writer
 identity. Those human-owned choices remain RECOMMENDED/open.
+
+EXTERNAL STRUCTURAL RECHECK — REFUSE
+
+Verified review object:
+HEAD = fbf239ec9ab40c71acf1178dbf97120e017eff6e
+HEAD:methodology/operating-harness-spec.md = dacb919e935622161ce4ea5a865c430b79852ff2
+
+The exact spec bytes were reviewed against every unresolved P0 and P1 in methodology/operating-harness-adversary-findings-2026-08-21.md. Structural clearance is refused because two P1 defects remain:
+
+1. P1 — Canonical serialization is still not canonical. Spec lines 638-643 call the grammar Canonical serialization but explicitly perform no Unicode normalization and make YAML mapping order non-semantic. Lines 645-662 permit YAML generally, including multiple key orders, indentation/flow styles, and quoting forms for the same consent object. Lines 664-671 fix headers, array cells, and two escapes but do not fix cell padding or a complete byte-generation/decoding algorithm. Multiple byte strings therefore represent the same parsed artifact. This does not close final-recheck P1-1 / delta P1-2.
+
+2. P1 — Consent chronology still lacks a comparable-instant grammar. Spec lines 704-714 require granted_at and expires_at only as ISO-8601, while execution.at explicitly requires an offset. ISO-8601 permits date-only and offset-free local values, so the required comparison granted_at <= execution.at < expires_at is undefined for otherwise admitted consent values. The example at lines 645-658 does not override the broader normative rule. Require offsets for all three instants and define comparison on normalized instants.
+
+The namespace, observation lifecycle, authority derivation, transition coupling, payload closure, FW-DEC-006 shape, single-writer restriction, review/gate provenance, closed-world frontmatter, refusal_reason confinement, review-root separation, honest append-only status, and enforcement-vocabulary provenance are structurally answered on these bytes.
+
+Authority verdict: NOT RATIFIED. This review does not ratify the 21 authority bindings, directory, repository, or writer choice.
