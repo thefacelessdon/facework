@@ -7,6 +7,16 @@ fires on a closing signal (drift → `/contract-sync`, broken behavior →
 `/evidence-debug`, growth pressure → `/scale-readiness`). See
 `methodology/loop-model.md` and CONSTITUTION.md Article V.
 
+**"Posture" means these eight and nothing else.** The 12 primitives adopted as
+live per-action stances — the trigger-question discipline in `AGENTS.md`
+*The two-layer check* — are **not** Postures: they *establish* coherence, which is
+Article V's other half. GAMUT's `.claude/rules/75-collaboration-postures.md` calls
+them "collaboration-postures"; that is a Rule-75 term and does not import.
+`sovereigntyPosture` (own/rent/mitigate) and `data_posture`
+(retention/training/residency) in `facework.manifest.schema.json` are two further,
+schema-enforced senses. Ruling and full sense map:
+`methodology/decisions/DECISION-008-posture-is-a-constitutional-term.md`.
+
 ## Added Skills
 - `/mvp-cut` - Define the smallest high-integrity MVP slice.
 - `/beta-hardening` - Harden MVP into beta reliability and observability.

@@ -62,8 +62,10 @@ Next.js site that publishes the protocol at face.works.
 | **Implementation** — Skills, Artifacts | `skills/`, `agents/`, `visual-system/` |
 | **Runtime** | out of scope — Facework declares, it does not implement |
 
-The Protocol establishes coherence; **Postures** maintain it. Background:
-`methodology/architecture-reconciliation-2026-06.md`.
+The Protocol establishes coherence; **Postures** maintain it — that split is
+CONSTITUTION.md Article V, and it is why "Posture" names the 8 standing operating
+modes and nothing else (`methodology/decisions/DECISION-008-posture-is-a-constitutional-term.md`).
+Background: `methodology/architecture-reconciliation-2026-06.md`.
 
 The governing equation is `Coherence = (Flow × Resonance) / (1 + Entropy)`. The
 build sequence *is* that equation, executed in order.
@@ -121,6 +123,8 @@ Facework/
   modes that cut across phases. See `skills/OPERATING_SKILLS.md`.
 - **System-loop skills** (`runtime-validation-pass`) — a third class that evolves
   the methodology itself; neither phase primitive nor Posture.
+- **The 12 primitives adopted as live stances are not a ninth–twentieth Posture.**
+  See *The two-layer check* below and `DECISION-008`.
 - **9 specialist agents** in `agents/`, one paired to each operating skill.
 - **3 Berd personas** in `.agents/agents/`, with non-overlapping authority —
   `protocol-operator` (runs one `/fw-*` phase against a tenant repo; cannot edit
@@ -240,6 +244,71 @@ Validation** — operation or review by someone who is not the author.
 > releases are in `ROADMAP.md`). Ruling: `methodology/decisions/DECISION-003`.
 > The release record is the ROADMAP row; methodology evolution goes in
 > `methodology/retros/`; rulings go in `methodology/decisions/`.
+
+## The two-layer check — before any consequential action
+
+The 12 primitives are not only phases. In live work each is a **stance with a
+trigger question**, and the discipline is to name which question is load-bearing
+*right now*, then name the authority you actually hold. Imported from GAMUT
+`.claude/rules/75-collaboration-postures.md`, in force there since 2026-04-23.
+
+**These are not Postures.** "Posture" is a constitutional term with exactly one
+meaning — one of the 8 standing operating modes through which coherence is
+*maintained* after it is established (Article V, `skills/OPERATING_SKILLS.md`).
+The 12 below are the primitives *establishing* it, which is Article V's other
+half. Ruling: `methodology/decisions/DECISION-008-posture-is-a-constitutional-term.md`.
+
+### Layer 1 — which primitive is load-bearing?
+
+| Primitive | Trigger question | Characteristic action |
+|---|---|---|
+| Semantics | Does this word mean the same thing in their frame as in ours? | Name the delta; propose one canonical term. |
+| Field | Does this respect real status and incentive loops, or optimise on paper? | Surface the social physics; flag theater. |
+| Taste | Is this the load-bearing question, or a proxy for it? | Reframe to the real question. |
+| Current | Was this decided? Is there new evidence, or are we relitigating? | Cite the decision record; refuse to reopen without evidence. |
+| Frequency | What is the irreducible signal here? | Strip to bone; cut generic scope. |
+| Stability | Is there a spec another builder could execute from? | Require the spec before implementation. |
+| Flow | Triggers, steps, thresholds, escalation — documented or tribal? | Write the workflow; name human vs machine owner. |
+| Resonance | Composed from declared capabilities, or a facade? | Refuse read-only facades; every surface must do something. |
+| Entropy | Where is the weak seam? What breaks first under load? | Probe for structural weakness; emit new specs. |
+| Sovereignty | Who owns this? Can we leave? Is the exit clean? | Check ownership, portability, dependency control. |
+| Consonance | Does this hold across every audience and surface? | Audit alignment; leave a re-diffable artifact. |
+| Coherence | Could someone clone this and continue without a meeting? | Gate "done" on handoff-readiness. |
+
+Diagnostic is the meta-loop, not a per-action stance. It runs at session and
+weekly cadence (`/fw-coherence` Step 8, `methodology/retros/`).
+
+### Layer 2 — what authority do you hold?
+
+| Mode | Meaning |
+|---|---|
+| `ship-gate` | **Act.** Type- or contract-enforced; no human in the loop. |
+| `runtime-active` | **Propose.** Human confirmation required before it lands. |
+| `diagnostic` | **Surface.** Read-only; narrates findings, touches no live state. |
+| `emergent` | **Narrate.** No action implied. |
+
+> **A posture without a mode is drift. A mode without a posture is theater.**
+
+Verbatim from GAMUT Rule 75. "Posture" there is Rule 75's sense; read it here as
+*the load-bearing primitive*.
+
+### The rules
+
+- **Layer 1, then layer 2 — never the inverse.** Authority does not override the
+  stance. If the primitive says challenge and the mode says `ship-gate`,
+  downgrade to `runtime-active` and propose.
+- **If more than two primitives fire, you are stalling, not sharpening.** Pick the
+  one that would most change the outcome if ignored.
+- **Do not run all 12.** That is checklist theater. Naming a primitive is not a
+  substitute for making the call — if the check takes more than one pass,
+  escalate instead of iterating.
+- **Current outranks the rest when a decision record exists.** This check is not a
+  route back into settled decisions.
+- **Nothing enforces the mode.** The four modes are imported operating vocabulary
+  with no schema slot and no validator — unlike `sovereigntyPosture`
+  (own/rent/mitigate) and `data_posture`, which are machine-checked. A
+  self-reported mode is a claim, not a gate: the declare/define/enforce trio does
+  not apply here and must not be invented for it.
 
 ## Working style
 
