@@ -1,6 +1,6 @@
 # The Operating Harness — carrier spec for operating intent
 
-**Date:** 2026-08-21 · **Status:** Structurally cleared; pending human ratification ·
+**Date:** 2026-08-21 · **Status:** Ratified for v0; structurally cleared; unwired ·
 **Subject:** the typed carrier for *operating intent*
 **Pairs with:** `methodology/loop-model.md`, `methodology/runtime-ports-berd-gap-2026-08-18.md`
 **Source pattern:** `gamut-ops/documents/design-harnesses-2026-04-27.md` (Design
@@ -14,6 +14,10 @@ qualified and stays out of the manifest schema and validator
 [`operating-harness-adversary-findings-2026-08-21.md`](operating-harness-adversary-findings-2026-08-21.md)
 — append-only findings and resolution warrants; external exact-byte structural
 PASS recorded at `55cd1c4`
+**V0 ratification:**
+[`FW-DEC-009`](decisions/DECISION-009-operating-harness-v0-ratification.md) — 21
+authority bindings, `single-writer` / `writer_id: harper`, independent private
+`personal/` repository, records under `personal/operating/`
 **Constraint set:** private — SignalThesis + canonical-language guide for
 Harper-as-Operator, author-asserted as locked 2026-06-03. **Inlined as §A; not
 cited by path; lock date independently unverifiable.**
@@ -23,11 +27,11 @@ cited by path; lock date independently unverifiable.**
 > `facework.manifest.schema.json`, or `bin/validate-manifest`. Its future binding
 > path is a standalone record schema and standalone validator — see §10.
 >
-> **Structurally cleared, not authorized.** An independent exact-byte recheck
+> **Structurally cleared and ratified for v0; not built.** An independent exact-byte recheck
 > found no remaining P0 or P1 on spec blob
 > `7d5689956d0759c531b39208fae42d2631e322e2`; the external warrant is appended
-> in the findings record. Structural clearance does not ratify the 21 proposed
-> authority bindings or any directory, repository, writer, or storage choice.
+> in the findings record. FW-DEC-009 separately ratifies the authority and
+> storage choices. No validator or running automatic enforcer exists.
 
 ---
 
@@ -36,7 +40,7 @@ cited by path; lock date independently unverifiable.**
 Four things this spec had to resolve, stated before the design:
 
 1. **No Operating Harness operation is automatically enforced today.** Of the
-   21 proposed authority-bearing entries in §3 — 18 subject operations and three
+   21 ratified v0 authority-bearing entries in §3 — 18 subject operations and three
    carrier checks — **zero** have a running automatic enforcer.
    Every gate is human-invoked or unwired. The
    validator that would check the record format —
@@ -236,7 +240,7 @@ It carries five things. The Design Harness's five anchors, subject-swapped:
 |---|---|---|---|
 | **Intent** | The design claim — "make onboarding explain trust before asking for data." | The **operating claim** — "advance node X by action Y, allocated as medium compute." | Field note, review line, or a prior Operating Harness's unresolved item |
 | **Context** | TWM context, TasteContract, DesignLanguageSpec, persona, phase, prior decisions. | **Node state, allocation budget, prior rulings, consent status.** What is true about this node and what compute is available to spend on it. | The review surface (§A.5, read-side view), decision records, consent records |
-| **Operations** | Typed canvas actions — generate, critique, apply move, commit, scaffold. | **Typed operating actions** — ingest a field note, score an allocation, draft a message, commit an advance, send to a collaborator. §3. | §3 proposed operation registry |
+| **Operations** | Typed canvas actions — generate, critique, apply move, commit, scaffold. | **Typed operating actions** — ingest a field note, score an allocation, draft a message, commit an advance, send to a collaborator. §3. | §3 ratified v0 operation registry |
 | **Evidence** | Score, refusal, changelog, through-line, gate verdict. | **What executed and why it was permitted** — the terminal record, its back-links with blob hashes, the enforcer-gap log. | §5.4, §6 |
 | **Authority** | What the agent may do, propose, diagnose, or only narrate. | Same four modes, **derived from the operation kind, never authored.** §3, §5.3. | `ship-gate` / `runtime-active` / `diagnostic` / `emergent` |
 
@@ -262,7 +266,7 @@ reused as the state vocabulary, with the *mechanism* and *output* columns
 subject-swapped. It has two legal paths because a read or narration cannot be
 forced to invent candidate advances and a proposed act:
 
-- **Proposal path** — for proposed `ship-gate` and `runtime-active` operations:
+- **Proposal path** — for ratified `ship-gate` and `runtime-active` operations:
   `intent-captured` → `context-bound` → `options-generated` →
   `tableau-reviewed` → `artifact-proposed` → `authority-checked` →
   `evidence-recorded`.
@@ -274,12 +278,13 @@ forced to invent candidate advances and a proposed act:
   external Options snapshot named in their payload; they never populate the
   observation record's local Options table.
 
-**Status — Structurally cleared; unwired pending human ratification.** The author
+**Status — Structurally cleared and ratified for v0; unwired.** The author
 selected the short observation path from the adversary's two proposed repairs;
 an independent exact-byte recheck cleared its representability grammar. The
 absent standalone validator still does not enforce it. It determines which
-record shapes are legal; it does not ratify any mode, channel, enforcer,
-directory, concurrency, repository, writer, or storage choice.
+record shapes are legal; FW-DEC-009 separately ratifies the v0 mode, channel,
+enforcer, repository, directory, and writer choices. Neither fact creates a
+validator or running enforcer.
 
 | State | What happens | Mechanism in this practice | Output |
 |---|---|---|---|
@@ -288,7 +293,7 @@ directory, concurrency, repository, writer, or storage choice.
 | `options-generated` | On the proposal path, candidate advances are produced, each sized. | Agent generates ≥1 candidate advance at Light / Medium / Heavy. | Non-empty Options table. |
 | `tableau-reviewed` | On the proposal path, options are scored, critiqued, or culled. **This is the compute-allocation call.** | Diagnostic operations used inside proposal review act as internal mechanisms; a standalone diagnostic record follows the observation path. | Scored options + cull rationale. |
 | `artifact-proposed` | On the proposal path, one option becomes a concrete proposed act. | A draft, a diff, a schedule change, a message. | `proposal` naming one operation kind + payload. |
-| `authority-checked` | On the proposal path, the derived authority regime is resolved. | Automatic gate or human review, as the proposed mode requires. | Settled mode-specific authority shape (§5.3). |
+| `authority-checked` | On the proposal path, the derived authority regime is resolved. | Automatic gate or human review, as the ratified v0 mode requires. | Settled mode-specific authority shape (§5.3). |
 | `evidence-recorded` | Either path lands a re-diffable result artifact. | Terminal record committed to the store. | `committed`/`refused` on the proposal path; `narrated` on the observation path (§6). |
 
 Two properties carried from v0.2.2's hard-won round 2:
@@ -306,14 +311,14 @@ Two properties carried from v0.2.2's hard-won round 2:
 
 ---
 
-## 3. Operation authority matrix
+## 3. V0 operation authority matrix
 
-There is no closed source map to copy. The matrix below is a **proposed operation
-registry**, derived from the private constraint set's capability domains and the
-four authority modes in §A.3. Its carrier shape is structurally cleared; its 21
-authority bindings have not been human-ratified. Therefore it does **not**
-authorize execution yet. This is the explicit P0-6 boundary: the shape is
-cleared; the bindings remain proposed.
+There was no closed source map to copy. The matrix below was authored from the
+private constraint set's capability domains and the four authority modes in
+§A.3, then structurally cleared by independent exact-byte review. **FW-DEC-009
+ratifies all 21 bindings as the v0 authority registry.** Each operation now bears
+exactly the authority its row states. Ratification does not make an absent
+enforcer run: every `Unwired` row remains unable to claim automatic enforcement.
 
 ### 3.1 Reading the matrix
 
@@ -346,7 +351,7 @@ two explicitly local labels rather than attributing them to the audit:
 - **No gate by design** — local to this document: a diagnostic or emergent
   operation bears no gate, so authority fields are forbidden rather than missing.
 
-### 3.2 Proposed subject-operation registry — single home
+### 3.2 Ratified v0 subject-operation registry — single home
 
 Payload keys prefixed with `+` are required; a `?` suffix marks an optional key.
 Every listed key resolves to the value grammar below. Repository quality commands
@@ -434,9 +439,9 @@ separate carrier-maintenance action records what happened to the carrier:
 
 | Carrier action | Regime | Channel | Required payload | Enforcer | Gate status |
 |---|---|---|---|---|---|
-| `validate-record` | proposed `ship-gate` | `internal` | `+record_path` | `operating-harness-record-validator` | **Unwired** — executable absent |
-| `reject-malformed-intent` | proposed `ship-gate` | `internal` | `+candidate_ids`, `+findings` | `operating-harness-record-validator` | **Unwired** — executable absent |
-| `verify-back-links` | proposed `ship-gate` | `internal` | `+record_path` | `operating-harness-record-validator` | **Unwired** — must refuse mismatch; never rewrites hashes |
+| `validate-record` | ratified v0 `ship-gate` | `internal` | `+record_path` | `operating-harness-record-validator` | **Unwired** — executable absent |
+| `reject-malformed-intent` | ratified v0 `ship-gate` | `internal` | `+candidate_ids`, `+findings` | `operating-harness-record-validator` | **Unwired** — executable absent |
+| `verify-back-links` | ratified v0 `ship-gate` | `internal` | `+record_path` | `operating-harness-record-validator` | **Unwired** — must refuse mismatch; never rewrites hashes |
 | `record-transition` | `carrier-write` — not an `AuthorityMode` | `internal` | `+record_path`, `+from`, `+to`, `+actor`, `+at`, `+result_ref` | `operating-harness-record-validator` | **Unwired** — executable absent |
 
 Carrier values are: `record_path` = a `StoreRef` resolving to the record being
@@ -457,15 +462,15 @@ authoring-layer until a store-level enforcer exists. It is not a subject operati
 and grants no subject-operation authority. It **records** the claim carried by the
 new state; it does not authorize or verify that claim. Until the validator exists,
 every transition is authoring-layer evidence rather than an enforced fact. The
-three proposed `ship-gate` modes retain their prior status; moving them here does
-not ratify or change them.
+three ratified `ship-gate` modes remain Unwired; ratification fixes their regime
+but does not make the absent validator execute.
 
 This split is the N8 boundary: diagnosis reads; recording records; neither name
 can launder the other.
 
 **When a subject operation does not clearly fit a kind, it is not run.** An
 unlisted subject operation requires a registry revision and human ruling first.
-Because this map is still proposed, none of its entries may be treated as bound
+The listed v0 entries are bound by FW-DEC-009; no unlisted kind inherits that
 authority.
 
 ### 3.4 Enforcement tally — stated, not implied
@@ -475,14 +480,14 @@ authority.
 | **Enforced** | 0 | none | none enforced |
 | **Subject: no gate by design** | 10 | subject rows 1–10 | short observation path; record-shape validation unwired |
 | **Subject: authoring-layer human gate** | 8 | subject rows 11–18 | full proposal path; record-shape validation unwired |
-| **Carrier: unwired proposed ship-gate** | 3 | `validate-record`, `reject-malformed-intent`, `verify-back-links` | checks either path; executable absent |
+| **Carrier: unwired ratified ship-gate** | 3 | `validate-record`, `reject-malformed-intent`, `verify-back-links` | checks either path; executable absent |
 | **Carrier: unwired carrier-write** | 1 | `record-transition` | writes either path; executable absent |
 
 Each operation or carrier action has one primary status. Subject rows 16–17
 additionally carry an unwired structural consent-presence check; consent substance
 and scope honesty remain authoring-layer obligations. Subject row 15 has no
 machine-readable runtime surface. Across the original authority-bearing set,
-18 subject rows plus three carrier checks preserve **21 proposed mode bindings**;
+18 subject rows plus three carrier checks carry **21 ratified v0 bindings**;
 `record-transition` is outside `AuthorityMode`. The count is unchanged by the
 short-form lifecycle; representability changed. Rows 1–10 now have a legal
 terminal path, but no new gate or enforcement claim.
@@ -500,9 +505,9 @@ calling any operation enforced.
 The executable would parse the registry and record grammars, exit non-zero on a
 violation, and run as a whole-file static check. §5 separates mechanically
 checkable rules from authoring-layer invariants. Building that executable is a
-follow-up after human ratification; structural clearance is already recorded and
-does not substitute for that ruling. The executable is not part of this
-carrier-spec task.
+follow-up under the structurally cleared and human-ratified v0 shape. Neither
+clearance nor ratification substitutes for implementation. The executable is not
+part of this carrier-spec task.
 
 What it will still not enforce, stated now so it is never implied later:
 
@@ -549,42 +554,45 @@ admissible store because records name real collaborators and carry their deal
 states; **N10** makes that a sovereignty constraint. The required property is
 private, diffable git history.
 
-**Concrete repository — RECOMMENDED / open.** The candidate is to make the
-private operating tree its own git repository. That choice is not ratified here;
-the human still owns it. A redacted index may later be published, but the records
-may not enter the public canon repo.
+**Concrete repository — ratified for v0, not initialized here.** FW-DEC-009
+ratifies `personal/` as its own access-controlled private git repository. It is
+not content of the public Facework repository even when its checkout is nested
+beneath that working directory. This session does not create or initialize it. A
+redacted index may later be published, but the records may not enter the public
+canon repo.
 
-**Which directory — RECOMMENDED / open.** FW-DEC-007 has resolved the vocabulary
-collision between `OperatingHarness` and `HarnessBundle`; it deliberately made
-no directory ruling. **This spec creates no directory.** The recommendation is:
+**Record directory — ratified for v0, not created here.** FW-DEC-009 ratifies
+`personal/operating/` from the public checkout's view, which is `operating/` from
+the independent private repository root. **This spec creates no directory.** The
+v0 convention is:
 
 ```
-operating/
-  <node>/
-    2026-08-21-001-first-worked-flow.md
+personal/                    # independent private git repository
+  operating/
+    <node>/
+      2026-08-21-001-first-worked-flow.md
 ```
 
-Recommending `operating/` on one argument: `harness-bundle/` (§10) is a **derived,
+The `operating/` ruling rests on one argument: `harness-bundle/` (§10) is a **derived,
 one-way, regeneratable** view of the Runtime Ports whose files "do not propagate
 back." An Operating Harness record is the exact opposite — **authored,
 advanced in place, and the evidence itself.** Sharing a root would put a derived
 artifact and a source-of-record artifact under one name, which is how a hand-edit
 to a derived copy becomes plausible. A root that does not contain the word
-"harness" also preserves FW-DEC-007's sense boundary. The human may ratify,
-reject, or replace this directory recommendation; the mkdir is a follow-up either
-way.
+"harness" also preserves FW-DEC-007's sense boundary. Creating the directory is
+a follow-up implementation action, not part of this ratification session.
 
 Filename: `<yyyy>-<mm>-<dd>-<seq>-<slug>.md`. Date is the `intent-captured` date
 and does not change as the record advances. `<seq>` is per-node per-day.
 
-The eventual store root carries `operating-store.yaml`, the resolver for every
-`repository` slug used by a context snapshot or backlink and the first
+The ratified private store root carries `operating-store.yaml`, the resolver for
+every `repository` slug used by a context snapshot or backlink and the first
 implementation's write policy:
 
 ```yaml
 write_policy:
   mode: single-writer
-  writer_id: <human-selected-id>
+  writer_id: harper
 repositories:
   private-operating: "."
   node-alpha-code: "../node-alpha-code"
@@ -592,12 +600,13 @@ repositories:
 
 Paths are local checkout paths and stay in the private store. A missing slug or
 missing checkout makes the reference unverifiable; the validator refuses it.
-The first implementation is **single-writer for the entire store**: only
-`writer_id` may perform `record-transition`; every parallel session is read-only.
+FW-DEC-009 ratifies the first implementation as **single-writer for the entire
+store**, with `writer_id: harper`: only that identity may perform
+`record-transition`; every parallel session is read-only.
 `transition.actor` must equal `writer_id`. A writer handoff requires a clean,
 committed store, no active write, and a separate commit changing `writer_id`
-before the successor writes. The human selects and changes the writer; this spec
-does not choose that identity. Multi-writer CAS and merge semantics are deferred.
+before the successor writes. A future writer change requires a separate human
+ruling. Multi-writer CAS and merge semantics are deferred.
 
 ### 5.2 Frontmatter
 
@@ -639,7 +648,7 @@ review:
   evidence_ref: review-artifacts/review-0NN.md
 transition:
   action: record-transition
-  record_path: "<record-root>/node-alpha/2026-08-21-001-first-worked-flow.md"
+  record_path: "operating/node-alpha/2026-08-21-001-first-worked-flow.md"
   from: artifact-proposed
   to: authority-checked
   actor: operator
@@ -652,9 +661,10 @@ Absent keys are meaningful. `mode`, `channel`, and `enforcer` never appear in a
 record. A diagnostic or emergent proposal has no `gate` or `review`; a narrated
 terminal does carry `outcome: narrated`.
 
-`<record-root>` is an explicit placeholder for the still-unruled directory in
-§5.1. It is replaced with the human-ratified root before validation; this example
-does not decide that root.
+Record paths are relative to the independent private repository root. The example
+therefore resolves publicly as
+`personal/operating/node-alpha/2026-08-21-001-first-worked-flow.md`; this spec
+records the ratified path but does not create it.
 
 An observation-path allocation critique uses this payload fragment while the
 local Constraints, Options, Tableau review, and Proposal rationale sections stay
@@ -666,7 +676,7 @@ operation:
   payload:
     options_snapshot_ref:
       repository: private-operating
-      path: "<record-root>/node-alpha/2026-08-20-001-options.md"
+      path: "operating/node-alpha/2026-08-20-001-options.md"
       blob: "blob:<full-object-id>"
     option_id: option-2
 ```
@@ -676,12 +686,12 @@ At `evidence-recorded/narrated`, `back_links` contains that exact triple:
 ```yaml
 back_links:
   - repository: private-operating
-    path: "<record-root>/node-alpha/2026-08-20-001-options.md"
+    path: "operating/node-alpha/2026-08-20-001-options.md"
     blob: "blob:<full-object-id>"
 ```
 
-Replacing `<record-root>` remains a human-owned directory decision; the example
-does not select it.
+These are private-repository-relative paths under the ratified
+`personal/operating/` directory; no directory is created here.
 
 #### Canonical serialization
 
@@ -1182,17 +1192,17 @@ Honest status per part:
 | Part | Status |
 |---|---|
 | Five parts (§1) | Specified. Subject-swap holds; the `cross-tenant` channel is new. |
-| Lifecycle (§2) | Seven-state vocabulary retained; full proposal path for rows 11–18 plus the author-selected short observation path for rows 1–10. **Structurally cleared; unwired pending human ratification.** |
-| Authority matrix (§3) | **Proposed, not bound:** 0 enforced / 10 no-gate observation-path operations / 8 authoring-layer proposal-path operations / 3 unwired carrier checks; `record-transition` is separately unwired outside `AuthorityMode`. The lifecycle repair changes representability, not authority. |
+| Lifecycle (§2) | Seven-state vocabulary retained; full proposal path for rows 11–18 plus the author-selected short observation path for rows 1–10. **Structurally cleared and ratified for v0; unwired.** |
+| Authority matrix (§3) | **Ratified for v0, not automatically enforced:** 0 enforced / 10 no-gate observation-path operations / 8 authoring-layer proposal-path operations / 3 unwired carrier checks; `record-transition` is separately ratified as `carrier-write`, outside `AuthorityMode`. |
 | Refusals (§7) | Specified. Mechanical portions depend on the absent validator; semantic portions remain authoring-layer. |
 | Record format (§5) | Specified with mechanical and authoring-layer rules separated. **No validator exists.** |
 | Closing signal (§6) | Task-loop artifact specified; product-loop review index specified but unwired. Git supplies audit evidence, not transition proof. |
 
-Next increment, smallest first: ask the human to ratify or reject the 21 authored
-bindings and the remaining human-owned storage choices. Only a structurally
-cleared, human-ratified shape should become
-`bin/validate-operating-harness-record`; only after that should a worked record
-be emitted.
+Next increment, smallest first: in a separate implementation session, satisfy
+the `/personal/` ignore prerequisite, initialize the ratified private repository
+and `operating/` directory, then build
+`bin/validate-operating-harness-record`. This session performs none of those
+actions. A worked record follows only after the validator exists.
 
 ---
 
@@ -1226,7 +1236,7 @@ defects.
 
 ---
 
-## 11. Structural check — cleared; human ratification pending
+## 11. Structural check — cleared and ratified for v0
 
 The append-only
 [`adversary findings record`](operating-harness-adversary-findings-2026-08-21.md)
@@ -1234,7 +1244,8 @@ preserves every REFUSE, WATCH, author response, and the final independent
 exact-byte **STRUCTURAL PASS** on spec blob
 `7d5689956d0759c531b39208fae42d2631e322e2`. Author resolutions remain weaker
 than external warrants. The structure is cleared; the authority bindings and
-all storage choices remain pending human ratification.
+storage choices are ratified for v0 by FW-DEC-009. That ruling does not change
+the zero-enforcer status.
 
 | Finding | Structural response | Where addressed | Challenge exercised during falsification |
 |---|---|---|---|
@@ -1250,8 +1261,9 @@ Additional draft-check results:
 - **P0-4:** no surface-agnostic claim is made; emission and cross-tenant rows
   require named target/payload shapes. The external exact-byte pass found no
   remaining P0 or P1.
-- **P0-6:** **open by design.** The registry is explicitly proposed and grants no
-  authority until human ratification. Structural clearance does not grant it.
+- **P0-6:** **closed by human ruling, not by falsification.** FW-DEC-009 ratifies
+  the 21 v0 bindings as written. Structural clearance did not and could not
+  grant that authority.
 - **Enforcement:** zero rows are called enforced. Content-quality commands are no
   longer misrepresented as authority enforcers.
 - **Concurrency:** the first implementation is now explicitly single-writer;
@@ -1264,20 +1276,15 @@ Additional draft-check results:
 
 ## 12. Unresolved
 
-1. **P0-6 / authority ratification.** The 21 mode assignments rest on nothing
-   equivalent to a closed tether map. The registry remains proposed and cannot
-   authorize execution.
-2. **The directory.** FW-DEC-007 resolved the vocabulary collision but did not
-   choose a directory. §5.1 leaves `operating/` RECOMMENDED / open and creates
-   nothing; the human owns the ruling.
-3. **`schedule-routine` has no machine surface** on the current runtime. Berd's Automations are
+1. **`schedule-routine` has no machine surface** on the current runtime. Berd's Automations are
    UI-built with no CLI and no on-disk config, so nothing can read the schedule a
    `schedule-routine` operation produced.
-4. **`recommend-cull` needs a semantic check.** Detecting that a
+2. **`recommend-cull` needs a semantic check.** Detecting that a
    recommendation was recorded as a decision is a prose-intent judgment.
-5. **Multi-writer operation.** Deferred. The first implementation is restricted
-   to the single writer selected by the human in `operating-store.yaml`.
-6. **Private-store ignore rule.** Its owning commit is outside this branch; it is
-   a landing dependency, not a property this spec claims is already present.
-7. **Whether the private operating tree should be its own repo** is a recommendation (§5.1), not
-   a ruling. It has consequences beyond this spec.
+3. **Multi-writer operation.** Deferred. V0 is ratified as `single-writer` with
+   `writer_id: harper`; a later multi-writer design needs a new ruling.
+4. **Private-store ignore prerequisite.** The public parent checkout must ignore
+   `/personal/` before the ratified private repository is initialized. This
+   branch does not claim that prerequisite has landed.
+5. **Private-store initialization.** `personal/` and `personal/operating/` are
+   ratified locations but are not created or initialized in this session.

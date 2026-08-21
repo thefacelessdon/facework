@@ -586,3 +586,22 @@ No authority binding, directory, repository, writer identity, or storage choice
 is resolved by this entry. All 21 bindings and every human-owned choice remain
 RECOMMENDED/open pending the human ruling. Prior REFUSE, WATCH, resolution, and
 PASS entries remain unchanged above.
+
+## Human ratification — v0
+
+**Date:** 2026-08-21
+**Ruling:**
+[`FW-DEC-009`](decisions/DECISION-009-operating-harness-v0-ratification.md)
+**Status:** ratified for v0; structurally cleared; unwired
+**Authority:** Harper — explicit direct ruling
+
+After the independent exact-byte structural PASS, Harper ratified the 21
+authority bindings exactly as written, `single-writer` mode with
+`writer_id: harper`, `personal/` as an independent access-controlled private git
+repository, and `personal/operating/` as the record directory.
+
+This appended ruling settles the human-owned choices that every preceding
+external verdict correctly left NOT RULED. It does not rewrite those historical
+boundaries and does not convert ratification into enforcement: no standalone
+schema, validator, private repository, record directory, or running automatic
+enforcer is created by this entry. Multi-writer operation remains deferred.
