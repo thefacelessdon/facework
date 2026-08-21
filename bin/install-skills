@@ -63,6 +63,7 @@ SKILLS=(
   evidence-debug
   launch-ops
   runtime-validation-pass
+  fw-spectrum
 )
 
 PRIMITIVES=(

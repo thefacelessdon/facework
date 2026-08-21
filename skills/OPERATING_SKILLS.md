@@ -38,6 +38,19 @@ are not Postures (and are not required by `facework-doctor`, like the primitives
   OpenAI, Claude Code, and Berd; see
   `methodology/retros/008-runtime-ports-validation-program.md`.
 
+## Diagnostic skills (instrument readers — NOT Postures)
+
+Read-only. These take a reading and change nothing. A Posture converges a live
+system; a diagnostic reports its present state and stops.
+
+- `/fw-spectrum` - Read ONE band of a system's coherence and emit a locus, not a
+  score. Runs a single detector from `theories/coherence-instrumentation.md` per
+  invocation (§VI.1, the visor rule: never render all bands at once), refuses a
+  reading whose instrument is not coupled to the force it claims, places a control
+  outside the band, and carries the FW-DEC-006 base rates and the F7 instability
+  flag. Present-state only — it does not forecast, and it writes no tracker row.
+  Paired persona: `.agents/agents/instrument-reader.md`.
+
 ## Paired Specialist Agents
 - `/mvp-cut` -> `mvp-scope-architect`
 - `/beta-hardening` -> `beta-reliability-auditor`
