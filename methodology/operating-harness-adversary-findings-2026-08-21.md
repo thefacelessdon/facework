@@ -492,3 +492,25 @@ The correction addresses only the two P1 findings in the external verdict above:
 This author entry does not supersede the external REFUSE or grant structural
 clearance. The 21 authority bindings, directory, concrete repository, and writer
 identity remain RECOMMENDED/open for the human.
+
+## External exact-byte structural recheck — REFUSE
+
+**Date:** 2026-08-21
+
+Verified review object:
+HEAD = 4186f5f08978ed96471f2264d24c3208dfa67978
+HEAD:methodology/operating-harness-spec.md = 040ca60905421b99338940570866573a3bf6e224
+working-file git hash-object = 040ca60905421b99338940570866573a3bf6e224
+worktree = clean
+
+The two P1s from the prior exact-byte review are closed on these bytes:
+1. Deterministic canonical serialization: restricted consent YAML and Markdown table encoders/decoders now define UTF-8/NFC/LF rules, fixed key/header/order/padding, deterministic collection ordering and escaping, decode→canonical re-encode→byte equality.
+2. Offset-normalized consent chronology: granted_at, execution.at, and expires_at share an explicit-offset RFC 3339 subset and compare as normalized UTC epoch nanoseconds.
+
+Structural PASS is refused because a P0 remains:
+- Registry rows score-allocation and critique-option require option_ids / option_id (spec lines 354-355).
+- Referential-integrity rule 4 requires operation option_id(s) to resolve to exactly one Options-table row (lines 759-763).
+- The observation path required for diagnostic operations requires the Options table empty at context-bound and evidence-recorded (lines 810 and 816), and cannot enter the proposal path (lines 818-822).
+Therefore both registered diagnostic operations remain structurally impossible. This is the same unresolved short-observation-lifecycle defect recorded earlier; later prose claiming the observation lifecycle structurally answered does not make the grammar satisfiable.
+
+Authority/storage verdict: NOT RULED. This review does not ratify the 21 authority bindings, directory, repository, writer identity, or any storage choice.
