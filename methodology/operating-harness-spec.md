@@ -166,6 +166,14 @@ The private guide's `stale-routine` literal conflicts with its own prohibition o
 `unwired-routine`; the mapping is explicit here rather than represented as an
 unchanged restatement.
 
+**Dated departure — 2026-08-21.** The private source, locked 2026-06-03,
+expected the agent-layer interpretation to be type-enforced and treated the type
+as that audience's thesis-equivalent. This spec deliberately replaces that
+expectation with the normative registry and record grammar in §3/§5, whose
+future binding target is JSON Schema plus a running validator (§8). A
+non-compiled TypeScript sketch in this docs repo would not enforce the claim.
+This is an explicit amendment with rationale, not an unchanged inheritance.
+
 ### A.5 Node registry and review surface
 
 Two private artifacts this spec refers to **structurally, never by content**:
@@ -301,7 +309,7 @@ authority and therefore do not appear as authority enforcers.
 | 10 | `recommend-cull` | `emergent` | `internal` | `+node`, `+rationale` | — | No gate by design; Sovereignty ruling stays open |
 | 11 | `validate-record` | `ship-gate` | `internal` | `+record_path` | `harness-record-validator` | **Unwired** — executable absent |
 | 12 | `reject-malformed-intent` | `ship-gate` | `internal` | `+candidate_ids`, `+findings` | `harness-record-validator` | **Unwired** — executable absent |
-| 13 | `route-model-tier` | `ship-gate` | `internal` | `+requested_operation`, `+chosen_tier` | `runtime-model-router` | **Unwired** — Berd binds tier per session |
+| 13 | `route-model-tier` | `runtime-active` | `internal` | `+requested_operation`, `+chosen_tier` | `operator-review` | **Authoring-layer** — Berd binds tier by human choice per session |
 | 14 | `verify-back-links` | `ship-gate` | `internal` | `+record_path` | `harness-record-validator` | **Unwired** — must refuse mismatch; never rewrites hashes |
 | 15 | `commit-allocation` | `runtime-active` | `internal` | `+week`, `+allocations` | `operator-review` | **Authoring-layer** — human ruling |
 | 16 | `advance-node` | `runtime-active` | `internal` | `+node`, `+advance`, `+evidence_refs` | `operator-review` | **Authoring-layer** — human ruling |
@@ -346,8 +354,8 @@ authority.
 |---|---|---|
 | **Enforced** | 0 | none |
 | **No gate by design** | 10 | 1–10 |
-| **Unwired automatic gate** | 4 | 11–14 |
-| **Authoring-layer human gate** | 7 | 15–21 |
+| **Unwired automatic gate** | 3 | 11, 12, 14 |
+| **Authoring-layer human gate** | 8 | 13, 15–21 |
 
 Each operation has one primary status. Rows 19–20 additionally carry an unwired
 structural consent-presence check; consent substance and scope honesty remain
@@ -372,9 +380,11 @@ What it will still not enforce, stated now so it is never implied later:
 1. **Trigger.** It runs `on_demand` (or inside `make protocol-check`). Berd has no
    `event` and no `continuous` trigger, so it **cannot** fire on a state
    transition. A record can sit invalid between invocations. Claude Code's
-   `SessionStart` hook (`bin/facework-session-check`) is the only event trigger in
-   the whole toolchain and it is Claude Code-only — a per-session sweep is the
-   closest available approximation to an event gate, and it is not the same thing.
+   `SessionStart` hook (`bin/facework-session-check`) is Claude Code-only; its
+   per-session sweep is the closest available session-bound approximation to an
+   event gate. The repo also has a `PreToolUse` hook for skill invocation;
+   neither hook observes record transitions, so neither is the gate specified
+   here.
 2. **Consent substance.** That a consent file exists and names a scope and expiry
    is checkable. That the person actually consented is not.
 3. **Scope honesty.** That a `cross-tenant` act stayed inside its declared scope is
@@ -804,7 +814,7 @@ Honest status per part:
 |---|---|
 | Five parts (§1) | Specified. Subject-swap holds; the `cross-tenant` channel is new. |
 | Lifecycle (§2) | Reused verbatim from v0.2.2, as §A.3 already declared. |
-| Authority matrix (§3) | **Proposed, not bound:** 0 enforced / 10 no-gate / 4 unwired / 7 authoring-layer. |
+| Authority matrix (§3) | **Proposed, not bound:** 0 enforced / 10 no-gate / 3 unwired / 8 authoring-layer. |
 | Refusals (§7) | Specified. Mechanical portions depend on the absent validator; semantic portions remain authoring-layer. |
 | Record format (§5) | Specified with mechanical and authoring-layer rules separated. **No validator exists.** |
 | Closing signal (§6) | Task-loop artifact specified; product-loop review index specified but unwired. Git supplies audit evidence, not transition proof. |
