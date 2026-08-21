@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+# Every skill directory under skills/ must be installable.
+#
+# 0.0.73 shipped three carrier skills as files that nothing installed: absent
+# from the SKILLS array in bin/install-skills, so a clone received three
+# SKILL.md files that never reached the skill namespace. That is the
+# declared-but-unenforced defect class one layer out — a capability asserted and
+# not wired — and it was caught by a human reading a diff, not by a check.
+# This is the check.
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$ROOT_DIR"
+
+if [ ! -f bin/install-skills ]; then
+  echo "[error] bin/install-skills not found"
+  exit 1
+fi
+
+# The declared set: names inside the SKILLS=( ... ) array.
+declared="$(awk '/^SKILLS=\(/{f=1;next} f&&/^\)/{f=0} f{gsub(/[[:space:]]/,"");if($0!="")print}' bin/install-skills | sort)"
+
+# The present set: directories under skills/ that actually carry a SKILL.md.
+present="$(find skills -mindepth 2 -maxdepth 2 -name SKILL.md -print 2>/dev/null \
+  | sed 's|^skills/||; s|/SKILL.md$||' | sort)"
+
+status=0
+
+unregistered="$(comm -13 <(printf '%s\n' "$declared") <(printf '%s\n' "$present"))"
+if [ -n "$unregistered" ]; then
+  echo "[error] skill present but not registered in bin/install-skills:"
+  printf '          %s\n' $unregistered
+  echo "          A skill that installs nowhere is a capability asserted and not wired."
+  status=1
+fi
+
+missing="$(comm -23 <(printf '%s\n' "$declared") <(printf '%s\n' "$present"))"
+if [ -n "$missing" ]; then
+  echo "[error] registered in bin/install-skills but no skills/<name>/SKILL.md:"
+  printf '          %s\n' $missing
+  status=1
+fi
+
+# The name inside SKILL.md is load-bearing on Berd: it must equal the folder.
+while IFS= read -r name; do
+  [ -n "$name" ] || continue
+  declared_name="$(awk -F': *' '/^name:/{print $2; exit}' "skills/$name/SKILL.md" | tr -d '"'"'"' \r')"
+  if [ -n "$declared_name" ] && [ "$declared_name" != "$name" ]; then
+    echo "[error] skills/$name/SKILL.md declares name '$declared_name'; Berd requires it to equal the folder name"
+    status=1
+  fi
+done <<< "$present"
+
+if [ "$status" -eq 0 ]; then
+  echo "[ok] skill registration: $(printf '%s\n' "$present" | grep -c . ) skill(s), all registered and folder-name-consistent"
+fi
+exit "$status"
