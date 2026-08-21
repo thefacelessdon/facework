@@ -1,0 +1,762 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "date"
+require "json"
+require "open3"
+require "pathname"
+require "psych"
+require "time"
+
+SCHEMA = File.expand_path("../operating-harness-record.schema.json", __dir__)
+SCHEMA_VERSION = "0.1.0-draft"
+STATES = %w[intent-captured context-bound options-generated tableau-reviewed artifact-proposed authority-checked evidence-recorded].freeze
+SLUG = /\A[a-z0-9][a-z0-9._-]*\z/
+TIMESTAMP = /\A(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.(\d{1,9}))?(Z|[+-](\d{2}):(\d{2}))\z/
+TOP_KEYS = %w[artifact record_schema id revision supersedes state node allocation intent context operation proposal authority_check gate review execution outcome refusal_reason back_links transition].freeze
+SECTIONS = ["Constraints", "Options", "Tableau review", "Proposal rationale", "Operation result", "Enforcer-gap log"].freeze
+
+REGISTRY = {
+  "read-node-state" => [:diagnostic, :internal, { "node" => :node }],
+  "ingest-field-note" => [:diagnostic, :internal, { "source_ref" => :store_ref }],
+  "score-allocation" => [:diagnostic, :internal, { "options_snapshot_ref" => :options_snapshot, "option_ids" => :option_ids }],
+  "critique-option" => [:diagnostic, :internal, { "options_snapshot_ref" => :options_snapshot, "option_id" => :option_id }],
+  "detect-enforcer-gap" => [:diagnostic, :internal, { "routine_id" => :string }],
+  "draft-message" => [:diagnostic, :internal, { "audience" => :string, "subject_ref" => :store_ref }],
+  "audit-consent" => [:diagnostic, :internal, { "target" => :target, "consent_ref?" => :store_ref }],
+  "narrate-week" => [:emergent, :internal, { "week" => :week }],
+  "narrate-coherence" => [:emergent, :internal, { "locus" => :locus, "failing_term" => :failing_term, "base_rate_ref" => :store_ref, "score_ref?" => :store_ref }],
+  "recommend-cull" => [:emergent, :internal, { "node" => :node, "rationale" => :string }],
+  "route-model-tier" => [:runtime_active, :internal, { "requested_operation" => :requested_operation, "chosen_tier" => :tier }],
+  "commit-allocation" => [:runtime_active, :internal, { "week" => :week, "allocations" => :allocations }],
+  "advance-node" => [:runtime_active, :internal, { "node" => :node, "advance" => :string, "evidence_refs" => :backlinks }],
+  "emit-repo-change" => [:runtime_active, :emission, { "repository" => :repository, "ref" => :git_ref, "diff_ref" => :store_ref }],
+  "schedule-routine" => [:runtime_active, :emission, { "schedule" => :schedule, "timezone" => :timezone, "runner" => :string }],
+  "send-to-collaborator" => [:runtime_active, :cross_tenant, { "target" => :target, "action" => :send_action, "message_ref" => :store_ref, "consent_ref" => :store_ref }],
+  "operate-in-collaborator-context" => [:runtime_active, :cross_tenant, { "target" => :target, "tool" => :string, "action" => :slug, "consent_ref" => :store_ref }],
+  "propose-canon-change" => [:runtime_active, :emission, { "repository" => :repository, "doc_path" => :relative_path, "diff_ref" => :store_ref }]
+}.freeze
+
+class Invalid < StandardError; end
+
+def fail!(message)
+  raise Invalid, message
+end
+
+def nonempty!(value, name)
+  fail!("#{name} must be a non-empty string") unless value.is_a?(String) && !value.strip.empty?
+  value
+end
+
+def slug!(value, name)
+  nonempty!(value, name)
+  fail!("#{name} must be a Slug") unless SLUG.match?(value)
+  value
+end
+
+def exact_keys!(value, required, optional, name)
+  fail!("#{name} must be an object") unless value.is_a?(Hash)
+  unknown = value.keys - required - optional
+  missing = required - value.keys
+  fail!("#{name} has unknown keys: #{unknown.join(', ')}") unless unknown.empty?
+  fail!("#{name} is missing keys: #{missing.join(', ')}") unless missing.empty?
+end
+
+def duplicate_keys!(node, path = "frontmatter")
+  if node.is_a?(Psych::Nodes::Mapping)
+    seen = {}
+    node.children.each_slice(2) do |key, value|
+      name = key.respond_to?(:value) ? key.value : key.to_s
+      fail!("duplicate key #{path}.#{name}") if seen[name]
+      seen[name] = true
+      duplicate_keys!(value, "#{path}.#{name}")
+    end
+  elsif node.respond_to?(:children) && node.children
+    node.children.each { |child| duplicate_keys!(child, path) }
+  end
+end
+
+def parse_yaml!(bytes, name)
+  tree = Psych.parse_stream(bytes)
+  duplicate_keys!(tree, name)
+  value = Psych.safe_load(bytes, permitted_classes: [Date, Time], permitted_symbols: [], aliases: false)
+  normalize = lambda do |item|
+    case item
+    when Hash then item.transform_values { |child| normalize.call(child) }
+    when Array then item.map { |child| normalize.call(child) }
+    when Time then item.iso8601(9)
+    when Date then item.iso8601
+    else item
+    end
+  end
+  normalize.call(value)
+rescue Psych::Exception => e
+  fail!("could not parse #{name}: #{e.message}")
+end
+
+def relative_path!(value, name)
+  nonempty!(value, name)
+  path = Pathname.new(value)
+  fail!("#{name} must be a relative POSIX path without '..'") if path.absolute? || value.include?("\\") || value.include?("\0") || path.each_filename.include?("..")
+  value
+end
+
+def timestamp!(value, name)
+  nonempty!(value, name)
+  match = TIMESTAMP.match(value)
+  fail!("#{name} must be a comparable RFC 3339 timestamp with an explicit offset") unless match
+  y, mon, day, hour, min, sec = match.captures[0, 6].map(&:to_i)
+  fail!("#{name} contains an invalid date") unless Date.valid_date?(y, mon, day)
+  fail!("#{name} contains an invalid time") unless hour <= 23 && min <= 59 && sec <= 59
+  if match[8]
+    oh = match[8].to_i
+    om = match[9].to_i
+    fail!("#{name} contains an invalid offset") unless oh <= 14 && om <= 59 && (oh < 14 || om.zero?)
+  end
+  Time.iso8601(value).to_r
+rescue ArgumentError
+  fail!("#{name} contains an invalid timestamp")
+end
+
+def canonical_timestamp(value)
+  time = Time.iso8601(value).utc
+  fraction = time.nsec.zero? ? "" : ".#{format('%09d', time.nsec).sub(/0+\z/, '')}"
+  time.strftime("%Y-%m-%dT%H:%M:%S") + fraction + "Z"
+end
+
+class Validator
+  attr_reader :path, :root, :record, :sections, :tables
+
+  def initialize(path)
+    @path = File.realpath(path)
+    @root = find_root!
+    @store = load_store!
+    @record, @sections = parse_record_file!(@path)
+    @tables = parse_tables!(@sections)
+  end
+
+  def validate!
+    validate_frontmatter!
+    validate_transition!
+    validate_operation! if record.key?("operation")
+    validate_body!
+    validate_state!
+    validate_consent! if operation_channel == :cross_tenant
+    true
+  end
+
+  private
+
+  def find_root!
+    dir = File.dirname(@path)
+    loop do
+      candidate = File.join(dir, "operating-store.yaml")
+      return dir if File.file?(candidate)
+      parent = File.dirname(dir)
+      break if parent == dir
+      dir = parent
+    end
+    fail!("operating-store.yaml not found above #{@path}")
+  end
+
+  def load_store!
+    value = parse_yaml!(File.binread(File.join(root, "operating-store.yaml")), "operating-store.yaml")
+    exact_keys!(value, %w[write_policy repositories], [], "operating-store.yaml")
+    exact_keys!(value["write_policy"], %w[mode writer_id], [], "write_policy")
+    fail!("write_policy.mode must be single-writer") unless value.dig("write_policy", "mode") == "single-writer"
+    fail!("write_policy.writer_id must be harper for the ratified v0 contract") unless value.dig("write_policy", "writer_id") == "harper"
+    repos = value["repositories"]
+    fail!("repositories must be a non-empty object") unless repos.is_a?(Hash) && !repos.empty?
+    repos.each do |slug, repo_path|
+      slug!(slug, "repository key")
+      nonempty!(repo_path, "repositories.#{slug}")
+      fail!("repositories.#{slug} must not contain NUL") if repo_path.include?("\0")
+      resolved = File.expand_path(repo_path, root)
+      fail!("repository #{slug} does not resolve to a directory") unless File.directory?(resolved)
+    end
+    value
+  end
+
+  def parse_record_file!(record_path)
+    bytes = File.binread(record_path)
+    fail!("record must be UTF-8 without BOM") if bytes.start_with?("\xEF\xBB\xBF".b) || !bytes.force_encoding(Encoding::UTF_8).valid_encoding?
+    match = bytes.match(/\A---\n(.*?)\n---\n(.*)\z/m)
+    fail!("record must contain YAML frontmatter delimited by LF-only --- lines") unless match
+    front = parse_yaml!(match[1], "frontmatter")
+    fail!("frontmatter must be an object") unless front.is_a?(Hash)
+    [front, parse_sections!(match[2])]
+  end
+
+  def parse_sections!(body)
+    expected = SECTIONS.map { |name| "## #{name}" }
+    headings = body.lines.grep(/^## /).map(&:chomp)
+    fail!("body sections must appear exactly once in the required order") unless headings == expected
+    result = {}
+    SECTIONS.each_with_index do |name, index|
+      start = body.index("## #{name}\n")
+      content_start = start + name.bytesize + 4
+      finish = index + 1 < SECTIONS.length ? body.index("## #{SECTIONS[index + 1]}\n", content_start) : body.bytesize
+      result[name] = body.byteslice(content_start...finish)
+    end
+    result
+  end
+
+  def parse_tables!(parts)
+    {
+      constraints: parse_table!(parts["Constraints"], %w[id source ref weight statement], [], "Constraints"),
+      options: parse_table!(parts["Options"], %w[id advance size resolves worsens], %w[resolves worsens], "Options"),
+      tableau: parse_table!(parts["Tableau review"], %w[option_id verdict rationale], [], "Tableau review"),
+      gaps: parse_table!(parts["Enforcer-gap log"], %w[at kind detail], [], "Enforcer-gap log")
+    }
+  end
+
+  def decode_cells!(line, count, name)
+    fail!("#{name} row must start and end with a boundary pipe") unless line.start_with?("| ") && line.end_with?(" |")
+    inner = line[2...-2]
+    cells = []
+    current = +""
+    slash_count = 0
+    after_boundary = false
+    inner.each_char do |char|
+      if after_boundary
+        fail!("#{name} row must use exactly one padding space") unless char == " "
+        after_boundary = false
+        next
+      end
+      if char == "|" && slash_count.even?
+        fail!("#{name} row must use exactly one padding space") unless current.end_with?(" ")
+        cells << current[0...-1]
+        current = +""
+        slash_count = 0
+        after_boundary = true
+        next
+      end
+      current << char
+      slash_count = char == "\\" ? slash_count + 1 : 0
+    end
+    fail!("#{name} row ends after a boundary pipe") if after_boundary
+    cells << current
+    fail!("#{name} row has #{cells.length} cells; expected #{count}") unless cells.length == count
+    cells.map do |cell|
+      out = +""
+      i = 0
+      while i < cell.length
+        if cell[i] == "\\"
+          nxt = cell[i + 1]
+          fail!("#{name} contains an unsupported table escape") unless ["\\", "|"].include?(nxt)
+          out << nxt
+          i += 2
+        else
+          out << cell[i]
+          i += 1
+        end
+      end
+      fail!("#{name} contains a decoded control character") if out.each_codepoint.any? { |codepoint| codepoint < 0x20 || codepoint == 0x7f }
+      out
+    end
+  end
+
+  def encode_cell(value)
+    value.gsub("\\", "\\\\").gsub("|", "\\|")
+  end
+
+  def parse_table!(slice, headers, arrays, name)
+    fail!("#{name} table slice must use LF, have one final LF, and no blank boundary lines") if slice.include?("\r") || slice.include?("\t") || !slice.end_with?("\n") || slice.end_with?("\n\n") || slice.start_with?("\n") || slice.lines.any? { |line| line.end_with?(" \n") }
+    fail!("#{name} table slice must be NFC-normalized") unless slice.unicode_normalize(:nfc) == slice
+    lines = slice.lines(chomp: true)
+    expected_header = "| #{headers.join(' | ')} |"
+    expected_delimiter = "| #{Array.new(headers.length, '---').join(' | ')} |"
+    fail!("#{name} table has a noncanonical header") unless lines[0] == expected_header
+    fail!("#{name} table has a noncanonical delimiter") unless lines[1] == expected_delimiter
+    rows = lines.drop(2).map do |line|
+      cells = decode_cells!(line, headers.length, name)
+      headers.zip(cells).to_h.tap do |row|
+        arrays.each do |column|
+          begin
+            parsed = JSON.parse(row[column])
+          rescue JSON::ParserError
+            fail!("#{name}.#{column} must be a minified JSON string array")
+          end
+          fail!("#{name}.#{column} must be a unique string array") unless parsed.is_a?(Array) && parsed.all? { |item| item.is_a?(String) } && parsed.uniq.length == parsed.length
+          canonical = JSON.generate(parsed.sort)
+          fail!("#{name}.#{column} array is not canonical") unless row[column] == canonical
+          row[column] = parsed
+        end
+      end
+    end
+    encoded = [expected_header, expected_delimiter] + rows.map do |row|
+      values = headers.map do |header|
+        value = arrays.include?(header) ? JSON.generate(row[header].sort) : row[header]
+        encode_cell(value)
+      end
+      "| #{values.join(' | ')} |"
+    end
+    fail!("#{name} table is not canonically encoded") unless slice == encoded.join("\n") + "\n"
+    rows
+  end
+
+  def validate_frontmatter!
+    exact_keys!(record, %w[artifact record_schema id revision state node intent transition], TOP_KEYS - %w[artifact record_schema id revision state node intent transition], "frontmatter")
+    fail!("artifact must be OperatingHarness") unless record["artifact"] == "OperatingHarness"
+    fail!("record_schema must be #{SCHEMA_VERSION}") unless record["record_schema"] == SCHEMA_VERSION
+    nonempty!(record["id"], "id")
+    fail!("revision must be a non-negative integer") unless record["revision"].is_a?(Integer) && record["revision"] >= 0
+    nonempty!(record["supersedes"], "supersedes") if record.key?("supersedes") && !record["supersedes"].nil?
+    fail!("state is invalid") unless STATES.include?(record["state"])
+    slug!(record["node"], "node")
+    if record.key?("allocation")
+      fail!("allocation must be light, medium, or heavy") unless %w[light medium heavy].include?(record["allocation"])
+    end
+    exact_keys!(record["intent"], %w[claim source], [], "intent")
+    nonempty!(record.dig("intent", "claim"), "intent.claim")
+    resolve_store_ref!(record.dig("intent", "source"), "intent.source")
+    snapshot!(record["context"], "context") if record.key?("context")
+    validate_backlinks!(record["back_links"], "back_links") if record.key?("back_links")
+    fail!("frontmatter may not author authority, mode, channel, or enforcer") unless (record.keys & %w[authority mode channel enforcer]).empty?
+  end
+
+  def validate_transition!
+    value = record["transition"]
+    exact_keys!(value, %w[action record_path from to actor at result_ref], [], "transition")
+    fail!("transition.action must be record-transition") unless value["action"] == "record-transition"
+    expected = Pathname.new(path).relative_path_from(Pathname.new(root)).to_s
+    relative_path!(value["record_path"], "transition.record_path")
+    fail!("transition.record_path must equal the validator input path (expected #{expected})") unless value["record_path"] == expected
+    fail!("transition.from is invalid") unless value["from"].nil? || STATES.include?(value["from"])
+    fail!("transition.to must equal state") unless value["to"] == record["state"]
+    fail!("transition.actor must equal write_policy.writer_id") unless value["actor"] == @store.dig("write_policy", "writer_id")
+    timestamp!(value["at"], "transition.at")
+    resolve_store_ref!(value["result_ref"], "transition.result_ref") unless value["result_ref"] == "#operation-result"
+  end
+
+  def validate_operation!
+    op = record["operation"]
+    exact_keys!(op, %w[kind payload], [], "operation")
+    kind = op["kind"]
+    fail!("unknown operation.kind #{kind.inspect}") unless REGISTRY.key?(kind)
+    spec = REGISTRY.fetch(kind)[2]
+    required = spec.keys.reject { |key| key.end_with?("?") }
+    optional = spec.keys.select { |key| key.end_with?("?") }.map { |key| key.delete_suffix("?") }
+    exact_keys!(op["payload"], required, optional, "operation.payload")
+    spec.each do |raw_key, grammar|
+      key = raw_key.delete_suffix("?")
+      next unless op["payload"].key?(key)
+      validate_payload_value!(op["payload"][key], grammar, "operation.payload.#{key}")
+    end
+  end
+
+  def validate_payload_value!(value, grammar, name)
+    case grammar
+    when :node, :slug then slug!(value, name)
+    when :string then nonempty!(value, name)
+    when :store_ref then resolve_store_ref!(value, name)
+    when :options_snapshot then options_snapshot!(value, name)
+    when :option_id then slug!(value, name); resolve_snapshot_option_ids!([value])
+    when :option_ids
+      fail!("#{name} must be a non-empty unique array") unless value.is_a?(Array) && !value.empty? && value.uniq.length == value.length
+      value.each { |item| slug!(item, name) }
+      resolve_snapshot_option_ids!(value)
+    when :target
+      exact_keys!(value, %w[tenant surface], [], name)
+      slug!(value["tenant"], "#{name}.tenant"); slug!(value["surface"], "#{name}.surface")
+    when :week
+      fail!("#{name} must be an ISO week") unless value.is_a?(String) && /\A\d{4}-W(0[1-9]|[1-4]\d|5[0-3])\z/.match?(value)
+    when :locus then fail!("#{name} has an invalid protocol layer") unless %w[semantics field taste frequency current flow stability resonance entropy sovereignty consonance].include?(value)
+    when :failing_term then fail!("#{name} must be flow, resonance, or entropy") unless %w[flow resonance entropy].include?(value)
+    when :requested_operation then fail!("#{name} must name a registered operation other than route-model-tier") unless REGISTRY.key?(value) && value != "route-model-tier"
+    when :tier then fail!("#{name} must be haiku, sonnet, or opus") unless %w[haiku sonnet opus].include?(value)
+    when :allocations
+      fail!("#{name} must be a non-empty array") unless value.is_a?(Array) && !value.empty?
+      value.each_with_index do |entry, index|
+        exact_keys!(entry, %w[node size], [], "#{name}[#{index}]")
+        slug!(entry["node"], "#{name}[#{index}].node")
+        fail!("#{name}[#{index}].size is invalid") unless %w[light medium heavy].include?(entry["size"])
+      end
+      fail!("#{name} node entries must be unique") unless value.map { |entry| entry["node"] }.uniq.length == value.length
+    when :backlinks then validate_backlinks!(value, name, nonempty: true)
+    when :repository then repository_root!(value)
+    when :git_ref
+      nonempty!(value, name)
+      _out, _err, status = Open3.capture3("git", "check-ref-format", value)
+      fail!("#{name} is not accepted by git check-ref-format") unless status.success?
+    when :schedule
+      exact_keys!(value, %w[kind expression], [], name)
+      fail!("#{name}.kind must be cron") unless value["kind"] == "cron"
+      fields = value["expression"].is_a?(String) ? value["expression"].split : []
+      fail!("#{name}.expression must be a five-field cron expression") unless fields.length == 5 && fields.all? { |field| /\A[0-9*?,\/-]+\z/.match?(field) }
+    when :timezone
+      relative_path!(value, name)
+      fail!("#{name} is not an installed IANA time-zone identifier") unless File.file?(File.join("/usr/share/zoneinfo", value))
+    when :send_action then fail!("#{name} must be send-message") unless value == "send-message"
+    when :relative_path then relative_path!(value, name)
+    else fail!("validator has no grammar for #{grammar}")
+    end
+  end
+
+  def validate_body!
+    constraints = tables[:constraints]
+    options = tables[:options]
+    tableau = tables[:tableau]
+    gaps = tables[:gaps]
+    unique_slug_rows!(constraints, "id", "Constraints")
+    constraints.each_with_index do |row, index|
+      slug!(row["source"], "Constraints[#{index}].source")
+      resolve_store_ref!(row["ref"], "Constraints[#{index}].ref")
+      fail!("Constraints[#{index}].weight is invalid") unless %w[hard soft context].include?(row["weight"])
+      nonempty!(row["statement"], "Constraints[#{index}].statement")
+    end
+    unique_slug_rows!(options, "id", "Options")
+    constraint_ids = constraints.map { |row| row["id"] }
+    options.each_with_index do |row, index|
+      nonempty!(row["advance"], "Options[#{index}].advance")
+      fail!("Options[#{index}].size is invalid") unless %w[light medium heavy].include?(row["size"])
+      refs = row["resolves"] + row["worsens"]
+      fail!("Options[#{index}] resolves/worsens overlap") unless (row["resolves"] & row["worsens"]).empty?
+      fail!("Options[#{index}] has an unresolved constraint id") unless refs.all? { |id| constraint_ids.one? { |candidate| candidate == id } }
+    end
+    fail!("Constraints rows must sort by id") unless constraints.map { |row| row["id"] } == constraints.map { |row| row["id"] }.sort
+    fail!("Options rows must sort by id") unless options.map { |row| row["id"] } == options.map { |row| row["id"] }.sort
+    option_ids = options.map { |row| row["id"] }
+    tableau.each_with_index do |row, index|
+      slug!(row["option_id"], "Tableau[#{index}].option_id")
+      fail!("Tableau[#{index}] has an unresolved option_id") unless option_ids.one? { |id| id == row["option_id"] }
+      fail!("Tableau[#{index}].verdict is invalid") unless %w[advance revise cull].include?(row["verdict"])
+      nonempty!(row["rationale"], "Tableau[#{index}].rationale")
+    end
+    if tableau.any?
+      fail!("Tableau rows must sort by option_id and cover each option exactly once") unless tableau.map { |row| row["option_id"] } == option_ids.sort
+    end
+    gaps.each_with_index do |row, index|
+      timestamp!(row["at"], "Enforcer-gap[#{index}].at")
+      fail!("Enforcer-gap[#{index}].kind is invalid") unless %w[manual-prompt-fallback unwired-routine missing-gate].include?(row["kind"])
+      nonempty!(row["detail"], "Enforcer-gap[#{index}].detail")
+    end
+    sorted_gaps = gaps.sort_by { |row| [timestamp!(row["at"], "gap.at"), row["kind"], row["detail"]] }
+    fail!("Enforcer-gap rows are not canonically sorted") unless gaps == sorted_gaps
+  end
+
+  def unique_slug_rows!(rows, key, name)
+    rows.each_with_index { |row, index| slug!(row[key], "#{name}[#{index}].#{key}") }
+    fail!("#{name} #{key} values must be unique") unless rows.map { |row| row[key] }.uniq.length == rows.length
+  end
+
+  def validate_state!
+    state = record["state"]
+    proposal_fields = %w[context allocation]
+    body_empty = tables[:constraints].empty? && tables[:options].empty? && tables[:tableau].empty?
+    rationale = sections["Proposal rationale"].strip
+    result = sections["Operation result"].strip
+    case state
+    when "intent-captured"
+      forbid!(%w[context allocation operation proposal authority_check gate review execution outcome back_links refusal_reason]); fail!("intent-captured body must be empty") unless body_empty && rationale.empty? && result.empty?
+    when "context-bound"
+      require_fields!(proposal_fields)
+      forbid!(%w[proposal authority_check gate review execution outcome back_links refusal_reason])
+      if record.key?("operation")
+        fail!("context-bound observation requires diagnostic or emergent operation") unless observation_mode?
+        fail!("context-bound observation body must be empty") unless body_empty && rationale.empty? && result.empty?
+      else
+        fail!("context-bound proposal body must be empty") unless body_empty && rationale.empty? && result.empty?
+      end
+    when "options-generated"
+      require_fields!(proposal_fields); forbid!(%w[operation proposal authority_check gate review execution outcome back_links refusal_reason]); require_options!; fail!("Tableau review must be empty at options-generated") unless tables[:tableau].empty?; fail!("proposal rationale and result must be empty") unless rationale.empty? && result.empty?
+    when "tableau-reviewed"
+      require_fields!(proposal_fields); forbid!(%w[operation proposal authority_check gate review execution outcome back_links refusal_reason]); require_options_and_tableau!; fail!("proposal rationale and result must be empty") unless rationale.empty? && result.empty?
+    when "artifact-proposed"
+      require_fields!(proposal_fields + %w[operation proposal]); forbid!(%w[authority_check gate review execution outcome back_links refusal_reason]); require_proposal_shape!(rationale, result)
+    when "authority-checked"
+      require_fields!(proposal_fields + %w[operation proposal authority_check]); forbid!(%w[execution outcome back_links refusal_reason]); require_proposal_shape!(rationale, result); validate_authority_shape!
+    when "evidence-recorded"
+      validate_terminal!(rationale, result, body_empty)
+    end
+  end
+
+  def require_fields!(keys)
+    missing = keys.reject { |key| record.key?(key) }
+    fail!("state #{record['state']} is missing fields: #{missing.join(', ')}") unless missing.empty?
+  end
+
+  def forbid!(keys)
+    present = keys.select { |key| record.key?(key) }
+    fail!("state #{record['state']} forbids fields: #{present.join(', ')}") unless present.empty?
+  end
+
+  def require_options!
+    fail!("proposal path requires non-empty Constraints and Options tables") if tables[:constraints].empty? || tables[:options].empty?
+  end
+
+  def require_options_and_tableau!
+    require_options!
+    fail!("proposal path requires a complete Tableau review") if tables[:tableau].empty?
+    fail!("exactly one Tableau option must advance") unless tables[:tableau].count { |row| row["verdict"] == "advance" } == 1
+  end
+
+  def require_proposal_shape!(rationale, result)
+    fail!("artifact proposal requires runtime-active operation") unless operation_mode == :runtime_active
+    require_options_and_tableau!
+    exact_keys!(record["proposal"], %w[option_id], [], "proposal")
+    option = slug!(record.dig("proposal", "option_id"), "proposal.option_id")
+    fail!("proposal.option_id must equal the sole advanced Tableau option") unless tables[:tableau].one? { |row| row["option_id"] == option && row["verdict"] == "advance" }
+    fail!("Proposal rationale must be non-empty") if rationale.empty?
+    fail!("Operation result must be empty before evidence-recorded") unless result.empty?
+  end
+
+  def validate_authority_shape!
+    exact_keys!(record["authority_check"], %w[status], [], "authority_check")
+    fail!("runtime-active authority_check.status must be settled") unless record.dig("authority_check", "status") == "settled"
+    fail!("runtime-active record must not carry gate") if record.key?("gate")
+    review = record["review"]
+    exact_keys!(review, %w[reviewer decision at evidence_ref], [], "review")
+    nonempty!(review["reviewer"], "review.reviewer")
+    fail!("review.decision is invalid") unless %w[confirmed rejected].include?(review["decision"])
+    timestamp!(review["at"], "review.at")
+    resolve_store_ref!(review["evidence_ref"], "review.evidence_ref")
+  end
+
+  def validate_terminal!(rationale, result, body_empty)
+    outcome = record["outcome"]
+    fail!("terminal outcome is invalid") unless %w[committed refused narrated].include?(outcome)
+    if observation_mode?
+      require_fields!(%w[context allocation operation authority_check outcome back_links])
+      forbid!(%w[proposal gate review execution refusal_reason])
+      fail!("observation terminal outcome must be narrated") unless outcome == "narrated"
+      fail!("observation terminal body proposal sections must be empty") unless body_empty && rationale.empty?
+      exact_keys!(record["authority_check"], %w[status], [], "authority_check")
+      fail!("observation authority must be not-applicable") unless record.dig("authority_check", "status") == "not-applicable"
+      fail!("narrated transition.result_ref must be #operation-result") unless record.dig("transition", "result_ref") == "#operation-result"
+      validate_result!(result)
+      validate_backlinks!(record["back_links"], "back_links", nonempty: true)
+      own_path = Pathname.new(path).relative_path_from(Pathname.new(root)).to_s
+      fail!("narrated terminal must not self-hash") if record["back_links"].any? { |entry| entry["repository"] == "private-operating" && entry["path"] == own_path }
+      snapshot = record.dig("operation", "payload", "options_snapshot_ref")
+      fail!("terminal observation must repeat options_snapshot_ref exactly in back_links") if snapshot && !record["back_links"].include?(snapshot)
+    else
+      require_fields!(%w[context operation proposal authority_check review outcome])
+      require_proposal_shape!(rationale, "")
+      validate_authority_shape!
+      fail!("Operation result must be non-empty at proposal terminal") if result.empty?
+      decision = record.dig("review", "decision")
+      if outcome == "committed"
+        fail!("committed runtime-active record requires confirmed review") unless decision == "confirmed"
+        forbid!(%w[refusal_reason])
+        validate_backlinks!(record["back_links"], "back_links", nonempty: true)
+        if operation_channel == :cross_tenant
+          exact_keys!(record["execution"], %w[at], [], "execution")
+          timestamp!(record.dig("execution", "at"), "execution.at")
+        else
+          forbid!(%w[execution])
+        end
+      elsif outcome == "refused"
+        fail!("refused runtime-active record requires rejected review") unless decision == "rejected"
+        nonempty!(record["refusal_reason"], "refusal_reason")
+        forbid!(%w[execution])
+        validate_backlinks!(record["back_links"], "back_links") if record.key?("back_links")
+      else
+        fail!("proposal path cannot terminate narrated")
+      end
+    end
+  end
+
+  def validate_result!(result)
+    kind = record.dig("operation", "kind")
+    result_kind = case kind
+                  when "draft-message" then "draft"
+                  when "recommend-cull" then "recommendation"
+                  else operation_mode == :diagnostic ? "findings" : "narration"
+                  end
+    lines = result.lines
+    fail!("Operation result must begin with Result-kind: #{result_kind}") unless lines.first&.chomp == "Result-kind: #{result_kind}"
+    fail!("Operation result body must be non-empty") if lines.drop(1).join.strip.empty?
+  end
+
+  def operation_mode
+    REGISTRY.dig(record.dig("operation", "kind"), 0)
+  end
+
+  def operation_channel
+    REGISTRY.dig(record.dig("operation", "kind"), 1)
+  end
+
+  def observation_mode?
+    %i[diagnostic emergent].include?(operation_mode)
+  end
+
+  def repository_root!(slug)
+    slug!(slug, "repository")
+    raw = @store.fetch("repositories")[slug]
+    fail!("repository #{slug} does not resolve exactly once in operating-store.yaml") unless raw.is_a?(String)
+    resolved = File.realpath(File.expand_path(raw, root))
+    fail!("repository #{slug} is not a git worktree") unless system("git", "-C", resolved, "rev-parse", "--git-dir", out: File::NULL, err: File::NULL)
+    resolved
+  end
+
+  def resolve_store_ref!(value, name)
+    relative_path!(value, name)
+    candidate = File.expand_path(value, root)
+    fail!("#{name} does not resolve to a file") unless File.file?(candidate)
+    real = File.realpath(candidate)
+    fail!("#{name} escapes the private store root") unless real == root || real.start_with?(root + File::SEPARATOR)
+    real
+  end
+
+  def snapshot!(value, name)
+    exact_keys!(value, %w[repository path blob], [], name)
+    repo = repository_root!(value["repository"])
+    relative_path!(value["path"], "#{name}.path")
+    candidate = File.expand_path(value["path"], repo)
+    fail!("#{name}.path does not resolve to a file") unless File.file?(candidate)
+    real = File.realpath(candidate)
+    fail!("#{name}.path escapes repository #{value['repository']}") unless real == repo || real.start_with?(repo + File::SEPARATOR)
+    object_format, status = Open3.capture2("git", "-C", repo, "rev-parse", "--show-object-format")
+    fail!("could not determine object format for #{name}") unless status.success?
+    expected_length = object_format.strip == "sha256" ? 64 : 40
+    fail!("#{name}.blob must be a full #{expected_length}-character object id") unless /\Ablob:[0-9a-f]{#{expected_length}}\z/.match?(value["blob"])
+    actual, hash_status = Open3.capture2("git", "-C", repo, "hash-object", real)
+    fail!("could not hash #{name}.path") unless hash_status.success?
+    fail!("#{name}.blob does not match the cited bytes") unless value["blob"] == "blob:#{actual.strip}"
+    real
+  end
+
+  def validate_backlinks!(value, name, nonempty: false)
+    fail!("#{name} must be an array") unless value.is_a?(Array)
+    fail!("#{name} must be non-empty") if nonempty && value.empty?
+    value.each_with_index { |entry, index| snapshot!(entry, "#{name}[#{index}]") }
+    fail!("#{name} must not contain duplicate triples") unless value.uniq.length == value.length
+  end
+
+  def options_snapshot!(value, name)
+    file = snapshot!(value, name)
+    cited_record, cited_sections = parse_record_file!(file)
+    fail!("#{name} must cite a supported Operating Harness record") unless cited_record["artifact"] == "OperatingHarness" && cited_record["record_schema"] == SCHEMA_VERSION
+    allowed = %w[options-generated tableau-reviewed artifact-proposed authority-checked evidence-recorded]
+    fail!("#{name} must cite a proposal-path record at options-generated or later") unless allowed.include?(cited_record["state"])
+    if %w[artifact-proposed authority-checked evidence-recorded].include?(cited_record["state"])
+      cited_mode = REGISTRY.dig(cited_record.dig("operation", "kind"), 0)
+      fail!("#{name} must cite a proposal-path operation") unless cited_mode == :runtime_active
+      fail!("#{name} must not cite an observation terminal") if cited_record["outcome"] == "narrated"
+    end
+    cited_options = parse_table!(cited_sections["Options"], %w[id advance size resolves worsens], %w[resolves worsens], "cited Options")
+    fail!("#{name} must cite a non-empty Options table") if cited_options.empty?
+    @snapshot_option_ids = cited_options.map { |row| row["id"] }
+  end
+
+  def resolve_snapshot_option_ids!(ids)
+    fail!("options_snapshot_ref must be validated before option ids") unless @snapshot_option_ids
+    fail!("an option id does not resolve exactly once in options_snapshot_ref") unless ids.all? { |id| @snapshot_option_ids.one? { |candidate| candidate == id } }
+  end
+
+  def validate_consent!
+    ref = record.dig("operation", "payload", "consent_ref")
+    file = resolve_store_ref!(ref, "operation.payload.consent_ref")
+    consent = parse_canonical_consent!(File.binread(file))
+    target = record.dig("operation", "payload", "target")
+    action = record.dig("operation", "payload", "action")
+    fail!("consent tenant does not match operation target tenant") unless consent["tenant"] == target["tenant"]
+    scope = consent["scope"].find { |entry| entry["surface"] == target["surface"] }
+    fail!("consent scope does not cover target surface and action") unless scope && scope["actions"].include?(action)
+    return unless record["state"] == "evidence-recorded" && record["outcome"] == "committed"
+    granted = timestamp!(consent["granted_at"], "consent.granted_at")
+    executed = timestamp!(record.dig("execution", "at"), "execution.at")
+    expires = timestamp!(consent["expires_at"], "consent.expires_at")
+    fail!("consent is not active at execution.at") unless granted <= executed && executed < expires
+  end
+
+  def parse_canonical_consent!(bytes)
+    bytes = bytes.dup.force_encoding(Encoding::UTF_8)
+    fail!("consent must be strict UTF-8 without BOM, CR, tabs, trailing spaces, or blank boundary lines") if bytes.start_with?("\xEF\xBB\xBF".b) || !bytes.valid_encoding? || bytes.include?("\r") || bytes.include?("\t") || !bytes.end_with?("\n") || bytes.end_with?("\n\n") || bytes.lines.any? { |line| line.end_with?(" \n") }
+    lines = bytes.lines(chomp: true)
+    fail!("consent must be NFC-normalized") unless bytes.unicode_normalize(:nfc) == bytes
+    index = 0
+    read_scalar = lambda do |key|
+      line = lines[index]
+      match = line&.match(/\A#{Regexp.escape(key)}: ("(?:[^"\\\x00-\x1f]|\\["\\])*")\z/)
+      fail!("consent expected canonical #{key}") unless match
+      index += 1
+      JSON.parse(match[1])
+    end
+    consent = {}
+    consent["consent_schema"] = read_scalar.call("consent_schema")
+    consent["tenant"] = read_scalar.call("tenant")
+    fail!("consent expected scope block") unless lines[index] == "scope:"
+    index += 1
+    scope = []
+    while lines[index]&.start_with?("  - surface: ")
+      surface_json = lines[index].delete_prefix("  - surface: ")
+      surface = JSON.parse(surface_json) rescue fail!("consent surface must be a JSON string")
+      index += 1
+      fail!("consent expected actions block") unless lines[index] == "    actions:"
+      index += 1
+      actions = []
+      while lines[index]&.start_with?("      - ")
+        actions << (JSON.parse(lines[index].delete_prefix("      - ")) rescue fail!("consent action must be a JSON string"))
+        index += 1
+      end
+      scope << { "surface" => surface, "actions" => actions }
+    end
+    consent["scope"] = scope
+    consent["granted_by"] = read_scalar.call("granted_by")
+    consent["granted_at"] = read_scalar.call("granted_at")
+    consent["expires_at"] = read_scalar.call("expires_at")
+    fail!("consent has trailing or unknown content") unless index == lines.length
+    fail!("consent_schema must be #{SCHEMA_VERSION}") unless consent["consent_schema"] == SCHEMA_VERSION
+    slug!(consent["tenant"], "consent.tenant")
+    nonempty!(consent["granted_by"], "consent.granted_by")
+    fail!("consent.scope must be non-empty") if scope.empty?
+    scope.each do |entry|
+      slug!(entry["surface"], "consent.scope.surface")
+      fail!("consent actions must be non-empty unique Slugs") if entry["actions"].empty? || entry["actions"].uniq.length != entry["actions"].length
+      entry["actions"].each { |action| slug!(action, "consent.scope.action") }
+    end
+    fail!("consent scope surfaces must be unique") unless scope.map { |entry| entry["surface"] }.uniq.length == scope.length
+    timestamp!(consent["granted_at"], "consent.granted_at")
+    timestamp!(consent["expires_at"], "consent.expires_at")
+    canonical = encode_consent(consent)
+    fail!("consent file is not canonically encoded") unless bytes == canonical
+    consent
+  rescue JSON::ParserError => e
+    fail!("consent contains invalid JSON string syntax: #{e.message}")
+  end
+
+  def encode_consent(consent)
+    scope = consent["scope"].map { |entry| { "surface" => entry["surface"], "actions" => entry["actions"].sort } }
+    scope.sort_by! { |entry| [entry["surface"], JSON.generate(entry["actions"])] }
+    lines = []
+    lines << "consent_schema: #{JSON.generate(consent['consent_schema'])}"
+    lines << "tenant: #{JSON.generate(consent['tenant'])}"
+    lines << "scope:"
+    scope.each do |entry|
+      lines << "  - surface: #{JSON.generate(entry['surface'])}"
+      lines << "    actions:"
+      entry["actions"].each { |action| lines << "      - #{JSON.generate(action)}" }
+    end
+    lines << "granted_by: #{JSON.generate(consent['granted_by'])}"
+    lines << "granted_at: #{JSON.generate(canonical_timestamp(consent['granted_at']))}"
+    lines << "expires_at: #{JSON.generate(canonical_timestamp(consent['expires_at']))}"
+    (lines.join("\n") + "\n").encode(Encoding::UTF_8)
+  end
+end
+
+begin
+  JSON.parse(File.read(SCHEMA))
+rescue StandardError => e
+  warn "[error] standalone schema invalid: #{e.message}"
+  exit 1
+end
+
+if ARGV.empty?
+  warn "usage: bin/validate-operating-harness-record <record.md>..."
+  exit 2
+end
+
+failed = false
+ARGV.each do |candidate|
+  begin
+    fail!("record not found: #{candidate}") unless File.file?(candidate)
+    Validator.new(candidate).validate!
+    puts "[ok] Operating Harness record valid: #{candidate}"
+  rescue Invalid, SystemCallError => e
+    warn "[error] #{candidate}: #{e.message}"
+    failed = true
+  end
+end
+exit(failed ? 1 : 0)

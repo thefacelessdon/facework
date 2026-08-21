@@ -1,0 +1,5 @@
+root = ARGV.fetch(0)
+store_path = File.join(root, "operating-store.yaml")
+record_path = File.join(root, "operating/node-alpha/observation.md")
+File.binwrite(store_path, File.binread(store_path).sub("writer_id: harper", "writer_id: intruder"))
+File.binwrite(record_path, File.binread(record_path).sub("actor: harper", "actor: intruder"))

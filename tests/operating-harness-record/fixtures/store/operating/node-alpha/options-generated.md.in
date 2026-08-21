@@ -1,0 +1,40 @@
+---
+artifact: OperatingHarness
+record_schema: 0.1.0-draft
+id: oh-node-alpha-options
+revision: 3
+state: options-generated
+node: node-alpha
+allocation: medium
+intent:
+  claim: "Generate candidate advances for node alpha."
+  source: field-notes/source.md
+context:
+  repository: private-operating
+  path: node-registry/node-alpha.md
+  blob: "blob:@NODE_BLOB@"
+transition:
+  action: record-transition
+  record_path: operating/node-alpha/options-generated.md
+  from: context-bound
+  to: options-generated
+  actor: harper
+  at: 2026-08-21T08:30:00-05:00
+  result_ref: field-notes/source.md
+---
+## Constraints
+| id | source | ref | weight | statement |
+| --- | --- | --- | --- | --- |
+| constraint-1 | field-note | field-notes/source.md | hard | Keep the evidence exact. |
+## Options
+| id | advance | size | resolves | worsens |
+| --- | --- | --- | --- | --- |
+| option-1 | Publish the reviewed increment. | medium | ["constraint-1"] | [] |
+## Tableau review
+| option_id | verdict | rationale |
+| --- | --- | --- |
+## Proposal rationale
+## Operation result
+## Enforcer-gap log
+| at | kind | detail |
+| --- | --- | --- |
