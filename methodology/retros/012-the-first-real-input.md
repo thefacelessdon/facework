@@ -1,7 +1,7 @@
 # Project Retrospective: The first real input (0.0.72 → 0.0.74)
 
-**Date:** 2026-08-21
-**Window:** ~00:07 → 09:30 local, 3 releases, PRs #82, #83, #84
+**Date:** 2026-08-21 · **Addendum:** 2026-08-21, same session (see the end)
+**Window:** ~00:07 → 10:15 local, 6 releases, PRs #82–#87
 **Kind:** System-loop session — self-development of the protocol. Fifth
 observable instance after retros 008–011. Ran as **four parallel Berd sessions
 in four isolated worktrees**, plus seven independent adversary passes in seven
@@ -224,6 +224,10 @@ namespace. Caught during integration, not by a check. **There is still no check 
 
 ### Open, unresolved
 
+> **Status as of the addendum:** items 1 and 2 are closed, 6 is
+> partly closed, and three new items were opened. See *Addendum* below; the
+> original wording is left intact.
+
 1. **No check couples `skills/*/SKILL.md` to `bin/install-skills`.** The drift was caught by
    a human reading a diff. Mechanically checkable, currently unchecked.
 2. **`harness-close`'s refusal path is now tested, but only in scratch.** Six probes
@@ -267,3 +271,134 @@ Do not treat either as promotion. §10's bar wants a worked flow, and the strong
 **self-application** — the instrument advancing its own node. The honest next move is a record on
 a node the author does not also own the instrument for, and the cheapest available check is the
 one this session left open: a mechanical link between `skills/` and `bin/install-skills`.
+
+---
+
+## Addendum — 2026-08-21, ~09:30 → 10:15, releases 0.0.75 → 0.0.77
+
+*Written in the same session, after three more releases. It is here rather than in
+a retro 013 because it is the same finding continuing to happen, and separating
+them would hide the frequency.*
+
+### The thesis got tested three more times and held every time
+
+This retro canonised one rule at 0.0.75: **a gate is not validated until it has
+run on material it did not author.** It was written from a single instance — the
+offset bug. In the ninety minutes after it was written, the same rule produced
+three more findings, none by review:
+
+| # | Found by | Release | Defect |
+|---|---|---|---|
+| 1 | Writing the first record | 0.0.74 | Character-offset vs byte-offset section slicing |
+| 2 | Probing whether a claim was true before acting on it | 0.0.76 | The spec declared **less** enforcement than it had |
+| 3 | Re-validating the store after a release | 0.0.77 | Back-link check conflated provenance with freshness |
+| 4 | Testing the installer's refusal paths before landing | 0.0.76 | Installer would have overwritten a foreign `pre-commit` hook |
+
+Three hits in ninety minutes for a rule derived from one. That is the rule earning
+its place, and it is also a warning: the reason it keeps paying is that the
+practice has a large stock of checks that have never run on anything real.
+
+### New finding: the defect class runs in both directions
+
+The repo's signature defect is *asserted but unenforced* — a claim with nothing
+behind it. 0.0.76 found the **inverse**, and it had not been named before:
+
+- **0.0.73** shipped a validator with ten cases and nothing invoking it, then
+  labelled rows `Unwired`. That label was *accurate about the trigger* and the
+  practice still had no gate.
+- **0.0.76** found that the same spec said `consent presence check unwired` and
+  `executable absent` on four carrier rows, and titled §4 *The missing enforcer*,
+  **all after 0.0.73 had built the thing**. The spec was claiming *less*
+  enforcement than it had.
+
+Declaring less is less dangerous than declaring more, and it is still a defect,
+for a specific reason: **a record inherited the stale claim.** `mantl/001`'s
+enforcer-gap log said the consent-presence check was unwired, because canon said
+so. The correction (`mantl/002`) had to be written as a separate record citing the
+first by blob — dissent appended, not history rewritten. A stale status label does
+not stay in the document; it propagates into evidence.
+
+**Rule added:** an enforcement label is a claim like any other and goes stale like
+any other. When an executable lands, the labels that described its absence are
+part of the same change.
+
+### New rule, and the strongest one this session produced
+
+**A rule whose enforcement generates pressure to break it is mis-specified.**
+
+FW-DEC-011's finding: back-link verification hashed the current bytes at a cited
+path and required equality. That made **every closed record decay to invalid as
+the evidence it cited legitimately evolved** — and the cheapest repair for a
+decayed record is to rewrite its recorded hash, which §5.3 rule 6 forbids
+absolutely. The rule was manufacturing exactly the temptation another rule existed
+to prohibit.
+
+The fix was not to relax rule 6. It was to notice that the check was asking the
+wrong question: *did the advance produce these bytes* (permanent, answerable by
+object existence) had been conflated with *are these still the current bytes at
+that path* (a freshness claim no record ever made).
+
+Generalised: when a prohibition needs willpower to hold, look for the rule that is
+creating the pressure. It is usually the one that is wrong.
+
+### What it cost, and what the evidence looks like now
+
+Byte-drift detection was fatal for three hours and cost a valid record. It is now
+a `[note]`. The store's own output is the argument:
+
+```
+[note] operating-harness/001: back_links[3]: cited bytes are no longer current at
+       bin/validate-operating-harness-record (cited 04d6ec4b, now 6dd6448d)
+```
+
+The **validator changed its own cited bytes** when it implemented the ruling.
+Under the previous rule, the fix would have invalidated the record that cited the
+thing being fixed. And `mantl/002` diverged **within thirty minutes of closing** —
+a record written after the problem was diagnosed still got caught by it, which is
+what makes it structural rather than unlucky. The spec's blob moved twice in
+ninety minutes: `2bde96c0 → 840bb4a1 → 346e03c2`.
+
+### Open items — updated
+
+- **1. Skills ↔ installer check — CLOSED** at 0.0.75.
+  `bin/validate-skill-registration` runs in `make protocol-check` and also checks
+  that a skill's `name:` equals its folder, which is load-bearing on Berd.
+- **2. Close-gate refusal path only tested in scratch — CLOSED** at 0.0.76. Ten
+  committed gate cases, including five installer refusals. One of them earned its
+  place immediately: without it the installer would silently overwrite a foreign
+  `pre-commit` hook.
+- **3. Product-loop review index — still open.** Five terminal records now exist,
+  so a generator would produce something real.
+- **4. Zero of 21 bindings enforced — narrowed, not closed.** The three carrier
+  checks are now **Enforced at commit**; the 18 subject operations remain
+  human-gated or no-gate by design. Authority is still not machine-conferred and
+  should not become so.
+- **5. `schedule-routine` has no machine surface — unchanged.**
+- **6. External-node flow — partly closed.** `mantl/001` is a record on a node with
+  a real external counterparty, and `mantl/002` corrects it. Both are `internal`
+  channel and diagnostic. **The `cross-tenant` channel has still never carried an
+  act**, and cannot until a real person grants a scoped consent record — which is
+  a conversation, not a task.
+- **7. NEW — nothing audits whether a store has the gate installed.** "Enforced at
+  commit" is a property of *this* store, not of the practice. `mantl/002` names
+  this in its own findings.
+- **8. NEW — `--no-verify` bypasses the gate.** It defends against error and
+  drift, not a determined author. A tamper-evident store needs an append-only
+  substrate, which git is not.
+- **9. NEW — object existence is not permanence.** `git gc` can drop unreachable
+  objects. Every blob cited so far was committed and is reachable, but the
+  guarantee is git's, not the carrier's. Citing an immutable reference instead of a
+  path remains open and would supersede FW-DEC-011's leniency rather than extend
+  it.
+
+### What actually got built, for the next reader
+
+Six releases, 0.0.72 → 0.0.77. The carrier is specified, falsified by a
+non-author, ratified (`FW-DEC-010`), enforced by a standalone validator with 13
+record cases, and gated at commit by a per-store hook with 10 gate cases. Five
+records are closed across three nodes in a private, remote-less store of 22
+commits; all five re-validate under 0.0.77.
+
+**Still not promotion.** §10's bar is a worked flow, and the strongest one here
+remains self-application. What changed is that the instrument now refuses things,
+including — twice today — refusing its author.
