@@ -268,6 +268,9 @@ forced to invent candidate advances and a proposed act:
   `intent-captured` → `context-bound` → `evidence-recorded`. It terminates as
   `narrated`, carries no Options, Tableau review, proposal, gate, or review, and
   records only the returned Operation result plus back-links to examined inputs.
+  `score-allocation` and `critique-option` read candidate ids from one immutable
+  external Options snapshot named in their payload; they never populate the
+  observation record's local Options table.
 
 **Status — Unwired structural rule, pending independent recheck.** The author
 selected the short observation path from the adversary's two proposed repairs.
@@ -279,7 +282,7 @@ repository choice.
 | State | What happens | Mechanism in this practice | Output |
 |---|---|---|---|
 | `intent-captured` | An operating claim is stated for a node. | Field note ingest, review line, prior Operating Harness's open item. | Record exists with `intent.claim` + `intent.source`. |
-| `context-bound` | The claim is bound to node state and available compute. | Node state read, allocation budget, prior rulings, consent lookup. | `context` block + `allocation` set. |
+| `context-bound` | The claim is bound to node state and available compute. | Node state read, allocation budget, prior rulings, consent lookup; an allocation score or critique binds one exact read-only Options snapshot. | `context` block + `allocation` set; applicable diagnostic payload complete. |
 | `options-generated` | On the proposal path, candidate advances are produced, each sized. | Agent generates ≥1 candidate advance at Light / Medium / Heavy. | Non-empty Options table. |
 | `tableau-reviewed` | On the proposal path, options are scored, critiqued, or culled. **This is the compute-allocation call.** | Diagnostic operations used inside proposal review act as internal mechanisms; a standalone diagnostic record follows the observation path. | Scored options + cull rationale. |
 | `artifact-proposed` | On the proposal path, one option becomes a concrete proposed act. | A draft, a diff, a schedule change, a message. | `proposal` naming one operation kind + payload. |
@@ -351,8 +354,8 @@ therefore do not appear as authority enforcers.
 |---|---|---|---|---|---|---|
 | 1 | `read-node-state` | `diagnostic` | `internal` | `+node` | — | No gate by design |
 | 2 | `ingest-field-note` | `diagnostic` | `internal` | `+source_ref` | — | No gate by design |
-| 3 | `score-allocation` | `diagnostic` | `internal` | `+option_ids` | — | No gate by design |
-| 4 | `critique-option` | `diagnostic` | `internal` | `+option_id` | — | No gate by design |
+| 3 | `score-allocation` | `diagnostic` | `internal` | `+options_snapshot_ref`, `+option_ids` | — | No gate by design |
+| 4 | `critique-option` | `diagnostic` | `internal` | `+options_snapshot_ref`, `+option_id` | — | No gate by design |
 | 5 | `detect-enforcer-gap` | `diagnostic` | `internal` | `+routine_id` | — | No gate by design |
 | 6 | `draft-message` | `diagnostic` | `internal` | `+audience`, `+subject_ref` | — | No gate by design |
 | 7 | `audit-consent` | `diagnostic` | `internal` | `+target`, `consent_ref?` | — | No gate by design |
@@ -372,13 +375,20 @@ Payload values have these normative shapes:
 
 `Slug` means `^[a-z0-9][a-z0-9._-]*$`. `StoreRef` means a relative POSIX path
 with no `..` whose resolved real path exists beneath the private store root.
+`SnapshotRef` means exactly
+`{repository: <repository Slug>, path: <relative POSIX path with no ..>, blob:
+"blob:<full-object-id>"}`; repository/path resolution and exact-byte identity use
+§5.3 rule 6. `OptionsSnapshotRef` is a `SnapshotRef` whose cited bytes decode as
+an Operating Harness proposal-path record at `options-generated` or later, using
+a supported `record_schema`, with a non-empty Options table.
 
 | Key(s) | Value shape |
 |---|---|
 | `node` | `NodeKey`: non-empty slug; registry membership is authoring-layer |
 | `source_ref`, `subject_ref`, `score_ref`, `base_rate_ref`, `message_ref`, `diff_ref`, `consent_ref` | `StoreRef`: relative POSIX path, no `..`, resolving to an existing file beneath the private store root |
-| `option_id` | one unique Options-table id |
-| `option_ids` | non-empty array of unique Options-table ids |
+| `options_snapshot_ref` | one `OptionsSnapshotRef`; permitted only for `score-allocation` and `critique-option` |
+| `option_id` | one unique id in the Options table of `options_snapshot_ref` |
+| `option_ids` | non-empty array of unique ids in the Options table of `options_snapshot_ref` |
 | `routine_id`, `audience`, `tool`, `runner`, `rationale`, `advance` | non-empty string |
 | `week` | ISO week string matching `^[0-9]{4}-W(0[1-9]|[1-4][0-9]|5[0-3])$` |
 | `locus` | one protocol layer: `semantics | field | taste | frequency | current | flow | stability | resonance | entropy | sovereignty | consonance` |
@@ -405,6 +415,13 @@ accompany every call.
 
 `recommend-cull` records **RECOMMENDED / open**, never RESOLVED, until the human
 rules. `draft-message` is not sending; sending is operation 16.
+
+For rows 3–4, `options_snapshot_ref` is input evidence, not a local candidate
+home. The operation reads only the blob-identified bytes, returns a diagnostic
+value, and cannot modify the cited record, its current path, the observation
+record's subject, or any external state. At `evidence-recorded/narrated`, the
+same SnapshotRef must appear in `back_links`; this records what was examined and
+does not mint write authority.
 
 ### 3.3 Diagnostic reads and carrier writes are separate
 
@@ -635,6 +652,33 @@ terminal does carry `outcome: narrated`.
 §5.1. It is replaced with the human-ratified root before validation; this example
 does not decide that root.
 
+An observation-path allocation critique uses this payload fragment while the
+local Constraints, Options, Tableau review, and Proposal rationale sections stay
+empty:
+
+```yaml
+operation:
+  kind: critique-option
+  payload:
+    options_snapshot_ref:
+      repository: private-operating
+      path: "<record-root>/node-alpha/2026-08-20-001-options.md"
+      blob: "blob:<full-object-id>"
+    option_id: option-2
+```
+
+At `evidence-recorded/narrated`, `back_links` contains that exact triple:
+
+```yaml
+back_links:
+  - repository: private-operating
+    path: "<record-root>/node-alpha/2026-08-20-001-options.md"
+    blob: "blob:<full-object-id>"
+```
+
+Replacing `<record-root>` remains a human-owned directory decision; the example
+does not select it.
+
 #### Canonical serialization
 
 For the parsed structures in this section, **canonical means one semantic value
@@ -757,10 +801,14 @@ draft does not claim the second set can be proved by a file validator.
    registry row, contains only keys allowed by that row, and every value conforms
    to §3.2's value grammar.
 4. **Referential integrity.** Constraints and Options ids are non-empty and unique
-   within their respective tables. `proposal.option_id`, Tableau rows, and
-   operation `option_id(s)` each resolve to exactly one Options-table row. Every
-   `resolves`/`worsens` id resolves to exactly one Constraints-table row. No free
-   or multiply-resolving reference is accepted.
+   within their respective tables. `proposal.option_id` and Tableau rows each
+   resolve to exactly one row in the local Options table. For
+   `score-allocation` and `critique-option`, `options_snapshot_ref` resolves and
+   each payload `option_id`/`option_ids` resolves to exactly one row in that
+   cited record's Options table; those ids never resolve against the empty local
+   observation-path table. Every `resolves`/`worsens` id resolves to exactly one
+   Constraints-table row in the record that owns the Options row. No free or
+   multiply-resolving reference is accepted.
 5. **Consent presence and shape.** A derived `cross-tenant` operation requires
    `consent_ref`. That file must exist and contain `tenant`, non-empty `scope`
    entries of `{surface: <non-empty Slug>, actions: <non-empty unique Slug[]>}`,
@@ -778,6 +826,8 @@ draft does not claim the second set can be proved by a file validator.
    `{repository, path, blob: "blob:<full-object-id>"}`. `repository` resolves via
    the store's repository map; `path` is relative; the full object id equals
    `git hash-object` for the cited bytes. A mismatch is refused, never rewritten.
+   An observation-path terminal repeats every payload `SnapshotRef` input as an
+   exactly equal backlink triple.
 7. **Transition, state shape, and outcome coupling.** `transition.action` is
    `record-transition`; `transition.record_path` equals the validator's input
    path; `transition.actor` equals `operating-store.yaml.write_policy.writer_id`;
@@ -788,8 +838,11 @@ draft does not claim the second set can be proved by a file validator.
    is coupled to the derived authority mode and settled decision where that mode
    carries one.
 8. **One home per concept.** `node`, `allocation`, claim, context snapshot,
-   constraints, options, proposal payload, `execution.at`, Operation result, and
-   backlinks each have the single homes named below. A second copy is invalid.
+   local constraints, local options, proposal payload, `execution.at`, Operation
+   result, and backlinks each have the single homes named below. A referenced
+   Options snapshot remains owned by its cited record; the observation record
+   carries only its `SnapshotRef` plus selected ids, never copied option rows. A
+   second authored copy is invalid.
 
 #### State matrix
 
@@ -807,7 +860,7 @@ global prohibition is part of every Forbidden cell below.
 |---|---|---|
 | `intent-captured` | — | `context`, `allocation`, `operation`, `proposal`, `authority_check`, `gate`, `review`, `execution`, `outcome`, `back_links` |
 | `context-bound` — proposal path | `context`, `allocation` | `operation`, `proposal`, `authority_check`, `gate`, `review`, `execution`, `outcome`, `back_links` |
-| `context-bound` — observation path | `context`, `allocation`; complete `operation` whose derived mode is `diagnostic` or `emergent` | `proposal`, `authority_check`, `gate`, `review`, `execution`, `outcome`, `back_links`; Constraints, Options, Tableau review, Proposal rationale, and Operation result must be empty |
+| `context-bound` — observation path | `context`, `allocation`; complete `operation` whose derived mode is `diagnostic` or `emergent`; rows 3–4 additionally carry a resolving `options_snapshot_ref` and ids resolving inside it | `proposal`, `authority_check`, `gate`, `review`, `execution`, `outcome`, `back_links`; local Constraints, Options, Tableau review, Proposal rationale, and Operation result must be empty |
 | `options-generated` — proposal path | `context`, `allocation`; non-empty Constraints and Options tables | `operation`, `proposal`, `authority_check`, `gate`, `review`, `execution`, `outcome`, `back_links` |
 | `tableau-reviewed` — proposal path | prior proposal-path fields; non-empty Tableau review | `operation`, `proposal`, `authority_check`, `gate`, `review`, `execution`, `outcome`, `back_links` |
 | `artifact-proposed` — proposal path | prior proposal-path fields; `operation` whose derived mode is `ship-gate` or `runtime-active`; `proposal.option_id`; complete `operation.payload` | `authority_check`, `gate`, `review`, `execution`, `outcome`, `back_links` |
@@ -818,8 +871,10 @@ global prohibition is part of every Forbidden cell below.
 Legal transitions are exactly the two paths in §2. A record selects the
 observation path by introducing a `diagnostic`/`emergent` operation at
 `context-bound`; after that it cannot enter a proposal-path state. The Operation
-result section is empty until `evidence-recorded`. Only `record-transition` may
-populate it while advancing to that terminal state.
+result section is empty until `evidence-recorded`. An Options snapshot is an
+immutable external input and does not populate any local proposal-path section.
+Only `record-transition` may populate the Operation result while advancing to
+that terminal state.
 
 Mode-specific authority shapes:
 
@@ -888,10 +943,13 @@ below; prose rationale remains human-read.
 ## Enforcer-gap log   <!-- at | kind | detail -->
 ```
 
-**Constraints** is the one home for forces and constraints. **Options** is the one
-home for candidate advances. `resolves` and `worsens` contain only Constraints
-ids. Context lives only in the frontmatter snapshot reference; proposal payload
-and backlinks live only in frontmatter. The body never duplicates them.
+**Constraints** is the one home for forces and constraints authored by this
+record. **Options** is the one home for candidate advances authored by this
+record. `resolves` and `worsens` contain only Constraints ids. A diagnostic
+`options_snapshot_ref` points to another record's exact bytes; it does not copy
+those rows into this body. Context lives only in the frontmatter snapshot
+reference; proposal payload and backlinks live only in frontmatter. The body
+never duplicates them.
 
 Table value grammar:
 
@@ -1181,7 +1239,7 @@ from the human authority ruling.
 | **P0-3** — pending and settled gates conflated | A full state matrix and three terminal variants now couple mode, decision, and outcome. `narrated` is representable; an unresolved human decision remains `artifact-proposed`. | §5.3 state matrix | Challenge every required/forbidden field combination and proposal retention. |
 | **P0-5** — read-only operation can gate | The evidence-store carve-out is removed. Diagnostics/emergent operations return values without writing; separate `record-transition` persists them only in the canonical Operation result home. Their authority shapes carry no gate or review. | §3.3, §5.3, §5.4, §7 r1 | Challenge whether `record-transition` can still launder an Operation result into a subject-state claim. |
 | **P0-7** — carrier/runtime vocabulary collision | FW-DEC-007 governs. The record uses `artifact: OperatingHarness`; the binding path is a standalone carrier schema and validator. The carrier stays out of `PROTOCOL.md` §9–§12, the manifest schema, and the manifest validator. | §1, §4, §5.2–§5.3, §8, §10 | Grep the forbidden files after rebase and challenge every unqualified carrier-sense use. |
-| **P0-A** — narrated terminal forbidden by proposal lifecycle | The state vocabulary now has two legal paths. Diagnostic/emergent records take the short observation path from `context-bound` directly to `evidence-recorded/narrated`; Options, Tableau review, and proposal are forbidden on that path. Referential-integrity rule 4 is unchanged. | §2, §5.3 state matrix + terminal variants | Construct every diagnostic/emergent row through the observation path and prove none can enter a proposal-path terminal. |
+| **P0-A** — narrated terminal forbidden by proposal lifecycle | The state vocabulary has two legal paths. Diagnostic/emergent records take the short observation path from `context-bound` directly to `evidence-recorded/narrated`; local Options, Tableau review, and proposal are forbidden. `score-allocation` and `critique-option` carry one immutable `options_snapshot_ref`, and their ids resolve inside that cited record under rule 4 without copying its Options locally. Their mode remains diagnostic and the snapshot grants no write authority. | §2, §3.2, §5.2 example, §5.3 rules 4/6/8 + state matrix | Construct all ten diagnostic/emergent rows; for rows 3–4 tamper with the snapshot blob, ids, backlink equality, and local Options emptiness. |
 
 Additional draft-check results:
 
