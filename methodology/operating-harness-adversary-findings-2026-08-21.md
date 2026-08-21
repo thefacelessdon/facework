@@ -218,3 +218,39 @@ provenance claim is disputed, the recourse is another appended dissent.
 Warrant remains asymmetric: an independent **external resolution** carries the
 stronger warrant; an **author resolution** carries the weaker warrant and cannot
 grant structural clearance or ratify any human-owned authority or storage ruling.
+
+---
+
+## Final structural recheck — external findings
+
+**Date:** 2026-08-21
+**Reviewed snapshot:** `33bf279751c8e2d008a377a7cf1434918942b6eb`
+**Correction range:** `981c83dab4426509f58f4e6ecea06a9158333cbd..33bf279751c8e2d008a377a7cf1434918942b6eb`
+**Structural verdict:** REFUSE
+**Authority-matrix verdict:** NOT RULED — the 21 bindings remain RECOMMENDED/open
+**Warrant:** external — stronger
+
+1. **P0-1 — FW-DEC-007 namespace violation remains.** The reviewed snapshot uses
+   bare `harness: OperatingHarness`, routes promotion through the manifest schema
+   and validator, and omits FW-DEC-007 at first definition.
+2. **P0-2 — Consent checks carrier-write time.** The reviewed snapshot binds
+   consent chronology to `transition.at` rather than an immutable
+   subject-execution timestamp or receipt.
+3. **P1-1 — Canonical serialization missing.** Consent files and parsed Markdown
+   table/array cells lack deterministic byte-level serialization rules.
+4. **P1-2 — Authority evidence and frontmatter under-specified.** Review and gate
+   evidence lack required typed provenance, and unknown frontmatter keys remain
+   representable.
+5. **P1-3 — Terminal forbidden-field coverage incomplete.** `refusal_reason` is
+   untyped and not forbidden outside the refused terminal.
+6. **P1-4 — Coherence narration conflicts with FW-DEC-006.** The reviewed
+   snapshot permits scalar-only coherence narration without locus, failing term,
+   and base-rate prior.
+7. **P2-1 — Session A falsely pending.** FW-DEC-007 had resolved vocabulary;
+   only the distinct human-owned directory choice remains RECOMMENDED/open.
+
+### Final structural recheck resolution entries
+
+- No resolution against the current post-`33bf279` carrier shape is recorded by
+  this external recheck. Later author corrections carry weaker warrant until an
+  independent pass checks their exact commit.
