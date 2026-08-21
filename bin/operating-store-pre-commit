@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+# Refuse a commit that would land an invalid Operating Harness record.
+#
+# The carrier's checks — record shape, authority settlement, writer identity,
+# back-link blob integrity, and cross-tenant consent presence/scope/chronology —
+# were all implemented at 0.0.73 and all ran `on_demand`. Nothing invoked them,
+# so the boundary that protects a counterparty depended on the operator
+# remembering to run a command. This hook is the invocation.
+#
+# It is not an `event` trigger: Berd has none, and neither does any runtime this
+# practice uses. It fires on `git commit`, which is the moment a record becomes
+# evidence. A record can still sit invalid in a working tree; it cannot become
+# history.
+set -euo pipefail
+
+ROOT="$(git rev-parse --show-toplevel)"
+[ -f "$ROOT/operating-store.yaml" ] || exit 0
+
+VALIDATOR="$(git config --get facework.recordValidator || true)"
+if [ -z "$VALIDATOR" ] || [ ! -x "$VALIDATOR" ]; then
+  echo "[refused] operating-store pre-commit: record validator not configured or not executable." >&2
+  echo "          git config facework.recordValidator <path to bin/validate-operating-harness-record>" >&2
+  echo "          Refusing rather than passing: an unrunnable gate must not read as a clean one." >&2
+  exit 1
+fi
+
+staged="$(git diff --cached --name-only --diff-filter=ACM -z -- 'operating/*.md' 'operating/**/*.md' | tr '\0' '\n' | sed '/^$/d' | sort -u)"
+[ -n "$staged" ] || exit 0
+
+status=0
+while IFS= read -r path; do
+  [ -n "$path" ] || continue
+
+  # Validate the bytes being committed, not a different version of them. The
+  # validator reads the working tree, so a divergent index would mean the gate
+  # passed on bytes that never land.
+  staged_blob="$(git rev-parse ":$path")"
+  if [ ! -f "$ROOT/$path" ]; then
+    echo "[refused] $path is staged but absent from the working tree; cannot validate the committed bytes." >&2
+    status=1
+    continue
+  fi
+  worktree_blob="$(git hash-object -- "$ROOT/$path")"
+  if [ "$staged_blob" != "$worktree_blob" ]; then
+    echo "[refused] $path differs between the index and the working tree." >&2
+    echo "          staged   $staged_blob" >&2
+    echo "          worktree $worktree_blob" >&2
+    echo "          Stage the exact bytes you want validated, then commit." >&2
+    status=1
+    continue
+  fi
+
+  if ! output="$("$VALIDATOR" "$ROOT/$path" 2>&1)"; then
+    printf '%s\n' "$output" >&2
+    status=1
+  fi
+done <<< "$staged"
+
+if [ "$status" -ne 0 ]; then
+  echo >&2
+  echo "[refused] commit blocked: one or more Operating Harness records did not validate." >&2
+  echo "          Fix the record. Do not weaken the record to satisfy the check." >&2
+  exit 1
+fi
+
+count="$(printf '%s\n' "$staged" | grep -c .)"
+echo "[ok] operating-store pre-commit: $count record(s) validated"

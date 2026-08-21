@@ -1,6 +1,6 @@
 # The Operating Harness — carrier spec for operating intent
 
-**Date:** 2026-08-21 · **Status:** Ratified for v0; structurally cleared; unwired ·
+**Date:** 2026-08-21 · **Status:** Ratified for v0; structurally cleared; **record gate enforced at commit** ·
 **Subject:** the typed carrier for *operating intent*
 **Pairs with:** `methodology/loop-model.md`, `methodology/runtime-ports-berd-gap-2026-08-18.md`
 **Source pattern:** `gamut-ops/documents/design-harnesses-2026-04-27.md` (Design
@@ -39,16 +39,17 @@ cited by path; lock date independently unverifiable.**
 
 Four things this spec had to resolve, stated before the design:
 
-1. **No Operating Harness operation is automatically enforced today.** Of the
-   21 ratified v0 authority-bearing entries in §3 — 18 subject operations and three
-   carrier checks — **zero** have a running automatic enforcer.
-   Every gate is human-invoked or unwired. The
-   validator that would check the record format —
-   `bin/validate-operating-harness-record` —
-   **does not exist.** §3 labels every row with one of four statuses, using this
-   repo's enforcement-audit vocabulary plus the explicit no-gate status:
-   **Enforced / Authoring-layer / Unwired / No gate by design**. §4 states what
-   is missing.
+1. **The record gate now runs; no *subject* operation is automatically gated.**
+   Of the 21 ratified v0 authority-bearing entries in §3, the **three carrier
+   checks** are enforced: `bin/validate-operating-harness-record` exists, and
+   `bin/operating-store-pre-commit` invokes it on every staged record, so an
+   invalid record cannot become history in a hook-installed store. The **18
+   subject operations** remain human-gated or no-gate by design — authority
+   itself is not machine-conferred, and this release does not claim otherwise.
+   §3 labels every row with one of five statuses, using this repo's
+   enforcement-audit vocabulary plus two explicitly local ones:
+   **Enforced at commit / Enforced / Authoring-layer / Unwired / No gate by
+   design**. §4 states what is still not enforced.
    This is the repo's recurring asserted-but-unenforced defect class: eleven
    instances were found across §9–§12
    ([§10–§12 enforcement audit](section10-12-enforcement-audit-2026-08-19.md)),
@@ -278,10 +279,11 @@ forced to invent candidate advances and a proposed act:
   external Options snapshot named in their payload; they never populate the
   observation record's local Options table.
 
-**Status — Structurally cleared and ratified for v0; unwired.** The author
-selected the short observation path from the adversary's two proposed repairs;
-an independent exact-byte recheck cleared its representability grammar. The
-absent standalone validator still does not enforce it. It determines which
+**Status — Structurally cleared, ratified for v0, and checked at commit.** The
+author selected the short observation path from the adversary's two proposed
+repairs; an independent exact-byte recheck cleared its representability grammar,
+and the standalone validator now enforces it whenever a record is committed in a
+hook-installed store. It determines which
 record shapes are legal; FW-DEC-010 separately ratifies the v0 mode, channel,
 enforcer, repository, directory, and writer choices. Neither fact creates a
 validator or running enforcer.
@@ -317,8 +319,9 @@ There was no closed source map to copy. The matrix below was authored from the
 private constraint set's capability domains and the four authority modes in
 §A.3, then structurally cleared by independent exact-byte review. **FW-DEC-010
 ratifies all 21 bindings as the v0 authority registry.** Each operation now bears
-exactly the authority its row states. Ratification does not make an absent
-enforcer run: every `Unwired` row remains unable to claim automatic enforcement.
+exactly the authority its row states. Ratification did not make an enforcer
+run; a hook does. Every row still labelled `Unwired` remains unable to claim
+automatic enforcement, and no row claims that *authority* is machine-conferred.
 
 ### 3.1 Reading the matrix
 
@@ -340,9 +343,15 @@ operations; their separate grammar and authority boundary live only in §3.3.
 **Gate status** starts from this repo's
 [`§9 enforcement-audit vocabulary`](section9-enforcement-audit-2026-08-19.md).
 `Enforced` and `Authoring-layer` retain that audit's meanings. This document adds
-two explicitly local labels rather than attributing them to the audit:
+three explicitly local labels rather than attributing them to the audit:
 
 - **Enforced** — an executable fails on violation.
+- **Enforced at commit** — local to this document: an executable fails on
+  violation, and something invokes it without being asked — here, a `pre-commit`
+  hook in the store. Weaker than a state-change trigger, which no runtime in use
+  provides: an invalid record may exist in a working tree, but not in history. It
+  is conditional on `bin/install-operating-store-hook` having been run against
+  that store, and it is bypassable with `--no-verify`; both are stated in §4.
 - **Authoring-layer** — the obligation is real and provably not machine-checkable.
   Legitimate, and must be *declared as such*.
 - **Unwired** — this document's name for the audit's defect state, **Declared but
@@ -375,8 +384,8 @@ therefore do not appear as authority enforcers.
 | 13 | `advance-node` | `runtime-active` | `internal` | `+node`, `+advance`, `+evidence_refs` | `operator-review` | **Authoring-layer** — human ruling |
 | 14 | `emit-repo-change` | `runtime-active` | `emission` | `+repository`, `+ref`, `+diff_ref` | `operator-review` | **Authoring-layer** — quality gates do not prove authority |
 | 15 | `schedule-routine` | `runtime-active` | `emission` | `+schedule`, `+timezone`, `+runner` | `operator-review` | **Authoring-layer** — Berd exposes no checkable schedule file |
-| 16 | `send-to-collaborator` | `runtime-active` | `cross-tenant` | `+target`, `+action`, `+message_ref`, `+consent_ref` | `operator-review` | **Authoring-layer**; consent presence check unwired |
-| 17 | `operate-in-collaborator-context` | `runtime-active` | `cross-tenant` | `+target`, `+tool`, `+action`, `+consent_ref` | `operator-review` | **Authoring-layer**; consent presence check unwired |
+| 16 | `send-to-collaborator` | `runtime-active` | `cross-tenant` | `+target`, `+action`, `+message_ref`, `+consent_ref` | `operator-review` | **Authoring-layer** review; consent presence, scope and chronology **enforced at commit** |
+| 17 | `operate-in-collaborator-context` | `runtime-active` | `cross-tenant` | `+target`, `+tool`, `+action`, `+consent_ref` | `operator-review` | **Authoring-layer** review; consent presence, scope and chronology **enforced at commit** |
 | 18 | `propose-canon-change` | `runtime-active` | `emission` | `+repository`, `+doc_path`, `+diff_ref` | `independent-review` | **Authoring-layer** — reviewer identity is not machine-gated |
 
 Payload values have these normative shapes:
@@ -439,10 +448,10 @@ separate carrier-maintenance action records what happened to the carrier:
 
 | Carrier action | Regime | Channel | Required payload | Enforcer | Gate status |
 |---|---|---|---|---|---|
-| `validate-record` | ratified v0 `ship-gate` | `internal` | `+record_path` | `operating-harness-record-validator` | **Unwired** — executable absent |
-| `reject-malformed-intent` | ratified v0 `ship-gate` | `internal` | `+candidate_ids`, `+findings` | `operating-harness-record-validator` | **Unwired** — executable absent |
-| `verify-back-links` | ratified v0 `ship-gate` | `internal` | `+record_path` | `operating-harness-record-validator` | **Unwired** — must refuse mismatch; never rewrites hashes |
-| `record-transition` | `carrier-write` — not an `AuthorityMode` | `internal` | `+record_path`, `+from`, `+to`, `+actor`, `+at`, `+result_ref` | `operating-harness-record-validator` | **Unwired** — executable absent |
+| `validate-record` | ratified v0 `ship-gate` | `internal` | `+record_path` | `operating-harness-record-validator` | **Enforced at commit** — hook-installed stores |
+| `reject-malformed-intent` | ratified v0 `ship-gate` | `internal` | `+candidate_ids`, `+findings` | `operating-harness-record-validator` | **Partial** — the validator refuses a malformed record; it does not emit the declared `findings` array |
+| `verify-back-links` | ratified v0 `ship-gate` | `internal` | `+record_path` | `operating-harness-record-validator` | **Enforced at commit** — refuses mismatch; never rewrites hashes |
+| `record-transition` | `carrier-write` — not an `AuthorityMode` | `internal` | `+record_path`, `+from`, `+to`, `+actor`, `+at`, `+result_ref` | `operating-harness-record-validator` | **Shape enforced at commit**; the write itself is performed by hand |
 
 Carrier values are: `record_path` = a `StoreRef` resolving to the record being
 checked; `candidate_ids` = a non-empty array of unique non-empty identifiers;
@@ -460,10 +469,11 @@ payload, fields first introduced by the new state, and the mutable fields named
 in §5.3. Preserving prior fields requires history and is therefore explicitly
 authoring-layer until a store-level enforcer exists. It is not a subject operation
 and grants no subject-operation authority. It **records** the claim carried by the
-new state; it does not authorize or verify that claim. Until the validator exists,
-every transition is authoring-layer evidence rather than an enforced fact. The
-three ratified `ship-gate` modes remain Unwired; ratification fixes their regime
-but does not make the absent validator execute.
+new state; it does not authorize or verify that claim. A committed transition's
+*shape* is now an enforced fact; its *legality as a sequence* is not, because a
+whole-file check cannot see prior states. The three ratified `ship-gate` modes run
+at commit in a hook-installed store; in a store without the hook they are
+`Unwired`, and the spec does not let installation be assumed.
 
 This split is the N8 boundary: diagnosis reads; recording records; neither name
 can launder the other.
@@ -477,15 +487,17 @@ authority.
 
 | State | Rows | Which | Legal lifecycle |
 |---|---|---|---|
-| **Enforced** | 0 | none | none enforced |
-| **Subject: no gate by design** | 10 | subject rows 1–10 | short observation path; record-shape validation unwired |
-| **Subject: authoring-layer human gate** | 8 | subject rows 11–18 | full proposal path; record-shape validation unwired |
-| **Carrier: unwired ratified ship-gate** | 3 | `validate-record`, `reject-malformed-intent`, `verify-back-links` | checks either path; executable absent |
-| **Carrier: unwired carrier-write** | 1 | `record-transition` | writes either path; executable absent |
+| **Enforced at commit** | 3 | `validate-record`, `verify-back-links`, and `record-transition`'s shape | either path; refuses at `git commit` in a hook-installed store |
+| **Subject: no gate by design** | 10 | subject rows 1–10 | short observation path; record shape checked at commit |
+| **Subject: authoring-layer human gate** | 8 | subject rows 11–18 | full proposal path; record shape checked at commit, authority not machine-conferred |
+| **Partial** | 1 | `reject-malformed-intent` | refuses, but does not emit its declared `findings` array |
 
 Each operation or carrier action has one primary status. Subject rows 16–17
-additionally carry an unwired structural consent-presence check; consent substance
-and scope honesty remain authoring-layer obligations. Subject row 15 has no
+additionally carry a **structural consent check that now runs**: presence, file
+shape, tenant binding, scope match, and offset-normalized chronology against
+`execution.at`. Consent *substance* — that the named person actually agreed — and
+scope honesty in the external system remain authoring-layer obligations and are
+not checkable from the record. Subject row 15 has no
 machine-readable runtime surface. Across the original authority-bearing set,
 18 subject rows plus three carrier checks carry **21 ratified v0 bindings**;
 `record-transition` is outside `AuthorityMode`. The count is unchanged by the
@@ -494,31 +506,32 @@ terminal path, but no new gate or enforcement claim.
 
 ---
 
-## 4. The missing enforcer
+## 4. What the enforcer does and does not enforce
 
-The proposed standalone enforcer is
-`bin/validate-operating-harness-record <path>...`. **It does not exist and is not
-wired into `make protocol-check`.** Per FW-DEC-007, it is separate from
-`bin/validate-manifest`. This spec therefore defines its future contract without
-calling any operation enforced.
+The standalone enforcer is `bin/validate-operating-harness-record <path>...`.
+**It exists, and `bin/operating-store-pre-commit` invokes it.** Per FW-DEC-007 it
+is separate from `bin/validate-manifest`, and the carrier format stays out of
+`PROTOCOL.md` §9–§12 and the manifest schema.
 
-The executable would parse the registry and record grammars, exit non-zero on a
-violation, and run as a whole-file static check. §5 separates mechanically
-checkable rules from authoring-layer invariants. Building that executable is a
-follow-up under the structurally cleared and human-ratified v0 shape. Neither
-clearance nor ratification substitutes for implementation. The executable is not
-part of this carrier-spec task.
+It parses the registry and record grammars, exits non-zero on a violation, and
+runs as a whole-file static check. §5 separates mechanically checkable rules from
+authoring-layer invariants. The gate is installed per store with
+`bin/install-operating-store-hook <store-root>`; a store without the hook has the
+executable available and nothing invoking it, which is the state this section
+previously described for every store.
 
 What it will still not enforce, stated now so it is never implied later:
 
-1. **Trigger.** It runs `on_demand` (or inside `make protocol-check`). Berd has no
-   `event` and no `continuous` trigger, so it **cannot** fire on a state
-   transition. A record can sit invalid between invocations. Claude Code's
-   `SessionStart` hook (`bin/facework-session-check`) is Claude Code-only; its
-   per-session sweep is the closest available session-bound approximation to an
-   event gate. The repo also has a `PreToolUse` hook for skill invocation;
-   neither hook observes record transitions, so neither is the gate specified
-   here.
+1. **Trigger — narrower than an event trigger, and named as such.** The gate
+   fires on `git commit`, not on a state change. Berd still has no `event` and no
+   `continuous` trigger, so **a record can sit invalid in a working tree for as
+   long as it likes**; what it cannot do is become history. That is the strongest
+   trigger available on this runtime, and it is a git property rather than a
+   runtime one — the same substitution §5 makes for the absent `MemoryMap`. Two
+   consequences stated rather than discovered: a store without
+   `bin/install-operating-store-hook` run against it has **no gate at all**, and
+   `--no-verify` bypasses it, so this is a gate against error and drift, not
+   against a determined author.
 2. **Consent substance.** That a consent file exists and names a scope and expiry
    is checkable. That the person actually consented is not.
 3. **Scope honesty.** That a `cross-tenant` act stayed inside its declared scope is
@@ -1156,8 +1169,8 @@ medium.
 There is a real binding target here, and it is not TypeScript. Per FW-DEC-007,
 the Operating Harness record uses a **standalone** JSON Schema and standalone
 validator; it never becomes a manifest feature. §5.3 distinguishes mechanically
-checkable structure from authoring-layer truth. Until then, §4's absent
-standalone validator is named as a gap.
+checkable structure from authoring-layer truth, and §4 names what the running
+validator still cannot reach.
 
 ```ts
 // NON-NORMATIVE sketch. Nothing compiles this. §5.3 is normative.
@@ -1192,10 +1205,10 @@ Honest status per part:
 | Part | Status |
 |---|---|
 | Five parts (§1) | Specified. Subject-swap holds; the `cross-tenant` channel is new. |
-| Lifecycle (§2) | Seven-state vocabulary retained; full proposal path for rows 11–18 plus the author-selected short observation path for rows 1–10. **Structurally cleared and ratified for v0; unwired.** |
-| Authority matrix (§3) | **Ratified for v0, not automatically enforced:** 0 enforced / 10 no-gate observation-path operations / 8 authoring-layer proposal-path operations / 3 unwired carrier checks; `record-transition` is separately ratified as `carrier-write`, outside `AuthorityMode`. |
-| Refusals (§7) | Specified. Mechanical portions depend on the absent validator; semantic portions remain authoring-layer. |
-| Record format (§5) | Specified with mechanical and authoring-layer rules separated. **No validator exists.** |
+| Lifecycle (§2) | Seven-state vocabulary retained; full proposal path for rows 11–18 plus the author-selected short observation path for rows 1–10. **Structurally cleared, ratified for v0, and checked at commit.** |
+| Authority matrix (§3) | **Ratified for v0; record shape enforced at commit, authority not machine-conferred:** 3 carrier checks enforced at commit / 10 no-gate observation-path operations / 8 authoring-layer proposal-path operations / 1 partial; `record-transition` is separately ratified as `carrier-write`, outside `AuthorityMode`. |
+| Refusals (§7) | Specified. Mechanical portions run at commit; semantic portions remain authoring-layer. |
+| Record format (§5) | Specified with mechanical and authoring-layer rules separated. **Validator exists and runs at commit.** |
 | Closing signal (§6) | Task-loop artifact specified; product-loop review index specified but unwired. Git supplies audit evidence, not transition proof. |
 
 Next increment, smallest first: in a separate implementation session, satisfy
@@ -1288,3 +1301,15 @@ Additional draft-check results:
    branch does not claim that prerequisite has landed.
 5. **Private-store initialization.** `personal/` and `personal/operating/` are
    ratified locations but are not created or initialized in this session.
+6. **The gate is per store, and nothing audits that it is installed.** A store
+   without `bin/install-operating-store-hook` run against it has the executable
+   available and nothing invoking it. There is no check that reports an
+   uninstalled store, so "enforced at commit" is a property of a store, not of
+   the practice.
+7. **`--no-verify` bypasses the gate.** It defends against error and drift, not
+   against a determined author. A tamper-evident store would need an append-only
+   substrate, which git is not (§4.5).
+8. **`reject-malformed-intent` refuses without reporting.** The validator fails
+   on a malformed record but does not emit the declared
+   `{code, message}` findings array, so the carrier action's payload contract is
+   satisfied by hand rather than by the executable.

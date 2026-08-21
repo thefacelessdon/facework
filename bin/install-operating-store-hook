@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+# Install the Operating Harness record gate into a private operating store.
+#
+#   bin/install-operating-store-hook <store-root>
+#
+# Idempotent. Refuses a target that is not a git repository or does not carry
+# operating-store.yaml, so the hook cannot be installed somewhere it would never
+# fire and be mistaken for coverage.
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+STORE="${1:-}"
+
+if [ -z "$STORE" ]; then
+  echo "usage: bin/install-operating-store-hook <store-root>" >&2
+  exit 1
+fi
+
+if [ ! -d "$STORE" ]; then
+  echo "[error] $STORE is not a directory" >&2
+  exit 1
+fi
+STORE="$(cd "$STORE" && pwd)"
+
+if ! git -C "$STORE" rev-parse --git-dir >/dev/null 2>&1; then
+  echo "[error] $STORE is not a git repository" >&2
+  exit 1
+fi
+
+if [ ! -f "$STORE/operating-store.yaml" ]; then
+  echo "[error] $STORE has no operating-store.yaml — it is not an operating store" >&2
+  exit 1
+fi
+
+VALIDATOR="$ROOT_DIR/bin/validate-operating-harness-record"
+if [ ! -x "$VALIDATOR" ]; then
+  echo "[error] $VALIDATOR is missing or not executable" >&2
+  exit 1
+fi
+
+HOOK_DIR="$(git -C "$STORE" rev-parse --absolute-git-dir)/hooks"
+mkdir -p "$HOOK_DIR"
+TARGET="$HOOK_DIR/pre-commit"
+
+if [ -e "$TARGET" ] && ! grep -q "operating-store pre-commit" "$TARGET" 2>/dev/null; then
+  echo "[error] $TARGET already exists and is not this hook; refusing to overwrite it" >&2
+  exit 1
+fi
+
+cp "$ROOT_DIR/bin/operating-store-pre-commit" "$TARGET"
+chmod +x "$TARGET"
+git -C "$STORE" config facework.recordValidator "$VALIDATOR"
+
+echo "[ok] installed pre-commit gate: $TARGET"
+echo "[ok] validator: $VALIDATOR"
+echo "     Records under operating/ must now validate before they can become history."
