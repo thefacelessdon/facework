@@ -139,6 +139,11 @@ Facework/
   `methodology/operating-harness-spec.md`; v0 authority and storage ratified in
   `DECISION-010`. Mechanically checked by `bin/validate-operating-harness-record`,
   which is **separate from** `bin/validate-manifest` per `DECISION-007`.
+- **Skill registration is checked.** `bin/validate-skill-registration` (in
+  `make protocol-check`) requires every `skills/<name>/SKILL.md` to appear in
+  `bin/install-skills` and its `name:` to equal its folder — Berd treats that
+  name as load-bearing. Added at 0.0.75 because three skills shipped at 0.0.73
+  that nothing installed.
 - **9 specialist agents** in `agents/`, one paired to each operating skill.
 - **4 Berd personas** in `.agents/agents/`, with non-overlapping authority —
   `protocol-operator` (runs one `/fw-*` phase against a tenant repo; cannot edit
