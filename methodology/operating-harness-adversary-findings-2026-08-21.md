@@ -569,3 +569,20 @@ unchanged in the reviewed blob, so the recheck found no regression.
 This structural PASS does not ratify the 21 proposed authority bindings,
 directory, repository, writer identity, or any human-owned choice. All remain
 RECOMMENDED/open pending the human ruling.
+
+## Post-PASS status correction — author record
+
+**Date:** 2026-08-21
+**Basis:** external exact-byte structural PASS recorded in commit `55cd1c4` for
+spec blob `7d5689956d0759c531b39208fae42d2631e322e2`
+**Disposition:** structurally cleared; pending human ratification
+
+The spec's stale pre-clearance status prose now states the external warrant that
+already governs: the carrier shape is structurally cleared, while the proposed
+authority bindings and human-owned storage choices remain unratified. This is a
+status-only correction; it does not change the cleared carrier grammar.
+
+No authority binding, directory, repository, writer identity, or storage choice
+is resolved by this entry. All 21 bindings and every human-owned choice remain
+RECOMMENDED/open pending the human ruling. Prior REFUSE, WATCH, resolution, and
+PASS entries remain unchanged above.

@@ -1,6 +1,6 @@
 # The Operating Harness — carrier spec for operating intent
 
-**Date:** 2026-08-21 · **Status:** Draft, pending `adversary` falsification ·
+**Date:** 2026-08-21 · **Status:** Structurally cleared; pending human ratification ·
 **Subject:** the typed carrier for *operating intent*
 **Pairs with:** `methodology/loop-model.md`, `methodology/runtime-ports-berd-gap-2026-08-18.md`
 **Source pattern:** `gamut-ops/documents/design-harnesses-2026-04-27.md` (Design
@@ -12,7 +12,8 @@ Harness v0.2.2 — bound, compiler-verified, running against 14th & Co)
 qualified and stays out of the manifest schema and validator
 **Falsification record:**
 [`operating-harness-adversary-findings-2026-08-21.md`](operating-harness-adversary-findings-2026-08-21.md)
-— append-only findings and resolution warrants
+— append-only findings and resolution warrants; external exact-byte structural
+PASS recorded at `55cd1c4`
 **Constraint set:** private — SignalThesis + canonical-language guide for
 Harper-as-Operator, author-asserted as locked 2026-06-03. **Inlined as §A; not
 cited by path; lock date independently unverifiable.**
@@ -22,10 +23,11 @@ cited by path; lock date independently unverifiable.**
 > `facework.manifest.schema.json`, or `bin/validate-manifest`. Its future binding
 > path is a standalone record schema and standalone validator — see §10.
 >
-> **Not falsified.** The P0 checklist in §11 is a *draft check* the author ran on
-> the author's own work. The Design Harness needed two rounds of real
-> falsification and its round-1 shape was superseded with six P0 findings. Assume
-> comparable defect density here.
+> **Structurally cleared, not authorized.** An independent exact-byte recheck
+> found no remaining P0 or P1 on spec blob
+> `7d5689956d0759c531b39208fae42d2631e322e2`; the external warrant is appended
+> in the findings record. Structural clearance does not ratify the 21 proposed
+> authority bindings or any directory, repository, writer, or storage choice.
 
 ---
 
@@ -272,12 +274,12 @@ forced to invent candidate advances and a proposed act:
   external Options snapshot named in their payload; they never populate the
   observation record's local Options table.
 
-**Status — Unwired structural rule, pending independent recheck.** The author
-selected the short observation path from the adversary's two proposed repairs.
-It is normative for this draft's representability grammar, but the absent
-standalone validator does not enforce it. It determines which record shapes are
-legal; it does not ratify any mode, channel, enforcer, directory, concurrency, or
-repository choice.
+**Status — Structurally cleared; unwired pending human ratification.** The author
+selected the short observation path from the adversary's two proposed repairs;
+an independent exact-byte recheck cleared its representability grammar. The
+absent standalone validator still does not enforce it. It determines which
+record shapes are legal; it does not ratify any mode, channel, enforcer,
+directory, concurrency, repository, writer, or storage choice.
 
 | State | What happens | Mechanism in this practice | Output |
 |---|---|---|---|
@@ -308,9 +310,10 @@ Two properties carried from v0.2.2's hard-won round 2:
 
 There is no closed source map to copy. The matrix below is a **proposed operation
 registry**, derived from the private constraint set's capability domains and the
-four authority modes in §A.3. It has not been human-ratified or adversarially
-cleared. Therefore it does **not** authorize execution yet. This is the explicit
-P0-6 boundary: the shape is specified; the bindings remain proposed.
+four authority modes in §A.3. Its carrier shape is structurally cleared; its 21
+authority bindings have not been human-ratified. Therefore it does **not**
+authorize execution yet. This is the explicit P0-6 boundary: the shape is
+cleared; the bindings remain proposed.
 
 ### 3.1 Reading the matrix
 
@@ -497,7 +500,8 @@ calling any operation enforced.
 The executable would parse the registry and record grammars, exit non-zero on a
 violation, and run as a whole-file static check. §5 separates mechanically
 checkable rules from authoring-layer invariants. Building that executable is a
-follow-up after human ratification and adversary clearance, not part of this
+follow-up after human ratification; structural clearance is already recorded and
+does not substitute for that ruling. The executable is not part of this
 carrier-spec task.
 
 What it will still not enforce, stated now so it is never implied later:
@@ -1178,15 +1182,15 @@ Honest status per part:
 | Part | Status |
 |---|---|
 | Five parts (§1) | Specified. Subject-swap holds; the `cross-tenant` channel is new. |
-| Lifecycle (§2) | Seven-state vocabulary retained; full proposal path for rows 11–18 plus the author-selected short observation path for rows 1–10. **Unwired structural rule, pending independent recheck.** |
+| Lifecycle (§2) | Seven-state vocabulary retained; full proposal path for rows 11–18 plus the author-selected short observation path for rows 1–10. **Structurally cleared; unwired pending human ratification.** |
 | Authority matrix (§3) | **Proposed, not bound:** 0 enforced / 10 no-gate observation-path operations / 8 authoring-layer proposal-path operations / 3 unwired carrier checks; `record-transition` is separately unwired outside `AuthorityMode`. The lifecycle repair changes representability, not authority. |
 | Refusals (§7) | Specified. Mechanical portions depend on the absent validator; semantic portions remain authoring-layer. |
 | Record format (§5) | Specified with mechanical and authoring-layer rules separated. **No validator exists.** |
 | Closing signal (§6) | Task-loop artifact specified; product-loop review index specified but unwired. Git supplies audit evidence, not transition proof. |
 
-Next increment, smallest first: falsify the proposed shape and resolve its
-findings, then ask the human to ratify or reject the 21 authored bindings. Only a
-surviving, human-ratified shape should become
+Next increment, smallest first: ask the human to ratify or reject the 21 authored
+bindings and the remaining human-owned storage choices. Only a structurally
+cleared, human-ratified shape should become
 `bin/validate-operating-harness-record`; only after that should a worked record
 be emitted.
 
@@ -1222,17 +1226,17 @@ defects.
 
 ---
 
-## 11. Draft check — P0 response, pending adversary falsification
+## 11. Structural check — cleared; human ratification pending
 
-**This is a draft response, not falsification and not clearance.** The append-only
+The append-only
 [`adversary findings record`](operating-harness-adversary-findings-2026-08-21.md)
-records three external passes. Round 3 issued WATCH against the pinned shape at
-`981c83d`; it explicitly did not cover later commits. The author's resolution
-entries carry weaker warrant than an external resolution. Status remains
-**pending adversary falsification**, and structural clearance remains separate
-from the human authority ruling.
+preserves every REFUSE, WATCH, author response, and the final independent
+exact-byte **STRUCTURAL PASS** on spec blob
+`7d5689956d0759c531b39208fae42d2631e322e2`. Author resolutions remain weaker
+than external warrants. The structure is cleared; the authority bindings and
+all storage choices remain pending human ratification.
 
-| Finding | Draft response | Where addressed | What remains for the adversary |
+| Finding | Structural response | Where addressed | Challenge exercised during falsification |
 |---|---|---|---|
 | **P0-1** — a concept with no single home | §3.2 is the single subject-operation registry and payload-value grammar; §3.3 is the single carrier-action grammar. Constraints, Options, context snapshot, proposal payload, Operation result, and backlinks each have one named home. References resolve by typed id/path shapes. | §3.2–§3.3, §5.3 rules 3/4/8, §5.4 | Challenge whether any payload value remains open or body rationale silently duplicates structured data. |
 | **P0-2** — authored authority can lie | Records author only `operation.kind` and payload. Mode, channel, and enforcer derive from the registry; their keys are forbidden. Cross-tenant consent derives from kind. | §3.1–§3.2, §5.3 rules 2/5 | The registry is prose until a validator exists; prove no alternate field can bypass derivation. |
@@ -1244,10 +1248,10 @@ from the human authority ruling.
 Additional draft-check results:
 
 - **P0-4:** no surface-agnostic claim is made; emission and cross-tenant rows
-  require named target/payload shapes. Whether those payloads are sufficient is
-  still a falsification question.
+  require named target/payload shapes. The external exact-byte pass found no
+  remaining P0 or P1.
 - **P0-6:** **open by design.** The registry is explicitly proposed and grants no
-  authority until human ratification and adversary clearance.
+  authority until human ratification. Structural clearance does not grant it.
 - **Enforcement:** zero rows are called enforced. Content-quality commands are no
   longer misrepresented as authority enforcers.
 - **Concurrency:** the first implementation is now explicitly single-writer;
