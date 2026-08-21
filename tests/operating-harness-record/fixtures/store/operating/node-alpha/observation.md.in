@@ -1,0 +1,52 @@
+---
+artifact: OperatingHarness
+record_schema: 0.1.0-draft
+id: oh-node-alpha-observation
+revision: 2
+supersedes: null
+state: evidence-recorded
+node: node-alpha
+allocation: light
+intent:
+  claim: "Read the current node state."
+  source: field-notes/source.md
+context:
+  repository: private-operating
+  path: node-registry/node-alpha.md
+  blob: "blob:@NODE_BLOB@"
+operation:
+  kind: read-node-state
+  payload:
+    node: node-alpha
+authority_check:
+  status: not-applicable
+outcome: narrated
+back_links:
+  - repository: private-operating
+    path: node-registry/node-alpha.md
+    blob: "blob:@NODE_BLOB@"
+transition:
+  action: record-transition
+  record_path: operating/node-alpha/observation.md
+  from: context-bound
+  to: evidence-recorded
+  actor: harper
+  at: 2026-08-21T09:00:00-05:00
+  result_ref: "#operation-result"
+---
+## Constraints
+| id | source | ref | weight | statement |
+| --- | --- | --- | --- | --- |
+## Options
+| id | advance | size | resolves | worsens |
+| --- | --- | --- | --- | --- |
+## Tableau review
+| option_id | verdict | rationale |
+| --- | --- | --- |
+## Proposal rationale
+## Operation result
+Result-kind: findings
+Node state was read without changing subject state.
+## Enforcer-gap log
+| at | kind | detail |
+| --- | --- | --- |

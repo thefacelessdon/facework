@@ -1,0 +1,5 @@
+write_policy:
+  mode: single-writer
+  writer_id: harper
+repositories:
+  private-operating: "."

@@ -1,0 +1,314 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://face.works/schemas/operating-harness-record.schema.json",
+  "title": "Operating Harness record frontmatter v0",
+  "description": "Standalone contract for the parsed YAML frontmatter of an Operating Harness record. Markdown body tables, repository resolution, blob identity, consent bytes, and state coupling are enforced by bin/validate-operating-harness-record.",
+  "$comment": "This schema is separate from the Facework manifest schema. It intentionally does not claim to enforce transition history, actual consent, scope honesty, node-registry membership, prior-field immutability, or Sovereignty recommendation semantics.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["artifact", "record_schema", "id", "revision", "state", "node", "intent", "transition"],
+  "properties": {
+    "artifact": { "const": "OperatingHarness" },
+    "record_schema": { "const": "0.1.0-draft" },
+    "id": { "$ref": "#/$defs/nonEmpty" },
+    "revision": { "type": "integer", "minimum": 0 },
+    "supersedes": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/nonEmpty" }] },
+    "state": { "enum": ["intent-captured", "context-bound", "options-generated", "tableau-reviewed", "artifact-proposed", "authority-checked", "evidence-recorded"] },
+    "node": { "$ref": "#/$defs/slug" },
+    "allocation": { "enum": ["light", "medium", "heavy"] },
+    "intent": {
+      "type": "object", "additionalProperties": false,
+      "required": ["claim", "source"],
+      "properties": { "claim": { "$ref": "#/$defs/nonEmpty" }, "source": { "$ref": "#/$defs/storeRef" } }
+    },
+    "context": { "$ref": "#/$defs/snapshotRef" },
+    "operation": { "$ref": "#/$defs/operation" },
+    "proposal": {
+      "type": "object", "additionalProperties": false, "required": ["option_id"],
+      "properties": { "option_id": { "$ref": "#/$defs/slug" } }
+    },
+    "authority_check": {
+      "type": "object", "additionalProperties": false, "required": ["status"],
+      "properties": { "status": { "enum": ["settled", "not-applicable"] } }
+    },
+    "gate": {
+      "type": "object", "additionalProperties": false,
+      "required": ["verdict", "checked_at", "evidence_ref", "contract_version"],
+      "properties": {
+        "verdict": { "enum": ["pass", "watch", "refuse"] },
+        "checked_at": { "$ref": "#/$defs/timestamp" },
+        "evidence_ref": { "$ref": "#/$defs/storeRef" },
+        "contract_version": { "$ref": "#/$defs/nonEmpty" }
+      }
+    },
+    "review": {
+      "type": "object", "additionalProperties": false,
+      "required": ["reviewer", "decision", "at", "evidence_ref"],
+      "properties": {
+        "reviewer": { "$ref": "#/$defs/nonEmpty" },
+        "decision": { "enum": ["confirmed", "rejected"] },
+        "at": { "$ref": "#/$defs/timestamp" },
+        "evidence_ref": { "$ref": "#/$defs/storeRef" }
+      }
+    },
+    "execution": {
+      "type": "object", "additionalProperties": false, "required": ["at"],
+      "properties": { "at": { "$ref": "#/$defs/timestamp" } }
+    },
+    "outcome": { "enum": ["committed", "refused", "narrated"] },
+    "refusal_reason": { "$ref": "#/$defs/nonEmpty" },
+    "back_links": { "type": "array", "items": { "$ref": "#/$defs/snapshotRef" } },
+    "transition": {
+      "type": "object", "additionalProperties": false,
+      "required": ["action", "record_path", "from", "to", "actor", "at", "result_ref"],
+      "properties": {
+        "action": { "const": "record-transition" },
+        "record_path": { "$ref": "#/$defs/storeRef" },
+        "from": { "oneOf": [{ "type": "null" }, { "enum": ["intent-captured", "context-bound", "options-generated", "tableau-reviewed", "artifact-proposed", "authority-checked", "evidence-recorded"] }] },
+        "to": { "enum": ["intent-captured", "context-bound", "options-generated", "tableau-reviewed", "artifact-proposed", "authority-checked", "evidence-recorded"] },
+        "actor": { "$ref": "#/$defs/nonEmpty" },
+        "at": { "$ref": "#/$defs/timestamp" },
+        "result_ref": { "oneOf": [{ "const": "#operation-result" }, { "$ref": "#/$defs/storeRef" }] }
+      }
+    }
+  },
+  "$defs": {
+    "nonEmpty": { "type": "string", "minLength": 1, "pattern": "\\S" },
+    "slug": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+    "storeRef": { "type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[^\\u0000]+$" },
+    "timestamp": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\\.[0-9]{1,9})?(?:Z|[+-][0-9]{2}:[0-9]{2})$" },
+    "snapshotRef": {
+      "type": "object", "additionalProperties": false,
+      "required": ["repository", "path", "blob"],
+      "properties": {
+        "repository": { "$ref": "#/$defs/slug" },
+        "path": { "$ref": "#/$defs/storeRef" },
+        "blob": { "type": "string", "pattern": "^blob:(?:[0-9a-f]{40}|[0-9a-f]{64})$" }
+      }
+    },
+    "target": {
+      "type": "object", "additionalProperties": false, "required": ["tenant", "surface"],
+      "properties": { "tenant": { "$ref": "#/$defs/slug" }, "surface": { "$ref": "#/$defs/slug" } }
+    },
+    "operation": {
+      "oneOf": [
+        { "$ref": "#/$defs/opReadNodeState" },
+        { "$ref": "#/$defs/opIngestFieldNote" },
+        { "$ref": "#/$defs/opScoreAllocation" },
+        { "$ref": "#/$defs/opCritiqueOption" },
+        { "$ref": "#/$defs/opDetectEnforcerGap" },
+        { "$ref": "#/$defs/opDraftMessage" },
+        { "$ref": "#/$defs/opAuditConsent" },
+        { "$ref": "#/$defs/opNarrateWeek" },
+        { "$ref": "#/$defs/opNarrateCoherence" },
+        { "$ref": "#/$defs/opRecommendCull" },
+        { "$ref": "#/$defs/opRouteModelTier" },
+        { "$ref": "#/$defs/opCommitAllocation" },
+        { "$ref": "#/$defs/opAdvanceNode" },
+        { "$ref": "#/$defs/opEmitRepoChange" },
+        { "$ref": "#/$defs/opScheduleRoutine" },
+        { "$ref": "#/$defs/opSendToCollaborator" },
+        { "$ref": "#/$defs/opOperateInCollaboratorContext" },
+        { "$ref": "#/$defs/opProposeCanonChange" }
+      ]
+    },
+    "operationBase": {
+      "type": "object", "additionalProperties": false, "required": ["kind", "payload"],
+      "properties": { "kind": { "$ref": "#/$defs/slug" }, "payload": { "type": "object" } }
+    },
+    "opReadNodeState": {
+      "allOf": [{ "$ref": "#/$defs/operationBase" }],
+      "properties": { "kind": { "const": "read-node-state" }, "payload": { "$ref": "#/$defs/payloadNode" } }
+    },
+    "opIngestFieldNote": {
+      "allOf": [{ "$ref": "#/$defs/operationBase" }],
+      "properties": { "kind": { "const": "ingest-field-note" }, "payload": { "$ref": "#/$defs/payloadSourceRef" } }
+    },
+    "opScoreAllocation": {
+      "allOf": [{ "$ref": "#/$defs/operationBase" }],
+      "properties": {
+        "kind": { "const": "score-allocation" },
+        "payload": {
+          "type": "object", "additionalProperties": false, "required": ["options_snapshot_ref", "option_ids"],
+          "properties": { "options_snapshot_ref": { "$ref": "#/$defs/snapshotRef" }, "option_ids": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/slug" } } }
+        }
+      }
+    },
+    "opCritiqueOption": {
+      "allOf": [{ "$ref": "#/$defs/operationBase" }],
+      "properties": {
+        "kind": { "const": "critique-option" },
+        "payload": {
+          "type": "object", "additionalProperties": false, "required": ["options_snapshot_ref", "option_id"],
+          "properties": { "options_snapshot_ref": { "$ref": "#/$defs/snapshotRef" }, "option_id": { "$ref": "#/$defs/slug" } }
+        }
+      }
+    },
+    "opDetectEnforcerGap": {
+      "allOf": [{ "$ref": "#/$defs/operationBase" }],
+      "properties": { "kind": { "const": "detect-enforcer-gap" }, "payload": { "$ref": "#/$defs/payloadRoutine" } }
+    },
+    "opDraftMessage": {
+      "allOf": [{ "$ref": "#/$defs/operationBase" }],
+      "properties": {
+        "kind": { "const": "draft-message" },
+        "payload": {
+          "type": "object", "additionalProperties": false, "required": ["audience", "subject_ref"],
+          "properties": { "audience": { "$ref": "#/$defs/nonEmpty" }, "subject_ref": { "$ref": "#/$defs/storeRef" } }
+        }
+      }
+    },
+    "opAuditConsent": {
+      "allOf": [{ "$ref": "#/$defs/operationBase" }],
+      "properties": {
+        "kind": { "const": "audit-consent" },
+        "payload": {
+          "type": "object", "additionalProperties": false, "required": ["target"],
+          "properties": { "target": { "$ref": "#/$defs/target" }, "consent_ref": { "$ref": "#/$defs/storeRef" } }
+        }
+      }
+    },
+    "opNarrateWeek": {
+      "allOf": [{ "$ref": "#/$defs/operationBase" }],
+      "properties": { "kind": { "const": "narrate-week" }, "payload": { "$ref": "#/$defs/payloadWeek" } }
+    },
+    "opNarrateCoherence": {
+      "allOf": [{ "$ref": "#/$defs/operationBase" }],
+      "properties": {
+        "kind": { "const": "narrate-coherence" },
+        "payload": {
+          "type": "object", "additionalProperties": false, "required": ["locus", "failing_term", "base_rate_ref"],
+          "properties": {
+            "locus": { "enum": ["semantics", "field", "taste", "frequency", "current", "flow", "stability", "resonance", "entropy", "sovereignty", "consonance"] },
+            "failing_term": { "enum": ["flow", "resonance", "entropy"] },
+            "base_rate_ref": { "$ref": "#/$defs/storeRef" },
+            "score_ref": { "$ref": "#/$defs/storeRef" }
+          }
+        }
+      }
+    },
+    "opRecommendCull": {
+      "allOf": [{ "$ref": "#/$defs/operationBase" }],
+      "properties": {
+        "kind": { "const": "recommend-cull" },
+        "payload": {
+          "type": "object", "additionalProperties": false, "required": ["node", "rationale"],
+          "properties": { "node": { "$ref": "#/$defs/slug" }, "rationale": { "$ref": "#/$defs/nonEmpty" } }
+        }
+      }
+    },
+    "opRouteModelTier": {
+      "allOf": [{ "$ref": "#/$defs/operationBase" }],
+      "properties": {
+        "kind": { "const": "route-model-tier" },
+        "payload": {
+          "type": "object", "additionalProperties": false, "required": ["requested_operation", "chosen_tier"],
+          "properties": {
+            "requested_operation": { "enum": ["read-node-state", "ingest-field-note", "score-allocation", "critique-option", "detect-enforcer-gap", "draft-message", "audit-consent", "narrate-week", "narrate-coherence", "recommend-cull", "commit-allocation", "advance-node", "emit-repo-change", "schedule-routine", "send-to-collaborator", "operate-in-collaborator-context", "propose-canon-change"] },
+            "chosen_tier": { "enum": ["haiku", "sonnet", "opus"] }
+          }
+        }
+      }
+    },
+    "opCommitAllocation": {
+      "allOf": [{ "$ref": "#/$defs/operationBase" }],
+      "properties": {
+        "kind": { "const": "commit-allocation" },
+        "payload": {
+          "type": "object", "additionalProperties": false, "required": ["week", "allocations"],
+          "properties": {
+            "week": { "$ref": "#/$defs/week" },
+            "allocations": {
+              "type": "array", "minItems": 1,
+              "items": {
+                "type": "object", "additionalProperties": false, "required": ["node", "size"],
+                "properties": { "node": { "$ref": "#/$defs/slug" }, "size": { "enum": ["light", "medium", "heavy"] } }
+              }
+            }
+          }
+        }
+      }
+    },
+    "opAdvanceNode": {
+      "allOf": [{ "$ref": "#/$defs/operationBase" }],
+      "properties": {
+        "kind": { "const": "advance-node" },
+        "payload": {
+          "type": "object", "additionalProperties": false, "required": ["node", "advance", "evidence_refs"],
+          "properties": { "node": { "$ref": "#/$defs/slug" }, "advance": { "$ref": "#/$defs/nonEmpty" }, "evidence_refs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/snapshotRef" } } }
+        }
+      }
+    },
+    "opEmitRepoChange": {
+      "allOf": [{ "$ref": "#/$defs/operationBase" }],
+      "properties": {
+        "kind": { "const": "emit-repo-change" },
+        "payload": {
+          "type": "object", "additionalProperties": false, "required": ["repository", "ref", "diff_ref"],
+          "properties": { "repository": { "$ref": "#/$defs/slug" }, "ref": { "$ref": "#/$defs/nonEmpty" }, "diff_ref": { "$ref": "#/$defs/storeRef" } }
+        }
+      }
+    },
+    "opScheduleRoutine": {
+      "allOf": [{ "$ref": "#/$defs/operationBase" }],
+      "properties": {
+        "kind": { "const": "schedule-routine" },
+        "payload": {
+          "type": "object", "additionalProperties": false, "required": ["schedule", "timezone", "runner"],
+          "properties": {
+            "schedule": { "type": "object", "additionalProperties": false, "required": ["kind", "expression"], "properties": { "kind": { "const": "cron" }, "expression": { "$ref": "#/$defs/nonEmpty" } } },
+            "timezone": { "$ref": "#/$defs/nonEmpty" },
+            "runner": { "$ref": "#/$defs/nonEmpty" }
+          }
+        }
+      }
+    },
+    "opSendToCollaborator": {
+      "allOf": [{ "$ref": "#/$defs/operationBase" }],
+      "properties": {
+        "kind": { "const": "send-to-collaborator" },
+        "payload": {
+          "type": "object", "additionalProperties": false, "required": ["target", "action", "message_ref", "consent_ref"],
+          "properties": { "target": { "$ref": "#/$defs/target" }, "action": { "const": "send-message" }, "message_ref": { "$ref": "#/$defs/storeRef" }, "consent_ref": { "$ref": "#/$defs/storeRef" } }
+        }
+      }
+    },
+    "opOperateInCollaboratorContext": {
+      "allOf": [{ "$ref": "#/$defs/operationBase" }],
+      "properties": {
+        "kind": { "const": "operate-in-collaborator-context" },
+        "payload": {
+          "type": "object", "additionalProperties": false, "required": ["target", "tool", "action", "consent_ref"],
+          "properties": { "target": { "$ref": "#/$defs/target" }, "tool": { "$ref": "#/$defs/nonEmpty" }, "action": { "$ref": "#/$defs/slug" }, "consent_ref": { "$ref": "#/$defs/storeRef" } }
+        }
+      }
+    },
+    "opProposeCanonChange": {
+      "allOf": [{ "$ref": "#/$defs/operationBase" }],
+      "properties": {
+        "kind": { "const": "propose-canon-change" },
+        "payload": {
+          "type": "object", "additionalProperties": false, "required": ["repository", "doc_path", "diff_ref"],
+          "properties": { "repository": { "$ref": "#/$defs/slug" }, "doc_path": { "$ref": "#/$defs/storeRef" }, "diff_ref": { "$ref": "#/$defs/storeRef" } }
+        }
+      }
+    },
+    "payloadNode": {
+      "type": "object", "additionalProperties": false, "required": ["node"],
+      "properties": { "node": { "$ref": "#/$defs/slug" } }
+    },
+    "payloadSourceRef": {
+      "type": "object", "additionalProperties": false, "required": ["source_ref"],
+      "properties": { "source_ref": { "$ref": "#/$defs/storeRef" } }
+    },
+    "payloadRoutine": {
+      "type": "object", "additionalProperties": false, "required": ["routine_id"],
+      "properties": { "routine_id": { "$ref": "#/$defs/nonEmpty" } }
+    },
+    "payloadWeek": {
+      "type": "object", "additionalProperties": false, "required": ["week"],
+      "properties": { "week": { "$ref": "#/$defs/week" } }
+    },
+    "week": { "type": "string", "pattern": "^[0-9]{4}-W(0[1-9]|[1-4][0-9]|5[0-3])$" }
+  }
+}

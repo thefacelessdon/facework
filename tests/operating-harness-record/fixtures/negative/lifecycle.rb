@@ -1,0 +1,5 @@
+path = File.join(ARGV.fetch(0), "operating/node-alpha/observation.md")
+bytes = File.binread(path)
+bytes.sub!("state: evidence-recorded", "state: intent-captured")
+bytes.sub!("to: evidence-recorded", "to: intent-captured")
+File.binwrite(path, bytes)

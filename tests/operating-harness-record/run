@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
+FIXTURES="$ROOT_DIR/tests/operating-harness-record/fixtures"
+VALIDATOR="$ROOT_DIR/bin/validate-operating-harness-record"
+TMP_ROOT="$(mktemp -d)"
+trap 'rm -rf "$TMP_ROOT"' EXIT
+
+prepare_store() {
+  local name="$1"
+  local target="$TMP_ROOT/$name"
+  cp -R "$FIXTURES/store" "$target"
+  find "$target/operating" -name '*.md.in' -print0 | while IFS= read -r -d '' source; do
+    mv "$source" "${source%.in}"
+  done
+  git -C "$target" init -q
+  local node_blob result_blob
+  node_blob="$(git -C "$target" hash-object node-registry/node-alpha.md)"
+  result_blob="$(git -C "$target" hash-object evidence/result.md)"
+  ruby -pi -e "gsub('@NODE_BLOB@', '$node_blob'); gsub('@RESULT_BLOB@', '$result_blob')" "$target"/operating/node-alpha/*.md
+  printf '%s\n' "$target"
+}
+
+expect_pass() {
+  local label="$1" path="$2"
+  if ! "$VALIDATOR" "$path" >"$TMP_ROOT/out" 2>"$TMP_ROOT/err"; then
+    echo "not ok - $label (expected pass)"
+    cat "$TMP_ROOT/err"
+    exit 1
+  fi
+  echo "ok - $label"
+}
+
+expect_fail() {
+  local label="$1" path="$2"
+  if "$VALIDATOR" "$path" >"$TMP_ROOT/out" 2>"$TMP_ROOT/err"; then
+    echo "not ok - $label (expected refusal)"
+    exit 1
+  fi
+  echo "ok - $label refused"
+}
+
+store="$(prepare_store positive)"
+expect_pass "lifecycle observation" "$store/operating/node-alpha/observation.md"
+expect_pass "lifecycle proposal options" "$store/operating/node-alpha/options-generated.md"
+expect_pass "runtime-active authority" "$store/operating/node-alpha/authority-checked.md"
+expect_pass "cross-tenant scoped consent" "$store/operating/node-alpha/cross-tenant.md"
+
+store="$(prepare_store lifecycle-negative)"
+ruby "$FIXTURES/negative/lifecycle.rb" "$store"
+expect_fail "lifecycle terminal fields" "$store/operating/node-alpha/observation.md"
+
+store="$(prepare_store authority-negative)"
+ruby "$FIXTURES/negative/authority.rb" "$store"
+expect_fail "authority settlement" "$store/operating/node-alpha/authority-checked.md"
+
+store="$(prepare_store writer-negative)"
+ruby "$FIXTURES/negative/writer.rb" "$store"
+expect_fail "writer identity" "$store/operating/node-alpha/observation.md"
+
+store="$(prepare_store writer-policy-negative)"
+ruby "$FIXTURES/negative/writer-policy.rb" "$store"
+expect_fail "ratified writer policy" "$store/operating/node-alpha/observation.md"
+
+store="$(prepare_store hash-negative)"
+ruby "$FIXTURES/negative/backlink-hash.rb" "$store"
+expect_fail "back-link hash integrity" "$store/operating/node-alpha/observation.md"
+
+store="$(prepare_store consent-negative)"
+ruby "$FIXTURES/negative/consent.rb" "$store"
+expect_fail "cross-tenant consent tenant binding" "$store/operating/node-alpha/cross-tenant.md"
+
+echo "10 deterministic Operating Harness record cases passed"

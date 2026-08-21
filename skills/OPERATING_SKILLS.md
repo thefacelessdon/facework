@@ -51,6 +51,30 @@ system; a diagnostic reports its present state and stops.
   flag. Present-state only — it does not forecast, and it writes no tracker row.
   Paired persona: `.agents/agents/instrument-reader.md`.
 
+## Carrier skills (Operating Harness lifecycle — NOT Postures)
+
+A fifth class. These operate one **Operating Harness** record — the typed carrier
+for *operating intent* — through its lifecycle. They are not Postures: a Posture
+maintains a live tenant system on the product loop, while these move a single
+carrier record from stated intent to recorded evidence. Governing spec:
+`methodology/operating-harness-spec.md`; authority and storage ratified in
+`methodology/decisions/DECISION-010-operating-harness-v0-ratification.md`.
+
+Per `DECISION-007`, bare "harness" means the runtime sense; the carrier sense is
+always qualified.
+
+- `/harness-open` - Capture one operating intent and bind it to context. Produces
+  a record at `context-bound`; authors only `operation.kind` and its payload,
+  never mode, channel, or enforcer.
+- `/harness-review` - The tableau. Diagnostic only: score and critique candidate
+  advances, change no subject state.
+- `/harness-close` - Authority check and evidence record. **Refuses to close**
+  without a validator-passing record and resolving back-links.
+
+Mechanical check: `bin/validate-operating-harness-record`. It is standalone —
+separate from `bin/validate-manifest`, and the carrier format does not enter
+`PROTOCOL.md` §9-§12 or the manifest schema.
+
 ## Paired Specialist Agents
 - `/mvp-cut` -> `mvp-scope-architect`
 - `/beta-hardening` -> `beta-reliability-auditor`

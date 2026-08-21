@@ -64,6 +64,9 @@ SKILLS=(
   launch-ops
   runtime-validation-pass
   fw-spectrum
+  harness-open
+  harness-review
+  harness-close
 )
 
 PRIMITIVES=(

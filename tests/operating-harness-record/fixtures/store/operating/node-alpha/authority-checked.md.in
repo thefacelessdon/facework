@@ -1,0 +1,61 @@
+---
+artifact: OperatingHarness
+record_schema: 0.1.0-draft
+id: oh-node-alpha-authority
+revision: 5
+supersedes: null
+state: authority-checked
+node: node-alpha
+allocation: medium
+intent:
+  claim: "Advance node alpha with reviewed evidence."
+  source: field-notes/source.md
+context:
+  repository: private-operating
+  path: node-registry/node-alpha.md
+  blob: "blob:@NODE_BLOB@"
+operation:
+  kind: advance-node
+  payload:
+    node: node-alpha
+    advance: "Publish the reviewed increment."
+    evidence_refs:
+      - repository: private-operating
+        path: evidence/result.md
+        blob: "blob:@RESULT_BLOB@"
+proposal:
+  option_id: option-1
+authority_check:
+  status: settled
+review:
+  reviewer: harper
+  decision: confirmed
+  at: 2026-08-21T09:00:00-05:00
+  evidence_ref: review-artifacts/review.md
+transition:
+  action: record-transition
+  record_path: operating/node-alpha/authority-checked.md
+  from: artifact-proposed
+  to: authority-checked
+  actor: harper
+  at: 2026-08-21T09:00:00-05:00
+  result_ref: review-artifacts/review.md
+---
+## Constraints
+| id | source | ref | weight | statement |
+| --- | --- | --- | --- | --- |
+| constraint-1 | field-note | field-notes/source.md | hard | Keep the evidence exact. |
+## Options
+| id | advance | size | resolves | worsens |
+| --- | --- | --- | --- | --- |
+| option-1 | Publish the reviewed increment. | medium | ["constraint-1"] | [] |
+## Tableau review
+| option_id | verdict | rationale |
+| --- | --- | --- |
+| option-1 | advance | It satisfies the fixture constraint. |
+## Proposal rationale
+The exact evidence supports this proposal.
+## Operation result
+## Enforcer-gap log
+| at | kind | detail |
+| --- | --- | --- |
