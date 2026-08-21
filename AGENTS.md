@@ -139,6 +139,13 @@ Facework/
   `methodology/operating-harness-spec.md`; v0 authority and storage ratified in
   `DECISION-010`. Mechanically checked by `bin/validate-operating-harness-record`,
   which is **separate from** `bin/validate-manifest` per `DECISION-007`.
+- **The Operating Harness record gate runs at commit.**
+  `bin/operating-store-pre-commit`, installed into a private store with
+  `bin/install-operating-store-hook <store-root>`, runs
+  `bin/validate-operating-harness-record` on every staged record and refuses the
+  commit on failure. This is what makes the carrier's cross-tenant consent check
+  an enforced boundary rather than an implemented one. It is per store, and
+  `--no-verify` bypasses it.
 - **Skill registration is checked.** `bin/validate-skill-registration` (in
   `make protocol-check`) requires every `skills/<name>/SKILL.md` to appear in
   `bin/install-skills` and its `name:` to equal its folder — Berd treats that

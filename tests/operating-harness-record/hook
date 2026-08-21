@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+# The gate must refuse a bad record at commit time, and only then is the
+# carrier's consent boundary enforced rather than merely implemented.
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
+FIXTURES="$ROOT_DIR/tests/operating-harness-record/fixtures"
+TMP_ROOT="$(mktemp -d)"
+trap 'chmod -R u+w "$TMP_ROOT" 2>/dev/null || true; rm -rf "$TMP_ROOT"' EXIT
+
+store="$TMP_ROOT/store"
+cp -R "$FIXTURES/store" "$store"
+find "$store/operating" -name '*.md.in' -print0 | while IFS= read -r -d '' src; do mv "$src" "${src%.in}"; done
+git -C "$store" init -q
+git -C "$store" config user.email harper@example.invalid
+git -C "$store" config user.name Harper
+node_blob="$(git -C "$store" hash-object node-registry/node-alpha.md)"
+result_blob="$(git -C "$store" hash-object evidence/result.md)"
+ruby -pi -e "gsub('@NODE_BLOB@', '$node_blob'); gsub('@RESULT_BLOB@', '$result_blob')" "$store"/operating/node-alpha/*.md
+
+"$ROOT_DIR/bin/install-operating-store-hook" "$store" >/dev/null
+
+pass=0
+check() { # label expect(commit-ok|commit-refused)
+  local label="$1" expect="$2" got
+  if git -C "$store" commit -q -m "probe" >"$TMP_ROOT/out" 2>&1; then got=commit-ok; else got=commit-refused; fi
+  if [ "$got" = "$expect" ]; then echo "ok - $label"; pass=$((pass+1));
+  else echo "not ok - $label (got $got, expected $expect)"; cat "$TMP_ROOT/out"; exit 1; fi
+}
+
+# 1. a valid record commits
+git -C "$store" add -A
+check "valid record commits" commit-ok
+
+# 2. an invalid record is refused
+ruby -pi -e "gsub('actor: harper', 'actor: intruder')" "$store/operating/node-alpha/observation.md"
+git -C "$store" add operating/node-alpha/observation.md
+check "invalid record refused at commit" commit-refused
+git -C "$store" checkout -- operating/node-alpha/observation.md
+git -C "$store" reset -q
+
+# 3. index and working tree must agree, or the gate would pass on bytes that never land
+git -C "$store" add operating/node-alpha/observation.md
+printf '\ndrift\n' >> "$store/operating/node-alpha/observation.md"
+check "index/worktree divergence refused" commit-refused
+git -C "$store" checkout -- operating/node-alpha/observation.md
+git -C "$store" reset -q
+
+# 4. an unrunnable validator refuses rather than passing quietly
+git -C "$store" config facework.recordValidator /nonexistent/validator
+git -C "$store" add -A 2>/dev/null || true
+printf '\n' >> "$store/operating/node-alpha/observation.md"
+git -C "$store" add operating/node-alpha/observation.md
+check "misconfigured validator refuses, does not pass" commit-refused
+git -C "$store" config facework.recordValidator "$ROOT_DIR/bin/validate-operating-harness-record"
+git -C "$store" checkout -- operating/node-alpha/observation.md
+git -C "$store" reset -q
+
+# 5. commits that touch no record are unaffected
+printf 'note\n' > "$store/review-artifacts/unrelated.md"
+git -C "$store" add review-artifacts/unrelated.md
+check "non-record commit unaffected" commit-ok
+
+# The installer must refuse targets where the gate would never fire, or an
+# uninstallable store reads as a covered one.
+refuse_install() { # label target
+  local label="$1" target="$2"
+  if "$ROOT_DIR/bin/install-operating-store-hook" "$target" >"$TMP_ROOT/out" 2>&1; then
+    echo "not ok - $label (installer accepted it)"; cat "$TMP_ROOT/out"; exit 1
+  fi
+  echo "ok - $label"; pass=$((pass+1))
+}
+
+mkdir -p "$TMP_ROOT/plain" "$TMP_ROOT/bare-git"
+git -C "$TMP_ROOT/bare-git" init -q
+refuse_install "installer refuses a missing path" "$TMP_ROOT/absent"
+refuse_install "installer refuses a non-git directory" "$TMP_ROOT/plain"
+refuse_install "installer refuses a git repo with no operating-store.yaml" "$TMP_ROOT/bare-git"
+
+printf 'write_policy:\n  mode: single-writer\n  writer_id: harper\nrepositories:\n  private-operating: "."\n' > "$TMP_ROOT/bare-git/operating-store.yaml"
+printf '#!/bin/sh\nexit 0\n' > "$(git -C "$TMP_ROOT/bare-git" rev-parse --absolute-git-dir)/hooks/pre-commit"
+chmod +x "$(git -C "$TMP_ROOT/bare-git" rev-parse --absolute-git-dir)/hooks/pre-commit"
+refuse_install "installer refuses to overwrite a foreign pre-commit hook" "$TMP_ROOT/bare-git"
+
+# Installing twice must be safe.
+"$ROOT_DIR/bin/install-operating-store-hook" "$store" >/dev/null
+echo "ok - installer is idempotent"; pass=$((pass+1))
+
+echo "$pass deterministic Operating Harness gate cases passed"
