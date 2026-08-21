@@ -290,10 +290,10 @@ operations; their separate grammar and authority boundary live only in §3.3.
 
 ### 3.2 Proposed subject-operation registry — single home
 
-Payload keys marked with `+` are required. `consent_ref` resolves to the consent
-record grammar in §5.3; `target` names the tenant and surface. Repository quality
-commands may validate a proposed diff, but they do not enforce operating
-authority and therefore do not appear as authority enforcers.
+Payload keys prefixed with `+` are required; a `?` suffix marks an optional key.
+Every listed key resolves to the value grammar below. Repository quality commands
+may validate a proposed diff, but they do not enforce operating authority and
+therefore do not appear as authority enforcers.
 
 | # | Operation kind | Mode | Channel | Required payload | Authority enforcer | Gate status |
 |---|---|---|---|---|---|---|
@@ -319,6 +319,37 @@ authority and therefore do not appear as authority enforcers.
 | 20 | `operate-in-collaborator-context` | `runtime-active` | `cross-tenant` | `+target`, `+tool`, `+action`, `+consent_ref` | `operator-review` | **Authoring-layer**; consent presence check unwired |
 | 21 | `propose-canon-change` | `runtime-active` | `emission` | `+repository`, `+doc_path`, `+diff_ref` | `independent-review` | **Authoring-layer** — reviewer identity is not machine-gated |
 
+Payload values have these normative shapes:
+
+`Slug` means `^[a-z0-9][a-z0-9._-]*$`. `StoreRef` means a relative POSIX path
+with no `..` whose resolved real path exists beneath the private store root.
+
+| Key(s) | Value shape |
+|---|---|
+| `node` | `NodeKey`: non-empty slug; registry membership is authoring-layer |
+| `source_ref`, `subject_ref`, `score_ref`, `message_ref`, `diff_ref`, `consent_ref`, `record_path` | `StoreRef`: relative POSIX path, no `..`, resolving to an existing file beneath the private store root |
+| `option_id` | one unique Options-table id |
+| `option_ids` | non-empty array of unique Options-table ids |
+| `candidate_ids` | non-empty array of unique non-empty identifiers |
+| `routine_id`, `audience`, `tool`, `runner`, `rationale`, `advance` | non-empty string |
+| `week` | ISO week string matching `^[0-9]{4}-W(0[1-9]|[1-4][0-9]|5[0-3])$` |
+| `target` | `{tenant: <non-empty slug>, surface: <non-empty slug>}` |
+| `action` | non-empty slug; for `cross-tenant`, exact value compared with consent scope |
+| `findings` | non-empty array of `{code: <non-empty slug>, message: <non-empty string>}` |
+| `requested_operation` | one subject-operation kind from this registry other than `route-model-tier` |
+| `chosen_tier` | `haiku | sonnet | opus` |
+| `allocations` | non-empty array of unique `{node: NodeKey, size: light | medium | heavy}` entries |
+| `evidence_refs` | non-empty array of Backlinks (§5.3 rule 6) |
+| `repository` | repository slug resolving exactly once in `repositories.yaml` |
+| `ref` | git ref accepted by `git check-ref-format` |
+| `schedule` | `{kind: cron, expression: <valid five-field cron expression>}` |
+| `timezone` | IANA time-zone identifier |
+| `doc_path` | relative POSIX path with no `..`; the target may be new |
+
+No payload key outside the matching registry row is permitted. `consent_ref?` on
+`audit-consent` is optional so the diagnostic can report absence; every `+` key
+is present exactly once.
+
 `recommend-cull` records **RECOMMENDED / open**, never RESOLVED, until the human
 rules. `draft-message` is not sending; sending is operation 19.
 
@@ -332,13 +363,21 @@ carrier-maintenance action records what happened to the carrier:
 |---|---|---|---|---|---|
 | `record-transition` | `carrier-write` — not an `AuthorityMode` | `internal` | `+record_path`, `+from`, `+to`, `+actor`, `+at`, `+result_ref` | `harness-record-validator` | **Unwired** — executable absent |
 
-`transition.action` must be `record-transition`. The action may write only the
-record identified by `record_path`, and only to carry the transition payload and
-the state shape required by §5.3. It is not a subject operation and cannot be
-used to claim the subject changed. Until the validator exists, every transition
-is authoring-layer evidence rather than an enforced fact. The §3.4 tally counts
-the 21 proposed subject operations only; this carrier action is separately
-declared unwired here.
+Carrier values are: `record_path` = the store-relative path of the record being
+checked; `from` = one lifecycle state or `null`; `to` = one lifecycle state;
+`actor` = non-empty identifier; `at` = ISO-8601 timestamp with offset; and
+`result_ref` = a `StoreRef` resolving to the artifact that caused or records the
+transition.
+
+`transition.action` must be `record-transition`. The action is obligated to write
+only the record identified by `record_path`, and only to carry the transition
+payload, fields first introduced by the new state, and the mutable fields named
+in §5.3. Preserving prior fields requires history and is therefore explicitly
+authoring-layer until a store-level enforcer exists. It is not a subject operation
+and cannot be used to claim the subject changed. Until the validator exists,
+every transition is authoring-layer evidence rather than an enforced fact. The
+§3.4 tally counts the 21 proposed subject operations only; this carrier action is
+separately declared unwired here.
 
 This split is the N8 boundary: diagnosis reads; recording records; neither name
 can launder the other.
@@ -524,23 +563,31 @@ draft does not claim the second set can be proved by a file validator.
 2. **Registry derivation.** When `operation` is present, `operation.kind` resolves
    to exactly one §3.2 row. The record contains no `authority`, `mode`, `channel`,
    or `enforcer` key.
-3. **Payload completeness.** `operation.payload` contains every `+` key in its
-   registry row. Unknown payload keys are refused until the registry defines them.
-4. **Referential integrity.** `proposal.option_id`, Tableau rows, and operation
-   `option_id(s)` resolve to Options-table ids. Every `resolves`/`worsens` id
-   resolves to the Constraints table. No free reference is accepted.
+3. **Payload conformance.** `operation.payload` contains every `+` key in its
+   registry row, contains only keys allowed by that row, and every value conforms
+   to §3.2's value grammar.
+4. **Referential integrity.** Constraints and Options ids are non-empty and unique
+   within their respective tables. `proposal.option_id`, Tableau rows, and
+   operation `option_id(s)` each resolve to exactly one Options-table row. Every
+   `resolves`/`worsens` id resolves to exactly one Constraints-table row. No free
+   or multiply-resolving reference is accepted.
 5. **Consent presence and shape.** A derived `cross-tenant` operation requires
    `consent_ref`. That file must exist and contain `tenant`, non-empty `scope`
    entries of `{surface, actions[]}`, `granted_by`, `granted_at` (ISO-8601), and
-   `expires_at` (ISO-8601). The proposal target and action must fall within the
-   declared scope and the expiry must be later than `transition.at`.
+   `expires_at` (ISO-8601). The consent tenant equals
+   `operation.payload.target.tenant`; target surface and action match one scope
+   entry; and `granted_at <= transition.at < expires_at`.
 6. **Backlink shape.** Each backlink is
    `{repository, path, blob: "blob:<full-object-id>"}`. `repository` resolves via
    the store's repository map; `path` is relative; the full object id equals
    `git hash-object` for the cited bytes. A mismatch is refused, never rewritten.
-7. **State shape and outcome coupling.** The state matrix below controls required
-   and forbidden fields. `pending` is never a terminal verdict; terminal outcome
-   is coupled to the derived authority mode and settled decision.
+7. **Transition, state shape, and outcome coupling.** `transition.action` is
+   `record-transition`; `transition.record_path` equals the validator's input
+   path; `transition.to` equals top-level `state`; `transition.at` is ISO-8601
+   with offset; and `transition.result_ref` resolves as a `StoreRef`. The state
+   matrix below controls required and forbidden fields. `pending` is never a
+   terminal verdict; terminal outcome is coupled to the derived authority mode
+   and settled decision where that mode carries one.
 8. **One home per concept.** `node`, `allocation`, claim, context snapshot,
    constraints, options, proposal payload, and backlinks each have the single
    homes named below. A second copy is invalid.
@@ -568,8 +615,8 @@ Mode-specific authority shapes:
 - `ship-gate`: `authority_check.status: settled` and
   `gate.verdict: pass | watch | refuse`; no `review`.
 - `runtime-active`: `authority_check.status: settled` and
-  `review.decision: confirmed | rejected | deferred`; no authored gate.
-  `deferred` may remain `authority-checked` but is not terminal.
+  `review.decision: confirmed | rejected`; no authored gate. If the human has not
+  ruled, the record remains `artifact-proposed` and carries no authority check.
 - `diagnostic` or `emergent`: `authority_check.status: not-applicable`; no `gate`
   and no `review`.
 
@@ -590,6 +637,13 @@ Terminal variants:
 - The operation stayed within consent scope in the external system.
 - `node` resolves to the tenant's private registry and the context snapshot was
   the right one for the judgment.
+- Once introduced, `harness`, `record_schema`, `id`, `supersedes`, `node`,
+  `intent`, `allocation`, `context`, Constraints, Options, Tableau review,
+  Proposal rationale, `operation`, `proposal`, `authority_check`, `gate`, and
+  `review` remain byte-identical across later revisions. A transition may change
+  `revision`, `state`, and `transition`, may append Enforcer-gap rows, and may add
+  only fields first required by the new state. This requires prior history and is
+  not a whole-file check.
 - `transition.from → to` followed the seven-state sequence. Git can help audit
   this but does not prove it.
 - `revision` is monotonic across the lineage; `supersedes` resolves; concurrent
@@ -597,8 +651,8 @@ Terminal variants:
 
 ### 5.4 Body
 
-Fixed sections, in order. The frontmatter carries what a validator reads; the body
-carries what a human reads.
+Fixed sections, in order. The validator reads frontmatter plus the table schemas
+below; prose rationale remains human-read.
 
 ```markdown
 ## Constraints        <!-- id | source | ref | weight | statement -->
@@ -612,6 +666,22 @@ carries what a human reads.
 home for candidate advances. `resolves` and `worsens` contain only Constraints
 ids. Context lives only in the frontmatter snapshot reference; proposal payload
 and backlinks live only in frontmatter. The body never duplicates them.
+
+Table value grammar:
+
+- **Constraints:** `id` is a unique `Slug`; `source` is a non-empty `Slug`; `ref`
+  is a `StoreRef`; `weight` is `hard | soft | context`; `statement` is non-empty.
+- **Options:** `id` is a unique `Slug`; `advance` is non-empty; `size` is
+  `light | medium | heavy`; `resolves` and `worsens` are arrays of unique
+  Constraints ids, with no id in both arrays.
+- **Tableau review:** each Options id appears exactly once; `verdict` is
+  `advance | revise | cull`; `rationale` is non-empty. Exactly one option has
+  `verdict: advance` before `artifact-proposed`, and it equals
+  `proposal.option_id` once that field exists.
+- **Proposal rationale:** non-empty prose from `artifact-proposed` onward; it may
+  explain but never restate the structured payload.
+- **Enforcer-gap log:** zero or more rows; `at` is ISO-8601 with offset; `kind` is
+  one `RecordEnforcerGap`; `detail` is non-empty.
 
 **Enforcer-gap log** is load-bearing, not a courtesy. **N5** / **G5**: if the
 operator prompted it, the Operating Harness failed. Each such event is logged here as
@@ -819,9 +889,10 @@ Honest status per part:
 | Record format (§5) | Specified with mechanical and authoring-layer rules separated. **No validator exists.** |
 | Closing signal (§6) | Task-loop artifact specified; product-loop review index specified but unwired. Git supplies audit evidence, not transition proof. |
 
-Next increment, smallest first: human-ratify the proposed registry, then run the
-pending adversary falsification. Only a surviving shape should become
-`bin/validate-harness-record`; only after that should a worked record be emitted.
+Next increment, smallest first: falsify the proposed shape and resolve its
+findings, then ask the human to ratify or reject the 21 authored bindings. Only a
+surviving, human-ratified shape should become `bin/validate-harness-record`; only
+after that should a worked record be emitted.
 
 ---
 
@@ -862,7 +933,7 @@ falsification**.
 |---|---|---|---|
 | **P0-1** — a concept with no single home | §3.2 is the single subject-operation registry; §3.3 is the single carrier-action grammar. Constraints, Options, context snapshot, proposal payload, and backlinks each have one named home. References resolve by id. | §3.2–§3.3, §5.3 rules 4/8, §5.4 | Challenge whether body rationale silently duplicates payload or context. |
 | **P0-2** — authored authority can lie | Records author only `operation.kind` and payload. Mode, channel, and enforcer derive from the registry; their keys are forbidden. Cross-tenant consent derives from kind. | §3.1–§3.2, §5.3 rules 2/5 | The registry is prose until a validator exists; prove no alternate field can bypass derivation. |
-| **P0-3** — pending and settled gates conflated | A full state matrix and three terminal variants now couple mode, decision, and outcome. `narrated` is representable; `deferred` is non-terminal. | §5.3 state matrix | Challenge every required/forbidden field combination and proposal retention. |
+| **P0-3** — pending and settled gates conflated | A full state matrix and three terminal variants now couple mode, decision, and outcome. `narrated` is representable; an unresolved human decision remains `artifact-proposed`. | §5.3 state matrix | Challenge every required/forbidden field combination and proposal retention. |
 | **P0-5** — read-only operation can gate | The evidence-store carve-out is removed. Diagnostics change no state; separate `record-transition` writes carrier history. Diagnostic/emergent authority shapes carry no gate or review. | §3.3, §5.3, §7 r1 | Challenge whether `record-transition` can still launder a diagnostic result into a subject-state claim. |
 
 Additional draft-check results:
