@@ -269,6 +269,13 @@ forced to invent candidate advances and a proposed act:
   `narrated`, carries no Options, Tableau review, proposal, gate, or review, and
   records only the returned Operation result plus back-links to examined inputs.
 
+**Status — Unwired structural rule, pending independent recheck.** The author
+selected the short observation path from the adversary's two proposed repairs.
+It is normative for this draft's representability grammar, but the absent
+standalone validator does not enforce it. It determines which record shapes are
+legal; it does not ratify any mode, channel, enforcer, directory, concurrency, or
+repository choice.
+
 | State | What happens | Mechanism in this practice | Output |
 |---|---|---|---|
 | `intent-captured` | An operating claim is stated for a node. | Field note ingest, review line, prior Operating Harness's open item. | Record exists with `intent.claim` + `intent.source`. |
@@ -443,20 +450,22 @@ authority.
 
 ### 3.4 Enforcement tally — stated, not implied
 
-| State | Rows | Which |
-|---|---|---|
-| **Enforced** | 0 | none |
-| **Subject: no gate by design** | 10 | subject rows 1–10 |
-| **Subject: authoring-layer human gate** | 8 | subject rows 11–18 |
-| **Carrier: unwired proposed ship-gate** | 3 | `validate-record`, `reject-malformed-intent`, `verify-back-links` |
-| **Carrier: unwired carrier-write** | 1 | `record-transition` |
+| State | Rows | Which | Legal lifecycle |
+|---|---|---|---|
+| **Enforced** | 0 | none | none enforced |
+| **Subject: no gate by design** | 10 | subject rows 1–10 | short observation path; record-shape validation unwired |
+| **Subject: authoring-layer human gate** | 8 | subject rows 11–18 | full proposal path; record-shape validation unwired |
+| **Carrier: unwired proposed ship-gate** | 3 | `validate-record`, `reject-malformed-intent`, `verify-back-links` | checks either path; executable absent |
+| **Carrier: unwired carrier-write** | 1 | `record-transition` | writes either path; executable absent |
 
 Each operation or carrier action has one primary status. Subject rows 16–17
 additionally carry an unwired structural consent-presence check; consent substance
 and scope honesty remain authoring-layer obligations. Subject row 15 has no
 machine-readable runtime surface. Across the original authority-bearing set,
 18 subject rows plus three carrier checks preserve **21 proposed mode bindings**;
-`record-transition` is outside `AuthorityMode`.
+`record-transition` is outside `AuthorityMode`. The count is unchanged by the
+short-form lifecycle; representability changed. Rows 1–10 now have a legal
+terminal path, but no new gate or enforcement claim.
 
 ---
 
@@ -993,8 +1002,8 @@ Honest status per part:
 | Part | Status |
 |---|---|
 | Five parts (§1) | Specified. Subject-swap holds; the `cross-tenant` channel is new. |
-| Lifecycle (§2) | Reused verbatim from v0.2.2, as §A.3 already declared. |
-| Authority matrix (§3) | **Proposed, not bound:** 0 enforced / 10 no-gate subject operations / 8 authoring-layer subject operations / 3 unwired carrier checks; `record-transition` is separately unwired outside `AuthorityMode`. |
+| Lifecycle (§2) | Seven-state vocabulary retained; full proposal path for rows 11–18 plus the author-selected short observation path for rows 1–10. **Unwired structural rule, pending independent recheck.** |
+| Authority matrix (§3) | **Proposed, not bound:** 0 enforced / 10 no-gate observation-path operations / 8 authoring-layer proposal-path operations / 3 unwired carrier checks; `record-transition` is separately unwired outside `AuthorityMode`. The lifecycle repair changes representability, not authority. |
 | Refusals (§7) | Specified. Mechanical portions depend on the absent validator; semantic portions remain authoring-layer. |
 | Record format (§5) | Specified with mechanical and authoring-layer rules separated. **No validator exists.** |
 | Closing signal (§6) | Task-loop artifact specified; product-loop review index specified but unwired. Git supplies audit evidence, not transition proof. |
