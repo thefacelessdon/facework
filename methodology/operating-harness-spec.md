@@ -637,38 +637,98 @@ does not decide that root.
 
 #### Canonical serialization
 
-All parsed artifacts are UTF-8 with LF line endings, one trailing newline, no
-tabs, and no Unicode normalization performed by the validator. YAML uses YAML
-1.2, exactly one document, no custom tags, anchors, aliases, merge keys, or
-duplicate mapping keys. Mapping order is not semantic.
+For the parsed structures in this section, **canonical means one semantic value
+has one accepted byte string**. The validator decodes strictly, encodes the
+decoded value with the algorithms below, and accepts the source only when the
+re-encoded bytes equal the source bytes. A merely equivalent YAML or Markdown
+representation is refused.
+
+The common byte rules apply to the complete consent file and, independently, to
+each structured table slice inside the record body: strict UTF-8 without BOM;
+Unicode scalar values normalized to NFC before validation, sorting, or emission;
+LF line endings; exactly one final LF in the encoded slice; no tabs, trailing
+spaces, blank line at the beginning or end of the slice, or carriage returns.
+Sorting is ascending lexicographic order of the normalized UTF-8 byte strings.
+JSON string encoding below means RFC 8259 double-quoted strings: escape quotation
+mark and reverse solidus; decoded control characters are refused, so no alternate
+control-character escape exists; do not escape solidus or printable non-ASCII
+characters.
+
+**Consent YAML encoder and decoder.** The consent file is the restricted YAML
+1.2 block form shown below, not general YAML. The encoder emits top-level keys in
+the exact order `consent_schema`, `tenant`, `scope`, `granted_by`, `granted_at`,
+`expires_at`; uses exactly two spaces per indentation level; emits no document
+marker, flow collection, comment, tag, anchor, alias, merge key, or blank line;
+and emits every scalar value as a JSON-encoded double-quoted string. It sorts
+each unique `actions` sequence and then sorts `scope` entries by `surface`
+followed by the encoded actions sequence. Sequence markers are exactly `- `.
+
+The decoder first applies the common byte checks, then parses only that grammar:
+the six top-level keys in that order; `scope` as a non-empty block sequence;
+each scope mapping with exactly `surface` then `actions`; and `actions` as a
+non-empty block sequence. Unknown or duplicate keys, alternate indentation,
+plain or single-quoted scalars, alternate key order, unsorted collections, and
+all other YAML spellings are refused. It JSON-decodes each double-quoted scalar,
+applies the value grammar, canonically re-encodes the entire consent object, and
+requires byte equality.
 
 A consent reference resolves to a YAML file with exactly these keys and shapes;
 unknown keys are rejected:
 
 ```yaml
-consent_schema: 0.1.0-draft
-tenant: counterparty-alpha
+consent_schema: "0.1.0-draft"
+tenant: "counterparty-alpha"
 scope:
-  - surface: inbox
+  - surface: "inbox"
     actions:
-      - send-message
-granted_by: counterparty-owner-id
-granted_at: 2026-08-20T09:00:00-05:00
-expires_at: 2026-08-27T09:00:00-05:00
+      - "send-message"
+granted_by: "counterparty-owner-id"
+granted_at: "2026-08-20T14:00:00Z"
+expires_at: "2026-08-27T14:00:00Z"
 ```
 
-`scope` is a non-empty YAML sequence. Each item has exactly `surface` and
-`actions`; `actions` is a non-empty YAML sequence of unique Slugs. Scalar values
-that YAML could interpret as another type must be quoted.
+`scope` and `actions` are non-empty; actions are unique Slugs and scope surfaces
+are unique. Consent timestamps use the timestamp grammar below. The canonical
+encoder converts them to UTC and emits `Z`, omits the fractional part when zero,
+and otherwise removes trailing fractional zeroes.
 
-The body uses GitHub-Flavored Markdown tables with the exact header names and
-column order shown in §5.4 and a delimiter row containing `---` for every column.
-Every logical row occupies one physical line. Array-valued cells (`resolves` and
-`worsens`) are minified JSON arrays of strings, for example
-`["constraint-a","constraint-b"]`; `[]` is the empty array. In ordinary string
-cells, `\` serializes as `\\`, `|` serializes as `\|`, and literal newlines
-are forbidden. A validator decodes those escapes before applying the value
-grammar. This is the only accepted table-cell encoding.
+**Markdown table encoder and decoder.** The four structured body tables use the
+exact header names and column order in §5.4. The encoder emits a header as
+`| ` + cells joined by ` | ` + ` |` + LF, then an identically shaped delimiter
+row whose every cell is `---`. Every body row uses that same form: exactly one
+ASCII space between each boundary pipe and cell bytes, including empty cells;
+no alignment colons or additional padding. Constraints and Options rows sort by
+`id`; Tableau rows sort by `option_id`; Enforcer-gap rows sort by normalized
+instant, then `kind`, then `detail`.
+
+Before cell emission, every string is NFC-normalized and literal CR, LF, and NUL
+are refused. Ordinary cells encode reverse solidus as `\\` and then pipe as
+`\|`. Array cells first sort their unique normalized strings, serialize them as
+a minified JSON array with the JSON string rules above (for example
+`["constraint-a","constraint-b"]`; `[]` is empty), then apply the same
+table-layer reverse-solidus and pipe escaping.
+
+The decoder requires the exact header and delimiter bytes. It scans each
+physical row left-to-right; a pipe is a boundary only when preceded by an even
+number of consecutive reverse solidus bytes. It requires the opening and closing
+boundary pipes and exactly one padding space on each side of every cell, removes
+that padding, and decodes only `\\` → `\` and `\|` → `|` left-to-right; every
+other table-layer escape is refused. Array columns are then parsed as minified
+JSON string arrays. The decoder applies the column value grammar, uniqueness and
+row-order rules, re-encodes the complete table, and requires byte equality. This
+is the only accepted table and array-cell representation.
+
+**Comparable timestamp grammar.** `granted_at`, `execution.at`, and `expires_at`
+each use the RFC 3339 subset
+`YYYY-MM-DDTHH:MM:SS[.fraction](Z|+HH:MM|-HH:MM)`, where `fraction` is one to
+nine decimal digits: a full date and time plus an explicit UTC designator or
+numeric offset. Date-only and offset-free local values are refused. Calendar
+fields must form a real Gregorian date; offset hours are `00`–`14`, offset
+minutes are `00`–`59`, `14` permits only `00` minutes, and leap-second `:60` is
+refused. For comparison, parse each value to an instant, subtract its offset,
+and normalize it to UTC epoch nanoseconds (right-padding the fraction to nine
+digits). Chronology is numeric comparison of those normalized instants, never
+lexical comparison of timestamp strings.
 
 ### 5.3 What makes a record valid
 
@@ -704,14 +764,16 @@ draft does not claim the second set can be proved by a file validator.
 5. **Consent presence and shape.** A derived `cross-tenant` operation requires
    `consent_ref`. That file must exist and contain `tenant`, non-empty `scope`
    entries of `{surface: <non-empty Slug>, actions: <non-empty unique Slug[]>}`,
-   `granted_by`, `granted_at` (ISO-8601), and `expires_at` (ISO-8601). The
-   consent tenant equals
+   `granted_by`, `granted_at`, and `expires_at`, encoded by the canonical consent
+   grammar above. All three chronology values — `granted_at`, `execution.at`,
+   and `expires_at` — require explicit offsets under the comparable timestamp
+   grammar. The consent tenant equals
    `operation.payload.target.tenant`; target surface and action match one scope
    entry. A terminal `committed` cross-tenant record requires
-   `execution.at` (ISO-8601 with offset), and the chronology check is
-   `granted_at <= execution.at < expires_at`. A pre-execution transition cannot
-   settle that check; `transition.at` is carrier history, not the time of the
-   external act.
+   `execution.at`, and the chronology check is
+   `normalize(granted_at) <= normalize(execution.at) < normalize(expires_at)`.
+   A pre-execution transition cannot settle that check; `transition.at` is
+   carrier history, not the time of the external act.
 6. **Backlink shape.** Each backlink is
    `{repository, path, blob: "blob:<full-object-id>"}`. `repository` resolves via
    the store's repository map; `path` is relative; the full object id equals
