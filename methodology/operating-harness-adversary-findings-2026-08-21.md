@@ -254,3 +254,15 @@ grant structural clearance or ratify any human-owned authority or storage ruling
 - No resolution against the current post-`33bf279` carrier shape is recorded by
   this external recheck. Later author corrections carry weaker warrant until an
   independent pass checks their exact commit.
+
+- **2026-08-21 — author resolution, weaker warrant.** Commit
+  `e86fefd894a19e7631df6321bb1c2c872a94516a` records the author's correction of
+  the final recheck defects still present at current HEAD: canonical consent and
+  Markdown-table serialization, closed-world frontmatter, typed gate/review
+  evidence, and complete `refusal_reason` coverage. Later commits had already
+  corrected the reviewed snapshot's FW-DEC-007, execution-time consent,
+  FW-DEC-006, and Session A findings. This entry does **not** grant structural
+  clearance; the external REFUSE verdict remains the strongest warrant until an
+  independent pass checks the exact corrected commit. The 21 authority bindings
+  and the directory, concurrency, and private-repository choices remain
+  RECOMMENDED/open.
