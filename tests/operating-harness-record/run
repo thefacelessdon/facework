@@ -47,6 +47,10 @@ expect_pass "lifecycle proposal options" "$store/operating/node-alpha/options-ge
 expect_pass "runtime-active authority" "$store/operating/node-alpha/authority-checked.md"
 expect_pass "cross-tenant scoped consent" "$store/operating/node-alpha/cross-tenant.md"
 
+store="$(prepare_store non-ascii)"
+ruby "$FIXTURES/positive/non-ascii.rb" "$store"
+expect_pass "non-ASCII body sections" "$store/operating/node-alpha/observation.md"
+
 store="$(prepare_store lifecycle-negative)"
 ruby "$FIXTURES/negative/lifecycle.rb" "$store"
 expect_fail "lifecycle terminal fields" "$store/operating/node-alpha/observation.md"
@@ -71,4 +75,4 @@ store="$(prepare_store consent-negative)"
 ruby "$FIXTURES/negative/consent.rb" "$store"
 expect_fail "cross-tenant consent tenant binding" "$store/operating/node-alpha/cross-tenant.md"
 
-echo "10 deterministic Operating Harness record cases passed"
+echo "11 deterministic Operating Harness record cases passed"
