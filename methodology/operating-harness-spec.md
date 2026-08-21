@@ -7,7 +7,8 @@
 Harness v0.2.2 — bound, compiler-verified, running against 14th & Co)
 **Composition rule:** `gamut-ops/documents/the-practice-three-layers-2026-04-28.md`
 **Constraint set:** private — SignalThesis + canonical-language guide for
-Harper-as-Operator, locked 2026-06-03. **Inlined as §A; not cited by path.**
+Harper-as-Operator, author-asserted as locked 2026-06-03. **Inlined as §A; not
+cited by path; lock date independently unverifiable.**
 
 > **Not canon.** This is a methodology note. It does not amend `PROTOCOL.md`,
 > `facework.manifest.schema.json`, or `bin/validate-manifest`, so the three-place
@@ -26,7 +27,8 @@ Harper-as-Operator, locked 2026-06-03. **Inlined as §A; not cited by path.**
 Four things this spec had to resolve, stated before the design:
 
 1. **No Operating Harness operation is automatically enforced today.** Of the
-   21 proposed operations in §3, **zero** have a running automatic enforcer.
+   21 proposed authority-bearing entries in §3 — 18 subject operations and three
+   carrier checks — **zero** have a running automatic enforcer.
    Every gate is human-invoked or unwired. The
    validator that would check the record format — `bin/validate-harness-record` —
    **does not exist.** §3 labels every row with one of three states borrowed from
@@ -45,7 +47,7 @@ Four things this spec had to resolve, stated before the design:
    files ARE the evidence store — is right about *git* and wrong about *which
    repo*. Operating Harness records name real nodes and real collaborators, and
    **N10** makes that a sovereignty constraint, not a hygiene preference.
-   Resolution in §5.1: the store is a **privately held git repo**, not the public
+   Requirement in §5.1: the store is a **privately held git repo**, not the public
    canon repo. The same rule governs this
    document — everything it needs from that tree is inlined in **§A**, so a reader
    holding only the public repo can execute it.
@@ -61,11 +63,14 @@ Four things this spec had to resolve, stated before the design:
 
 ## A. Inherited requirements — private provenance
 
-The Operating Harness's constraint set was locked **2026-06-03** as a SignalThesis
-plus a companion canonical-language guide for *Harper-as-Operator*. **Those two
-artifacts are private and will never appear in a clone of this repo.** They name
-real collaborators and carry their deal states; the source tree is excluded from
-public distribution for exactly that reason. The standing rule is direct —
+The Operating Harness's constraint set is **author-asserted as locked
+2026-06-03** in a SignalThesis plus a companion canonical-language guide for
+*Harper-as-Operator*. No dated public hash or independently checkable stamp
+exposes the locked source bytes, so the pre-registration date is **unverified** by
+public readers. **Those two artifacts are private and will never appear in a
+clone of this repo.** They name real collaborators and carry their deal states;
+the source tree is excluded from public distribution for exactly that reason.
+The standing rule is direct —
 a public artifact that needs a fact from there **inlines the fact and marks the
 provenance private** rather than citing a path no clone can resolve.
 
@@ -166,7 +171,8 @@ The private guide's `stale-routine` literal conflicts with its own prohibition o
 `unwired-routine`; the mapping is explicit here rather than represented as an
 unchanged restatement.
 
-**Dated departure — 2026-08-21.** The private source, locked 2026-06-03,
+**Dated departure — 2026-08-21.** The private source, author-asserted as locked
+2026-06-03,
 expected the agent-layer interpretation to be type-enforced and treated the type
 as that audience's thesis-equivalent. This spec deliberately replaces that
 expectation with the normative registry and record grammar in §3/§5, whose
@@ -307,17 +313,14 @@ therefore do not appear as authority enforcers.
 | 8 | `narrate-week` | `emergent` | `internal` | `+week` | — | No gate by design |
 | 9 | `narrate-coherence` | `emergent` | `internal` | `+score_ref` | — | No gate by design |
 | 10 | `recommend-cull` | `emergent` | `internal` | `+node`, `+rationale` | — | No gate by design; Sovereignty ruling stays open |
-| 11 | `validate-record` | `ship-gate` | `internal` | `+record_path` | `harness-record-validator` | **Unwired** — executable absent |
-| 12 | `reject-malformed-intent` | `ship-gate` | `internal` | `+candidate_ids`, `+findings` | `harness-record-validator` | **Unwired** — executable absent |
-| 13 | `route-model-tier` | `runtime-active` | `internal` | `+requested_operation`, `+chosen_tier` | `operator-review` | **Authoring-layer** — Berd binds tier by human choice per session |
-| 14 | `verify-back-links` | `ship-gate` | `internal` | `+record_path` | `harness-record-validator` | **Unwired** — must refuse mismatch; never rewrites hashes |
-| 15 | `commit-allocation` | `runtime-active` | `internal` | `+week`, `+allocations` | `operator-review` | **Authoring-layer** — human ruling |
-| 16 | `advance-node` | `runtime-active` | `internal` | `+node`, `+advance`, `+evidence_refs` | `operator-review` | **Authoring-layer** — human ruling |
-| 17 | `emit-repo-change` | `runtime-active` | `emission` | `+repository`, `+ref`, `+diff_ref` | `operator-review` | **Authoring-layer** — quality gates do not prove authority |
-| 18 | `schedule-routine` | `runtime-active` | `emission` | `+schedule`, `+timezone`, `+runner` | `operator-review` | **Authoring-layer** — Berd exposes no checkable schedule file |
-| 19 | `send-to-collaborator` | `runtime-active` | `cross-tenant` | `+target`, `+action`, `+message_ref`, `+consent_ref` | `operator-review` | **Authoring-layer**; consent presence check unwired |
-| 20 | `operate-in-collaborator-context` | `runtime-active` | `cross-tenant` | `+target`, `+tool`, `+action`, `+consent_ref` | `operator-review` | **Authoring-layer**; consent presence check unwired |
-| 21 | `propose-canon-change` | `runtime-active` | `emission` | `+repository`, `+doc_path`, `+diff_ref` | `independent-review` | **Authoring-layer** — reviewer identity is not machine-gated |
+| 11 | `route-model-tier` | `runtime-active` | `internal` | `+requested_operation`, `+chosen_tier` | `operator-review` | **Authoring-layer** — Berd binds tier by human choice per session |
+| 12 | `commit-allocation` | `runtime-active` | `internal` | `+week`, `+allocations` | `operator-review` | **Authoring-layer** — human ruling |
+| 13 | `advance-node` | `runtime-active` | `internal` | `+node`, `+advance`, `+evidence_refs` | `operator-review` | **Authoring-layer** — human ruling |
+| 14 | `emit-repo-change` | `runtime-active` | `emission` | `+repository`, `+ref`, `+diff_ref` | `operator-review` | **Authoring-layer** — quality gates do not prove authority |
+| 15 | `schedule-routine` | `runtime-active` | `emission` | `+schedule`, `+timezone`, `+runner` | `operator-review` | **Authoring-layer** — Berd exposes no checkable schedule file |
+| 16 | `send-to-collaborator` | `runtime-active` | `cross-tenant` | `+target`, `+action`, `+message_ref`, `+consent_ref` | `operator-review` | **Authoring-layer**; consent presence check unwired |
+| 17 | `operate-in-collaborator-context` | `runtime-active` | `cross-tenant` | `+target`, `+tool`, `+action`, `+consent_ref` | `operator-review` | **Authoring-layer**; consent presence check unwired |
+| 18 | `propose-canon-change` | `runtime-active` | `emission` | `+repository`, `+doc_path`, `+diff_ref` | `independent-review` | **Authoring-layer** — reviewer identity is not machine-gated |
 
 Payload values have these normative shapes:
 
@@ -327,20 +330,18 @@ with no `..` whose resolved real path exists beneath the private store root.
 | Key(s) | Value shape |
 |---|---|
 | `node` | `NodeKey`: non-empty slug; registry membership is authoring-layer |
-| `source_ref`, `subject_ref`, `score_ref`, `message_ref`, `diff_ref`, `consent_ref`, `record_path` | `StoreRef`: relative POSIX path, no `..`, resolving to an existing file beneath the private store root |
+| `source_ref`, `subject_ref`, `score_ref`, `message_ref`, `diff_ref`, `consent_ref` | `StoreRef`: relative POSIX path, no `..`, resolving to an existing file beneath the private store root |
 | `option_id` | one unique Options-table id |
 | `option_ids` | non-empty array of unique Options-table ids |
-| `candidate_ids` | non-empty array of unique non-empty identifiers |
 | `routine_id`, `audience`, `tool`, `runner`, `rationale`, `advance` | non-empty string |
 | `week` | ISO week string matching `^[0-9]{4}-W(0[1-9]|[1-4][0-9]|5[0-3])$` |
 | `target` | `{tenant: <non-empty slug>, surface: <non-empty slug>}` |
-| `action` | non-empty slug; for `cross-tenant`, exact value compared with consent scope |
-| `findings` | non-empty array of `{code: <non-empty slug>, message: <non-empty string>}` |
+| `action` | `send-to-collaborator`: literal `send-message`; `operate-in-collaborator-context`: non-empty slug. Every cross-tenant value is compared exactly with consent scope. |
 | `requested_operation` | one subject-operation kind from this registry other than `route-model-tier` |
 | `chosen_tier` | `haiku | sonnet | opus` |
 | `allocations` | non-empty array of unique `{node: NodeKey, size: light | medium | heavy}` entries |
 | `evidence_refs` | non-empty array of Backlinks (§5.3 rule 6) |
-| `repository` | repository slug resolving exactly once in `repositories.yaml` |
+| `repository` | repository slug resolving exactly once in `operating-store.yaml` |
 | `ref` | git ref accepted by `git check-ref-format` |
 | `schedule` | `{kind: cron, expression: <valid five-field cron expression>}` |
 | `timezone` | IANA time-zone identifier |
@@ -351,23 +352,30 @@ No payload key outside the matching registry row is permitted. `consent_ref?` on
 is present exactly once.
 
 `recommend-cull` records **RECOMMENDED / open**, never RESOLVED, until the human
-rules. `draft-message` is not sending; sending is operation 19.
+rules. `draft-message` is not sending; sending is operation 16.
 
 ### 3.3 Diagnostic reads and carrier writes are separate
 
-A diagnostic operation returns findings and changes **no state**, including the
-Operating Harness record. There is no evidence-store carve-out. A separate
-carrier-maintenance action records what happened to the carrier:
+A diagnostic or emergent operation returns a value and changes **no state**,
+including the Operating Harness record. There is no evidence-store carve-out. A
+separate carrier-maintenance action records what happened to the carrier:
 
 | Carrier action | Regime | Channel | Required payload | Enforcer | Gate status |
 |---|---|---|---|---|---|
+| `validate-record` | proposed `ship-gate` | `internal` | `+record_path` | `harness-record-validator` | **Unwired** — executable absent |
+| `reject-malformed-intent` | proposed `ship-gate` | `internal` | `+candidate_ids`, `+findings` | `harness-record-validator` | **Unwired** — executable absent |
+| `verify-back-links` | proposed `ship-gate` | `internal` | `+record_path` | `harness-record-validator` | **Unwired** — must refuse mismatch; never rewrites hashes |
 | `record-transition` | `carrier-write` — not an `AuthorityMode` | `internal` | `+record_path`, `+from`, `+to`, `+actor`, `+at`, `+result_ref` | `harness-record-validator` | **Unwired** — executable absent |
 
-Carrier values are: `record_path` = the store-relative path of the record being
-checked; `from` = one lifecycle state or `null`; `to` = one lifecycle state;
-`actor` = non-empty identifier; `at` = ISO-8601 timestamp with offset; and
-`result_ref` = a `StoreRef` resolving to the artifact that caused or records the
-transition.
+Carrier values are: `record_path` = a `StoreRef` resolving to the record being
+checked; `candidate_ids` = a non-empty array of unique non-empty identifiers;
+`findings` = a non-empty array of
+`{code: <non-empty Slug>, message: <non-empty string>}`; `from` = one lifecycle
+state or `null`; `to` = one lifecycle state; `actor` = non-empty identifier; `at`
+= ISO-8601 timestamp with offset; and `result_ref` = either a `StoreRef` resolving
+to the artifact that caused or records the transition, or the literal
+`#operation-result` when `record-transition` persists a diagnostic/emergent
+return in the record body.
 
 `transition.action` must be `record-transition`. The action is obligated to write
 only the record identified by `record_path`, and only to carry the transition
@@ -376,8 +384,8 @@ in §5.3. Preserving prior fields requires history and is therefore explicitly
 authoring-layer until a store-level enforcer exists. It is not a subject operation
 and cannot be used to claim the subject changed. Until the validator exists,
 every transition is authoring-layer evidence rather than an enforced fact. The
-§3.4 tally counts the 21 proposed subject operations only; this carrier action is
-separately declared unwired here.
+three proposed `ship-gate` modes retain their prior status; moving them here does
+not ratify or change them.
 
 This split is the N8 boundary: diagnosis reads; recording records; neither name
 can launder the other.
@@ -392,13 +400,17 @@ authority.
 | State | Rows | Which |
 |---|---|---|
 | **Enforced** | 0 | none |
-| **No gate by design** | 10 | 1–10 |
-| **Unwired automatic gate** | 3 | 11, 12, 14 |
-| **Authoring-layer human gate** | 8 | 13, 15–21 |
+| **Subject: no gate by design** | 10 | subject rows 1–10 |
+| **Subject: authoring-layer human gate** | 8 | subject rows 11–18 |
+| **Carrier: unwired proposed ship-gate** | 3 | `validate-record`, `reject-malformed-intent`, `verify-back-links` |
+| **Carrier: unwired carrier-write** | 1 | `record-transition` |
 
-Each operation has one primary status. Rows 19–20 additionally carry an unwired
-structural consent-presence check; consent substance and scope honesty remain
-authoring-layer obligations. Row 18 has no machine-readable runtime surface.
+Each operation or carrier action has one primary status. Subject rows 16–17
+additionally carry an unwired structural consent-presence check; consent substance
+and scope honesty remain authoring-layer obligations. Subject row 15 has no
+machine-readable runtime surface. Across the original authority-bearing set,
+18 subject rows plus three carrier checks preserve **21 proposed mode bindings**;
+`record-transition` is outside `AuthorityMode`.
 
 ---
 
@@ -433,9 +445,10 @@ What it will still not enforce, stated now so it is never implied later:
 5. **Append-only history.** Git records ordinary rewrites but does not prevent
    amend, squash, or force-push. No protected append-only store exists here.
 
-The registry grammar, consent grammar, backlink grammar, state matrix, and body
-table schemas below are sufficient implementation inputs; semantic truth and
-transition provenance remain authoring-layer even after a validator exists.
+The subject registry, carrier-action grammar, consent grammar, backlink grammar,
+state matrix, and body schemas below are the implementation inputs; semantic
+truth and transition provenance remain authoring-layer even after a validator
+exists.
 
 ---
 
@@ -449,19 +462,19 @@ diffable *without* a runtime, because no runtime will hold it.
 
 ### 5.1 Where the store lives
 
-**Two separate questions.** Which repo, and which directory.
+**Three separate questions.** What storage properties are required, which private
+repository supplies them, and which directory holds records.
 
-**Which repo — resolved.** Not this one. The private operating tree is excluded
-from public distribution because it names real collaborators and carries their
-deal states; Operating Harness records are made of exactly that material. **N10**
-makes this a sovereignty constraint. The requirement is *diffable git history*,
-not *presence in the public canon repo*. The public-repo ignore rule is a landing
-dependency until its owning branch reaches this branch (§12).
+**Storage contract — specified.** Operating Harness records require a
+git-tracked, access-controlled private store. The public canon repo is not an
+admissible store because records name real collaborators and carry their deal
+states; **N10** makes that a sovereignty constraint. The required property is
+private, diffable git history.
 
-> **Recommendation:** the private operating tree becomes its own git repository.
-> The store gets real history, blob
-> hashes, and `git log --follow`; nothing private enters the public tree. A
-> redacted index may be published later; the records may not.
+**Concrete repository — RECOMMENDED / open.** The candidate is to make the
+private operating tree its own git repository. That choice is not ratified here;
+the human still owns it. A redacted index may later be published, but the records
+may not enter the public canon repo.
 
 **Which directory — deferred, with a recommendation.** Session A is ruling on the
 collision between `OperatingHarness` and `HarnessBundle` (`PROTOCOL.md` §10).
@@ -486,10 +499,14 @@ way.
 Filename: `<yyyy>-<mm>-<dd>-<seq>-<slug>.md`. Date is the `intent-captured` date
 and does not change as the record advances. `<seq>` is per-node per-day.
 
-The store root also carries `repositories.yaml`, the resolver for every
-`repository` slug used by a context snapshot or backlink:
+The eventual store root carries `operating-store.yaml`, the resolver for every
+`repository` slug used by a context snapshot or backlink and the first
+implementation's write policy:
 
 ```yaml
+write_policy:
+  mode: single-writer
+  writer_id: <human-selected-id>
 repositories:
   private-operating: "."
   node-alpha-code: "../node-alpha-code"
@@ -497,6 +514,12 @@ repositories:
 
 Paths are local checkout paths and stay in the private store. A missing slug or
 missing checkout makes the reference unverifiable; the validator refuses it.
+The first implementation is **single-writer for the entire store**: only
+`writer_id` may perform `record-transition`; every parallel session is read-only.
+`transition.actor` must equal `writer_id`. A writer handoff requires a clean,
+committed store, no active write, and a separate commit changing `writer_id`
+before the successor writes. The human selects and changes the writer; this spec
+does not choose that identity. Multi-writer CAS and merge semantics are deferred.
 
 ### 5.2 Frontmatter
 
@@ -573,8 +596,9 @@ draft does not claim the second set can be proved by a file validator.
    or multiply-resolving reference is accepted.
 5. **Consent presence and shape.** A derived `cross-tenant` operation requires
    `consent_ref`. That file must exist and contain `tenant`, non-empty `scope`
-   entries of `{surface, actions[]}`, `granted_by`, `granted_at` (ISO-8601), and
-   `expires_at` (ISO-8601). The consent tenant equals
+   entries of `{surface: <non-empty Slug>, actions: <non-empty unique Slug[]>}`,
+   `granted_by`, `granted_at` (ISO-8601), and `expires_at` (ISO-8601). The
+   consent tenant equals
    `operation.payload.target.tenant`; target surface and action match one scope
    entry; and `granted_at <= transition.at < expires_at`.
 6. **Backlink shape.** Each backlink is
@@ -583,14 +607,16 @@ draft does not claim the second set can be proved by a file validator.
    `git hash-object` for the cited bytes. A mismatch is refused, never rewritten.
 7. **Transition, state shape, and outcome coupling.** `transition.action` is
    `record-transition`; `transition.record_path` equals the validator's input
-   path; `transition.to` equals top-level `state`; `transition.at` is ISO-8601
-   with offset; and `transition.result_ref` resolves as a `StoreRef`. The state
-   matrix below controls required and forbidden fields. `pending` is never a
-   terminal verdict; terminal outcome is coupled to the derived authority mode
-   and settled decision where that mode carries one.
+   path; `transition.actor` equals `operating-store.yaml.write_policy.writer_id`;
+   `transition.to` equals top-level `state`; `transition.at` is ISO-8601 with
+   offset; and `transition.result_ref` is either a resolving `StoreRef` or the
+   allowed `#operation-result` literal. The state matrix below controls required
+   and forbidden fields. `pending` is never a terminal verdict; terminal outcome
+   is coupled to the derived authority mode and settled decision where that mode
+   carries one.
 8. **One home per concept.** `node`, `allocation`, claim, context snapshot,
-   constraints, options, proposal payload, and backlinks each have the single
-   homes named below. A second copy is invalid.
+   constraints, options, proposal payload, Operation result, and backlinks each
+   have the single homes named below. A second copy is invalid.
 
 #### State matrix
 
@@ -610,6 +636,9 @@ prior state. `Context` is a snapshot reference, not copied node-state prose:
 | `authority-checked` | prior fields; mode-specific `authority_check.status` and authority shape below | `outcome`, `back_links` |
 | `evidence-recorded` | prior fields; one terminal variant below | fields forbidden by that variant |
 
+The Operation result section is empty through `authority-checked`. Only
+`record-transition` may populate it while advancing to `evidence-recorded`.
+
 Mode-specific authority shapes:
 
 - `ship-gate`: `authority_check.status: settled` and
@@ -626,10 +655,10 @@ Terminal variants:
   `confirmed`; requires non-empty `back_links`.
 - `refused`: only `ship-gate` with `refuse`, or `runtime-active` with `rejected`;
   requires `refusal_reason`; backlinks optional.
-- `narrated`: only `diagnostic` or `emergent`; requires non-empty `back_links` to
-  the exact input bytes examined or to a separate narration artifact produced by
-  the operation, and carries no `gate` or `review`. A pure read cites its inputs;
-  the terminal record is the closing artifact and does not self-hash.
+- `narrated`: only `diagnostic` or `emergent`; requires a non-empty Operation
+  result, `transition.result_ref: "#operation-result"`, and non-empty `back_links`
+  to the exact input bytes examined. It carries no `gate` or `review`. The
+  terminal record is the result artifact and does not self-hash.
 
 #### Authoring-layer invariants
 
@@ -639,15 +668,16 @@ Terminal variants:
   the right one for the judgment.
 - Once introduced, `harness`, `record_schema`, `id`, `supersedes`, `node`,
   `intent`, `allocation`, `context`, Constraints, Options, Tableau review,
-  Proposal rationale, `operation`, `proposal`, `authority_check`, `gate`, and
-  `review` remain byte-identical across later revisions. A transition may change
-  `revision`, `state`, and `transition`, may append Enforcer-gap rows, and may add
-  only fields first required by the new state. This requires prior history and is
-  not a whole-file check.
+  Proposal rationale, Operation result once populated, `operation`, `proposal`,
+  `authority_check`, `gate`, and `review` remain byte-identical across later
+  revisions. A transition may change `revision`, `state`, and `transition`, may
+  append Enforcer-gap rows, and may add only fields first required by the new
+  state. This requires prior history and is not a whole-file check.
 - `transition.from → to` followed the seven-state sequence. Git can help audit
   this but does not prove it.
 - `revision` is monotonic across the lineage; `supersedes` resolves; concurrent
-  forks are reconciled. No store-level compare-and-swap exists yet.
+  forks do not occur under the single-writer restriction. The validator can
+  compare history but cannot prove that no second writer acted outside it.
 
 ### 5.4 Body
 
@@ -659,6 +689,7 @@ below; prose rationale remains human-read.
 ## Options            <!-- id | advance | size | resolves | worsens -->
 ## Tableau review     <!-- option_id | verdict | rationale -->
 ## Proposal rationale <!-- explanation only; payload stays in frontmatter -->
+## Operation result   <!-- persisted only by record-transition at terminal -->
 ## Enforcer-gap log   <!-- at | kind | detail -->
 ```
 
@@ -680,6 +711,13 @@ Table value grammar:
   `proposal.option_id` once that field exists.
 - **Proposal rationale:** non-empty prose from `artifact-proposed` onward; it may
   explain but never restate the structured payload.
+- **Operation result:** empty before `evidence-recorded`. For a narrated terminal,
+  its first nonblank line is `Result-kind: <kind>` and the remaining body is
+  non-empty. `<kind>` derives without a second authored map:
+  `draft-message → draft`; `recommend-cull → recommendation`; every other
+  diagnostic operation → `findings`; every other emergent operation →
+  `narration`. The diagnostic/emergent operation returns the bytes;
+  `record-transition` is the only action that persists them here.
 - **Enforcer-gap log:** zero or more rows; `at` is ISO-8601 with offset; `kind` is
   one `RecordEnforcerGap`; `detail` is non-empty.
 
@@ -728,11 +766,11 @@ transitions.
    uncommitted states, guarantee one transition per commit, or survive every
    amend/squash/force-push path. The explicit `transition` block makes the claimed
    step inspectable; legality remains authoring-layer until a store enforces it.
-3. **Back-links resolve, or the closure is void.** Each full blob object id is
-   re-verifiable with `git hash-object`. A back-link that no longer resolves means
-   the cited evidence changed after closure — the same tamper check
-   `sync-canon --check` performs on provenance stamps, and the same verdict:
-   provenance that cannot be checked is decoration.
+3. **Back-links verify, or closure is void.** Hash the current cited path bytes
+   with `git hash-object` and compare them with the recorded full object id. A
+   mismatch proves the current path bytes differ from the cited bytes. An absent
+   object or unavailable repository makes provenance **unverifiable**; it is not
+   proof that the evidence changed. Either condition prevents closure.
 4. **The next intent is a diff, not a memory.** The next run compares the terminal
    record's claim against current node state. Divergence is the next
    `intent-captured`, and it cites the prior record's `id`. No runtime memory is
@@ -767,8 +805,8 @@ actually happen in this practice.
 1. **Authority laundering.** An operation may not be called `diagnostic` if
    any state changed. *Diagnostic means read; if state changed, it wasn't
    diagnostic — it was unauthorized* (**N8**, **G6**). Structural in §5.3
-   and §3.3: diagnostics return findings; `record-transition` records them. There
-   is no evidence-store carve-out.
+   and §3.3: diagnostics/emergent operations return values;
+   `record-transition` records them. There is no evidence-store carve-out.
 
 2. **Sovereignty violation.** An operation whose registry row derives
    `cross-tenant` is refused without a scoped, unexpired consent record. *My
@@ -806,7 +844,7 @@ actually happen in this practice.
 
 8. **Silent doctrine change.** An Operating Harness cannot amend canon — `PROTOCOL.md`,
    `CONSTITUTION.md`, `theories/`, `standards/README.md`,
-   `methodology/build-methodology.md`. `propose-canon-change` (#21) drafts; canon
+   `methodology/build-methodology.md`. `propose-canon-change` drafts; canon
    lands as a reviewed PR by someone who is not the drafter, with `sync-canon`
    run and the regenerated copy committed. An Operating Harness never hand-edits a derived
    copy.
@@ -832,7 +870,8 @@ with operating words painted on top.
 
 ## 8. Type sketch — non-normative
 
-**The normative form is §3.2's registry plus §5's record grammar.** This sketch
+**The normative form is §3.2's subject registry, §3.3's carrier-action grammar,
+and §5's record grammar.** This sketch
 is an argument aid.
 
 I agree with the brief that TypeScript is the wrong altitude, and want to sharpen
@@ -884,7 +923,7 @@ Honest status per part:
 |---|---|
 | Five parts (§1) | Specified. Subject-swap holds; the `cross-tenant` channel is new. |
 | Lifecycle (§2) | Reused verbatim from v0.2.2, as §A.3 already declared. |
-| Authority matrix (§3) | **Proposed, not bound:** 0 enforced / 10 no-gate / 3 unwired / 8 authoring-layer. |
+| Authority matrix (§3) | **Proposed, not bound:** 0 enforced / 10 no-gate subject operations / 8 authoring-layer subject operations / 3 unwired carrier checks; `record-transition` is separately unwired outside `AuthorityMode`. |
 | Refusals (§7) | Specified. Mechanical portions depend on the absent validator; semantic portions remain authoring-layer. |
 | Record format (§5) | Specified with mechanical and authoring-layer rules separated. **No validator exists.** |
 | Closing signal (§6) | Task-loop artifact specified; product-loop review index specified but unwired. Git supplies audit evidence, not transition proof. |
@@ -924,17 +963,18 @@ Harness's own round-1 shape looked finished and carried six P0 defects.
 
 ## 11. Draft check — P0 response, pending adversary falsification
 
-**This is a draft response, not falsification and not clearance.** An adversary
-pass refused the prior shape. The author changed the spec in response and has not
-asked the same persona to grade the changes. Status remains **pending adversary
-falsification**.
+**This is a draft response, not falsification and not clearance.** An independent
+second pass refused the pinned shape at `981c83d`; it explicitly did not cover
+later commits. The author has corrected only its agent-resolvable findings and
+has not asked the same persona to grade those corrections. Status remains
+**pending adversary falsification**.
 
 | Finding | Draft response | Where addressed | What remains for the adversary |
 |---|---|---|---|
-| **P0-1** — a concept with no single home | §3.2 is the single subject-operation registry; §3.3 is the single carrier-action grammar. Constraints, Options, context snapshot, proposal payload, and backlinks each have one named home. References resolve by id. | §3.2–§3.3, §5.3 rules 4/8, §5.4 | Challenge whether body rationale silently duplicates payload or context. |
+| **P0-1** — a concept with no single home | §3.2 is the single subject-operation registry and payload-value grammar; §3.3 is the single carrier-action grammar. Constraints, Options, context snapshot, proposal payload, Operation result, and backlinks each have one named home. References resolve by typed id/path shapes. | §3.2–§3.3, §5.3 rules 3/4/8, §5.4 | Challenge whether any payload value remains open or body rationale silently duplicates structured data. |
 | **P0-2** — authored authority can lie | Records author only `operation.kind` and payload. Mode, channel, and enforcer derive from the registry; their keys are forbidden. Cross-tenant consent derives from kind. | §3.1–§3.2, §5.3 rules 2/5 | The registry is prose until a validator exists; prove no alternate field can bypass derivation. |
 | **P0-3** — pending and settled gates conflated | A full state matrix and three terminal variants now couple mode, decision, and outcome. `narrated` is representable; an unresolved human decision remains `artifact-proposed`. | §5.3 state matrix | Challenge every required/forbidden field combination and proposal retention. |
-| **P0-5** — read-only operation can gate | The evidence-store carve-out is removed. Diagnostics change no state; separate `record-transition` writes carrier history. Diagnostic/emergent authority shapes carry no gate or review. | §3.3, §5.3, §7 r1 | Challenge whether `record-transition` can still launder a diagnostic result into a subject-state claim. |
+| **P0-5** — read-only operation can gate | The evidence-store carve-out is removed. Diagnostics/emergent operations return values without writing; separate `record-transition` persists them only in the canonical Operation result home. Their authority shapes carry no gate or review. | §3.3, §5.3, §5.4, §7 r1 | Challenge whether `record-transition` can still launder an Operation result into a subject-state claim. |
 
 Additional draft-check results:
 
@@ -945,7 +985,8 @@ Additional draft-check results:
   authority until human ratification and adversary clearance.
 - **Enforcement:** zero rows are called enforced. Content-quality commands are no
   longer misrepresented as authority enforcers.
-- **Concurrency:** still unresolved and recorded below.
+- **Concurrency:** the first implementation is now explicitly single-writer;
+  multi-writer CAS/merge remains deferred.
 
 ---
 
@@ -956,12 +997,13 @@ Additional draft-check results:
    authorize execution.
 2. **The directory** — Session A's call. §5.1 recommends `operating/` and creates
    nothing.
-3. **Row 18 has no machine surface** on the current runtime. Berd's Automations are
+3. **`schedule-routine` has no machine surface** on the current runtime. Berd's Automations are
    UI-built with no CLI and no on-disk config, so nothing can read the schedule a
    `schedule-routine` operation produced.
-4. **Row 10 needs a semantic check.** Detecting that a
+4. **`recommend-cull` needs a semantic check.** Detecting that a
    recommendation was recorded as a decision is a prose-intent judgment.
-5. **Concurrency.** Two sessions, one node, no merge or compare-and-swap rule.
+5. **Multi-writer operation.** Deferred. The first implementation is restricted
+   to the single writer selected by the human in `operating-store.yaml`.
 6. **Private-store ignore rule.** Its owning commit is outside this branch; it is
    a landing dependency, not a property this spec claims is already present.
 7. **Whether the private operating tree should be its own repo** is a recommendation (§5.1), not
