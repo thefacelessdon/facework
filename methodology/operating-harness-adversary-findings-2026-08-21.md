@@ -161,3 +161,14 @@ The later external correction accounting identifies these round-1 findings:
 
 - No author or external resolution recorded yet.
 
+### Resolution append — author correction after round 3
+
+- **2026-08-21 — author resolution, weaker warrant.** Commit
+  `3bb693e3a0098005a9b3571e4992b601f4b02fd0` records the author's correction of
+  P0-A, P1-A through P1-F, and P2-1 through P2-6. It adds the short observation
+  lifecycle, preserves referential-integrity rule 4, separates authored and
+  derived review roots, binds consent to `execution.at`, restores public source
+  anchors, and corrects the remaining grammar and wording defects. This entry
+  does **not** grant structural clearance and does not ratify the 21 authority
+  bindings or any directory, concurrency, or private-repository choice. An
+  independent external resolution is still required.
