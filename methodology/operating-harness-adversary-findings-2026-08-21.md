@@ -465,3 +465,30 @@ The exact spec bytes were reviewed against every unresolved P0 and P1 in methodo
 The namespace, observation lifecycle, authority derivation, transition coupling, payload closure, FW-DEC-006 shape, single-writer restriction, review/gate provenance, closed-world frontmatter, refusal_reason confinement, review-root separation, honest append-only status, and enforcement-vocabulary provenance are structurally answered on these bytes.
 
 Authority verdict: NOT RATIFIED. This review does not ratify the 21 authority bindings, directory, repository, or writer choice.
+
+### Exact-byte REFUSE — author resolution entry
+
+**Date:** 2026-08-21
+**Correction commit:** `d71ca59eff4aaaede7d3072c458194cafb85d54c`
+**Warrant:** author resolution — weaker
+**Disposition:** pending independent recheck; no structural PASS claimed
+
+The correction addresses only the two P1 findings in the external verdict above:
+
+1. Consent is now a restricted YAML 1.2 block grammar with strict UTF-8, NFC,
+   fixed key order, fixed two-space indentation, block collections only,
+   JSON-double-quoted scalars, deterministic collection sorting, UTC timestamp
+   emission, and canonical decode → re-encode → byte-equality validation.
+   Structured Markdown tables now have fixed row construction, header and
+   delimiter bytes, one-space cell padding, deterministic row/array ordering,
+   table-layer escaping, a boundary-aware decoder, JSON-array decoding, and the
+   same canonical byte-equality check.
+2. `granted_at`, `execution.at`, and `expires_at` now share one RFC 3339 subset
+   requiring a full timestamp and explicit `Z` or numeric offset. The grammar
+   validates calendar and offset ranges, refuses leap seconds and offset-free
+   values, normalizes all three to UTC epoch nanoseconds, and applies consent
+   chronology to those normalized instants rather than timestamp strings.
+
+This author entry does not supersede the external REFUSE or grant structural
+clearance. The 21 authority bindings, directory, concrete repository, and writer
+identity remain RECOMMENDED/open for the human.
