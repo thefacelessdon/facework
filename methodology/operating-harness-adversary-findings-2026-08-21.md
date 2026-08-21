@@ -362,3 +362,19 @@ private repository, and directory remain RECOMMENDED/open for the human
   above.
 - The authority bindings and storage choices remain RECOMMENDED/open for the
   human. This structural record neither accepts nor rejects them.
+
+## External resolution recheck — short observation lifecycle
+
+**Date:** 2026-08-21
+**Reviewed snapshot:** `1730df3502b9a34bfd47be7f43a45416c89ed018`
+**Range checked:** `3bb693e3a0098005a9b3571e4992b601f4b02fd0..1730df3502b9a34bfd47be7f43a45416c89ed018`
+**Verdict:** REFUSE
+**Warrant:** external — stronger
+
+The short observation lifecycle is now honestly labeled as an author-selected, unwired structural rule pending independent recheck (`methodology/operating-harness-spec.md:272-278`, `:452-467`, `:998-1002`). That labeling grants no authority and creates no human-owned ruling.
+
+One P0 remains unchanged. `score-allocation` and `critique-option` require `option_ids` / `option_id` (`:347-348`). Referential-integrity rule 4 requires those identifiers to resolve to the record's Options table (`:644-648`). The observation-path `context-bound` shape requires Options to be empty (`:689`), and diagnostic/emergent operations cannot enter the proposal path (`:697-701`). Those two registered diagnostic operations therefore have no valid terminal record shape. Round-three P0-A is not resolved.
+
+No structural clearance is granted. The 21 authority bindings, directory, private repository, and every other human-owned choice remain RECOMMENDED/open.
+
+---
