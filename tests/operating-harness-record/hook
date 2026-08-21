@@ -61,4 +61,29 @@ printf 'note\n' > "$store/review-artifacts/unrelated.md"
 git -C "$store" add review-artifacts/unrelated.md
 check "non-record commit unaffected" commit-ok
 
+# The installer must refuse targets where the gate would never fire, or an
+# uninstallable store reads as a covered one.
+refuse_install() { # label target
+  local label="$1" target="$2"
+  if "$ROOT_DIR/bin/install-operating-store-hook" "$target" >"$TMP_ROOT/out" 2>&1; then
+    echo "not ok - $label (installer accepted it)"; cat "$TMP_ROOT/out"; exit 1
+  fi
+  echo "ok - $label"; pass=$((pass+1))
+}
+
+mkdir -p "$TMP_ROOT/plain" "$TMP_ROOT/bare-git"
+git -C "$TMP_ROOT/bare-git" init -q
+refuse_install "installer refuses a missing path" "$TMP_ROOT/absent"
+refuse_install "installer refuses a non-git directory" "$TMP_ROOT/plain"
+refuse_install "installer refuses a git repo with no operating-store.yaml" "$TMP_ROOT/bare-git"
+
+printf 'write_policy:\n  mode: single-writer\n  writer_id: harper\nrepositories:\n  private-operating: "."\n' > "$TMP_ROOT/bare-git/operating-store.yaml"
+printf '#!/bin/sh\nexit 0\n' > "$(git -C "$TMP_ROOT/bare-git" rev-parse --absolute-git-dir)/hooks/pre-commit"
+chmod +x "$(git -C "$TMP_ROOT/bare-git" rev-parse --absolute-git-dir)/hooks/pre-commit"
+refuse_install "installer refuses to overwrite a foreign pre-commit hook" "$TMP_ROOT/bare-git"
+
+# Installing twice must be safe.
+"$ROOT_DIR/bin/install-operating-store-hook" "$store" >/dev/null
+echo "ok - installer is idempotent"; pass=$((pass+1))
+
 echo "$pass deterministic Operating Harness gate cases passed"
