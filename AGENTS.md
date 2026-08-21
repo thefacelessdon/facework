@@ -104,9 +104,9 @@ Facework/
 ├── facework.manifest.schema.json  ← JSON Schema for manifest validation
 ├── theories/                      ← Theory + Discipline + the Coherence OS
 ├── methodology/                   ← build system: retros, decisions, changelog, archive
-├── skills/                        ← 12 protocol + 8 Posture + system-loop + diagnostic skills
+├── skills/                        ← 12 protocol + 8 Posture + system-loop + diagnostic + carrier skills
 ├── agents/                        ← 9 paired specialist agents
-├── .agents/agents/                ← 4 Berd personas — discovered on clone
+├── .agents/agents/                ← 5 Berd personas — discovered on clone
 ├── visual-system/                 ← FVS/FVI/FVA/FVR/FVP identity spec (Implementation layer)
 ├── standards/                     ← deferred post-1.0 track — NOT canonical
 ├── examples/face.works/           ← reference output from a completed run (NOT the active project)
@@ -132,6 +132,13 @@ Facework/
   a score. It changes no state, so it is not a Posture, and it reads what the
   phases already produce, so it is not a phase (§VIII: "the detector set is not a
   new phase").
+- **Carrier skills** (`harness-open`, `harness-review`, `harness-close`) — a fifth
+  class: they move one **Operating Harness** record (the carrier for operating
+  intent) from stated intent to recorded evidence. Not Postures — a Posture
+  maintains a live tenant system; these operate a single carrier record. Spec:
+  `methodology/operating-harness-spec.md`; v0 authority and storage ratified in
+  `DECISION-010`. Mechanically checked by `bin/validate-operating-harness-record`,
+  which is **separate from** `bin/validate-manifest` per `DECISION-007`.
 - **9 specialist agents** in `agents/`, one paired to each operating skill.
 - **4 Berd personas** in `.agents/agents/`, with non-overlapping authority —
   `protocol-operator` (runs one `/fw-*` phase against a tenant repo; cannot edit
