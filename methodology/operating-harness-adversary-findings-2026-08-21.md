@@ -541,3 +541,31 @@ This author entry does not supersede the external REFUSE or grant structural
 clearance. It does not ratify the 21 authority bindings or decide the directory,
 repository, writer identity, or any other human-owned storage choice; those remain
 RECOMMENDED/open.
+
+## External exact-byte structural recheck — PASS
+
+**Date:** 2026-08-21
+**Verified HEAD:** `9d8ffbe1ccbd24c21313a5f10107ea36499d124a`
+**Verified spec blob in HEAD and working file:**
+`7d5689956d0759c531b39208fae42d2631e322e2`
+**Target-file worktree state:** clean
+**Structural verdict:** PASS
+**Authority/storage verdict:** NOT RULED
+**Warrant:** external — stronger
+
+The exact-byte review found no remaining P0 or P1. `score-allocation` and
+`critique-option` are representable on the observation path through a closed,
+typed `OptionsSnapshotRef` to exact blob bytes. Selected ids resolve strictly
+inside the cited non-empty Options table; the local Options table remains empty;
+and the identical snapshot triple is required as a terminal backlink.
+Diagnostics cannot modify the cited record, its path, the observation subject,
+or external state. `record-transition` remains separately scoped to carrier
+persistence only.
+
+The canonical-serialization and comparable-chronology P1 sections already
+cleared on spec blob `040ca60905421b99338940570866573a3bf6e224` are
+unchanged in the reviewed blob, so the recheck found no regression.
+
+This structural PASS does not ratify the 21 proposed authority bindings,
+directory, repository, writer identity, or any human-owned choice. All remain
+RECOMMENDED/open pending the human ruling.
