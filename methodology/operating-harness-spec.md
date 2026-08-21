@@ -615,6 +615,7 @@ review:
   reviewer: operator
   decision: confirmed
   at: 2026-08-21T00:40:00-05:00
+  evidence_ref: review-artifacts/review-0NN.md
 transition:
   action: record-transition
   record_path: "<record-root>/node-alpha/2026-08-21-001-first-worked-flow.md"
@@ -634,6 +635,41 @@ terminal does carry `outcome: narrated`.
 §5.1. It is replaced with the human-ratified root before validation; this example
 does not decide that root.
 
+#### Canonical serialization
+
+All parsed artifacts are UTF-8 with LF line endings, one trailing newline, no
+tabs, and no Unicode normalization performed by the validator. YAML uses YAML
+1.2, exactly one document, no custom tags, anchors, aliases, merge keys, or
+duplicate mapping keys. Mapping order is not semantic.
+
+A consent reference resolves to a YAML file with exactly these keys and shapes;
+unknown keys are rejected:
+
+```yaml
+consent_schema: 0.1.0-draft
+tenant: counterparty-alpha
+scope:
+  - surface: inbox
+    actions:
+      - send-message
+granted_by: counterparty-owner-id
+granted_at: 2026-08-20T09:00:00-05:00
+expires_at: 2026-08-27T09:00:00-05:00
+```
+
+`scope` is a non-empty YAML sequence. Each item has exactly `surface` and
+`actions`; `actions` is a non-empty YAML sequence of unique Slugs. Scalar values
+that YAML could interpret as another type must be quoted.
+
+The body uses GitHub-Flavored Markdown tables with the exact header names and
+column order shown in §5.4 and a delimiter row containing `---` for every column.
+Every logical row occupies one physical line. Array-valued cells (`resolves` and
+`worsens`) are minified JSON arrays of strings, for example
+`["constraint-a","constraint-b"]`; `[]` is the empty array. In ordinary string
+cells, `\` serializes as `\\`, `|` serializes as `\|`, and literal newlines
+are forbidden. A validator decodes those escapes before applying the value
+grammar. This is the only accepted table-cell encoding.
+
 ### 5.3 What makes a record valid
 
 Validity has a mechanically checkable core and authoring-layer invariants. The
@@ -643,7 +679,17 @@ draft does not claim the second set can be proved by a file validator.
 
 1. **Discriminator and identity.** `artifact: OperatingHarness`, `record_schema`,
    `id`, non-negative `revision`, `state`, `node`, and `intent.claim/source` are
-   present. A Facework release version is never copied into the record.
+   present. A Facework release version is never copied into the record. The only
+   permitted top-level keys are `artifact`, `record_schema`, `id`, `revision`,
+   `supersedes`, `state`, `node`, `allocation`, `intent`, `context`, `operation`,
+   `proposal`, `authority_check`, `gate`, `review`, `execution`, `outcome`,
+   `refusal_reason`, `back_links`, and `transition`; every unknown key is
+   rejected. Nested mappings are also closed: `intent={claim,source}`;
+   `context={repository,path,blob}`; `operation={kind,payload}`;
+   `proposal={option_id}`; `authority_check={status}`;
+   `execution={at}`; `transition={action,record_path,from,to,actor,at,result_ref}`;
+   and each backlink is `{repository,path,blob}`. Payload keys remain closed by
+   rule 3; gate and review keys are closed by their mode-specific shapes below.
 2. **Registry derivation.** When `operation` is present, `operation.kind` resolves
    to exactly one §3.2 row. The record contains no `authority`, `mode`, `channel`,
    or `enforcer` key.
@@ -691,6 +737,10 @@ The first transition uses `from: null`; later transitions name the immediately
 prior state. `Context` is a snapshot reference, not copied node-state prose:
 `{repository, path, blob}`.
 
+`refusal_reason` is terminal-only: it is forbidden in every state and terminal
+variant except `evidence-recorded/refused`, where it is a non-empty string. This
+global prohibition is part of every Forbidden cell below.
+
 | State | Required beyond Common | Forbidden |
 |---|---|---|
 | `intent-captured` | — | `context`, `allocation`, `operation`, `proposal`, `authority_check`, `gate`, `review`, `execution`, `outcome`, `back_links` |
@@ -712,10 +762,16 @@ populate it while advancing to that terminal state.
 Mode-specific authority shapes:
 
 - `ship-gate`: `authority_check.status: settled` and
-  `gate.verdict: pass | watch | refuse`; no `review`.
+  `gate` with exactly `{verdict, checked_at, evidence_ref, contract_version}`;
+  `verdict: pass | watch | refuse`; `checked_at` is ISO-8601 with offset;
+  `evidence_ref` is a resolving `StoreRef`; `contract_version` is a non-empty
+  string identifying the gate contract; no `review`.
 - `runtime-active`: `authority_check.status: settled` and
-  `review.decision: confirmed | rejected`; no authored gate. If the human has not
-  ruled, the record remains `artifact-proposed` and carries no authority check.
+  `review` with exactly `{reviewer, decision, at, evidence_ref}`; `reviewer` is a
+  non-empty stable identity; `decision: confirmed | rejected`; `at` is ISO-8601
+  with offset; `evidence_ref` is a resolving `StoreRef`; no authored gate. If the
+  human has not ruled, the record remains `artifact-proposed` and carries no
+  authority check.
 - `diagnostic` or `emergent`: on the observation-path terminal only,
   `authority_check.status: not-applicable`; no `gate` and no `review`.
 
@@ -725,16 +781,16 @@ Terminal variants:
   `runtime-active` with `confirmed`; requires non-empty `back_links`. A derived
   `cross-tenant` operation additionally requires `execution.at` as the ISO-8601
   timestamp of the external act; `execution` is forbidden for every other
-  committed operation.
+  committed operation. `refusal_reason` is forbidden.
 - `refused`: proposal path only; `ship-gate` with `refuse`, or `runtime-active`
-  with `rejected`; requires `refusal_reason`; backlinks optional; `execution` is
-  forbidden because no act occurred.
+  with `rejected`; requires non-empty-string `refusal_reason`; backlinks optional;
+  `execution` is forbidden because no act occurred.
 - `narrated`: observation path only; `diagnostic` or `emergent`; requires
   `authority_check.status: not-applicable`, a non-empty Operation result,
   `transition.result_ref: "#operation-result"`, and non-empty `back_links` to the
   exact input bytes examined. It carries no Options, Tableau review, proposal,
-  `gate`, `review`, or `execution`. The terminal record is the result artifact
-  and does not self-hash.
+  `gate`, `review`, `execution`, or `refusal_reason`. The terminal record is the
+  result artifact and does not self-hash.
 
 #### Authoring-layer invariants
 
