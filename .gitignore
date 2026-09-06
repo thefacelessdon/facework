@@ -32,3 +32,21 @@ scratch-fw-claude/
 # Superseded build artifacts. The 402KB standards-integration patch was applied
 # on 2026-06-30 and shipped as 0.0.9; the diff is history, not source.
 methodology/patches/
+
+# Working directories that live inside this repo but are NOT protocol content.
+# This repo is public. On 2026-09-05 a `git add -A` swept every one of these
+# into a commit and pushed it — passphrases, medical records and financial
+# agreements among them. Deleting the branch did not remove the commit or the
+# PR diff; only GitHub Support can. These entries exist so a broad add cannot
+# reach them again, and they are not a substitute for staging explicit paths.
+Berdia/
+personal/
+.codex/
+Primitive Pattern design brief/
+folder structure research/
+fresh projects /
+
+# Belt and braces for the shapes those files took, wherever they land.
+*.local.txt
+**/Medical Records/
+**/Financial Records/
