@@ -1,0 +1,39 @@
+# Overview of Key Terms — Plum Bayou Solar Project
+
+---
+
+- **7-year** maximum Development Term permitted (no interference with existing use of ground)
+- **30-year** Operations Term, with two 10-year options possible
+
+---
+
+## Payable At Signing
+
+| Rate | Details |
+|------|---------|
+| **$120/acre** | Rental Payment at the rate of $40/year covering Years 1–3 |
+
+---
+
+## Payable During Development Term
+
+| Rate | Year |
+|------|------|
+| $50/acre | Year 4 (if required) |
+| $50/acre | Year 5 (if required) |
+| $60/acre | Year 6 (if required) |
+| $60/acre | Year 7 (if required) |
+
+---
+
+## Payable During Operations Term
+
+*Increases at 2%/year*
+
+| Rate | Description |
+|------|-------------|
+| **$800/acre/year*** | Project Site occupied, effectively fenced off area used by project *(note: there is also a $200/acre increase in Year 31)* |
+| $0.55/LF/year* | Roads (if outside Project Site) |
+| $0.50/LF/year* | Underground Cabling (if outside Project Site) |
+| $1.00/LF/year* | Overhead Cabling (if outside Project Site) |
+| $100/acre/year | Tenant Transition payment pass-through for 3 consecutive years, intended to compensate an existing farm tenant for lost farming revenue ($50/year if grazing lease) |

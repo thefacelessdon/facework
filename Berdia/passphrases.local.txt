@@ -1,0 +1,10 @@
+TEMPORARY PASSPHRASES — distribute securely, then DELETE this file.
+Each user is required to change theirs on first login.
+
+stedmon   [trustee]  Dzgvgr97ZZ
+stanley   [operator]  ck91LVnRwC
+darius    [operator]  DCyT1H0XsF
+kim       [operator]  LpHqDGECof
+chuck     [operator]  1fgCS5cuTl
+reneta    [operator]  GmjPu9PrUp
+grandma   [viewer]  H21GAc1iif

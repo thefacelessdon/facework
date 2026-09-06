@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Monson Family — Family View</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper:#FAFAF8; --card:#FFFFFF; --ink:#1A1A18; --muted:#6B6B66; --faint:#9a9a94;
+    --line:#E0DED8; --line-2:#EDEBE6;
+    --rust:#C45A3C; --green:#3D7A5F; --green-d:#2C6049; --green-bg:#E3F0E9;
+    --amber:#B9891F; --amber-bg:rgba(212,168,67,0.16);
+    --rust-bg:rgba(196,90,60,0.12); --gray-bg:#F0EEE9;
+    --serif:'Instrument Serif',serif; --sans:'Inter',sans-serif; --grot:'Space Grotesk',sans-serif;
+  }
+  * { box-sizing:border-box; }
+  html,body { margin:0; padding:0; }
+  body { background:var(--paper); color:var(--ink); font-family:var(--sans); font-weight:400; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  h1,h2,h3,h4 { font-family:var(--serif); font-weight:400; line-height:1.15; margin:0; }
+  .num { font-family:var(--grot); }
+  a { color:inherit; }
+  .container { max-width:1120px; margin:0 auto; padding:0 32px; }
+  .label { font-family:var(--sans); font-size:0.7rem; font-weight:600; letter-spacing:0.09em; text-transform:uppercase; color:var(--muted); }
+
+  nav.nav { border-bottom:1px solid var(--line); background:var(--paper); position:sticky; top:0; z-index:20; }
+  nav.nav .container { display:flex; flex-wrap:wrap; align-items:center; gap:18px; padding-top:15px; padding-bottom:15px; }
+  nav.nav .brand { font-family:var(--serif); font-size:1.25rem; margin-right:auto; text-decoration:none; }
+  nav.nav a { font-size:0.82rem; text-decoration:none; color:var(--muted); }
+  nav.nav a:hover { color:var(--ink); }
+  nav.nav a.here { color:var(--rust); font-weight:600; }
+  nav.nav button.link { background:none; border:none; color:var(--muted); font-size:0.82rem; cursor:pointer; font-family:var(--sans); }
+  nav.nav button.link:hover { color:var(--rust); }
+
+  .mast { padding:52px 0 30px; }
+  .mast .kicker { display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+  .phase-pill { font-family:var(--grot); font-size:0.72rem; font-weight:600; letter-spacing:0.04em; color:var(--green-d); background:var(--green-bg); padding:5px 11px; border-radius:100px; }
+  .mast h1 { font-size:3.1rem; letter-spacing:-0.02em; }
+  .mast .asof { font-family:var(--grot); font-size:0.78rem; color:var(--faint); margin-top:8px; }
+  .mast .sum { max-width:70ch; color:var(--muted); font-size:1.02rem; margin-top:16px; }
+  .pubnote { font-family:var(--grot); font-size:0.76rem; color:var(--green-d); background:var(--green-bg); display:inline-block; padding:5px 12px; border-radius:100px; margin-top:18px; }
+
+  .alert { display:flex; gap:13px; align-items:flex-start; border:1px solid var(--rust); background:var(--rust-bg); border-radius:10px; padding:16px 18px; margin:20px 0 8px; }
+  .alert .dot { width:9px; height:9px; border-radius:50%; background:var(--rust); margin-top:7px; flex-shrink:0; }
+  .alert .t { font-size:0.95rem; line-height:1.55; }
+  .alert .t b { font-weight:600; }
+
+  .strip { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:12px; overflow:hidden; margin:22px 0 8px; }
+  @media (max-width:760px){ .strip { grid-template-columns:repeat(2,1fr); } }
+  .stat { background:var(--card); padding:18px 20px; }
+  .stat .k { font-family:var(--grot); font-size:1.5rem; font-weight:600; letter-spacing:-0.01em; }
+  .stat .l { font-size:0.72rem; text-transform:uppercase; letter-spacing:0.07em; color:var(--muted); margin-top:6px; }
+  .stat .sub { font-size:0.78rem; color:var(--faint); margin-top:3px; }
+
+  section.os { padding:46px 0; border-top:1px solid var(--line); }
+  .sec-head { display:flex; align-items:baseline; gap:14px; margin-bottom:22px; }
+  .sec-head h2 { font-size:2rem; letter-spacing:-0.01em; }
+  .sec-head .tag { font-family:var(--grot); font-size:0.72rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--rust); }
+  .sec-head .note { margin-left:auto; font-size:0.82rem; color:var(--muted); max-width:36ch; text-align:right; }
+
+  .pill { display:inline-flex; align-items:center; gap:6px; font-family:var(--grot); font-size:0.68rem; font-weight:600; letter-spacing:0.02em; padding:4px 10px; border-radius:100px; white-space:nowrap; }
+  .pill::before { content:""; width:6px; height:6px; border-radius:50%; }
+  .pill.ok,.pill.hold { color:var(--green-d); background:var(--green-bg); } .pill.ok::before,.pill.hold::before{ background:var(--green); }
+  .pill.watch,.pill.pending { color:var(--amber); background:var(--amber-bg); } .pill.watch::before,.pill.pending::before{ background:var(--amber); }
+  .pill.risk { color:var(--rust); background:var(--rust-bg); } .pill.risk::before{ background:var(--rust); }
+  .pill.idle { color:var(--muted); background:var(--gray-bg); } .pill.idle::before{ background:var(--faint); }
+
+  .grid { display:grid; gap:14px; }
+  .g2 { grid-template-columns:1fr 1fr; } .g3 { grid-template-columns:repeat(3,1fr); }
+  @media (max-width:800px){ .g2,.g3 { grid-template-columns:1fr; } }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:20px 22px; }
+  .card h3 { font-size:1.35rem; margin-bottom:4px; }
+  .card .row { display:flex; align-items:center; gap:10px; }
+  .card .role { font-size:0.9rem; color:var(--muted); margin:6px 0 12px; }
+  .kv { font-size:0.85rem; color:var(--muted); margin-top:4px; } .kv b { color:var(--ink); font-weight:600; }
+
+  .tbl { width:100%; border-collapse:collapse; }
+  .tbl th { text-align:left; font-family:var(--grot); font-size:0.68rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); font-weight:600; padding:0 14px 10px; border-bottom:1px solid var(--line); }
+  .tbl td { padding:14px; border-bottom:1px solid var(--line-2); vertical-align:top; font-size:0.9rem; }
+  .tbl tr:last-child td { border-bottom:none; }
+  .tbl .nm { font-weight:600; }
+  .tbl .val { font-family:var(--grot); white-space:nowrap; }
+  .tbl .muted { color:var(--muted); font-size:0.82rem; }
+  .tbl-wrap { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:8px 8px 4px; overflow-x:auto; }
+  .empty { color:var(--faint); font-size:0.86rem; padding:14px; }
+
+  .arow { cursor:pointer; }
+  .arow .detail { display:none; color:var(--muted); font-size:0.82rem; margin-top:8px; line-height:1.5; }
+  .arow.open .detail { display:block; }
+
+  .gate-col h3 { font-size:1.15rem; font-family:var(--sans); font-weight:600; margin-bottom:4px; }
+  .gate-col .gstat { font-family:var(--grot); font-size:0.76rem; color:var(--muted); margin-bottom:14px; }
+  .gitem { display:flex; gap:10px; align-items:flex-start; padding:9px 0; border-top:1px solid var(--line-2); font-size:0.88rem; line-height:1.45; }
+  .gitem:first-of-type { border-top:none; }
+  .gbox { width:15px; height:15px; border:1.5px solid var(--faint); border-radius:4px; flex-shrink:0; margin-top:2px; }
+  .gitem.done .gbox { border-color:var(--green); background:var(--green-bg); position:relative; }
+  .gitem.done .gbox::after { content:""; position:absolute; left:4px; top:1px; width:4px; height:8px; border-right:2px solid var(--green-d); border-bottom:2px solid var(--green-d); transform:rotate(45deg); }
+  .gitem.done span { color:var(--muted); }
+
+  .dl { display:flex; gap:13px; padding:13px 0; border-top:1px solid var(--line-2); }
+  .dl:first-of-type { border-top:none; }
+  .dl .bar { width:3px; border-radius:3px; flex-shrink:0; }
+  .dl.risk .bar { background:var(--rust); } .dl.watch .bar { background:var(--amber); }
+  .dl .item { font-weight:600; font-size:0.92rem; }
+  .dl .when { font-family:var(--grot); font-size:0.74rem; color:var(--muted); }
+  .dl .why { font-size:0.84rem; color:var(--muted); margin-top:3px; max-width:70ch; }
+
+  .prog { display:flex; align-items:center; gap:14px; margin-bottom:18px; }
+  .prog .track { flex:1; height:8px; background:var(--gray-bg); border-radius:100px; overflow:hidden; }
+  .prog .fill { height:100%; background:var(--green); border-radius:100px; transition:width .4s ease; }
+  .prog .pct { font-family:var(--grot); font-size:0.82rem; color:var(--muted); white-space:nowrap; }
+  .cl-group { margin-top:18px; }
+  .cl-group .gh { font-family:var(--grot); font-size:0.72rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
+  .cl { display:flex; gap:12px; align-items:flex-start; padding:11px 4px; border-bottom:1px solid var(--line-2); }
+  .cbox { width:18px; height:18px; border:1.5px solid var(--faint); border-radius:5px; flex-shrink:0; margin-top:1px; position:relative; }
+  .cl.checked .cbox { border-color:var(--green); background:var(--green); }
+  .cl.checked .cbox::after { content:""; position:absolute; left:5px; top:1.5px; width:5px; height:9px; border-right:2px solid #fff; border-bottom:2px solid #fff; transform:rotate(45deg); }
+  .cl .body { flex:1; }
+  .cl .txt { font-size:0.92rem; }
+  .cl.checked .txt { color:var(--muted); text-decoration:line-through; text-decoration-color:var(--faint); }
+  .cl .who { font-family:var(--grot); font-size:0.72rem; color:var(--faint); margin-top:3px; }
+
+  .dec { display:grid; grid-template-columns:1fr auto auto; gap:16px; align-items:center; padding:13px 0; border-top:1px solid var(--line-2); font-size:0.9rem; }
+  .dec:first-of-type { border-top:none; }
+  @media (max-width:700px){ .dec { grid-template-columns:1fr; gap:5px; } }
+  .dec .st { font-family:var(--grot); font-size:0.76rem; color:var(--amber); }
+  .dec .wn { font-family:var(--grot); font-size:0.74rem; color:var(--faint); }
+
+  footer.os { border-top:1px solid var(--line); padding:34px 0 60px; }
+  footer.os p { font-size:0.8rem; color:var(--faint); line-height:1.6; max-width:80ch; }
+  .subtle-note { font-size:0.8rem; color:var(--faint); margin-top:10px; }
+
+  /* login */
+  .lock { position:fixed; inset:0; z-index:100; background:var(--paper); display:flex; align-items:center; justify-content:center; padding:24px; }
+  .lock.hidden { display:none; }
+  .lockbox { max-width:390px; width:100%; text-align:center; }
+  .lockbox .label { color:var(--rust); }
+  .lockbox h2 { font-size:2.3rem; margin:4px 0 12px; }
+  .lockbox p { color:var(--muted); font-size:0.92rem; margin:0 auto 22px; max-width:34ch; }
+  .lockbox form { display:flex; flex-direction:column; gap:8px; }
+  .lockbox input { font-family:var(--sans); font-size:0.95rem; padding:11px 14px; border:1px solid var(--line); border-radius:9px; background:var(--card); color:var(--ink); }
+  .lockbox input:focus { outline:none; border-color:var(--rust); }
+  .lockbox button { font-family:var(--grot); font-weight:600; font-size:0.9rem; padding:11px 20px; border:none; border-radius:9px; background:var(--ink); color:var(--paper); cursor:pointer; }
+  .lockbox button:hover { background:#000; }
+  .lockerr { color:var(--rust); font-size:0.84rem; margin-top:14px; min-height:1.2em; }
+
+  .app { display:none; } .app.show { display:block; }
+</style>
+</head>
+<body>
+
+<div id="login" class="lock">
+  <div class="lockbox">
+    <div class="label">Monson Family</div>
+    <h2>Family View</h2>
+    <p>Sign in with your family account to see where things stand.</p>
+    <form id="loginform">
+      <input id="u" type="text" placeholder="Username" autocomplete="username" autofocus>
+      <input id="p" type="password" placeholder="Passphrase" autocomplete="current-password">
+      <button type="submit">Sign in</button>
+    </form>
+    <div id="lockerr" class="lockerr"></div>
+  </div>
+</div>
+
+<div class="app" id="app">
+<nav class="nav">
+  <div class="container">
+    <a href="index.html" class="brand">Monson Family</a>
+    <a href="index.html">The Plan</a>
+    <a href="capital-stack.html">Capital Stack</a>
+    <a href="system.html" class="here">Family View</a>
+    <button class="link" id="signout">Sign out</button>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="mast">
+    <div class="kicker"><span class="label">Family View</span><span class="phase-pill" id="phasePill"></span></div>
+    <h1 id="famTitle"></h1>
+    <div class="asof" id="asOf"></div>
+    <p class="sum" id="phaseSum"></p>
+    <div><span class="pubnote" id="pubnote"></span></div>
+    <div class="alert" id="alert"><span class="dot"></span><div class="t"></div></div>
+    <div class="strip" id="strip"></div>
+  </div>
+</div>
+
+<div class="container">
+  <section class="os" id="sec-gov">
+    <div class="sec-head"><span class="tag">Layer 1</span><h2>Governance</h2><span class="note">What the family owns, who decides, what's protected.</span></div>
+    <div id="govTrust" style="margin-bottom:16px;"></div>
+    <div class="tbl-wrap" style="margin-bottom:16px;"><table class="tbl" id="assetTbl"></table></div>
+    <div class="grid g2">
+      <div class="card"><h3 style="font-family:var(--sans);font-weight:600;font-size:1.1rem;margin-bottom:12px;">Solar payment shares</h3><table class="tbl" id="shareTbl"></table></div>
+      <div class="card" id="committee"></div>
+    </div>
+  </section>
+
+  <section class="os" id="sec-op">
+    <div class="sec-head"><span class="tag">Layer 2</span><h2>Operating</h2><span class="note">The businesses, their operators, and how capital moves.</span></div>
+    <div class="grid g3" id="llcGrid"></div>
+  </section>
+
+  <section class="os" id="sec-intel">
+    <div class="sec-head"><span class="tag">Layer 3</span><h2>Intelligence</h2><span class="note">Capital, gates, and the deadlines that govern everything.</span></div>
+    <h3 style="font-family:var(--sans);font-weight:600;font-size:1.1rem;margin:0 0 10px;">Capital deployed to date</h3>
+    <div class="tbl-wrap" style="margin-bottom:8px;"><table class="tbl" id="deployedTbl"></table></div>
+    <h3 style="font-family:var(--sans);font-weight:600;font-size:1.1rem;margin:24px 0 10px;">Capital stack available</h3>
+    <div class="tbl-wrap"><table class="tbl" id="capTbl"></table></div>
+    <p class="subtle-note" id="capNote"></p>
+    <div class="grid g2" style="margin-top:26px;">
+      <div class="card gate-col" id="gateP0"></div>
+      <div class="card gate-col" id="gateP1"></div>
+    </div>
+    <h3 style="font-family:var(--sans);font-weight:600;font-size:1.1rem;margin:28px 0 8px;">Deadlines &amp; watch items</h3>
+    <div id="deadlines"></div>
+  </section>
+
+  <section class="os" id="sec-check">
+    <div class="sec-head"><span class="tag">Progress</span><h2>Action checklist</h2><span class="note">Where the foundation work stands, as published by the trustee.</span></div>
+    <div class="prog"><div class="track"><div class="fill" id="progFill"></div></div><span class="pct" id="progPct"></span></div>
+    <div id="checklist"></div>
+  </section>
+
+  <section class="os" id="sec-dec">
+    <div class="sec-head"><span class="tag">Open</span><h2>Decisions pending</h2></div>
+    <div id="decisions"></div>
+  </section>
+</div>
+
+<footer class="os"><div class="container">
+  <p id="disclaimer"></p>
+</div></footer>
+</div>
+
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var pill = function(status,label){ return '<span class="pill '+(status||'idle')+'">'+(label||'')+'</span>'; };
+  var money = function(n){ return '$'+Number(n||0).toLocaleString(); };
+  function fmtDate(s){ if(!s) return ''; var d=new Date(s); return d.toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'}); }
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+
+  async function api(path,opts){ opts=opts||{}; opts.credentials='same-origin'; if(opts.body){opts.headers=Object.assign({'Content-Type':'application/json'},opts.headers||{});}
+    var r=await fetch(path,opts); var j={}; try{j=await r.json();}catch(e){} if(!r.ok){throw new Error(j.error||('Error '+r.status));} return j; }
+
+  function render(config, snapshot){
+    var d = config;
+    snapshot = snapshot || { gatesDone:[], checklistDone:[], capital:[], totalDeployed:0, publishedAt:null };
+    var gatesDone = snapshot.gatesDone || [], checkDone = snapshot.checklistDone || [];
+
+    // masthead
+    $('phasePill').textContent = 'Phase ' + d.phase.current + ' · ' + d.phase.name;
+    $('famTitle').textContent = d.meta.family + ' — Family View';
+    $('asOf').textContent = d.meta.location;
+    $('phaseSum').textContent = d.phase.summary;
+    $('pubnote').textContent = snapshot.publishedAt ? ('Last updated by the trustee · ' + fmtDate(snapshot.publishedAt)) : 'Not yet published';
+    $('alert').className = 'alert ' + d.alert.level;
+    $('alert').querySelector('.t').innerHTML = d.alert.text;
+
+    // strip — live from snapshot
+    var gTotal = d.gates.length, cTotal = d.checklist.length;
+    $('strip').innerHTML = [
+      { k:'Phase '+d.phase.current, l:d.phase.name, sub:d.phase.window },
+      { k:money(snapshot.totalDeployed), l:'Capital deployed', sub:'of '+d.phase.capacity+' available' },
+      { k:gatesDone.length+' / '+gTotal, l:'Gates cleared', sub:'foundation + phase 1' },
+      { k:checkDone.length+' / '+cTotal, l:'Checklist done', sub:'setup tasks' }
+    ].map(function(s){ return '<div class="stat"><div class="k">'+s.k+'</div><div class="l">'+s.l+'</div><div class="sub">'+s.sub+'</div></div>'; }).join('');
+
+    // governance — trust
+    var t = d.trust;
+    $('govTrust').innerHTML = '<div class="card"><div class="row" style="margin-bottom:6px;"><h3 style="flex:1;">'+t.name+'</h3>'+pill(t.status,t.statusLabel)+'</div>'
+      + '<div class="kv"><b>Type</b> · '+t.type+'</div><div class="kv"><b>Settlor</b> · '+t.settlor+'</div>'
+      + '<div class="kv"><b>Trustee</b> · '+t.trustee+'</div><div class="kv"><b>Successor</b> · '+t.successor+'</div>'
+      + '<div class="kv" style="margin-top:10px;">'+t.note+'</div></div>';
+
+    // assets
+    $('assetTbl').innerHTML = '<thead><tr><th>Asset</th><th>Value</th><th>Owner</th><th>Status</th></tr></thead><tbody>'
+      + d.assets.map(function(a){ return '<tr class="arow"><td class="nm">'+a.name+'<div class="detail">'+a.detail+'<br><span style="color:var(--ink)">'+a.note+'</span></div></td>'
+          + '<td class="val">'+a.value+'</td><td class="muted">'+a.owner+'</td><td>'+pill(a.status,a.statusLabel)+'</td></tr>'; }).join('') + '</tbody>';
+    Array.prototype.forEach.call(document.querySelectorAll('#assetTbl .arow'), function(r){ r.addEventListener('click', function(){ r.classList.toggle('open'); }); });
+
+    // solar shares
+    $('shareTbl').innerHTML = '<thead><tr><th>Owner</th><th>Share</th><th>Year 1</th><th>Flow</th></tr></thead><tbody>'
+      + d.solarShares.map(function(s){ return '<tr><td class="nm">'+s.name+'</td><td class="val">'+s.pct+'</td><td class="val">'+s.year1+'</td><td class="muted">'+s.flow+'</td></tr>'; }).join('') + '</tbody>';
+
+    // committee
+    var c = d.committee;
+    $('committee').innerHTML = '<h3 style="font-family:var(--sans);font-weight:600;font-size:1.1rem;margin-bottom:10px;">Advisory Committee</h3>'
+      + '<div class="kv"><b>Rule</b> · '+c.rule+'</div><div class="kv"><b>Seats</b> · '+c.seats.join(' · ')+'</div>'
+      + '<div class="kv" style="margin-top:8px;"><b>Approves:</b> '+c.approves.join('; ')+'.</div>'
+      + '<div class="kv" style="margin-top:8px;color:var(--faint)">'+c.routine+'</div>';
+
+    // operating
+    $('llcGrid').innerHTML = d.llcs.map(function(l){ return '<div class="card"><div class="row" style="margin-bottom:2px;"><h3 style="flex:1;font-size:1.15rem;font-family:var(--sans);font-weight:600;">'+l.name+'</h3></div>'
+      + '<div style="margin:2px 0 10px;">'+pill(l.status,l.statusLabel)+'</div><div class="role">'+l.role+'</div>'
+      + '<div class="kv"><b>Operator</b> · '+l.operator+'</div><div class="kv"><b>Comp</b> · '+l.comp+'</div><div class="kv"><b>Agreement</b> · '+l.agreement+'</div></div>'; }).join('');
+
+    // deployed to date (live)
+    var cap = snapshot.capital || [];
+    $('deployedTbl').innerHTML = '<thead><tr><th>Amount</th><th>Source</th><th>To</th><th>When</th></tr></thead><tbody>'
+      + (cap.length ? cap.map(function(e){ return '<tr><td class="val">'+money(e.amount)+'</td><td>'+esc(e.source)+'</td><td class="muted">'+esc(e.toLLC||'')+'</td><td class="muted val">'+fmtDate(e.at)+'</td></tr>'; }).join('')
+          + '<tr><td class="val" style="font-weight:700">'+money(snapshot.totalDeployed)+'</td><td class="muted" colspan="3">total deployed</td></tr>'
+        : '<tr><td colspan="4" class="empty">No capital deployed yet — Phase 0 (foundation).</td></tr>') + '</tbody>';
+
+    // capital stack available
+    $('capTbl').innerHTML = '<thead><tr><th>Source</th><th>Amount</th><th>Status</th><th>Notes</th></tr></thead><tbody>'
+      + d.capitalStack.map(function(s){ return '<tr><td class="nm">'+s.source+'</td><td class="val">'+s.amount+'</td><td>'+pill(s.status,s.statusLabel)+'</td><td class="muted">'+s.note+'</td></tr>'; }).join('') + '</tbody>';
+    $('capNote').textContent = d.capitalNote;
+
+    // gates (config keyed + snapshot done)
+    var groupsOrder = [];
+    d.gates.forEach(function(g){ if(groupsOrder.indexOf(g.group)<0) groupsOrder.push(g.group); });
+    function gateCard(name){ var items=d.gates.filter(function(g){return g.group===name;});
+      var done=items.filter(function(g){return gatesDone.indexOf(g.key)>-1;}).length;
+      return '<h3>'+name+'</h3><div class="gstat">'+done+' of '+items.length+' cleared</div>'
+        + items.map(function(g){ return '<div class="gitem'+(gatesDone.indexOf(g.key)>-1?' done':'')+'"><span class="gbox"></span><span>'+g.text+'</span></div>'; }).join('');
+    }
+    $('gateP0').innerHTML = groupsOrder[0] ? gateCard(groupsOrder[0]) : '';
+    $('gateP1').innerHTML = groupsOrder[1] ? gateCard(groupsOrder[1]) : '';
+
+    // deadlines
+    $('deadlines').innerHTML = d.deadlines.map(function(x){ return '<div class="dl '+x.level+'"><div class="bar"></div><div><div class="item">'+x.item+' <span class="when">· '+x.when+'</span></div><div class="why">'+x.why+'</div></div></div>'; }).join('');
+
+    // checklist (read-only, from published snapshot)
+    var done = d.checklist.filter(function(c){ return checkDone.indexOf(c.id)>-1; });
+    var rem = d.checklist.filter(function(c){ return checkDone.indexOf(c.id)<0; });
+    function clRows(list, checked){ return list.map(function(it){ return '<div class="cl'+(checked?' checked':'')+'"><span class="cbox"></span><div class="body"><div class="txt">'+it.text+'</div><div class="who">'+it.owner+'</div></div></div>'; }).join(''); }
+    var ch = '';
+    if(done.length){ ch += '<div class="cl-group"><div class="gh">Done · '+done.length+'</div>'+clRows(done,true)+'</div>'; }
+    if(rem.length){ ch += '<div class="cl-group"><div class="gh">Remaining · '+rem.length+'</div>'+clRows(rem,false)+'</div>'; }
+    $('checklist').innerHTML = ch;
+    var pct = Math.round(100*done.length/d.checklist.length);
+    $('progFill').style.width = pct+'%';
+    $('progPct').textContent = done.length+' of '+d.checklist.length+' complete · '+pct+'%';
+
+    // decisions
+    $('decisions').innerHTML = d.decisions.map(function(x){ return '<div class="dec"><div>'+x.item+'</div><div class="st">'+x.status+'</div><div class="wn">'+x.when+'</div></div>'; }).join('');
+
+    $('disclaimer').textContent = d.meta.disclaimer;
+  }
+
+  function enter(res){
+    $('login').classList.add('hidden');
+    $('app').classList.add('show');
+    render(res.config, res.snapshot);
+  }
+  function boot(){
+    api('/api/family').then(enter).catch(function(){ $('login').classList.remove('hidden'); });
+  }
+
+  $('loginform').addEventListener('submit', function(e){ e.preventDefault();
+    var err=$('lockerr'); err.textContent='Signing in…';
+    api('/api/login',{method:'POST',body:JSON.stringify({username:$('u').value,passphrase:$('p').value})})
+      .then(function(){ err.textContent=''; return api('/api/family'); })
+      .then(enter)
+      .catch(function(ex){ err.textContent = ex.message || 'Sign in failed'; });
+  });
+  $('signout').addEventListener('click', function(){ api('/api/logout',{method:'POST'}).then(function(){ location.reload(); }); });
+
+  boot();
+})();
+</script>
+</body>
+</html>

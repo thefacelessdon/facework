@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Action Checklist — Berdia Monson Family Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAFAF8; --ink:#1A1A18; --muted:#6B6B66; --line:#E0DED8;
+    --terra:#C45A3C; --green:#3D7A5F; --amber:#D4A843; --tint:#F0E6E0; --greentint:#E3F0E9; --red:#B23B2E;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:#efefec;color:var(--ink);font-family:'Inter',sans-serif;line-height:1.5;}
+  .page{max-width:900px;margin:24px auto;background:var(--bg);padding:40px 44px;border-radius:10px;box-shadow:0 2px 24px rgba(0,0,0,.06);}
+  h1{font-family:'Instrument Serif',serif;font-size:2.3rem;font-weight:400;margin:0 0 4px;}
+  .sub{color:var(--muted);font-size:.95rem;margin:0 0 2px;max-width:60ch;}
+  .meta{font-family:'Space Grotesk',sans-serif;font-size:.72rem;letter-spacing:.04em;text-transform:uppercase;color:var(--terra);margin-top:8px;}
+  a.back{color:var(--terra);font-size:.8rem;text-decoration:none;font-family:'Space Grotesk',sans-serif;}
+  h2{font-family:'Inter',sans-serif;font-size:1.05rem;font-weight:700;margin:28px 0 4px;}
+  .who{font-family:'Space Grotesk',sans-serif;font-size:.72rem;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:0 0 10px;}
+  .pill{display:inline-block;font-family:'Space Grotesk',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.04em;padding:2px 8px;border-radius:100px;vertical-align:middle;}
+  .pill.todo{background:var(--tint);color:var(--terra);}
+  .pill.prog{background:#FFF6DF;color:#8A6A12;}
+  .pill.done{background:var(--greentint);color:#2C6049;}
+  .pill.block{background:#F7E0DD;color:var(--red);}
+  .pill.pri{background:var(--ink);color:#fff;}
+  .done-strip{background:var(--greentint);border-radius:10px;padding:16px 20px;margin:18px 0 6px;}
+  .done-strip h3{margin:0 0 8px;font-size:.95rem;}
+  .done-strip ul{margin:0;padding-left:18px;font-size:.85rem;column-count:2;column-gap:28px;}
+  .done-strip li{margin-bottom:4px;}
+  .owner{background:#fff;border:1px solid var(--line);border-left:4px solid var(--terra);border-radius:0 10px 10px 0;padding:16px 18px;margin:12px 0;}
+  .owner.attorney{border-left-color:var(--terra);}
+  .owner.cpa{border-left-color:var(--green);}
+  .owner.pru{border-left-color:var(--amber);}
+  .owner.square{border-left-color:#3b5bdb;}
+  .owner.orion{border-left-color:#8A6A12;}
+  .owner.family{border-left-color:var(--ink);}
+  .item{display:flex;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:.86rem;}
+  .item:first-of-type{border-top:none;}
+  .item .bx{flex:0 0 auto;width:16px;height:16px;border:1.5px solid var(--muted);border-radius:4px;margin-top:2px;}
+  .item .body{flex:1;}
+  .item .body .ask{font-weight:600;}
+  .item .body .why{color:var(--muted);font-size:.8rem;}
+  .ask-line{font-family:'Space Grotesk',sans-serif;font-size:.78rem;color:var(--green);margin-top:8px;}
+  .contact{font-size:.78rem;color:var(--muted);margin-top:2px;}
+  .legend{font-size:.72rem;color:var(--muted);margin:8px 0 0;}
+  .foot{margin-top:24px;padding-top:12px;border-top:1px solid var(--line);font-size:.7rem;color:var(--muted);}
+  .pill.part{background:#FFF6DF;color:#8A6A12;}
+  .gtab{width:100%;border-collapse:collapse;font-size:.8rem;margin:6px 0 4px;}
+  .gtab th{background:var(--ink);color:#fff;text-align:left;padding:8px 10px;font-size:.62rem;letter-spacing:.05em;text-transform:uppercase;font-weight:600;}
+  .gtab td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top;}
+  .gtab td.cat{font-weight:600;font-family:'Space Grotesk',sans-serif;white-space:nowrap;}
+  .gtab .have{color:#2C6049;} .gtab .need{color:var(--terra);}
+  .tag{font-family:'Space Grotesk',sans-serif;font-size:.6rem;font-weight:700;padding:2px 7px;border-radius:100px;white-space:nowrap;}
+  .tag.ok{background:var(--greentint);color:#2C6049;} .tag.mid{background:#FFF6DF;color:#8A6A12;} .tag.gap{background:#F7E0DD;color:var(--red);}
+  @media print{ body{background:#fff;} .page{box-shadow:none;margin:0;max-width:100%;padding:.4in .5in;border-radius:0;} .owner,.gtab tr{break-inside:avoid;} @page{margin:.4in;} }
+  @media(max-width:640px){ .done-strip ul{column-count:1;} }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <a class="back" href="index.html">&larr; Back to the plan</a>
+  <h1>Action Checklist</h1>
+  <p class="sub">What's done, what's left, and exactly who to contact for each open item — so the plan keeps moving.</p>
+  <p class="meta">Updated July 14, 2026 · Full repo audited · Work top to bottom · ⬛ = priority</p>
+
+  <div class="done-strip">
+    <h3>✓ Already done</h3>
+    <ul>
+      <li>Name corrected on the POA (Berdia / a-k-a Birdia)</li>
+      <li>Consolidated durable POA drafted + Word doc sent to Reneta</li>
+      <li><strong>Both</strong> life policies documented (Prudential $161K + Chicago Met $3K)</li>
+      <li>Restaurant Square financial package pulled (net sales, tax, tips, fees, payouts, staff) + monthly CSV</li>
+      <li>Square Capital $72,500 pre-approval confirmed (terms in hand)</li>
+      <li>Solar package assembled: lease + recorded amendment + signed side letter + estoppel + recorded memo</li>
+      <li>Solar counterparty confirmed: Orion→<strong>Entergy</strong> assignment recorded 4/29/2026</li>
+      <li>Land parcels identified: Jefferson Co. 001-03633-000 (40 ac) + 001-03634-000 (69.01 ac)</li>
+      <li>Will, Healthcare directive &amp; Beneficiary deed on file</li>
+      <li>Capital Stack one-pager built for CPA/lender</li>
+    </ul>
+  </div>
+  <p class="legend">Status key: <span class="pill done">DONE</span> <span class="pill prog">IN PROGRESS</span> <span class="pill todo">TO DO</span> <span class="pill block">BLOCKED</span> <span class="pill pri">⬛ PRIORITY</span></p>
+
+  <!-- GATHER STATUS -->
+  <h2>Where each piece stands — document gather status</h2>
+  <p class="who">Full repo audited against the trust-formation gather list</p>
+  <table class="gtab">
+    <thead><tr><th style="width:15%">Category</th><th style="width:37%">✅ Have</th><th style="width:37%">❌ Still need</th><th style="width:11%">Status</th></tr></thead>
+    <tbody>
+      <tr><td class="cat">Grandma legal</td><td class="have">POA (notarized + new draft), Will, Healthcare directive, Beneficiary deed, SSN/DOB/address</td><td class="need">Physician capacity letter; reconcile beneficiary deed vs. trust</td><td><span class="tag mid">MOSTLY</span></td></tr>
+      <tr><td class="cat">The land</td><td class="have">Parcel IDs + legal descriptions; recorded lease memo</td><td class="need">Underlying vesting/warranty deed; property-tax records; survey; title policy</td><td><span class="tag mid">PARTIAL</span></td></tr>
+      <tr><td class="cat">Solar lease</td><td class="have">Full lease, recorded 1st amendment, key terms, signed side letter, estoppel, recorded memo, Entergy assignment, payment setup</td><td class="need">Confirm assignment-to-trust clause; firm COD date</td><td><span class="tag ok">NEARLY DONE</span></td></tr>
+      <tr><td class="cat">Restaurant</td><td class="have">Square financial package: net sales ($515K/$564K), tax, tips, card/cash, processing fees, bank payouts, staff count + monthly CSV; ownership memo</td><td class="need">3-yr tax returns, 12-mo bank statements, payroll registers, entity/LLC docs, business license, Grider Field lease, vendor invoices (COGS)</td><td><span class="tag mid">STARTED</span></td></tr>
+      <tr><td class="cat">Life insurance</td><td class="have">Prudential statement ($161K); Chicago Met full policy ($3K, benef. Reneta)</td><td class="need">Prudential full contract; confirm current beneficiaries; premium status</td><td><span class="tag mid">MOSTLY</span></td></tr>
+      <tr><td class="cat">Coins</td><td class="have">—</td><td class="need">Location, appraisal (ANA/ASA), insurance, inventory</td><td><span class="tag gap">NOT STARTED</span></td></tr>
+      <tr><td class="cat">Family info</td><td class="have">Addresses/phones (Reneta, Kim, Charles); Grandma + Reneta SSN/DOB</td><td class="need">SSN/DOB/address for Charles, Kim, Stedmon, Stanley, Darius</td><td><span class="tag mid">PARTIAL</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="owner attorney" style="border-left-color:var(--red);margin-top:14px;">
+    <div class="item"><div class="bx"></div><div class="body"><span class="ask">⚠ New conflict found — the Beneficiary (transfer-on-death) Deed.</span> <span class="pill block">RECONCILE</span><div class="why">The Aug-2023 deed sends the 109 acres directly to Reneta, Charles &amp; Kim on death — which competes with putting the land in the trust. The attorney must revoke or reconcile it, or the trust and the deed will contradict each other.</div></div></div>
+  </div>
+
+  <!-- ATTORNEY -->
+  <h2>1 · Arkansas Trust / Estate Attorney <span class="pill pri">⬛ PRIORITY</span></h2>
+  <p class="who">Owner: Stanley · Status: need to engage one</p>
+  <div class="owner attorney">
+    <div class="item"><div class="bx"></div><div class="body"><span class="ask">Finalize &amp; re-execute the consolidated POA.</span> <span class="pill todo">TO DO</span><div class="why">Sign with 2 witnesses, re-notarize, then record in Jefferson County. It expressly revokes the prior 2023 and June-2026 POAs. This is the legal key that unlocks everything else.</div></div></div>
+    <div class="item"><div class="bx"></div><div class="body"><span class="ask">Form the Family Trust</span> (recommend revocable core) <span class="pill todo">TO DO</span><div class="why">Decide revocable vs. an irrevocable/ILIT layer with the CPA. Restaurant goes in an LLC owned by the trust; land + solar held directly.</div></div></div>
+    <div class="item"><div class="bx"></div><div class="body"><span class="ask">Reconcile the Beneficiary (TOD) deed with the trust.</span> <span class="pill pri">⬛ PRIORITY</span> <span class="pill todo">TO DO</span><div class="why">The Aug-2023 deed already conveys the land to Reneta/Charles/Kim on death. It must be revoked or coordinated so it doesn't contradict putting the land in the trust.</div></div></div>
+    <div class="item"><div class="bx"></div><div class="body"><span class="ask">Confirm the lease's landlord-assignment clause allows assigning to the trust.</span> <span class="pill prog">LEASE IN HAND</span><div class="why">No longer blocked — we have the full lease + recorded amendment. The developer already freely assigned to Entergy, so assignment terms look permissive; attorney just needs to confirm the landlord side.</div></div></div>
+    <div class="item"><div class="bx"></div><div class="body"><span class="ask">Check the existing Will is consistent with the trust</span> <span class="pill todo">TO DO</span><div class="why">The Second Will is on file — it should pour over to / not contradict the trust.</div></div></div>
+    <div class="item"><div class="bx"></div><div class="body"><span class="ask">Set up the restaurant LLC + management agreement</span> <span class="pill todo">TO DO</span></div></div>
+    <div class="ask-line">Ask when you call: flat fee for trust + 2–3 LLC operating agreements + POA finalize; experience with solar-lease assignments into trusts. (Budget ~$8K–$15K.)</div>
+  </div>
+
+  <!-- CPA -->
+  <h2>2 · CPA</h2>
+  <p class="who">Owner: Stanley · Status: need to engage one</p>
+  <div class="owner cpa">
+    <div class="item"><div class="bx"></div><div class="body"><span class="ask">Square financial extract — pulled &amp; packaged.</span> <span class="pill done">DONE</span><div class="why">Net sales ($515K '24 / $564K '25), sales tax, tips, card/cash split, processing fees ($13.2K '25) and bank payouts ($421K '25) are in <em>RESTAURANT_FINANCIAL_PACKAGE_(Square_Extract).md</em> + monthly CSV, with a P&amp;L skeleton for the CPA.</div></div></div>
+    <div class="item"><div class="bx"></div><div class="body"><span class="ask">Gather the remaining EXTERNAL restaurant docs.</span> <span class="pill pri">⬛ PRIORITY</span> <span class="pill prog">STARTED</span><div class="why">Square can't provide these: 3-yr tax returns, 12-mo bank statements, payroll registers (20 active staff), entity/LLC formation docs (confirm the restaurant's legal entity), business license, Grider Field lease, vendor/food invoices (COGS). These fill the [EXTERNAL] lines in the P&amp;L skeleton.</div></div></div>
+    <div class="item"><div class="bx"></div><div class="body"><span class="ask">Labor scoped from Square timecards.</span> <span class="pill done">EST. DONE</span><div class="why">Est. gross wages $143K (2024) / $159K (2025) ≈ 28% of net sales (all employees, incl. Lee Harper — Stanley's brother). Add ~10–12% employer taxes for fully-loaded cost. Stanley (owner) doesn't clock in, so his comp is a <strong>separate</strong> EBITDA add-back to pull from external records.</div></div></div>
+    <div class="item"><div class="bx"></div><div class="body"><span class="ask">Preliminary EBITDA computed.</span> <span class="pill prog">PROVISIONAL</span><div class="why">2025 est. <strong>~$104K before owner comp</strong> (range $64K–$138K), ~18% margin. Grounded in revenue/fees/wages; COGS + rent still assumed. Food invoices + lease will firm it up.</div></div></div>
+    <div class="item"><div class="bx"></div><div class="body"><span class="ask">Grantor vs. non-grantor trust decision</span> <span class="pill todo">TO DO</span><div class="why">Drives tax treatment of solar + restaurant income. Coordinate with the attorney.</div></div></div>
+    <div class="item"><div class="bx"></div><div class="body"><span class="ask">Set up clean ongoing bookkeeping for the restaurant</span> <span class="pill todo">TO DO</span></div></div>
+    <div class="ask-line">Ask when you call: can you produce a clean P&amp;L + balance sheet from Square + bank records, and advise grantor vs. non-grantor? (Budget ~$3K–$8K initial.)</div>
+  </div>
+
+  <!-- PRUDENTIAL -->
+  <h2>3 · Life Insurance (Prudential + Chicago Met)</h2>
+  <p class="who">Owner: Reneta / Stanley · Prudential #98 727 915 (800) 778-2255 · Chicago Met #A-80050094</p>
+  <div class="owner pru">
+    <div class="item"><div class="bx"></div><div class="body"><span class="ask">Confirm the Prudential $173.51/mo premium is current &amp; the premium account is positive.</span> <span class="pill pri">⬛ PRIORITY</span> <span class="pill todo">TO DO</span><div class="why">A 30-year-old variable policy with a loan against it can lapse — losing a $161K benefit and possibly triggering tax. Verify it's current.</div></div></div>
+    <div class="item"><div class="bx"></div><div class="body"><span class="ask">Confirm the current beneficiary on BOTH policies.</span> <span class="pill todo">TO DO</span><div class="why">Chicago Met ($3K) names Reneta directly. Prudential beneficiary is unconfirmed — pull it before deciding the trust update.</div></div></div>
+    <div class="item"><div class="bx"></div><div class="body"><span class="ask">Decide whether to repay or leave the $7,290 Prudential loan</span> <span class="pill todo">TO DO</span><div class="why">It currently reduces both the cash value and the death benefit.</div></div></div>
+    <div class="item"><div class="bx"></div><div class="body"><span class="ask">Update the beneficiary to the trust (after it exists)</span> <span class="pill block">BLOCKED</span><div class="why">Simple form once the trust is formed — no ILIT needed at this estate size.</div></div></div>
+    <div class="item"><div class="bx"></div><div class="body"><span class="ask">Request the Prudential full policy contract</span> <span class="pill todo">TO DO</span><div class="why">We have the annual statement; the attorney/CPA may want the full contract. Confirm Living Needs Benefit terms while you're at it.</div></div></div>
+  </div>
+
+  <!-- SQUARE -->
+  <h2>4 · Square</h2>
+  <p class="who">Owner: Stanley · Griderfield account</p>
+  <div class="owner square">
+    <div class="item"><div class="bx"></div><div class="body"><span class="ask">Rotate / revoke the production access token.</span> <span class="pill pri">⬛ PRIORITY</span> <span class="pill todo">TO DO</span><div class="why">A live token was shared in chat — treat it as compromised. Regenerate it in Developer Dashboard → Production → Credentials.</div></div></div>
+    <div class="item"><div class="bx"></div><div class="body"><span class="ask">Decide whether / when to draw the $72,500.</span> <span class="pill todo">TO DO</span><div class="why">~30–40% effective APR — reserve for a fast-payback need, not as default working capital. Confirm borrower-of-record matches the trust/LLC.</div></div></div>
+    <div class="item"><div class="bx"></div><div class="body"><span class="ask">Pull expense / fee data for the CPA's EBITDA work</span> <span class="pill prog">IN PROGRESS</span></div></div>
+  </div>
+
+  <!-- ORION -->
+  <h2>5 · Orion / Entergy (Solar) — mostly resolved</h2>
+  <p class="who">Owner: Stanley · Lease AR-WBF1-1230 · counterparty now Entergy Arkansas</p>
+  <div class="owner orion">
+    <div class="item"><div class="bx"></div><div class="body"><span class="ask">Get a firm construction / COD timeline in writing</span> <span class="pill pri">⬛ PRIORITY</span> <span class="pill todo">TO DO</span><div class="why">The one solar item still open — $800/acre rent doesn't start until commercial operation, and everything downstream keys off this date. Ask Entergy now.</div></div></div>
+    <div class="item"><div class="bx"></div><div class="body"><span class="ask">Confirm the estoppel was executed &amp; returned</span> <span class="pill prog">ON FILE</span><div class="why">The estoppel is in the records — just verify the signed version was delivered.</div></div></div>
+    <div class="item"><div class="bx"></div><div class="body"><span class="ask">Side letter found · Entergy assignment recorded</span> <span class="pill done">DONE</span><div class="why">Signed side letter is on file; the Orion→Entergy assignment was recorded in Jefferson County on 4/29/2026. Payment setup (Entergy payment agreement + instruction form) is in hand.</div></div></div>
+  </div>
+
+  <!-- FAMILY -->
+  <h2>6 · Family Members</h2>
+  <p class="who">Owner: Stanley — collect &amp; confirm</p>
+  <div class="owner family">
+    <div class="item"><div class="bx"></div><div class="body"><span class="ask">Collect full legal name, SSN, DOB, address</span> for Reneta, Charles Toliver, Kim Fox, Stedmon, Stanley, Darius <span class="pill todo">TO DO</span><div class="why">The attorney needs these for the trust + beneficiary records.</div></div></div>
+    <div class="item"><div class="bx"></div><div class="body"><span class="ask">Confirm the three 16.67% solar shares are unchanged</span> (Reneta, Charles, Kim) <span class="pill todo">TO DO</span></div></div>
+    <div class="item"><div class="bx"></div><div class="body"><span class="ask">Confirm Reneta accepts the agent / proposed roles; Stedmon the trustee role</span> <span class="pill todo">TO DO</span></div></div>
+    <div class="item"><div class="bx"></div><div class="body"><span class="ask">Confirm Stanley is comfortable with the trust-owned restaurant structure</span> <span class="pill todo">TO DO</span></div></div>
+    <div class="item"><div class="bx"></div><div class="body"><span class="ask">Get coins appraised (ANA/ASA), insured, then placed in trust</span> <span class="pill todo">TO DO</span><div class="why">Darius's inheritance — appraisal gates trust placement.</div></div></div>
+  </div>
+
+  <!-- GRANDMA -->
+  <h2>7 · For Grandma (Berdia)</h2>
+  <p class="who">Owner: Reneta / Stanley</p>
+  <div class="owner">
+    <div class="item"><div class="bx"></div><div class="body"><span class="ask">Get a physician capacity letter on file — time-sensitive.</span> <span class="pill pri">⬛ PRIORITY</span> <span class="pill todo">TO DO</span><div class="why">Now urgent: the medical records show a June-2026 hospitalization and CT-brain around when the current POA was signed. A contemporaneous capacity letter protects the new POA and the trust from challenge — and the sooner documents are executed while capacity is clear, the better. Coordinate timing with the attorney.</div></div></div>
+    <div class="item"><div class="bx"></div><div class="body"><span class="ask">Pull the underlying vesting deed + property-tax records</span> <span class="pill prog">PARCELS KNOWN</span><div class="why">We already have the parcel numbers (001-03633-000 · 001-03634-000) and legal descriptions from the beneficiary deed. Order the current warranty/vesting deed and recent tax bills from the Jefferson County recorder/assessor to complete the land file for the trust transfer.</div></div></div>
+  </div>
+
+  <p class="foot"><strong>The critical path:</strong> engage the attorney → re-execute the POA (with a capacity letter) &amp; reconcile the beneficiary deed → form the trust → fund it (land, solar, restaurant LLC, insurance beneficiary, coins). <strong>The biggest gap</strong> is the restaurant's underlying financials — start pulling tax returns, P&amp;L and bank statements now, as they have the longest lead time. Things doable <em>today</em>: rotate the Square token, confirm the Prudential premium is current, and request the COD date from Entergy. · Companion docs: <a href="capital-stack.html" style="color:var(--terra)">Capital Stack</a> · <a href="checklist.html" style="color:var(--terra)">CPA/Attorney Prep Checklist</a></p>
+
+</div>
+</body>
+</html>

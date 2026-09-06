@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Monson Family — Trustee Console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#FAFAF8;--card:#FFF;--ink:#1A1A18;--muted:#6B6B66;--faint:#9a9a94;--line:#E0DED8;--line2:#EDEBE6;--rust:#C45A3C;--green:#3D7A5F;--green-d:#2C6049;--green-bg:#E3F0E9;--amber:#B9891F;--amber-bg:rgba(212,168,67,.16);--gray-bg:#F0EEE9;--serif:'Instrument Serif',serif;--sans:'Inter',sans-serif;--grot:'Space Grotesk',sans-serif;}
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased;}
+  h1,h2,h3,h4{font-family:var(--serif);font-weight:400;line-height:1.15;margin:0;}
+  .num{font-family:var(--grot);}
+  .container{max-width:1080px;margin:0 auto;padding:0 28px;}
+  .label{font-family:var(--sans);font-size:.7rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);}
+  button{font-family:var(--grot);cursor:pointer;}
+  input,select{font-family:var(--sans);}
+
+  /* login */
+  .login{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:24px;background:var(--paper);}
+  .login.hidden{display:none;}
+  .loginbox{max-width:380px;width:100%;text-align:center;}
+  .loginbox h2{font-size:2.3rem;margin:4px 0 6px;}
+  .loginbox p{color:var(--muted);font-size:.9rem;margin:0 auto 20px;max-width:32ch;}
+  .loginbox .fld{margin-bottom:10px;}
+  .loginbox input{width:100%;font-size:.95rem;padding:11px 14px;border:1px solid var(--line);border-radius:9px;background:var(--card);color:var(--ink);}
+  .loginbox input:focus{outline:none;border-color:var(--rust);}
+  .loginbox button{width:100%;font-weight:600;font-size:.92rem;padding:12px;border:none;border-radius:9px;background:var(--ink);color:var(--paper);}
+  .loginerr{color:var(--rust);font-size:.84rem;margin-top:12px;min-height:1.2em;}
+
+  /* app */
+  .app{display:none;} .app.show{display:block;}
+  header.bar{border-bottom:1px solid var(--line);background:var(--paper);position:sticky;top:0;z-index:10;}
+  header.bar .container{display:flex;align-items:center;gap:16px;padding:15px 28px;}
+  header.bar .brand{font-family:var(--serif);font-size:1.2rem;margin-right:auto;}
+  .chip{font-family:var(--grot);font-size:.74rem;color:var(--muted);border:1px solid var(--line);border-radius:100px;padding:5px 11px;}
+  .chip b{color:var(--ink);}
+  .rolechip{font-family:var(--grot);font-size:.66rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;padding:4px 9px;border-radius:100px;color:var(--green-d);background:var(--green-bg);}
+  header.bar button.link{background:none;border:none;color:var(--muted);font-size:.8rem;}
+  header.bar button.link:hover{color:var(--rust);}
+
+  .mast{padding:34px 0 8px;} .mast h1{font-size:2.4rem;} .mast .ro{color:var(--rust);font-size:.85rem;margin-top:6px;}
+  .strip{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:20px 0;}
+  @media(max-width:640px){.strip{grid-template-columns:1fr;}}
+  .stat{background:var(--card);padding:16px 18px;}
+  .stat .k{font-family:var(--grot);font-size:1.5rem;font-weight:600;} .stat .l{font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-top:5px;}
+
+  section.blk{padding:26px 0;border-top:1px solid var(--line);}
+  .blk h2{font-size:1.7rem;margin-bottom:14px;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:14px;}
+
+  .form{display:grid;grid-template-columns:120px 1fr 1fr auto;gap:10px;align-items:end;}
+  @media(max-width:720px){.form{grid-template-columns:1fr 1fr;}}
+  .form .f label{display:block;font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:4px;}
+  .form input,.form select{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);font-size:.9rem;}
+  .btn{background:var(--ink);color:var(--paper);border:none;border-radius:8px;padding:10px 16px;font-weight:600;font-size:.86rem;}
+  .btn.sec{background:transparent;color:var(--ink);border:1px solid var(--line);}
+  .btn:disabled{opacity:.4;cursor:not-allowed;}
+
+  table.tbl{width:100%;border-collapse:collapse;} table.tbl th{text-align:left;font-family:var(--grot);font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:0 12px 9px;border-bottom:1px solid var(--line);}
+  table.tbl td{padding:11px 12px;border-bottom:1px solid var(--line2);font-size:.88rem;vertical-align:top;}
+  table.tbl tr:last-child td{border-bottom:none;}
+  .val{font-family:var(--grot);white-space:nowrap;} .muted{color:var(--muted);} .empty{color:var(--faint);font-size:.86rem;padding:14px 12px;}
+
+  .gitem,.citem{display:flex;gap:11px;align-items:flex-start;padding:10px 4px;border-bottom:1px solid var(--line2);cursor:pointer;}
+  .gitem:hover,.citem:hover{background:var(--line2);}
+  .box{width:17px;height:17px;border:1.5px solid var(--faint);border-radius:5px;flex-shrink:0;margin-top:2px;position:relative;}
+  .on .box{border-color:var(--green);background:var(--green);}
+  .on .box::after{content:"";position:absolute;left:5px;top:1.5px;width:5px;height:9px;border-right:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(45deg);}
+  .gitem .t,.citem .t{flex:1;font-size:.9rem;} .on .t{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--faint);}
+  .meta{font-family:var(--grot);font-size:.7rem;color:var(--faint);margin-top:3px;}
+  .gh{font-family:var(--grot);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:16px 0 4px;}
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--paper);font-size:.85rem;padding:10px 18px;border-radius:8px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:50;}
+  .toast.show{opacity:1;} .toast.err{background:var(--rust);}
+  .ro-banner{background:var(--amber-bg);color:var(--amber);font-size:.82rem;padding:8px 14px;border-radius:8px;margin-bottom:14px;font-family:var(--grot);}
+  .modal{position:fixed;inset:0;z-index:60;background:rgba(26,22,15,.45);display:none;align-items:center;justify-content:center;padding:24px;}
+  .modal.show{display:flex;}
+  .modalbox{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px;max-width:400px;width:100%;box-shadow:0 30px 70px -30px rgba(0,0,0,.4);}
+  .modalbox h3{font-size:1.6rem;margin-bottom:4px;}
+  .modalbox input{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:9px;background:var(--paper);color:var(--ink);font-size:.92rem;margin-top:9px;}
+  .modalbox input:focus{outline:none;border-color:var(--rust);}
+  .pwrow{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;}
+  .pubbar{display:flex;align-items:center;gap:14px;background:var(--green-bg);border:1px solid rgba(61,122,95,.25);border-radius:12px;padding:14px 18px;margin-top:4px;}
+  .pubbar .pt{flex:1;} .pubbar .pt b{color:var(--green-d);} .pubbar .pt .sub{font-family:var(--grot);font-size:.76rem;color:var(--muted);margin-top:2px;}
+  .pubbar .btn{background:var(--green-d);}
+  .evt{display:grid;grid-template-columns:140px 1fr auto;gap:14px;align-items:baseline;padding:11px 4px;border-bottom:1px solid var(--line2);font-size:.88rem;}
+  .evt:last-child{border-bottom:none;}
+  .evt .who{font-family:var(--grot);font-size:.8rem;color:var(--ink);font-weight:600;}
+  .evt .who .ty{display:block;font-weight:400;color:var(--faint);font-size:.66rem;text-transform:uppercase;letter-spacing:.05em;margin-top:2px;}
+  .evt .dt{color:var(--ink);line-height:1.4;} .evt .tm{font-family:var(--grot);font-size:.74rem;color:var(--faint);white-space:nowrap;}
+  footer{border-top:1px solid var(--line);padding:26px 0 50px;} footer p{font-size:.78rem;color:var(--faint);max-width:80ch;}
+</style>
+</head>
+<body>
+
+<div id="login" class="login">
+  <div class="loginbox">
+    <div class="label" style="color:var(--rust)">Monson Family</div>
+    <h2>Trustee Console</h2>
+    <p>Sign in to log capital, update gates, and generate reports.</p>
+    <form id="loginform">
+      <div class="fld"><input id="u" type="text" placeholder="Username" autocomplete="username" autofocus></div>
+      <div class="fld"><input id="p" type="password" placeholder="Passphrase" autocomplete="current-password"></div>
+      <button type="submit">Sign in</button>
+    </form>
+    <div class="loginerr" id="loginerr"></div>
+  </div>
+</div>
+
+<div class="app" id="app">
+  <header class="bar"><div class="container">
+    <span class="brand">Monson Family</span>
+    <span class="chip">Signed in as <b id="who"></b></span>
+    <span class="rolechip" id="role"></span>
+    <button class="link" id="changepw">Change passphrase</button>
+    <button class="link" id="logout">Sign out</button>
+  </div></header>
+
+  <div class="container">
+    <div class="mast"><h1>Trustee Console</h1><div class="ro" id="rodesc"></div></div>
+    <div id="roBanner"></div>
+    <div class="strip" id="strip"></div>
+    <div id="publishBar"></div>
+
+    <section class="blk">
+      <h2>Capital deployed</h2>
+      <div class="card" id="capForm"></div>
+      <div class="card"><table class="tbl" id="capTbl"></table></div>
+    </section>
+
+    <section class="blk">
+      <h2>Phase gates</h2>
+      <div class="card" id="gates"></div>
+    </section>
+
+    <section class="blk">
+      <h2>Action checklist</h2>
+      <div class="card" id="checklist"></div>
+    </section>
+
+    <section class="blk">
+      <h2>Quarterly reports</h2>
+      <div class="card" id="repForm"></div>
+      <div class="card"><table class="tbl" id="repTbl"></table></div>
+    </section>
+
+    <section class="blk">
+      <h2>Activity log</h2>
+      <div class="card" id="activity"></div>
+    </section>
+  </div>
+  <footer><div class="container"><p>Internal family working tool. Not legal, tax, or investment advice. All actions are recorded with the acting user and time.</p></div></footer>
+</div>
+
+<div class="modal" id="pwmodal">
+  <div class="modalbox">
+    <h3 id="pwtitle">Change passphrase</h3>
+    <p id="pwsub" class="muted" style="font-size:.86rem;">Choose a new passphrase (at least 8 characters).</p>
+    <form id="pwform">
+      <input id="pw_cur" type="password" placeholder="Current passphrase" autocomplete="current-password">
+      <input id="pw_new" type="password" placeholder="New passphrase" autocomplete="new-password">
+      <input id="pw_conf" type="password" placeholder="Confirm new passphrase" autocomplete="new-password">
+      <div class="pwrow">
+        <button type="button" class="btn sec" id="pw_cancel">Cancel</button>
+        <button type="submit" class="btn">Save passphrase</button>
+      </div>
+    </form>
+    <div class="loginerr" id="pwerr" style="text-align:left;"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  var GATES={ "Phase 0 → 1 — Foundation complete":[
+      ["p0_1","Trust legally formed, executed by Grandma, recorded"],
+      ["p0_2","All assets transferred in (deed, lease assignment, restaurant LLC, insurance beneficiary)"],
+      ["p0_3","Coin collection appraised and valued"],
+      ["p0_4","Restaurant financials cleaned (2-yr P&L reconciled)"],
+      ["p0_5","Solar lease assignment confirmed legal (Orion allows trust ownership)"],
+      ["p0_6","Grandma's legal capacity confirmed (physician letter if advised)"],
+      ["p0_7","All beneficiaries received and signed the trust document"],
+      ["p0_8","CPA engaged; tax structure determined"],
+      ["p0_9","Family info + SSNs collected"],
+      ["p0_10","Advisory Committee finalized; first meeting scheduled"]],
+    "Phase 1 → 2 — Capital deployed, performing":[
+      ["p1_1","All Phase 1 debt service current"],
+      ["p1_2","Restaurant EBITDA ≥ 1.0× debt service"],
+      ["p1_3","Ancillary Services winning contracts (≥ $15K revenue)"],
+      ["p1_4","Darius: 12 mo licensure, 5–10 closed deals, advances repaid"],
+      ["p1_5","Square Capital fully repaid"],
+      ["p1_6","Trust reserves ≥ $50K–$100K"],
+      ["p1_7","Solar COD confirmed, income flowing"]] };
+  var CHECK=[["c1","Family meeting held (Apr 12, 2026)","Family",true],["c2","Plan documented","Stedmon",true],["c3","Restaurant revenue verified via Square","Stedmon",true],["c4","Life insurance policy located + analyzed","Stedmon",true],["c5","Solar lease reviewed","Stedmon",true],["c6","Attorney engagement","Kim",false],["c7","Restaurant financials cleanup","CPA / Stanley",false],["c8","Coin appraisal scheduled","Darius",false],["c9","Family info collection (SSNs, contacts)","All",false],["c10","1099 filing for income recipient","Kim / Stanley",false],["c11","Attorney review: solar lease assignment rights","Attorney",false],["c12","Trust document + LLC operating agreements drafted","Attorney",false],["c13","Land deed transfer prepared","Attorney",false],["c14","Life insurance beneficiary change to trust","Stedmon",false],["c15","Policy loan decision (repay vs leave)","CPA / Attorney",false],["c16","Restaurant LLC formation","Attorney",false],["c17","Restaurant management agreement (Stanley)","Attorney",false],["c18","Ancillary Services LLC formation","Attorney",false],["c19","Real-Estate SPV template + TREC review","TX Attorney",false],["c20","Advisory Committee charter","Stedmon",false],["c21","Grandma capacity confirmation (if advised)","Attorney / MD",false],["c22","CPA engagement letter","Stedmon",false],["c23","Bi-weekly family meetings scheduled","Stedmon",false],["c24","Confirm Grandma's prior solar payments complete","Stedmon",false]];
+  var LLCS=["Restaurant LLC","Ancillary Services LLC","Real-Estate SPVs","Learning Institution LLC","Logistics LLC","Cross-LLC Operations","Trust (general)"];
+
+  var session=null, state=null, canWrite=false, isTrustee=false;
+
+  async function api(path,opts){ opts=opts||{}; opts.credentials="same-origin"; if(opts.body){opts.headers=Object.assign({"Content-Type":"application/json"},opts.headers||{});}
+    var r=await fetch(path,opts); var j={}; try{j=await r.json();}catch(e){} if(!r.ok){throw new Error(j.error||("Error "+r.status));} return j; }
+  function toast(msg,isErr){ var t=$("toast"); t.textContent=msg; t.className="toast show"+(isErr?" err":""); setTimeout(function(){t.className="toast";},2200); }
+  function money(n){ return "$"+Number(n||0).toLocaleString(); }
+  function fmtDate(s){ if(!s)return""; var d=new Date(s); return d.toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"}); }
+  function fmtDateTime(s){ if(!s)return""; var d=new Date(s); return d.toLocaleDateString(undefined,{month:"short",day:"numeric"})+" "+d.toLocaleTimeString(undefined,{hour:"numeric",minute:"2-digit"}); }
+  function renderAudit(events){ $("activity").innerHTML = (events&&events.length) ? events.map(function(e){ return '<div class="evt"><div class="who">'+esc(e.actor)+'<span class="ty">'+esc(e.type)+'</span></div><div class="dt">'+esc(e.detail)+'</div><div class="tm">'+fmtDateTime(e.at)+'</div></div>'; }).join("") : '<div style="padding:14px;color:var(--faint);font-size:.86rem;">No activity recorded yet — actions show here as the family uses the console.</div>'; }
+  async function loadAudit(){ try{ var r=await api("/api/audit"); renderAudit(r.events); }catch(e){} }
+
+  function boot(){
+    api("/api/state").then(function(res){ session=res.session; state=res.data; enter(); }).catch(function(){ $("login").classList.remove("hidden"); });
+  }
+  function enter(){
+    canWrite = session.role!=="viewer"; isTrustee = session.role==="trustee";
+    $("login").classList.add("hidden"); $("app").classList.add("show");
+    $("who").textContent=session.username; $("role").textContent=session.role;
+    $("rodesc").textContent = isTrustee?"Full access — capital, gates, checklist, reports.":(canWrite?"You can log capital and update gates & checklist.":"Read-only view.");
+    $("roBanner").innerHTML = canWrite?"":'<div class="ro-banner">Read-only access — you can view everything but not make changes.</div>';
+    render();
+    loadAudit();
+    if(session.mustChange){ openPw(true); }
+  }
+  function openPw(forced){
+    $("pwerr").textContent=""; $("pw_cur").value=""; $("pw_new").value=""; $("pw_conf").value="";
+    $("pwtitle").textContent = forced ? "Set a new passphrase" : "Change passphrase";
+    $("pwsub").textContent = forced ? "Your account is on a temporary passphrase. Set your own to continue (at least 8 characters)." : "Choose a new passphrase (at least 8 characters).";
+    $("pw_cancel").style.display = forced ? "none" : "";
+    $("pwmodal").classList.add("show"); $("pw_cur").focus();
+  }
+  function closePw(){ $("pwmodal").classList.remove("show"); }
+  function stateMap(arr){ var m={}; (arr||[]).forEach(function(x){m[x.key]={done:x.done,by:x.by,at:x.at};}); return m; }
+
+  function render(){
+    var gm=stateMap(state.gates), cm=stateMap(state.checklist);
+    // summary
+    var totalCap=(state.capital||[]).reduce(function(a,c){return a+(Number(c.amount)||0);},0);
+    var gAll=[].concat.apply([],Object.keys(GATES).map(function(k){return GATES[k];})); var gDone=gAll.filter(function(g){return gm[g[0]]&&gm[g[0]].done;}).length;
+    var cDone=CHECK.filter(function(c){var o=cm[c[0]];return o?o.done:c[3];}).length;
+    $("strip").innerHTML=[["k",money(totalCap),"Capital deployed"],["k",gDone+" / "+gAll.length,"Gates cleared"],["k",cDone+" / "+CHECK.length,"Checklist done"]]
+      .map(function(s){return '<div class="stat"><div class="k">'+s[1]+'</div><div class="l">'+s[2]+'</div></div>';}).join("");
+
+    // publish to family view (trustee only)
+    if(isTrustee){
+      var pub = state.published ? ("Last published to the family view "+fmtDate(state.published)) : "Not yet published to the family view.";
+      $("publishBar").innerHTML = '<div class="pubbar"><div class="pt"><b>Publish to family view</b><div class="sub">'+pub+'</div></div><button class="btn" id="dopublish">Publish now</button></div>';
+      $("dopublish").addEventListener("click",doPublish);
+    } else { $("publishBar").innerHTML=""; }
+
+    // capital form
+    $("capForm").innerHTML = canWrite ? (
+      '<div class="form">'
+      +'<div class="f"><label>Amount</label><input id="cap_amt" type="number" min="0" placeholder="0"></div>'
+      +'<div class="f"><label>Source</label><input id="cap_src" type="text" placeholder="e.g. Solar-backed loan"></div>'
+      +'<div class="f"><label>To</label><select id="cap_to">'+LLCS.map(function(l){return '<option>'+l+'</option>';}).join("")+'</select></div>'
+      +'<div class="f"><button class="btn" id="cap_add">Log entry</button></div>'
+      +'</div><div class="f" style="margin-top:10px;"><label>Note (optional)</label><input id="cap_note" type="text" placeholder="context"></div>'
+    ) : '<div class="muted" style="font-size:.88rem;">Capital entries are logged by the trustee and operators.</div>';
+    if(canWrite){ $("cap_add").addEventListener("click",addCapital); }
+
+    // capital table
+    var cap=state.capital||[];
+    $("capTbl").innerHTML = '<thead><tr><th>Amount</th><th>Source</th><th>To</th><th>By</th><th>When</th></tr></thead><tbody>'
+      + (cap.length? cap.map(function(e){return '<tr><td class="val">'+money(e.amount)+'</td><td>'+esc(e.source)+(e.note?'<div class="muted" style="font-size:.78rem;">'+esc(e.note)+'</div>':'')+'</td><td class="muted">'+esc(e.toLLC||"")+'</td><td class="muted">'+esc(e.by)+'</td><td class="muted val">'+fmtDate(e.at)+'</td></tr>';}).join("")
+        : '<tr><td colspan="5" class="empty">No capital deployed yet — Phase 0.</td></tr>') + '</tbody>';
+
+    // gates
+    var gh="";
+    Object.keys(GATES).forEach(function(group){
+      gh+='<div class="gh">'+group+'</div>';
+      GATES[group].forEach(function(g){ var o=gm[g[0]]; var done=o?o.done:false;
+        gh+='<div class="gitem'+(done?' on':'')+'" data-gate="'+g[0]+'"><span class="box"></span><div class="t">'+g[1]+(o&&o.by?'<div class="meta">'+esc(o.by)+' · '+fmtDate(o.at)+'</div>':'')+'</div></div>';
+      });
+    });
+    $("gates").innerHTML=gh;
+    if(canWrite){ Array.prototype.forEach.call(document.querySelectorAll("#gates .gitem"),function(el){ el.addEventListener("click",function(){toggleGate(el.getAttribute("data-gate"),!el.classList.contains("on"));}); }); }
+
+    // checklist
+    var ch="";
+    CHECK.forEach(function(c){ var o=cm[c[0]]; var done=o?o.done:c[3];
+      ch+='<div class="citem'+(done?' on':'')+'" data-check="'+c[0]+'"><span class="box"></span><div class="t">'+c[1]+'<div class="meta">'+esc(c[2])+(o&&o.by?' · '+esc(o.by)+' · '+fmtDate(o.at):'')+'</div></div></div>';
+    });
+    $("checklist").innerHTML=ch;
+    if(canWrite){ Array.prototype.forEach.call(document.querySelectorAll("#checklist .citem"),function(el){ el.addEventListener("click",function(){toggleCheck(el.getAttribute("data-check"),!el.classList.contains("on"));}); }); }
+
+    // reports
+    $("repForm").innerHTML = isTrustee ? (
+      '<div class="form" style="grid-template-columns:1fr auto;"><div class="f"><label>Quarter / label</label><input id="rep_q" type="text" placeholder="e.g. Q3 2026"></div><div class="f"><button class="btn" id="rep_gen">Generate report</button></div></div>'
+    ) : '<div class="muted" style="font-size:.88rem;">Only the trustee can generate reports. Past reports are listed below.</div>';
+    if(isTrustee){ $("rep_gen").addEventListener("click",genReport); }
+    var reps=state.reports||[];
+    $("repTbl").innerHTML='<thead><tr><th>Quarter</th><th>Deployed</th><th>By</th><th>Generated</th></tr></thead><tbody>'
+      + (reps.length? reps.map(function(r){return '<tr><td class="nm">'+esc(r.quarter||"—")+'</td><td class="val">'+money(r.totalDeployed)+'</td><td class="muted">'+esc(r.by)+'</td><td class="muted val">'+fmtDate(r.at)+'</td></tr>';}).join("")
+        : '<tr><td colspan="4" class="empty">No reports yet.</td></tr>')+'</tbody>';
+  }
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];}); }
+
+  async function reload(){ var res=await api("/api/state"); session=res.session; state=res.data; render(); loadAudit(); }
+
+  async function addCapital(){
+    var amount=$("cap_amt").value, source=$("cap_src").value, toLLC=$("cap_to").value, note=$("cap_note").value;
+    try{ await api("/api/capital",{method:"POST",body:JSON.stringify({amount:amount,source:source,toLLC:toLLC,note:note})}); toast("Capital entry logged"); await reload(); }
+    catch(e){ toast(e.message,true); }
+  }
+  async function toggleGate(key,done){ try{ await api("/api/gate",{method:"POST",body:JSON.stringify({key:key,done:done})}); await reload(); }catch(e){ toast(e.message,true); } }
+  async function toggleCheck(key,done){ try{ await api("/api/checklist",{method:"POST",body:JSON.stringify({key:key,done:done})}); await reload(); }catch(e){ toast(e.message,true); } }
+  async function genReport(){ var q=$("rep_q").value; try{ await api("/api/report",{method:"POST",body:JSON.stringify({quarter:q})}); toast("Report generated"); await reload(); }catch(e){ toast(e.message,true); } }
+  async function doPublish(){ var b=$("dopublish"); if(b){b.disabled=true;b.textContent="Publishing…";} try{ await api("/api/publish",{method:"POST"}); toast("Published to family view"); await reload(); }catch(e){ toast(e.message,true); if(b){b.disabled=false;b.textContent="Publish now";} } }
+
+  $("loginform").addEventListener("submit",function(e){ e.preventDefault(); $("loginerr").textContent="Signing in…";
+    api("/api/login",{method:"POST",body:JSON.stringify({username:$("u").value,passphrase:$("p").value})})
+      .then(function(){ $("loginerr").textContent=""; return boot(); })
+      .catch(function(err){ $("loginerr").textContent=err.message||"Sign in failed"; });
+  });
+  $("logout").addEventListener("click",function(){ api("/api/logout",{method:"POST"}).then(function(){ location.reload(); }); });
+
+  $("changepw").addEventListener("click",function(){ openPw(false); });
+  $("pw_cancel").addEventListener("click",closePw);
+  $("pwform").addEventListener("submit",function(e){ e.preventDefault();
+    var cur=$("pw_cur").value, nw=$("pw_new").value, cf=$("pw_conf").value;
+    if(nw.length<8){ $("pwerr").textContent="New passphrase must be at least 8 characters."; return; }
+    if(nw!==cf){ $("pwerr").textContent="New passphrases do not match."; return; }
+    $("pwerr").textContent="Saving…";
+    api("/api/change-pass",{method:"POST",body:JSON.stringify({current:cur,next:nw})})
+      .then(function(){ closePw(); toast("Passphrase updated"); return reload(); })
+      .catch(function(err){ $("pwerr").textContent=err.message||"Failed"; });
+  });
+
+  boot();
+})();
+</script>
+</body>
+</html>

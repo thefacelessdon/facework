@@ -1,0 +1,19 @@
+{
+  "name": "berdia",
+  "version": "1.0.0",
+  "description": "Monson Family plan + operating system",
+  "main": "index.js",
+  "scripts": {
+    "seed": "node seed.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "engines": {
+    "node": "24.x"
+  },
+  "dependencies": {
+    "vercel": "^50.34.1"
+  }
+}

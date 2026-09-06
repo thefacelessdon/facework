@@ -1,0 +1,24 @@
+# Deploy ONLY the public site + gated app (HTML, encrypted data, /api functions, /lib).
+# Everything below is sensitive family material or local-only source — never deploy it.
+
+# Plaintext data source + local scripts (encrypted/served files stay deployed)
+system-data.js
+seed.js
+seed-config.js
+passphrases.local.txt
+.env
+.env.*
+
+# Legal + financial documents
+*.pdf
+*.md
+Records/
+Orion Agreements/
+
+# Tooling / local
+node_modules/
+package-lock.json
+skills-lock.json
+.claude/
+.agents/
+.DS_Store

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Berdia Monson — Family Plan Essentials</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 18px; }
+body {
+  background: #FAFAF8; color: #1A1A18;
+  font-family: 'Inter', sans-serif; line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+.container { max-width: 680px; margin: 0 auto; padding: 0 28px; }
+section { padding: 48px 0; border-top: 1px solid #E0DED8; }
+section:first-of-type { border-top: none; }
+h1, h2 { font-family: 'Instrument Serif', serif; font-weight: 400; line-height: 1.2; }
+h1 { font-size: 2.75rem; letter-spacing: -0.02em; }
+h2 { font-size: 1.75rem; margin-bottom: 0.75rem; }
+h3 { font-family: 'Inter', sans-serif; font-size: 1.05rem; font-weight: 600; margin: 1.5rem 0 0.5rem; }
+p { margin-bottom: 1rem; }
+.num { font-family: 'Space Grotesk', sans-serif; }
+.label { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6B6B66; }
+.secondary { color: #6B6B66; }
+.accent { color: #C45A3C; }
+.green { color: #3D7A5F; }
+.hero { padding: 64px 0 32px; text-align: center; }
+.hero .subtitle { font-size: 1.05rem; color: #6B6B66; margin: 12px auto 24px; max-width: 520px; }
+.divider { width: 48px; height: 3px; background: #C45A3C; margin: 24px auto; border-radius: 2px; }
+.callout {
+  background: #fff; border: 1px solid #E0DED8; border-left: 4px solid #C45A3C;
+  border-radius: 8px; padding: 20px 24px; margin: 20px 0;
+}
+.callout.green-callout { border-left-color: #3D7A5F; background: #F4F9F6; }
+.callout.amber-callout { border-left-color: #D4A843; background: #FFFCF5; }
+.highlight-box {
+  background: #F0E6E0; border-radius: 10px; padding: 24px; text-align: center; margin: 24px 0;
+}
+.highlight-box .big { font-family: 'Space Grotesk', sans-serif; font-size: 2rem; font-weight: 700; color: #C45A3C; }
+ul.checks { list-style: none; margin: 12px 0; }
+ul.checks li { padding: 8px 0 8px 28px; position: relative; }
+ul.checks li::before {
+  content: "✓"; position: absolute; left: 0; color: #3D7A5F; font-weight: 700;
+}
+ul.plain { margin: 12px 0 12px 1.25rem; }
+table { width: 100%; border-collapse: collapse; font-size: 0.95rem; margin: 16px 0; }
+th {
+  background: #1A1A18; color: #FAFAF8; text-align: left; padding: 12px 14px;
+  font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase;
+}
+td { padding: 12px 14px; border-bottom: 1px solid #E0DED8; font-family: 'Space Grotesk', sans-serif; }
+td.text-cell { font-family: 'Inter', sans-serif; }
+tr.grandma-row { background: #F0E6E0; font-weight: 600; }
+tr.total-row { background: #F4F9F6; font-weight: 600; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+.mini-card {
+  background: #fff; border: 1px solid #E0DED8; border-radius: 8px; padding: 16px;
+}
+.mini-card h4 { font-size: 0.8rem; font-weight: 600; margin-bottom: 8px; color: #6B6B66; text-transform: uppercase; letter-spacing: 0.05em; }
+.footer-note { font-size: 0.85rem; color: #6B6B66; text-align: center; padding: 32px 0 48px; }
+.footer-note a { color: #C45A3C; font-weight: 600; }
+.nav-top {
+  padding: 14px 0; border-bottom: 1px solid #E0DED8; background: rgba(250,250,248,0.95);
+}
+.nav-top .container { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; }
+.nav-top a { color: #C45A3C; text-decoration: none; font-weight: 600; }
+.print-cover { display: none; }
+@media (max-width: 600px) {
+  html { font-size: 16px; }
+  .two-col { grid-template-columns: 1fr; }
+}
+@media print {
+  .nav-top { display: none; }
+  html { font-size: 13pt; }
+  section { padding: 20px 0; page-break-inside: avoid; }
+  .callout, .highlight-box, .two-col, table { break-inside: avoid; }
+  .print-cover {
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center; min-height: 100vh; padding: 2in 1in; page-break-after: always;
+  }
+  .print-cover h1 { font-size: 2.5rem; }
+  a { color: inherit; text-decoration: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="print-cover" aria-hidden="true">
+  <span class="label">Essentials Only</span>
+  <h1>Berdia Monson</h1>
+  <p class="subtitle">The family financial plan — short version</p>
+  <div class="divider"></div>
+  <p class="secondary">Prepared for Grandma · May 2026<br>Monson Family · Jefferson County, Arkansas</p>
+</div>
+
+<nav class="nav-top">
+  <div class="container">
+    <span class="label">Essentials for Grandma</span>
+    <a href="index.html">Full family brief →</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="container">
+    <span class="label">Family Financial Plan</span>
+    <h1>Berdia Monson</h1>
+    <p class="subtitle">The important parts — in plain language, without the extra detail.</p>
+    <div class="divider"></div>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <h2>Why This Exists</h2>
+    <p>This is a summary of what the family is proposing for the land, solar lease, and restaurant. It is written so you can read it once and understand the big picture.</p>
+    <div class="callout green-callout">
+      <p style="margin:0;"><strong>This is not a vote.</strong> No one is being asked to give up anything. The goal is to organize and protect what you already own — and to carry out your wishes clearly for the generations after you.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>What You Own Today</h2>
+    <ul class="plain">
+      <li><strong>109 acres</strong> in Jefferson County — in your name. <strong class="green">Not for sale.</strong></li>
+      <li><strong>Solar lease</strong> on 94.75 acres — 30-year contract with Orion. Rent starts when construction finishes (target summer 2026, may slip).</li>
+      <li><strong>Restaurant</strong> at Grider Field — operating ~10 years. Stanley runs it day to day. Set to be inherited by Stanley.</li>
+      <li><strong>Coin collection</strong> — Darius's inheritance (value pending appraisal).</li>
+      <li><strong>Life insurance</strong> — full picture still being gathered; may be larger than discussed on April 12.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>What Does <em>Not</em> Change</h2>
+    <ul class="checks">
+      <li><strong>No land is sold.</strong> It stays in the family.</li>
+      <li>Reneta, Charles, and Kim keep receiving their <strong class="num">16.67%</strong> of solar income — paid directly to them, every year.</li>
+      <li>Stanley keeps running the restaurant.</li>
+      <li>You still define the rules. The trust carries out <strong>your</strong> wishes — it does not take control away from you while you are able to decide.</li>
+      <li>No family member is asked to personally guarantee loans or take on debt.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>Your Solar Income</h2>
+    <p>When the solar farm is fully operating, the lease pays <strong class="num">$800 per acre per year</strong> on 94.75 acres — <strong class="num">$75,800 total</strong>. Payments go up <strong>2% each year</strong>. They are usually paid <strong>once a year</strong>, not monthly.</p>
+
+    <div class="highlight-box">
+      <div class="label" style="margin-bottom:8px;">Your share (50%)</div>
+      <div class="big num">$37,900</div>
+      <div class="secondary" style="font-size:0.9rem; margin-top:4px;">per year when rent starts · ~$3,158/mo equivalent</div>
+    </div>
+
+    <table>
+      <thead>
+        <tr><th>Person</th><th>Share</th><th>Year 1</th></tr>
+      </thead>
+      <tbody>
+        <tr class="grandma-row">
+          <td class="text-cell">You (Grandma)</td><td>50%</td><td>$37,900</td>
+        </tr>
+        <tr><td class="text-cell">Reneta</td><td>16.67%</td><td>$12,630</td></tr>
+        <tr><td class="text-cell">Charles</td><td>16.67%</td><td>$12,630</td></tr>
+        <tr><td class="text-cell">Kim</td><td>16.67%</td><td>$12,630</td></tr>
+        <tr class="total-row"><td class="text-cell"><strong>Total</strong></td><td>100%</td><td>$75,800</td></tr>
+      </tbody>
+    </table>
+
+    <p class="secondary" style="font-size:0.9rem;">Under the plan, your 50% is managed through the trust so it can be reinvested and protected — not spent down. The children's shares continue going to them directly.</p>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>What Is a Trust?</h2>
+    <p>A <strong>trust</strong> is a legal box that holds assets for the family. You set the rules. A <strong>trustee</strong> (Stedmon, with a bank as backup) manages the box according to your rules. The family receives income from what the trust owns — but the land and businesses stay protected inside the trust.</p>
+    <h3>What the trust would do for you</h3>
+    <ul class="checks">
+      <li>Keep the land together and protect it from forced sale</li>
+      <li>Hold the restaurant under a written contract that protects Stanley's role</li>
+      <li>Pay property taxes and upkeep so land is not lost to unpaid bills</li>
+      <li>Borrow against solar income to grow family businesses — <strong>without selling land</strong></li>
+      <li>Pass assets to grandchildren in an orderly way — not through probate court</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>One Decision When Rent Starts</h2>
+    <p>The first year of full solar rent is a one-time choice. No one currently depends on that money — which is why the family may decide together before habits form.</p>
+
+    <div class="two-col">
+      <div class="mini-card" style="border-left: 4px solid #3D7A5F;">
+        <h4>Option A — All year-one to trust</h4>
+        <p style="font-size:0.95rem; margin:0;">Everyone skips year-one checks. The trust receives the full <strong class="num">$75,800</strong> as seed money. Normal payments resume in year two.</p>
+      </div>
+      <div class="mini-card" style="border-left: 4px solid #D4A843;">
+        <h4>Option B — Pay as usual</h4>
+        <p style="font-size:0.95rem; margin:0;">Each person receives their share in year one — you <strong class="num">$37,900</strong>, each child <strong class="num">$12,630</strong>. The trust still borrows to fund growth; it just starts without extra cash on hand.</p>
+      </div>
+    </div>
+
+    <div class="callout amber-callout">
+      <p style="margin:0;"><strong>Either way:</strong> Land stays in the family. Ownership shares do not change. This decision has not been made yet — the family will discuss it before rent starts.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>Why Now</h2>
+    <ul class="plain">
+      <li>Solar construction is coming — once rent starts flowing, it is harder to reorganize.</li>
+      <li>The trust should be in place <strong>while you can still define how assets are governed</strong>.</li>
+      <li>No one relies on solar income for daily expenses today — that makes now the right time to set things up cleanly.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>What Happens Next</h2>
+    <ol class="plain">
+      <li><strong>April 12 meeting done</strong> — family reviewed the plan together.</li>
+      <li><strong>Now (May–June)</strong> — gather documents, hire trust attorney and CPA, clean up restaurant books.</li>
+      <li><strong>Summer 2026</strong> — form trust and transfer assets (when attorney and CPA are ready).</li>
+      <li><strong>When solar is built</strong> — full rent begins; family decides year-one option if needed.</li>
+      <li><strong>After that</strong> — trust deploys capital slowly, one step at a time, with family oversight.</li>
+    </ol>
+    <p class="secondary" style="font-size:0.9rem;">Bi-weekly Sunday check-ins continue so everyone stays aligned.</p>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>Questions?</h2>
+    <p>Stedmon prepared this summary. Reneta, Stanley, and the rest of the family are part of the conversation. Ask anything — there are no bad questions.</p>
+    <div class="callout">
+      <p style="margin:0;">The full brief has charts, numbers, and detail for family members who want to go deeper: <a href="index.html">berdia-family-plan.vercel.app</a></p>
+    </div>
+  </div>
+</section>
+
+<p class="footer-note container">
+  Essentials summary · May 2026 · <a href="index.html">Read the full family plan</a>
+</p>
+
+</body>
+</html>

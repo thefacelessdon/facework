@@ -1,0 +1,2594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Berdia Monson — Family Financial Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ── RESET & BASE ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  background: #FAFAF8;
+  color: #1A1A18;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── TYPOGRAPHY ── */
+h1, h2, h3, h4 { font-family: 'Instrument Serif', serif; font-weight: 400; line-height: 1.2; }
+h1 { font-size: 3.5rem; letter-spacing: -0.02em; }
+h2 { font-size: 2.25rem; letter-spacing: -0.01em; margin-bottom: 1rem; }
+h3 { font-size: 1.5rem; margin-bottom: 0.75rem; }
+h4 { font-size: 1.25rem; margin-bottom: 0.5rem; }
+p { margin-bottom: 1rem; max-width: 680px; }
+strong { font-weight: 600; }
+.num { font-family: 'Space Grotesk', sans-serif; }
+.label { font-family: 'Inter', sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6B6B66; }
+.secondary { color: #6B6B66; }
+.accent { color: #C45A3C; }
+.green { color: #3D7A5F; }
+.amber { color: #D4A843; }
+
+/* ── LAYOUT ── */
+.container { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+section { padding: 80px 0; }
+section + section { border-top: 1px solid #E0DED8; }
+
+/* ── NAV ── */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(250,250,248,0.92); backdrop-filter: blur(12px);
+  border-bottom: 1px solid #E0DED8;
+  padding: 14px 0;
+}
+.nav .container { display: flex; align-items: center; gap: 32px; overflow-x: auto; }
+.nav a {
+  font-size: 0.8rem; font-weight: 500; color: #6B6B66;
+  text-decoration: none; white-space: nowrap; transition: color 0.2s;
+}
+.nav a:hover { color: #C45A3C; }
+.nav .brand { font-family: 'Instrument Serif', serif; font-size: 1.1rem; color: #1A1A18; margin-right: auto; }
+
+/* ── HERO ── */
+.hero { padding: 120px 0 80px; text-align: center; }
+.hero h1 { margin-bottom: 16px; }
+.hero .subtitle { font-size: 1.1rem; color: #6B6B66; max-width: 640px; margin: 0 auto 40px; }
+.hero .intro { max-width: 700px; margin: 0 auto; text-align: left; font-size: 1.05rem; line-height: 1.8; }
+.hero .divider { width: 60px; height: 3px; background: #C45A3C; margin: 40px auto 0; border-radius: 2px; }
+
+/* ── PART HEADER ── */
+.part-header { margin-bottom: 48px; }
+.part-header .label { margin-bottom: 8px; display: block; }
+
+/* ── CARDS GRID ── */
+.cards { display: grid; gap: 24px; margin: 32px 0; }
+.cards-3 { grid-template-columns: repeat(3, 1fr); }
+.cards-2 { grid-template-columns: repeat(2, 1fr); }
+.cards-4 { grid-template-columns: repeat(4, 1fr); }
+.cards-5 { grid-template-columns: repeat(5, 1fr); }
+
+.card {
+  background: #fff; border: 1px solid #E0DED8; border-radius: 12px;
+  padding: 28px; position: relative; transition: box-shadow 0.2s;
+}
+.card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.04); }
+.card .card-icon { font-size: 2rem; margin-bottom: 12px; display: block; }
+.card .card-title { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.95rem; margin-bottom: 6px; }
+.card .card-number { font-family: 'Space Grotesk', sans-serif; font-size: 1.75rem; font-weight: 700; margin-bottom: 8px; }
+.card .card-detail { font-size: 0.85rem; color: #6B6B66; line-height: 1.6; }
+.card.dashed { border-style: dashed; border-color: #C45A3C; background: #FEFCFB; }
+.card.dark { background: #1A1A18; color: #FAFAF8; border-color: #1A1A18; }
+.card.dark .card-detail { color: #aaa; }
+.card.green-card { border-left: 4px solid #3D7A5F; }
+.card.amber-card { border-left: 4px solid #D4A843; }
+
+.badge-tbd {
+  display: inline-block; background: #F0E6E0; color: #C45A3C;
+  font-family: 'Space Grotesk', sans-serif; font-size: 0.7rem; font-weight: 700;
+  padding: 3px 10px; border-radius: 100px; letter-spacing: 0.05em;
+}
+.badge-confirmed {
+  display: inline-block; background: #E3F0E9; color: #2C6049;
+  font-family: 'Space Grotesk', sans-serif; font-size: 0.7rem; font-weight: 700;
+  padding: 3px 10px; border-radius: 100px; letter-spacing: 0.05em;
+}
+
+/* ── TABLES ── */
+.table-wrap { overflow-x: auto; margin: 24px 0; -webkit-overflow-scrolling: touch; }
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+table th {
+  background: #1A1A18; color: #FAFAF8;
+  font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.75rem;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  text-align: left; padding: 14px 18px;
+}
+table th:first-child { border-radius: 8px 0 0 0; }
+table th:last-child { border-radius: 0 8px 0 0; }
+table td { padding: 14px 18px; border-bottom: 1px solid #E0DED8; font-family: 'Space Grotesk', sans-serif; }
+table tr:last-child td { border-bottom: none; }
+table .total-row { background: #F0E6E0; font-weight: 600; }
+table .total-row td { border-bottom: none; }
+table .total-row-dark { background: #1A1A18; color: #FAFAF8; font-weight: 700; }
+table .total-row-dark td { border-bottom: none; color: #FAFAF8; }
+table td.text-cell { font-family: 'Inter', sans-serif; }
+
+/* ── OWNERSHIP BARS ── */
+.ownership-bar { margin: 12px 0; }
+.ownership-bar .bar-label {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 0.9rem; margin-bottom: 6px;
+}
+.ownership-bar .bar-track {
+  background: #E0DED8; border-radius: 6px; height: 10px; overflow: hidden;
+}
+.ownership-bar .bar-fill { height: 100%; border-radius: 6px; transition: width 0.6s ease; }
+
+/* ── INFLATION VISUAL ── */
+.inflation-bars { display: flex; flex-direction: column; gap: 16px; margin: 24px 0; }
+.inflation-row { display: flex; align-items: center; gap: 16px; }
+.inflation-row .year-label { width: 80px; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.9rem; flex-shrink: 0; }
+.inflation-row .bar-container { flex: 1; position: relative; }
+.inflation-row .bar-nominal {
+  height: 32px; border-radius: 6px; position: relative;
+  display: flex; align-items: center; padding: 0 12px;
+  font-family: 'Space Grotesk', sans-serif; font-size: 0.8rem; font-weight: 600; color: #fff;
+}
+.inflation-row .bar-real {
+  position: absolute; top: 0; left: 0; height: 32px; border-radius: 6px;
+  opacity: 0.35;
+}
+.inflation-row .value-label { width: 140px; flex-shrink: 0; text-align: right; font-size: 0.8rem; color: #6B6B66; }
+
+/* ── TIMELINE ── */
+.timeline { display: flex; justify-content: space-between; align-items: flex-start; position: relative; margin: 48px 0; padding: 0 20px; }
+.timeline::before {
+  content: ''; position: absolute; top: 16px; left: 52px; right: 52px;
+  height: 2px; background: #E0DED8;
+}
+.timeline-item { text-align: center; position: relative; z-index: 1; flex: 1; }
+.timeline-dot {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: #C45A3C; margin: 0 auto 16px;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-family: 'Space Grotesk', sans-serif; font-size: 0.75rem; font-weight: 700;
+}
+.timeline-dot.outline { background: #fff; border: 2px solid #C45A3C; color: #C45A3C; }
+.timeline-label { font-weight: 600; font-size: 0.85rem; margin-bottom: 4px; }
+.timeline-desc { font-size: 0.8rem; color: #6B6B66; max-width: 180px; margin: 0 auto; line-height: 1.5; }
+
+/* ── CALLOUT ── */
+.callout {
+  border-left: 4px solid #C45A3C; background: #FFF; padding: 24px 28px;
+  border-radius: 0 8px 8px 0; margin: 32px 0; font-size: 0.95rem;
+}
+.callout.green-callout { border-left-color: #3D7A5F; background: #F4F9F6; }
+.callout.amber-callout { border-left-color: #D4A843; background: #FFFCF5; }
+.callout.dark-callout { background: #1A1A18; color: #FAFAF8; border-left-color: #C45A3C; }
+.callout p:last-child { margin-bottom: 0; }
+
+/* ── TRUST DIAGRAM ── */
+.trust-diagram { background: #fff; border: 1px solid #E0DED8; border-radius: 12px; overflow: hidden; margin: 32px 0; }
+.trust-header { background: #1A1A18; color: #FAFAF8; padding: 24px 32px; }
+.trust-header h3 { color: #FAFAF8; margin-bottom: 4px; }
+.trust-header p { color: #aaa; margin-bottom: 0; font-size: 0.9rem; max-width: 100%; }
+.trust-body { padding: 32px; }
+.trust-footer { padding: 24px 32px; background: #F0E6E0; border-top: 1px solid #E0DED8; }
+
+/* ── FLOW DIAGRAM ── */
+.flow { display: flex; align-items: center; justify-content: center; gap: 0; margin: 40px 0; flex-wrap: wrap; }
+.flow-step {
+  background: #fff; border: 1px solid #E0DED8; border-radius: 12px;
+  padding: 24px; text-align: center; min-width: 200px; max-width: 260px; flex: 1;
+}
+.flow-step .step-num {
+  width: 36px; height: 36px; border-radius: 50%; background: #C45A3C; color: #fff;
+  font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.9rem;
+  display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;
+}
+.flow-step .step-title { font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; }
+.flow-step .step-detail { font-size: 0.8rem; color: #6B6B66; }
+.flow-arrow {
+  font-size: 1.5rem; color: #C45A3C; padding: 0 8px; flex-shrink: 0;
+  display: flex; align-items: center;
+}
+
+/* ── FIREWALL ── */
+.firewall { border-radius: 12px; overflow: hidden; margin: 32px 0; border: 1px solid #E0DED8; }
+.firewall-protected { background: #F4F9F6; padding: 28px 32px; }
+.firewall-bar {
+  background: #1A1A18; color: #FAFAF8; text-align: center;
+  padding: 12px; font-family: 'Space Grotesk', sans-serif; font-weight: 700;
+  font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase;
+}
+.firewall-operating { background: #FFFCF5; padding: 28px 32px; }
+
+/* ── COMPARISON TABLE ── */
+.comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin: 32px 0; border-radius: 12px; overflow: hidden; border: 1px solid #E0DED8; }
+.comparison-col { padding: 32px; }
+.comparison-col.do-nothing { background: #FFF5F3; }
+.comparison-col.do-nothing .col-header { color: #C45A3C; }
+.comparison-col.this-plan { background: #F4F9F6; }
+.comparison-col.this-plan .col-header { color: #3D7A5F; }
+.comparison-col.distribute { background: #FFFCF5; }
+.comparison-col.distribute .col-header { color: #D4A843; }
+.col-header { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid currentColor; }
+.comparison-row { margin-bottom: 20px; }
+.comparison-row .row-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #6B6B66; margin-bottom: 4px; }
+.comparison-row .row-value { font-size: 0.9rem; line-height: 1.6; }
+
+/* ── PHASE CARDS ── */
+.phase-card {
+  background: #fff; border: 1px solid #E0DED8; border-radius: 12px;
+  padding: 32px; margin-bottom: 24px;
+}
+.phase-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px; border-radius: 50%;
+  font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.1rem;
+  color: #fff; margin-bottom: 16px;
+}
+.phase-badge.p0 { background: #6B6B66; }
+.phase-badge.p1 { background: #C45A3C; }
+.phase-badge.p2 { background: #3D7A5F; }
+
+/* ── GATE ── */
+.gate {
+  background: #FFFCF5; border: 2px dashed #D4A843; border-radius: 12px;
+  padding: 24px 28px; margin: 24px 0;
+}
+.gate-title {
+  font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.8rem;
+  letter-spacing: 0.08em; text-transform: uppercase; color: #D4A843; margin-bottom: 12px;
+}
+.gate ul { list-style: none; padding: 0; }
+.gate li { position: relative; padding-left: 24px; margin-bottom: 8px; font-size: 0.9rem; }
+.gate li::before { content: ''; position: absolute; left: 0; top: 8px; width: 10px; height: 10px; border-radius: 50%; border: 2px solid #D4A843; }
+
+/* ── CAPITAL CYCLE ── */
+.cycle { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 16px; margin: 40px 0; }
+.cycle-node {
+  background: #fff; border: 2px solid #E0DED8; border-radius: 12px;
+  padding: 20px 24px; text-align: center; min-width: 150px;
+}
+.cycle-node.highlight { border-color: #C45A3C; }
+.cycle-node .node-title { font-weight: 600; font-size: 0.9rem; }
+.cycle-node .node-detail { font-size: 0.8rem; color: #6B6B66; margin-top: 4px; }
+.cycle-arrow { font-size: 1.5rem; color: #C45A3C; }
+
+/* ── ENDOWMENT ── */
+.endowment { background: #1A1A18; border-radius: 12px; padding: 48px; margin: 40px 0; color: #FAFAF8; }
+.endowment h3 { color: #FAFAF8; margin-bottom: 24px; }
+.endowment .cards { gap: 16px; }
+.endowment .card { background: #2a2a28; border-color: #3a3a38; color: #FAFAF8; }
+.endowment .card .card-detail { color: #aaa; }
+
+/* ── SUCCESS TIMELINE ── */
+.success-timeline { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin: 40px 0; }
+.success-item { text-align: center; }
+.success-item .big-num {
+  font-family: 'Space Grotesk', sans-serif; font-size: 4rem; font-weight: 700;
+  line-height: 1; margin-bottom: 8px;
+}
+
+/* ── QUOTE ── */
+.quote {
+  text-align: center; padding: 48px 40px; margin: 40px 0;
+  background: #F0E6E0; border-radius: 12px;
+}
+.quote blockquote {
+  font-family: 'Instrument Serif', serif; font-size: 1.6rem; font-style: italic;
+  max-width: 700px; margin: 0 auto; line-height: 1.5;
+}
+
+/* ── STEPS TIMELINE (VERTICAL) ── */
+.steps { position: relative; padding-left: 60px; margin: 40px 0; }
+.steps::before {
+  content: ''; position: absolute; left: 18px; top: 0; bottom: 0;
+  width: 2px; background: #E0DED8;
+}
+.step-item { position: relative; margin-bottom: 32px; }
+.step-item:last-child { margin-bottom: 0; }
+.step-item .step-dot {
+  position: absolute; left: -60px; top: 2px;
+  width: 36px; height: 36px; border-radius: 50%;
+  background: #C45A3C; color: #fff;
+  font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.85rem;
+  display: flex; align-items: center; justify-content: center;
+}
+.step-item .step-when { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #C45A3C; margin-bottom: 4px; }
+.step-item .step-what { font-weight: 600; font-size: 0.95rem; margin-bottom: 2px; }
+.step-item .step-desc { font-size: 0.85rem; color: #6B6B66; }
+.step-item.step-done .step-dot { background: #3D7A5F; }
+.step-item.step-active .step-dot { background: #C45A3C; box-shadow: 0 0 0 3px rgba(196,90,60,0.25); }
+.step-item.step-done .step-when { color: #3D7A5F; }
+.step-item.step-active .step-when { color: #C45A3C; }
+.step-status {
+  display: inline-block; font-family: 'Space Grotesk', sans-serif; font-size: 0.65rem;
+  font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 2px 8px; border-radius: 100px; margin-left: 8px; vertical-align: middle;
+}
+.step-status.done { background: #E8F3ED; color: #3D7A5F; }
+.step-status.active { background: #F0E6E0; color: #C45A3C; }
+.step-status.next { background: #E0DED8; color: #6B6B66; }
+
+/* ── ROLE CARDS ── */
+.role-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin: 32px 0; }
+.role-card {
+  background: #fff; border: 1px solid #E0DED8; border-radius: 12px;
+  padding: 24px; border-top: 4px solid #C45A3C;
+}
+.role-card .role-name { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 8px; }
+.role-card .role-desc { font-size: 0.85rem; color: #6B6B66; line-height: 1.6; }
+.role-card.green-top { border-top-color: #3D7A5F; }
+.role-card.amber-top { border-top-color: #D4A843; }
+.role-card.dark-top { border-top-color: #1A1A18; }
+.role-card.full-width { grid-column: 1 / -1; }
+
+/* ── BOTTOM LINE ── */
+.bottom-line { margin: 32px 0; }
+.bottom-line ul { list-style: none; padding: 0; }
+.bottom-line li { position: relative; padding-left: 28px; margin-bottom: 12px; font-size: 0.95rem; line-height: 1.6; }
+.bottom-line li::before {
+  content: ''; position: absolute; left: 0; top: 8px;
+  width: 12px; height: 12px; border-radius: 50%; background: #C45A3C;
+}
+
+/* ── CLOSING ── */
+.closing { text-align: center; padding: 64px 0; }
+.closing p { max-width: 700px; margin: 0 auto 16px; font-size: 1.05rem; }
+.closing .closing-cta { font-style: italic; color: #6B6B66; margin-top: 32px; font-size: 0.95rem; }
+
+/* ── TRUST ARCHITECT SECTION ── */
+.architect-section {
+  margin: 40px 0;
+  padding: 40px;
+  background: #1A1A18;
+  border-radius: 12px;
+  color: #FAFAF8;
+  position: relative;
+  overflow: hidden;
+}
+.architect-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #C45A3C, #D4A843);
+}
+.architect-section h4 {
+  color: #FAFAF8;
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+}
+.architect-section .architect-subtitle {
+  color: #aaa;
+  font-size: 0.95rem;
+  margin-bottom: 32px;
+  max-width: 100%;
+}
+.architect-does-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin: 24px 0;
+}
+.architect-does-col h5 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+}
+.architect-does-col.does h5 {
+  color: #3D7A5F;
+  border-bottom: 2px solid #3D7A5F;
+}
+.architect-does-col.does-not h5 {
+  color: #C45A3C;
+  border-bottom: 2px solid #C45A3C;
+}
+.architect-does-col ul {
+  list-style: none;
+  padding: 0;
+}
+.architect-does-col li {
+  padding: 8px 0;
+  padding-left: 20px;
+  position: relative;
+  font-size: 0.85rem;
+  color: #ccc;
+  line-height: 1.6;
+}
+.architect-does-col.does li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 14px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #3D7A5F;
+}
+.architect-does-col.does-not li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 14px;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: #C45A3C;
+  transform: rotate(45deg);
+}
+.architect-comp-note {
+  margin-top: 24px;
+  padding: 16px 20px;
+  background: #2a2a28;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: #aaa;
+  border-left: 3px solid #D4A843;
+}
+
+/* ── HYBRID TRUSTEE MODEL ── */
+.hybrid-model {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  align-items: center;
+  gap: 0;
+  margin: 24px 0;
+}
+.hybrid-node {
+  background: #2a2a28;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+}
+.hybrid-node .hybrid-icon {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+  display: block;
+}
+.hybrid-node .hybrid-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #FAFAF8;
+  margin-bottom: 6px;
+}
+.hybrid-node .hybrid-detail {
+  font-size: 0.8rem;
+  color: #aaa;
+  line-height: 1.5;
+}
+.hybrid-node.primary { border: 2px solid #C45A3C; }
+.hybrid-arrow {
+  font-size: 1.5rem;
+  color: #C45A3C;
+  text-align: center;
+  padding: 0 4px;
+}
+.hybrid-why {
+  margin-top: 20px;
+  padding: 16px 20px;
+  background: #2a2a28;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: #aaa;
+  line-height: 1.6;
+  border-left: 3px solid #3D7A5F;
+}
+
+/* ── GLOSSARY ── */
+.glossary { margin: 32px 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.glossary-item { background: #fff; border: 1px solid #E0DED8; border-radius: 12px; padding: 24px 28px; }
+.glossary-term { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.95rem; margin-bottom: 6px; color: #C45A3C; }
+.glossary-def { font-size: 0.9rem; color: #6B6B66; line-height: 1.7; max-width: 100%; }
+
+/* ── OPERATOR DETAIL ── */
+.operator-section { margin: 40px 0; padding: 32px; background: #fff; border: 1px solid #E0DED8; border-radius: 12px; }
+.operator-section h4 { font-size: 1.3rem; margin-bottom: 16px; }
+.operator-diagram { background: #FAFAF8; border: 1px solid #E0DED8; border-radius: 8px; padding: 24px; margin: 20px 0; }
+.operator-list { list-style: none; padding: 0; margin: 16px 0; }
+.operator-list li { padding: 8px 0; padding-left: 20px; position: relative; font-size: 0.9rem; }
+.operator-list li::before { content: ''; position: absolute; left: 0; top: 14px; width: 8px; height: 8px; border-radius: 50%; background: #C45A3C; }
+
+/* ── GOVERNANCE ── */
+.governance-block { background: #fff; border: 1px solid #E0DED8; border-radius: 12px; overflow: hidden; margin: 32px 0; }
+.governance-section { padding: 24px 28px; border-bottom: 1px solid #E0DED8; }
+.governance-section:last-child { border-bottom: none; }
+.governance-section-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; }
+
+/* ── GENERATION BLOCKS ── */
+.gen-block { margin: 32px 0; padding: 32px; border-radius: 12px; border: 1px solid #E0DED8; background: #fff; }
+.gen-block h4 { margin-bottom: 20px; }
+.gen-member { margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid #E0DED8; }
+.gen-member:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+.gen-member-name { font-weight: 600; font-size: 0.95rem; margin-bottom: 4px; }
+.gen-member-detail { font-size: 0.85rem; color: #6B6B66; line-height: 1.6; }
+
+/* ── 30-YEAR TABLE ── */
+.schedule-table-wrap {
+  overflow-x: auto; margin: 24px 0; border-radius: 12px;
+  border: 1px solid #E0DED8; -webkit-overflow-scrolling: touch;
+}
+.schedule-table-wrap table { min-width: 700px; margin: 0; }
+.schedule-table-wrap table th { position: sticky; top: 0; }
+.schedule-table-wrap table td { font-size: 0.85rem; padding: 10px 16px; white-space: nowrap; }
+.schedule-table-wrap table th { padding: 12px 16px; font-size: 0.7rem; }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.part-header { animation: fadeUp 0.6s ease both; }
+.card, .callout, .phase-card, .role-card { animation: fadeUp 0.5s ease both; }
+
+/* ── TOUCH TARGETS ── */
+@media (pointer: coarse) {
+  .nav a { padding: 8px 4px; min-height: 44px; display: flex; align-items: center; }
+}
+
+/* ── UTILITY ── */
+.mt-16 { margin-top: 16px; }
+.mt-24 { margin-top: 24px; }
+.mt-32 { margin-top: 32px; }
+.mt-48 { margin-top: 48px; }
+.mb-16 { margin-bottom: 16px; }
+.mb-24 { margin-bottom: 24px; }
+.mb-32 { margin-bottom: 32px; }
+.mb-48 { margin-bottom: 48px; }
+.text-center { text-align: center; }
+.max-w-prose { max-width: 680px; }
+
+/* ── RESPONSIVE — TABLET ── */
+@media (max-width: 900px) {
+  h1 { font-size: 2.5rem; }
+  h2 { font-size: 1.75rem; }
+  h3 { font-size: 1.3rem; }
+  .cards-3, .cards-4, .cards-5 { grid-template-columns: 1fr 1fr; }
+  .comparison { grid-template-columns: 1fr; }
+  .success-timeline { grid-template-columns: 1fr; }
+  .role-cards { grid-template-columns: 1fr; }
+  .architect-does-grid { grid-template-columns: 1fr; gap: 24px; }
+  .hybrid-model { grid-template-columns: 1fr; gap: 12px; }
+  .hybrid-arrow { transform: rotate(90deg); }
+  .hybrid-node { padding: 20px; }
+  .architect-section { padding: 32px 24px; }
+  section { padding: 48px 0; }
+  .hero { padding: 80px 0 48px; }
+  .container { padding: 0 24px; }
+  .endowment { padding: 32px 24px; }
+  .trust-body { padding: 24px; }
+  .trust-header { padding: 20px 24px; }
+  .trust-footer { padding: 20px 24px; }
+  .firewall-protected, .firewall-operating { padding: 24px; }
+  .quote { padding: 32px 24px; }
+  .quote blockquote { font-size: 1.3rem; }
+  .operator-section { padding: 24px; }
+  .gen-block { padding: 24px; }
+}
+
+/* ── RESPONSIVE — MOBILE ── */
+@media (max-width: 600px) {
+  html { font-size: 15px; }
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.5rem; }
+  h3 { font-size: 1.2rem; }
+  p { font-size: 0.95rem; }
+  .container { padding: 0 16px; }
+  section { padding: 40px 0; }
+  .hero { padding: 60px 0 40px; }
+  .hero h1 { font-size: 1.85rem; }
+  .hero .subtitle { font-size: 1rem; }
+  .hero .intro { font-size: 0.95rem; }
+
+  .nav { padding: 10px 0; }
+  .nav .container { gap: 16px; -webkit-overflow-scrolling: touch; }
+  .nav .brand { font-size: 1rem; margin-right: 16px; }
+  .nav a { font-size: 0.75rem; }
+
+  .cards-3, .cards-2, .cards-4, .cards-5 { grid-template-columns: 1fr; }
+  .cards { gap: 16px; }
+  .card { padding: 20px; }
+  .card .card-number { font-size: 1.5rem; }
+
+  .table-wrap { margin: 16px -16px; padding: 0 16px; }
+  table { font-size: 0.8rem; min-width: 500px; }
+  table th, table td { padding: 10px 12px; }
+
+  .ownership-bar .bar-label { font-size: 0.8rem; }
+
+  .inflation-row { flex-wrap: wrap; gap: 8px; }
+  .inflation-row .year-label { width: 60px; font-size: 0.8rem; }
+  .inflation-row .value-label { width: 100%; text-align: left; font-size: 0.75rem; }
+  .inflation-row .bar-nominal { height: 28px; font-size: 0.7rem; }
+
+  .timeline { flex-direction: column; gap: 24px; padding: 0; }
+  .timeline::before { left: 16px; top: 0; bottom: 0; width: 2px; }
+  .timeline-item { text-align: left; padding-left: 48px; }
+  .timeline-dot { margin: 0 0 8px; position: absolute; left: 0; }
+
+  .comparison { grid-template-columns: 1fr; }
+  .comparison-col { padding: 24px; }
+
+  .flow { flex-direction: column; gap: 8px; }
+  .flow-step { min-width: auto; max-width: 100%; width: 100%; }
+  .flow-arrow { transform: rotate(90deg); }
+
+  .steps { padding-left: 48px; }
+  .step-item .step-dot { left: -48px; width: 32px; height: 32px; font-size: 0.75rem; }
+  .steps::before { left: 14px; }
+
+  .endowment { padding: 24px 16px; }
+  .operator-section { padding: 20px; }
+  .gen-block { padding: 20px; }
+  .governance-section { padding: 20px; }
+
+  .schedule-table-wrap { margin: 16px -16px; border-radius: 0; border-left: none; border-right: none; }
+  .schedule-table-wrap table { min-width: 600px; }
+
+  .success-timeline { gap: 24px; }
+  .success-item .big-num { font-size: 3rem; }
+
+  /* Trust diagram full-bleed */
+  .trust-diagram { margin-left: -16px; margin-right: -16px; border-radius: 0; border-left: none; border-right: none; }
+  .trust-header { padding: 16px; }
+  .trust-header h3 { font-size: 1.1rem; }
+  .trust-body { padding: 16px; }
+  .trust-body .cards { gap: 10px; }
+  .trust-footer { padding: 16px; font-size: 0.85rem; }
+
+  /* Firewall full-bleed */
+  .firewall { margin-left: -16px; margin-right: -16px; border-radius: 0; border-left: none; border-right: none; }
+  .firewall-protected, .firewall-operating { padding: 16px; }
+  .firewall-bar { padding: 8px; font-size: 0.75rem; }
+
+  /* Architect section full-bleed */
+  .architect-section { margin-left: -16px; margin-right: -16px; border-radius: 0; padding: 28px 16px; }
+  .architect-does-grid { grid-template-columns: 1fr; gap: 20px; }
+  .hybrid-model { grid-template-columns: 1fr; gap: 8px; }
+  .hybrid-arrow { transform: rotate(90deg); font-size: 1rem; }
+  .hybrid-node { padding: 16px; }
+  .architect-comp-note { padding: 12px 16px; font-size: 0.85rem; }
+
+  /* Glossary single column */
+  .glossary { grid-template-columns: 1fr; gap: 12px; }
+  .glossary-item { padding: 16px 20px; }
+
+  /* Phase cards */
+  .phase-card { padding: 20px 16px; }
+  .phase-badge { width: 36px; height: 36px; font-size: 1rem; }
+
+  /* Callouts */
+  .callout { padding: 16px; margin: 20px 0; font-size: 0.9rem; }
+
+  /* Quote full-bleed */
+  .quote { margin-left: -16px; margin-right: -16px; border-radius: 0; padding: 28px 16px; }
+  .quote blockquote { font-size: 1.15rem; }
+
+  /* Comparison full-bleed */
+  .comparison { margin-left: -16px; margin-right: -16px; border-radius: 0; border-left: none; border-right: none; }
+  .comparison-col { padding: 20px 16px; }
+  .col-header { font-size: 0.75rem; }
+
+  /* Role cards */
+  .role-cards { gap: 12px; }
+  .role-card { padding: 16px; }
+  .role-card .role-name { font-size: 0.9rem; }
+  .role-card .role-desc { font-size: 0.8rem; }
+
+  /* Bottom line */
+  .bottom-line li { font-size: 0.85rem; padding-left: 22px; margin-bottom: 10px; }
+  .bottom-line li::before { width: 8px; height: 8px; top: 7px; }
+
+  /* Closing */
+  .closing { padding: 32px 0; }
+  .closing p { font-size: 0.9rem; }
+
+  /* General fixes */
+  p { max-width: 100%; }
+  .part-header h2 { font-size: 1.4rem; }
+}
+
+/* ── PRINT STYLES ── */
+.print-cover { display: none; }
+@media print {
+  .nav { display: none; }
+  body { font-size: 12pt; }
+  section { padding: 24px 0; page-break-inside: avoid; }
+  .card, .callout, .phase-card, .role-card, .operator-section, .gen-block { break-inside: avoid; }
+  .comparison { break-inside: avoid; page-break-inside: avoid; }
+  .schedule-table-wrap { overflow: visible; }
+  .schedule-table-wrap table { min-width: 0; font-size: 8pt; }
+  .print-cover {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 100vh;
+    padding: 2in 1in;
+    page-break-after: always;
+  }
+  .print-cover h1 { font-size: 2.75rem; margin-bottom: 0.5rem; }
+  .print-cover .print-subtitle { font-size: 1.25rem; color: #6B6B66; margin-bottom: 2rem; max-width: 5.5in; }
+  .print-cover .print-meta { font-size: 0.95rem; color: #6B6B66; line-height: 1.8; }
+  .print-cover .print-divider { width: 60px; height: 3px; background: #C45A3C; margin: 2rem auto; border-radius: 2px; }
+  a { color: inherit; text-decoration: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- Print-only cover (Grandma PDF) -->
+<div class="print-cover" aria-hidden="true">
+  <span class="label">Family Financial Plan</span>
+  <h1>Berdia Monson</h1>
+  <p class="print-subtitle">A plain-language overview of the family's land, solar lease, restaurant, and proposed trust — written so everyone starts from the same place.</p>
+  <div class="print-divider"></div>
+  <p class="print-meta">Prepared for Grandma · May 2026<br>Monson Family · Jefferson County, Arkansas</p>
+</div>
+
+<!-- ════════════════ NAV ════════════════ -->
+<nav class="nav">
+  <div class="container">
+    <a href="#" class="brand">Monson Family</a>
+    <a href="#part1">Where We Are</a>
+    <a href="#part2">The Plan</a>
+    <a href="#part3">The Numbers</a>
+    <a href="#part4">Comparison</a>
+    <a href="#part5">Risk</a>
+    <a href="#part6">Legacy</a>
+    <a href="#part7">Next Steps</a>
+    <a href="grandma.html" style="color:#C45A3C; font-weight:600;">Essentials</a>
+    <a href="capital-stack.html" style="color:#C45A3C; font-weight:600;">Capital Stack</a>
+    <a href="action-checklist.html" style="color:#C45A3C; font-weight:600;">Action Checklist</a>
+    <a href="checklist.html" style="color:#C45A3C; font-weight:600;">Prep Checklist</a>
+    <a href="system.html" style="color:#C45A3C; font-weight:600;">Operating System</a>
+  </div>
+</nav>
+
+<!-- ════════════════ HERO ════════════════ -->
+<header class="hero">
+  <div class="container">
+    <span class="label">Family Financial Plan</span>
+    <h1>Berdia Monson</h1>
+    <p class="subtitle">A comprehensive plan for organizing, protecting, and growing the family's assets across generations.</p>
+    <div class="intro">
+      <p>This brief explains what is happening with the family's land, solar lease, and restaurant — and what we recommend doing about it. It is written in plain language so everyone starts from the same place.</p>
+      <p>This is not a vote. No one is being asked to give up anything. The goal is to make sure everyone understands the situation, the numbers, and the plan — and that Grandma's wishes for how these assets are used are carried out clearly and intentionally.</p>
+    </div>
+    <div class="divider"></div>
+  </div>
+</header>
+
+<!-- ════════════════ PART 1 ════════════════ -->
+<section id="part1">
+  <div class="container">
+    <div class="part-header">
+      <span class="label">Part 1</span>
+      <h2>Where We Are Today</h2>
+    </div>
+
+    <h3>The Family's Assets</h3>
+    <p>The family has three valuable assets. Today, they sit apart from each other — unconnected, unstructured, and working alone.</p>
+
+    <div class="cards cards-3">
+      <div class="card green-card">
+        <span class="card-icon">&#9650;</span>
+        <div class="card-title">109 Acres</div>
+        <div class="card-detail">Jefferson County, Arkansas<br>Owned by Grandma (sole title)<br><strong class="green">Not for sale</strong></div>
+      </div>
+      <div class="card amber-card">
+        <span class="card-icon">&#9788;</span>
+        <div class="card-title">Solar Lease</div>
+        <div class="card-number num">~$3.25M</div>
+        <div class="card-detail">30-year contract with Orion Renewables<br>94.75 acres under lease<br><span class="secondary">Construction targeted summer 2026 — may slip</span></div>
+      </div>
+      <div class="card" style="border-left: 4px solid #C45A3C;">
+        <span class="card-icon">&#9733;</span>
+        <div class="card-title">Restaurant — Grider Field</div>
+        <div class="card-number num">$644K/yr</div>
+        <div class="card-detail">Pine Bluff, AR · operating since 2016<br><span class="secondary">2025 gross sales, verified via Square</span><br><strong>Set to be inherited by Stanley</strong></div>
+      </div>
+    </div>
+
+    <div class="cards cards-2 mt-32">
+      <div class="card dashed">
+        <div class="card-title">Coin Collection</div>
+        <span class="badge-tbd">TBD</span>
+        <div class="card-detail mt-16">Darius's inheritance. Hard asset — strengthens the trust's balance sheet and can accelerate Darius's real estate ventures.</div>
+      </div>
+      <div class="card green-card">
+        <div class="card-title">Life Insurance — Prudential</div>
+        <span class="badge-confirmed">DOCUMENTED</span>
+        <div class="card-number num mt-16">~$161K</div>
+        <div class="card-detail">Net death benefit (Policy #98 727 915, in force since 1992)<br>~$137K net cash value available now<br><span class="secondary">Living Needs Benefit rider — funds long-term care</span></div>
+      </div>
+    </div>
+
+    <!-- Asset details -->
+    <div class="mt-48">
+      <p><strong>The land</strong> is the foundation. Grandma holds sole title. It has been in the family for generations. It is not being sold under any scenario.</p>
+      <p><strong>The solar lease</strong> is a 30-year contract with Orion Renewables on 94.75 acres. Construction was targeted for <strong>summer 2026</strong>, but Orion may push that date — the family is following up for a firm timeline. The $800/acre operations rent does not start until the project reaches <strong>commercial operation (COD)</strong>, which could be late 2026, 2027, or later depending on construction. The lease pays $800 per acre per year at COD, increasing 2% annually.</p>
+      <p><strong>The restaurant</strong> at Grider Field is the only asset that produces real income today — and the numbers are now <strong>verified, not estimated</strong>. Pulled directly from Square, gross sales were <strong>$577,216 in 2024</strong> and <strong>$644,287 in 2025</strong> (+11.6%), on 20,000+ transactions a year, with a trailing-12-month total of ~$630,000. Operating since 2016. Stanley runs day-to-day operations and is set to inherit the restaurant, similar to how the coin collection is being inherited by Darius. This verified processing history is what already produced a <strong>$72,500 Square Capital pre-approval</strong> (see below).</p>
+      <p><strong>The coin collection</strong> is a set of precious coins being inherited by Darius. Once appraised and placed into the trust, the coins strengthen the trust's balance sheet. If the appraisal shows significant value, the coins serve as dedicated collateral for Darius's real estate advances. If the value is modest, the trust funds real estate ventures from its general reserves and operating cash flow — the same pool that funds all other LLCs. Either way, Darius's gate to trust capital is his track record, not the coins.</p>
+      <p><strong>Life insurance</strong> is now documented. Grandma holds a <strong>Prudential Variable Appreciable Life</strong> policy (#98 727 915), in force since April 1992, with a <strong>net death benefit of ~$161,484</strong> and <strong>~$136,676 in net cash value</strong> that is usable today. It carries a Living Needs Benefit rider — an accelerated benefit that can be drawn down for terminal or chronic illness, which makes it a direct funding source for long-term care. The policy is a living asset, not just a death benefit: its cash value adds to the trust's borrowing capacity now, and the death benefit gives the trust liquidity later. Proceeds should be managed by the trust, not distributed as a lump sum, and the beneficiary designation must be updated to align with the trust structure. Two items need attention: a <strong>$7,290 policy loan</strong> currently reduces the benefit, and the <strong>$173.51/month premium</strong> must keep being paid to avoid lapse — confirm who is paying and that the premium account stays positive.</p>
+    </div>
+  </div>
+</section>
+
+<!-- RESTAURANT REVENUE — VERIFIED -->
+<section>
+  <div class="container">
+    <h3>Restaurant Revenue — Verified via Square</h3>
+    <p>The restaurant's income is no longer an estimate. These figures were pulled <strong>directly from the Square account</strong> for the Grider Field location (completed sales), which is exactly the kind of third-party, verifiable record a lender or the trust attorney will want to see.</p>
+
+    <div class="cards cards-3">
+      <div class="card" style="border-left:4px solid #C45A3C;">
+        <div class="card-title">2024 Gross Sales</div>
+        <div class="card-number num">$577,216</div>
+        <div class="card-detail">20,210 orders · ~$28.56 avg ticket</div>
+      </div>
+      <div class="card green-card">
+        <div class="card-title">2025 Gross Sales</div>
+        <div class="card-number num">$644,287</div>
+        <div class="card-detail"><span class="green">+11.6% year over year</span><br>21,537 orders · ~$29.92 avg ticket</div>
+      </div>
+      <div class="card green-card">
+        <div class="card-title">Trailing 12 Months</div>
+        <div class="card-number num">~$630K</div>
+        <div class="card-detail">Jul 2025 – Jun 2026<br>2026 YTD (Jan–Jun): $318,184</div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Period</th><th>Orders</th><th>Gross Sales</th><th>Avg Ticket</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="text-cell">2024 (full year)</td><td>20,210</td><td>$577,215.77</td><td>$28.56</td></tr>
+          <tr><td class="text-cell">2025 (full year)</td><td>21,537</td><td>$644,286.85</td><td>$29.92</td></tr>
+          <tr><td class="text-cell">2026 (Jan–Jun, partial)</td><td>10,377</td><td>$318,184.26</td><td>$30.66</td></tr>
+          <tr class="total-row-dark"><td class="text-cell"><strong>Trailing 12 months (Jul 2025–Jun 2026)</strong></td><td>—</td><td><strong>~$630,434</strong></td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="secondary">Figures are gross completed-sale totals (include tax and tips), pulled from Square on June 29, 2026 — the same processing record Square uses to underwrite. For the trust/CPA file, these should be reconciled against tax returns and bank deposits, but they establish a strong, verifiable revenue floor.</p>
+
+    <h4>The $72,500 Square Capital pre-approval</h4>
+    <div class="callout green-callout">
+      <p style="margin-bottom:8px;">The restaurant is <strong>currently pre-approved for $72,500</strong> through Square Capital. This is meaningful because:</p>
+      <p style="margin-bottom:8px;">&bull; It is <strong>already underwritten</strong> off the verified sales above — no new financials package, no appraisal, no closing process.</p>
+      <p style="margin-bottom:8px;">&bull; It is the <strong>fastest capital in the whole plan</strong> — funds in days, repaid automatically as a fixed percentage of daily Square sales.</p>
+      <p style="margin-bottom:0;">&bull; It sits <em>alongside</em> the larger bank facilities (solar-backed, restaurant-backed), not instead of them. Think of it as immediate working capital the trust can use first while the bigger, cheaper loans are arranged.</p>
+    </div>
+    <div class="callout amber-callout">
+      <p style="margin-bottom:0;"><strong>Before drawing it:</strong> Square Capital is convenient but carries a higher effective cost than a bank term loan, and repayment reduces daily cash flow. Use it for short-cycle needs with a clear payback — not as long-term financing. Confirm the exact fee and holdback percentage in the Square dashboard before accepting, and coordinate with the trust structure so the borrower of record is correct.</p>
+    </div>
+  </div>
+</section>
+
+<!-- LIFE INSURANCE -->
+<section>
+  <div class="container">
+    <h3>The Life Insurance — Now Documented</h3>
+    <p>Grandma's Prudential <em>Variable Appreciable Life</em> policy has been located and reviewed (most recent annual statement dated May 2, 2025). It has quietly compounded for over 30 years and is one of the most flexible assets in the picture — it works for the family both now and later.</p>
+
+    <div class="cards cards-3">
+      <div class="card green-card">
+        <span class="card-icon">&#9670;</span>
+        <div class="card-title">Net Death Benefit</div>
+        <div class="card-number num">$161,484</div>
+        <div class="card-detail">Paid to beneficiaries at death. $60K guaranteed face + $108,774 accumulated value, less the $7,290 loan.</div>
+      </div>
+      <div class="card green-card">
+        <span class="card-icon">&#9650;</span>
+        <div class="card-title">Net Cash Value</div>
+        <div class="card-number num">$136,676</div>
+        <div class="card-detail">Live capital available <strong>today</strong> — borrowable against or surrenderable. Adds to the trust's capacity now.</div>
+      </div>
+      <div class="card green-card">
+        <span class="card-icon">&#9854;</span>
+        <div class="card-title">Living Needs Benefit</div>
+        <div class="card-number num">Rider</div>
+        <div class="card-detail">Accelerates the death benefit for terminal or chronic illness — a direct funding source for long-term care.</div>
+      </div>
+    </div>
+
+    <h4>Exactly what makes up these numbers</h4>
+    <p>The policy holds <strong>two different pools of money</strong>, and it's important not to confuse them. The <strong>death benefit</strong> is what gets paid out when Grandma passes. The <strong>cash value</strong> is money that is accessible <em>while she is living</em>. They are related but not the same number. Here is how each one is built, line by line, from the May 2, 2025 statement (values as of April 1, 2025):</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Death Benefit — paid when Grandma passes</th><th>Amount</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="text-cell">Guaranteed face amount</td><td>$60,000.00</td></tr>
+          <tr><td class="text-cell">+ Accumulated excess death benefit <span class="secondary">(30+ yrs of growth)</span></td><td>$106,927.66</td></tr>
+          <tr><td class="text-cell">+ Termination dividend</td><td>$1,846.20</td></tr>
+          <tr class="total-row"><td class="text-cell"><strong>Gross death benefit</strong></td><td><strong>$168,773.86</strong></td></tr>
+          <tr><td class="text-cell">− Outstanding policy loan</td><td>($7,290.27)</td></tr>
+          <tr class="total-row-dark"><td class="text-cell"><strong>NET DEATH BENEFIT (to the trust)</strong></td><td><strong>$161,483.59</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Cash Value — usable while Grandma is living</th><th>Amount</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="text-cell">Contract fund <span class="secondary">(the invested account value)</span></td><td>$142,120.54</td></tr>
+          <tr><td class="text-cell">+ Termination dividend</td><td>$1,846.20</td></tr>
+          <tr><td class="text-cell">− Surrender charge</td><td>$0.00</td></tr>
+          <tr class="total-row"><td class="text-cell"><strong>Cash value</strong></td><td><strong>$143,966.74</strong></td></tr>
+          <tr><td class="text-cell">− Outstanding policy loan</td><td>($7,290.27)</td></tr>
+          <tr class="total-row-dark"><td class="text-cell"><strong>NET CASH VALUE (available today)</strong></td><td><strong>$136,676.47</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout green-callout">
+      <p style="margin-bottom:0;"><strong>It is still growing.</strong> Over the most recent statement year, the net death benefit rose from $150,618 to <strong>$161,484</strong> and the net cash value rose from $125,730 to <strong>$136,676</strong> — a <strong>6.07% net return</strong> for the year. This is an appreciating asset, not a static one.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Policy Detail</th><th>Value</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="text-cell">Carrier / Type</td><td class="text-cell">Prudential — Variable Appreciable Life</td></tr>
+          <tr><td class="text-cell">Policy Number</td><td>98 727 915</td></tr>
+          <tr><td class="text-cell">In force since</td><td>April 1, 1992</td></tr>
+          <tr><td class="text-cell">Insured</td><td class="text-cell">Berdia Toliver Monson</td></tr>
+          <tr><td class="text-cell">Monthly premium</td><td>$173.51</td></tr>
+          <tr><td class="text-cell">Outstanding policy loan</td><td>$7,290.27</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>How it fits the trust</h4>
+    <p>Because the total estate sits well below the federal estate-tax exemption, the goal here is not estate-tax avoidance — it is <strong>coordinated control, liquidity, and probate avoidance</strong>. The recommended path:</p>
+    <div class="callout green-callout">
+      <p style="margin-bottom:8px;"><strong>1. Name the trust as beneficiary.</strong> The death benefit flows into the trust to be managed under its rules (reserves, debt payoff, distributions) rather than handed out as a lump sum. Simple beneficiary-change form — no new entity needed.</p>
+      <p style="margin-bottom:8px;"><strong>2. Keep the policy in force and preserve the Living Needs rider.</strong> It is the family's first line of defense for long-term-care costs, ahead of touching the land, solar income, or Medicaid planning.</p>
+      <p style="margin-bottom:0;"><strong>3. Treat the cash value as standby capital, not spending money.</strong> The ~$137K can back the trust's borrowing capacity now; surrender only as a deliberate decision, since it ends the death benefit and may trigger tax.</p>
+    </div>
+    <div class="callout amber-callout">
+      <p style="margin-bottom:0;"><strong>Two things to confirm with the attorney and Prudential:</strong> (1) who is paying the $173.51/month premium and whether the premium account stays positive — a 30-year-old variable policy with a loan against it can lapse, which could create a taxable event; and (2) whether to repay or leave the $7,290 loan, which currently reduces both the cash value and the death benefit.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SOLAR LEASE PAYMENT SHARES -->
+<section>
+  <div class="container">
+    <h3>Solar Lease Payment Shares</h3>
+    <p>The solar lease is on Grandma's land. The siblings receive shares of the lease payments as follows:</p>
+
+    <div style="max-width: 560px;">
+      <div class="ownership-bar">
+        <div class="bar-label"><span>Berdia Monson (Grandma)</span><span class="num" style="font-weight:600;">50.00%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:50%; background:#C45A3C;"></div></div>
+      </div>
+      <div class="ownership-bar">
+        <div class="bar-label"><span>Reneta Harper</span><span class="num" style="font-weight:600;">16.67%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:16.67%; background:#3D7A5F;"></div></div>
+      </div>
+      <div class="ownership-bar">
+        <div class="bar-label"><span>Charles Toliver</span><span class="num" style="font-weight:600;">16.67%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:16.67%; background:#3D7A5F;"></div></div>
+      </div>
+      <div class="ownership-bar">
+        <div class="bar-label"><span>Kim Fox</span><span class="num" style="font-weight:600;">16.67%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:16.67%; background:#3D7A5F;"></div></div>
+      </div>
+    </div>
+
+    <div class="callout green-callout mt-32">
+      <p><strong>Restaurant:</strong> Owned by Grandma<br>
+      <strong>Land:</strong> Owned by Grandma (sole title)</p>
+    </div>
+  </div>
+</section>
+
+<!-- SOLAR LEASE — WHAT IT ACTUALLY PAYS -->
+<section>
+  <div class="container">
+    <h3>The Solar Lease — What It Actually Pays</h3>
+    <p>The solar project is currently in development. Construction was targeted for <strong>summer 2026</strong>, but that date may slip — Orion has not confirmed a firm schedule. The $800/acre rent does not start until the project reaches commercial operation (COD), which could be late 2026, 2027, or later.</p>
+    <p>Once the project reaches commercial operation, here is what each person receives:</p>
+
+    <div class="callout" style="border-left-color: #D4A843; background: #FFFCF5;">
+      <p style="margin-bottom:8px;"><strong class="num" style="font-size:1.1rem;">94.75 acres x $800/acre = $75,800 per year total</strong></p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Owner</th>
+            <th>Share</th>
+            <th>Year 1</th>
+            <th>Per Month (Yr 1)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-cell">Berdia (Grandma)</td>
+            <td>50.00%</td>
+            <td>$37,900</td>
+            <td>$3,158</td>
+          </tr>
+          <tr>
+            <td class="text-cell">Reneta</td>
+            <td>16.67%</td>
+            <td>$12,630</td>
+            <td>$1,052</td>
+          </tr>
+          <tr>
+            <td class="text-cell">Charles</td>
+            <td>16.67%</td>
+            <td>$12,630</td>
+            <td>$1,052</td>
+          </tr>
+          <tr>
+            <td class="text-cell">Kim</td>
+            <td>16.67%</td>
+            <td>$12,630</td>
+            <td>$1,052</td>
+          </tr>
+          <tr class="total-row">
+            <td class="text-cell"><strong>Total</strong></td>
+            <td><strong>100.00%</strong></td>
+            <td><strong>$75,800</strong></td>
+            <td><strong>$6,317</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout amber-callout">
+      <p style="margin-bottom:0;"><strong>Note:</strong> Although the "Per Month" column shows a monthly equivalent, payments have historically been distributed <strong>annually</strong> — not monthly. These amounts increase 2% every year.</p>
+    </div>
+
+    <!-- FULL 30-YEAR PAYMENT SCHEDULE -->
+    <h4 class="mt-48">Full 30-Year Payment Schedule</h4>
+    <p>Projected annual payments for the full life of the lease, assuming a 2% annual escalator from the Year 1 base of $75,800 total.</p>
+
+    <div class="schedule-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Year</th>
+            <th>Grandma (50%)</th>
+            <th>Reneta (16.67%)</th>
+            <th>Charles (16.67%)</th>
+            <th>Kim (16.67%)</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>$37,900</td><td>$12,633</td><td>$12,633</td><td>$12,633</td><td>$75,800</td></tr>
+          <tr><td>2</td><td>$38,658</td><td>$12,886</td><td>$12,886</td><td>$12,886</td><td>$77,316</td></tr>
+          <tr><td>3</td><td>$39,431</td><td>$13,144</td><td>$13,144</td><td>$13,144</td><td>$78,862</td></tr>
+          <tr><td>4</td><td>$40,220</td><td>$13,407</td><td>$13,407</td><td>$13,407</td><td>$80,440</td></tr>
+          <tr><td>5</td><td>$41,024</td><td>$13,675</td><td>$13,675</td><td>$13,675</td><td>$82,048</td></tr>
+          <tr><td>6</td><td>$41,845</td><td>$13,948</td><td>$13,948</td><td>$13,948</td><td>$83,689</td></tr>
+          <tr><td>7</td><td>$42,681</td><td>$14,227</td><td>$14,227</td><td>$14,227</td><td>$85,363</td></tr>
+          <tr><td>8</td><td>$43,535</td><td>$14,512</td><td>$14,512</td><td>$14,512</td><td>$87,070</td></tr>
+          <tr><td>9</td><td>$44,406</td><td>$14,802</td><td>$14,802</td><td>$14,802</td><td>$88,812</td></tr>
+          <tr><td>10</td><td>$45,294</td><td>$15,098</td><td>$15,098</td><td>$15,098</td><td>$90,588</td></tr>
+          <tr><td>11</td><td>$46,200</td><td>$15,400</td><td>$15,400</td><td>$15,400</td><td>$92,399</td></tr>
+          <tr><td>12</td><td>$47,124</td><td>$15,708</td><td>$15,708</td><td>$15,708</td><td>$94,247</td></tr>
+          <tr><td>13</td><td>$48,066</td><td>$16,022</td><td>$16,022</td><td>$16,022</td><td>$96,132</td></tr>
+          <tr><td>14</td><td>$49,027</td><td>$16,342</td><td>$16,342</td><td>$16,342</td><td>$98,055</td></tr>
+          <tr><td>15</td><td>$50,008</td><td>$16,669</td><td>$16,669</td><td>$16,669</td><td>$100,016</td></tr>
+          <tr><td>16</td><td>$51,008</td><td>$17,003</td><td>$17,003</td><td>$17,003</td><td>$102,016</td></tr>
+          <tr><td>17</td><td>$52,028</td><td>$17,343</td><td>$17,343</td><td>$17,343</td><td>$104,056</td></tr>
+          <tr><td>18</td><td>$53,069</td><td>$17,689</td><td>$17,689</td><td>$17,689</td><td>$106,137</td></tr>
+          <tr><td>19</td><td>$54,130</td><td>$18,043</td><td>$18,043</td><td>$18,043</td><td>$108,260</td></tr>
+          <tr><td>20</td><td>$55,213</td><td>$18,404</td><td>$18,404</td><td>$18,404</td><td>$110,425</td></tr>
+          <tr><td>21</td><td>$56,317</td><td>$18,772</td><td>$18,772</td><td>$18,772</td><td>$112,634</td></tr>
+          <tr><td>22</td><td>$57,443</td><td>$19,148</td><td>$19,148</td><td>$19,148</td><td>$114,886</td></tr>
+          <tr><td>23</td><td>$58,592</td><td>$19,531</td><td>$19,531</td><td>$19,531</td><td>$117,184</td></tr>
+          <tr><td>24</td><td>$59,764</td><td>$19,921</td><td>$19,921</td><td>$19,921</td><td>$119,528</td></tr>
+          <tr><td>25</td><td>$60,959</td><td>$20,320</td><td>$20,320</td><td>$20,320</td><td>$121,918</td></tr>
+          <tr><td>26</td><td>$62,179</td><td>$20,726</td><td>$20,726</td><td>$20,726</td><td>$124,357</td></tr>
+          <tr><td>27</td><td>$63,422</td><td>$21,141</td><td>$21,141</td><td>$21,141</td><td>$126,844</td></tr>
+          <tr><td>28</td><td>$64,691</td><td>$21,563</td><td>$21,563</td><td>$21,563</td><td>$129,381</td></tr>
+          <tr><td>29</td><td>$65,984</td><td>$21,995</td><td>$21,995</td><td>$21,995</td><td>$131,968</td></tr>
+          <tr><td>30</td><td>$67,304</td><td>$22,434</td><td>$22,434</td><td>$22,434</td><td>$134,608</td></tr>
+          <tr class="total-row-dark">
+            <td class="text-cell"><strong>Cumulative</strong></td>
+            <td><strong>$1,547,544</strong></td>
+            <td><strong>$515,706</strong></td>
+            <td><strong>$515,706</strong></td>
+            <td><strong>$515,706</strong></td>
+            <td><strong>$3,094,662</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout green-callout mt-24">
+      <p style="margin-bottom:0;"><strong>Reneta, Charles, and Kim's income does not change under this plan.</strong> They continue receiving their 16.67% directly, every year, for the life of the lease.</p>
+    </div>
+  </div>
+</section>
+
+<!-- YEAR-ONE SOLAR DECISION -->
+<section id="year-one-solar">
+  <div class="container">
+    <div class="part-header">
+      <span class="label">Decision at COD</span>
+      <h2>Year-One Solar Decision</h2>
+    </div>
+
+    <p>When the solar project reaches commercial operation, the first full year of rent is <strong class="num">$75,800</strong> total. No one in the family currently depends on that money for day-to-day expenses — which is why the April 12 meeting raised a one-time choice before habits form.</p>
+    <p class="secondary">This is separate from the long-term plan (Grandma's 50% managed through the trust, siblings keeping 16.67% each). It is only about what happens to <strong>year-one cash</strong> when rent first starts.</p>
+
+    <div class="comparison">
+      <div class="comparison-col this-plan">
+        <div class="col-header">Scenario A — Reinvest All Year-One Into Trust</div>
+        <div class="comparison-row">
+          <div class="row-label">Stanley's April 12 proposal</div>
+          <div class="row-value">Everyone agrees to forgo year-one checks so the trust starts with cash on hand — not just borrowing capacity.</div>
+        </div>
+        <div class="comparison-row">
+          <div class="row-label">Grandma (50%)</div>
+          <div class="row-value num"><strong>$0</strong> to Grandma · <strong class="green">$37,900</strong> to trust</div>
+        </div>
+        <div class="comparison-row">
+          <div class="row-label">Reneta, Charles, Kim (16.67% each)</div>
+          <div class="row-value num"><strong>$0</strong> each · <strong class="green">$12,633</strong> each to trust</div>
+        </div>
+        <div class="comparison-row">
+          <div class="row-label">Trust cash from year-one rent</div>
+          <div class="row-value num"><strong class="green">$75,800</strong></div>
+        </div>
+        <div class="comparison-row">
+          <div class="row-label">Phase 1 target ($150K–$250K)</div>
+          <div class="row-value">Year-one cash covers roughly <strong>30–50%</strong> of the low end before any loan. Remaining Phase 1 capital still comes from solar-backed borrowing ($200K–$250K on Grandma's share) plus restaurant-backed lending once financials are clean.</div>
+        </div>
+        <div class="comparison-row">
+          <div class="row-label">Years 2–30</div>
+          <div class="row-value">Normal split resumes — siblings receive 16.67% directly each year; Grandma's 50% continues through the trust as designed.</div>
+        </div>
+        <div class="comparison-row">
+          <div class="row-label">Tradeoff</div>
+          <div class="row-value">No one takes a year-one check. Trust gets an immediate <strong class="num">$75,800</strong> seed for reserves, ancillary services startup, and debt-service cushion — voluntary, one-time.</div>
+        </div>
+      </div>
+      <div class="comparison-col distribute">
+        <div class="col-header">Scenario B — Distribute Year-One As Planned</div>
+        <div class="comparison-row">
+          <div class="row-label">Default ownership split</div>
+          <div class="row-value">Year-one rent is paid out the same way as every other year — each owner receives their share.</div>
+        </div>
+        <div class="comparison-row">
+          <div class="row-label">Grandma (50%)</div>
+          <div class="row-value num"><strong>$37,900</strong> <span class="secondary">(under the trust plan, Grandma's share is managed and reinvested through the trust — not spent down personally)</span></div>
+        </div>
+        <div class="comparison-row">
+          <div class="row-label">Reneta, Charles, Kim (16.67% each)</div>
+          <div class="row-value num"><strong>$12,633</strong> each in hand</div>
+        </div>
+        <div class="comparison-row">
+          <div class="row-label">Trust cash from year-one rent</div>
+          <div class="row-value num"><strong>$0</strong> extra beyond Grandma's ongoing trust structure</div>
+        </div>
+        <div class="comparison-row">
+          <div class="row-label">Phase 1 target ($150K–$250K)</div>
+          <div class="row-value">Funded entirely from borrowing and operating setup — solar-backed loan ($200K–$250K), restaurant-backed lending, and phased deployment as gates are cleared. No year-one cash infusion.</div>
+        </div>
+        <div class="comparison-row">
+          <div class="row-label">Years 2–30</div>
+          <div class="row-value">Same as Scenario A — no permanent change to anyone's ownership share or escalator.</div>
+        </div>
+        <div class="comparison-row">
+          <div class="row-label">Tradeoff</div>
+          <div class="row-value">Everyone receives expected year-one income. Trust starts Phase 1 without the extra <strong class="num">$75,800</strong> cushion — still viable via borrowing, but less cash on day one.</div>
+        </div>
+      </div>
+    </div>
+
+    <h4 class="mt-32">Year-One Cash Flow — Side by Side</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Recipient</th>
+            <th>Share</th>
+            <th>Scenario A (all to trust)</th>
+            <th>Scenario B (distribute)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-cell">Berdia (Grandma)</td>
+            <td>50.00%</td>
+            <td class="text-cell">$0 cash · $37,900 to trust</td>
+            <td>$37,900</td>
+          </tr>
+          <tr>
+            <td class="text-cell">Reneta</td>
+            <td>16.67%</td>
+            <td class="text-cell">$0 cash · $12,633 to trust</td>
+            <td>$12,633</td>
+          </tr>
+          <tr>
+            <td class="text-cell">Charles</td>
+            <td>16.67%</td>
+            <td class="text-cell">$0 cash · $12,633 to trust</td>
+            <td>$12,633</td>
+          </tr>
+          <tr>
+            <td class="text-cell">Kim</td>
+            <td>16.67%</td>
+            <td class="text-cell">$0 cash · $12,633 to trust</td>
+            <td>$12,633</td>
+          </tr>
+          <tr class="total-row">
+            <td class="text-cell"><strong>Total year-one rent</strong></td>
+            <td><strong>100%</strong></td>
+            <td class="text-cell"><strong class="green">$75,800 to trust</strong></td>
+            <td><strong>$75,800 distributed</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout amber-callout mt-24">
+      <p style="margin-bottom:8px;"><strong>What does not change in either scenario:</strong> Land stays in the family. The 30-year lease and 2% escalator continue. Solar-backed borrowing ($200K–$250K on Grandma's share) and total platform capacity ($450K–$650K+) remain available either way. This is a one-time year-one fork — not a permanent change to ownership.</p>
+      <p style="margin-bottom:0;"><strong>Status:</strong> Pending family decision at or before Phase 1 deployment. Requires voluntary agreement from all beneficiaries if Scenario A is chosen. See <a href="#part7" style="color:#C45A3C; font-weight:600;">Part 7, Step 9</a>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- INFLATION PROBLEM -->
+<section>
+  <div class="container">
+    <h3>The Problem with Just Collecting Checks</h3>
+    <p>The lease pays out ~$3.25 million over 30 years. That sounds like a lot. But a dollar today does not buy what a dollar will buy in 10 or 20 years. This is not speculation — it is how inflation has always worked.</p>
+
+    <div class="callout" style="background: #F0E6E0; border-left-color: #C45A3C;">
+      <p style="margin-bottom:8px;"><strong>Grandma was born in 1937.</strong></p>
+      <p class="num" style="margin-bottom:4px;">$1 in 1937 = $22-$24 today</p>
+      <p class="num" style="margin-bottom:4px;">$40,000 in 1990 = ~$100,000 today</p>
+      <p class="num" style="margin-bottom:0;">$100,000 in 2020 = ~$125,000 today</p>
+    </div>
+
+    <p>The 2% annual increase in the lease does NOT keep up if inflation runs at 3% (which is normal).</p>
+
+    <h4 class="mt-32">Grandma's Share Over 30 Years</h4>
+    <div class="inflation-bars">
+      <div class="inflation-row">
+        <div class="year-label">Year 1</div>
+        <div class="bar-container">
+          <div class="bar-nominal" style="width:55%; background:#C45A3C;">$37,900/yr</div>
+        </div>
+        <div class="value-label">buys $37,900 today</div>
+      </div>
+      <div class="inflation-row">
+        <div class="year-label">Year 10</div>
+        <div class="bar-container">
+          <div class="bar-real" style="width:55%; background:#3D7A5F;"></div>
+          <div class="bar-nominal" style="width:67%; background:#C45A3C;">$46,200/yr</div>
+        </div>
+        <div class="value-label">buys ~$38,500 today</div>
+      </div>
+      <div class="inflation-row">
+        <div class="year-label">Year 20</div>
+        <div class="bar-container">
+          <div class="bar-real" style="width:49%; background:#3D7A5F;"></div>
+          <div class="bar-nominal" style="width:82%; background:#C45A3C;">$56,300/yr</div>
+        </div>
+        <div class="value-label">buys ~$34,000 today</div>
+      </div>
+      <div class="inflation-row">
+        <div class="year-label">Year 30</div>
+        <div class="bar-container">
+          <div class="bar-real" style="width:41%; background:#3D7A5F;"></div>
+          <div class="bar-nominal" style="width:100%; background:#C45A3C;">$68,600/yr</div>
+        </div>
+        <div class="value-label">buys ~$28,000 today</div>
+      </div>
+    </div>
+
+    <h4 class="mt-32">Each Sibling's Share Over 30 Years</h4>
+    <div class="inflation-bars">
+      <div class="inflation-row">
+        <div class="year-label">Year 1</div>
+        <div class="bar-container">
+          <div class="bar-nominal" style="width:55%; background:#3D7A5F;">$12,630/yr</div>
+        </div>
+        <div class="value-label">buys $12,630 today</div>
+      </div>
+      <div class="inflation-row">
+        <div class="year-label">Year 10</div>
+        <div class="bar-container">
+          <div class="bar-real" style="width:56%; background:#C45A3C;"></div>
+          <div class="bar-nominal" style="width:67%; background:#3D7A5F;">$15,400/yr</div>
+        </div>
+        <div class="value-label">buys ~$12,850 today</div>
+      </div>
+      <div class="inflation-row">
+        <div class="year-label">Year 20</div>
+        <div class="bar-container">
+          <div class="bar-real" style="width:50%; background:#C45A3C;"></div>
+          <div class="bar-nominal" style="width:82%; background:#3D7A5F;">$18,770/yr</div>
+        </div>
+        <div class="value-label">buys ~$11,350 today</div>
+      </div>
+      <div class="inflation-row">
+        <div class="year-label">Year 30</div>
+        <div class="bar-container">
+          <div class="bar-real" style="width:41%; background:#C45A3C;"></div>
+          <div class="bar-nominal" style="width:100%; background:#3D7A5F;">$22,870/yr</div>
+        </div>
+        <div class="value-label">buys ~$9,300 today</div>
+      </div>
+    </div>
+
+    <p class="mt-16 secondary" style="font-size:0.9rem;">The checks get bigger. What they buy gets smaller. This affects everyone — not just Grandma.</p>
+
+    <div class="callout dark-callout mt-32">
+      <p style="margin-bottom:8px; max-width:100%;"><span class="num" style="color:#FAFAF8;">30-year total (nominal): ~$1,620,000</span></p>
+      <p style="margin-bottom:0; max-width:100%;"><span class="num" style="color:#aaa;">30-year total (real value): ~$800,000–$900,000 in today's money</span></p>
+    </div>
+
+    <p class="mt-24"><strong>The question is not how much money comes in. It is what that money can still do.</strong></p>
+  </div>
+</section>
+
+<!-- WHY THIS MOMENT MATTERS -->
+<section>
+  <div class="container">
+    <h3>Why This Moment Matters</h3>
+    <p>Solar construction begins this summer. Once income starts flowing, habits form, expectations set in, and restructuring becomes harder. <strong>The window to act is now — measured in weeks, not years.</strong></p>
+    <p>Grandma is 88 years old. The trust must be formed while she has the legal authority to define how these assets are governed. That is the real deadline.</p>
+
+    <div class="timeline mt-48">
+      <div class="timeline-item">
+        <div class="timeline-dot">1</div>
+        <div class="timeline-label">Now (March 2026)</div>
+        <div class="timeline-desc">Read this document. Engage attorney + CPA.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot">2</div>
+        <div class="timeline-label">Apr-May 2026</div>
+        <div class="timeline-desc">Trust formed. Assets moved. Agreements signed.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot outline">3</div>
+        <div class="timeline-label">Summer 2026</div>
+        <div class="timeline-desc">Construction begins. Rent starts after completion.</div>
+      </div>
+    </div>
+
+    <div class="callout amber-callout mt-32">
+      <p style="margin-bottom:0;">Construction begins this summer. The trust must be in place <strong>before</strong> income starts flowing. We have weeks, not months.</p>
+    </div>
+
+    <p class="mt-24"><strong>No one currently relies on solar income for day-to-day expenses.</strong> That is not a problem — it is an advantage. It means we can structure things now, before the money creates habits that are hard to change.</p>
+  </div>
+</section>
+
+<!-- ════════════════ PART 2 ════════════════ -->
+<section id="part2">
+  <div class="container">
+    <div class="part-header">
+      <span class="label">Part 2</span>
+      <h2>The Plan</h2>
+    </div>
+
+    <h3>What We're Recommending</h3>
+    <p>I am recommending that the family create a <strong>Family Operating Trust</strong> — a single legal structure that holds the land, the solar lease, and the restaurant together. The trust does not change who gets what. It changes how the assets are organized so they can work together instead of sitting apart.</p>
+
+    <!-- TRUST STRUCTURE DIAGRAM -->
+    <div class="trust-diagram">
+      <div class="trust-header">
+        <h3>Family Operating Trust</h3>
+        <p>Holds all family assets. Grandma defines the rules. Stedmon serves as Trustee and Trust Architect. Advisory Committee approves major moves.</p>
+      </div>
+      <div class="trust-body">
+        <div class="cards cards-4">
+          <div class="card green-card" style="text-align:center;">
+            <div class="card-title">Land</div>
+            <div class="card-detail">109 acres<br>Grandma holds title</div>
+          </div>
+          <div class="card amber-card" style="text-align:center;">
+            <div class="card-title">Solar Lease Income</div>
+            <div class="card-detail">Split to owners as today</div>
+          </div>
+          <div class="card" style="text-align:center; border-left: 4px solid #C45A3C;">
+            <div class="card-title">Restaurant LLC</div>
+            <div class="card-detail">Stanley operates</div>
+          </div>
+          <div class="card" style="text-align:center; border-left: 4px solid #C45A3C;">
+            <div class="card-title">Ancillary Services LLC</div>
+            <div class="card-detail">Stanley operates</div>
+          </div>
+        </div>
+
+        <p class="secondary mt-24" style="font-size:0.85rem; max-width:100%;"><strong>Future LLCs (Phase 2, funded sequentially):</strong></p>
+        <div class="cards cards-3 mt-16">
+          <div class="card dashed" style="text-align:center; padding:20px;">
+            <div class="card-title" style="font-size:0.85rem;">Real Estate</div>
+            <div class="card-detail">Darius operates</div>
+          </div>
+          <div class="card dashed" style="text-align:center; padding:20px;">
+            <div class="card-title" style="font-size:0.85rem;">Logistics</div>
+            <div class="card-detail">Chuck operates</div>
+          </div>
+          <div class="card dashed" style="text-align:center; padding:20px;">
+            <div class="card-title" style="font-size:0.85rem;">Learning Institution</div>
+            <div class="card-detail">Kim operates</div>
+          </div>
+        </div>
+      </div>
+      <div class="trust-footer">
+        <p class="label" style="margin-bottom: 12px;">Income Flows</p>
+        <div style="display:flex; flex-direction:column; gap:8px; font-size:0.9rem;">
+          <div><strong class="green">Reneta</strong> — 16.67% solar — <strong>paid directly</strong></div>
+          <div><strong class="green">Charles</strong> — 16.67% solar — <strong>paid directly</strong></div>
+          <div><strong class="green">Kim</strong> — 16.67% solar — <strong>paid directly</strong></div>
+          <div style="margin-top:8px;"><strong class="accent">Grandma's 50%</strong> — managed through the trust (reinvested to preserve buying power)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUICK REFERENCE — GLOSSARY -->
+    <h3 class="mt-48">Quick Reference — What These Terms Mean</h3>
+    <div class="glossary">
+      <div class="glossary-item">
+        <div class="glossary-term">Trust</div>
+        <div class="glossary-def">A legal structure that holds assets on behalf of beneficiaries. The trust owns the assets; the Trustee manages them according to the rules Grandma defines. Beneficiaries receive income from the trust but do not individually own the assets — which is what protects them from probate, divorce, and forced sale.</div>
+      </div>
+      <div class="glossary-item">
+        <div class="glossary-term">LLC (Limited Liability Company)</div>
+        <div class="glossary-def">A separate legal entity that owns and operates a single business. Each LLC has its own bank accounts, its own books, and its own liabilities. If one LLC fails, the losses are contained to that LLC — they do not spread to other businesses or to the trust's core assets.</div>
+      </div>
+      <div class="glossary-item">
+        <div class="glossary-term">SPV (Special Purpose Vehicle)</div>
+        <div class="glossary-def">A type of LLC created for a single deal or property. In Darius's case, each real estate transaction sits in its own SPV. This isolates each deal so that a loss on one property does not affect any other.</div>
+      </div>
+      <div class="glossary-item">
+        <div class="glossary-term">Management Agreement</div>
+        <div class="glossary-def">A written contract between the trust (as owner) and an operator (the person running the business). It defines the operator's compensation, authority, performance expectations, and protections. It replaces informal handshake arrangements with legally binding terms.</div>
+      </div>
+    </div>
+
+    <!-- WHAT CHANGES / DOESN'T CHANGE -->
+    <h3 class="mt-48">What Changes</h3>
+    <ul class="operator-list">
+      <li>The assets are held in one place instead of scattered</li>
+      <li>The land is legally protected from forced sale or partition</li>
+      <li>The restaurant is owned by the trust, operated by Stanley under a written contract that protects his role</li>
+      <li>Grandma's 50% solar income can be reinvested to preserve its value over time</li>
+      <li>The trust can borrow against future income to fund growth — without selling land</li>
+    </ul>
+
+    <h3 class="mt-32">What Does Not Change</h3>
+    <ul class="operator-list" style="list-style:none;">
+      <li style="padding-left:24px;"><span style="position:absolute; left:0; top:10px; width:10px; height:10px; border-radius:50%; background:#3D7A5F;"></span>Reneta, Charles, and Kim receive their 16.67% solar income, directly, unchanged</li>
+      <li style="padding-left:24px;"><span style="position:absolute; left:0; top:10px; width:10px; height:10px; border-radius:50%; background:#3D7A5F;"></span>Stanley continues running the restaurant day to day</li>
+      <li style="padding-left:24px;"><span style="position:absolute; left:0; top:10px; width:10px; height:10px; border-radius:50%; background:#3D7A5F;"></span>No land is sold</li>
+      <li style="padding-left:24px;"><span style="position:absolute; left:0; top:10px; width:10px; height:10px; border-radius:50%; background:#3D7A5F;"></span>No beneficiary takes on personal financial risk (Stedmon, as Trustee, accepts fiduciary responsibility — he is personally accountable for managing the trust properly)</li>
+    </ul>
+  </div>
+</section>
+
+<!-- OPERATORS -->
+<section>
+  <div class="container">
+    <h3>The Family's Operators — Everyone Can Have a Role</h3>
+    <p>This is not a plan where one person runs everything and everyone else collects checks. The vision is a family operating company — each LLC matched to a family member with real domain expertise. Every operator has a written management agreement that defines compensation, authority, and protections. Each person can choose whether to take the seat.</p>
+
+    <!-- STANLEY -->
+    <div class="operator-section">
+      <h4>Stanley Harper — Restaurant + Ancillary Services</h4>
+      <p>Stanley is the trust's primary operator for the restaurant. For Ancillary Services, Stanley is the natural fit as operator given his existing presence on the solar site. He would manage two LLCs under separate written agreements.</p>
+
+      <div class="operator-diagram">
+        <div style="text-align:center; margin-bottom:16px;">
+          <span class="label">Family Operating Trust (Owner)</span>
+        </div>
+        <div class="cards cards-2">
+          <div class="card" style="text-align:center; border-top:3px solid #C45A3C;">
+            <div class="card-title">Restaurant LLC</div>
+            <div class="card-detail">Manager: Stanley<br>Base draw + profit sharing<br>(he built this — heaviest comp)<br>Separate books & accounts</div>
+          </div>
+          <div class="card" style="text-align:center; border-top:3px solid #D4A843;">
+            <div class="card-title">Ancillary Services LLC</div>
+            <div class="card-detail">Manager: Stanley<br>Smaller base + higher profit share<br>(rewards winning contracts)<br>Separate books & accounts</div>
+          </div>
+        </div>
+      </div>
+
+      <p><strong>Why this matters for Stanley:</strong></p>
+      <ul class="operator-list">
+        <li>Grandma intended for Stanley to have the restaurant. This structure honors that — his role is protected by contract, not goodwill</li>
+        <li>Managing ancillary services expands his role and his compensation. He's not just the restaurant guy — he's the family's operating partner</li>
+        <li>Each agreement stands on its own. If one business struggles, his role in the other is unaffected</li>
+        <li>His compensation grows as the businesses grow (profit participation, not just salary)</li>
+      </ul>
+
+      <h4 class="mt-24" style="font-size:1rem;">Why trust-owned instead of personally owned?</h4>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th></th><th>Trust-Owned</th><th>Personally Owned</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="text-cell"><strong>Borrowing power</strong></td><td class="text-cell"><strong class="green">$200K-$300K</strong> against documented cash flow</td><td class="text-cell">Limited to personal credit</td></tr>
+            <tr><td class="text-cell"><strong>Succession</strong></td><td class="text-cell"><strong class="green">Clear</strong> — governed by trust rules</td><td class="text-cell">Probate, fragmentation, uncertainty</td></tr>
+            <tr><td class="text-cell"><strong>Stanley's protection</strong></td><td class="text-cell"><strong class="green">Contractual</strong> — legally binding agreement</td><td class="text-cell">Informal — depends on family goodwill</td></tr>
+            <tr><td class="text-cell"><strong>Stanley's upside</strong></td><td class="text-cell"><strong class="green">Two businesses</strong> with profit sharing in each</td><td class="text-cell">One business, all personal risk</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- DARIUS -->
+    <div class="operator-section">
+      <h4>Darius — Real Estate SPVs</h4>
+      <p>Darius is building a real estate career in Texas. Under the trust, he operates real estate ventures through deal-specific SPVs (Special Purpose Vehicles) — each property sits in its own LLC. The trust provides deal-specific capital — earnest money, appraisal gaps, short-term bridge funding — funded from trust reserves and operating cash flow. If the coin collection appraises at significant value, the coins serve as dedicated collateral that strengthens the trust's capacity for these advances. The trust is repaid at closing plus a fee.</p>
+      <p>Darius's management agreement defines:</p>
+      <ul class="operator-list">
+        <li>His authority on each deal (sourcing, negotiation, closing)</li>
+        <li>Compensation structure (transaction fees + profit participation)</li>
+        <li>Performance expectations (licensed and active, with trust capital available from day one — the trust is his competitive advantage entering the market)</li>
+        <li>The coin collection, once appraised, as an accelerant — not a prerequisite — for trust-backed real estate capital</li>
+      </ul>
+      <p>As Darius gains experience, the trust can co-invest in property acquisitions (fix-and-flip, rentals) through property-specific entities — without drawing on solar or restaurant capital.</p>
+    </div>
+
+    <!-- KIM -->
+    <div class="operator-section">
+      <h4>Kim Fox — Learning Institution</h4>
+      <p>Kim is a licensed speech therapist who wants to build a long-term practice. She is the potential operator for a <strong>Learning Institution LLC</strong> — a trust-backed practice that leverages her professional credentials and clinical expertise.</p>
+      <p>Kim's management agreement would define:</p>
+      <ul class="operator-list">
+        <li>Full operational authority over the practice</li>
+        <li>Compensation structure (base + profit sharing as the practice grows)</li>
+        <li>The trust provides startup capital and operational infrastructure</li>
+        <li>Kim's 16.67% solar income remains completely unchanged — this is a separate operating role</li>
+      </ul>
+      <p>Kim already runs her own billing operations (with Reneta's support). The trust structure gives her practice legal protection, startup capital, and administrative backbone without personal financial risk.</p>
+    </div>
+
+    <!-- CHUCK -->
+    <div class="operator-section">
+      <h4>Charles (Chuck) Toliver — Logistics LLC</h4>
+      <p>Chuck is the potential operator for Logistics LLC. He has spent his career in logistics, driving for Pepsi, and has the domain knowledge to build a legitimate logistics company.</p>
+      <p>Chelsea (CK) Harper's experience managing last-mile delivery operations strategy across 4,300 Walmart stores represents a <strong>significant point of leverage</strong> for this venture — her expertise could inform the business model, operational systems, and customer acquisition strategy.</p>
+      <p>Chuck's management agreement would define:</p>
+      <ul class="operator-list">
+        <li>Full operational authority over Logistics LLC</li>
+        <li>Compensation structure (base draw + profit participation)</li>
+        <li>Performance expectations and contract pipeline requirements</li>
+        <li>The trust provides startup capital; Chuck provides the operational expertise</li>
+      </ul>
+      <p>This is not a speculative venture — it is deep industry experience operating in a domain Chuck already knows. Chuck's 16.67% solar income remains completely unchanged.</p>
+    </div>
+
+    <!-- RENETA -->
+    <div class="operator-section">
+      <h4>Reneta Harper — Cross-LLC Operations</h4>
+      <p>Reneta is the family's operational backbone. She currently handles billing operations for Kim's speech therapy practice and co-manages the restaurant alongside Stanley. Under the trust, her role expands to provide <strong>cross-LLC operational support</strong> — the person who keeps the businesses running clean.</p>
+      <ul class="operator-list">
+        <li>Billing and administrative operations across trust LLCs</li>
+        <li>Financial reporting support for the Trustee</li>
+        <li>Vendor management and compliance coordination</li>
+        <li>Operational continuity when individual LLC operators are focused on growth</li>
+      </ul>
+      <p>Reneta is not an LLC operator — she is the operational infrastructure that connects them. Her compensation is defined through a trust services agreement. Her 16.67% solar income remains completely unchanged.</p>
+    </div>
+
+    <!-- STEDMON — TRUST ARCHITECT -->
+    <div class="architect-section">
+      <h4>Stedmon Harper — Trustee &amp; Trust Architect</h4>
+      <p class="architect-subtitle">I am not an LLC operator. The Trustee cannot serve as an operator — that is a direct fiduciary conflict. My role is different: I am the trust's architect. I design the systems that operators use, enforce accountability, and ensure every LLC runs the way it should.</p>
+
+      <div class="architect-does-grid">
+        <div class="architect-does-col does">
+          <h5>What the Trustee Does</h5>
+          <ul>
+            <li><strong style="color:#FAFAF8;">System design</strong> — Build reporting templates, capital deployment process, gate criteria, and operator accountability frameworks that every LLC follows</li>
+            <li><strong style="color:#FAFAF8;">Financial oversight</strong> — Review monthly LLC financials, ensure books are clean, flag variances, report to beneficiaries quarterly</li>
+            <li><strong style="color:#FAFAF8;">Capital deployment execution</strong> — When the Advisory Committee approves a capital allocation, the Trustee executes it: coordinates with lenders, manages loan documentation, ensures funds reach the right LLC</li>
+            <li><strong style="color:#FAFAF8;">Operator support</strong> — Build the infrastructure operators plug into: accounting systems, compliance checklists, insurance coordination, legal templates</li>
+            <li><strong style="color:#FAFAF8;">Compliance and legal</strong> — Ensure all trust filings are current, LLC annual reports filed, insurance maintained, management agreements followed</li>
+            <li><strong style="color:#FAFAF8;">Dispute resolution</strong> — The neutral party who enforces the trust document when conflicts arise, not personal opinion</li>
+            <li><strong style="color:#FAFAF8;">Succession planning</strong> — Identify and prepare successor trustees, document all systems so the trust does not depend on any one person</li>
+          </ul>
+        </div>
+        <div class="architect-does-col does-not">
+          <h5>What the Trustee Does NOT Do</h5>
+          <ul>
+            <li>Does not run any individual business day-to-day</li>
+            <li>Does not make unilateral capital decisions (Advisory Committee approves)</li>
+            <li>Does not override an operator's authority within their LLC</li>
+            <li>Does not use trust resources for personal benefit</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="architect-comp-note">
+        <strong style="color:#D4A843;">Trustee compensation</strong> is defined in the trust document — a written fee structure reviewed and approved by the beneficiaries. This is not a favor. It is a professional role with personal liability and fiduciary accountability.
+      </div>
+
+      <!-- HYBRID TRUSTEE MODEL -->
+      <h4 style="margin-top:40px; font-size:1.15rem;">The Hybrid Trustee Model</h4>
+      <p style="color:#aaa; font-size:0.9rem; margin-bottom:24px; max-width:100%;">The trust document will name a successor trustee in case I cannot serve. I am recommending a hybrid approach:</p>
+
+      <div class="hybrid-model">
+        <div class="hybrid-node primary">
+          <span class="hybrid-icon">&#9670;</span>
+          <div class="hybrid-title">Individual Trustee</div>
+          <div class="hybrid-detail">Stedmon serves as Trustee — understands the vision, knows the family, built the plan. Makes decisions quickly with context, not bureaucracy.</div>
+        </div>
+        <div class="hybrid-arrow">&#8594;</div>
+        <div class="hybrid-node">
+          <span class="hybrid-icon">&#9632;</span>
+          <div class="hybrid-title">Professional Successor</div>
+          <div class="hybrid-detail">A bank or trust company is named in the trust document as backup. If something happens, the trust does not stop. The institution steps in.</div>
+        </div>
+        <div class="hybrid-arrow">&#8594;</div>
+        <div class="hybrid-node">
+          <span class="hybrid-icon">&#9654;</span>
+          <div class="hybrid-title">Admin Support</div>
+          <div class="hybrid-detail">Trust administration service handles compliance, tax filings, quarterly reports, and record-keeping. $1K-$3K/yr instead of $5K-$10K for a full professional trustee.</div>
+        </div>
+      </div>
+
+      <div class="hybrid-why">
+        <strong style="color:#3D7A5F;">Why this matters:</strong> A trust that depends entirely on one person is fragile. A trust that has documented systems, a named successor, and professional support is an institution. That is what I am building.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- GOVERNANCE -->
+<section>
+  <div class="container">
+    <h3>How the Trust Is Governed</h3>
+
+    <div class="governance-block">
+      <div class="governance-section" style="background:#1A1A18; color:#FAFAF8;">
+        <div class="governance-section-title" style="color:#C45A3C;">Advisory Committee</div>
+        <p style="color:#aaa; font-size:0.9rem; margin-bottom:16px; max-width:100%;">Approves major decisions together. Decisions: Majority rules (2 of 3 decides).</p>
+        <div style="display:flex; gap:16px; flex-wrap:wrap; margin-bottom:16px;">
+          <div style="background:#2a2a28; padding:12px 16px; border-radius:8px; font-size:0.85rem;">
+            <strong>Seat 1:</strong> Stedmon Harper (Trustee)
+          </div>
+          <div style="background:#2a2a28; padding:12px 16px; border-radius:8px; font-size:0.85rem;">
+            <strong>Seat 2:</strong> A family beneficiary
+          </div>
+          <div style="background:#2a2a28; padding:12px 16px; border-radius:8px; font-size:0.85rem;">
+            <strong>Seat 3:</strong> Family member or outside advisor
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; font-size:0.85rem;">
+          <div>
+            <p style="color:#C45A3C; font-weight:600; margin-bottom:8px; max-width:100%;">Required to approve:</p>
+            <ul style="list-style:none; color:#ccc; padding:0;">
+              <li style="margin-bottom:4px;">New borrowing above $50,000</li>
+              <li style="margin-bottom:4px;">Capital deployment to any LLC</li>
+              <li style="margin-bottom:4px;">New LLC formation</li>
+              <li>Related-party transactions</li>
+            </ul>
+          </div>
+          <div>
+            <p style="color:#6B6B66; font-weight:600; margin-bottom:8px; max-width:100%;">NOT required for:</p>
+            <ul style="list-style:none; color:#888; padding:0;">
+              <li style="margin-bottom:4px;">Day-to-day operations (that's the operator's job)</li>
+              <li style="margin-bottom:4px;">Routine expenses within approved budgets</li>
+              <li>Distributions already defined by trust rules</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="governance-section">
+        <div class="governance-section-title" style="color:#C45A3C;">Trustee: Stedmon Harper (Trust Architect)</div>
+        <ul class="operator-list" style="font-size:0.9rem;">
+          <li>Designs systems, templates, and processes that all LLCs operate within</li>
+          <li>Oversees financial reporting across all LLCs</li>
+          <li>Executes decisions approved by Advisory Committee</li>
+          <li>Reports to beneficiaries quarterly</li>
+          <li>Builds operator accountability frameworks</li>
+          <li>Coordinates with CPA, attorney, and lenders</li>
+          <li>Compensated per written terms</li>
+          <li>Subject to fiduciary duty — personally liable</li>
+          <li>Does NOT operate any LLC (fiduciary conflict)</li>
+        </ul>
+      </div>
+
+      <div class="governance-section">
+        <div class="governance-section-title" style="color:#D4A843;">Operators (Current and Potential)</div>
+        <div style="font-size:0.9rem; margin-bottom:12px;">
+          <p style="max-width:100%; margin-bottom:4px;">Stanley Harper — Restaurant LLC + Ancillary Services</p>
+          <p style="max-width:100%; margin-bottom:4px;">Darius — Real Estate SPVs</p>
+          <p style="max-width:100%; margin-bottom:4px;">Kim Fox — Learning Institution LLC <span class="secondary">(potential)</span></p>
+          <p style="max-width:100%; margin-bottom:12px;">Charles (Chuck) Toliver — Logistics LLC <span class="secondary">(potential)</span></p>
+        </div>
+        <ul class="operator-list" style="font-size:0.85rem;">
+          <li>Each operator has a separate management agreement</li>
+          <li>Full operational authority within their business</li>
+          <li>Operators recuse themselves from Advisory Committee votes on capital allocation to their own LLC — they do not vote on their own funding</li>
+          <li>A beneficiary who also operates an LLC keeps their committee eligibility but must recuse on conflicts</li>
+          <li><strong>The Trustee cannot also serve as an LLC operator</strong> — this is a direct fiduciary conflict. The Trustee's role is to build the operational systems and infrastructure that operators use, and to ensure accountability across all LLCs</li>
+          <li>Recognized through compensation, not governance</li>
+        </ul>
+      </div>
+
+      <div class="governance-section">
+        <div class="governance-section-title" style="color:#3D7A5F;">Operations: Reneta Harper</div>
+        <ul class="operator-list" style="font-size:0.9rem;">
+          <li>Cross-LLC operational support</li>
+          <li>Billing ops, admin, vendor management</li>
+          <li>Reporting support for Trustee</li>
+        </ul>
+      </div>
+
+      <div class="governance-section" style="background:#FAFAF8;">
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:24px; font-size:0.85rem;">
+          <div>
+            <div class="governance-section-title">Successor Trustee (Hybrid Model)</div>
+            <ul class="operator-list" style="font-size:0.85rem;">
+              <li>Professional trust company named as backup</li>
+              <li>Takes over if Stedmon cannot serve</li>
+              <li>Systems and documentation ensure continuity</li>
+              <li>Trust administration service handles compliance and filings ($1K-$3K/yr) while Stedmon serves</li>
+            </ul>
+          </div>
+          <div>
+            <div class="governance-section-title">Beneficiaries</div>
+            <p style="max-width:100%;">Reneta, Charles, Kim, Berdia. Receive quarterly financial reports. Can access trust records at any time. Majority vote can remove trustee. Income distributions unchanged.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="governance-section" style="background:#F0E6E0;">
+        <div class="governance-section-title" style="color:#C45A3C;">Accountability</div>
+        <ul class="operator-list" style="font-size:0.85rem;">
+          <li>Quarterly written reports to all beneficiaries</li>
+          <li>Annual independent CPA review</li>
+          <li>All related-party transactions disclosed in advance</li>
+          <li>Advisory Committee minutes documented</li>
+          <li>Any beneficiary can request records anytime</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout mt-24">
+      <p style="margin-bottom:0;"><strong>How operator-beneficiary conflicts are managed:</strong> Beneficiaries who also serve as LLC operators remain eligible for the Advisory Committee but must recuse themselves from any vote involving capital allocation to their own LLC — they do not vote on their own funding. The Trustee cannot also serve as an LLC operator — this is a direct fiduciary conflict. The Trustee's role is to build the operational systems and infrastructure that operators use, and to ensure accountability across all LLCs. Reneta, as cross-LLC operations, supports all businesses but does not have capital allocation authority.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ PART 3 ════════════════ -->
+<section id="part3">
+  <div class="container">
+    <div class="part-header">
+      <span class="label">Part 3</span>
+      <h2>The Numbers</h2>
+    </div>
+
+    <h3>How the Trust Unlocks Capital</h3>
+    <p>The trust does not create money from nothing. It borrows against <strong>future income that is already contracted</strong> — the solar lease. The loan is repaid from that income over time. No land is sold. No family member's income is pledged.</p>
+
+    <!-- LEVERAGE DIAGRAM -->
+    <div class="trust-diagram">
+      <div class="trust-header">
+        <h3>How Leverage Works</h3>
+        <p>Grandma's 50% solar income ($37,900/yr, growing 2%/yr, contracted for 30 yrs)</p>
+      </div>
+      <div class="trust-body">
+        <div class="flow">
+          <div class="flow-step">
+            <div class="step-title">Partial Assignment to Lender</div>
+            <div class="step-detail">Only Grandma's share is used as collateral</div>
+          </div>
+          <div class="flow-arrow">&rarr;</div>
+          <div class="flow-step" style="border-color:#C45A3C;">
+            <div class="step-title accent num" style="font-size:1.3rem;">$200K – $250K</div>
+            <div class="step-detail">Loan Proceeds</div>
+          </div>
+          <div class="flow-arrow">&rarr;</div>
+          <div class="flow-step">
+            <div class="step-title">Deployed into Trust-Owned LLCs</div>
+            <div class="step-detail">See Capital Plan below</div>
+          </div>
+        </div>
+      </div>
+      <div class="trust-footer" style="background: #F4F9F6;">
+        <p class="label green" style="margin-bottom:12px;">What is NOT touched</p>
+        <div style="display:grid; grid-template-columns: repeat(4,1fr); gap:12px; font-size:0.85rem;">
+          <div><strong class="green">Reneta's 16.67%</strong><br>Never pledged</div>
+          <div><strong class="green">Charles's 16.67%</strong><br>Never pledged</div>
+          <div><strong class="green">Kim's 16.67%</strong><br>Never pledged</div>
+          <div><strong class="green">The land</strong><br>Never sold, never collateral</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOTAL CAPITAL -->
+    <h3 class="mt-48">Total Capital Available</h3>
+    <p class="secondary">(Once Restaurant Financials Are Documented)</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Source</th><th>Amount</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="text-cell">Square Capital pre-approval <span class="badge-confirmed">APPROVED — AVAILABLE NOW</span></td><td>$72,500</td></tr>
+          <tr><td class="text-cell">Solar-backed loan (Grandma's share only)</td><td>$200K – $250K</td></tr>
+          <tr><td class="text-cell">Restaurant-backed loan (financials verified via Square) <span class="badge-confirmed">VERIFIED</span></td><td>$200K – $300K</td></tr>
+          <tr><td class="text-cell">Equipment / working capital</td><td>$50K – $100K</td></tr>
+          <tr><td class="text-cell">Coin collection (accelerant) <span class="badge-tbd">PENDING APPRAISAL</span></td><td>TBD</td></tr>
+          <tr><td class="text-cell">Life insurance — cash value (Prudential) <span class="badge-confirmed">DOCUMENTED</span></td><td>~$137K available now</td></tr>
+          <tr class="total-row">
+            <td class="text-cell"><strong>Total Platform Capacity</strong></td>
+            <td><strong>$657K – $857K+</strong><br><span style="font-size:0.8rem; color:#6B6B66;">(incl. $72.5K Square + insurance cash value; before coins)</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="green" style="font-weight:600; margin-top:8px;">No land sold. No family income pledged.</p>
+
+    <div style="margin:24px 0;display:flex;gap:12px;flex-wrap:wrap;">
+      <a href="capital-stack.html" style="display:inline-block;background:#C45A3C;color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:0.9rem;text-decoration:none;padding:12px 22px;border-radius:8px;">View the full Capital Stack &rarr;</a>
+      <a href="action-checklist.html" style="display:inline-block;background:#fff;color:#C45A3C;border:1px solid #C45A3C;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:0.9rem;text-decoration:none;padding:12px 22px;border-radius:8px;">What's left to do &rarr;</a>
+    </div>
+
+    <!-- DEBT SERVICE -->
+    <h3 class="mt-48">What Does the Loan Actually Cost?</h3>
+    <p>The trust borrows $200K–$250K against Grandma's solar income. Here is what that costs annually:</p>
+
+    <div class="callout">
+      <p style="margin-bottom:4px;"><strong>Grandma's annual solar income:</strong> <span class="num">$37,900</span></p>
+      <p style="margin-bottom:4px;"><strong>Lender requirement (DSCR 1.3x):</strong></p>
+      <p style="margin-bottom:0;">Maximum annual loan payment = <span class="num"><strong>~$29,000</strong></span> ($37,900 / 1.3)</p>
+    </div>
+
+    <p>At 7-8% interest, 15-20 year term:</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Loan Amount</th><th>Annual Payment</th><th>What Remains of Grandma's $37,900</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>$200,000</td><td>~$22,000</td><td class="text-cell"><strong class="green">~$15,900 free</strong></td></tr>
+          <tr><td>$225,000</td><td>~$25,000</td><td class="text-cell"><strong class="green">~$12,900 free</strong></td></tr>
+          <tr><td>$250,000</td><td>~$29,000</td><td class="text-cell"><strong class="amber">~$8,900 free</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="mt-16 secondary" style="font-size:0.9rem;">The remaining free income goes to trust reserves. As the 2% escalator increases Grandma's share each year, the cushion grows — the loan payment is fixed but her income is not. After the loan is paid off (year 15-20), Grandma's full solar income flows to the trust — no debt service, just capital.</p>
+  </div>
+</section>
+
+<!-- CAPITAL PLAN -->
+<section>
+  <div class="container">
+    <h3>The Capital Plan — Phased, Gated, One Step at a Time</h3>
+    <p>Capital is not deployed all at once. Each phase has a <strong>gate</strong> — conditions that must be met before the next phase begins. If a gate is not cleared, the plan pauses. It does not collapse.</p>
+
+    <div class="flow mt-32">
+      <div class="flow-step" style="border-color:#6B6B66;">
+        <div class="step-num" style="background:#6B6B66;">0</div>
+        <div class="step-title">Foundation</div>
+        <div class="step-detail">Now – Summer '26<br>Set up legal</div>
+      </div>
+      <div class="flow-arrow" style="color:#D4A843;">GATE &rarr;</div>
+      <div class="flow-step" style="border-color:#C45A3C;">
+        <div class="step-num">1</div>
+        <div class="step-title">First Capital</div>
+        <div class="step-detail">After COD<br>Deploy first capital</div>
+      </div>
+      <div class="flow-arrow" style="color:#D4A843;">GATE &rarr;</div>
+      <div class="flow-step" style="border-color:#3D7A5F;">
+        <div class="step-num" style="background:#3D7A5F;">2</div>
+        <div class="step-title">Expansion</div>
+        <div class="step-detail">Years 2-5<br>Scale up</div>
+      </div>
+    </div>
+
+    <!-- PHASE 0 -->
+    <div class="phase-card">
+      <div class="phase-badge p0">0</div>
+      <h4>Phase 0 — Foundation (Now – Summer 2026)</h4>
+      <p>No capital is deployed. No debt is taken. This phase builds the legal and financial infrastructure. <strong>This is where we are right now.</strong></p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Item</th><th>Cost</th></tr></thead>
+          <tbody>
+            <tr><td class="text-cell">Trust + LLC legal formation</td><td>$8K – $12K</td></tr>
+            <tr><td class="text-cell">CPA engagement + tax planning</td><td>$3K – $5K</td></tr>
+            <tr><td class="text-cell">Restaurant financial cleanup</td><td>$2K – $5K</td></tr>
+            <tr><td class="text-cell">Insurance review</td><td>$1K – $2K</td></tr>
+            <tr><td class="text-cell">Coin collection appraisal</td><td>$150 – $500</td></tr>
+            <tr class="total-row"><td class="text-cell"><strong>Total</strong></td><td><strong>$14K – $24K</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="secondary" style="font-size:0.85rem;">Funded from Grandma's existing resources or early development-stage solar payments.</p>
+
+      <div class="gate">
+        <div class="gate-title">Gate — To Move to Phase 1, ALL Must Be True</div>
+        <ul>
+          <li>Trust is legally formed and assets transferred</li>
+          <li>Restaurant has 2+ years of documented, clean financials</li>
+          <li>Tax structure questions resolved by CPA</li>
+          <li>All beneficiaries have received trust documents</li>
+          <li>Trustee compensation defined in writing</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- PHASE 1 -->
+    <div class="phase-card">
+      <div class="phase-badge p1">1</div>
+      <h4>Phase 1 — First Capital (After Solar COD)</h4>
+      <p>Solar-backed borrowing is established. Two things launch: an <strong>ancillary services LLC</strong> tied to the solar site, and <strong>Darius's first real estate advances</strong> — small, deal-specific capital commitments that rotate back to the trust at closing.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Item</th><th>Cost</th></tr></thead>
+          <tbody>
+            <tr><td class="text-cell">Restaurant stabilization (working capital, reserves)</td><td>$40K – $60K</td></tr>
+            <tr><td class="text-cell">Ancillary Services LLC launch (equipment, bonding, first bids)</td><td>$50K – $75K</td></tr>
+            <tr><td class="text-cell">Real estate advances (Darius) — earnest money, appraisal gaps; rotating capital, repaid at closing</td><td>$10K – $25K</td></tr>
+            <tr><td class="text-cell">Debt service buffer (covenant protection, cushion)</td><td>$25K – $40K</td></tr>
+            <tr><td class="text-cell">Reserve (held, not deployed)</td><td>$25K – $50K</td></tr>
+            <tr class="total-row"><td class="text-cell"><strong>Total</strong></td><td><strong>$150K – $250K</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4 class="mt-32" style="font-size:1.1rem;">What does $50K–$75K actually buy?</h4>
+      <p>The ancillary services LLC starts with vegetation management — mowing, brush clearing, basic site maintenance.</p>
+
+      <div class="cards cards-2 mt-16">
+        <div class="card amber-card">
+          <div class="card-title" style="color:#D4A843;">Tier 1: Vegetation Management ($50K–$75K)</div>
+          <div class="card-detail">
+            Commercial mower(s): $8K–$25K<br>
+            Truck + trailer: $25K–$40K<br>
+            Hand tools, PPE, safety gear: $3K–$5K<br>
+            Bonding + licensing: $2K–$5K<br><br>
+            Revenue: ~$30K–$60K/year for vegetation management. The Orion contract on 94.75 acres is the anchor client.
+          </div>
+        </div>
+        <div class="card dashed">
+          <div class="card-title" style="color:#C45A3C;">Tier 2: Full Site Services ($100K–$175K total)</div>
+          <div class="card-detail">
+            Panel washing (water truck/trailer): $15K–$30K<br>
+            Fence/security maintenance: $10K–$20K<br>
+            Erosion/drainage control: $20K–$40K<br><br>
+            Tier 2 is funded from Phase 2 capital ONLY after Tier 1 has proven revenue. Equipment holds resale value.
+          </div>
+        </div>
+      </div>
+
+      <p class="mt-16"><strong>Why ancillary services first?</strong> It is the smallest capital commitment, most directly tied to the solar asset, and the equipment can be sold if it fails. If Stanley can win contracts at other solar sites beyond ours, this becomes a real business — not just a maintenance crew for one property.</p>
+
+      <div class="gate">
+        <div class="gate-title">Gate — To Move to Phase 2, ALL Must Be True</div>
+        <ul>
+          <li>Solar construction complete and commercial operation achieved — full rent is flowing</li>
+          <li>Ancillary Services LLC has won at least one contract</li>
+          <li>Restaurant financials support lending</li>
+          <li>All Phase 1 debt service is current</li>
+          <li>Trustee has issued at least two quarterly reports</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ADDITIONAL TRUST ASSETS -->
+    <div class="phase-card" style="background:#FAFAF8;">
+      <h4>Additional Trust Assets: Coin Collection + Life Insurance</h4>
+      <p>The coin collection and the life insurance policy both strengthen the trust's position but are not part of the solar-backed borrowing. They serve distinct roles.</p>
+
+      <div class="cards cards-2 mt-16">
+        <div class="card" style="border-left: 4px solid #D4A843;">
+          <div class="card-title">Coin Collection (Darius's Inheritance)</div>
+          <div class="card-detail">
+            <strong>Role:</strong> Balance sheet accelerant + potential collateral<br>
+            <strong>Value:</strong> TBD (professional appraisal required first)<br><br>
+            Placed into the trust, insured and documented. NOT sold — if significant value, used as dedicated collateral for Darius's real estate advances. If modest value, still a documented trust asset — real estate ventures funded from trust reserves and operating cash flow. Darius's gate to trust capital is his track record (licensed and active — trust backs from day one), not the coin appraisal. If the trust is dissolved, coins are distributed per trust terms.
+          </div>
+        </div>
+        <div class="card" style="border-left: 4px solid #3D7A5F;">
+          <div class="card-title">Life Insurance</div>
+          <div class="card-detail">
+            <strong>Role:</strong> Long-term capital injection into the trust<br>
+            <strong>Status:</strong> Pending confirmation — full policy package needed<br><br>
+            The April 12 call surfaced several policies, but the family may not have the complete picture yet; a larger policy may exist. Do not size trust borrowing or estate planning around insurance until documents are in hand. Once confirmed, proceeds would be managed by the trust — not distributed as a lump sum — and reviewed with the attorney for beneficiary alignment, ILIT options, and estate tax impact.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 2 -->
+    <div class="phase-card">
+      <div class="phase-badge p2">2</div>
+      <h4>Phase 2 — Expansion (Years 2–5)</h4>
+      <p><strong>Only begins after Phase 1 gates are cleared.</strong> Ventures are funded one at a time, not all at once. No more than two active at once.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Venture</th><th>Capital</th><th>Operator</th><th>Gate</th></tr></thead>
+          <tbody>
+            <tr><td class="text-cell">Ancillary scale-up (Tier 2 equip)</td><td>$75K–$125K</td><td class="text-cell">Stanley</td><td class="text-cell">Positive cash flow from Tier 1</td></tr>
+            <tr><td class="text-cell">Restaurant expansion</td><td>$150K–$200K</td><td class="text-cell">Stanley</td><td class="text-cell">Lender-approved loan</td></tr>
+            <tr><td class="text-cell">Real estate co-investment (larger deals)</td><td>~$50K–$150K per deal</td><td class="text-cell">Darius</td><td class="text-cell">Phase 1 small deals proven, ready to scale up</td></tr>
+            <tr><td class="text-cell">Logistics LLC</td><td>~$150K</td><td class="text-cell">Chuck</td><td class="text-cell">Specific contract or pipeline</td></tr>
+            <tr><td class="text-cell">Learning Institution</td><td>~$100K</td><td class="text-cell">Kim</td><td class="text-cell">Business plan + trust review</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout mt-24">
+        <p style="margin-bottom:8px;"><strong>How real estate works (Darius):</strong> Darius is building a real estate career in Texas. The trust is designed to give him leverage as a new agent entering the market — not to make him prove himself without it first.</p>
+        <p style="margin-bottom:8px;"><strong>Phase 1 (small deals, from day one):</strong> Once Darius is licensed and active, the trust provides small deal-specific advances — earnest money, appraisal gaps, short-term bridge funding. These are small capital commitments ($2K–$10K per deal) that rotate back to the trust at closing plus a fee. This is not a permanent capital deployment — it is working capital that cycles. Stedmon builds the systems (deal analysis templates, transaction checklists, reporting frameworks) that give Darius institutional infrastructure a solo agent does not have.</p>
+        <p style="margin-bottom:8px;"><strong>Phase 2 (larger co-investments):</strong> As Darius closes deals and builds a track record, the trust can scale up — co-investing in property acquisitions (fix-and-flip, rentals) through property-specific SPVs at $50K–$150K per deal. Each property sits in its own LLC. If the coin collection appraises at significant value, it strengthens the trust's capacity for these larger advances. If the value is modest, capital comes from the same general reserves that fund all other LLCs.</p>
+        <p style="margin-bottom:8px;"><strong>How logistics works (Chuck):</strong> Chuck is the potential operator — he has a career in logistics and the domain knowledge. CK Harper's experience managing last-mile delivery operations at 4,300 Walmart stores is a significant point of leverage for the business model.</p>
+        <p style="margin-bottom:0;"><strong>How the learning institution works (Kim):</strong> Kim is a licensed speech therapist building a long-term practice. Reneta already handles Kim's billing ops today. Under the trust, this becomes a formal LLC with legal protection and growth capital.</p>
+      </div>
+    </div>
+
+    <!-- LONG-TERM -->
+    <h3 class="mt-48">Long-Term: Years 5–30</h3>
+    <p>Once multiple businesses are operating and cash-flowing, the trust shifts from building to cycling. Profits return to the trust. Debts get paid down. Capital is recycled into existing or new ventures.</p>
+    <p><strong>The objective is not aggressive growth for its own sake. It is building self-sustaining income streams that outlive the solar lease — businesses that generate their own revenue, create real jobs, and compound the family's position over decades. Discipline, not passivity.</strong></p>
+
+    <div class="cycle">
+      <div class="cycle-node">
+        <div class="node-title amber">Solar Income</div>
+      </div>
+      <div class="cycle-arrow">&rarr;</div>
+      <div class="cycle-node highlight">
+        <div class="node-title">Trust Treasury</div>
+      </div>
+      <div class="cycle-arrow">&rarr;</div>
+      <div class="cycle-node">
+        <div class="node-title green">Operating LLCs</div>
+      </div>
+      <div class="cycle-arrow">&rarr;</div>
+      <div class="cycle-node">
+        <div class="node-title">Returns Flow Back</div>
+        <div class="node-detail">Debt paydown, reserves, new ventures, distributions</div>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-top:-8px;">
+      <span class="secondary" style="font-size:0.85rem;">Restaurant profits also flow into Trust Treasury</span>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ PART 4 ════════════════ -->
+<section id="part4">
+  <div class="container">
+    <div class="part-header">
+      <span class="label">Part 4</span>
+      <h2>This Plan vs. Doing Nothing</h2>
+    </div>
+
+    <h3>Side-by-Side: 30-Year Outcome</h3>
+
+    <div class="comparison">
+      <div class="comparison-col do-nothing">
+        <div class="col-header">Do Nothing</div>
+        <div class="comparison-row">
+          <div class="row-label">Solar income</div>
+          <div class="row-value num">$3.25M nominal</div>
+        </div>
+        <div class="comparison-row">
+          <div class="row-label">Real value (today's $)</div>
+          <div class="row-value">~$1.6–1.8M <span class="secondary">(erodes every year)</span></div>
+        </div>
+        <div class="comparison-row">
+          <div class="row-label">Capital unlocked</div>
+          <div class="row-value num">$0</div>
+        </div>
+        <div class="comparison-row">
+          <div class="row-label">Businesses created</div>
+          <div class="row-value">0</div>
+        </div>
+        <div class="comparison-row">
+          <div class="row-label">Land</div>
+          <div class="row-value">Still owned</div>
+        </div>
+        <div class="comparison-row">
+          <div class="row-label">Restaurant</div>
+          <div class="row-value">Informal, unprotected</div>
+        </div>
+        <div class="comparison-row">
+          <div class="row-label">Siblings' income</div>
+          <div class="row-value">Same (16.67% each)</div>
+        </div>
+        <div class="comparison-row">
+          <div class="row-label">Grandma's intent</div>
+          <div class="row-value">Defined by default</div>
+        </div>
+        <div class="comparison-row">
+          <div class="row-label">Asset protection</div>
+          <div class="row-value">Fragments over time (probate, disputes)</div>
+        </div>
+        <div class="comparison-row">
+          <div class="row-label">What heirs inherit</div>
+          <div class="row-value">Whatever each person saved from their 16.67%</div>
+        </div>
+      </div>
+      <div class="comparison-col this-plan">
+        <div class="col-header">This Plan</div>
+        <div class="comparison-row">
+          <div class="row-label">Solar income</div>
+          <div class="row-value num">$3.25M nominal (same)</div>
+        </div>
+        <div class="comparison-row">
+          <div class="row-label">Real value (today's $)</div>
+          <div class="row-value"><strong>Preserved</strong> through reinvestment</div>
+        </div>
+        <div class="comparison-row">
+          <div class="row-label">Capital unlocked</div>
+          <div class="row-value num"><strong>$450K–$650K</strong> (no land sale)</div>
+        </div>
+        <div class="comparison-row">
+          <div class="row-label">Businesses created</div>
+          <div class="row-value">Up to 5, each in own LLC with named operator</div>
+        </div>
+        <div class="comparison-row">
+          <div class="row-label">Land</div>
+          <div class="row-value">Still owned + <strong>protected from forced sale</strong></div>
+        </div>
+        <div class="comparison-row">
+          <div class="row-label">Restaurant</div>
+          <div class="row-value">Trust-owned, <strong>contractual operator protections</strong></div>
+        </div>
+        <div class="comparison-row">
+          <div class="row-label">Siblings' income</div>
+          <div class="row-value">Same (16.67% each)</div>
+        </div>
+        <div class="comparison-row">
+          <div class="row-label">Grandma's intent</div>
+          <div class="row-value"><strong>Defined by Grandma's explicit decisions</strong></div>
+        </div>
+        <div class="comparison-row">
+          <div class="row-label">Asset protection</div>
+          <div class="row-value"><strong>Held together by legal structure</strong></div>
+        </div>
+        <div class="comparison-row">
+          <div class="row-label">What heirs inherit</div>
+          <div class="row-value">A funded trust with education support, venture capital, and ongoing business income</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CORE DIFFERENCE -->
+    <h3 class="mt-48">The Core Difference</h3>
+
+    <div class="cards cards-2 mt-24">
+      <div class="card" style="background:#FFF5F3; border-color:#C45A3C;">
+        <div class="card-title accent">Do Nothing</div>
+        <p class="num" style="font-size:0.9rem; margin-top:8px;">$37,900/yr &rarr; $37,900/yr &rarr; $37,900/yr</p>
+        <div class="card-detail">Same check, worth less and less each year.</div>
+      </div>
+      <div class="card" style="background:#F4F9F6; border-color:#3D7A5F;">
+        <div class="card-title green">This Plan</div>
+        <p class="num" style="font-size:0.9rem; margin-top:8px;">$37,900/yr &rarr; Trust &rarr; Operating Businesses</p>
+        <div class="card-detail">Buying power preserved. Multiple income sources. Assets protected. Grandma's intent carried out.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ PART 5 ════════════════ -->
+<section id="part5">
+  <div class="container">
+    <div class="part-header">
+      <span class="label">Part 5</span>
+      <h2>Risk and Downside</h2>
+    </div>
+
+    <h3>The Design Principle</h3>
+    <p>Every operating venture sits inside its own LLC. If one fails, the loss is contained to that LLC. It does not touch the land, the solar lease, or anyone else's income.</p>
+
+    <!-- FIREWALL DIAGRAM -->
+    <div class="firewall">
+      <div class="firewall-protected">
+        <span class="label green" style="display:block; margin-bottom:12px;">Protected Layer (Always Safe)</span>
+        <div class="cards cards-3" style="margin:0;">
+          <div class="card green-card" style="padding:16px; text-align:center;">
+            <div class="card-title" style="font-size:0.85rem;">Land</div>
+            <div class="card-detail" style="font-size:0.8rem;">Never sold, never collateral</div>
+          </div>
+          <div class="card green-card" style="padding:16px; text-align:center;">
+            <div class="card-title" style="font-size:0.85rem;">Solar Lease</div>
+            <div class="card-detail" style="font-size:0.8rem;">30-year contract with Orion</div>
+          </div>
+          <div class="card green-card" style="padding:16px; text-align:center;">
+            <div class="card-title" style="font-size:0.85rem;">Sibling Income</div>
+            <div class="card-detail" style="font-size:0.8rem;">Never pledged</div>
+          </div>
+        </div>
+      </div>
+      <div class="firewall-bar">Firewall</div>
+      <div class="firewall-operating">
+        <span class="label amber" style="display:block; margin-bottom:12px;">Operating Layer (Contained Risk)</span>
+        <div class="cards cards-4" style="margin:0;">
+          <div class="card" style="padding:16px; text-align:center; border-left: 3px solid #D4A843;">
+            <div class="card-title" style="font-size:0.85rem;">Ancillary Services LLC</div>
+            <div class="card-detail" style="font-size:0.75rem;">If this fails, only this LLC is affected</div>
+          </div>
+          <div class="card" style="padding:16px; text-align:center; border-left: 3px solid #D4A843;">
+            <div class="card-title" style="font-size:0.85rem;">Restaurant LLC</div>
+            <div class="card-detail" style="font-size:0.75rem;">If this struggles, only this LLC affected</div>
+          </div>
+          <div class="card" style="padding:16px; text-align:center; border-left: 3px solid #D4A843;">
+            <div class="card-title" style="font-size:0.85rem;">Real Estate SPVs</div>
+            <div class="card-detail" style="font-size:0.75rem;">If a deal goes bad, only THAT deal's LLC affected</div>
+          </div>
+          <div class="card dashed" style="padding:16px; text-align:center;">
+            <div class="card-title" style="font-size:0.85rem;">Future LLCs</div>
+            <div class="card-detail" style="font-size:0.75rem;">Same rules</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCENARIO TABLE -->
+    <h3 class="mt-48">What Can Go Wrong — Scenario by Scenario</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Scenario</th><th>What Happens</th><th>Who Is Affected</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="text-cell">Solar delayed past 2026</td><td class="text-cell">Phase 1 borrowing is delayed. No losses.</td><td class="text-cell">Nobody. Lease terms unchanged.</td></tr>
+          <tr><td class="text-cell">Ancillary LLC fails to win contracts</td><td class="text-cell">Equipment sold. LLC wound down. Max loss: $75K.</td><td class="text-cell">Trust absorbs $50K–$75K loss. Nobody else.</td></tr>
+          <tr><td class="text-cell">Restaurant revenue drops</td><td class="text-cell">Expansion pauses. Solar income untouched. No cross-default.</td><td class="text-cell">Trust only. Solar distributions continue.</td></tr>
+          <tr><td class="text-cell">Everything goes wrong at once (worst case)</td><td class="text-cell">Freeze deployments. Service debt. Max exposure: $150K–$200K.</td><td class="text-cell">Trust contracts but does not collapse. Land, solar, and family income intact.</td></tr>
+          <tr><td class="text-cell">Governance conflict</td><td class="text-cell">Trustee removed by beneficiary vote. Successor takes over.</td><td class="text-cell">Authority changes. No assets lost.</td></tr>
+          <tr><td class="text-cell">Real estate deal goes bad (Darius)</td><td class="text-cell">Loss contained to that deal's LLC. Property sold to recover.</td><td class="text-cell">Trust absorbs loss on that deal only.</td></tr>
+          <tr><td class="text-cell">Family disagrees about the trust</td><td class="text-cell">Trust structures Grandma's share independently.</td><td class="text-cell">Nobody's income changes. Siblings keep 16.67%.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- RISK SUMMARY -->
+    <h3 class="mt-48">Risk Summary</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Risk</th><th>Max Loss</th><th>Land at Risk?</th></tr></thead>
+        <tbody>
+          <tr><td class="text-cell">Solar delay</td><td>$0</td><td class="text-cell green"><strong>No</strong></td></tr>
+          <tr><td class="text-cell">Ancillary LLC fails</td><td>$75K</td><td class="text-cell green"><strong>No</strong></td></tr>
+          <tr><td class="text-cell">Restaurant decline</td><td>$150K</td><td class="text-cell green"><strong>No</strong></td></tr>
+          <tr><td class="text-cell">Real estate deal fails</td><td class="text-cell">Per deal</td><td class="text-cell green"><strong>No</strong></td></tr>
+          <tr><td class="text-cell">Worst case combined</td><td>$200K</td><td class="text-cell green"><strong>No</strong></td></tr>
+          <tr><td class="text-cell">Governance conflict</td><td>$0</td><td class="text-cell green"><strong>No</strong></td></tr>
+          <tr><td class="text-cell accent"><strong>Inflation (do nothing)</strong></td><td class="text-cell accent"><strong>Unlimited</strong></td><td class="text-cell secondary">N/A</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout green-callout mt-24">
+      <p style="margin-bottom:0;">In every scenario: Land stays in the family. Solar lease continues. Reneta, Charles, Kim income unchanged. Trust can be dissolved and assets returned.</p>
+    </div>
+
+    <!-- RISK OF DOING NOTHING -->
+    <h3 class="mt-48">The Risk of Doing Nothing</h3>
+    <p>Doing nothing is not risk-free. It is a choice to let inflation erode the value of the family's income over 30 years.</p>
+
+    <div class="callout dark-callout">
+      <div style="display:grid; grid-template-columns: auto 1fr; gap:8px 16px; font-size:0.9rem;">
+        <span class="num" style="color:#FAFAF8;">Year 1:</span><span style="color:#aaa;">$37,900 buys $37,900 of goods</span>
+        <span class="num" style="color:#FAFAF8;">Year 10:</span><span style="color:#aaa;">$46,200 buys ~$38,500 of goods</span>
+        <span class="num" style="color:#FAFAF8;">Year 20:</span><span style="color:#aaa;">$56,300 buys ~$34,000 of goods</span>
+        <span class="num" style="color:#FAFAF8;">Year 30:</span><span style="color:#aaa;">$68,600 buys ~$28,000 of goods</span>
+      </div>
+      <p style="margin-top:16px; color:#aaa; margin-bottom:0; max-width:100%;">The checks grow 2% per year. Costs have historically grown 3% per year. The gap compounds every single year.</p>
+    </div>
+
+    <p class="mt-24"><strong>This plan does not eliminate risk. It replaces the slow, invisible risk of inflation with contained, manageable, defined risks — each one capped, isolated, and reversible.</strong></p>
+  </div>
+</section>
+
+<!-- ════════════════ PART 6 ════════════════ -->
+<section id="part6">
+  <div class="container">
+    <div class="part-header">
+      <span class="label">Part 6</span>
+      <h2>What This Becomes</h2>
+    </div>
+
+    <h3>The Trust Is Not a 30-Year Project. It Is a Permanent Family Institution.</h3>
+    <p>The solar lease lasts 30 years. The trust does not. The trust is designed to hold the family's assets together <strong>across generations</strong> — long after the solar checks stop.</p>
+    <p>The assets — land, restaurant, operating businesses — stay in the trust. They do not get divided up when someone passes. What flows out to family members is <strong>income from those assets</strong>, not the assets themselves.</p>
+
+    <div class="cards cards-2 mt-32">
+      <div class="card" style="border-left: 4px solid #1A1A18;">
+        <div class="card-title">Stays in the Trust <span class="secondary" style="font-weight:400; font-size:0.8rem;">(permanent, undivided)</span></div>
+        <div class="card-detail mt-16">
+          Land (109 acres)<br>Solar lease rights<br>Restaurant<br>Operating LLCs<br>Cash reserves<br>Coin collection<br>Life insurance proceeds
+        </div>
+      </div>
+      <div class="card" style="border-left: 4px solid #3D7A5F;">
+        <div class="card-title">Flows Out to Family <span class="secondary" style="font-weight:400; font-size:0.8rem;">(income, not assets)</span></div>
+        <div class="card-detail mt-16">
+          Solar lease payments<br>Restaurant dividends<br>Operating business profit distributions<br>Education funding<br>Venture support for heirs
+        </div>
+      </div>
+    </div>
+
+    <!-- GENERATION 1 -->
+    <div class="gen-block mt-48">
+      <span class="label" style="display:block; margin-bottom:8px;">Generation 1</span>
+      <h4>Grandma + Her Children</h4>
+
+      <div class="gen-member">
+        <div class="gen-member-name">Reneta</div>
+        <div class="gen-member-detail">16.67% solar income — paid directly, unchanged. Cross-LLC operations (billing, admin, reporting). Already handles Kim's billing + co-manages restaurant.</div>
+      </div>
+      <div class="gen-member">
+        <div class="gen-member-name">Charles (Chuck)</div>
+        <div class="gen-member-detail">16.67% solar income — paid directly, unchanged. Potential operator of Logistics LLC.</div>
+      </div>
+      <div class="gen-member">
+        <div class="gen-member-name">Kim</div>
+        <div class="gen-member-detail">16.67% solar income — paid directly, unchanged. Potential operator of Learning Institution LLC.</div>
+      </div>
+      <div class="gen-member">
+        <div class="gen-member-name">Grandma</div>
+        <div class="gen-member-detail">50% solar income managed through trust. Her intent defines how assets are structured.</div>
+      </div>
+      <div class="gen-member">
+        <div class="gen-member-name">Stanley</div>
+        <div class="gen-member-detail">Operates Restaurant LLC + Ancillary Services LLC. Compensated through management agreements. Role protected by contract.</div>
+      </div>
+      <div class="gen-member">
+        <div class="gen-member-name">Darius</div>
+        <div class="gen-member-detail">Operates Real Estate SPVs. Deal-specific trust capital from reserves and cash flow. Coin collection strengthens trust balance sheet. Management agreement protects role.</div>
+      </div>
+      <div class="gen-member">
+        <div class="gen-member-name">Stedmon (Trust Architect)</div>
+        <div class="gen-member-detail">Trustee — designs systems, builds infrastructure, enforces accountability across all LLCs. Does not operate any LLC (fiduciary conflict). Coordinates with CPA, attorney, lenders. Professional trust company named as successor. Author of this brief.</div>
+      </div>
+    </div>
+
+    <!-- GENERATION 2 -->
+    <div class="gen-block">
+      <span class="label" style="display:block; margin-bottom:8px;">Generation 2</span>
+      <h4>The Children and Grandchildren</h4>
+
+      <p>If a beneficiary passes, their solar income share transfers to their children. Their beneficiary status in the trust transfers to their children. Nothing about the trust structure changes.</p>
+
+      <p><strong>What heirs receive:</strong> Solar income (their parent's share), distributions from trust-owned businesses, education funding, and venture support.</p>
+
+      <div class="cards cards-2 mt-24">
+        <div class="card green-card">
+          <div class="card-title">Education Support</div>
+          <div class="card-detail">The trust's education provisions — funded from trust reserves and operating profits — cover tuition, professional certifications, vocational training, and educational materials for any heir. The Advisory Committee approves education disbursements based on documented enrollment. This is not a blank check — it is structured support for verified educational pursuits.</div>
+        </div>
+        <div class="card amber-card">
+          <div class="card-title">Venture Support</div>
+          <div class="card-detail">Any heir who wants to start a business can apply to the trust for venture capital — the same model used for Darius's real estate career. The process: submit a written business plan, present to the Advisory Committee, receive deal-specific capital through a new LLC. The trust is repaid at an agreed schedule plus a fee. This creates a repeatable pathway — not a one-time gift, but a permanent institution that backs the next generation's ambition.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AFTER SOLAR LEASE ENDS -->
+    <div class="gen-block" style="background:#FAFAF8;">
+      <span class="label" style="display:block; margin-bottom:8px;">Year 30+</span>
+      <h4>After the Solar Lease Ends</h4>
+      <p>The solar checks stop. But the trust still owns: 109 acres of land, a restaurant (or whatever it has become), operating businesses built during the lease years, and cash reserves and investment returns.</p>
+      <p><strong>The trust is self-sustaining.</strong> The businesses and assets generate income for heirs. The land can be re-leased, developed, or held. The family still has a platform — not just memories.</p>
+
+      <div class="callout mt-16" style="border-left-color:#1A1A18;">
+        <p style="margin-bottom:0;"><strong>Governance Succession:</strong> The trust document will define how leadership transitions across generations: how successor trustees are selected, how Advisory Committee seats are filled when members step down or pass, and how the next generation's operators are appointed to run trust businesses. (Attorney will draft these provisions.)</p>
+      </div>
+    </div>
+
+    <!-- SUCCESS TIMELINE -->
+    <h3 class="mt-48">What "Success" Looks Like</h3>
+
+    <div class="success-timeline">
+      <div class="success-item">
+        <div class="big-num accent">10</div>
+        <p class="label mb-16">Years</p>
+        <p style="font-size:0.85rem; text-align:left;">Solar income flowing, trust debt largely paid down. Restaurant expanded. Ancillary services operating profitably. Darius building real estate practice. Kim's learning institution established. Chuck running logistics. Reneta keeping ops clean. Heirs receiving distributions from multiple income sources. Education fund supporting the next generation.</p>
+      </div>
+      <div class="success-item">
+        <div class="big-num green">20</div>
+        <p class="label mb-16">Years</p>
+        <p style="font-size:0.85rem; text-align:left;">Multiple businesses generating independent income. Solar income still flowing (10 years remaining). Trust is self-sustaining — not dependent on any single income source. Next generation stepping into operator and leadership roles. Trust reserves growing as businesses mature.</p>
+      </div>
+      <div class="success-item">
+        <div class="big-num" style="color:#1A1A18;">30</div>
+        <p class="label mb-16">Years</p>
+        <p style="font-size:0.85rem; text-align:left;">Solar checks stop — but the trust doesn't. The land is still there, available for re-lease or new development. The businesses built during the lease years ARE the income engine now. The family has a funded institution, not just a piece of land and a memory.</p>
+      </div>
+    </div>
+
+    <div class="callout" style="background:#FFF5F3; border-left-color:#C45A3C; margin-top:24px;">
+      <p style="margin-bottom:0;"><strong>Without this plan, in 30 years:</strong> Solar checks stopped. $3.25M came and went — eroded by inflation. No businesses built. Land still there but producing nothing. Each heir has what they saved individually from their 16.67% — nothing more.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ PART 7 ════════════════ -->
+<section id="part7">
+  <div class="container">
+    <div class="part-header">
+      <span class="label">Part 7</span>
+      <h2>What Happens Next</h2>
+    </div>
+
+    <h3>The Steps, In Order</h3>
+    <p class="secondary" style="margin-bottom:24px;">Updated after the April 12, 2026 family meeting. Use the <a href="checklist.html#s0" style="color:#C45A3C; font-weight:600;">action checklist</a> to track assignments between meetings.</p>
+
+    <div class="steps">
+      <div class="step-item step-done">
+        <div class="step-dot">&#10003;</div>
+        <div class="step-when">April 12, 2026 <span class="step-status done">Done</span></div>
+        <div class="step-what">Family meeting — everyone reviewed the plan and asked questions</div>
+        <div class="step-desc">Trust proposal walked through; action items assigned; bi-weekly Sunday check-ins agreed</div>
+      </div>
+      <div class="step-item step-active">
+        <div class="step-dot">2</div>
+        <div class="step-when">May 2026 <span class="step-status active">In progress</span></div>
+        <div class="step-what">Complete preparation checklist and close April 12 action items</div>
+        <div class="step-desc">Gather documents, assign owners, reconcile solar payments, send insurance policies</div>
+      </div>
+      <div class="step-item step-active">
+        <div class="step-dot">3</div>
+        <div class="step-when">May – June 2026 <span class="step-status active">In progress</span></div>
+        <div class="step-what">Engage trust attorney + CPA</div>
+        <div class="step-desc">Kim confirming whether current family attorney can handle trust work; CPA for restaurant financials and tax structure</div>
+      </div>
+      <div class="step-item">
+        <div class="step-dot">4</div>
+        <div class="step-when">May – June 2026 <span class="step-status next">Next</span></div>
+        <div class="step-what">Get coin collection appraised</div>
+      </div>
+      <div class="step-item step-active">
+        <div class="step-dot">4b</div>
+        <div class="step-when">May 2026 <span class="step-status active">In progress</span></div>
+        <div class="step-what">Confirm full life insurance picture</div>
+        <div class="step-desc">April 12 mentioned several policies; a larger policy may exist — gather every policy document and annual statement before planning around a number</div>
+      </div>
+      <div class="step-item">
+        <div class="step-dot">5</div>
+        <div class="step-when">May – June 2026 <span class="step-status next">Next</span></div>
+        <div class="step-what">Clean up restaurant financials</div>
+        <div class="step-desc">Tax returns, P&L, bank statements — Stanley</div>
+      </div>
+      <div class="step-item">
+        <div class="step-dot">6</div>
+        <div class="step-when">June – July 2026 <span class="step-status next">Next</span></div>
+        <div class="step-what">Trust formed, assets transferred, operating agreements signed</div>
+      </div>
+      <div class="step-item">
+        <div class="step-dot">7</div>
+        <div class="step-when">TBD <span class="step-status next">Pending Orion</span></div>
+        <div class="step-what">Solar construction begins</div>
+        <div class="step-desc">Originally targeted summer 2026 — date may slip; follow up with Orion for firm timeline</div>
+      </div>
+      <div class="step-item">
+        <div class="step-dot">8</div>
+        <div class="step-when">TBD (after construction) <span class="step-status next">Pending</span></div>
+        <div class="step-what">Solar reaches commercial operation — full rent begins</div>
+      </div>
+      <div class="step-item">
+        <div class="step-dot">9</div>
+        <div class="step-when">After COD <span class="step-status next">Pending</span></div>
+        <div class="step-what">Phase 1 capital deployed</div>
+        <div class="step-desc">Decide at a future meeting: reinvest year-one solar income into trust vs. distribute as planned — <a href="#year-one-solar" style="color:#C45A3C; font-weight:600;">see both scenarios</a></div>
+      </div>
+    </div>
+
+    <!-- WHAT EACH PERSON SHOULD KNOW -->
+    <h3 class="mt-48">What Each Person Should Know</h3>
+
+    <div class="role-cards">
+      <div class="role-card">
+        <div class="role-name">Reneta</div>
+        <div class="role-desc">You are the family's operations backbone. You already handle billing ops for Kim's practice and co-manage the restaurant. Under the trust, you support ops across all LLCs — the person who keeps the businesses running clean. Your 16.67% solar income is yours, unchanged.</div>
+      </div>
+      <div class="role-card">
+        <div class="role-name">Stanley</div>
+        <div class="role-desc">You are the family's primary operating partner. You run the restaurant and the ancillary services business — each under its own written agreement that protects your role, defines your compensation, and cannot be changed on a whim.</div>
+      </div>
+      <div class="role-card">
+        <div class="role-name">Darius</div>
+        <div class="role-desc">You are the family's real estate operator. The trust provides deal-specific capital from its reserves and operating cash flow. The coin collection strengthens the trust's balance sheet — but your gate to capital is your track record (licensed and active — trust backs from day one), not the coins. Each property sits in its own LLC. Your management agreement protects your role.</div>
+      </div>
+      <div class="role-card">
+        <div class="role-name">Kim</div>
+        <div class="role-desc">You are the potential operator for the family's learning institution. Your speech therapy expertise becomes the foundation for a trust-backed practice. Management agreement protects your role. Your 16.67% solar income remains unchanged.</div>
+      </div>
+      <div class="role-card">
+        <div class="role-name">Chuck</div>
+        <div class="role-desc">You are the potential operator for the family's logistics venture. Career experience at Pepsi gives you the domain knowledge. CK's last-mile delivery ops strategy across 4,300 Walmart stores is a point of leverage for the business model. Trust-backed, operator-run. Your 16.67% solar income remains unchanged.</div>
+      </div>
+      <div class="role-card green-top">
+        <div class="role-name">Grandma</div>
+        <div class="role-desc">This plan carries out your wishes for how the land, the restaurant, and the solar income are used. It requires your authority to set up. The window to act is now.</div>
+      </div>
+      <div class="role-card dark-top full-width" style="background:#1A1A18; color:#FAFAF8; border-color:#1A1A18;">
+        <div class="role-name" style="color:#FAFAF8;">Stedmon (Trustee / Trust Architect)</div>
+        <div style="font-family:'Instrument Serif', serif; font-size:1.15rem; font-style:italic; color:#D4A843; margin-bottom:12px; line-height:1.5;">
+          "I am not the guy who controls the money. I am the person who builds the machine."
+        </div>
+        <div class="role-desc" style="color:#aaa;">I design the systems operators use, enforce accountability, coordinate with professionals, and report to you quarterly. I do not run any LLC — that is a fiduciary conflict. A professional trust company is named as successor if I cannot serve. I am compensated fairly and can be replaced by beneficiary vote if I do not perform.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ BOTTOM LINE ════════════════ -->
+<section>
+  <div class="container">
+    <h3>The Bottom Line</h3>
+    <p>The family owns valuable assets — land, a 30-year solar lease, and an operating restaurant. Today these assets sit apart, unstructured, and exposed.</p>
+    <p>This plan puts them together in a single legal structure that:</p>
+
+    <div class="bottom-line">
+      <ul>
+        <li><strong>Protects</strong> the land from forced sale</li>
+        <li><strong>Protects</strong> the restaurant from probate and fragmentation</li>
+        <li><strong>Preserves</strong> everyone's income exactly as it is</li>
+        <li><strong>Unlocks</strong> $450K–$650K in capital without selling anything</li>
+        <li><strong>Creates</strong> new income sources that outlive the solar lease — each one operated by a family member with real domain expertise</li>
+        <li><strong>Contains</strong> all risk to individual LLCs with defined maximum losses</li>
+        <li><strong>Gives everyone a role</strong> — Stanley (restaurant + ancillary), Darius (real estate), Kim (learning institution), Chuck (logistics), Reneta (cross-LLC operations), Stedmon (trust architect — builds the systems, not the businesses)</li>
+        <li><strong>Funds</strong> education and ventures for the next generation from trust reserves, operating profits, and life insurance proceeds</li>
+        <li><strong>Carries out</strong> Grandma's intent explicitly, not by default</li>
+      </ul>
+    </div>
+
+    <div class="quote">
+      <blockquote>This is not a 30-year plan. It is a permanent family institution.</blockquote>
+      <p class="mt-16 secondary" style="max-width:600px; margin:16px auto 0;">The solar lease is the starting engine. The businesses built during those 30 years become the engine that runs after. Trust reserves, operating profits, and life insurance proceeds fund education and ventures for future generations. The heirs don't just inherit checks — they inherit a platform.</p>
+    </div>
+
+    <div class="closing mt-48">
+      <p><strong>Everyone can choose what they want to do. But this is the big vision:</strong> every LLC matched to a family member with real expertise, every role protected by contract, every person opted in on their own terms.</p>
+      <p><strong>Nothing in this plan requires anyone to give up what they have.</strong> It requires us to organize what we already own — while Grandma is here to define how it's done.</p>
+      <p class="closing-cta">Questions are welcome. This document exists so the conversation starts from shared understanding, not assumptions.</p>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

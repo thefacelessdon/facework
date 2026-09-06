@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPA + Attorney Preparation Checklist — Monson Family</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ── RESET & BASE ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  background: #FAFAF8;
+  color: #1A1A18;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── TYPOGRAPHY ── */
+h1, h2, h3, h4 { font-family: 'Instrument Serif', serif; font-weight: 400; line-height: 1.2; }
+h1 { font-size: 3.5rem; letter-spacing: -0.02em; }
+h2 { font-size: 2.25rem; letter-spacing: -0.01em; margin-bottom: 1rem; }
+h3 { font-size: 1.5rem; margin-bottom: 0.75rem; }
+h4 { font-size: 1.25rem; margin-bottom: 0.5rem; }
+p { margin-bottom: 1rem; max-width: 680px; }
+strong { font-weight: 600; }
+.num { font-family: 'Space Grotesk', sans-serif; }
+.label { font-family: 'Inter', sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6B6B66; }
+.secondary { color: #6B6B66; }
+.accent { color: #C45A3C; }
+.green { color: #3D7A5F; }
+.amber { color: #D4A843; }
+
+/* ── LAYOUT ── */
+.container { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+section { padding: 80px 0; }
+section + section { border-top: 1px solid #E0DED8; }
+
+/* ── NAV ── */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(250,250,248,0.92); backdrop-filter: blur(12px);
+  border-bottom: 1px solid #E0DED8;
+  padding: 14px 0;
+}
+.nav .container { display: flex; align-items: center; gap: 32px; overflow-x: auto; }
+.nav a {
+  font-size: 0.8rem; font-weight: 500; color: #6B6B66;
+  text-decoration: none; white-space: nowrap; transition: color 0.2s;
+}
+.nav a:hover { color: #C45A3C; }
+.nav .brand { font-family: 'Instrument Serif', serif; font-size: 1.1rem; color: #1A1A18; margin-right: auto; }
+
+/* ── HERO ── */
+.hero { padding: 120px 0 80px; text-align: center; }
+.hero h1 { margin-bottom: 16px; font-size: 2.75rem; }
+.hero .subtitle { font-size: 1.1rem; color: #6B6B66; max-width: 640px; margin: 0 auto 40px; }
+.hero .divider { width: 60px; height: 3px; background: #C45A3C; margin: 40px auto 0; border-radius: 2px; }
+
+/* ── TABLE OF CONTENTS ── */
+.toc {
+  background: #fff; border: 1px solid #E0DED8; border-radius: 12px;
+  padding: 32px; max-width: 700px; margin: 0 auto 48px;
+}
+.toc-title {
+  font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.8rem;
+  letter-spacing: 0.08em; text-transform: uppercase; color: #C45A3C;
+  margin-bottom: 20px;
+}
+.toc-list { list-style: none; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.toc-list a {
+  display: flex; align-items: baseline; gap: 12px; text-decoration: none; color: #1A1A18;
+  padding: 8px 12px; border-radius: 6px; transition: background 0.2s; font-size: 0.9rem;
+}
+.toc-list a:hover { background: #F0E6E0; }
+.toc-num {
+  font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.8rem;
+  color: #C45A3C; width: 24px; flex-shrink: 0; text-align: right;
+}
+.toc-text { font-weight: 500; }
+
+/* ── SECTION HEADER ── */
+.section-header { margin-bottom: 32px; }
+.section-header .label { margin-bottom: 8px; display: block; }
+.section-header .section-desc { font-size: 0.95rem; color: #6B6B66; }
+
+/* ── CHECKLIST ITEMS ── */
+.checklist { margin: 24px 0; }
+.check-item {
+  display: flex; align-items: flex-start; gap: 16px;
+  padding: 16px 0; border-bottom: 1px solid #E0DED8;
+}
+.check-item:last-child { border-bottom: none; }
+
+/* Custom checkbox */
+.check-box {
+  width: 24px; height: 24px; min-width: 24px; min-height: 24px;
+  border: 2px solid #E0DED8; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.2s; margin-top: 2px;
+  position: relative;
+}
+.check-input { position: absolute; opacity: 0; width: 0; height: 0; }
+.check-input:checked + .check-box {
+  background: #C45A3C; border-color: #C45A3C;
+}
+.check-input:checked + .check-box::after {
+  content: '';
+  width: 6px; height: 10px;
+  border: 2px solid #fff; border-top: none; border-left: none;
+  transform: rotate(45deg); margin-top: -2px;
+}
+.check-input:focus-visible + .check-box {
+  box-shadow: 0 0 0 3px rgba(196,90,60,0.3);
+}
+
+.check-content { flex: 1; }
+.check-label { font-size: 0.95rem; line-height: 1.6; cursor: pointer; }
+.check-label strong { color: #1A1A18; }
+.check-note { font-size: 0.85rem; color: #6B6B66; margin-top: 4px; line-height: 1.5; }
+.check-meta {
+  display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 8px;
+  font-size: 0.8rem; color: #6B6B66;
+}
+.check-owner {
+  font-family: 'Space Grotesk', sans-serif; font-weight: 600; color: #C45A3C;
+}
+.check-due { font-family: 'Space Grotesk', sans-serif; }
+.action-section .check-item { padding: 20px 0; }
+
+/* ── TABLES ── */
+.table-wrap { overflow-x: auto; margin: 24px 0; -webkit-overflow-scrolling: touch; }
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+table th {
+  background: #1A1A18; color: #FAFAF8;
+  font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.75rem;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  text-align: left; padding: 14px 18px;
+}
+table th:first-child { border-radius: 8px 0 0 0; }
+table th:last-child { border-radius: 0 8px 0 0; }
+table td { padding: 14px 18px; border-bottom: 1px solid #E0DED8; }
+table tr:last-child td { border-bottom: none; }
+table .total-row { background: #F0E6E0; font-weight: 600; }
+table .total-row td { border-bottom: none; }
+
+/* ── CALLOUT ── */
+.callout {
+  border-left: 4px solid #C45A3C; background: #FFF; padding: 24px 28px;
+  border-radius: 0 8px 8px 0; margin: 24px 0; font-size: 0.95rem;
+}
+.callout.green-callout { border-left-color: #3D7A5F; background: #F4F9F6; }
+.callout.amber-callout { border-left-color: #D4A843; background: #FFFCF5; }
+.callout.dark-callout { background: #1A1A18; color: #FAFAF8; border-left-color: #C45A3C; }
+.callout p:last-child { margin-bottom: 0; }
+
+/* ── PRIORITY BADGES ── */
+.priority-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.7rem;
+  padding: 3px 10px; border-radius: 100px; letter-spacing: 0.05em;
+}
+.priority-1 { background: #C45A3C; color: #fff; }
+.priority-2 { background: #D4A843; color: #fff; }
+.priority-3 { background: #3D7A5F; color: #fff; }
+.priority-4 { background: #E0DED8; color: #1A1A18; }
+.priority-5 { background: #F0E6E0; color: #C45A3C; }
+.priority-6 { background: #F4F9F6; color: #3D7A5F; }
+.priority-7 { background: #FFFCF5; color: #D4A843; }
+.priority-8 { background: #E0DED8; color: #6B6B66; }
+
+/* ── QUESTION LIST ── */
+.question-list { list-style: none; padding: 0; margin: 16px 0; counter-reset: q; }
+.question-list li {
+  counter-increment: q; position: relative; padding: 12px 0 12px 40px;
+  border-bottom: 1px solid #E0DED8; font-size: 0.95rem; line-height: 1.6;
+}
+.question-list li:last-child { border-bottom: none; }
+.question-list li::before {
+  content: counter(q); position: absolute; left: 0; top: 12px;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: #F0E6E0; color: #C45A3C;
+  font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.8rem;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ── OPTION CARDS ── */
+.option-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 24px 0; }
+.option-card {
+  background: #fff; border: 1px solid #E0DED8; border-radius: 12px;
+  padding: 24px; border-top: 4px solid #C45A3C;
+}
+.option-card .option-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.9rem; margin-bottom: 8px; }
+.option-card .option-desc { font-size: 0.85rem; color: #6B6B66; line-height: 1.6; }
+.option-card.recommended { border-top-color: #3D7A5F; background: #F4F9F6; }
+
+/* ── KEY INFO TABLE ── */
+.key-info-table td:first-child { font-weight: 600; font-family: 'Inter', sans-serif; white-space: nowrap; }
+.key-info-table td:last-child { font-size: 0.85rem; color: #6B6B66; font-family: 'Inter', sans-serif; }
+
+/* ── FAMILY MEMBER BLOCKS ── */
+.member-block {
+  background: #fff; border: 1px solid #E0DED8; border-radius: 12px;
+  padding: 24px; margin-bottom: 16px;
+}
+.member-block h4 { font-size: 1.1rem; margin-bottom: 16px; }
+
+/* ── PROFESSIONAL CARD ── */
+.pro-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 32px 0; }
+.pro-card {
+  background: #fff; border: 1px solid #E0DED8; border-radius: 12px;
+  padding: 28px; border-top: 4px solid #C45A3C;
+}
+.pro-card h4 { margin-bottom: 16px; font-size: 1.15rem; }
+.pro-card .pro-sub { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase; margin: 16px 0 8px; }
+.pro-card ul { list-style: none; padding: 0; }
+.pro-card li { position: relative; padding-left: 20px; margin-bottom: 6px; font-size: 0.9rem; line-height: 1.6; }
+.pro-card li::before { content: ''; position: absolute; left: 0; top: 10px; width: 8px; height: 8px; border-radius: 50%; background: #C45A3C; }
+.pro-budget {
+  margin-top: 16px; padding: 16px; background: #F0E6E0; border-radius: 8px;
+  font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.9rem;
+}
+
+/* ── READY SECTION ── */
+.ready-block {
+  background: #1A1A18; border-radius: 12px; padding: 48px; margin: 32px 0; color: #FAFAF8;
+}
+.ready-block h3 { color: #FAFAF8; margin-bottom: 24px; font-family: 'Instrument Serif', serif; }
+.ready-block .checklist .check-item { border-bottom-color: #333; }
+.ready-block .check-box { border-color: #555; }
+.ready-block .check-input:checked + .check-box { background: #C45A3C; border-color: #C45A3C; }
+.ready-block .check-label { color: #FAFAF8; }
+.ready-block .check-note { color: #888; }
+
+/* ── CLOSING ── */
+.closing { text-align: center; padding: 48px 0; }
+.closing p { max-width: 700px; margin: 0 auto 12px; font-size: 0.95rem; color: #6B6B66; }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.section-header { animation: fadeUp 0.6s ease both; }
+
+/* ── TOUCH TARGETS ── */
+@media (pointer: coarse) {
+  .nav a { padding: 8px 4px; min-height: 44px; display: flex; align-items: center; }
+  .check-item { padding: 20px 0; }
+  .check-box { width: 28px; height: 28px; min-width: 28px; min-height: 28px; }
+}
+
+/* ── RESPONSIVE — TABLET ── */
+@media (max-width: 900px) {
+  h1 { font-size: 2.5rem; }
+  h2 { font-size: 1.75rem; }
+  h3 { font-size: 1.3rem; }
+  section { padding: 48px 0; }
+  .hero { padding: 80px 0 48px; }
+  .container { padding: 0 24px; }
+  .toc-list { grid-template-columns: 1fr; }
+  .option-cards { grid-template-columns: 1fr; }
+  .pro-cards { grid-template-columns: 1fr; }
+  .ready-block { padding: 32px 24px; }
+}
+
+/* ── RESPONSIVE — MOBILE ── */
+@media (max-width: 600px) {
+  html { font-size: 15px; }
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.5rem; }
+  h3 { font-size: 1.2rem; }
+  p { font-size: 0.95rem; }
+  .container { padding: 0 16px; }
+  section { padding: 40px 0; }
+  .hero { padding: 60px 0 40px; }
+  .hero h1 { font-size: 1.85rem; }
+  .hero .subtitle { font-size: 1rem; }
+
+  .nav { padding: 10px 0; }
+  .nav .container { gap: 16px; -webkit-overflow-scrolling: touch; }
+  .nav .brand { font-size: 1rem; margin-right: 16px; }
+  .nav a { font-size: 0.75rem; }
+
+  .toc { padding: 24px; }
+  .toc-list { gap: 4px; }
+  .toc-list a { font-size: 0.85rem; padding: 6px 8px; }
+
+  .table-wrap { margin: 16px -16px; padding: 0 16px; }
+  table { font-size: 0.8rem; min-width: 500px; }
+  table th, table td { padding: 10px 12px; }
+
+  .option-cards { grid-template-columns: 1fr; gap: 12px; }
+  .pro-cards { grid-template-columns: 1fr; }
+  .ready-block { padding: 24px 16px; }
+  .member-block { padding: 20px; }
+}
+
+/* ── PRINT STYLES ── */
+@media print {
+  .nav { display: none; }
+  body { font-size: 11pt; }
+  section { padding: 24px 0; page-break-inside: avoid; }
+  .check-box { border-color: #999; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .toc { page-break-after: always; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════ NAV ════════════════ -->
+<nav class="nav">
+  <div class="container">
+    <a href="index.html" class="brand">Monson Family</a>
+    <a href="index.html" style="color:#C45A3C; font-weight:600;">Brief</a>
+    <a href="#s0" style="color:#C45A3C; font-weight:600;">Actions</a>
+    <a href="#s1">Grandma</a>
+    <a href="#s2">Land</a>
+    <a href="#s3">Solar</a>
+    <a href="#s4">Restaurant</a>
+    <a href="#s5">Insurance</a>
+    <a href="#s6">Coins</a>
+    <a href="#s7">Family</a>
+    <a href="#s8">Questions</a>
+    <a href="#s9">Priority</a>
+    <a href="#s10">Professionals</a>
+  </div>
+</nav>
+
+<!-- ════════════════ HERO ════════════════ -->
+<header class="hero">
+  <div class="container">
+    <span class="label">Preparation Checklist</span>
+    <h1>CPA + Trust Attorney</h1>
+    <p class="subtitle">Everything you need to gather before sitting down with the CPA and trust attorney. Walking in with this package complete means the professionals can do their work instead of sending you home to find documents.</p>
+
+    <div class="callout amber-callout" style="text-align:left; max-width:600px; margin:32px auto 0;">
+      <p style="margin-bottom:0;"><strong>Target timeline:</strong> All items gathered before first meeting. Allow 2-4 weeks to collect everything.</p>
+    </div>
+
+    <div class="divider"></div>
+  </div>
+</header>
+
+<!-- ════════════════ HOW TO USE ════════════════ -->
+<section style="padding-top:0;">
+  <div class="container">
+    <div class="toc">
+      <div class="toc-title">Table of Contents</div>
+      <ul class="toc-list">
+        <li><a href="#s0"><span class="toc-num">0</span><span class="toc-text">Family Action Items (Apr 12)</span></a></li>
+        <li><a href="#s1"><span class="toc-num">1</span><span class="toc-text">Grandma — Personal & Legal</span></a></li>
+        <li><a href="#s2"><span class="toc-num">2</span><span class="toc-text">The Land</span></a></li>
+        <li><a href="#s3"><span class="toc-num">3</span><span class="toc-text">The Solar Lease</span></a></li>
+        <li><a href="#s4"><span class="toc-num">4</span><span class="toc-text">The Restaurant</span></a></li>
+        <li><a href="#s5"><span class="toc-num">5</span><span class="toc-text">Life Insurance Policy</span></a></li>
+        <li><a href="#s6"><span class="toc-num">6</span><span class="toc-text">Coin Collection</span></a></li>
+        <li><a href="#s7"><span class="toc-num">7</span><span class="toc-text">Family Member Information</span></a></li>
+        <li><a href="#s8"><span class="toc-num">8</span><span class="toc-text">Questions for First Meeting</span></a></li>
+        <li><a href="#s9"><span class="toc-num">9</span><span class="toc-text">What to Do First</span></a></li>
+        <li><a href="#s10"><span class="toc-num">10</span><span class="toc-text">Choosing Professionals</span></a></li>
+      </ul>
+    </div>
+
+    <div class="callout" style="max-width:700px; margin:0 auto;">
+      <p style="margin-bottom:8px;"><strong>How to use this document:</strong> Work through each section. Gray notes under an item explain what it means if the wording is unfamiliar. If you can't find something, note it — gaps are information too.</p>
+      <p style="margin-bottom:0;"><strong>Your progress is saved automatically</strong> in this browser when you check items off.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ SECTION 0 ════════════════ -->
+<section id="s0" class="action-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">Section 0</span>
+      <h2>Family Action Items — April 12 Meeting</h2>
+      <p class="section-desc">Tasks assigned at the April 12, 2026 family meeting. Complete these before or alongside the CPA/attorney preparation sections below. Each item includes a short note on what it means if the wording is unfamiliar.</p>
+    </div>
+
+    <div class="checklist">
+      <label class="check-item">
+        <input type="checkbox" class="check-input" id="check-s0-1"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Send 1099 tax information</strong> to Kimberly Stepps (CPA)</div>
+          <div class="check-note">A <strong>1099</strong> is the IRS form that reports income paid to someone who is not an employee (for example, solar lease payments to Grandma). Stanley should send Kim whatever she needs to file correctly — amounts paid, payee name and address, and tax ID.</div>
+          <div class="check-meta"><span class="check-owner">Stanley Harper</span></div>
+          <div class="check-note">Kim submits the completed 1099 to the IRS and sends copies to the family. This keeps solar and related income reported correctly for Grandma's taxes.</div>
+          <div class="check-meta"><span class="check-owner">Kimberly Stepps</span></div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input" id="check-s0-3"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Consult family attorney</strong> — confirm they can handle trust formation, LLC setup, and operating agreements</div>
+          <div class="check-note">Before hiring, verify the attorney can draft a <strong>family operating trust</strong> (holds assets for beneficiaries), form <strong>LLCs</strong> (legal wrappers for the restaurant or land), and write <strong>operating agreements</strong> (rules for who runs each LLC). Not every attorney does all three.</div>
+          <div class="check-meta"><span class="check-owner">Kimberly Stepps</span></div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input" id="check-s0-4"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Locate and send all life insurance policy documents</strong> to Stedmon (full policies and annual statements, not summaries)</div>
+          <div class="check-note">April 12 call mentioned several policies, but the full picture is unknown — Grandma may have a larger policy than what was discussed. Do not treat any amount as confirmed until documents are reviewed.</div>
+          <div class="check-meta"><span class="check-owner">The group</span></div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input" id="check-s0-5"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Contact Jefferson County Clerk</strong> — inquire about bidding process for solar ancillary service contracts</div>
+          <div class="check-note"><strong>Ancillary services</strong> are extra work tied to the solar project (for example, road grading or site prep). The county may require competitive bids before certain contracts are awarded. This call is to learn the rules and deadlines — not to sign anything yet.</div>
+          <div class="check-meta"><span class="check-owner">The group</span></div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input" id="check-s0-6"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Document and reconcile all solar payments received</strong> — compare records before signing any new agreement</div>
+          <div class="check-note">List every check or deposit from Orion (or related parties), match it to bank statements and any 1099s, and note dates and amounts. The family should agree on the total received so far before changing who receives future payments or signing amendments.</div>
+          <div class="check-meta"><span class="check-owner">The group</span></div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input" id="check-s0-7"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Email James</strong> — request confirmation that all of Grandma's payments have been received</div>
+          <div class="check-note">James is the Orion Renewables contact on the solar side. A written reply (email) creates a record of what the developer believes has been paid — useful if family records do not match.</div>
+          <div class="check-meta"><span class="check-owner">Stedmon Harper</span></div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input" id="check-s0-8"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Create two financial scenarios</strong> — year-one solar income reinvested into trust vs. distributed as planned</div>
+          <div class="check-note">When full solar rent starts, the family must decide: pay everyone their share right away, or keep year-one money inside the trust to fund land protection, reserves, or investments. Stedmon will model both paths so the family can compare numbers before deciding.</div>
+          <div class="check-meta"><span class="check-owner">Stedmon Harper</span></div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input" id="check-s0-9"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Generate printable PDF</strong> of the family plan for Grandma</div>
+          <div class="check-note">A single, readable document Grandma can hold without using a website — same content as the family plan brief, formatted for printing or sharing by email.</div>
+          <div class="check-meta"><span class="check-owner">Stedmon Harper</span></div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input" id="check-s0-10"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Schedule standing bi-weekly Sunday evening</strong> family check-in meetings</div>
+          <div class="check-note">Recurring calendar invite every two weeks so progress on trust prep, documents, and open decisions does not depend on someone remembering to call a meeting.</div>
+          <div class="check-meta"><span class="check-owner">Stedmon Harper</span></div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input" id="check-s0-11"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Distribute meeting notes and updated materials</strong> to all family members</div>
+          <div class="check-note">Everyone should receive the same notes, checklist link, and plan updates — not just whoever was on the call — so decisions and assignments stay visible.</div>
+          <div class="check-meta"><span class="check-owner">Stedmon Harper</span></div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input" id="check-s0-12"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Obtain Arkansas real estate operating license</strong></div>
+          <div class="check-note">Arkansas requires a license to perform certain real estate activities. Darius is pursuing this so he can legally help manage or broker trust-related property work in-state when Phase 2 land projects move forward.</div>
+          <div class="check-meta"><span class="check-owner">Darius Harper</span></div>
+        </div>
+      </label>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ SECTION 1 ════════════════ -->
+<section id="s1">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">Section 1</span>
+      <h2>Grandma (Berdia Monson) — Personal and Legal</h2>
+      <p class="section-desc">These documents establish who Grandma is legally and confirm she can sign trust papers. The attorney cannot draft or file without this information.</p>
+    </div>
+
+    <h4>Identity and Legal Status</h4>
+    <div class="checklist">
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label">Government-issued photo ID (driver's license or state ID — current, not expired)</div>
+          <div class="check-note">Used to verify identity when signing trust and deed documents. Expired IDs are usually not accepted.</div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label">Social Security number</div>
+          <div class="check-note">Required on trust and tax filings. Share securely with the attorney and CPA only — not in group texts.</div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label">Date of birth documentation</div>
+          <div class="check-note">Birth certificate or other official record if the attorney needs to confirm age for capacity or insurance planning.</div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label">Current mailing address</div>
+          <div class="check-note">Legal documents and county recordings use this address for notices and tax correspondence.</div>
+        </div>
+      </label>
+    </div>
+
+    <h4 style="margin-top:32px;">Legal Capacity</h4>
+    <div class="checklist">
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Confirmation that Grandma is legally competent to execute trust documents.</strong></div>
+          <div class="check-note">If there is any question about capacity, the attorney may recommend a physician's letter or a capacity evaluation. This is not an insult — it protects the trust from future challenges. Better to have it and not need it.</div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Existing power of attorney documents</strong> — does anyone currently hold POA for Grandma?</div>
+          <div class="check-note"><strong>Power of attorney (POA)</strong> lets someone sign or decide on Grandma's behalf. If an old POA exists, the attorney must know who holds it so it does not conflict with the new trust.</div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Existing will</strong> — if Grandma has a will, bring it.</div>
+          <div class="check-note">A <strong>will</strong> says who gets assets at death. The new trust must work with it — usually the will is updated to “pour over” into the trust so nothing conflicts.</div>
+        </div>
+      </label>
+    </div>
+
+    <h4 style="margin-top:32px;">Existing Estate Documents</h4>
+    <div class="checklist">
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label">Any prior trust documents (even if never funded or long expired)</div>
+          <div class="check-note">An old trust folder counts even if no assets were ever moved into it. The attorney checks for conflicts with the new plan.</div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label">Any prior estate plans or letters of intent</div>
+          <div class="check-note">Informal notes or old lawyer letters about who should get what — helps the attorney align the new trust with past wishes.</div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label">Any deeds, title documents, or recorded interests in the land</div>
+          <div class="check-note">Anything filed at the county showing Grandma's name on property — including partial interests or old transfers.</div>
+        </div>
+      </label>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ SECTION 2 ════════════════ -->
+<section id="s2">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">Section 2</span>
+      <h2>The Land</h2>
+      <p class="section-desc">Proof of who owns the 109 acres and whether anything else (loans, easements, other leases) limits what the trust can do with it.</p>
+    </div>
+
+    <h4>Ownership Documentation</h4>
+    <div class="checklist">
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Deed(s) to the 109.01 acres</strong> — the actual recorded deed showing current ownership.</div>
+          <div class="check-note">If ownership has passed through generations, the attorney may need the chain of title.</div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Property tax records</strong> — most recent tax bills or receipts.</div>
+          <div class="check-note">Shows the assessed value and confirms no delinquent taxes.</div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Survey or plat map</strong> — if one exists. Shows exact boundaries.</div>
+          <div class="check-note">A licensed survey drawing of property lines. Helpful if solar acreage or fence lines are ever disputed.</div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Title insurance policy</strong> — if one exists from a prior transaction.</div>
+          <div class="check-note">Issued when property was bought or refinanced; shows who owned it and whether title defects were insured.</div>
+        </div>
+      </label>
+    </div>
+
+    <h4 style="margin-top:32px;">Current Encumbrances</h4>
+    <p class="secondary" style="font-size:0.9rem; margin-bottom:8px;">An <strong>encumbrance</strong> is anything that limits full control of the land — a loan, a legal claim, a neighbor's right-of-way, or another lease.</p>
+    <div class="checklist">
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label">Any existing liens, mortgages, or judgments against the property</div>
+          <div class="check-note">Recorded debts or court claims tied to the land. Must be cleared or disclosed before transferring into a trust.</div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label">Any existing easements (utility, road, neighbor access)</div>
+          <div class="check-note">Legal permission for someone else to use part of the land (power lines, shared drive, etc.). Does not transfer ownership but affects use.</div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label">Any other leases or use agreements besides the solar lease</div>
+          <div class="check-note">Hunting leases, grazing agreements, cell towers, etc. The trust needs a full list of who has rights on the property.</div>
+        </div>
+      </label>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ SECTION 3 ════════════════ -->
+<section id="s3">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">Section 3</span>
+      <h2>The Solar Lease</h2>
+      <p class="section-desc">The contract with Orion Renewables that pays rent for solar panels on ~94.75 acres. The attorney must confirm the lease can be assigned to a family trust before the structure is finalized.</p>
+    </div>
+
+    <h4>Lease Documents</h4>
+    <div class="checklist">
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>The complete solar lease agreement with Orion Renewables</strong> — every page, every amendment, every addendum.</div>
+          <div class="check-note">This is the single most important document in the package. The attorney and CPA both need it.</div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Any correspondence with Orion Renewables</strong> about timeline, construction, or payment schedule changes</div>
+          <div class="check-note">Emails or letters about delays, construction start, or when full rent begins (<strong>COD</strong> — commercial operation date). Summer 2026 is a target, not a guarantee.</div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>All payment records received to date</strong> — development-stage payments, check stubs, bank deposits, 1099s</div>
+          <div class="check-note">Orion may pay smaller amounts during development before the farm is fully operating. Collect every payment so the CPA can reconcile income and the family knows what was already received.</div>
+        </div>
+      </label>
+    </div>
+
+    <h4 style="margin-top:32px;">Key Information the Attorney Will Look For</h4>
+    <p>The attorney will review the lease to confirm these points (you do not need to answer them yourself — they come from the contract):</p>
+    <div class="checklist" style="padding-left:0;">
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin:16px 0;">
+        <div style="background:#fff; padding:16px; border-radius:8px; border:1px solid #E0DED8; font-size:0.9rem;">Exact acreage under lease (94.75 acres)</div>
+        <div style="background:#fff; padding:16px; border-radius:8px; border:1px solid #E0DED8; font-size:0.9rem;">Payment terms and escalator</div>
+        <div style="background:#fff; padding:16px; border-radius:8px; border:1px solid #E0DED8; font-size:0.9rem;">Assignment rights — can Berdia's interest be assigned to a trust?</div>
+        <div style="background:#fff; padding:16px; border-radius:8px; border:1px solid #E0DED8; font-size:0.9rem;">Default provisions — what happens if Orion fails</div>
+        <div style="background:#fff; padding:16px; border-radius:8px; border:1px solid #E0DED8; font-size:0.9rem;">Early termination rights — for either party</div>
+        <div style="background:#fff; padding:16px; border-radius:8px; border:1px solid #E0DED8; font-size:0.9rem;">COD definition — what triggers operational payments</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <p style="margin-bottom:0;"><strong>If the lease restricts assignment to a trust, the attorney needs to know immediately.</strong> This could change the entire structure.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ SECTION 4 ════════════════ -->
+<section id="s4">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">Section 4</span>
+      <h2>The Restaurant</h2>
+      <p class="section-desc">Stanley's restaurant at Grider Field. Clean, documented financials are required before a lender or the trust structure can treat it as a real asset (~$500K/year is an estimate until verified).</p>
+    </div>
+
+    <h4>Business Documents</h4>
+    <div class="checklist">
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Business license / permit</strong> — current operating license</div>
+          <div class="check-note">Proof the restaurant is legally allowed to operate in its city/county. Usually renewed annually.</div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Any existing business entity documents</strong> — is the restaurant an LLC, sole proprietorship, DBA?</div>
+          <div class="check-note">If there's an entity, bring the formation documents and operating agreement. A <strong>DBA</strong> (“doing business as”) is a trade name; a <strong>sole proprietorship</strong> means Grandma or Stanley owns it directly with no separate company.</div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Lease agreement for the Grider Field location</strong> — the full lease.</div>
+          <div class="check-note">How long is the term? What are the renewal options? Is the location secure for the next 5–10 years?</div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Any equipment leases or financing agreements</strong></div>
+          <div class="check-note">Ovens, coolers, or vehicles paid over time. Outstanding balances reduce what the business is worth and must be disclosed to lenders.</div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Insurance policies</strong> — general liability, property, workers' comp, liquor liability (if applicable)</div>
+          <div class="check-note">Shows the restaurant is covered for injuries, fire/theft, employee injuries, and (if alcohol is served) liquor-related claims.</div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Any existing contracts</strong> — food suppliers, service providers, equipment maintenance</div>
+          <div class="check-note">Long-term vendor deals may bind the business after ownership changes. The attorney reviews anything that survives a transfer to the trust.</div>
+        </div>
+      </label>
+    </div>
+
+    <h4 style="margin-top:40px;">Financial Records — This Is the Big One</h4>
+    <div class="callout dark-callout" style="margin-bottom:24px;">
+      <p style="margin-bottom:0; max-width:100%; color:#FAFAF8;">The restaurant's financials are the foundation for borrowing capacity. Lenders will not lend against "we think it makes $500K." They lend against documented, verifiable numbers.</p>
+    </div>
+
+    <p><strong>What you need (in order of importance):</strong></p>
+    <div class="checklist">
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Federal tax returns for the last 3 years</strong> (business returns — Schedule C if sole proprietorship, or 1065/1120 if entity)</div>
+          <div class="check-note">This is the minimum a lender will accept. <strong>Schedule C</strong> is the business profit page on a personal return; <strong>1065/1120</strong> are separate business return forms.</div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Profit and loss statements (P&L) for the last 3 years</strong> — monthly or quarterly</div>
+          <div class="check-note">A <strong>P&L</strong> is a report of revenue minus expenses over time. If these don't exist in clean form, this is the first thing to fix.</div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Balance sheet</strong> — current. Shows assets, liabilities, and equity.</div>
+          <div class="check-note">Snapshot of what the business owns vs. owes on a specific date. If the restaurant has never had one, the CPA will need to create it.</div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Bank statements for the last 12 months</strong> — the restaurant's operating account(s). Every account.</div>
+          <div class="check-note">Shows actual cash in and out. Lenders often trust bank deposits more than informal spreadsheets.</div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Point-of-sale (POS) reports</strong> — if the restaurant uses a POS system (Square, Toast, Clover, etc.), pull the annual sales summaries.</div>
+          <div class="check-note">The register system that rings up orders. Its reports verify revenue independently of tax returns.</div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Payroll records</strong> — how many employees? Total payroll cost? Are payroll taxes current?</div>
+          <div class="check-note">Unpaid payroll taxes are a common reason loans get denied. Include W-2 summaries or payroll provider reports if available.</div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Any outstanding debts</strong> — loans, credit cards, vendor balances, equipment financing</div>
+          <div class="check-note">Everything the restaurant owes today. Needed to calculate true net value and monthly debt payments.</div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Accounts receivable</strong> — does anyone owe the restaurant money? (Catering accounts, government contracts, etc.)</div>
+          <div class="check-note">Money customers owe but have not paid yet. Include invoices and aging if catering or contracts are a material part of revenue.</div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Accounts payable</strong> — does the restaurant owe anyone money?</div>
+          <div class="check-note">Unpaid vendor bills. Important so the trust does not inherit surprise liabilities.</div>
+        </div>
+      </label>
+    </div>
+
+    <h4 style="margin-top:32px;">What "Clean Financials" Means</h4>
+    <p>A lender reviewing the restaurant will want to see:</p>
+    <div style="display:grid; gap:12px; margin:16px 0;">
+      <div style="background:#fff; padding:20px; border-radius:8px; border:1px solid #E0DED8; display:flex; gap:16px; align-items:flex-start;">
+        <span class="num" style="font-weight:700; color:#C45A3C; font-size:1.1rem; min-width:24px;">1</span>
+        <div><strong>Revenue is verifiable</strong> — tax returns match bank deposits match POS reports</div>
+      </div>
+      <div style="background:#fff; padding:20px; border-radius:8px; border:1px solid #E0DED8; display:flex; gap:16px; align-items:flex-start;">
+        <span class="num" style="font-weight:700; color:#C45A3C; font-size:1.1rem; min-width:24px;">2</span>
+        <div><strong>Expenses are categorized</strong> — food cost, labor, rent, utilities, insurance, other</div>
+      </div>
+      <div style="background:#fff; padding:20px; border-radius:8px; border:1px solid #E0DED8; display:flex; gap:16px; align-items:flex-start;">
+        <span class="num" style="font-weight:700; color:#C45A3C; font-size:1.1rem; min-width:24px;">3</span>
+        <div><strong>Owner compensation is separated</strong> — how much is Stanley drawing? Is it consistent? Is it documented as salary, draws, or informal?</div>
+      </div>
+      <div style="background:#fff; padding:20px; border-radius:8px; border:1px solid #E0DED8; display:flex; gap:16px; align-items:flex-start;">
+        <span class="num" style="font-weight:700; color:#C45A3C; font-size:1.1rem; min-width:24px;">4</span>
+        <div><strong>EBITDA is calculable</strong> — Revenue minus operating expenses minus owner compensation = EBITDA. This number determines borrowing capacity.</div>
+      </div>
+    </div>
+
+    <div class="callout amber-callout">
+      <p style="margin-bottom:0;"><strong>If the restaurant has been run informally</strong> (cash transactions not fully recorded, expenses mixed with personal spending, no formal bookkeeping), the CPA will need time to reconstruct clean financials. This is common for family-owned restaurants. It is not a problem — it is a task that needs to start now.</p>
+    </div>
+
+    <h4 style="margin-top:32px;">Stanley Harper — Operator Information</h4>
+    <div class="checklist">
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label">Stanley's full legal name and SSN (needed for management agreement and background if lending is involved)</div>
+          <div class="check-note">A <strong>management agreement</strong> is the written deal for how Stanley runs the restaurant after the trust owns it — role, pay, and authority.</div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label">Stanley's current compensation arrangement — how is he paid today? Salary? Draws? Percentage?</div>
+          <div class="check-note">A <strong>draw</strong> is money taken from business profits without formal payroll. The CPA needs to know how pay is handled today to set a clean structure under the trust.</div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label">Any existing written agreements between Stanley and Grandma about the restaurant</div>
+          <div class="check-note">Even informal or old letters matter — they show prior understanding of ownership, pay, or who can make decisions.</div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label">Stanley's understanding and comfort level with the trust-owned structure</div>
+          <div class="check-note">Trust-owned means the restaurant would be owned by the family trust, not Grandma personally, with Stanley operating under a formal agreement. Stanley should understand this before documents are drafted.</div>
+        </div>
+      </label>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ SECTION 5 ════════════════ -->
+<section id="s5">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">Section 5</span>
+      <h2>Life Insurance Policy</h2>
+      <p class="section-desc">These documents establish what exists, who is covered, and what the trust attorney and CPA need to model — nothing is final until the full policy package is in hand.</p>
+    </div>
+
+    <div class="callout amber-callout">
+      <p style="margin-bottom:0;"><strong>Status: pending confirmation.</strong> The April 12 family call surfaced several policies, but the family does not yet have the complete picture. Grandma may hold a larger policy than what was discussed. Gather <strong>every</strong> policy document and recent annual statement before entering death benefits or cash values into the plan.</p>
+    </div>
+
+    <h4>Policy Documents</h4>
+    <div class="checklist">
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>The complete life insurance policy</strong> — not the summary, the full policy document.</div>
+          <div class="check-note">If you can't find the original, the insurance company can provide a duplicate.</div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Most recent annual statement</strong> — shows current death benefit, cash value (if applicable), premiums, and policy status</div>
+          <div class="check-note">Usually mailed once a year. Lists the payout amount at death, any savings built inside the policy, and whether it is still active.</div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Premium payment records</strong> — is the policy current? Are premiums being paid? By whom?</div>
+          <div class="check-note">Canceled policies pay nothing. Bank drafts, canceled checks, or agent receipts show who pays and whether coverage could lapse.</div>
+        </div>
+      </label>
+    </div>
+
+    <h4 style="margin-top:32px;">Key Information to Extract</h4>
+    <div class="table-wrap">
+      <table class="key-info-table">
+        <thead>
+          <tr><th>Question</th><th>Why It Matters</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Policy type: Term, whole life, universal life, or variable?</td><td>Determines whether there's cash value and how the policy can be used</td></tr>
+          <tr><td>Death benefit amount: $______</td><td>Determines how much flows to beneficiaries or the trust at death</td></tr>
+          <tr><td>Cash value (if whole/universal life): $______</td><td>Cash value can be borrowed against now or used as trust collateral</td></tr>
+          <tr><td>Current beneficiary(ies): Who is named?</td><td>Must be updated if the trust should receive the benefit</td></tr>
+          <tr><td>Policy owner: Who owns the policy?</td><td>Usually Grandma, but must be confirmed</td></tr>
+          <tr><td>Premium amount and frequency: $___/month or year</td><td>Determines ongoing cost to keep the policy active</td></tr>
+          <tr><td>Loans against the policy: Any outstanding?</td><td>Reduces effective death benefit</td></tr>
+          <tr><td>Riders: Accidental death, long-term care, waiver of premium?</td><td>May have additional value</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 style="margin-top:32px;">How Life Insurance Fits Into the Trust</h4>
+    <p>The attorney and CPA will evaluate three options:</p>
+
+    <div class="option-cards">
+      <div class="option-card">
+        <div class="option-title">Option 1: Change Beneficiary to Trust</div>
+        <div class="option-desc">
+          Death benefit flows into the trust at Grandma's passing. Simple to execute — just a beneficiary change form.<br><br>
+          <strong>Downside:</strong> Death benefit may be included in Grandma's taxable estate.
+        </div>
+      </div>
+      <div class="option-card recommended">
+        <div class="option-title" style="color:#3D7A5F;">Option 2: Create an ILIT</div>
+        <div class="option-desc">
+          A separate trust owns the policy. Keeps death benefit OUT of taxable estate entirely.<br><br>
+          <strong>Key requirement:</strong> Grandma cannot be the owner. 3-year lookback rule applies. More complex ($2K-$5K setup).<br><br>
+          <strong>Best for:</strong> Large death benefits where estate tax is a concern.
+        </div>
+      </div>
+      <div class="option-card" style="border-top-color:#6B6B66;">
+        <div class="option-title">Option 3: Keep As-Is</div>
+        <div class="option-desc">
+          Death benefit goes directly to named beneficiaries outside the trust. No estate tax planning benefit. No trust integration. Simplest, but may not align with overall plan.
+        </div>
+      </div>
+    </div>
+
+    <div class="callout green-callout">
+      <p style="margin-bottom:8px;"><strong>The right choice depends on:</strong></p>
+      <p style="margin-bottom:4px; max-width:100%;">The size of Grandma's total estate relative to the federal estate tax exemption. The death benefit amount. Whether the policy has cash value. Whether the 3-year rule for ILIT transfers is a concern given Grandma's age.</p>
+      <p style="margin-bottom:0;"><strong>The attorney and CPA will make this recommendation. Your job is to bring the policy.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ SECTION 6 ════════════════ -->
+<section id="s6">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">Section 6</span>
+      <h2>Coin Collection (For Darius)</h2>
+      <p class="section-desc">Grandma's coin collection may be placed in the trust or used as collateral once it is inventoried and professionally valued. Until then, treat the value as unknown.</p>
+    </div>
+
+    <div class="checklist">
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Current location of the coins</strong> — where are they physically?</div>
+          <div class="check-note">Safe, bank box, home, or with a family member. The trust cannot protect what no one can locate.</div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Any existing documentation</strong> — prior appraisals, purchase receipts, insurance riders, inventory lists</div>
+          <div class="check-note">Even partial lists help the appraiser. An <strong>insurance rider</strong> is extra coverage on a homeowner's policy for valuables.</div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Certified numismatic appraiser identified</strong></div>
+          <div class="check-note">A <strong>numismatic appraiser</strong> specializes in coins — not a general antique shop. Credentials: ANA or ASA.</div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Appraisal scheduled or completed</strong></div>
+          <div class="check-note">This must happen before the coins can be placed into the trust or used as collateral.</div>
+        </div>
+      </label>
+      <label class="check-item">
+        <input type="checkbox" class="check-input"><span class="check-box"></span>
+        <div class="check-content">
+          <div class="check-label"><strong>Insurance:</strong> Are the coins currently insured? Under whose policy? What's the coverage amount?</div>
+          <div class="check-note">If coverage is low or missing, the trust may need a separate rider or policy after appraisal.</div>
+        </div>
+      </label>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ SECTION 7 ════════════════ -->
+<section id="s7">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">Section 7</span>
+      <h2>Family Member Information</h2>
+      <p class="section-desc">The attorney will need basic information for everyone named in the trust — who creates it, who benefits, who manages it, and who operates the restaurant. Share SSNs privately with professionals only.</p>
+    </div>
+
+    <div class="callout" style="margin-bottom:24px;">
+      <p style="margin-bottom:0;"><strong>Quick roles:</strong> <strong>Grantor/settlor</strong> = Grandma, who creates and funds the trust. <strong>Beneficiary</strong> = person who receives income or assets from the trust. <strong>Trustee</strong> = person who manages the trust day to day. <strong>Successor trustee</strong> = backup if the primary trustee cannot serve.</p>
+    </div>
+
+    <div class="member-block">
+      <h4>Berdia Monson <span class="secondary" style="font-size:0.85rem; font-family:'Inter',sans-serif;">(Grantor / Settlor)</span></h4>
+      <div class="checklist">
+        <label class="check-item">
+          <input type="checkbox" class="check-input"><span class="check-box"></span>
+          <div class="check-content">
+            <div class="check-label">Full legal name, SSN, DOB, address</div>
+            <div class="check-note">Exactly as it appears on Social Security and driver's license — used on trust and tax forms.</div>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="check-input"><span class="check-box"></span>
+          <div class="check-content">
+            <div class="check-label">Legal capacity confirmation (see Section 1)</div>
+            <div class="check-note">Confirms Grandma can legally sign the trust. See Section 1 for details.</div>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <div class="member-block">
+      <h4>Reneta Harper <span class="secondary" style="font-size:0.85rem; font-family:'Inter',sans-serif;">(Beneficiary)</span></h4>
+      <div class="checklist">
+        <label class="check-item">
+          <input type="checkbox" class="check-input"><span class="check-box"></span>
+          <div class="check-content">
+            <div class="check-label">Full legal name, SSN, DOB, address</div>
+            <div class="check-note">Exactly as it appears on Social Security and driver's license — used on trust and tax forms.</div>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="check-input"><span class="check-box"></span>
+          <div class="check-content">
+            <div class="check-label">Confirmation that her 16.67% solar distribution continues unchanged</div>
+            <div class="check-note">Reneta keeps the same share of solar rent (one-sixth of the 50% branch). This documents agreement — not a new math exercise.</div>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <div class="member-block">
+      <h4>Charles Toliver <span class="secondary" style="font-size:0.85rem; font-family:'Inter',sans-serif;">(Beneficiary)</span></h4>
+      <div class="checklist">
+        <label class="check-item">
+          <input type="checkbox" class="check-input"><span class="check-box"></span>
+          <div class="check-content">
+            <div class="check-label">Full legal name, SSN, DOB, address</div>
+            <div class="check-note">Exactly as it appears on Social Security and driver's license — used on trust and tax forms.</div>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="check-input"><span class="check-box"></span>
+          <div class="check-content">
+            <div class="check-label">Confirmation that his 16.67% solar distribution continues unchanged</div>
+            <div class="check-note">Charles keeps the same share of solar rent under the proposed structure — document that everyone agrees.</div>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <div class="member-block">
+      <h4>Kim Fox <span class="secondary" style="font-size:0.85rem; font-family:'Inter',sans-serif;">(Beneficiary)</span></h4>
+      <div class="checklist">
+        <label class="check-item">
+          <input type="checkbox" class="check-input"><span class="check-box"></span>
+          <div class="check-content">
+            <div class="check-label">Full legal name, SSN, DOB, address</div>
+            <div class="check-note">Exactly as it appears on Social Security and driver's license — used on trust and tax forms.</div>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="check-input"><span class="check-box"></span>
+          <div class="check-content">
+            <div class="check-label">Confirmation that her 16.67% solar distribution continues unchanged</div>
+            <div class="check-note">Kim keeps the same share of solar rent under the proposed structure — document that everyone agrees.</div>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="check-input"><span class="check-box"></span>
+          <div class="check-content">
+            <div class="check-label">If Kim's practice is a potential Phase 2 venture: current business structure, revenue, and growth plans</div>
+            <div class="check-note"><strong>Phase 2</strong> means a future trust-owned business beyond the restaurant — only needed if the family pursues acquiring or expanding Kim's CPA practice later.</div>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <div class="member-block">
+      <h4>Stedmon Harper <span class="secondary" style="font-size:0.85rem; font-family:'Inter',sans-serif;">(Proposed Trustee)</span></h4>
+      <div class="checklist">
+        <label class="check-item">
+          <input type="checkbox" class="check-input"><span class="check-box"></span>
+          <div class="check-content">
+            <div class="check-label">Full legal name, SSN, DOB, address</div>
+            <div class="check-note">Exactly as it appears on Social Security and driver's license — used on trust and tax forms.</div>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="check-input"><span class="check-box"></span>
+          <div class="check-content">
+            <div class="check-label">Background information as needed for fiduciary role</div>
+            <div class="check-note">A <strong>fiduciary</strong> must act in the family's best interest, not personal gain. The attorney may ask about conflicts of interest or prior trustee experience.</div>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="check-input"><span class="check-box"></span>
+          <div class="check-content">
+            <div class="check-label">Proposed successor trustee name(s)</div>
+            <div class="check-note">Who steps in if Stedmon cannot serve (illness, relocation, death). Often a trusted family member plus a bank trust department as backup.</div>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <div class="member-block">
+      <h4>Stanley Harper <span class="secondary" style="font-size:0.85rem; font-family:'Inter',sans-serif;">(Restaurant Operator)</span></h4>
+      <div class="checklist">
+        <label class="check-item">
+          <input type="checkbox" class="check-input"><span class="check-box"></span>
+          <div class="check-content">
+            <div class="check-label">Full legal name, SSN, DOB, address</div>
+            <div class="check-note">Exactly as it appears on Social Security and driver's license — used on trust and tax forms.</div>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="check-input"><span class="check-box"></span>
+          <div class="check-content">
+            <div class="check-label">Current compensation arrangement</div>
+            <div class="check-note">How Stanley is paid today — see Section 4 for detail. Needed for the management agreement under trust ownership.</div>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="check-input"><span class="check-box"></span>
+          <div class="check-content">
+            <div class="check-label">Confirmation of his understanding of proposed structure</div>
+            <div class="check-note">Stanley acknowledges the restaurant would be trust-owned with him operating under a formal contract — not informally as today.</div>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <div class="member-block">
+      <h4>Darius <span class="secondary" style="font-size:0.85rem; font-family:'Inter',sans-serif;">(Coin Collection / Real Estate)</span></h4>
+      <div class="checklist">
+        <label class="check-item">
+          <input type="checkbox" class="check-input"><span class="check-box"></span>
+          <div class="check-content">
+            <div class="check-label">Full legal name, SSN, DOB, address</div>
+            <div class="check-note">Exactly as it appears on Social Security and driver's license — used on trust and tax forms.</div>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="check-input"><span class="check-box"></span>
+          <div class="check-content">
+            <div class="check-label">Texas real estate license status (active, in progress, or planned)</div>
+            <div class="check-note">Darius is pursuing an <strong>Arkansas</strong> license per Section 0; note Texas status too if he holds or plans both — relevant for future land work.</div>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="check-input"><span class="check-box"></span>
+          <div class="check-content">
+            <div class="check-label">Sponsoring broker information (if licensed)</div>
+            <div class="check-note">Every licensed agent works under a <strong>sponsoring broker</strong> — the brokerage that holds their license. Needed if Darius handles trust-related property tasks.</div>
+          </div>
+        </label>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ SECTION 8 ════════════════ -->
+<section id="s8">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">Section 8</span>
+      <h2>Questions to Bring to the First Meeting</h2>
+      <p class="section-desc">You do not need to know the answers — these are conversation starters for the attorney and CPA. Jargon is explained in plain language below each list.</p>
+    </div>
+
+    <div class="callout green-callout" style="margin-bottom:24px;">
+      <p style="margin-bottom:8px;"><strong>Terms you may hear:</strong></p>
+      <p style="margin-bottom:0; max-width:100%;"><strong>Assignment</strong> = transferring lease rights to the trust. <strong>Grantor trust</strong> = Grandma pays tax on trust income while alive. <strong>ILIT</strong> = separate trust that owns life insurance. <strong>EBITDA</strong> = restaurant profit before interest, taxes, depreciation. <strong>Gift tax</strong> = tax on large transfers while living. <strong>Estate tax exemption</strong> = amount you can pass at death before federal estate tax applies.</p>
+    </div>
+
+    <h4>For the Trust Attorney</h4>
+    <ol class="question-list">
+      <li>Can Berdia's solar lease interest be assigned to a trust? Does the lease allow it?</li>
+      <li>What type of trust is recommended — grantor vs. non-grantor, revocable vs. irrevocable?</li>
+      <li>Should the life insurance policy be held inside the trust, moved to an ILIT, or left as-is?</li>
+      <li>What are the estate tax implications given the total asset picture?</li>
+      <li>How should the restaurant transfer be structured to avoid triggering unnecessary taxes?</li>
+      <li>What successor trustee provisions do you recommend?</li>
+      <li>How do we handle the 3-year lookback rule if we transfer the life insurance policy?</li>
+      <li>What is the estimated cost and timeline for trust formation, LLC setup, and operating agreements?</li>
+    </ol>
+
+    <h4 style="margin-top:40px;">For the CPA</h4>
+    <ol class="question-list">
+      <li>What is the restaurant's actual EBITDA based on the financials provided?</li>
+      <li>What trust structure (grantor/non-grantor) is most tax-efficient for this family?</li>
+      <li>How will solar income be taxed — as rental income, ordinary income, or other?</li>
+      <li>What are the gift tax implications of transferring assets into the trust?</li>
+      <li>Does Grandma's total estate exceed the federal estate tax exemption? If the exemption drops in 2026, does that change the answer?</li>
+      <li>How should LLC income be structured for tax efficiency — pass-through to trust or retained?</li>
+      <li>What bookkeeping system should the restaurant adopt going forward?</li>
+      <li>What quarterly/annual filings will the trust and LLCs require?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ════════════════ SECTION 9 ════════════════ -->
+<section id="s9">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">Section 9</span>
+      <h2>What to Do First</h2>
+      <p class="section-desc">Priority order — start with the hardest items, not the easiest.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Priority</th><th>Task</th><th>Why First</th><th>Time Needed</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="priority-badge priority-1">1</span></td>
+            <td style="font-family:'Inter',sans-serif;">Find the solar lease agreement</td>
+            <td style="font-family:'Inter',sans-serif;">Everything depends on assignment rights</td>
+            <td>1 day</td>
+          </tr>
+          <tr>
+            <td><span class="priority-badge priority-1">2</span></td>
+            <td style="font-family:'Inter',sans-serif;">Find the life insurance policy</td>
+            <td style="font-family:'Inter',sans-serif;">Determines estate tax strategy</td>
+            <td>1 day</td>
+          </tr>
+          <tr>
+            <td><span class="priority-badge priority-2">3</span></td>
+            <td style="font-family:'Inter',sans-serif;">Gather restaurant tax returns (3 years)</td>
+            <td style="font-family:'Inter',sans-serif;">Longest lead time if reconstruction needed</td>
+            <td>1-4 weeks</td>
+          </tr>
+          <tr>
+            <td><span class="priority-badge priority-2">4</span></td>
+            <td style="font-family:'Inter',sans-serif;">Get restaurant bank statements (12 months)</td>
+            <td style="font-family:'Inter',sans-serif;">Verifies revenue, easy to request</td>
+            <td>1 week</td>
+          </tr>
+          <tr>
+            <td><span class="priority-badge priority-3">5</span></td>
+            <td style="font-family:'Inter',sans-serif;">Get coin collection appraised</td>
+            <td style="font-family:'Inter',sans-serif;">Required before trust placement</td>
+            <td>2-3 weeks</td>
+          </tr>
+          <tr>
+            <td><span class="priority-badge priority-3">6</span></td>
+            <td style="font-family:'Inter',sans-serif;">Gather land deeds and tax records</td>
+            <td style="font-family:'Inter',sans-serif;">County recorder's office if not in hand</td>
+            <td>1-2 weeks</td>
+          </tr>
+          <tr>
+            <td><span class="priority-badge priority-4">7</span></td>
+            <td style="font-family:'Inter',sans-serif;">Collect family member information</td>
+            <td style="font-family:'Inter',sans-serif;">Coordination with multiple people</td>
+            <td>1-2 weeks</td>
+          </tr>
+          <tr>
+            <td><span class="priority-badge priority-4">8</span></td>
+            <td style="font-family:'Inter',sans-serif;">Confirm Grandma's legal capacity</td>
+            <td style="font-family:'Inter',sans-serif;">Sensitive but essential</td>
+            <td style="font-family:'Inter',sans-serif;">Schedule with attorney</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ SECTION 10 ════════════════ -->
+<section id="s10">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">Section 10</span>
+      <h2>Choosing the Right Professionals</h2>
+    </div>
+
+    <div class="pro-cards">
+      <div class="pro-card">
+        <h4>Trust / Estate Attorney</h4>
+        <div class="pro-sub" style="color:#3D7A5F;">Look For</div>
+        <ul>
+          <li>Experience with family trusts holding real property and operating businesses</li>
+          <li>Licensed in Arkansas (where the assets are)</li>
+          <li>Familiarity with solar lease assignments and agricultural/rural land trusts</li>
+          <li>Willingness to coordinate with a CPA on tax structure</li>
+        </ul>
+        <div class="pro-sub" style="color:#C45A3C;">Ask</div>
+        <ul>
+          <li>How many family operating trusts have you drafted?</li>
+          <li>Have you handled solar lease assignments into trust structures before?</li>
+          <li>What is your flat fee or hourly rate for trust formation + LLC setup?</li>
+          <li>Can you draft the restaurant management agreement as part of the engagement?</li>
+        </ul>
+        <div class="pro-budget num">Budget: $8K-$15K<br><span style="font-size:0.8rem; font-weight:400; color:#6B6B66;">Trust formation, 2-3 LLC operating agreements, and management agreement. Get a written engagement letter with scope and fees before starting.</span></div>
+      </div>
+
+      <div class="pro-card" style="border-top-color:#3D7A5F;">
+        <h4>CPA</h4>
+        <div class="pro-sub" style="color:#3D7A5F;">Look For</div>
+        <ul>
+          <li>Experience with trust taxation and small business financials</li>
+          <li>Familiarity with pass-through entity taxation</li>
+          <li>Ability to reconstruct restaurant financials if needed</li>
+          <li>Willingness to coordinate with the attorney on structure</li>
+        </ul>
+        <div class="pro-sub" style="color:#C45A3C;">Ask</div>
+        <ul>
+          <li>Can you review the restaurant's books and produce clean P&L and balance sheet?</li>
+          <li>What is your fee for annual trust and LLC tax filings?</li>
+          <li>Can you advise on the grantor vs. non-grantor trust decision?</li>
+          <li>What ongoing bookkeeping do you recommend for the restaurant?</li>
+        </ul>
+        <div class="pro-budget num">Budget: $3K-$8K initial<br><span style="font-size:0.8rem; font-weight:400; color:#6B6B66;">Financial cleanup + tax structure advisory. Ongoing: $2K-$5K/year for trust and LLC filings.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ WHEN YOU'RE READY ════════════════ -->
+<section>
+  <div class="container">
+    <div class="ready-block">
+      <h3>When You're Ready</h3>
+      <p style="color:#aaa; max-width:100%; margin-bottom:24px;">Once you have Sections 1-7 substantially complete, you're ready to schedule the first meeting. You don't need every item checked — but you need the big ones:</p>
+
+      <div class="checklist">
+        <label class="check-item">
+          <input type="checkbox" class="check-input"><span class="check-box"></span>
+          <div class="check-content">
+            <div class="check-label">Solar lease agreement <span style="color:#888;">(Section 3)</span></div>
+            <div class="check-note">Full Orion contract — determines whether income can flow through the trust.</div>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="check-input"><span class="check-box"></span>
+          <div class="check-content">
+            <div class="check-label">Life insurance policies <span style="color:#888;">(Section 5)</span></div>
+            <div class="check-note">Every policy and annual statement — amounts still pending confirmation.</div>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="check-input"><span class="check-box"></span>
+          <div class="check-content">
+            <div class="check-label">Restaurant tax returns or financial records <span style="color:#888;">(Section 4)</span></div>
+            <div class="check-note">At minimum, three years of tax returns plus bank statements.</div>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="check-input"><span class="check-box"></span>
+          <div class="check-content">
+            <div class="check-label">Land deed <span style="color:#888;">(Section 2)</span></div>
+            <div class="check-note">Recorded deed showing Grandma owns the 109 acres.</div>
+          </div>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" class="check-input"><span class="check-box"></span>
+          <div class="check-content">
+            <div class="check-label">Grandma's legal documents <span style="color:#888;">(Section 1)</span></div>
+            <div class="check-note">ID, will, POA, and any prior estate papers.</div>
+          </div>
+        </label>
+      </div>
+
+      <p style="color:#C45A3C; font-weight:600; margin-top:24px; max-width:100%;">With these five in hand, the attorney and CPA can start working. Everything else can follow.</p>
+    </div>
+
+    <div class="closing">
+      <p><em>This checklist exists so you walk into the room prepared — not guessing. The professionals bill by the hour. The more organized you are, the less it costs and the faster it moves.</em></p>
+    </div>
+  </div>
+</section>
+
+<script>
+(function () {
+  var STORAGE_KEY = 'berdia-family-checklist-v1';
+  var inputs = document.querySelectorAll('.check-input');
+  var state = {};
+
+  inputs.forEach(function (input, index) {
+    if (!input.id) {
+      input.id = 'check-auto-' + index;
+    }
+  });
+
+  try {
+    state = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+  } catch (e) {
+    state = {};
+  }
+
+  inputs.forEach(function (input) {
+    if (state[input.id]) {
+      input.checked = true;
+    }
+    input.addEventListener('change', function () {
+      state[input.id] = input.checked;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    });
+  });
+})();
+</script>
+</body>
+</html>
