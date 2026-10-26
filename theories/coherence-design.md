@@ -4,8 +4,6 @@ version: 1.0
 status: Living Document
 ---
 
-**Surface note (2026-10-26):** This short living text and the longer Coherence Design surface inside the Drive Standards Architecture mega-draft are two surfaces of the same discipline. They are intentionally not merged. Promotion of one surface (or a reconciled third) requires an explicit human promotion call. Until then, treat this file as the maintained short living text; treat the Drive CD tab as draft working text.
-
 # Coherence Design™
 
 *The discipline of designing systems that hold their shape across time, scale,
