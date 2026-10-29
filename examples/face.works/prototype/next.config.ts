@@ -31,6 +31,17 @@ const nextConfig: NextConfig = {
       { source: "/library", destination: "/methodology", permanent: true },
     ];
   },
+  // PERMANENT: the Berdia family platform (Vercel project berdia-trust) is
+  // mounted at /berdia — Tasks (intake), Family Plan, Documents and Portal.
+  // Family invitation links point here; removing this breaks every family
+  // member's sign-in link. Guarded by src/app/berdia-mount.test.ts.
+  // DO NOT REMOVE.
+  async rewrites() {
+    return [
+      { source: "/berdia", destination: "https://berdia-trust.vercel.app/berdia/" },
+      { source: "/berdia/:path*", destination: "https://berdia-trust.vercel.app/berdia/:path*" },
+    ];
+  },
   async headers() {
     return [
       {
