@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Origins Sprint Board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Schibsted+Grotesk:wght@500;700&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Values mirror examples/face.works/prototype/src/app/reading-room.css (--rr-*).
+   --rr-issue is the PROPOSED per-issue accent (README conflict 3). Not canon. */
+:root{
+  --rr-paper:oklch(0.967 0.008 85);--rr-surface:oklch(0.936 0.010 84);--rr-rule:oklch(0.800 0.013 82);
+  --rr-meta:oklch(0.515 0.012 80);--rr-body:oklch(0.305 0.012 68);--rr-ink:oklch(0.175 0.012 55);
+  --rr-verdigris:oklch(0.55 0.075 190);--rr-verdigris-text:oklch(0.47 0.070 190);
+  --rr-field:oklch(0.185 0.008 70);--rr-field-panel:oklch(0.235 0.009 70);--rr-field-line:oklch(0.340 0.010 70);
+  --rr-field-text:oklch(0.920 0.012 85);--rr-field-mute:oklch(0.630 0.013 78);--rr-verdigris-field:oklch(0.740 0.085 190);
+  --rr-settled:oklch(0.56 0.12 150);--rr-attention:oklch(0.70 0.13 75);--rr-exposure:oklch(0.58 0.19 30);--rr-archive:oklch(0.50 0.13 300);
+  --rr-issue:oklch(0.87 0.21 118); /* UPLOAD #13 tab, sampled #CCE302 */
+  --read:"Literata",Georgia,serif;--struct:"Schibsted Grotesk",system-ui,sans-serif;--rec:"Spline Sans Mono",ui-monospace,monospace;
+  --measure:68ch;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--rr-paper);color:var(--rr-body);font-family:var(--read);font-size:1.0625rem;line-height:1.65;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:48px 16px 96px}
+@media (min-width:720px){.wrap{padding:64px 32px 128px}}
+.label{font-family:var(--rec);font-weight:500;font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;color:var(--rr-meta);font-variant-numeric:tabular-nums;display:inline-flex;gap:8px;align-items:center}
+.label b{color:var(--rr-ink);font-weight:500}
+h1,h2,h3{font-family:var(--struct);color:var(--rr-ink);font-weight:700;letter-spacing:-.01em;margin:0}
+h1{font-size:clamp(1.9rem,4vw,2.8rem);line-height:1.1}
+h2{font-size:1.5rem;line-height:1.2}
+h3{font-size:1.05rem;line-height:1.3}
+p{margin:0;max-width:var(--measure)}
+a{color:var(--rr-verdigris-text)}
+section{display:grid;gap:24px;padding-top:64px;margin-top:64px;border-top:1px solid var(--rr-rule)}
+.sq,.ci{display:inline-block;width:9px;height:9px;flex:none}
+.sq{border:1.5px solid currentColor}.ci{border-radius:50%;background:currentColor}
+.mast{display:flex;flex-wrap:wrap;gap:16px 32px;align-items:center;justify-content:space-between}
+.lockup{display:flex;align-items:center;gap:14px;color:var(--rr-ink)}
+.lockup svg.m{width:46px;height:auto}.lockup svg.w{width:150px;height:auto}
+.stamp{font-family:var(--rec);font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;color:var(--rr-ink);border:1px solid var(--rr-ink);padding:6px 10px}
+.lede{display:grid;gap:16px;margin-top:40px}
+.lede p{font-size:1.2rem;line-height:1.55;color:var(--rr-ink)}
+/* ledger */
+.ledger{display:grid;border-top:1px solid var(--rr-rule)}
+.row{display:grid;grid-template-columns:1fr;gap:6px 24px;padding:16px 0;border-bottom:1px solid var(--rr-rule)}
+@media (min-width:820px){.row{grid-template-columns:150px 1fr 1.1fr}}
+.row .k{font-family:var(--rec);font-size:.75rem;color:var(--rr-meta);display:flex;gap:8px;align-items:baseline;text-transform:uppercase;letter-spacing:.06em}
+.row .t{color:var(--rr-ink);font-weight:600}
+.row .p{font-size:.95rem}
+/* directions */
+.dirs{display:grid;gap:32px}
+@media (min-width:960px){.dirs{grid-template-columns:repeat(3,1fr);gap:24px}}
+.dir{display:grid;gap:14px;align-content:start}
+.dir .chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-family:var(--rec);font-size:.68rem;letter-spacing:.04em;border:1px solid var(--rr-rule);padding:2px 7px;color:var(--rr-body)}
+.dir.pick .chip.pk{border-color:var(--rr-ink);color:var(--rr-ink)}
+.dir dl{margin:0;display:grid;gap:6px;font-size:.92rem}
+.dir dt{font-family:var(--rec);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--rr-meta)}
+.dir dd{margin:0 0 6px}
+.surface{aspect-ratio:4/5;position:relative;overflow:hidden;border:1px solid var(--rr-rule)}
+/* A */
+.sA{background:var(--rr-paper);padding:20px;display:grid;align-content:start;gap:12px}
+.sA .mini-row{display:grid;grid-template-columns:auto 1fr;gap:10px;padding:9px 0;border-bottom:1px solid var(--rr-rule);font-size:.82rem;align-items:baseline}
+.sA .mini-row .label{font-size:.6rem}
+.sA h4{font-family:var(--struct);font-size:1.05rem;color:var(--rr-ink);margin:0}
+.note{font-style:italic;font-size:.82rem;color:var(--rr-body)}
+/* B */
+.sB{background:var(--rr-paper);padding:20px 20px 40px}
+.sB .in{display:grid;gap:10px}
+.slate{justify-self:end;display:flex;gap:10px;align-items:center;font-family:var(--rec);font-size:.75rem;color:var(--rr-ink);border:1px solid var(--rr-ink);padding:4px 10px}
+.slate .circ{border:1px solid var(--rr-ink);border-radius:50%;width:22px;height:22px;display:grid;place-items:center}
+.pegs{position:absolute;left:0;right:0;bottom:12px;display:flex;justify-content:center;gap:28px;align-items:center}
+.pegs .slot{width:34px;height:8px;background:var(--rr-ink);border-radius:4px}
+.pegs .hole{width:12px;height:12px;background:var(--rr-ink);border-radius:50%}
+.fixband{display:flex;align-items:center;gap:10px;color:var(--rr-ink);padding:10px 0;border-top:1px solid var(--rr-rule);border-bottom:1px solid var(--rr-rule)}
+.fixband svg.m{width:30px;height:23px}.fixband svg.w{width:110px;height:16px}
+.mini-row.att{outline:1px solid var(--rr-verdigris);outline-offset:2px}
+/* C */
+.sC{background:var(--rr-surface);color:var(--rr-ink);padding:18px;display:grid;grid-template-rows:auto 1fr auto;gap:10px}
+.sC svg.ht{position:absolute;inset:18% 6% 22%;width:88%;height:60%}
+.sC .top{display:flex;justify-content:space-between;align-items:center;position:relative}
+.sC .top svg{width:28px;height:auto}
+.sC .plate{position:relative;align-self:center;justify-self:start;display:grid;gap:8px}
+.sC .np{font-family:var(--struct);font-weight:700;font-size:clamp(2rem,5vw,2.8rem);line-height:1;background:var(--rr-issue);padding:6px 14px;color:var(--rr-ink);box-shadow:1px 2px 0 oklch(0.4 0 0 / .25)}
+.tab.light{background:var(--rr-paper);color:var(--rr-ink);border:1px solid var(--rr-ink)}
+.tab{font-family:var(--rec);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;background:var(--rr-ink);color:var(--rr-paper);padding:5px 9px;justify-self:start}
+.sC .colo{position:relative;font-family:var(--rec);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase}
+.caption{font-family:var(--rec);font-size:.68rem;color:var(--rr-meta);letter-spacing:.04em}
+.verdict{border:1px solid var(--rr-ink);padding:20px;display:grid;gap:10px}
+.verdict p{color:var(--rr-ink)}
+/* type */
+.type{display:grid;gap:0;border-top:1px solid var(--rr-rule)}
+.ty{display:grid;gap:8px 24px;padding:20px 0;border-bottom:1px solid var(--rr-rule)}
+@media (min-width:820px){.ty{grid-template-columns:200px 1fr}}
+.s-read{font-family:var(--read);font-size:1.6rem;color:var(--rr-ink);line-height:1.25}
+.s-struct{font-family:var(--struct);font-weight:700;font-size:1.6rem;color:var(--rr-ink)}
+.s-rec{font-family:var(--rec);font-size:.95rem;color:var(--rr-ink);letter-spacing:.04em}
+.s-note{font-family:var(--read);font-style:italic;font-size:1.1rem}
+.s-np{font-family:var(--rec);font-size:.95rem;color:var(--rr-meta)}
+/* color */
+.sw{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:1px;background:var(--rr-rule);border:1px solid var(--rr-rule)}
+.sw div{background:var(--rr-paper);padding:0 0 10px;display:grid;gap:6px;font-size:.8rem}
+.sw i{display:block;height:64px}
+.sw span{padding:0 10px}
+.hue{position:relative;height:120px;border-top:1px solid var(--rr-ink);margin-top:28px}
+.hue .tick{position:absolute;top:-6px;width:1px;height:12px;background:var(--rr-ink)}
+.hue .m{position:absolute;top:18px;transform:translateX(-50%);display:grid;justify-items:center;gap:4px;font-family:var(--rec);font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.hue .m i{width:16px;height:16px;display:block}
+.hue .m.cand{top:auto;bottom:0}
+.hue .m.cand i{border:1.5px dashed var(--rr-ink)}
+.hue .band{position:absolute;top:-1px;height:3px}
+/* components */
+.comp{display:grid;gap:32px}
+@media (min-width:960px){.comp{grid-template-columns:1fr 1fr}}
+.block{display:grid;gap:10px;padding:20px 0;border-top:1px solid var(--rr-ink)}
+.block .img{aspect-ratio:16/9;border:1px solid var(--rr-rule);background:var(--rr-surface);position:relative;overflow:hidden}
+.block .img svg{width:100%;height:100%}
+.block .t{font-family:var(--read);font-weight:600;font-size:1.2rem;color:var(--rr-ink)}
+.block .marg{border-left:1px solid var(--rr-rule);padding-left:12px}
+.hold{font-family:var(--rec);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--rr-meta)}
+.hold b{color:var(--rr-ink);font-weight:500}
+.sheet{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:1px;background:var(--rr-rule);border:1px solid var(--rr-rule)}
+.sheet figure{margin:0;background:var(--rr-paper);padding:8px;display:grid;gap:6px}
+.sheet figure div{aspect-ratio:1;background:var(--rr-surface)}
+.sheet figcaption{font-family:var(--rec);font-size:.6rem;color:var(--rr-meta);letter-spacing:.04em}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{text-align:left;padding:10px 12px 10px 0;border-bottom:1px solid var(--rr-rule);vertical-align:top}
+th{font-family:var(--rec);font-weight:500;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--rr-meta)}
+td:first-child{color:var(--rr-ink);font-weight:600;white-space:nowrap}
+.tbl{overflow-x:auto}
+.no{color:var(--rr-meta)}
+footer{margin-top:96px;padding-top:24px;border-top:1px solid var(--rr-rule)}
+
+/* mark study */
+.marks{display:grid;gap:32px}
+@media (min-width:960px){.marks{grid-template-columns:repeat(3,1fr);gap:24px}}
+.mk{display:grid;gap:14px;align-content:start}
+.mk .stage{border:1px solid var(--rr-rule);background:var(--rr-paper);aspect-ratio:4/3;display:grid;place-items:center;color:var(--rr-ink)}
+.mk .stage svg{height:42%;width:auto}
+.mk .lock{display:flex;align-items:center;gap:12px;color:var(--rr-ink);padding:14px 0;border-top:1px solid var(--rr-rule);border-bottom:1px solid var(--rr-rule)}
+.mk .lock .a{height:30px;width:auto}.mk .lock .b{height:22px;width:auto}
+.mk .micro{display:flex;gap:16px;align-items:center;color:var(--rr-ink)}
+.mk .micro svg{height:16px;width:auto}
+.mk.pick .stage{border-color:var(--rr-ink)}
+.demo{position:relative;border:1px solid var(--rr-ink);background:var(--rr-paper);aspect-ratio:16/9;overflow:hidden}
+.demo .ev{position:absolute;display:grid;gap:4px;font-size:.8rem;color:var(--rr-ink);padding:8px;background:var(--rr-surface)}
+.demo .ev .label{font-size:.58rem}
+.demo .box{position:absolute;color:var(--rr-verdigris);pointer-events:none}
+.demo .box svg{width:100%;height:100%;overflow:visible}
+.demo .box path{vector-effect:non-scaling-stroke;stroke-width:2}
+.demo .end{position:absolute;inset:0;background:var(--rr-paper);display:none;place-items:center}
+.demo .end .lk{display:flex;align-items:center;gap:16px;color:var(--rr-ink)}
+.demo .end .lk .a{height:52px;width:auto}.demo .end .lk .b{height:38px;width:auto}
+.demo.done .end{display:grid}.demo.done .box{display:none}
+
+.ms{position:relative;border:1px solid var(--rr-ink);background:var(--rr-paper);padding:20px;min-height:340px;overflow:hidden}
+.ms-cap{position:absolute;right:16px;top:14px}
+.ms-ch{display:grid;gap:10px;max-width:620px;margin-top:22px}
+.mrows{display:grid;border-top:1px solid var(--rr-rule)}
+.mrow{display:grid;grid-template-columns:auto auto 1fr auto;gap:12px;align-items:center;padding:9px 0;border-bottom:1px solid var(--rr-rule);font-size:.88rem;color:var(--rr-ink)}
+.mrow .label{font-size:.6rem}
+.mk-sh{width:9px;height:9px;display:inline-block;border:1.5px solid currentColor;transition:border-radius 520ms cubic-bezier(0.22,1,0.36,1),background-color 520ms cubic-bezier(0.22,1,0.36,1),transform 520ms cubic-bezier(0.22,1,0.36,1)}
+.mk-sh.ci2{border-radius:50%;background:var(--rr-ink);transform:scale(1.1)}
+.mk-sh.sq2{border-radius:0;background:transparent}
+.ms .box{position:absolute;display:none;color:var(--rr-verdigris);pointer-events:none}
+.ms .box svg{width:100%;height:100%;overflow:visible}
+.ms .box path{vector-effect:non-scaling-stroke;stroke-width:2}
+.ms-end{position:absolute;inset:0;background:var(--rr-paper);display:none;place-items:center;color:var(--rr-ink)}
+.ms-end .iss{width:min(78%,640px);height:auto}
+@media (prefers-reduced-motion: reduce){.mk-sh{transition:none}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="mark" viewBox="0 0 230 176">
+      <g fill="currentColor"><path d="M8 16C46 21 80 31 106 46V57C78 44 44 35 9 31Z"/><path d="M16 47C50 53 82 62 106 76V87C80 74 50 65 21 62Z"/><path d="M28 79C58 85 84 94 106 106V117C82 104 58 96 36 94Z"/><path d="M18 150C58 138 92 120 104 100V112C90 122 56 150 16 160Z"/></g>
+      <g fill="currentColor" transform="translate(230 0) scale(-1 1)"><path d="M8 16C46 21 80 31 106 46V57C78 44 44 35 9 31Z"/><path d="M16 47C50 53 82 62 106 76V87C80 74 50 65 21 62Z"/><path d="M28 79C58 85 84 94 106 106V117C82 104 58 96 36 94Z"/><path d="M18 150C58 138 92 120 104 100V112C90 122 56 150 16 160Z"/></g>
+    </symbol>
+    <symbol id="word" viewBox="0 0 560 80">
+      <g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter"><path d="M8 70V10H50M8 39H43"/><path d="M67 70L90 15L113 70M80 47H100"/><path d="M183 22C176 13 168 10 157 10C140 10 131 21 131 40C131 59 140 70 157 70C168 70 176 67 183 58"/><path d="M207 10V70M207 10H251M207 39H245M207 70H251"/><path d="M273 10L285 65L305 36L325 65L337 10"/><path d="M382 10C365 10 356 21 356 40C356 59 365 70 382 70C399 70 408 59 408 40C408 21 399 10 382 10Z"/><path d="M433 70V10H458C473 10 481 18 481 30C481 42 473 49 461 49L484 70M461 49H433"/><path d="M509 10V70M551 10L513 42L554 70"/></g>
+    </symbol>
+    <symbol id="frame" viewBox="0 0 64 80"><path d="M4 28V4H20M44 4H60V28M4 52V76H20M44 76H60V52" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter"/></symbol>
+    <symbol id="mono2" viewBox="0 0 216 160"><g fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="square" stroke-linejoin="miter"><path d="M10 18C44 21 74 30 96 44"/><path d="M16 50C46 54 74 62 96 76"/><path d="M24 82C50 86 74 96 96 112"/><path d="M14 150C26 126 40 98 96 92"/><path d="M206 18C172 21 142 30 120 44"/><path d="M200 50C170 54 142 62 120 76"/><path d="M192 82C166 86 142 96 120 112"/><path d="M202 150C190 126 176 98 120 92"/></g></symbol>
+    <symbol id="fw" viewBox="0 0 134 80"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter"><path d="M8 70V10H50M8 39H43"/><path d="M62 10L73 70L94 38L115 70L126 10"/></g></symbol>
+    <pattern id="ht" width="9" height="9" patternUnits="userSpaceOnUse"><circle cx="4.5" cy="4.5" r="2.4" fill="currentColor"/></pattern>
+    <pattern id="ht2" width="7" height="7" patternUnits="userSpaceOnUse"><circle cx="3.5" cy="3.5" r="1.3" fill="currentColor"/></pattern>
+    <pattern id="dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="8" cy="8" r=".9" fill="oklch(0.42 0.010 70)"/></pattern>
+  </defs>
+</svg>
+
+<main class="wrap">
+  <header class="mast">
+    <div class="lockup" aria-label="Facework">
+      <svg class="m" aria-hidden="true"><use href="#mark"/></svg>
+      <svg class="w" viewBox="0 0 560 80" aria-hidden="true"><use href="#word"/></svg>
+    </div>
+    <span class="stamp">Proposal · not canon · not live</span>
+  </header>
+
+  <div class="lede">
+    <span class="label"><b>Visual system</b> · Sprint 01 · revision 2 · research first · 2026-10-30</span>
+    <h1>The mark holds; the record moves. One thin accent points at what’s being read.</h1>
+    <p>That is what the New York Times 175 film shows across all 48 frames I sampled, and it's the idea this system is built on. The board is rebuilt from seven field notes, not from the mood board, which turned out to misdescribe four of its seven sources. It extends the locked identity (Coherence Mark, Register wordmark, Literata / Schibsted Grotesk / Spline Sans Mono, verdigris). Every rule cites a field note in <code>field-notes/</code>.</p>
+  </div>
+
+  <!-- FINDINGS FIRST -->
+  <section aria-labelledby="f">
+    <span class="label"><span class="sq"></span><b>6 conflicts</b> · 2 ruled · 4 wait on Stead</span>
+    <h2 id="f">Decisions this proposal can't make for you</h2>
+    <div class="ledger">
+      <div class="row"><span class="k"><span class="ci"></span>01 · Masthead</span><span class="t">Ruled 2026-10-30: "A public record of coherence" stays</span><span class="p">"The study of digital identity, autonomy, and perception" is the Index's field-of-study line beneath it. The Times also kept its masthead for 175 (FN-01).</span></div>
+      <div class="row"><span class="k"><span class="sq"></span>02 · Mark</span><span class="t">The handoff asks for a "blackletter-adjacent mark", but the identity is locked and derived from the equation</span><span class="p">Proposed: no new logo, no blackletter font. Issue numerals are built from the Register wordmark's own strokes, the way the 175 numerals echo the Fraktur h, k and s (FN-01).</span></div>
+      <div class="row"><span class="k"><span class="ci"></span>03 · Accent</span><span class="t">Ruled 2026-10-30: one accent label per issue</span><span class="p">Hue recorded in the colophon. Never on reading pages; no status markers alongside it. The DESIGN.md §4 amendment is still to be made through a release.</span></div>
+      <div class="row"><span class="k"><span class="sq"></span>04 · Grid</span><span class="t">An Are.na channel is an equal grid, and DESIGN.md bans repeated equal card grids</span><span class="p">Proposed: ledger rows by default. A cardless "contact sheet" only for image-only channels.</span></div>
+      <div class="row"><span class="k"><span class="sq"></span>05 · IA</span><span class="t">The Index fits neither The Work nor The Practice</span><span class="p">Proposed: the Index is a holding of The Work, a sibling of Runs &amp; Evidence. No third mode.</span></div>
+      <div class="row"><span class="k"><span class="sq"></span>06 · Names</span><span class="t">Beacon, Chronicle, Veil, Specter, and Parallax are ChatGPT-era coinages</span><span class="p">Proposed: use plain descriptive names until each is ruled on under FW-DEC-002.</span></div>
+    </div>
+  </section>
+
+  <!-- FIELD NOTES -->
+  <section aria-labelledby="fn">
+    <span class="label"><b>Research</b> · 7 field notes · frames and timestamps cited · <code>field-notes/</code></span>
+    <h2 id="fn">What the sources actually show</h2>
+    <div class="ledger">
+      <div class="row"><span class="k"><span class="ci"></span>FN-01 · NYT 175</span><span class="t">The wordmark is identical in all 48 frames (12.18 s at 4 fps). Notes, archive photos and folders swap on hard cuts, 4–8 per second.</span><span class="p">Full 73 s film: orange squares are verification marks (Sudan, 0:38–0:42). White pages alternate with black screens. The 175 lockup cuts on complete at about 1:11 and holds.</span></div>
+      <div class="row"><span class="k"><span class="ci"></span>FN-02 · Prada</span><span class="t">The film is finished painted cel animation (54.5 s). The pencil roughs are a separate set of stills.</span><span class="p">Process is published beside the work, not as its style. Red construction pencil (#D98464) rhymes with the red dress. Slate "Scn 2 (A)" and peg holes are real process marks.</span></div>
+      <div class="row"><span class="k"><span class="ci"></span>FN-03 · Public Records</span><span class="t">UPLOAD #13 is grey halftone with one acid-green tab (#CCE302). The attached video is a different piece: an October calendar.</span><span class="p">In the calendar, the month's lineup grows as a network of names along hairlines (1–16 s), holds, then resets at 23 s.</span></div>
+      <div class="row"><span class="k"><span class="sq"></span>FN-04 · Grail</span><span class="t">Video not watched; transcript not obtained</span><span class="p">From secondhand summaries: one book, reread constantly, no to-dos, full books go in a box. The notebook look is unsupported.</span></div>
+      <div class="row"><span class="k"><span class="sq"></span>FN-05 · Maeda</span><span class="t">No source for the pastel geometry</span><span class="p">The documented lesson is constraint: DBN is grayscale only (0–100). "Subtract the obvious, add the meaningful."</span></div>
+      <div class="row"><span class="k"><span class="sq"></span>FN-06 · Petersen</span><span class="t">"Generative Networks": growth by creations, which can be remixed</span><span class="p">Strategy, not a look. Supports stable IDs on every block. The cover is also acid green. smc90 and img-6204 not opened.</span></div>
+      <div class="row"><span class="k"><span class="sq"></span>FN-07 · SoundCloud</span><span class="t">No original found for the particle wave</span><span class="p">The useful idea is the player's comments pinned at a moment on the waveform.</span></div>
+    </div>
+  </section>
+
+  <!-- DIRECTIONS -->
+  <section aria-labelledby="d">
+    <span class="label"><b>Deliverable 3</b> · three directions · same identity, different register in the lead</span>
+    <h2 id="d">Three directions</h2>
+    <div class="dirs">
+      <article class="dir pick">
+        <span class="label"><span class="ci" style="color:var(--rr-ink)"></span><b>A · Recommended</b> · leads with FN-01</span>
+        <h3>The Record Holds</h3>
+        <div class="surface sA" aria-label="Direction A mock: fixed lockup band, evidence ledger, verdigris attention box">
+          <span class="label"><span class="sq"></span><b>Channel · Index</b> · Field of study</span>
+          <div class="fixband"><svg class="m" aria-hidden="true"><use href="#mark"/></svg><svg class="w" viewBox="0 0 560 80" aria-hidden="true"><use href="#word"/></svg></div>
+          <span class="hold"><b>41</b> blocks / <b>12</b> noted · <b>29</b> open</span>
+          <div>
+            <div class="mini-row"><span class="label"><span class="ci"></span>BLK-0412</span><span>Reporter's notebook page, scanned<br><span class="note">Kept flat, uncorrected.</span></span></div>
+            <div class="mini-row att"><span class="label"><span class="sq"></span>BLK-0413</span><span>Contact sheet, 35mm, frames 14–15A</span></div>
+            <div class="mini-row"><span class="label"><span class="sq"></span>BLK-0414</span><span>Calendar lineup, drawn as a network</span></div>
+          </div>
+          <span class="label">By the Faceless Don</span>
+        </div>
+        <div class="chips"><span class="chip pk">FN-01 still mark</span><span class="chip pk">FN-01 attention box</span><span class="chip">FN-05 constraint</span><span class="chip">FN-07 pinned notes</span></div>
+        <dl><dt>Strong</dt><dd>The core idea is seen in the primary source (48 frames). It touches no locked clause.</dd><dt>Weak</dt><dd>It needs real archive material. With an empty Index it's just a quiet page.</dd></dl>
+      </article>
+
+      <article class="dir">
+        <span class="label"><span class="sq"></span><b>B</b> · becomes the process layer · FN-02</span>
+        <h3>Work Beside the Work</h3>
+        <div class="surface sB" aria-label="Direction B mock: process sheet with slate, construction lines, peg holes">
+          <div class="in">
+            <div class="slate"><span>RDG 07</span><span class="circ">A</span></div>
+            <svg viewBox="0 0 300 190" width="100%" aria-hidden="true" fill="none" stroke-linecap="round">
+              <path d="M40 160C80 120 120 60 150 30M150 30C180 60 220 120 260 160" stroke="oklch(0.64 0.12 40)" stroke-width="1.2" stroke-dasharray="4 4"/>
+              <path d="M60 150c30-20 60-56 88-104" stroke="var(--rr-ink)" stroke-width="1.4"/>
+              <path d="M240 150c-30-20-60-56-88-104" stroke="var(--rr-ink)" stroke-width="1.4"/>
+              <path d="M150 30v130" stroke="oklch(0.64 0.12 40)" stroke-width="1" stroke-dasharray="2 5"/>
+              <circle cx="150" cy="104" r="22" stroke="var(--rr-meta)" stroke-width="1"/>
+            </svg>
+            <span class="label">Rough · deriving the open center · linked to reading 07</span>
+          </div>
+          <div class="pegs" aria-hidden="true"><i class="slot"></i><i class="hole"></i><i class="slot"></i></div>
+        </div>
+        <div class="chips"><span class="chip">FN-02 process beside work</span><span class="chip">FN-02 slate + pegs</span><span class="chip">FN-04 reread</span></div>
+        <dl><dt>Strong</dt><dd>Visible process, made literal and honest: real roughs linked to finished readings.</dd><dt>Weak</dt><dd>Only works if process is actually kept. The notebook look is unsupported (FN-04).</dd></dl>
+      </article>
+
+      <article class="dir">
+        <span class="label"><span class="sq"></span><b>C</b> · becomes the issue register · FN-03</span>
+        <h3>The Drop</h3>
+        <div class="surface sC" aria-label="Direction C mock: grey halftone, one accent label, lockup on a fixed band">
+          <svg class="ht" viewBox="0 0 200 160" preserveAspectRatio="xMidYMid slice" aria-hidden="true" style="color:var(--rr-ink)"><clipPath id="cl"><ellipse cx="62" cy="80" rx="48" ry="72"/><ellipse cx="138" cy="80" rx="48" ry="72"/></clipPath><rect width="200" height="160" fill="url(#ht)" clip-path="url(#cl)" opacity=".7"/></svg>
+          <div class="top"><svg viewBox="0 0 230 176" aria-hidden="true"><use href="#mark"/></svg><span class="label">Issue</span></div>
+          <div class="plate"><span class="tab light">The Index</span><span class="np">Issue 01</span><span class="tab light">Constructed, not assigned</span></div>
+          <div class="colo">Issue 01 · 2026-11 · 6 findings · 38 blocks · accent recorded in colophon</div>
+        </div>
+        <div class="chips"><span class="chip">FN-03 one green tab</span><span class="chip">FN-03 network lineup</span><span class="chip">FN-06 stable IDs</span></div>
+        <dl><dt>Strong</dt><dd>Built for X and numbered drops. Accretion is a strong channel motion.</dd><dt>Weak</dt><dd>The accent still amends DESIGN.md §4. The "issue" model rests on one still (FN-00).</dd></dl>
+      </article>
+    </div>
+    <p class="caption">The issue label in C is set in Schibsted Grotesk as a placeholder. The rule is numerals built from the Register wordmark's strokes, designed together with the mark's motion study (05-motion).</p>
+
+    <div class="verdict">
+      <span class="label"><span class="ci" style="color:var(--rr-ink)"></span><b>Recommendation</b></span>
+      <p><strong>A as the system.</strong> It's the direction most directly seen in the primary source: a public record where the mark holds and the evidence moves. B rides along as the linked process layer. C contributes one accent label per issue and accretion as channel motion.</p>
+      <p>The masthead ruling (keep "A public record of coherence") settles A as the base.</p>
+    </div>
+  </section>
+
+  <!-- TYPE -->
+  <section aria-labelledby="t">
+    <span class="label"><b>Deliverable 1 · §1</b> · type · no face changes</span>
+    <h2 id="t">Serif reads, grotesk structures, mono certifies</h2>
+    <div class="type">
+      <div class="ty"><span class="label"><b>Literata</b> · reading · held (Times: Cheltenham defines) · FN-01</span><span class="s-read">Identity is constructed, negotiated, and owned.</span></div>
+      <div class="ty"><span class="label"><b>Schibsted Grotesk</b> · structure · held (Times: Franklin informs) · FN-01</span><span class="s-struct">Channel · Index</span></div>
+      <div class="ty"><span class="label"><b>Spline Sans Mono</b> · archive facts, slates, timestamps · FN-02 · FN-07</span><span class="s-rec">BLK-0412 · IMAGE · ARE.NA/FACEWORK-INDEX · 3 CHANNELS</span></div>
+      <div class="ty"><span class="label"><b>Literata italic</b> · typed margin note · real handwriting is scanned, never a font · FN-01</span><span class="s-note">Why this is here: the hand stays visible inside the machine frame.</span></div>
+      <div class="ty"><span class="label"><b>Issue numerals</b> · built from wordmark strokes · FN-01</span><span class="s-np">Not drawn yet. Designed together with the mark’s motion study, as the 175 numerals and their motion were.</span></div>
+    </div>
+  </section>
+
+  <!-- COLOR -->
+  <section aria-labelledby="c">
+    <span class="label"><b>Deliverable 1 · §2</b> · color</span>
+    <h2 id="c">Paper, ink, one pointing accent, and one label per issue</h2>
+    <div class="sw">
+      <div><i style="background:var(--rr-paper);border-bottom:1px solid var(--rr-rule)"></i><span class="label"><b>Paper</b></span><span>--rr-paper · kept</span></div>
+      <div><i style="background:var(--rr-ink)"></i><span class="label"><b>Ink</b></span><span>--rr-ink · kept · CTAs</span></div>
+      <div><i style="background:var(--rr-verdigris)"></i><span class="label"><b>Verdigris</b></span><span>The one brand accent · kept</span></div>
+      <div><i style="background:var(--rr-field)"></i><span class="label"><b>Field</b></span><span>Obsidian · process ground · kept</span></div>
+      <div><i style="background:var(--rr-issue)"></i><span class="label"><b>Issue · proposed</b></span><span>--rr-issue · one label per issue</span></div>
+    </div>
+    <p>The Times ground samples #FDFDFD; its warmth comes from the objects, not the paper (FN-01). The only accent is a thin box that points (FN-01), which is verdigris’s job here. The real UPLOAD #13 is grey with <b>one</b> green tab, #CCE302 (FN-03), so the issue accent shrinks to one label. It still sits next to <em>settled</em> on the hue wheel, which is why a page carrying it shows no status markers.</p>
+    <div class="hue" role="img" aria-label="Hue ruler 0 to 360: exposure 30, signal orange candidate 45, attention 75, acid green candidate 125, settled 150, verdigris 190, archive 300">
+      <span class="tick" style="left:0"></span><span class="tick" style="left:100%"></span>
+      <span class="m" style="left:8.33%"><i style="background:var(--rr-exposure)"></i>exposure 30</span>
+      <span class="m" style="left:20.8%"><i style="background:var(--rr-attention)"></i>attention 75</span>
+      <span class="m" style="left:41.7%"><i style="background:var(--rr-settled)"></i>settled 150</span>
+      <span class="m" style="left:52.8%"><i style="background:var(--rr-verdigris)"></i>verdigris 190</span>
+      <span class="m" style="left:83.3%"><i style="background:var(--rr-archive)"></i>archive 300</span>
+      <span class="m cand" style="left:12.5%"><i style="background:oklch(0.68 0.19 45)"></i>FN-07 #FF5500 ~45</span>
+      <span class="m cand" style="left:32.8%"><i style="background:var(--rr-issue)"></i>FN-03 acid 118</span>
+    </div>
+  </section>
+
+  <!-- COMPONENTS -->
+  <section aria-labelledby="k">
+    <span class="label"><b>Deliverable 2</b> · Are.na / Index components · none of them is a card</span>
+    <h2 id="k">Archive block, channel, finding, chapter, issue</h2>
+    <div class="comp">
+      <div class="block">
+        <span class="label"><span class="ci" style="color:var(--rr-settled)"></span><b>BLK-0412</b> · Image · are.na/facework-index</span>
+        <div class="img"><svg viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true" style="color:var(--rr-body)"><rect width="300" height="200" fill="url(#ht2)" opacity=".55"/></svg></div>
+        <span class="t">Photographed figure inside a pencil drawing</span>
+        <span class="label">source-domain.example · captured date shown only if the source has one</span>
+        <p class="note marg">The hand and the camera share one frame. The process is left in.</p>
+        <span class="label">↳ in <b>3</b> channels · circle = noted and connected</span>
+      </div>
+      <div class="block">
+        <span class="label"><span class="sq"></span><b>Channel</b> · Index · Domain · Open</span>
+        <span class="t" style="font-family:var(--struct)">Craft and process references</span>
+        <p>Intent: references where the making stays visible in the made thing.</p>
+        <span class="hold"><b>41</b> blocks / <b>12</b> noted · <b>29</b> open</span>
+        <div class="sheet" aria-label="Contact sheet example">
+          <figure><div></div><figcaption>BLK-0412</figcaption></figure>
+          <figure><div></div><figcaption>BLK-0413</figcaption></figure>
+          <figure><div></div><figcaption>BLK-0414</figcaption></figure>
+          <figure><div></div><figcaption>BLK-0415</figcaption></figure>
+        </div>
+        <span class="caption">Contact sheet: the only sanctioned equal grid, for image-only channels. 1px gutters, no card chrome.</span>
+      </div>
+      <div class="block">
+        <span class="label"><span class="sq"></span><b>Finding 07</b> · From channel Index · 5 blocks cited</span>
+        <span class="t" style="font-size:1.5rem;line-height:1.25">Visible process reads as trust when the archive can show its sources.</span>
+        <p>A finding is a reading: eyebrow, claim, body, instrument, verdict. Without block citations it's an essay, not a finding.</p>
+        <span class="label">Verdict · <b>Open</b> · cites BLK-0412 · 0413 · 0414 · 0415 · 0418</span>
+      </div>
+      <div class="block">
+        <span class="label"><b>Chapter 3 of 4</b> · Executing Facework · index is real (roadmap)</span>
+        <span class="t">Prologue</span>
+        <p style="font-size:1.05rem">We started by asking who gets to decide how a person is seen. The archive is our answer in progress. It is kept in the open, and every claim points back to what it came from.</p>
+        <span class="label">By the Faceless Don · prologue voice · placeholder copy until 02-narrative-rewrite is attached</span>
+      </div>
+    </div>
+
+    <h3 style="margin-top:16px">Where the Faceless Don voice sits: a lens, never a mascot</h3>
+    <div class="tbl"><table>
+      <thead><tr><th>Placement</th><th>Allowed</th><th>Form</th></tr></thead>
+      <tbody>
+        <tr><td>Byline</td><td>Yes</td><td>Mono · <code>BY THE FACELESS DON</code> (already the canon byline on theory docs)</td></tr>
+        <tr><td>Prologue</td><td>Yes</td><td>Literata, at most 3 paragraphs, chapters and issues only</td></tr>
+        <tr><td>Margin note</td><td>Yes</td><td>Literata italic, 1–2 sentences: why this block is here</td></tr>
+        <tr><td>Colophon</td><td>Yes</td><td>One mono line</td></tr>
+        <tr><td>Avatar, silhouette, mask icon</td><td class="no">No</td><td class="no">None, in any state</td></tr>
+        <tr><td>Chatbot / "ask the Don"</td><td class="no">No</td><td class="no">None</td></tr>
+        <tr><td>Nav, buttons, errors, section heads</td><td class="no">No</td><td class="no">The system speaks plainly there</td></tr>
+      </tbody>
+    </table></div>
+    <p><strong>The Don frames, the record certifies.</strong> The narrator can say why something matters. Only mono says what it <em>is</em>.</p>
+  </section>
+
+  <!-- TEXTURE -->
+  <section aria-labelledby="x">
+    <span class="label"><b>Deliverable 1 · §5</b> · texture is allowed only when it reports process</span>
+    <h2 id="x">Texture rules</h2>
+    <div class="tbl"><table>
+      <thead><tr><th>Texture</th><th>Means</th><th>Allowed on</th><th>Never</th></tr></thead>
+      <tbody>
+        <tr><td>Real scans · FN-01</td><td>The actual material</td><td>Archive blocks, shown flat and uncorrected. This is the main texture.</td><td>Grain or age overlays on the ground</td></tr>
+        <tr><td>Process layer · FN-02</td><td>How it was made</td><td>Real roughs, slates and construction lines, published beside and linked to the finished reading</td><td>As a filter or style on finished work</td></tr>
+        <tr><td>Notebook ground · FN-04</td><td colspan="3" class="no">Dropped pending. Its only evidence was a generated mood-board panel.</td></tr>
+        <tr><td>Halftone · FN-03</td><td>This image is a reproduction</td><td>External-source block images, covers. One screen, one color</td><td>Facework diagrams, or faces of real people in identity research</td></tr>
+        <tr><td>Signal trace · FN-07</td><td>Data over time</td><td>Field/Trace instrument only, structural motion</td><td>Ambient decoration, glow</td></tr>
+      </tbody>
+    </table></div>
+    <p>One texture per surface. No site-wide paper grain. Nothing on CTAs or navigation. With reduced motion, traces show their settled state.</p>
+  </section>
+
+  <!-- MARK STUDY -->
+  <section aria-labelledby="mk">
+    <span class="label"><b>Mark study</b> · reopened at Stead’s request · mark and motion derived together · <code>06-mark-study.md</code></span>
+    <h2 id="mk">What the mark could be</h2>
+    <p><b>Status: M2 is the call</b> after the lookalike check (07). M1’s corners live on as the attention box (08 §4). Criteria first, then shapes. The mark must: carry canon meaning (four constructs, open center); be complete on arrival (FN-01 end card); share strokes with the wordmark (FN-01); have motion that’s a working behavior, not a logo animation; and be faceless, a lens.</p>
+    <div class="marks">
+      <article class="mk">
+        <span class="label"><span class="sq"></span><b>M1</b> · The Frame · failed lookalike check (07) → kept as the attention box</span>
+        <div class="stage" aria-label="M1: four square-capped corners around an empty 4:5 portrait space"><svg viewBox="0 0 64 80" aria-hidden="true"><use href="#frame"/></svg></div>
+        <div class="lock" aria-label="M1 lockup with wordmark"><svg class="a" viewBox="0 0 64 80" aria-hidden="true"><use href="#frame"/></svg><svg class="b" viewBox="0 0 560 80" aria-hidden="true"><use href="#word"/></svg></div>
+        <div class="micro" aria-label="M1 at 16px"><svg viewBox="0 0 64 80" aria-hidden="true"><use href="#frame"/></svg><span class="label">16 px</span></div>
+        <dl class="dir"><dt>Meaning</dt><dd>Four corners are the four constructs; the empty interior is Coherence; the open sides are exchange with the world. A portrait frame with no face: the lens, never the face.</dd><dt>Motion</dt><dd>It <em>is</em> the attention box. It cuts from evidence to evidence, and when it lands on nothing, it’s the logo.</dd><dt>Risk</dt><dd>Corner brackets are a common UI motif. Needs a distinctiveness check.</dd></dl>
+      </article>
+      <article class="mk pick">
+        <span class="label"><span class="ci" style="color:var(--rr-ink)"></span><b>M2 · Recommended after 07</b> · Coherence Mark, redrawn monoline</span>
+        <div class="stage" aria-label="M2: the four-strand bilateral mark drawn as monoline strokes"><svg viewBox="0 0 216 160" aria-hidden="true"><use href="#mono2"/></svg></div>
+        <div class="lock"><svg class="a" viewBox="0 0 216 160" aria-hidden="true"><use href="#mono2"/></svg><svg class="b" viewBox="0 0 560 80" aria-hidden="true"><use href="#word"/></svg></div>
+        <div class="micro"><svg viewBox="0 0 216 160" aria-hidden="true"><use href="#mono2"/></svg><span class="label">16 px</span></div>
+        <dl class="dir"><dt>Meaning</dt><dd>Keeps the recovered lineage and the full FVI-001 derivation. Gains the wordmark’s stroke.</dd><dt>Motion</dt><dd>Strand draw-in: a logo animation, not a system behavior.</dd><dt>Risk</dt><dd>Still reads “butterfly” first.</dd></dl>
+      </article>
+      <article class="mk">
+        <span class="label"><span class="sq"></span><b>M3</b> · Register monogram</span>
+        <div class="stage" aria-label="M3: F and W from the wordmark"><svg viewBox="0 0 134 80" aria-hidden="true"><use href="#fw"/></svg></div>
+        <div class="lock"><svg class="a" viewBox="0 0 134 80" aria-hidden="true"><use href="#fw"/></svg><svg class="b" viewBox="0 0 560 80" aria-hidden="true"><use href="#word"/></svg></div>
+        <div class="micro"><svg viewBox="0 0 134 80" aria-hidden="true"><use href="#fw"/></svg><span class="label">16 px</span></div>
+        <dl class="dir"><dt>Meaning</dt><dd>None beyond the name. Perfect family resemblance.</dd><dt>Motion</dt><dd>None intrinsic.</dd><dt>Risk</dt><dd>Generic. Carries no canon meaning.</dd></dl>
+      </article>
+    </div>
+
+    <h3 style="margin-top:8px">M2 drawing pass (08)</h3>
+    <p>The Coherence Mark redrawn monoline at the wordmark’s weight. Four strands per side; the lowest rises and crosses the third (Entropy); the center stays open. Small sizes are drawn on their own pixel grids, not scaled down.</p>
+    <div style="display:grid;gap:20px;color:var(--rr-ink)">
+      <figure style="margin:0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 772.8 128.0" aria-hidden="true" style="width:min(100%,640px);height:auto"><g transform="scale(0.8)"><g fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="square" stroke-linejoin="miter"><path d="M10 18C44 21 74 30 96 44"/><path d="M16 50C46 54 74 62 96 76"/><path d="M24 82C50 86 74 96 96 112"/><path d="M14 150C26 126 40 98 96 92"/><path d="M206 18C172 21 142 30 120 44"/><path d="M200 50C170 54 142 62 120 76"/><path d="M192 82C166 86 142 96 120 112"/><path d="M202 150C190 126 176 98 120 92"/></g></g><g transform="translate(212.8 24)"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter"><path d="M8 70V10H50M8 39H43"/><path d="M67 70L90 15L113 70M80 47H100"/><path d="M183 22C176 13 168 10 157 10C140 10 131 21 131 40C131 59 140 70 157 70C168 70 176 67 183 58"/><path d="M207 10V70M207 10H251M207 39H245M207 70H251"/><path d="M273 10L285 65L305 36L325 65L337 10"/><path d="M382 10C365 10 356 21 356 40C356 59 365 70 382 70C399 70 408 59 408 40C408 21 399 10 382 10Z"/><path d="M433 70V10H458C473 10 481 18 481 30C481 42 473 49 461 49L484 70M461 49H433"/><path d="M509 10V70M551 10L513 42L554 70"/></g></g></svg>
+<figcaption class="caption">Horizontal lockup. Mark at 0.8×, so its stroke equals the wordmark’s. Clear space x = cap height. Minimum 120 px wide.</figcaption></figure>
+      <div style="display:flex;flex-wrap:wrap;gap:28px;align-items:flex-end">
+        <figure style="margin:0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 238.0" aria-hidden="true" style="width:200px;height:auto"><g transform="translate(193.6 0)"><g transform="scale(0.8)"><g fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="square" stroke-linejoin="miter"><path d="M10 18C44 21 74 30 96 44"/><path d="M16 50C46 54 74 62 96 76"/><path d="M24 82C50 86 74 96 96 112"/><path d="M14 150C26 126 40 98 96 92"/><path d="M206 18C172 21 142 30 120 44"/><path d="M200 50C170 54 142 62 120 76"/><path d="M192 82C166 86 142 96 120 112"/><path d="M202 150C190 126 176 98 120 92"/></g></g></g><g transform="translate(0 158.0)"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter"><path d="M8 70V10H50M8 39H43"/><path d="M67 70L90 15L113 70M80 47H100"/><path d="M183 22C176 13 168 10 157 10C140 10 131 21 131 40C131 59 140 70 157 70C168 70 176 67 183 58"/><path d="M207 10V70M207 10H251M207 39H245M207 70H251"/><path d="M273 10L285 65L305 36L325 65L337 10"/><path d="M382 10C365 10 356 21 356 40C356 59 365 70 382 70C399 70 408 59 408 40C408 21 399 10 382 10Z"/><path d="M433 70V10H458C473 10 481 18 481 30C481 42 473 49 461 49L484 70M461 49H433"/><path d="M509 10V70M551 10L513 42L554 70"/></g></g></svg>
+<figcaption class="caption">Stacked, min 64 px</figcaption></figure>
+        <figure style="margin:0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 216 160" aria-hidden="true" style="width:96px;height:auto"><g fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="square" stroke-linejoin="miter"><path d="M10 18C44 21 74 30 96 44"/><path d="M16 50C46 54 74 62 96 76"/><path d="M24 82C50 86 74 96 96 112"/><path d="M14 150C26 126 40 98 96 92"/><path d="M206 18C172 21 142 30 120 44"/><path d="M200 50C170 54 142 62 120 76"/><path d="M192 82C166 86 142 96 120 112"/><path d="M202 150C190 126 176 98 120 92"/></g></svg>
+<figcaption class="caption">Master</figcaption></figure>
+        <figure style="margin:0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" aria-hidden="true" style="width:32px;height:32px"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square" stroke-linejoin="miter"><path d="M1.5 5C6 5.4 10.5 6.8 13.6 9"/><path d="M2.4 10C6.6 10.6 10.5 12 13.6 14.2"/><path d="M3.4 15.2C7 15.9 10.5 17.6 13.6 20.6"/><path d="M2 27C3.8 23.2 5.8 18.8 13.6 17.4"/><path d="M30.5 5C26 5.4 21.5 6.8 18.4 9"/><path d="M29.6 10C25.4 10.6 21.5 12 18.4 14.2"/><path d="M28.6 15.2C25 15.9 21.5 17.6 18.4 20.6"/><path d="M30 27C28.2 23.2 26.2 18.8 18.4 17.4"/></g></svg>
+<figcaption class="caption">32</figcaption></figure>
+        <figure style="margin:0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" style="width:24px;height:24px"><g fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="square" stroke-linejoin="miter"><path d="M1.2 4C4.6 4.3 7.8 5.3 10.1 7"/><path d="M1.8 7.8C5 8.3 7.9 9.4 10.1 11"/><path d="M2.6 11.8C5.3 12.4 7.9 13.7 10.1 16"/><path d="M1.5 20.4C2.8 17.4 4.3 14.2 10.1 13.2"/><path d="M22.8 4C19.4 4.3 16.2 5.3 13.9 7"/><path d="M22.2 7.8C19 8.3 16.1 9.4 13.9 11"/><path d="M21.4 11.8C18.7 12.4 16.1 13.7 13.9 16"/><path d="M22.5 20.4C21.2 17.4 19.7 14.2 13.9 13.2"/></g></svg>
+<figcaption class="caption">24</figcaption></figure>
+        <figure style="margin:0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" aria-hidden="true" style="width:16px;height:16px"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="butt" stroke-linejoin="miter"><path d="M1 3L6.3 4.8"/><path d="M1.4 6.2L6.3 8"/><path d="M2 9.4L6.3 12.2"/><path d="M1 14.2L6.3 10"/><path d="M15 3L9.7 4.8"/><path d="M14.6 6.2L9.7 8"/><path d="M14 9.4L9.7 12.2"/><path d="M15 14.2L9.7 10"/></g></svg>
+<figcaption class="caption">16</figcaption></figure>
+      </div>
+    </div>
+    <h3 style="margin-top:8px">Issue numerals: the 175 logic</h3>
+    <p>The Times drew 175 so each numeral echoes a letter of its wordmark (FN-01). Here every digit is built only from strokes already in FACEWORK: stems, bars, the O, the C opening, the R bowl, the A diagonal. Refined set; optical overshoot still needs a type designer.</p>
+    <figure style="margin:0;border:1px solid var(--rr-rule);padding:12px;color:var(--rr-ink)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 610 120" aria-hidden="true" style="width:100%;height:auto"><g transform="translate(10 20)"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="2"><path transform="translate(0 0)" d="M24 10C10 10 4 21 4 40C4 59 10 70 24 70C38 70 44 59 44 40C44 21 38 10 24 10Z"/></g></g><g transform="translate(70 20)"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="2"><path transform="translate(0 0)" d="M28 70V10M28 10L14 22"/></g></g><g transform="translate(130 20)"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="2"><path transform="translate(0 0)" d="M7 21C10 14 16 10 24 10C35 10 42 16 42 26C42 35 36 41 27 48L6 70H43"/></g></g><g transform="translate(190 20)"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="2"><path transform="translate(0 0)" d="M7 15C11 11 16 10 22 10C34 10 41 16 41 25C41 34 34 39 22 39H18M22 39C35 39 43 45 43 55C43 65 35 70 22 70C15 70 10 68 6 64"/></g></g><g transform="translate(250 20)"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="2"><path transform="translate(0 0)" d="M32 70V14L5 52H44"/></g></g><g transform="translate(310 20)"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="2"><path transform="translate(0 0)" d="M41 10H9V36C13 34 18 33 23 33C35 33 43 40 43 51C43 63 35 70 23 70C15 70 10 68 6 64"/></g></g><g transform="translate(370 20)"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="2"><path transform="translate(0 0)" d="M39 14C35 11 30 10 26 10C12 10 5 22 5 42C5 60 12 70 25 70C37 70 44 62 44 52C44 41 37 35 25 35C16 35 9 40 6 46"/></g></g><g transform="translate(430 20)"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="2"><path transform="translate(0 0)" d="M5 10H43L19 70"/></g></g><g transform="translate(490 20)"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="2"><path transform="translate(0 0)" d="M24 39C14 39 8 33 8 25C8 16 15 10 24 10C34 10 40 16 40 25C40 33 34 39 24 39C12 39 6 45 6 55C6 64 14 70 24 70C35 70 42 64 42 55C42 45 36 39 24 39Z"/></g></g><g transform="translate(550 20)"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="2"><path transform="translate(0 0) rotate(180 24.5 40)" d="M39 14C35 11 30 10 26 10C12 10 5 22 5 42C5 60 12 70 25 70C37 70 44 62 44 52C44 41 37 35 25 35C16 35 9 40 6 46"/></g></g></svg>
+<figcaption class="caption">Refined set: marks/m2/numerals-0-9.svg. Sources per digit in 08 §3.</figcaption></figure>
+    <figure style="margin:0;color:var(--rr-ink)" aria-label="M2 issue lockup 13"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940.8 128.0" aria-hidden="true" style="width:min(100%,720px);height:auto"><g transform="scale(0.8)"><g fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="square" stroke-linejoin="miter"><path d="M10 18C44 21 74 30 96 44"/><path d="M16 50C46 54 74 62 96 76"/><path d="M24 82C50 86 74 96 96 112"/><path d="M14 150C26 126 40 98 96 92"/><path d="M206 18C172 21 142 30 120 44"/><path d="M200 50C170 54 142 62 120 76"/><path d="M192 82C166 86 142 96 120 112"/><path d="M202 150C190 126 176 98 120 92"/></g></g><g transform="translate(212.8 24)"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter"><path d="M8 70V10H50M8 39H43"/><path d="M67 70L90 15L113 70M80 47H100"/><path d="M183 22C176 13 168 10 157 10C140 10 131 21 131 40C131 59 140 70 157 70C168 70 176 67 183 58"/><path d="M207 10V70M207 10H251M207 39H245M207 70H251"/><path d="M273 10L285 65L305 36L325 65L337 10"/><path d="M382 10C365 10 356 21 356 40C356 59 365 70 382 70C399 70 408 59 408 40C408 21 399 10 382 10Z"/><path d="M433 70V10H458C473 10 481 18 481 30C481 42 473 49 461 49L484 70M461 49H433"/><path d="M509 10V70M551 10L513 42L554 70"/></g></g><g transform="translate(820.8 24)"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="2"><path transform="translate(0 0)" d="M28 70V10M28 10L14 22"/><path transform="translate(60 0)" d="M7 15C11 11 16 10 22 10C34 10 41 16 41 25C41 34 34 39 22 39H18M22 39C35 39 43 45 43 55C43 65 35 70 22 70C15 70 10 68 6 64"/></g></g></svg>
+<figcaption class="caption">Issue lockup, one baseline: marks/m2/m2-lockup-issue-13.svg</figcaption></figure>
+    <h3 style="margin-top:8px">Motion study: a channel builds, the attention box (The Frame) checks, a state settles, the M2 lockup cuts on</h3>
+    <div class="ms" id="ms" role="img" aria-label="Motion study. Archive blocks cut on one at a time; a verdigris frame cuts between cited blocks; one block's marker eases from open square to settled circle; then the lockup with issue numerals cuts on complete and holds.">
+      <div class="ms-cap label" id="mscap">Settled channel (static)</div>
+      <div class="ms-ch">
+        <span class="label"><b>Channel · Index</b> · Visible process</span>
+        <span class="hold" id="mshold"><b>6</b> blocks · <b>1</b> settled · <b>5</b> open</span>
+        <div class="mrows"><div class="mrow" data-i="0"><span class="mk-sh sq2"></span><span class="label">BLK-0412 · scan</span><span class="mt">Reporter’s notebook page</span><span class="label st">Open</span></div><div class="mrow" data-i="1"><span class="mk-sh sq2"></span><span class="label">BLK-0413 · image</span><span class="mt">Contact sheet, frames 14–15A</span><span class="label st">Open</span></div><div class="mrow" data-i="2"><span class="mk-sh sq2"></span><span class="label">BLK-0418 · source</span><span class="mt">Pentagon study, cover page</span><span class="label st">Open</span></div><div class="mrow" data-i="3"><span class="mk-sh ci2"></span><span class="label">BLK-0421 · audio</span><span class="mt">Interview, pinned at 0:58</span><span class="label st">Settled</span></div><div class="mrow" data-i="4"><span class="mk-sh sq2"></span><span class="label">BLK-0425 · scan</span><span class="mt">Field notes, Grand Rapids</span><span class="label st">Open</span></div><div class="mrow" data-i="5"><span class="mk-sh sq2"></span><span class="label">BLK-0430 · image</span><span class="mt">Satellite frame, verified</span><span class="label st">Open</span></div></div>
+      </div>
+      <div class="box" id="msbox"><svg viewBox="0 0 64 80" preserveAspectRatio="none"><path d="M4 28V4H20M44 4H60V28M4 52V76H20M44 76H60V52" fill="none" stroke="currentColor" stroke-linecap="square"/></svg></div>
+      <div class="ms-end" id="msend"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940.8 128.0" aria-hidden="true" style="width:min(80%,660px);height:auto"><g transform="scale(0.8)"><g fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="square" stroke-linejoin="miter"><path d="M10 18C44 21 74 30 96 44"/><path d="M16 50C46 54 74 62 96 76"/><path d="M24 82C50 86 74 96 96 112"/><path d="M14 150C26 126 40 98 96 92"/><path d="M206 18C172 21 142 30 120 44"/><path d="M200 50C170 54 142 62 120 76"/><path d="M192 82C166 86 142 96 120 112"/><path d="M202 150C190 126 176 98 120 92"/></g></g><g transform="translate(212.8 24)"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter"><path d="M8 70V10H50M8 39H43"/><path d="M67 70L90 15L113 70M80 47H100"/><path d="M183 22C176 13 168 10 157 10C140 10 131 21 131 40C131 59 140 70 157 70C168 70 176 67 183 58"/><path d="M207 10V70M207 10H251M207 39H245M207 70H251"/><path d="M273 10L285 65L305 36L325 65L337 10"/><path d="M382 10C365 10 356 21 356 40C356 59 365 70 382 70C399 70 408 59 408 40C408 21 399 10 382 10Z"/><path d="M433 70V10H458C473 10 481 18 481 30C481 42 473 49 461 49L484 70M461 49H433"/><path d="M509 10V70M551 10L513 42L554 70"/></g></g><g transform="translate(820.8 24)"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="2"><path transform="translate(0 0)" d="M28 70V10M28 10L14 22"/><path transform="translate(60 0)" d="M7 15C11 11 16 10 22 10C34 10 41 16 41 25C41 34 34 39 22 39H18M22 39C35 39 43 45 43 55C43 65 35 70 22 70C15 70 10 68 6 64"/></g></g></svg>
+</div>
+    </div>
+    <p class="caption">Two clocks (05 P2): evidence <b>cuts</b> (blocks arrive about every 300 ms; the box jumps about every 380 ms); state <b>eases</b> (square → circle, 520 ms, <code>--rr-ease-settle</code>). The lockup cuts on complete and holds (FN-01 end card, about 1:11). With reduced motion, or without scripts, the settled channel shows, static. Numerals are drawn from the wordmark’s strokes (<code>marks/register-numerals.svg</code>).</p>
+    <script>
+    (function(){
+      var ms=document.getElementById('ms'),box=document.getElementById('msbox'),cap=document.getElementById('mscap'),hold=document.getElementById('mshold'),end=document.getElementById('msend');
+      var rows=[].slice.call(ms.querySelectorAll('.mrow'));
+      var still=false; try{still=matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){}
+      function settled(r,on){var m=r.querySelector('.mk-sh');m.classList.toggle('ci2',on);m.classList.toggle('sq2',!on);r.querySelector('.st').textContent=on?'Settled':'Open'}
+      function setHold(n,s){hold.innerHTML='<b>'+n+'</b> blocks · <b>'+s+'</b> settled · <b>'+(n-s)+'</b> open'}
+      function finalState(){rows.forEach(function(r,k){r.style.visibility='visible';settled(r,k===3)});setHold(6,1);box.style.display='none';end.style.display='none';cap.textContent='Settled channel (static)'}
+      if(still){finalState();return}
+      ms.classList.add('anim');
+      var T=[],q=function(ms_,f){T.push([ms_,f])};
+      function place(r){var a=r.getBoundingClientRect(),R=ms.getBoundingClientRect(),p=5;box.style.display='block';box.style.left=(a.left-R.left-p)+'px';box.style.top=(a.top-R.top-p)+'px';box.style.width=(a.width+2*p)+'px';box.style.height=(a.height+2*p)+'px'}
+      function build(){
+        T=[];
+        q(0,function(){end.style.display='none';box.style.display='none';rows.forEach(function(r){r.style.visibility='hidden';settled(r,false)});setHold(0,0);cap.textContent='1 · Accretion: blocks cut on, one at a time'});
+        rows.forEach(function(r,k){q(300,function(){r.style.visibility='visible';setHold(k+1,0)})});
+        q(500,function(){cap.textContent='2 · Attention box: cuts to the evidence being checked'});
+        [0,2,5,3].forEach(function(k){q(380,function(){place(rows[k])})});
+        q(420,function(){cap.textContent='3 · State eases: open → settled'; settled(rows[3],true); setHold(6,1)});
+        q(1300,function(){box.style.display='none';cap.textContent='4 · Lockup: cuts on complete, holds';end.style.display='grid'});
+        q(2800,function(){run()});
+      }
+      function run(){build();var t=0;T.forEach(function(x){t+=x[0];setTimeout(x[1],t)})}
+      run();
+    })();
+    </script>
+  </section>
+
+  <!-- MOTION -->
+  <section aria-labelledby="mo">
+    <span class="label"><b>Deliverable 4</b> · motion principles · <code>05-motion-principles.md</code></span>
+    <h2 id="mo">The mark holds; the record moves</h2>
+    <div class="ledger">
+      <div class="row"><span class="k">P1 · Hold</span><span class="t">The lockup never takes part in content motion</span><span class="p">In the full Times film, the 175 lockup cuts on complete at about 1:11 and holds. No draw-in. Proposed: keep Facework’s draw-in for the identity moment only.</span></div>
+      <div class="row"><span class="k">P2 · Two clocks</span><span class="t">Evidence cuts; state changes settle</span><span class="p">Evidence swaps instantly at 120–250 ms per item. Open→issued uses <code>--rr-ease-settle</code>. FN-01 hard cuts.</span></div>
+      <div class="row"><span class="k">P3 · Attention box</span><span class="t">A 1px verdigris rectangle that jumps to what’s being read</span><span class="p">Never tweened, one per screen. FN-01 orange box.</span></div>
+      <div class="row"><span class="k">P4 · Accretion</span><span class="t">Channels build block by block along their connections, then settle</span><span class="p">Once on the web; may loop in social. FN-03 calendar network.</span></div>
+      <div class="row"><span class="k">P5 · Two worlds</span><span class="t">Archive moves like a document; Facework drawings draw in</span><span class="p">No parallax or animation of real people’s archival images. FN-02 contrast.</span></div>
+      <div class="row"><span class="k">P6 · Parallel track</span><span class="t">Process is shown beside the work, never as a filter on it</span><span class="p">No fake boil, grain or wobble. FN-02 stills vs film.</span></div>
+      <div class="row"><span class="k">P8 · Sources first</span><span class="t">The material speaks for most of the film; the brand speaks last</span><span class="p">69 of 73 s are archival voices and work. Then one line types on (~35 characters/s) and the lockup cuts on.</span></div>
+      <div class="row"><span class="k"><span class="sq"></span>Open</span><span class="t">Coherence Mark motion study, before any numerals</span><span class="p">The end-card behavior is now known. The New Year’s Eve launch animation is still unseen.</span></div>
+    </div>
+  </section>
+
+  <!-- DELTA -->
+  <section aria-labelledby="df">
+    <span class="label"><b>Deliverable 5</b> · recommendations only</span>
+    <h2 id="df">Delta Futurism: a domain and an issue series, not a sub-brand</h2>
+    <div class="ledger">
+      <div class="row"><span class="k">01 · Tag</span><span class="t"><code>DOMAIN · DELTA</code> on channels, findings, issues</span><span class="p">Domains stay open. Delta is one value among future, unnamed ones.</span></div>
+      <div class="row"><span class="k">02 · Same body</span><span class="t">Same type, paper, mark</span><span class="p">That's what "seen through Facework's visual language" means in practice.</span></div>
+      <div class="row"><span class="k">03 · Accent</span><span class="t">Per-issue accent taken from the place</span><span class="p">River silt, red clay, juke-joint paint. Recorded in the colophon with its source. Covers only.</span></div>
+      <div class="row"><span class="k">04 · Maps</span><span class="t">City pods and the corridor as Structure / Lineage diagrams</span><span class="p">Not tourism maps. Pods still forming are squares, established ones are circles.</span></div>
+      <div class="row"><span class="k">05 · Dignity</span><span class="t">History enters as cited archive blocks</span><span class="p">No sepia "authenticity", no Southern-gothic texture. Let a finding test the blues narrative, not illustrate it.</span></div>
+    </div>
+  </section>
+
+  <!-- SOURCES -->
+  <section aria-labelledby="s">
+    <span class="label"><span class="sq"></span><b>Missing sources</b> · on the remote box, not reachable from here</span>
+    <h2 id="s">Please attach</h2>
+    <div class="ledger">
+      <div class="row"><span class="k">P1</span><span class="t">02-narrative-rewrite.md</span><span class="p">The real Faceless Don voice. The narrator rules here are inferred, not read.</span></div>
+      <div class="row"><span class="k">P2</span><span class="t">07-identity-as-infrastructure.md</span><span class="p">The thesis the type and dignity rules should serve.</span></div>
+      <div class="row"><span class="k">P3</span><span class="t">01-brand-guide-original.md</span><span class="p">So the Origins rules this proposal drops can be listed line by line.</span></div>
+      <div class="row"><span class="k">P4</span><span class="t">03-arena-automation-tables.md</span><span class="p">Exact channel names and the Are.na → X block shapes.</span></div>
+      <div class="row"><span class="k">Also</span><span class="t">05 / 06 identity research · delta-futures-doc.md · CONTINUITY.md</span><span class="p">For checking the dignity rules and the Delta note against their sources.</span></div>
+    </div>
+  </section>
+
+  <footer>
+    <span class="label">visual-system/proposals/2026-10-30-origins-sprint · FVS authority: Experimental · promotes only via Stead + Canon Keeper</span>
+  </footer>
+</main>
+</body>
+</html>
