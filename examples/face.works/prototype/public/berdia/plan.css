@@ -107,6 +107,7 @@
 .year-label{font-family:var(--rr-font-structure);font-weight:700;font-size:1.0625rem;color:var(--rr-ink)}
 .bar-container{position:relative;min-width:0}
 .bar-nominal{position:relative;height:2.25rem;display:flex;align-items:center;padding:0 .75rem;font-family:var(--rr-font-structure);font-weight:700;font-size:1rem;color:var(--rr-paper);white-space:nowrap}
+.bar-nominal.fill-a{background:var(--rr-verdigris-text)} /* text on fill: AA token, not the mark fill */
 .bar-real{position:absolute;top:0;left:0;height:2.25rem;opacity:.55;mix-blend-mode:multiply}
 .value-label{font-size:1rem;color:var(--rr-body);text-align:right}
 @media(max-width:640px){.inflation-row{grid-template-columns:4rem minmax(0,1fr)}.value-label{grid-column:2;text-align:left}}

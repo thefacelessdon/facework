@@ -41,16 +41,14 @@
       <dl><div><dt>Profile</dt><dd data-k="profile"></dd></div><div><dt>Documents sent</dt><dd data-k="files"></dd></div><div><dt>Last activity</dt><dd data-k="lastAt"></dd></div></dl>
       <p class="verdict" data-k="next"></p>
     </div>
-  </section>
-
-  <section id="firstrun" class="reading" aria-labelledby="fr" hidden>
-    <p class="fig">Getting started</p>
-    <h2 id="fr">Three steps, in order</h2>
-    <ol class="ledger">
-      <li class="is-active" data-step="upload"><span class="n">1</span><div><p class="t"><a href="/berdia/intake.html">Send your documents</a></p><p class="d">Start in Tasks. Upload what you have; you do not need everything at once.</p></div><span class="s"><span class="chip attention" data-k="s1">Start here</span></span></li>
-      <li data-step="review"><span class="n">2</span><div><p class="t">See what you sent, and read the Plan</p><p class="d">Opens once your first record is in.</p></div><span class="s"><span class="chip open" data-k="s2">Locked</span></span></li>
-      <li data-step="open"><span class="n">3</span><div><p class="t">The trust opens to you</p><p class="d">Work streams, documents and reports appear once your profile and documents are in.</p></div><span class="s"><span class="chip open" data-k="s3">Locked</span></span></li>
-    </ol>
+    <div id="firstrun" class="after" aria-labelledby="fr" hidden>
+      <h3 id="fr" class="fig">After this</h3>
+      <ol class="ledger">
+        <li data-step="upload" hidden><span class="n">1</span><div><p class="t">Send your documents</p></div><span class="s"><span class="chip attention" data-k="s1">Start here</span></span></li>
+        <li data-step="review"><span class="n">2</span><div><p class="t">See what you sent, and read the Plan</p><p class="d">Opens once your first record is in.</p></div><span class="s"><span class="chip open" data-k="s2">Locked</span></span></li>
+        <li data-step="open"><span class="n">3</span><div><p class="t">The trust opens to you</p><p class="d">Work streams, documents and reports appear once your profile and documents are in.</p></div><span class="s"><span class="chip open" data-k="s3">Locked</span></span></li>
+      </ol>
+    </div>
   </section>
 
   <section id="family" class="reading" hidden aria-labelledby="fh">
