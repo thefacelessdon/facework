@@ -9,6 +9,7 @@ describe("berdia family mount", () => {
       source: "/berdia/api/:path*",
       destination: "https://berdia-trust.vercel.app/berdia/api/:path*",
     });
+    expect(list).toContainEqual({ source: "/berdia/k/:code", destination: "/berdia/intake.html" });
     expect(list.find((r) => r.source === "/berdia")).toBeUndefined();
     expect(list.find((r) => r.source === "/berdia/:path*")).toBeUndefined();
   });

@@ -39,6 +39,10 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       { source: "/berdia/api/:path*", destination: "https://berdia-trust.vercel.app/berdia/api/:path*" },
+      // One-tap invitation links: face.works/berdia/k/<code>. The code rides in the path, not
+      // a #fragment, because Gmail/Outlook link wrappers drop fragments. intake.js reads it,
+      // signs in, and replaces the URL so the code leaves the address bar.
+      { source: "/berdia/k/:code", destination: "/berdia/intake.html" },
     ];
   },
   async headers() {
@@ -56,6 +60,15 @@ const nextConfig: NextConfig = {
             key: "Permissions-Policy",
             value: "camera=(), microphone=(), geolocation=(), browsing-topics=()",
           },
+        ],
+      },
+      // Listed after the site-wide rule so its Referrer-Policy wins on invitation links.
+      {
+        source: "/berdia/k/:code",
+        headers: [
+          { key: "Cache-Control", value: "no-store, private" },
+          { key: "Referrer-Policy", value: "no-referrer" },
+          { key: "X-Robots-Tag", value: "noindex, nofollow" },
         ],
       },
     ];
