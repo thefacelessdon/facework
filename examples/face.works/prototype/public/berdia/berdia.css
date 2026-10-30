@@ -219,6 +219,13 @@ h2 .chip,h3 .chip{margin-left:.75rem}
 .next .tally dd{margin:.125rem 0 0;font-family:var(--rr-font-structure);font-weight:700;font-size:1.125rem;color:var(--rr-ink)}
 .rr .next .tally .fig{margin-bottom:1rem}
 .next .tally .verdict{margin-top:1rem;padding-top:0;border-top:0;font-size:1.0625rem}
+/* Getting started folded into the next-step panel: the panel is step 1, this lists what follows */
+.next .after{margin-top:2rem;padding-top:1.25rem;border-top:1px solid var(--rr-rule)}
+.rr .next .after .fig{margin-bottom:.5rem}
+.next .after .ledger{border-top:0}
+.next .after .ledger .t{font-size:1.0625rem}
+.next .after .ledger .n{font-size:1.25rem}
+.next .after .ledger .d{font-size:1rem}
 @media(max-width:560px){.next .tally dl{grid-template-columns:1fr 1fr}.next .tally dl>div:last-child{grid-column:1/-1}}
 
 /* ---- Tasks, signed in: the task is the page --------------------------------- */
