@@ -39,7 +39,7 @@ methodology/patches/
 # agreements among them. Deleting the branch did not remove the commit or the
 # PR diff; only GitHub Support can. These entries exist so a broad add cannot
 # reach them again, and they are not a substitute for staging explicit paths.
-Berdia/
+/Berdia/
 personal/
 .codex/
 Primitive Pattern design brief/

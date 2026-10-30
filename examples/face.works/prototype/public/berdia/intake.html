@@ -1,13 +1,106 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'"><title>Tasks · Berdia family trust</title><link rel="stylesheet" href="intake.css"><link rel="stylesheet" href="/berdia/rr.css"><link rel="stylesheet" href="/berdia/berdia.css"><script src="intake.js" defer></script></head>
-<body class="rr intake"><nav class="family-nav" aria-label="Berdia family trust"><a class="brand" href="/berdia/portal/">Berdia family trust</a><a href="/berdia/portal/">Home</a><a href="/berdia/intake.html">Tasks</a><a href="/berdia/portal/trust.html">Trust</a><a href="/berdia/plan/index.html">Plan</a><a href="/berdia/portal/documents.html">Documents</a></nav><script src="/berdia/nav.js" defer></script><div class="session-bar"><button id="logout" class="quiet" hidden>Sign out</button></div>
-<main><aside><p class="eyebrow">A foundation for what comes next</p><h1>A place for<br>your part.</h1><p class="intro">Help us bring the family’s records together, one piece at a time.</p><div class="coordinators"><span class="line"></span><p>Stedmon &amp; Hop are coordinating.<br>You don’t have to gather everything at once.</p></div><ol class="steps"><li><span>01</span>Your information</li><li><span>02</span>Documents you have</li><li><span>03</span>We take it from here</li></ol><details><summary>Who can see what I send?</summary><p>You and the designated intake reviewers, Stedmon and Hop. Information is for preparing the family trust and organizing records. It is not shown on the shared family dashboard.</p><p>We’ll coordinate any handoff to the attorney or CPA. Contact Stedmon or Hop to correct information, request removal, or arrange another way to provide sensitive details. This form does not sign a trust or agree to transfer assets.</p></details></aside>
-<section class="workspace" aria-label="Your family records"><div id="notice" role="status" tabindex="-1"></div>
-<div id="locked" class="panel"><p class="eyebrow">By personal invitation</p><h2>Welcome to the Berdia family trust.</h2><p>Tap the private link in the email Stedmon or Hop sent you — it signs you in automatically. Each person has their own link.</p><p class="muted">If your link has expired, ask for a new one. Please don’t forward your link.</p><div class="fine-rule"></div><details class="code-fallback"><summary>Link not working? Enter a code instead</summary><form id="login-form"><label for="invite">Invitation code</label><input id="invite" type="password" autocomplete="off" spellcheck="false" required maxlength="64"><button type="submit">Open my records <span aria-hidden="true">↗</span></button></form></details></div>
-<div id="signed-in" hidden><div class="welcome"><p class="eyebrow" id="greeting">Your family records</p><p class="muted">Your session lasts up to 30 minutes. Unsent fields stay only on this page.</p></div>
-<nav class="tabs" aria-label="Intake sections"><button data-view="information" aria-pressed="true">Your information</button><button data-view="documents" aria-pressed="false">Send documents</button><button data-view="receipts" aria-pressed="false">Received records</button></nav>
-<section id="information" class="panel view"><div class="section-number">01 / YOUR INFORMATION</div><h2>Let’s get the details right.</h2><p>Use your full legal name as it appears on your documents. Fields marked <span aria-label="required">*</span> are required. Please don’t enter Social Security numbers or dates of birth here; the attorney collects those directly.</p>
-<form id="profile-form" autocomplete="off"><div class="fields"><div class="wide"><label for="fullName">Full legal name *</label><input id="fullName" name="fullName" maxlength="150" required autocomplete="name"></div><div><label for="preferredName">What should we call you?</label><input id="preferredName" name="preferredName" maxlength="80" autocomplete="nickname"></div><div class="wide"><label for="address">Mailing address *</label><textarea id="address" name="address" rows="3" maxlength="500" required autocomplete="street-address" placeholder="Street, city, state and ZIP code"></textarea></div><div><label for="email">Email</label><input id="email" name="email" type="email" maxlength="254" autocomplete="email"></div><div><label for="phone">Phone</label><input id="phone" name="phone" type="tel" maxlength="40" autocomplete="tel"></div><div class="wide"><label for="missing">Anything we should help track down?</label><textarea id="missing" name="missing" rows="3" maxlength="2000" placeholder="A document you can’t find, or the person who has it."></textarea></div><div class="wide"><label for="notes">Other details or corrections</label><textarea id="notes" name="notes" rows="3" maxlength="2000"></textarea></div></div><label class="consent"><input name="consent" type="checkbox" required><span>I understand that Stedmon and Hop can review this information to coordinate trust preparation, and I agree to submit it for that purpose.</span></label><button type="submit">Send my information <span aria-hidden="true">↗</span></button><p class="hint">We’ll confirm when your information has been received. Sending again replaces your previous information.</p></form></section>
-<section id="documents" class="panel view" hidden><div class="section-number">02 / DOCUMENTS</div><h2>Send what you have.</h2><p>A clear scan or photo is fine. Keep your originals. For a large document, split it into smaller PDFs or send individual page photos.</p><form id="upload-form"><label for="category">What kind of record is it?</label><select id="category" required><option value="">Choose a category</option><option value="estate">Estate documents / power of attorney</option><option value="land">Land / deeds / property taxes</option><option value="solar">Solar lease / payments / correspondence</option><option value="restaurant">Restaurant / tax / banking / payroll</option><option value="insurance">Life insurance</option><option value="coins">Coin inventory / appraisal</option><option value="other">Other trust records</option></select><div class="upload-area"><label for="files">Choose documents</label><p>PDF, JPG or PNG · Up to 2.5 MB per file</p><input id="files" type="file" accept="application/pdf,image/jpeg,image/png" multiple required aria-describedby="file-help"><p id="file-help" class="hint">Up to 10 files per submission. If a file fails, completed uploads remain saved.</p></div><ul id="file-list" class="file-list" aria-live="polite"></ul><label class="consent"><input id="upload-consent" type="checkbox" required><span>I’m authorized to share these records for trust preparation and understand that Stedmon and Hop can review them.</span></label><button type="submit">Send documents <span aria-hidden="true">↗</span></button></form></section>
-<section id="receipts" class="panel view" hidden><div class="section-number">03 / RECEIVED RECORDS</div><h2 id="inbox-title">What we’ve received.</h2><p id="inbox-description">A receipt means the record arrived. It does not mean the attorney has reviewed or approved it.</p><button id="refresh" class="quiet">Refresh records</button><div id="records" aria-live="polite"></div><section id="record-detail" hidden><div class="fine-rule"></div><h3>Submitted information</h3><p class="hint">Contains private information. Close this view when you finish.</p><button id="close-detail" class="quiet">Close details</button><dl id="details"></dl></section></section></div>
-</section></main><footer>BERDIA FAMILY TRUST <span>Built around care, clarity and continuity.</span></footer></body></html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'"><title>Tasks · Berdia family trust</title><link rel="stylesheet" href="/berdia/rr.css"><link rel="stylesheet" href="/berdia/berdia.css"><script src="/berdia/intake.js" defer></script></head>
+<body class="rr intake">
+<!-- berdia:masthead -->
+<a class="skip" href="#main">Skip to content</a>
+<header class="bm">
+  <div class="bm-plate">
+    <a class="bm-lockup" href="/berdia/portal/" aria-label="Berdia family trust — Home"><span class="bm-mark" aria-hidden="true">B</span><span class="bm-word" aria-hidden="true">BERDIA</span></a>
+    <span class="bm-sub">Family Trust</span>
+    <p class="bm-meta"><span>Private family record</span></p>
+  </div>
+  <nav class="bm-nav" aria-label="Berdia">
+    <a href="/berdia/portal/">Home</a>
+    <a href="/berdia/intake.html">Tasks</a>
+    <a href="/berdia/portal/trust.html">Trust</a>
+    <a href="/berdia/plan/index.html">Plan</a>
+    <a href="/berdia/portal/documents.html">Documents</a>
+  </nav>
+</header>
+<script src="/berdia/nav.js" defer></script>
+<!-- /berdia:masthead -->
+<main id="main" class="page page--split">
+<div class="col">
+  <header class="folio">
+    <p class="fig" id="greeting">Tasks · by personal invitation</p>
+    <h1>A place for your part.</h1>
+    <p class="lede">Help bring the family’s records together, one piece at a time. You don’t have to gather everything at once.</p>
+    <p class="session"><button id="logout" class="quiet" hidden>Sign out</button></p>
+  </header>
+
+  <div id="notice" role="status" tabindex="-1"></div>
+
+  <section id="locked" class="next" aria-labelledby="lk">
+    <p class="fig">Sign in</p>
+    <h2 id="lk">Welcome to the Berdia family trust.</h2>
+    <p>Tap the private link in the email Stedmon or Hop sent you. It signs you in automatically. Each person has their own link.</p>
+    <p class="note">If your link has expired, ask for a new one. Please don’t forward your link.</p>
+    <details class="code-fallback"><summary>Link not working? Enter a code instead</summary>
+      <form id="login-form"><label for="invite">Invitation code</label><input id="invite" type="password" autocomplete="off" spellcheck="false" required maxlength="64"><button type="submit">Open my records</button></form>
+    </details>
+  </section>
+
+  <div id="signed-in" hidden>
+    <p class="note">Your session lasts up to 30 minutes. Unsent fields stay only on this page.</p>
+    <nav class="tabs" aria-label="Your tasks"><button data-view="information" aria-pressed="true"><span>1</span>Your information</button><button data-view="documents" aria-pressed="false"><span>2</span>Send documents</button><button data-view="receipts" aria-pressed="false"><span>3</span>Received records</button></nav>
+
+    <section id="information" class="reading view" aria-labelledby="t1">
+      <p class="fig">Task 1 · your information</p>
+      <h2 id="t1">Let’s get the details right.</h2>
+      <p>Use your full legal name as it appears on your documents. Fields marked * are required. Please don’t enter Social Security numbers or dates of birth here; the attorney collects those directly.</p>
+      <form id="profile-form" autocomplete="off"><div class="fields">
+        <div class="wide"><label for="fullName">Full legal name *</label><input id="fullName" name="fullName" maxlength="150" required autocomplete="name"></div>
+        <div><label for="preferredName">What should we call you?</label><input id="preferredName" name="preferredName" maxlength="80" autocomplete="nickname"></div>
+        <div class="wide"><label for="address">Mailing address *</label><textarea id="address" name="address" rows="3" maxlength="500" required autocomplete="street-address" placeholder="Street, city, state and ZIP code"></textarea></div>
+        <div><label for="email">Email</label><input id="email" name="email" type="email" maxlength="254" autocomplete="email"></div>
+        <div><label for="phone">Phone</label><input id="phone" name="phone" type="tel" maxlength="40" autocomplete="tel"></div>
+        <div class="wide"><label for="missing">Anything we should help track down?</label><textarea id="missing" name="missing" rows="3" maxlength="2000" placeholder="A document you can’t find, or the person who has it."></textarea></div>
+        <div class="wide"><label for="notes">Other details or corrections</label><textarea id="notes" name="notes" rows="3" maxlength="2000"></textarea></div>
+      </div>
+      <label class="consent"><input name="consent" type="checkbox" required><span>I understand that Stedmon and Hop can review this information to coordinate trust preparation, and I agree to submit it for that purpose.</span></label>
+      <button type="submit">Send my information</button>
+      <p class="hint">We’ll confirm when your information has been received. Sending again replaces your previous information.</p></form>
+    </section>
+
+    <section id="documents" class="reading view" hidden aria-labelledby="t2">
+      <p class="fig">Task 2 · documents</p>
+      <h2 id="t2">Send what you have.</h2>
+      <p>A clear scan or photo is fine. Keep your originals. For a large document, split it into smaller PDFs or send individual page photos.</p>
+      <form id="upload-form"><label for="category">What kind of record is it?</label><select id="category" required><option value="">Choose a category</option><option value="estate">Estate documents / power of attorney</option><option value="land">Land / deeds / property taxes</option><option value="solar">Solar lease / payments / correspondence</option><option value="restaurant">Restaurant / tax / banking / payroll</option><option value="insurance">Life insurance</option><option value="coins">Coin inventory / appraisal</option><option value="other">Other trust records</option></select>
+        <div class="upload-area"><label for="files">Choose documents</label><p class="hint">PDF, JPG or PNG · up to 2.5 MB per file</p><input id="files" type="file" accept="application/pdf,image/jpeg,image/png" multiple required aria-describedby="file-help"><p id="file-help" class="hint">Up to 10 files per submission. If a file fails, completed uploads remain saved.</p></div>
+        <ul id="file-list" class="file-list" aria-live="polite"></ul>
+        <label class="consent"><input id="upload-consent" type="checkbox" required><span>I’m authorized to share these records for trust preparation and understand that Stedmon and Hop can review them.</span></label>
+        <button type="submit">Send documents</button></form>
+    </section>
+
+    <section id="receipts" class="reading view" hidden aria-labelledby="inbox-title">
+      <p class="fig">Task 3 · received records</p>
+      <h2 id="inbox-title">What we’ve received.</h2>
+      <p id="inbox-description">A receipt means the record arrived. It does not mean the attorney has reviewed or approved it.</p>
+      <button id="refresh" class="quiet">Refresh records</button>
+      <div id="records" class="records" aria-live="polite"></div>
+      <section id="record-detail" hidden><h3>Submitted information</h3><p class="hint">Contains private information. Close this view when you finish.</p><button id="close-detail" class="quiet">Close details</button><dl id="details" class="facts"></dl></section>
+    </section>
+  </div>
+</div>
+
+<aside class="rail" aria-label="How this works">
+  <section>
+    <h2>How this works</h2>
+    <ol class="ledger steps-mini">
+      <li><span class="n">1</span><div><p class="t">Your information</p></div></li>
+      <li><span class="n">2</span><div><p class="t">Documents you have</p></div></li>
+      <li><span class="n">3</span><div><p class="t">We take it from here</p></div></li>
+    </ol>
+  </section>
+  <section>
+    <h2>Coordinating</h2>
+    <p>Stedmon &amp; Hop are coordinating. Contact either of them to correct information, request removal, or arrange another way to send sensitive details.</p>
+  </section>
+  <details><summary>Who can see what I send?</summary><p>You and the designated intake reviewers, Stedmon and Hop. Information is for preparing the family trust and organizing records. It is not shown on the shared family pages.</p><p>We’ll coordinate any handoff to the attorney or CPA. This form does not sign a trust or agree to transfer assets.</p></details>
+</aside>
+</main>
+<!-- berdia:colophon -->
+<footer class="colophon"><div><span><b>BERDIA</b>&ensp;Family trust · Instance 01</span><span>Private family records. Please don’t forward your link.</span></div></footer>
+<!-- /berdia:colophon -->
+</body></html>

@@ -1,61 +1,113 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><title>Home · Berdia family trust</title><link rel="stylesheet" href="/berdia/rr.css"><link rel="stylesheet" href="/berdia/berdia.css"></head>
 <body class="rr" data-page="dashboard">
-<nav class="family-nav" aria-label="Berdia family trust">
-  <a class="brand" href="/berdia/portal/"><span class="mark" aria-hidden="true">B</span><span class="word">Berdia</span></a>
-  <a href="/berdia/portal/">Home</a>
-  <a href="/berdia/intake.html">Tasks</a>
-  <a href="/berdia/portal/trust.html">Trust</a>
-  <a href="/berdia/plan/index.html">Plan</a>
-  <a href="/berdia/portal/documents.html">Documents</a>
-</nav>
-<script src="/berdia/nav.js" defer></script>
-<main class="portal">
-  <header class="page-head">
-    <p class="dateline" id="today"></p>
-    <h1 id="greet">Berdia family trust</h1>
-    <p class="mast-meta">Family trust · Instance 01 · Updated 29 Oct 2026</p>
-  </header>
-  <p id="signin" class="notice" hidden>Open <a href="/berdia/intake.html">Tasks</a> from your invitation link to sign in, then come back here.</p>
-  <p class="home-status" id="home-status">The family is gathering documents and engaging an attorney and CPA. The trust is not formed yet.</p>
-  <div class="home-next" id="home-next">
-    <p class="eyebrow">Your next step</p>
-    <h2 id="next-title">Send your documents</h2>
-    <p id="next-desc">Start in Tasks. Upload what you have; you do not need everything at once.</p>
-    <p class="ws-cta" id="cta"><a class="rr-cta" href="/berdia/intake.html">Open your tasks</a></p>
+<!-- berdia:masthead -->
+<a class="skip" href="#main">Skip to content</a>
+<header class="bm">
+  <div class="bm-plate">
+    <a class="bm-lockup" href="/berdia/portal/" aria-label="Berdia family trust — Home"><span class="bm-mark" aria-hidden="true">B</span><span class="bm-word" aria-hidden="true">BERDIA</span></a>
+    <span class="bm-sub">Family Trust</span>
+    <p class="bm-meta"><span>Private family record</span></p>
   </div>
-  <section id="firstrun" aria-labelledby="fr" hidden>
-    <h2 id="fr">Getting started</h2>
-    <ol class="steps-rail">
-      <li class="is-active" data-step="upload"><span class="step-n">01</span><div><p class="step-t"><a href="/berdia/intake.html">Send your documents</a></p><p class="step-d">Start in Tasks. Upload what you have; you do not need everything at once.</p></div><span class="chip attention" data-k="s1">Start here</span></li>
-      <li data-step="review"><span class="step-n">02</span><div><p class="step-t">See what you sent, and read the Plan</p><p class="step-d">Opens once your first record is in.</p></div><span class="chip open" data-k="s2">Locked</span></li>
-      <li data-step="open"><span class="step-n">03</span><div><p class="step-t">The trust opens to you</p><p class="step-d">Work streams, documents and reports appear once your profile and documents are in.</p></div><span class="chip open" data-k="s3">Locked</span></li>
-    </ol>
-  </section>
+  <nav class="bm-nav" aria-label="Berdia">
+    <a href="/berdia/portal/">Home</a>
+    <a href="/berdia/intake.html">Tasks</a>
+    <a href="/berdia/portal/trust.html">Trust</a>
+    <a href="/berdia/plan/index.html">Plan</a>
+    <a href="/berdia/portal/documents.html">Documents</a>
+  </nav>
+</header>
+<script src="/berdia/nav.js" defer></script>
+<!-- /berdia:masthead -->
+<main id="main" class="page page--split">
+<div class="col">
+  <header class="folio">
+    <p class="fig" id="today">The family record</p>
+    <h1 id="greet">Berdia family trust</h1>
+    <p class="lede">The family is gathering documents and engaging an attorney and CPA. The trust is not formed yet.</p>
+    <p class="byline" id="roleline" hidden></p>
+  </header>
+
+  <p id="signin" class="notice" hidden><span class="fig">Sign-in needed</span>Open <a href="/berdia/intake.html">Tasks</a> from your invitation link to sign in, then come back here.</p>
   <p id="err" class="err" hidden></p>
-  <section id="me" hidden aria-labelledby="mh"><h2 id="mh">Your part</h2><dl class="facts"><div><dt>Profile</dt><dd data-k="profile"></dd></div><div><dt>Documents sent</dt><dd data-k="files"></dd></div><div><dt>Last activity</dt><dd data-k="lastAt"></dd></div></dl><p data-k="next"></p></section>
-  <section id="family" hidden aria-labelledby="fh"><h2 id="fh">Family intake</h2><p class="muted" data-k="tally"></p><div class="table-wrap"><table><thead><tr><th>Member</th><th>Role</th><th>Profile</th><th>Files</th><th>Status</th><th>Last activity</th></tr></thead><tbody id="rows"></tbody></table></div></section>
-  <section aria-labelledby="ns">
-    <p class="eyebrow" style="font-family:var(--rr-font-record);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--rr-meta);margin:0 0 var(--rr-sp-2)">From the Plan</p>
+
+  <section class="next" aria-labelledby="next-title">
+    <p class="fig">Your next step</p>
+    <h2 id="next-title">Send your documents</h2>
+    <p>Start in Tasks. Upload what you have; you do not need everything at once.</p>
+    <p id="cta"><a class="cta" href="/berdia/intake.html">Open your tasks</a></p>
+  </section>
+
+  <section id="firstrun" class="reading" aria-labelledby="fr" hidden>
+    <p class="fig">Getting started</p>
+    <h2 id="fr">Three steps, in order</h2>
+    <ol class="ledger">
+      <li class="is-active" data-step="upload"><span class="n">1</span><div><p class="t"><a href="/berdia/intake.html">Send your documents</a></p><p class="d">Start in Tasks. Upload what you have; you do not need everything at once.</p></div><span class="s"><span class="chip attention" data-k="s1">Start here</span></span></li>
+      <li data-step="review"><span class="n">2</span><div><p class="t">See what you sent, and read the Plan</p><p class="d">Opens once your first record is in.</p></div><span class="s"><span class="chip open" data-k="s2">Locked</span></span></li>
+      <li data-step="open"><span class="n">3</span><div><p class="t">The trust opens to you</p><p class="d">Work streams, documents and reports appear once your profile and documents are in.</p></div><span class="s"><span class="chip open" data-k="s3">Locked</span></span></li>
+    </ol>
+  </section>
+
+  <section id="me" class="reading" hidden aria-labelledby="mh">
+    <p class="fig">Your record</p>
+    <h2 id="mh">Your part</h2>
+    <dl class="facts"><div><dt>Profile</dt><dd data-k="profile"></dd></div><div><dt>Documents sent</dt><dd data-k="files"></dd></div><div><dt>Last activity</dt><dd data-k="lastAt"></dd></div></dl>
+    <p class="verdict" data-k="next"></p>
+  </section>
+
+  <section id="family" class="reading" hidden aria-labelledby="fh">
+    <p class="fig">Reviewer view</p>
+    <h2 id="fh">Family intake</h2>
+    <p class="note" data-k="tally"></p>
+    <div class="table-wrap"><table><thead><tr><th>Member</th><th>Role</th><th>Profile</th><th>Files</th><th>Status</th><th>Last activity</th></tr></thead><tbody id="rows"></tbody></table></div>
+  </section>
+
+  <section class="reading" aria-labelledby="ns">
+    <p class="fig">From the Plan · status as of October 29, 2026</p>
     <h2 id="ns">Where the family is</h2>
-    <p class="muted">Status as of October 29, 2026. Original summer-2026 dates have passed; stage 03 has no new date yet.</p>
-    <ol class="stage-rows">
-      <li><span class="step-n">01</span><div><p class="step-t">Family meeting</p><p class="step-d">April 12: the family reviewed the plan together.</p></div><span class="chip settled">Done</span></li>
-      <li class="is-active"><span class="step-n">02</span><div><p class="step-t"><a href="/berdia/intake.html">Gather documents; engage attorney and CPA</a></p><p class="step-d">Everyone sends their records through Tasks. Consolidated POA is with the attorney.</p></div><span class="chip attention">Active</span></li>
-      <li><span class="step-n">03</span><div><p class="step-t">Form the trust and transfer assets</p><p class="step-d">Once the attorney and CPA are ready. Opens governance and banking.</p></div><span class="chip open">Next</span></li>
-      <li><span class="step-n">04</span><div><p class="step-t">Solar rent begins</p><p class="step-d">At commercial operation, expected around 2028–2029 (Entergy).</p></div><span class="chip open">Locked</span></li>
-      <li><span class="step-n">05</span><div><p class="step-t">Deploy capital, one step at a time</p><p class="step-d">With family oversight and regular reports.</p></div><span class="chip open">Locked</span></li>
-    </ol>
-    <p style="margin-top:var(--rr-sp-6)"><a href="/berdia/plan/index.html">Plan chapters</a> · <a href="/berdia/plan/grandma.html">Plain-language Family Plan</a></p>
-  </section>
-  <section id="desk" hidden aria-labelledby="dh">
-    <h2 id="dh">Trustee desk</h2>
-    <ol class="doc-rows">
-      <li><div class="doc-meta"><span class="chip open">Locked</span></div><div class="doc-body"><p class="doc-title">Monthly family update</p><p class="doc-desc">Starts once the trust is formed.</p></div></li>
-      <li><div class="doc-meta"><span class="chip open">Locked</span></div><div class="doc-body"><p class="doc-title">Quarterly committee report</p><p class="doc-desc">Starts once the trust is formed.</p></div></li>
-      <li><div class="doc-meta"><span class="chip open">Planned</span></div><div class="doc-body"><p class="doc-title"><a href="/berdia/portal/trust.html#ch">Partners and banking</a></p><p class="doc-desc">Attorney, CPA, trust bank account and income sources.</p></div></li>
+    <p class="note">The original summer-2026 dates have passed. Stage 3 has no new date yet.</p>
+    <ol class="ledger">
+      <li><span class="n">1</span><div><p class="t">Family meeting</p><p class="d">April 12: the family reviewed the plan together.</p></div><span class="s"><span class="chip settled">Done</span></span></li>
+      <li class="is-active"><span class="n">2</span><div><p class="t"><a href="/berdia/intake.html">Gather documents; engage attorney and CPA</a></p><p class="d">Everyone sends their records through Tasks. The consolidated power of attorney is with the attorney.</p></div><span class="s"><span class="chip attention">Now</span></span></li>
+      <li><span class="n">3</span><div><p class="t">Form the trust and transfer assets</p><p class="d">Once the attorney and CPA are ready. Opens governance and banking.</p></div><span class="s"><span class="chip open">Next</span></span></li>
+      <li><span class="n">4</span><div><p class="t">Solar rent begins</p><p class="d">At commercial operation, expected around 2028–2029 (Entergy Arkansas).</p></div><span class="s"><span class="chip open">Later</span></span></li>
+      <li><span class="n">5</span><div><p class="t">Deploy capital, one step at a time</p><p class="d">With family oversight and regular reports.</p></div><span class="s"><span class="chip open">Later</span></span></li>
     </ol>
   </section>
+
+  <section id="desk" class="reading" hidden aria-labelledby="dh">
+    <p class="fig">Trustee desk</p>
+    <h2 id="dh">What the trustee will run</h2>
+    <ol class="ledger ledger--plain">
+      <li><div><p class="t">Monthly family update</p><p class="d">Starts once the trust is formed.</p></div><span class="s"><span class="chip open">Locked</span></span></li>
+      <li><div><p class="t">Quarterly committee report</p><p class="d">Starts once the trust is formed.</p></div><span class="s"><span class="chip open">Locked</span></span></li>
+      <li><div><p class="t"><a href="/berdia/portal/trust.html#partners">Partners and banking</a></p><p class="d">Attorney, CPA, trust bank account and income sources.</p></div><span class="s"><span class="chip open">Planned</span></span></li>
+    </ol>
+  </section>
+</div>
+
+<aside class="rail" aria-label="About this record">
+  <section>
+    <h2>This record</h2>
+    <dl>
+      <div><dt>Trust</dt><dd>Not formed yet<small>Proposed revocable grantor trust; final structure pending the CPA.</small></dd></div>
+      <div><dt>Stage</dt><dd>2 of 5<small>Gather documents; engage attorney and CPA.</small></dd></div>
+      <div><dt>Coordinating</dt><dd>Stedmon &amp; Hop<small>You don’t have to gather everything at once.</small></dd></div>
+      <div><dt>Updated</dt><dd><time datetime="2026-10-29">29 Oct 2026</time></dd></div>
+    </dl>
+  </section>
+  <section>
+    <h2>Read</h2>
+    <ul><li><a href="/berdia/plan/grandma.html">The plan in plain language</a></li><li><a href="/berdia/plan/index.html">The Family Plan, by chapter</a></li><li><a href="/berdia/portal/documents.html">Shared documents</a></li></ul>
+  </section>
+  <section>
+    <h2>Reading the marks</h2>
+    <ul class="key"><li><span class="chip settled">Done</span></li><li><span class="chip attention">Now, or needs you</span></li><li><span class="chip open">Next, later or locked</span></li></ul>
+  </section>
+</aside>
 </main>
+<!-- berdia:colophon -->
+<footer class="colophon"><div><span><b>BERDIA</b>&ensp;Family trust · Instance 01</span><span>Private family records. Please don’t forward your link.</span></div></footer>
+<!-- /berdia:colophon -->
 <script src="/berdia/portal/portal.js" defer></script>
 </body></html>
