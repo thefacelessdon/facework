@@ -39,7 +39,8 @@ body.rr{margin:0;min-height:100svh;display:flex;flex-direction:column;background
   text-decoration:none!important;border-bottom:4px solid transparent;margin-bottom:-1px;padding-top:4px}
 .bm-nav a:hover{color:var(--rr-ink)!important;border-bottom-color:var(--rr-rule)}
 .bm-nav a[aria-current]{color:var(--rr-ink)!important;border-bottom-color:var(--rr-ink)}
-@media(max-width:720px){.bm-sub{display:none}.rr .bm-meta{display:none}
+/* Phones keep the sign-in state (nav.js fills .bm-meta) and drop only the static label. */
+@media(max-width:720px){.bm-sub{display:none}.rr .bm-meta{font-size:.8125rem;letter-spacing:.04em}.rr .bm-meta>span{display:none}
   .bm-nav{justify-content:space-between;gap:0 .75rem}.bm-nav a{font-size:1rem}}
 
 /* ---- Page frame: reading column + margin rail ------------------------------- */
@@ -142,7 +143,15 @@ h2 .chip,h3 .chip{margin-left:.75rem}
 .rail .key{display:flex;flex-direction:column;gap:.75rem;margin:0;padding:0;list-style:none}
 .rail .key li{border:0}
 .rail+.rail,.rail>section+section{margin-top:2.5rem}
-@media(max-width:1099px){.rail{margin-top:1rem}}
+@media(max-width:1099px){.rail{margin-top:1rem}
+  /* Below the column the rail only repeats it (stage, trust status, the marks' own words);
+     keep what is new: where to read further. */
+  .rail-record,.rail-key{display:none}.rail:has(.rail-record)>section:not(.rail-record,.rail-key){margin-top:0}}
+
+/* ---- Rhythm on phones -------------------------------------------------------- */
+/* Desktop gaps (4.5rem) read as empty screens on a 375px phone; tighten, keep the order. */
+@media(max-width:640px){.page{padding-top:2rem;padding-bottom:4rem}.folio{margin-bottom:2.5rem}
+  .reading{margin-top:3rem}.next{margin-bottom:3rem}.page--split{gap:2rem}}
 
 /* ---- Tables ----------------------------------------------------------------- */
 .table-wrap{overflow-x:auto;margin:1rem 0 1.5rem;border-top:1px solid var(--rr-ink)}
@@ -186,6 +195,38 @@ h2 .chip,h3 .chip{margin-left:.75rem}
 /* ---- Print ------------------------------------------------------------------ */
 @media print{.bm-nav,.bm-meta,.skip,.rail,.cta{display:none!important}.bm-plate{border-bottom-width:2px}body.rr{font-size:11pt}}
 
+/* ---- Arrival: signed out ---------------------------------------------------- */
+/* intake.js shows #locked until a session is confirmed. While it shows, Tasks is the
+   front door: the welcome is the headline and the link instructions sit above the fold.
+   No markup change: the seam is the hidden attribute the sign-in script already owns. */
+.intake:has(#locked:not([hidden])) .folio{display:none}
+.intake #locked:not([hidden]){background:none;border:0;padding:0;margin:0 0 3.5rem}
+.intake #locked h2{font-family:var(--rr-font-structure);font-weight:800;font-size:clamp(2.625rem,6.2vw,4.5rem);line-height:1.02;letter-spacing:-.025em;margin:0 0 1.5rem;max-width:13ch}
+.intake #locked>p:not(.fig):not(.note){font-size:clamp(1.3125rem,2.4vw,1.5rem);line-height:1.45;color:var(--rr-ink);max-width:28em}
+.intake #locked .note{max-width:34em}
+.intake #locked .code-fallback{margin-top:2.5rem;border-top:1px solid var(--rr-ink)}
+/* Home, signed out: one action. The next step returns once there is someone to give it to. */
+.rr:has(#signin:not([hidden])) .next{display:none}
+
+/* ---- Home, signed in --------------------------------------------------------- */
+/* The date portal.js writes is today's date, not a fact about the record. */
+.rr #today{display:none}
+/* Your part lives inside the next-step panel: one place that says what to do and how far
+   you are, instead of a separate section repeating "complete your profile in Tasks". */
+.next .tally{margin-top:2rem;padding-top:1.25rem;border-top:1px solid var(--rr-rule)}
+.next .tally dl{display:grid;grid-template-columns:repeat(3,minmax(0,auto));justify-content:start;gap:.5rem 2.5rem;margin:0}
+.next .tally dt{font-family:var(--rr-font-record);font-size:.8125rem;letter-spacing:.06em;text-transform:uppercase;color:var(--rr-meta)}
+.next .tally dd{margin:.125rem 0 0;font-family:var(--rr-font-structure);font-weight:700;font-size:1.125rem;color:var(--rr-ink)}
+.rr .next .tally .fig{margin-bottom:1rem}
+.next .tally .verdict{margin-top:1rem;padding-top:0;border-top:0;font-size:1.0625rem}
+@media(max-width:560px){.next .tally dl{grid-template-columns:1fr 1fr}.next .tally dl>div:last-child{grid-column:1/-1}}
+
+/* ---- Tasks, signed in: the task is the page --------------------------------- */
+/* The welcome pitch is for arrival; once signed in it shrinks so the form starts on screen. */
+.intake:has(#signed-in:not([hidden])) .folio{margin-bottom:2rem}
+.intake:has(#signed-in:not([hidden])) .folio h1{font-size:clamp(1.75rem,3.4vw,2.25rem);line-height:1.1;letter-spacing:-.015em;margin-bottom:.5rem;max-width:none}
+.intake:has(#signed-in:not([hidden])) .folio .lede{display:none}
+
 /* ---- Tasks ------------------------------------------------------------------ */
 .session{margin:1.5rem 0 0}
 #notice:not(:empty){border:1px solid var(--rr-ink);border-top:3px solid var(--rr-settled);background:var(--rr-surface);padding:1rem 1.25rem;margin:0 0 2rem;color:var(--rr-ink);font-size:1.0625rem}
@@ -198,7 +239,8 @@ h2 .chip,h3 .chip{margin-left:.75rem}
 .tabs button span{font-weight:800;font-size:1.375rem;color:var(--rr-meta)}
 .tabs button[aria-pressed=true]{color:var(--rr-ink);border-bottom-color:var(--rr-ink)}
 .tabs button[aria-pressed=true] span{color:var(--rr-ink)}
-.tabs+.reading{margin-top:0}
+/* The tabs already rule the top of the task; a second ink rule under them is noise. */
+.tabs~.reading{margin-top:0;border-top:0;padding-top:0}
 @media(max-width:640px){.tabs button{flex-direction:column;align-items:flex-start;gap:.125rem;font-size:.9375rem}}
 .fields{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem 1.25rem;margin:2rem 0}
 .fields .wide{grid-column:1/-1}
