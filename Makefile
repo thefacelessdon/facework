@@ -8,7 +8,7 @@ help:
 	@echo "  make validate-manifest FILE=path/to/file  Validate a custom manifest file"
 	@echo "  make release-check                         Validate release number (unique, documented, increasing)"
 	@echo "  make test                                  Run the Operating Harness record + gate suites"
-	@echo "  make protocol-check                        Validate manifest + protocol files + skill registration + tests + release number"
+	@echo "  make protocol-check                        Validate manifest + protocol files + skill registration + tokens + tests + release number"
 	@echo "  make update                                Check for and install updates"
 
 validate:
@@ -30,6 +30,7 @@ protocol-check:
 		echo "[ok] required file present: $$f"; \
 	done
 	@./bin/validate-skill-registration
+	@./bin/validate-tokens
 	@./tests/operating-harness-record/run
 	@./tests/operating-harness-record/hook
 	@./bin/validate-release

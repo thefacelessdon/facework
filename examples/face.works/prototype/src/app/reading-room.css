@@ -52,6 +52,13 @@
   --rr-sp-24: 96px;
 
   /* --- Motion (§9) --------------------------------------------------- */
+  /* Durations per FVI-400; bin/validate-tokens checks this block. */
+  --rr-motion-immediate: 120ms;
+  --rr-motion-quick: 180ms;
+  --rr-motion-standard: 300ms;
+  --rr-motion-signature: 520ms;
+  --rr-motion-hold: 900ms;
+  --rr-motion-ambient: 8s;
   --rr-ease-settle: cubic-bezier(0.22, 1, 0.36, 1);
   --rr-measure: 68ch;
 }

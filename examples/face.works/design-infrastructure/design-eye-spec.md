@@ -1,5 +1,13 @@
 # Design Eye Evaluator — Playbook (face.works)
 
+> **Grounding superseded (0.0.79).** Step 0 loads `design-infrastructure/` —
+> tokens.json, components.yaml and the examples library — which its own README
+> marks *not active design authority*: Inter / JetBrains Mono / ochre `#A37E3F`,
+> not the Reading Room. Until this playbook is re-grounded, take every token
+> value from `visual-system/applications/shared/tokens.json` (validated by
+> `bin/validate-tokens`) and the taste contract from `prototype/DESIGN.md`; treat
+> component contracts and examples here as structure only, never as values.
+
 The `design-eye-evaluator` Skill executes this playbook. It gates output
 against the Face.works TasteContract, returning pass/fail + grounded
 feedback. Runtime calls this skill before publishing artifacts.

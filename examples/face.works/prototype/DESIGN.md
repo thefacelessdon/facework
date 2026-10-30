@@ -13,7 +13,7 @@ Design context lives in `.impeccable.md`. This file is the enforceable contract.
 
 Facework is *a discipline for seeing, designing, and maintaining the structures
 that let identity carry weight over time.* It calls itself **a public record of
-attention.** Its core act is not building — it is **reading coherence**: seeing
+coherence.** Its core act is not building — it is **reading coherence**: seeing
 the structure under the surface, and whether it holds under pressure, before it
 fails.
 
@@ -26,7 +26,7 @@ would still hold if I inherited it cold."*
 
 face.works is a reading room / observatory. Every surface is a **reading** of a
 system's coherence — never a portfolio, brochure, or dashboard. Sibling to 14th &
-Co: they *instrument transfer* (operational); Facework *instruments attention*
+Co: they *instrument transfer* (operational); Facework *instruments coherence*
 (diagnostic / perceptual).
 
 **The core test (taste contract apex):** *If this reading were inherited by

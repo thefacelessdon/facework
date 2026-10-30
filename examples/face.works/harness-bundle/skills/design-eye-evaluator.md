@@ -13,6 +13,12 @@ model_tier: standard
 
 # Design Eye Evaluator
 
+> **Grounding superseded (0.0.79).** The `design-infrastructure` bundle this
+> skill loads is retained evidence, not active authority (see its README). Take
+> token values from `visual-system/applications/shared/tokens.json` and the
+> taste contract from `examples/face.works/prototype/DESIGN.md` until the
+> evaluator is re-grounded.
+
 Gate output against the TasteContract. Returns pass/fail + dimension
 scores + grounded feedback referencing specific contract clauses and
 on/off-brand example entries. Called by output-producing skills before

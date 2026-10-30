@@ -10,6 +10,8 @@ set -euo pipefail
 #       canonical durations declared in identity/FVI-400-motion-signature.md;
 #   (c) no CSS file under applications/*/reference/ forks a raw color hex,
 #       OKLCH/RGB/HSL value, or font-family outside a var(--rr-*) reference.
+#   (d) reading-room.css (the live site) :root defines the same motion set
+#       and ease curve — the prototype ships it, not tokens.css.
 # Exits non-zero on any violation.
 
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
@@ -19,8 +21,9 @@ TOKENS_JSON="$VS_DIR/applications/shared/tokens.json"
 MOTION_DOC="$VS_DIR/identity/FVI-400-motion-signature.md"
 COLOR_DOC="$VS_DIR/FVS-600-color.md"
 REFERENCE_GLOB="$VS_DIR/applications"
+READING_ROOM_CSS="$ROOT_DIR/examples/face.works/prototype/src/app/reading-room.css"
 
-for f in "$TOKENS_CSS" "$TOKENS_JSON" "$MOTION_DOC"; do
+for f in "$TOKENS_CSS" "$TOKENS_JSON" "$MOTION_DOC" "$READING_ROOM_CSS"; do
   if [ ! -f "$f" ]; then
     echo "[error] required file not found: $f"
     exit 1
@@ -36,14 +39,14 @@ echo "Facework token validator"
 echo "Repo: $ROOT_DIR"
 echo
 
-ruby - "$TOKENS_CSS" "$TOKENS_JSON" "$MOTION_DOC" "$COLOR_DOC" "$REFERENCE_GLOB" <<'RUBY'
+ruby - "$TOKENS_CSS" "$TOKENS_JSON" "$MOTION_DOC" "$COLOR_DOC" "$REFERENCE_GLOB" "$READING_ROOM_CSS" <<'RUBY'
 # encoding: utf-8
 require "json"
 
 Encoding.default_external = Encoding::UTF_8
 Encoding.default_internal = Encoding::UTF_8
 
-tokens_css_path, tokens_json_path, motion_doc_path, color_doc_path, reference_root = ARGV
+tokens_css_path, tokens_json_path, motion_doc_path, color_doc_path, reference_root, reading_room_path = ARGV
 
 violations = 0
 def fail!(msg)
@@ -181,6 +184,30 @@ expected_motion.each do |name, value|
   end
 end
 
+# --- (d) the live site's :root carries the FVI-400 motion set ---------------
+# reading-room.css is the token source the prototype actually ships, but (b)
+# only covered the shared tokens.css copy — the six durations were specified
+# and validated for 0.0.32–0.0.78 while the live site never defined them.
+rr_root = File.read(reading_room_path)[/:root\s*\{(.*?)\n\}/m, 1].to_s
+rr_vars = {}
+rr_root.scan(/--rr-([a-z0-9-]+)\s*:\s*([^;]+);/i) do |name, value|
+  rr_vars[name.strip] = value.strip.gsub(/\s+/, "").downcase
+end
+expected_motion.each do |name, value|
+  rr_val = rr_vars["motion-#{name}"]
+  if rr_val.nil?
+    fail!("(d) reading-room.css :root missing --rr-motion-#{name} (FVI-400 = #{value})")
+    violations += 1
+  elsif rr_val != value
+    fail!("(d) motion mismatch for #{name}: reading-room.css=#{rr_val} FVI-400=#{value}")
+    violations += 1
+  end
+end
+if ease_doc && rr_vars["ease-settle"] != ease_doc.gsub(/\s+/, "").downcase
+  fail!("(d) reading-room.css --rr-ease-settle=#{rr_vars['ease-settle'].inspect} FVI-400=#{ease_doc}")
+  violations += 1
+end
+
 # --- (c) reference CSS must not fork raw color / font-family ----------------
 # A declaration is allowed to carry a raw color/font literal only when its
 # value is sourced through a var(...) reference (canonical token or fallback).
@@ -215,7 +242,7 @@ end
 puts
 if violations.zero?
   puts "[ok] color palette matches FVS-600 (#{css_colors.size} tokens, css + json)"
-  puts "[ok] motion token set matches FVI-400 (#{REQUIRED_MOTION.length} durations)"
+  puts "[ok] motion token set matches FVI-400 (#{REQUIRED_MOTION.length} durations, shared + reading-room.css)"
   puts "[ok] reference CSS sources all colors and fonts from --rr-* tokens"
   puts
   puts "All token source-authority checks passed."
