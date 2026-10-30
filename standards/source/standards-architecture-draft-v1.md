@@ -4,6 +4,8 @@
 
 Version 1.0
 
+**Authority note (2026-10-26):** The sole Canonical Constitution is `CONSTITUTION.md` in the Facework repository / face.works. This Drive mega-draft is a **pre-commit working mirror**, not an independent canon. Do not treat self-labels of "Canonical" elsewhere in this file as governing authority until explicitly promoted.
+
 ---
 
 # **Preamble**
@@ -69,6 +71,8 @@ Coherence Design derives its principles from Cultural Physics.
 
 No element of Facework shall contradict the principles established by either.
 
+The practice occupies one layer of a five-layer model: **Theory** (Cultural Physics) → **Discipline** (Coherence Design) → **Practice** (Facework) → **Implementation** (Skills and Artifacts) → **Runtime** (execution environments). Authority flows downward only.
+
 ---
 
 # **Article IV**
@@ -91,11 +95,11 @@ Every coherent system exhibits these forces regardless of implementation.
 
 # **Article V**
 
-## **The Protocol Principle**
+## **The Protocol and Postures Principle**
 
-The protocol defines the sequence through which the primitives are applied.
+The Protocol defines the sequence through which the primitives are applied to **establish** coherence. Postures are the standing operating modes through which coherence is **maintained** after it is established.
 
-The protocol may evolve as the practice matures.
+The Protocol and the Postures may evolve as the practice matures.
 
 The primitives shall not.
 
@@ -239,9 +243,10 @@ Its purpose is to create systems capable of sustaining meaning, preserving agenc
 
 **Version:** 1.0.0
 
-**Status:** Canonical
+**Status:** Deferred — not canonical (per `standards/README.md`)
 
-**Authority:** Facework Constitution
+**Authority:** Facework Constitution (repo Canonical only). This Specification track is staged, not active.
+
 
 ---
 
@@ -272,6 +277,8 @@ The Specification separates theory from discipline, discipline from practice, pr
 ---
 
 # **Canonical Architecture**
+
+**Open decision (2026-10-26):** This mega-draft still carries two layer counts — **Coherence Canon** uses seven layers (Theory, Discipline, Practice, Methodology, Protocol, Tools, Evidence) while **Spec/FS** uses the five-layer model (Theory → Discipline → Practice → Implementation → Runtime). Repo `standards/README.md` records five-layer as locked for activation, but do **not** silently collapse here. Principal decides which surface governs before next promotion.
 
 ```
 The Facework Specification
@@ -944,6 +951,8 @@ Its purpose is to provide a stable foundation upon which practitioners, organiza
 
 # FS-000
 
+**Standards track status (2026-10-26):** FS / FOS / FRS in this mega-draft remain **Deferred / not canonical** per `standards/README.md`. Runtime Ports are live elsewhere; this formal track is staged until protocol 1.0 criteria are met.
+
 # **FS-000 — Facework Specification: Core Concepts & Terminology**
 
 **Document ID:** FS-000
@@ -952,7 +961,7 @@ Its purpose is to provide a stable foundation upon which practitioners, organiza
 
 **Version:** 1.0.0
 
-**Status:** Canonical
+**Status:** Deferred — not canonical (per `standards/README.md`)
 
 **Authority:** Facework Constitution
 
@@ -1524,7 +1533,7 @@ Everything built within Facework inherits its meaning from this document.
 # **FOS-050 — Facework Resource Namespace (FRN)**
 
 **Version:** 1.0  
- **Status:** Canonical  
+ **Status:** Deferred — not canonical (per `standards/README.md`)
  **Authority:**
 
 * Facework Constitution
@@ -1900,7 +1909,7 @@ All future registries SHALL identify resources using Facework Resource Names.
 
 **Version:** 1.0.0
 
-**Status:** Canonical
+**Status:** Deferred — not canonical (per `standards/README.md`)
 
 **Authority:** Facework Specification
 
@@ -2404,7 +2413,7 @@ Every runtime executes what this architecture makes possible.
 
 **Version:** 1.0.0
 
-**Status:** Canonical
+**Status:** Deferred — not canonical (per `standards/README.md`)
 
 **Authority:** Facework Specification
 
@@ -2765,7 +2774,7 @@ Everything else is merely one way of representing it.
 
 **Version:** 1.0.0
 
-**Status:** Canonical
+**Status:** Deferred — not canonical (per `standards/README.md`)
 
 **Authority:** Facework Specification
 
@@ -5672,7 +5681,9 @@ It ensures that every normative change is deliberate, traceable, constitutionall
 ### **Canonical Architecture of the Coherence Design Ecosystem**
 
 **Version:** 1.0  
- **Status:** Living Document
+ **Status:** Living Document (draft surface — not independently Canonical)
+
+**Open decision (2026-10-26):** Seven-layer Canon model vs Spec/FS five-layer model — see note under Facework Specification → Canonical Architecture. Do not silently pick one.
 
 ---
 
@@ -7151,6 +7162,8 @@ And what can be designed can be redesigned.
 
 # **COHERENCE DESIGN™**
 
+**Surface note (2026-10-26):** This longer Drive/Coherence Design surface and the short living text at `theories/coherence-design.md` in the Facework repo are **two surfaces of the same discipline**. They are intentionally **not merged**. Promotion of one surface (or a reconciled third) requires an explicit human promotion call. Until then: repo short text = maintained living text; this Drive surface = draft working text.
+
 ### **The Discipline**
 
 **Version:** 1.0  
@@ -7804,7 +7817,7 @@ For example:
 
 Version: 1.0
 
-Status: Canonical
+Status: Deferred — not canonical (per standards/README.md)
 
 Authority: Facework Constitution v1.0
 
@@ -8178,7 +8191,7 @@ End of FOS-100.
 
 Version: 1.0
 
-Status: Canonical
+Status: Deferred — not canonical (per standards/README.md)
 
 Authority: Facework Constitution v1.0
 
@@ -8600,7 +8613,7 @@ End of FOS-200.
 
 Version: 1.0
 
-Status: Canonical
+Status: Deferred — not canonical (per standards/README.md)
 
 Authority: Facework Constitution v1.0
 
@@ -8982,7 +8995,7 @@ End of FOS-201.
 
 Version: 1.0
 
-Status: Canonical
+Status: Deferred — not canonical (per standards/README.md)
 
 Authority:
 
@@ -9692,7 +9705,7 @@ This appendix serves as implementation guidance for maintainers responsible for 
 # **FOS-400 — Primitive Standards**
 
 **Version:** 1.0  
- **Status:** Canonical  
+ **Status:** Deferred — not canonical (per `standards/README.md`)
  **Authority:**
 
 * Facework Constitution  
@@ -10243,7 +10256,7 @@ Defines how Primitives compose into executable sequences.
 # **FOS-401 — Canonical Primitive Registry**
 
 **Version:** 1.0  
- **Status:** Canonical Registry  
+ **Status:** Deferred registry — not canonical (per standards/README.md)  
  **Authority:**
 
 * Facework Constitution  
