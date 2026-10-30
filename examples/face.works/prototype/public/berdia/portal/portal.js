@@ -4,8 +4,8 @@ const when = (s) => s ? new Date(s).toLocaleString([], { dateStyle: 'medium', ti
 const STATUS = { complete: 'Complete', 'profile-only': 'Profile done, no files', 'files-only': 'Files, no profile', 'not-started': 'Not started' };
 async function call(path, action, data = {}, blob = false) {
   const r = await fetch(path, { method: 'POST', credentials: 'same-origin', cache: 'no-store', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action, ...data }) });
-  if (r.status === 401) { const s = $('signin'); if (s) s.hidden = false; throw Object.assign(new Error('signin'), { silent: true }); }
-  if (!r.ok) { let m = 'Something went wrong.'; try { m = (await r.json()).error || m; } catch {} throw new Error(m); }
+  if (r.status === 401 || r.status === 403) { const s = $('signin'); if (s) s.hidden = false; throw Object.assign(new Error('signin'), { silent: true }); }
+  if (!r.ok) { let m = 'We couldn’t load your records just now. Please try again in a minute.'; try { m = (await r.json()).error || m; } catch {} throw new Error(m); }
   return blob ? r.blob() : r.json();
 }
 const err = (e) => { if (e.silent) return; const x = $('err'); if (x) { x.textContent = e.message; x.hidden = false; } };
