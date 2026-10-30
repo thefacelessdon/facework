@@ -278,7 +278,7 @@ The Specification separates theory from discipline, discipline from practice, pr
 
 # **Canonical Architecture**
 
-**Open decision (2026-10-26):** This mega-draft still carries two layer counts — **Coherence Canon** uses seven layers (Theory, Discipline, Practice, Methodology, Protocol, Tools, Evidence) while **Spec/FS** uses the five-layer model (Theory → Discipline → Practice → Implementation → Runtime). Repo `standards/README.md` records five-layer as locked for activation, but do **not** silently collapse here. Principal decides which surface governs before next promotion.
+**Resolved (2026-10-30, principal ruling — Harper):** The five-layer model governs: **Theory → Discipline → Practice → Implementation → Runtime** (`CONSTITUTION.md` Article III; spine decision 1 in `methodology/architecture-reconciliation-2026-06.md`). The Coherence Canon's seven-layer list (Theory, Discipline, Practice, Methodology, Protocol, Tools, Evidence) is superseded and maps onto it: Methodology and Protocol sit inside **Practice**; Tools are **Implementation**; Evidence is an artifact every layer produces, not a layer of its own (as Capability is, spine decision 2). Runtime has no counterpart in the seven-layer list. The Canon section's own text is converted when this track activates (`standards/README.md`, known issues).
 
 ```
 The Facework Specification
@@ -5683,7 +5683,7 @@ It ensures that every normative change is deliberate, traceable, constitutionall
 **Version:** 1.0  
  **Status:** Living Document (draft surface — not independently Canonical)
 
-**Open decision (2026-10-26):** Seven-layer Canon model vs Spec/FS five-layer model — see note under Facework Specification → Canonical Architecture. Do not silently pick one.
+**Resolved (2026-10-30):** The five-layer model governs; the seven-layer list in this section is superseded. See the note under Facework Specification → Canonical Architecture for how its layers map.
 
 ---
 
