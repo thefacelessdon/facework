@@ -35,7 +35,7 @@ async function documents() {
   try { const s = await call('/berdia/api/portal', 'summary'); role = s.role; for (const m of s.members) names[m.subject] = m.name; } catch (e) { if (e.silent) return; }
   const { rows } = await call('/berdia/api/intake', 'list'); const box = $('uploads'); box.hidden = false;
   set(box, 'uphead', role === 'reviewer' ? 'Family uploads (reviewer)' : 'Your uploads');
-  set(box, 'upnote', role === 'reviewer' ? 'Visible to reviewers only. Each open/download is logged.' : 'Only you and family reviewers can see these.');
+  set(box, 'upnote', role === 'reviewer' ? 'Visible to reviewers only. Each open/download is logged.' : 'Only you and the family reviewer (Stedmon) can see these.');
   const groups = new Map(); for (const r of rows) { if (!groups.has(r.owner)) groups.set(r.owner, []); groups.get(r.owner).push(r); }
   if (!rows.length) $('groups').textContent = 'No uploads yet.';
   for (const [owner, list] of groups) { if (role === 'reviewer') $('groups').append(Object.assign(el('p', names[owner] || 'Family member'), { className: 'group-label' })); const ul = el('ul');
