@@ -24,14 +24,33 @@ $('login-form').addEventListener('submit', e => { e.preventDefault(); busy(e.cur
 $('logout').addEventListener('click', async () => { try { await api('logout'); lock(); $('profile-form').reset(); $('upload-form').reset(); $('file-list').replaceChildren(); notice('You’re signed out.'); } catch (e) { notice(e.message, true); } });
 document.querySelectorAll('[data-view]').forEach(b => b.addEventListener('click', () => view(b.dataset.view)));
 $('profile-form').addEventListener('submit', e => { e.preventDefault(); busy(e.currentTarget, async () => { const p = Object.fromEntries(new FormData(e.currentTarget)); p.consent = p.consent === 'on'; const r = await api('profile', p); notice('Your information was received on ' + new Date(r.at).toLocaleString() + '. Thank you.'); }); });
-$('files').addEventListener('change', () => { $('file-list').replaceChildren(); for (const f of $('files').files) { const li = document.createElement('li'); li.textContent = f.name + ' · ' + (f.size / 1000000).toFixed(2) + ' MB' + (f.size > 2500000 ? ' — too large' : ''); $('file-list').append(li); } });
+// Phone photos of documents are often 3–5 MB. Photos over the limit are resized in the browser
+// (long side 2400 px keeps text sharp, then lower JPEG quality only if needed); PDFs can't be shrunk here.
+const LIMIT = 2500000, TARGET = 2300000, isPhoto = f => /^image\/(jpeg|png)$/.test(f.type);
+async function fit(f) {
+  if (f.size <= LIMIT || !isPhoto(f)) return f;
+  const img = await createImageBitmap(f, { imageOrientation: 'from-image' });
+  try {
+    for (const [max, q] of [[2400, .85], [2400, .75], [2000, .75], [1600, .7]]) {
+      const k = Math.min(1, max / Math.max(img.width, img.height)), c = document.createElement('canvas');
+      c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+      const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height); g.drawImage(img, 0, 0, c.width, c.height);
+      const blob = await new Promise(r => c.toBlob(r, 'image/jpeg', q));
+      if (blob && blob.size <= TARGET) return new File([blob], f.name.replace(/\.(png|jpe?g)$/i, '') + '.jpg', { type: 'image/jpeg' });
+    }
+  } finally { img.close(); }
+  return f;
+}
+const sizeNote = f => f.size <= LIMIT ? '' : isPhoto(f) ? ' — will be resized to fit' : ' — too large; split it into smaller PDFs';
+$('files').addEventListener('change', () => { $('file-list').replaceChildren(); for (const f of $('files').files) { const li = document.createElement('li'); li.textContent = f.name + ' · ' + (f.size / 1000000).toFixed(2) + ' MB' + sizeNote(f); $('file-list').append(li); } });
 function base64(file) { return new Promise((resolve, reject) => { const r = new FileReader(); r.onload = () => resolve(r.result.split(',')[1]); r.onerror = () => reject(new Error('Could not read ' + file.name)); r.readAsDataURL(file); }); }
 $('upload-form').addEventListener('submit', e => { e.preventDefault(); busy(e.currentTarget, async () => {
   const files = Array.from($('files').files); if (files.length > 10) throw new Error('Choose up to 10 files at a time.');
-  if (files.some(f => f.size > 2500000 || f.size === 0)) throw new Error('Each file must contain data and be no larger than 2.5 MB.');
+  if (files.some(f => f.size === 0)) throw new Error('One of the files is empty. Choose it again.');
   let received = 0; const failures = [];
-  for (const [index, f] of files.entries()) { const row = $('file-list').children[index]; row.textContent = f.name + ' — sending…';
-    try { await api('upload', { name: f.name, category: $('category').value, bytes: await base64(f), consent: $('upload-consent').checked }); received++; row.textContent = f.name + ' — received'; }
+  for (const [index, f] of files.entries()) { const row = $('file-list').children[index]; row.textContent = f.name + (f.size > LIMIT && isPhoto(f) ? ' — resizing and sending…' : ' — sending…');
+    try { const u = await fit(f); if (u.size > LIMIT) throw new Error(isPhoto(f) ? 'still too large after resizing. Try a closer photo of one page.' : 'over 2.5 MB. Split it into smaller PDFs.');
+      await api('upload', { name: u.name, category: $('category').value, bytes: await base64(u), consent: $('upload-consent').checked }); received++; row.textContent = f.name + ' — received'; }
     catch (error) { failures.push(f.name); row.textContent = f.name + ' — not received: ' + error.message; }
   }
   notice(received + ' of ' + files.length + ' documents received.' + (failures.length ? ' Re-select the failed files to retry. Successful uploads are saved.' : ' Thank you. Keep your originals.'), failures.length > 0);
