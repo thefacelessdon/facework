@@ -7,8 +7,8 @@ help:
 	@echo "  make validate                              Validate default facework.manifest.yaml"
 	@echo "  make validate-manifest FILE=path/to/file  Validate a custom manifest file"
 	@echo "  make release-check                         Validate release number (unique, documented, increasing)"
-	@echo "  make test                                  Run the Operating Harness record + gate suites"
-	@echo "  make protocol-check                        Validate manifest + protocol files + skill registration + tokens + tests + release number"
+	@echo "  make test                                  Run the design-eye + Operating Harness record + gate suites"
+	@echo "  make protocol-check                        Validate manifest + protocol files + skill registration + tokens + design-eye grounding + tests + release number"
 	@echo "  make update                                Check for and install updates"
 
 validate:
@@ -31,11 +31,14 @@ protocol-check:
 	done
 	@./bin/validate-skill-registration
 	@./bin/validate-tokens
+	@./bin/validate-design-eye
+	@./tests/design-eye/run
 	@./tests/operating-harness-record/run
 	@./tests/operating-harness-record/hook
 	@./bin/validate-release
 
 test:
+	@./tests/design-eye/run
 	@./tests/operating-harness-record/run
 	@./tests/operating-harness-record/hook
 

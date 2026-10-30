@@ -13,12 +13,6 @@ model_tier: standard
 
 # Design Eye Evaluator
 
-> **Grounding superseded (0.0.79).** The `design-infrastructure` bundle this
-> skill loads is retained evidence, not active authority (see its README). Take
-> token values from `visual-system/applications/shared/tokens.json` and the
-> taste contract from `examples/face.works/prototype/DESIGN.md` until the
-> evaluator is re-grounded.
-
 Gate output against the TasteContract. Returns pass/fail + dimension
 scores + grounded feedback referencing specific contract clauses and
 on/off-brand example entries. Called by output-producing skills before
@@ -59,10 +53,19 @@ clauses and example library entries.
 
 ## Notes
 
-DesignInfrastructure (PROTOCOL.md §11) provides the data:
-- `tokens.json` — structured design tokens
-- `components.yaml` — primitives with machine-readable contract rules
-- `examples/on-brand-examples.md` and `examples/off-brand-anti-examples.md`
+DesignInfrastructure (PROTOCOL.md §11) provides the data — the Reading Room
+grounding set (0.0.80):
+- `examples/face.works/prototype/src/app/reading-room.css` — token source of
+  truth; findings cite `--rr-*` names and resolve values here
+- `examples/face.works/design-eye/components.yaml` — component contracts and
+  taste-clause ids, derived from `prototype/DESIGN.md` and FVS-200
+- `examples/face.works/design-eye/examples/on-brand-examples.md` (`ON-n`) and
+  `off-brand-anti-examples.md` (`OFF-n`)
+
+The superseded `design-infrastructure/` tokens, components, and examples are
+retained evidence only; the Skill never loads them. `bin/validate-design-eye`
+fails protocol-check if any evaluator wiring points back at them or cites a
+token or clause that does not exist.
 
 The Skill's playbook spells out the 6-step evaluation flow (load
 context → classify → score dimensions → check component contracts →

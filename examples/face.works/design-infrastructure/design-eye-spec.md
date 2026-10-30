@@ -1,12 +1,11 @@
 # Design Eye Evaluator — Playbook (face.works)
 
-> **Grounding superseded (0.0.79).** Step 0 loads `design-infrastructure/` —
-> tokens.json, components.yaml and the examples library — which its own README
-> marks *not active design authority*: Inter / JetBrains Mono / ochre `#A37E3F`,
-> not the Reading Room. Until this playbook is re-grounded, take every token
-> value from `visual-system/applications/shared/tokens.json` (validated by
-> `bin/validate-tokens`) and the taste contract from `prototype/DESIGN.md`; treat
-> component contracts and examples here as structure only, never as values.
+> **Grounding (0.0.80).** This playbook sits in `design-infrastructure/` only
+> because that is its registered path. It does **not** load that directory's
+> `tokens.json`, `components.yaml` or `examples/` — those are superseded,
+> retained evidence. It grades against the Reading Room grounding set in
+> `examples/face.works/design-eye/`, and `bin/validate-design-eye` fails
+> protocol-check if that ever changes.
 
 The `design-eye-evaluator` Skill executes this playbook. It gates output
 against the Face.works TasteContract, returning pass/fail + grounded
@@ -25,11 +24,21 @@ feedback. Runtime calls this skill before publishing artifacts.
 Load the standard context bundles plus the design-infrastructure bundle:
 
 - `soul` — TasteContract quality bar
-- `taste` — full design language (DESIGN.md) and TasteContract rubric
-- `design-infrastructure` — tokens.json + components.yaml + examples library
+- `taste` — full design language (`prototype/DESIGN.md`) and TasteContract rubric
+- `design-infrastructure` — the Reading Room grounding set:
+  - `prototype/src/app/reading-room.css` — **token source of truth**. Every
+    `--rr-*` name a finding cites must be defined here; resolve values here.
+  - `design-eye/components.yaml` — component contracts and taste-clause ids
+  - `design-eye/examples/on-brand-examples.md` (`ON-n`) and
+    `design-eye/examples/off-brand-anti-examples.md` (`OFF-n`)
+
+Primitives (`--rr-*` role tokens) resolve per register: `.rr` is The Record,
+`.rr-field` is The Field (DESIGN.md §3). Grade an artifact in the register it
+declares.
 
 Without this context loaded, do not proceed. The evaluator is grounded in
-declared infrastructure, not invented criteria.
+declared infrastructure, not invented criteria. Never take a value from the
+superseded set beside this file — it is not the face.works system.
 
 ## Step 1 — Classify the artifact
 
@@ -68,10 +77,14 @@ artifact aligns or conflicts with.
 ## Step 3 — Check component contract rules
 
 For each component used in the artifact, check the `contract.must[]` and
-`contract.must_not[]` rules in `components.yaml`. Specifically:
+`contract.must_not[]` rules in `design-eye/components.yaml`, then check the
+artifact against every `taste_clauses[]` entry that applies. Specifically:
 
-- Are declared `tokens_used` references the actual tokens the artifact
-  consumes? (Detect off-token color/spacing.)
+- Are the artifact's colors, faces, spacing, and motion consumed through the
+  component's declared `tokens_used` (`--rr-*` names)? Flag any raw literal
+  (hex, `oklch()`, font-family string, `ms` duration, `cubic-bezier`) that
+  bypasses a token, and any register-specific token (e.g. `--rr-paper`) used
+  where a role token (`--rr-ground`) belongs.
 - Does the artifact violate any `must_not` rule? List the violations.
 - Does the artifact satisfy all `must` rules for the components it uses?
 
@@ -79,13 +92,13 @@ This is the **mechanical** check — clear pass/fail per rule.
 
 ## Step 4 — Compare to examples library
 
-Reference `examples/on-brand-examples.md` and
-`examples/off-brand-anti-examples.md`. For each finding:
+Reference `design-eye/examples/on-brand-examples.md` and
+`design-eye/examples/off-brand-anti-examples.md`. For each finding:
 
-- Cite the nearest on-brand example the artifact resembles or should
-  resemble.
-- Cite the nearest off-brand anti-example the artifact may be drifting
-  toward.
+- Cite the nearest on-brand example by id (`ON-n`) the artifact resembles
+  or should resemble.
+- Cite the nearest off-brand anti-example by id (`OFF-n`) the artifact may
+  be drifting toward.
 
 ## Step 5 — Verdict
 
@@ -131,13 +144,14 @@ evaluated_at: <ISO timestamp>
 
 ## Component contract findings
 
-- <Component>: must violations — <list, or "none">
-- <Component>: must_not violations — <list, or "none">
+- <component id>: must violations — <list, or "none">
+- <component id>: must_not violations — <list, or "none">
+- Taste clauses breached: <clause ids, or "none">
 
 ## Reference
 
-- Closest on-brand example: <link to entry in on-brand-examples.md>
-- Closest anti-example to avoid: <link to entry in off-brand-anti-examples.md>
+- Closest on-brand example: <ON-n — title>
+- Closest anti-example to avoid: <OFF-n — title>
 
 ## Required corrections (if fail)
 
@@ -148,11 +162,13 @@ evaluated_at: <ISO timestamp>
 ## Step 7 — Don't be vague
 
 Every finding cites a specific contract clause or example. "Looks a bit
-off" is not a finding. "Heading uses type.family.body instead of
-type.family.display — violates heading component contract" is.
+off" is not a finding. "Section title set in --rr-font-record instead of
+--rr-font-structure — violates section-head `must` (clause: mono-certifies),
+drifting toward OFF-4" is.
 
 ## When to skip
 
 Never. The evaluator runs whenever called. If the artifact can't be
 loaded or the design-infrastructure context isn't available, return an
-error report — do not approximate.
+error report — do not approximate. A finding that cites a token not defined
+in `reading-room.css` is itself an evaluator error.

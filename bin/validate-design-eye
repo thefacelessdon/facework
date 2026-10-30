@@ -1,0 +1,217 @@
+#!/usr/bin/env bash
+# validate-design-eye — the design-eye evaluator must grade against the live
+# Reading Room system, and only cite things that exist in it.
+#
+# Until 0.0.80 the evaluator loaded examples/face.works/design-infrastructure/ —
+# Inter / JetBrains Mono / ochre tokens its own README marks "not active design
+# authority" — so an artifact could pass the face.works design gate while
+# contradicting the live site. Nothing compared the evaluator's grounding to the
+# canonical tokens; 0.0.79 found it by reading. This is the check.
+#
+# Asserts:
+#   (a) wiring — facework.manifest.yaml design_infrastructure and the
+#       `design-infrastructure` context bundle do not load the superseded set,
+#       and the bundle loads reading-room.css plus the manifest's components and
+#       both example files; the playbook and Skill card cite the same set and
+#       never the superseded tokens / components / examples;
+#   (b) every `--rr-*` token cited by the grounding set, the playbook, the
+#       Skill card, or an evals/ report is a custom property defined in
+#       reading-room.css (a `--rr-x-*` family must match at least one);
+#   (c) components.yaml and the on-brand examples reference tokens, never copy
+#       them: no color, easing, duration, or token font-family literal;
+#   (d) every `clause:` id, bold component id, and ON-n / OFF-n citation resolves
+#       in components.yaml or the examples library.
+#
+# Usage: bin/validate-design-eye [ROOT]   (ROOT defaults to the repo; tests pass
+# a fixture tree). Exits non-zero on any violation.
+set -euo pipefail
+
+ROOT_DIR="${1:-$(cd "$(dirname "$0")/.." && pwd)}"
+ROOT_DIR="$(cd "$ROOT_DIR" && pwd)"
+
+if ! command -v ruby >/dev/null 2>&1; then
+  echo "[error] ruby is required (uses stdlib YAML parser)."
+  exit 1
+fi
+
+echo "Facework design-eye grounding validator"
+echo "Repo: $ROOT_DIR"
+echo
+
+ruby - "$ROOT_DIR" <<'RUBY'
+# encoding: utf-8
+require "yaml"
+
+Encoding.default_external = Encoding::UTF_8
+Encoding.default_internal = Encoding::UTF_8
+
+root = ARGV[0]
+violations = 0
+fail = lambda { |msg| puts "[fail] #{msg}"; violations += 1 }
+
+TOKENS_CSS  = "examples/face.works/prototype/src/app/reading-room.css"
+MANIFEST    = "facework.manifest.yaml"
+CONTEXT     = "examples/face.works/runtime-ports/context-manifest.yaml"
+PLAYBOOK    = "examples/face.works/design-infrastructure/design-eye-spec.md"
+SKILL_CARD  = "examples/face.works/harness-bundle/skills/design-eye-evaluator.md"
+SUPERSEDED  = "examples/face.works/design-infrastructure/"
+SUPERSEDED_GROUNDING = %r{design-infrastructure/(?:tokens\.json|components\.yaml|examples/)}
+
+abs = ->(rel) { File.join(root, rel) }
+[TOKENS_CSS, MANIFEST, CONTEXT, PLAYBOOK, SKILL_CARD].each do |rel|
+  unless File.file?(abs.(rel))
+    puts "[error] required file not found: #{rel}"
+    exit 1
+  end
+end
+
+# --- token universe: every --rr-* custom property reading-room.css defines ----
+css = File.read(abs.(TOKENS_CSS)).gsub(%r{/\*.*?\*/}m, "")
+defined = css.scan(/(?:^|[;{\s])--rr-([a-z0-9]+(?:-[a-z0-9]+)*)\s*:/i).flatten.map(&:downcase).uniq
+if defined.empty?
+  puts "[error] no --rr-* custom properties parsed from #{TOKENS_CSS}"
+  exit 1
+end
+
+# --- (a) wiring ---------------------------------------------------------------
+manifest = YAML.safe_load(File.read(abs.(MANIFEST)), aliases: true) || {}
+di = manifest["design_infrastructure"]
+unless di.is_a?(Hash)
+  puts "[error] #{MANIFEST} has no design_infrastructure block"
+  exit 1
+end
+%w[tokens components examples].each do |k|
+  v = di[k].to_s
+  if v.start_with?(SUPERSEDED)
+    fail.("(a) #{MANIFEST} design_infrastructure.#{k} loads the superseded set: #{v}")
+  end
+end
+components_rel = di["components"].to_s
+examples_rel   = di["examples"].to_s.sub(%r{/?\z}, "/")
+on_rel  = examples_rel + "on-brand-examples.md"
+off_rel = examples_rel + "off-brand-anti-examples.md"
+[components_rel, on_rel, off_rel].each do |rel|
+  unless File.file?(abs.(rel))
+    puts "[error] grounding file not found: #{rel}"
+    exit 1
+  end
+end
+
+context = YAML.safe_load(File.read(abs.(CONTEXT)), aliases: true) || {}
+bundle = (context["bundles"] || []).find { |b| b["id"] == "design-infrastructure" }
+if bundle.nil?
+  fail.("(a) #{CONTEXT} has no design-infrastructure bundle")
+else
+  paths = (bundle["load"] || []).map { |l| l["path"].to_s }
+  paths.each do |p|
+    fail.("(a) design-infrastructure bundle loads the superseded set: #{p}") if p.start_with?(SUPERSEDED)
+  end
+  [TOKENS_CSS, components_rel, on_rel, off_rel].each do |want|
+    fail.("(a) design-infrastructure bundle does not load #{want}") unless paths.include?(want)
+  end
+end
+
+grounding_dir = File.dirname(components_rel) + "/"
+[PLAYBOOK, SKILL_CARD].each do |rel|
+  text = File.read(abs.(rel))
+  text.scan(SUPERSEDED_GROUNDING) { fail.("(a) #{rel} cites superseded grounding: #{$~[0]}") }
+  short = grounding_dir.sub(%r{\Aexamples/face\.works/}, "")
+  fail.("(a) #{rel} does not cite the grounding set (#{short})") unless text.include?(short)
+  fail.("(a) #{rel} does not cite the token source (reading-room.css)") unless text.include?("reading-room.css")
+end
+
+# --- load the grounding set ---------------------------------------------------
+comp_text = File.read(abs.(components_rel))
+comp = YAML.safe_load(comp_text, aliases: false) || {}
+clause_ids = (comp["taste_clauses"] || []).map { |c| c["id"].to_s }
+component_ids = (comp["components"] || []).map { |c| c["id"].to_s }
+fail.("(d) #{components_rel} declares no taste_clauses") if clause_ids.empty?
+fail.("(d) #{components_rel} declares no components") if component_ids.empty?
+
+on_text  = File.read(abs.(on_rel))
+off_text = File.read(abs.(off_rel))
+on_ids  = on_text.scan(/^## (ON-\d+)\b/).flatten
+off_ids = off_text.scan(/^## (OFF-\d+)\b/).flatten
+
+cited_files = {
+  components_rel => comp_text,
+  on_rel => on_text,
+  off_rel => off_text,
+  PLAYBOOK => File.read(abs.(PLAYBOOK)),
+  SKILL_CARD => File.read(abs.(SKILL_CARD)),
+}
+# Evaluation reports kept with the set are evidence; a report citing a token or
+# clause that does not exist is an evaluator error (playbook, "When to skip").
+Dir.glob(File.join(root, grounding_dir, "evals", "*.md")).sort.each do |path|
+  cited_files[path.sub(root + "/", "")] = File.read(path)
+end
+
+# --- (b) every cited --rr-* token exists --------------------------------------
+cited_tokens = 0
+cited_files.each do |rel, text|
+  text.scan(/--rr-([a-z0-9]+(?:-[a-z0-9]+)*)(-?\*)?/i) do |name, wildcard|
+    name = name.downcase
+    cited_tokens += 1
+    if wildcard
+      unless defined.any? { |d| d.start_with?(name + "-") || (wildcard == "*" && d.start_with?(name)) }
+        fail.("(b) #{rel} cites token family --rr-#{name}-* but reading-room.css defines none")
+      end
+    elsif !defined.include?(name)
+      fail.("(b) #{rel} cites --rr-#{name}, which reading-room.css does not define")
+    end
+  end
+end
+
+# --- (c) reference, never copy ------------------------------------------------
+font_literals = css.scan(/--rr-font-[a-z-]+\s*:\s*"([^"]+)"/i).flatten
+literal_res = {
+  "hex color" => /#[0-9a-f]{6}\b|#[0-9a-f]{3}\b(?![-\w])/i,
+  "color function" => /\b(?:oklch|oklab|rgba?|hsla?)\(/i,
+  "easing curve" => /cubic-bezier\(/i,
+  "duration" => /\b\d+(?:\.\d+)?m?s\b(?![\w-])/,
+}
+[[components_rel, comp_text], [on_rel, on_text]].each do |rel, text|
+  text.each_line.with_index(1) do |line, n|
+    literal_res.each do |kind, re|
+      fail.("(c) #{rel}:#{n} copies a #{kind} literal (#{line[re]}) — cite the --rr-* token") if line =~ re
+    end
+    font_literals.each do |fam|
+      fail.("(c) #{rel}:#{n} copies font-family literal \"#{fam}\" — cite the --rr-font-* token") if line.include?(fam)
+    end
+  end
+end
+
+# --- (d) every cited clause / component / example id resolves -----------------
+cited_files.each do |rel, text|
+  text.scan(/clause:\s*([a-z0-9-]+(?:,\s*[a-z0-9-]+)*)/) do |list,|
+    list.split(/,\s*/).each do |id|
+      fail.("(d) #{rel} cites clause '#{id}', not declared in #{components_rel}") unless clause_ids.include?(id)
+    end
+  end
+  text.scan(/\b(ON|OFF)-(\d+)\b/) do |kind, num|
+    id = "#{kind}-#{num}"
+    pool = kind == "ON" ? on_ids : off_ids
+    fail.("(d) #{rel} cites #{id}, which the examples library does not define") unless pool.include?(id)
+  end
+end
+[[on_rel, on_text], [off_rel, off_text]].each do |rel, text|
+  text.scan(/\*\*([a-z][a-z0-9]*(?:-[a-z0-9]+)+|[a-z]+)\*\*/) do |id,|
+    fail.("(d) #{rel} cites component '#{id}', not declared in #{components_rel}") unless component_ids.include?(id)
+  end
+end
+
+puts
+if violations.zero?
+  puts "[ok] evaluator wiring loads #{grounding_dir} + reading-room.css, never the superseded set"
+  puts "[ok] #{cited_tokens} --rr-* citations all defined in reading-room.css (#{defined.size} tokens)"
+  puts "[ok] contracts and on-brand examples reference tokens, copy no literals"
+  puts "[ok] #{clause_ids.size} clauses / #{component_ids.size} components / #{on_ids.size} ON + #{off_ids.size} OFF examples — every citation resolves"
+  puts
+  puts "All design-eye grounding checks passed."
+  exit 0
+else
+  puts
+  puts "#{violations} design-eye grounding violation(s) found."
+  exit 1
+end
+RUBY

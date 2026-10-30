@@ -93,8 +93,11 @@ runtime_ports:
 # v1.3.0 — DesignInfrastructure: tokens + components + examples + evaluator skill.
 # Track-aware conformance (PROTOCOL.md §11.7): face.works is agency_studio (MAY) but emits
 # anyway since GAMUT audits include design-quality evaluations of client deliverables.
+# 0.0.80 — grounded on the Reading Room: tokens resolve to the FVS-validated JSON
+# mirror of reading-room.css; contracts + examples live in design-eye/. The older
+# design-infrastructure/ set is retained evidence, not authority.
 design_infrastructure:
-  tokens:     "examples/face.works/design-infrastructure/tokens.json"
-  components: "examples/face.works/design-infrastructure/components.yaml"
-  examples:   "examples/face.works/design-infrastructure/examples/"
+  tokens:     "visual-system/applications/shared/tokens.json"
+  components: "examples/face.works/design-eye/components.yaml"
+  examples:   "examples/face.works/design-eye/examples/"
   evaluator_skill_id: "design-eye-evaluator"

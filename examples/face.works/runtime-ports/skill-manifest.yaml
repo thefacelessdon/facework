@@ -202,7 +202,7 @@ skills:
     domain: quality
     trigger: on_demand
     ownership: agent
-    playbook: "examples/face.works/design-infrastructure/design-eye-spec.md"
+    playbook: "examples/face.works/design-infrastructure/design-eye-spec.md"  # path kept; grounding is design-eye/ (0.0.80)
     inputs:
       - name: artifact_path
         type: file_path

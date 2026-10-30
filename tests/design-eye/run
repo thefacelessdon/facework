@@ -1,0 +1,122 @@
+#!/usr/bin/env bash
+# Negative tests for bin/validate-design-eye. Each case copies the real
+# evaluator wiring and grounding set into a scratch tree, introduces one class
+# of drift, and requires the validator to refuse it with the expected check tag
+# — a refusal for some other reason (a missing file) does not count.
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
+VALIDATOR="$ROOT_DIR/bin/validate-design-eye"
+TMP_ROOT="$(mktemp -d)"
+trap 'rm -rf "$TMP_ROOT"' EXIT
+
+FILES=(
+  facework.manifest.yaml
+  examples/face.works/prototype/src/app/reading-room.css
+  examples/face.works/runtime-ports/context-manifest.yaml
+  examples/face.works/harness-bundle/skills/design-eye-evaluator.md
+  examples/face.works/design-infrastructure
+  examples/face.works/design-eye
+)
+
+prepare() {
+  local target="$TMP_ROOT/$1"
+  for f in "${FILES[@]}"; do
+    mkdir -p "$target/$(dirname "$f")"
+    cp -R "$ROOT_DIR/$f" "$target/$f"
+  done
+  printf '%s\n' "$target"
+}
+
+# edit <tree> <relative file> <ruby expression applied to the file text `s`>
+edit() {
+  ruby -E UTF-8:UTF-8 -e 'p = ARGV[0]; s = File.read(p); n = eval(ARGV[1].dup.force_encoding("UTF-8")); abort("edit was a no-op: #{ARGV[1]}") if n == s; File.write(p, n)' \
+    "$1/$2" "$3"
+}
+
+expect_pass() {
+  local label="$1" path="$2"
+  if ! "$VALIDATOR" "$path" >"$TMP_ROOT/out" 2>&1; then
+    echo "not ok - $label (expected pass)"
+    cat "$TMP_ROOT/out"
+    exit 1
+  fi
+  echo "ok - $label"
+}
+
+expect_fail() {
+  local label="$1" path="$2" tag="$3"
+  if "$VALIDATOR" "$path" >"$TMP_ROOT/out" 2>&1; then
+    echo "not ok - $label (expected refusal)"
+    exit 1
+  fi
+  if ! grep -qF -- "[fail] $tag" "$TMP_ROOT/out"; then
+    echo "not ok - $label (refused, but not by check $tag)"
+    cat "$TMP_ROOT/out"
+    exit 1
+  fi
+  echo "ok - $label"
+}
+
+DE=examples/face.works/design-eye
+SPEC=examples/face.works/design-infrastructure/design-eye-spec.md
+CARD=examples/face.works/harness-bundle/skills/design-eye-evaluator.md
+CTX=examples/face.works/runtime-ports/context-manifest.yaml
+CSS=examples/face.works/prototype/src/app/reading-room.css
+
+t="$(prepare baseline)"
+expect_pass "real grounding set passes" "$t"
+
+t="$(prepare manifest-superseded)"
+edit "$t" facework.manifest.yaml 's.sub("examples/face.works/design-eye/components.yaml", "examples/face.works/design-infrastructure/components.yaml")'
+expect_fail "manifest pointing components at the superseded set is refused" "$t" "(a)"
+
+t="$(prepare bundle-superseded)"
+edit "$t" "$CTX" 's.sub("examples/face.works/prototype/src/app/reading-room.css", "examples/face.works/design-infrastructure/tokens.json")'
+expect_fail "context bundle loading superseded tokens.json is refused" "$t" "(a)"
+
+t="$(prepare playbook-superseded)"
+edit "$t" "$SPEC" 's.sub("design-eye/examples/on-brand-examples.md", "design-infrastructure/examples/on-brand-examples.md")'
+expect_fail "playbook citing superseded examples is refused" "$t" "(a)"
+
+t="$(prepare card-unground)"
+edit "$t" "$CARD" 's.gsub("reading-room.css", "tokens.css")'
+expect_fail "skill card that drops the token source is refused" "$t" "(a)"
+
+t="$(prepare phantom-token)"
+edit "$t" "$DE/components.yaml" 's.sub("      - --rr-cta-ink\n", "      - --rr-cta-ink\n      - --rr-brand-primary\n")'
+expect_fail "contract citing a token reading-room.css lacks is refused" "$t" "(b)"
+
+t="$(prepare token-renamed-upstream)"
+edit "$t" "$CSS" 's.gsub("--rr-accent-text:", "--rr-accent-label:")'
+expect_fail "renaming a cited token in reading-room.css is caught" "$t" "(b)"
+
+t="$(prepare copied-color)"
+edit "$t" "$DE/components.yaml" 's.sub("fill --rr-cta-fill,", "fill oklch(0.175 0.012 55),")'
+expect_fail "contract copying a color value is refused" "$t" "(c)"
+
+t="$(prepare copied-easing)"
+edit "$t" "$DE/examples/on-brand-examples.md" 's.sub("on `--rr-ease-settle`", "on `cubic-bezier(0.22, 1, 0.36, 1)`")'
+expect_fail "on-brand example copying the easing curve is refused" "$t" "(c)"
+
+t="$(prepare copied-font)"
+edit "$t" "$DE/components.yaml" 's.sub("set in --rr-font-record,", "set in Spline Sans Mono Variable,")'
+expect_fail "contract copying a token font-family is refused" "$t" "(c)"
+
+t="$(prepare unknown-clause)"
+edit "$t" "$DE/examples/off-brand-anti-examples.md" 's.sub("clause: no-gradient-no-glow, banned-ai-tells.", "clause: no-gradient-no-glow, brand-voice-warmth.")'
+expect_fail "example citing an undeclared clause is refused" "$t" "(d)"
+
+t="$(prepare unknown-example)"
+edit "$t" "$SPEC" 's.sub("drifting toward OFF-4", "drifting toward OFF-99")'
+expect_fail "playbook citing a missing anti-example is refused" "$t" "(d)"
+
+t="$(prepare unknown-component)"
+edit "$t" "$DE/examples/on-brand-examples.md" 's.sub("- **ink-cta** —", "- **hero-banner** —")'
+expect_fail "example citing an undeclared component is refused" "$t" "(d)"
+
+t="$(prepare eval-phantom-token)"
+edit "$t" "$DE/evals/2026-10-29-home.md" 's.sub("background `--rr-settled`**", "background `--rr-status-open`**")'
+expect_fail "evaluation report citing a phantom token is refused" "$t" "(b)"
+
+echo "design-eye validator: all cases ok"

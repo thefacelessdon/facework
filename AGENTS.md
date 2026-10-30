@@ -110,9 +110,10 @@ Facework/
 ├── visual-system/                 ← FVS/FVI/FVA/FVR/FVP identity spec (Implementation layer)
 ├── standards/                     ← deferred post-1.0 track — NOT canonical
 ├── examples/face.works/           ← reference output from a completed run (NOT the active project)
-│   ├── define/ runtime-ports/ harness-bundle/ design-infrastructure/
+│   ├── define/ runtime-ports/ harness-bundle/ design-eye/ (evaluator grounding)
+│   ├── design-infrastructure/     ← superseded §11 set (evidence; holds the playbook path)
 │   └── prototype/                 ← the live Next.js site (own guide: prototype/CLAUDE.md)
-└── bin/                           ← validate-manifest, validate-tokens, harness-to-claude-code
+└── bin/                           ← validate-manifest, validate-tokens, validate-design-eye, harness-to-claude-code
 ```
 
 ### Skills and agents

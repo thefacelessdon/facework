@@ -1,0 +1,452 @@
+# face.works — design-eye component contracts (Reading Room)
+#
+# The grounding the design-eye evaluator grades against (PROTOCOL.md §11.4).
+# Derived from examples/face.works/prototype/DESIGN.md (taste contract) and
+# visual-system/FVS-200-primitives.md, written against the live components in
+# examples/face.works/prototype/src/components/rr/ and their classes in
+# src/app/reading-room.css.
+#
+# Tokens are REFERENCED, never copied. Every `--rr-*` name below must be a custom
+# property defined in reading-room.css (the token source of truth); values live
+# there and in visual-system/applications/shared/tokens.json, nowhere here.
+# bin/validate-design-eye enforces this — a cited token that does not exist, or a
+# raw color / duration / easing / font literal in this file, fails protocol-check.
+#
+# Register-neutral role tokens (--rr-ground, --rr-text, --rr-text-strong,
+# --rr-muted, --rr-line, --rr-accent, --rr-accent-text, --rr-cta-*, --rr-status-*)
+# are what primitives consume: `.rr` (The Record) and `.rr-field` (The Field) each
+# resolve them, so one primitive renders in either register unchanged (DESIGN §3).
+# A component that reaches past a role token to a register-specific one
+# (e.g. --rr-paper inside a primitive) is drift unless its contract says why.
+
+version: "2.0.0"
+tenant: "face.works"
+grounding: "reading-room"
+supersedes: "examples/face.works/design-infrastructure/components.yaml (retained evidence, not authority)"
+
+sources:
+  tokens: "examples/face.works/prototype/src/app/reading-room.css"
+  tokens_mirror: "visual-system/applications/shared/tokens.json"
+  taste_contract: "examples/face.works/prototype/DESIGN.md"
+  primitives: "visual-system/FVS-200-primitives.md"
+  authority_ruling: "methodology/decisions/DECISION-002"
+
+# ---------------------------------------------------------------------------
+# Taste clauses — the stable ids examples and evaluation reports cite.
+# Each is a sentence of DESIGN.md (or an FVS-200 failure mode) given an id so a
+# finding can name it. `source` is the section it comes from.
+# ---------------------------------------------------------------------------
+taste_clauses:
+  - id: inherited-cold
+    rule: "The reading would still hold if inherited cold by someone who wasn't in the room."
+    source: "DESIGN.md §2, §11"
+  - id: color-classifies
+    rule: "Color only classifies. Monochrome first; a hue appears only where a real state exists."
+    source: "DESIGN.md §4, §11"
+  - id: ink-cta
+    rule: "CTAs are ink (--rr-cta-fill / --rr-cta-ink). Never a colored button."
+    source: "DESIGN.md §4, §11"
+  - id: verdigris-attended
+    rule: "Verdigris marks the active / attended state and links only — never decoration, never a status."
+    source: "DESIGN.md §4, §11"
+  - id: status-reserved
+    rule: "--rr-settled / --rr-attention / --rr-exposure / --rr-archive are permanently spoken-for; never brand, never decoration."
+    source: "DESIGN.md §4"
+  - id: no-gradient-no-glow
+    rule: "No gradients (fills, backgrounds, text) and no glow. Never pure black or pure white."
+    source: "DESIGN.md §4, §9, §11"
+  - id: three-voices
+    rule: "Serif reads (--rr-font-reading), grotesque structures (--rr-font-structure), mono certifies (--rr-font-record)."
+    source: "DESIGN.md §5"
+  - id: mono-certifies
+    rule: "Mono is for labels, IDs, metadata, verdicts and Field instruments — never monospace-as-'techy' shorthand for prose or headings."
+    source: "DESIGN.md §5, §11"
+  - id: uppercase-labels-only
+    rule: "Uppercase only for short mono labels, never body or headings."
+    source: "DESIGN.md §5"
+  - id: measure
+    rule: "Body runs at the reading measure (--rr-measure); lines never span the full viewport."
+    source: "DESIGN.md §5, §6"
+  - id: reading-is-the-unit
+    rule: "The reading is the unit, not the card: mono eyebrow → title → body → instrument → verdict."
+    source: "DESIGN.md §6"
+  - id: no-card-in-card
+    rule: "Never card-inside-card; prefer hairline-ruled rows and squared panels over cards."
+    source: "DESIGN.md §6, §11; FVS-200 §5 (cardification)"
+  - id: no-equal-card-grid
+    rule: "No repeated equal card grids unless the content is truly tabular."
+    source: "DESIGN.md §6, §11; FVS-200 §5"
+  - id: index-only-where-order-is-real
+    rule: "A section index or phase count appears only where order is real — never as decoration."
+    source: "DESIGN.md §6"
+  - id: gap-not-margin
+    rule: "Lay siblings out with gap on the 4pt scale (--rr-sp-*); a heading earns space above it."
+    source: "DESIGN.md §6"
+  - id: hairline-only
+    rule: "Rules are 1px hairlines in --rr-line. No side-stripe accent borders thicker than 1px."
+    source: "DESIGN.md §6, §11"
+  - id: margin-is-apparatus
+    rule: "The margin rail is typographic apparatus: at most one hairline, no background, no card; folds inline below 1100px, never hidden."
+    source: "DESIGN.md §6"
+  - id: one-axis
+    rule: "Every composition can name its primary axis; left reading edge is the default. No centered-everything."
+    source: "FVS-200 §1, §2; DESIGN.md §11"
+  - id: five-instruments
+    rule: "Every visual is one of the five instruments (Reading, Field/Trace, Structure/Lineage, Pressure, Coherence verdict) or argues its way in. No stock, no decorative icons."
+    source: "DESIGN.md §7, §11"
+  - id: shape-law
+    rule: "Square = open/unsettled, circle = settled/issued — rendered only by ShapeMarker (or the verdict marker), never re-drawn ad hoc."
+    source: "DESIGN.md §7"
+  - id: no-fabricated-records
+    rule: "Instruments derive from records; they never invent dates, counts, or reading-time estimates."
+    source: "DESIGN.md §7 (Holdings line, Reading margin)"
+  - id: open-center-mark
+    rule: "The Coherence Mark has an open center in every state — never a filled node, never decoration."
+    source: "DESIGN.md §8, §11"
+  - id: structural-motion
+    rule: "Motion animates transform, opacity, stroke-dashoffset only, on --rr-ease-settle with --rr-motion-* durations. No bounce, no elastic, no glow. prefers-reduced-motion shows the settled state."
+    source: "DESIGN.md §9; FVS-800; FVI-400"
+  - id: copy-is-a-reading
+    rule: "Copy names things by what they are: no marketing register, no agency theatre, no technical costume, no exclamation points."
+    source: "DESIGN.md §11"
+  - id: banned-ai-tells
+    rule: "Banned outright: gradient text, side-stripe borders >1px, glassmorphism, card-in-card, repeated equal card grids, hero-metric templates, bounce easing, decorative sparklines, mono-as-techy, centered-everything, rounded icon-above-every-heading."
+    source: "DESIGN.md §11"
+
+# ---------------------------------------------------------------------------
+# Components — §11.4 shape. `source` names the live implementation the contract
+# was read from; `fvs200` names the visual primitives it carries.
+# ---------------------------------------------------------------------------
+components:
+  - id: record-label
+    name: "RecordLabel (the mono .fig eyebrow)"
+    purpose: "Opens nearly every block with a short certifying label — kind, ID, phase."
+    source: "src/components/rr/RecordLabel.tsx · .rr-label"
+    fvs200: [continuity, axis]
+    variants: [plain, tick]
+    states: [default]
+    tokens_used:
+      - --rr-font-record
+      - --rr-muted
+      - --rr-accent
+      - --rr-sp-2
+    contract:
+      must:
+        - "set in --rr-font-record, uppercase, tracked, tabular numerals (clause: mono-certifies, uppercase-labels-only)"
+        - "text in --rr-muted; the optional tick is a square in --rr-accent (clause: verdigris-attended)"
+        - "short — a kind, an ID, a phase; never a sentence"
+      must_not:
+        - "no pill / badge background or rounded container around the label"
+        - "no icon in place of or beside the tick"
+        - "no status color on the label text (clause: status-reserved)"
+
+  - id: display
+    name: "Display statement (home masthead)"
+    purpose: "The one statement a surface opens on — the reading room speaking."
+    source: "src/app/page.tsx · .rr-display, .rr-masthead"
+    fvs200: [axis, scale]
+    variants: [masthead]
+    states: [default]
+    tokens_used:
+      - --rr-font-reading
+      - --rr-text-strong
+      - --rr-sp-4
+    contract:
+      must:
+        - "one per surface, left-aligned on the column's reading edge (clause: one-axis)"
+        - "color --rr-text-strong; balanced wrap so no widowed last word"
+        - "preceded by a RecordLabel eyebrow and followed by a lede in --rr-muted at --rr-measure"
+      must_not:
+        - "no gradient fill, text shadow, or glow (clause: no-gradient-no-glow)"
+        - "no all-caps display text (clause: uppercase-labels-only)"
+        - "no hero-metric template — no giant number posing as the headline (clause: banned-ai-tells)"
+        - "no exclamation point (clause: copy-is-a-reading)"
+
+  - id: section-head
+    name: "SectionHead"
+    purpose: "Mono record-label (+ a real index) above a Schibsted structural title."
+    source: "src/components/rr/SectionHead.tsx · .rr-sectionhead"
+    fvs200: [axis, flow]
+    variants: [plain, indexed]
+    states: [default]
+    tokens_used:
+      - --rr-font-structure
+      - --rr-text-strong
+      - --rr-accent-text
+      - --rr-sp-3
+    contract:
+      must:
+        - "title in --rr-font-structure (the system speaks), color --rr-text-strong (clause: three-voices)"
+        - "opens with a RecordLabel; an index (e.g. 'phase 3 of 5') appears only where order is real, in --rr-accent-text (clause: index-only-where-order-is-real)"
+        - "a heading earns space above it — separation by gap on the --rr-sp-* scale (clause: gap-not-margin)"
+      must_not:
+        - "no decorative numbering (01 / 02 / 03) on unordered sections"
+        - "no icon above or beside the heading (clause: banned-ai-tells)"
+        - "no side-stripe accent border (clause: hairline-only)"
+
+  - id: reading
+    name: "Reading (the unit)"
+    purpose: "The unit of every surface: mono eyebrow → Literata title → body (→ instrument → verdict)."
+    source: "src/components/rr/Reading.tsx · .rr-reading"
+    fvs200: [module, flow, continuity]
+    variants: [default, tick]
+    states: [default]
+    tokens_used:
+      - --rr-font-reading
+      - --rr-text-strong
+      - --rr-text
+      - --rr-measure
+      - --rr-sp-4
+    contract:
+      must:
+        - "eyebrow → title → body, in that order (clause: reading-is-the-unit)"
+        - "title in --rr-font-reading (the thinking speaks); body in --rr-text at --rr-measure (clause: measure)"
+        - "sits directly on the register ground — no container of its own"
+      must_not:
+        - "no card, shadow, or raised background wrapping the reading (clause: no-card-in-card)"
+        - "no reading-time estimate or fabricated date (clause: no-fabricated-records)"
+
+  - id: prose
+    name: "Prose (canon documents on /protocol/[slug])"
+    purpose: "Long-form running text for served canon documents."
+    source: "src/components/Markdown.tsx · .rr-prose*"
+    fvs200: [axis, flow]
+    variants: [body, quote, table, code]
+    states: [default]
+    tokens_used:
+      - --rr-font-reading
+      - --rr-font-structure
+      - --rr-font-record
+      - --rr-text
+      - --rr-text-strong
+      - --rr-line
+      - --rr-muted
+      - --rr-accent
+      - --rr-accent-text
+      - --rr-measure
+    contract:
+      must:
+        - "body in --rr-font-reading at --rr-measure; h2/h3 in --rr-font-structure (clause: three-voices, measure)"
+        - "code, IDs and tables of record in --rr-font-record only (clause: mono-certifies)"
+        - "inline links follow the text-link contract"
+      must_not:
+        - "no justified text or forced hyphenation"
+        - "no uppercase running text (clause: uppercase-labels-only)"
+        - "no pull-quote decoration — a quote is an indent led by one 1px --rr-accent hairline in --rr-muted italic, not a colored panel or thick stripe (clause: hairline-only)"
+
+  - id: reading-index
+    name: "ReadingIndex (hairline record rows)"
+    purpose: "Lists readings as ruled rows: mono ID, structural title, muted note, shape-law status."
+    source: "src/components/rr/ReadingIndex.tsx · .rr-index*"
+    fvs200: [module, axis, continuity]
+    variants: [with-status, browse]
+    states: [default, hover, focus]
+    tokens_used:
+      - --rr-line
+      - --rr-font-record
+      - --rr-font-structure
+      - --rr-text-strong
+      - --rr-muted
+      - --rr-accent-text
+      - --rr-accent
+      - --rr-sp-4
+    contract:
+      must:
+        - "rows separated by 1px --rr-line hairlines, top rule on the list (clause: hairline-only)"
+        - "hover moves only the title to --rr-accent-text; focus-visible draws an --rr-accent outline (clause: verdigris-attended)"
+        - "status renders through ShapeMarker (clause: shape-law)"
+      must_not:
+        - "no cards per row and no equal card grid in place of rows (clause: no-card-in-card, no-equal-card-grid)"
+        - "no chevrons, arrows, or icons as row affordance"
+        - "no row background fills on hover"
+
+  - id: shape-marker
+    name: "ShapeMarker (the shape law)"
+    purpose: "The one rendering of open (square) vs settled (circle), shared by rows and legend."
+    source: "src/components/rr/ShapeMarker.tsx · .rr-marker"
+    fvs200: [tension, continuity]
+    variants: [open, settled]
+    states: [default]
+    tokens_used:
+      - --rr-muted
+      - --rr-settled
+    contract:
+      must:
+        - "open = square in --rr-muted; settled = circle in --rr-settled (clause: shape-law, status-reserved)"
+        - "rendered by the ShapeMarker component (or the verdict marker), never re-drawn per surface"
+      must_not:
+        - "no emoji, check-mark, or icon substitute for the shape"
+        - "no status color used where no real state exists (clause: color-classifies)"
+
+  - id: coherence-verdict
+    name: "CoherenceVerdict"
+    purpose: "The diagnostic state — n/5 bars plus a shape-law marker, in record voice."
+    source: "src/components/rr/CoherenceVerdict.tsx · .rr-verdict*"
+    fvs200: [tension, scale]
+    variants: [open, settled]
+    states: [default]
+    tokens_used:
+      - --rr-font-record
+      - --rr-muted
+      - --rr-line
+      - --rr-accent
+      - --rr-text-strong
+      - --rr-settled
+    contract:
+      must:
+        - "score set in --rr-font-record with tabular numerals (clause: mono-certifies)"
+        - "lit bars in --rr-accent, unlit in --rr-line; marker follows the shape law"
+        - "derived from the record's real status, never asserted (clause: no-fabricated-records)"
+      must_not:
+        - "no gauge dial, donut chart, progress ring, or sparkline (clause: banned-ai-tells, five-instruments)"
+        - "no percentage dressed as precision the reading does not have"
+
+  - id: ink-cta
+    name: "InkCTA"
+    purpose: "The primary action — ink fill, paper text, inverts on the Field."
+    source: "src/components/rr/InkCTA.tsx · .rr-cta"
+    fvs200: [flow, tension]
+    variants: [default]
+    states: [default, hover, focus]
+    tokens_used:
+      - --rr-cta-fill
+      - --rr-cta-ink
+      - --rr-font-structure
+      - --rr-accent
+      - --rr-ease-settle
+      - --rr-sp-3
+      - --rr-sp-6
+    contract:
+      must:
+        - "fill --rr-cta-fill, text --rr-cta-ink, 1px border in the fill (clause: ink-cta)"
+        - "hover is an opacity change only; focus-visible draws an --rr-accent outline"
+        - "sizes to its label — an action, not a banner; left-aligned in its section (clause: one-axis)"
+      must_not:
+        - "no colored fill — not verdigris, not a status hue (clause: ink-cta, verdigris-attended)"
+        - "no gradient, shadow, glow, or pulsing (clause: no-gradient-no-glow, structural-motion)"
+        - "no stacked row of competing CTAs — one primary action per section"
+        - "no exclamation point or urgency copy (clause: copy-is-a-reading)"
+
+  - id: text-link
+    name: "Text link"
+    purpose: "Inline links in prose and apparatus."
+    source: ".rr-link, .rr-prose a, .rr-ledger-seealso__link"
+    fvs200: [flow]
+    variants: [inline, apparatus]
+    states: [default, hover, focus]
+    tokens_used:
+      - --rr-accent-text
+      - --rr-accent
+    contract:
+      must:
+        - "color --rr-accent-text; underline visible by default, hairline thickness (clause: verdigris-attended)"
+        - "focus-visible draws an --rr-accent outline"
+      must_not:
+        - "no underline-on-hover-only"
+        - "no arrow glyphs or external-link icons appended as decoration"
+
+  - id: structure-lineage
+    name: "StructureLineage"
+    purpose: "What holds the system up and what survives handoff — hairline rows with shape-law markers."
+    source: "src/components/rr/StructureLineage.tsx · .rr-lineage*"
+    fvs200: [axis, module, continuity]
+    variants: [default]
+    states: [default]
+    tokens_used:
+      - --rr-line
+      - --rr-muted
+      - --rr-settled
+      - --rr-font-structure
+      - --rr-font-record
+      - --rr-sp-3
+      - --rr-sp-4
+    contract:
+      must:
+        - "rows ruled by 1px --rr-line; markers follow the shape law (clause: hairline-only, shape-law)"
+        - "label in --rr-font-structure, note in --rr-font-record (clause: three-voices)"
+      must_not:
+        - "no flowchart boxes, connector arrows, or org-chart cards in place of rows (clause: no-card-in-card)"
+
+  - id: trace
+    name: "Trace (the Field / Trace instrument)"
+    purpose: "The bounded pattern and how it moves over time — the Lorenz Field, a verdigris oscillation."
+    source: "src/components/rr/Trace.tsx · .rr-trace*"
+    fvs200: [flow, tension, continuity]
+    variants: [static, draw]
+    states: [default, reduced-motion]
+    tokens_used:
+      - --rr-accent
+      - --rr-line
+      - --rr-ease-settle
+    contract:
+      must:
+        - "stroke in --rr-accent on an --rr-line axis; fill none"
+        - "draw-in animates stroke-dashoffset only, eased on --rr-ease-settle; reduced motion shows the settled trace (clause: structural-motion)"
+        - "carries a mono label and a caption that states the claim (clause: five-instruments)"
+      must_not:
+        - "no glow, gradient stroke, or particle effect (clause: no-gradient-no-glow)"
+        - "no decorative sparkline standing in for an instrument (clause: banned-ai-tells)"
+
+  - id: ledger
+    name: "Ledger surface (holdings line + index + legend)"
+    purpose: "Browse surfaces: the ledger counts itself, lists its records, and teaches its shape law."
+    source: "src/components/rr/Ledger.tsx · .rr-ledger*"
+    fvs200: [module, axis, scale]
+    variants: [collection, thin]
+    states: [default]
+    tokens_used:
+      - --rr-font-record
+      - --rr-muted
+      - --rr-text-strong
+      - --rr-accent
+      - --rr-sp-3
+    contract:
+      must:
+        - "holdings line derives counts from the records via holdingsFor(); counts in --rr-text-strong, units in --rr-muted (clause: no-fabricated-records)"
+        - "thin collections state their condition plainly (e.g. 0 ENTRIES ISSUED)"
+        - "legend renders through ShapeMarker in the row-status voice (clause: shape-law)"
+      must_not:
+        - "no dates on records that have none"
+        - "no apology or filler copy for a thin collection ('coming soon!') (clause: copy-is-a-reading)"
+        - "no hero-metric tiles summarising the ledger (clause: banned-ai-tells)"
+
+  - id: margin
+    name: "Reading margin (document apparatus)"
+    purpose: "A document's record apparatus — kind, provenance, ~word count, Contents, see-also."
+    source: "src/components/rr/Margin.tsx · .rr-margin*, .rr-ledger__rail, .rr-contents*"
+    fvs200: [axis, balance, scale]
+    variants: [rail, inline-fold]
+    states: [default]
+    tokens_used:
+      - --rr-line
+      - --rr-muted
+      - --rr-font-record
+      - --rr-accent-text
+      - --rr-measure
+    contract:
+      must:
+        - "at ≥1100px a sticky right rail beside the --rr-measure column; below, folds inline and Contents becomes a native <details> (clause: margin-is-apparatus)"
+        - "canon voice above the one hairline, wayfinding below it"
+        - "word count is an honest '~N words'; Contents comes from the document's own h2 spine, omitted under two h2s"
+      must_not:
+        - "no rail background, card, or second hairline (clause: margin-is-apparatus)"
+        - "no reading-time estimate, no scroll-spy JS (clause: no-fabricated-records)"
+        - "never hidden at narrow widths"
+
+  - id: coherence-mark
+    name: "CoherenceMark + Register wordmark"
+    purpose: "The governing equation drawn; identity lockup leads with mark, then the Register wordmark."
+    source: "src/components/rr/CoherenceMark.tsx, FaceworkWordmark.tsx · .rr-mark"
+    fvs200: [axis, tension, continuity]
+    variants: [default, micro]
+    states: [default]
+    tokens_used:
+      - --rr-text-strong
+    contract:
+      must:
+        - "open center in every state; inherits color via currentColor — ink on Record, signal-light on Field (clause: open-center-mark)"
+        - "wordmark is the FaceworkWordmark vector, not typeset text"
+      must_not:
+        - "no filled center node or center dot (clause: open-center-mark)"
+        - "no use as a decorative motif, bullet, or background pattern (clause: five-instruments)"
+        - "no Schibsted-text stand-in for the wordmark"
