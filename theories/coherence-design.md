@@ -13,6 +13,8 @@ and transmission.*
 decay, Coherence Design establishes **how** coherent systems are designed — and
 [Facework](the-coherence-operating-system.md) is the practice that applies it.*
 
+> **Surface note (2026-10-26):** This short living text and the longer Coherence Design surface inside the Drive Standards Architecture mega-draft are two surfaces of the same discipline. They are intentionally not merged. Promotion of one surface (or a reconciled third) requires an explicit human promotion call. Until then, treat this file as the maintained short living text; treat the Drive CD tab as draft working text.
+
 ---
 
 ## I. The Discipline
