@@ -14,3 +14,15 @@ describe("berdia family mount", () => {
     expect(list.find((r) => r.source === "/berdia/:path*")).toBeUndefined();
   });
 });
+
+describe("berdia invitation link headers", () => {
+  it("never caches /berdia/k links or leaks them as a referrer, and wins over the site-wide rule", async () => {
+    const hs = await (nextConfig.headers as () => Promise<{ source: string; headers: { key: string; value: string }[] }[]>)();
+    const k = hs.findIndex((h) => h.source === "/berdia/k/:code");
+    const site = hs.findIndex((h) => h.source === "/:path*");
+    expect(k).toBeGreaterThan(site);
+    const v = Object.fromEntries(hs[k].headers.map((h) => [h.key, h.value]));
+    expect(v["Cache-Control"]).toContain("no-store");
+    expect(v["Referrer-Policy"]).toBe("no-referrer");
+  });
+});
