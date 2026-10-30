@@ -31,15 +31,14 @@ const nextConfig: NextConfig = {
       { source: "/library", destination: "/methodology", permanent: true },
     ];
   },
-  // PERMANENT: the Berdia family platform (Vercel project berdia-trust) is
-  // mounted at /berdia — Tasks (intake), Family Plan, Documents and Portal.
-  // Family invitation links point here; removing this breaks every family
-  // member's sign-in link. Guarded by src/app/berdia-mount.test.ts.
-  // DO NOT REMOVE.
+  // PERMANENT: Berdia on face.works.
+  // Static UI (portal, plan, intake pages) is served from public/berdia/.
+  // Only the intake/session API proxies to berdia-trust so family invitation
+  // sign-in keeps working. Guarded by src/app/berdia-mount.test.ts.
+  // DO NOT REMOVE the api rewrite.
   async rewrites() {
     return [
-      { source: "/berdia", destination: "https://berdia-trust.vercel.app/berdia/" },
-      { source: "/berdia/:path*", destination: "https://berdia-trust.vercel.app/berdia/:path*" },
+      { source: "/berdia/api/:path*", destination: "https://berdia-trust.vercel.app/berdia/api/:path*" },
     ];
   },
   async headers() {

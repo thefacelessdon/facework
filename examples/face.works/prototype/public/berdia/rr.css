@@ -1,0 +1,346 @@
+/* rr.css — VERBATIM extract of face.works Reading Room design language
+   Source: thefacelessdon/facework examples/face.works/prototype/src/app/reading-room.css
+   (lines 1-161, 285-380, 448-460, 496-512, 555-606). Do not edit tokens here; edit upstream.
+   Fonts: same @fontsource-variable files face.works self-hosts (latin, wght axis). */
+@font-face{font-family:"Literata Variable";font-style:normal;font-display:swap;font-weight:200 900;src:url(/berdia/fonts/literata-latin-wght-normal.woff2) format("woff2-variations")}
+@font-face{font-family:"Schibsted Grotesk Variable";font-style:normal;font-display:swap;font-weight:400 900;src:url(/berdia/fonts/schibsted-grotesk-latin-wght-normal.woff2) format("woff2-variations")}
+@font-face{font-family:"Spline Sans Mono Variable";font-style:normal;font-display:swap;font-weight:300 700;src:url(/berdia/fonts/spline-sans-mono-latin-wght-normal.woff2) format("woff2-variations")}
+/* =========================================================================
+   Reading Room — the face.works design language (foundation)
+   Binding contract: DESIGN.md (+ .impeccable.md). OKLCH only.
+   NON-BREAKING: all tokens namespaced --rr-* so they never collide with the
+   existing --fw-* Visual Language System. Nothing here restyles the old pages.
+   ========================================================================= */
+
+:root {
+  /* --- The Record — light (DESIGN.md §4) ------------------------------- */
+  --rr-paper: oklch(0.967 0.008 85); /* page ground */
+  --rr-surface: oklch(0.936 0.010 84); /* raised panel / worksheet fill */
+  --rr-rule: oklch(0.800 0.013 82); /* hairline rules, borders */
+  --rr-meta: oklch(0.515 0.012 80); /* metadata + secondary text */
+  --rr-body: oklch(0.305 0.012 68); /* reading body */
+  --rr-ink: oklch(0.175 0.012 55); /* ink, marks, PRIMARY ACTIONS/CTAs */
+  --rr-verdigris: oklch(0.55 0.075 190); /* brand accent — fills / marks */
+  --rr-verdigris-text: oklch(0.47 0.070 190); /* accent AS TEXT on paper (AA) */
+
+  /* --- The Field — dark, warm obsidian (DESIGN.md §4) ----------------- */
+  --rr-field: oklch(0.185 0.008 70); /* ground */
+  --rr-field-panel: oklch(0.235 0.009 70);
+  --rr-field-raised: oklch(0.270 0.010 70);
+  --rr-field-line: oklch(0.340 0.010 70); /* 1px borders */
+  --rr-field-text: oklch(0.920 0.012 85);
+  --rr-field-mute: oklch(0.630 0.013 78);
+  --rr-verdigris-field: oklch(0.740 0.085 190); /* lifted for >=4.5:1 on field */
+
+  /* --- Reserved status (classification only — NOT brand) (§4) --------- */
+  --rr-settled: oklch(0.56 0.12 150); /* green  — settled / owned  (circle); FILLS/MARKS only */
+  --rr-settled-text: oklch(0.49 0.12 150); /* settled AS TEXT on paper (AA >=4.5:1) */
+  --rr-settled-field: oklch(0.72 0.10 150); /* settled AS TEXT lifted for dark field (AA) */
+  --rr-attention: oklch(0.70 0.13 75); /* amber  — needs attention */
+  --rr-attention-text: oklch(0.52 0.12 72); /* text-tier on paper */
+  --rr-exposure: oklch(0.58 0.19 30); /* red    — weak / at risk */
+  --rr-exposure-text: oklch(0.48 0.17 30); /* text-tier on paper */
+  --rr-archive: oklch(0.50 0.13 300); /* violet — archived / wayfinding */
+
+  /* --- Type roles (§5) — mapped to the self-hosted @fontsource families */
+  --rr-font-reading: "Literata Variable", Georgia, serif;
+  --rr-font-structure: "Schibsted Grotesk Variable", system-ui, sans-serif;
+  --rr-font-record: "Spline Sans Mono Variable", ui-monospace, monospace;
+
+  /* --- 4pt spacing scale (§6) ---------------------------------------- */
+  --rr-sp-1: 4px;
+  --rr-sp-2: 8px;
+  --rr-sp-3: 12px;
+  --rr-sp-4: 16px;
+  --rr-sp-6: 24px;
+  --rr-sp-8: 32px;
+  --rr-sp-12: 48px;
+  --rr-sp-16: 64px;
+  --rr-sp-24: 96px;
+
+  /* --- Motion (§9) --------------------------------------------------- */
+  --rr-ease-settle: cubic-bezier(0.22, 1, 0.36, 1);
+  --rr-measure: 68ch;
+}
+
+/* =========================================================================
+   Register scopes — two states of one system (§3).
+   Primitives style themselves via register-neutral aliases (--rr-ground,
+   --rr-text, --rr-line, --rr-accent, --rr-cta-*) that each scope resolves,
+   so a primitive can be dropped into either register unchanged.
+   ========================================================================= */
+
+.rr {
+  /* The Record — settled / issued readings */
+  color-scheme: light;
+  --rr-ground: var(--rr-paper);
+  --rr-ground-raised: var(--rr-surface);
+  --rr-text: var(--rr-body);
+  --rr-text-strong: var(--rr-ink);
+  --rr-muted: var(--rr-meta);
+  --rr-line: var(--rr-rule);
+  --rr-accent: var(--rr-verdigris);
+  --rr-accent-text: var(--rr-verdigris-text);
+  --rr-cta-fill: var(--rr-ink); /* ink-black bg */
+  --rr-cta-ink: var(--rr-paper); /* paper text */
+  --rr-status-attention: var(--rr-attention-text);
+  --rr-status-exposure: var(--rr-exposure-text);
+  --rr-status-settled: var(--rr-settled-text);
+}
+
+.rr-field {
+  /* The Field — live / under observation */
+  color-scheme: dark;
+  --rr-ground: var(--rr-field);
+  --rr-ground-raised: var(--rr-field-raised);
+  --rr-text: var(--rr-field-text);
+  --rr-text-strong: var(--rr-field-text);
+  --rr-muted: var(--rr-field-mute);
+  --rr-line: var(--rr-field-line);
+  --rr-accent: var(--rr-verdigris-field);
+  --rr-accent-text: var(--rr-verdigris-field);
+  --rr-cta-fill: var(--rr-field-text); /* inverts to light fill */
+  --rr-cta-ink: var(--rr-field); /* dark ink text */
+  --rr-status-attention: var(--rr-attention);
+  --rr-status-exposure: var(--rr-exposure);
+  --rr-status-settled: var(--rr-settled-field);
+}
+
+.rr,
+.rr-field {
+  background: var(--rr-ground);
+  color: var(--rr-text);
+  font-family: var(--rr-font-reading);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+.rr-field {
+  line-height: 1.72; /* light-on-dark adds 0.05–0.1 (§5) */
+}
+
+/* =========================================================================
+   Primitive classes — token-driven only. No cards-in-cards, no side-stripe
+   borders (>1px), no gradients, no glow (§11).
+   ========================================================================= */
+
+/* RecordLabel — the mono `.fig` eyebrow (§5) */
+.rr-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rr-sp-2);
+  font-family: var(--rr-font-record);
+  font-weight: 500;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--rr-muted);
+  font-variant-numeric: tabular-nums;
+}
+.rr-label__tick {
+  width: 0.5em;
+  height: 0.5em;
+  background: var(--rr-accent);
+  flex: none;
+}
+
+/* SectionHead — mono label (+ real index) → Schibsted title (§6) */
+.rr-sectionhead {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rr-sp-3);
+}
+.rr-sectionhead__index {
+  color: var(--rr-accent-text);
+}
+.rr-sectionhead__title {
+  font-family: var(--rr-font-structure);
+  font-weight: 600;
+  font-size: clamp(1.4rem, 2.4vw, 1.7rem);
+  line-height: 1.15;
+  letter-spacing: -0.005em;
+  color: var(--rr-text-strong);
+  margin: 0;
+  text-wrap: balance; /* no widowed last words on masthead propositions */
+}
+
+/* Reading — the unit: eyebrow → Literata title → body (§6) */
+.rr-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rr-sp-2);
+  font-family: var(--rr-font-structure);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  line-height: 1;
+  padding: var(--rr-sp-3) var(--rr-sp-6);
+  background: var(--rr-cta-fill);
+  color: var(--rr-cta-ink);
+  border: 1px solid var(--rr-cta-fill);
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 180ms var(--rr-ease-settle);
+}
+.rr-cta:hover {
+  opacity: 0.88;
+}
+.rr-cta:focus-visible {
+  outline: 2px solid var(--rr-accent);
+  outline-offset: 2px;
+}
+
+/* Text link — verdigris as text, active/attended only (§4) */
+.rr-link {
+  color: var(--rr-accent-text);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  text-decoration-thickness: 1px;
+}
+.rr-link:focus-visible {
+  outline: 2px solid var(--rr-accent);
+  outline-offset: 2px;
+}
+
+/* CoherenceMark — the governing equation drawn (§8). The center is ALWAYS
+   open (coherence is the relationship, never a filled node); the mark carries
+   no state node. Inherits ink on Record, signal-light on Field. */
+.rr-mark {
+  display: inline-block;
+  color: var(--rr-text-strong, currentColor); /* rests in ink, even off-register */
+}
+
+/* =========================================================================
+   Page composition — The Work surfaces (§10). The wrapper carries both `.rr`
+   (register) and `section-page` (opt out of the legacy
+   `.site-main > div:not(.section-page)` ink-border rule in globals.css); the
+   `.rr-page` padding below wins by source order.
+   ========================================================================= */
+.rr-page {
+  padding: var(--rr-sp-24) var(--rr-gutter, 6vw);
+  min-height: 70svh;
+}
+.rr-column {
+  max-width: 74ch;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--rr-sp-12);
+}
+.rr-masthead {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rr-sp-4);
+}
+/* Home display statement — the reading room speaks in Literata (§5) */
+.rr-display {
+  font-family: var(--rr-font-reading);
+  font-weight: 600;
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+  color: var(--rr-text-strong);
+  margin: 0;
+}
+.rr-lede {
+  max-width: var(--rr-measure);
+  margin: 0;
+  color: var(--rr-muted);
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+.rr-lead-reading,
+.rr-feature,
+.rr-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rr-sp-6);
+}
+/* An ink CTA is an action, not a banner — it never stretches to the column. */
+.rr-feature > .rr-cta {
+  align-self: flex-start;
+}
+
+.rr-marker {
+  display: inline-block;
+  width: 0.6em;
+  height: 0.6em;
+  flex: none;
+}
+.rr-marker--open {
+  background: var(--rr-muted);
+} /* square = open */
+.rr-marker--settled {
+  background: var(--rr-settled);
+  border-radius: 50%;
+} /* circle = settled */
+.rr-note {
+  max-width: var(--rr-measure);
+  margin: 0;
+  color: var(--rr-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+.rr-note--record {
+  font-family: var(--rr-font-record);
+  font-size: 0.8125rem;
+  line-height: 1.65;
+}
+.rr-note a {
+  color: var(--rr-accent-text);
+  text-underline-offset: 0.15em;
+}
+
+.rr-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--rr-line);
+}
+.rr-rows__item {
+  display: grid;
+  grid-template-columns: 10.5rem 1fr;
+  gap: var(--rr-sp-3) var(--rr-sp-8);
+  align-items: baseline;
+  padding: var(--rr-sp-6) 0;
+  border-bottom: 1px solid var(--rr-line);
+}
+.rr-rows__meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rr-sp-1);
+  font-family: var(--rr-font-record);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+  color: var(--rr-muted);
+  font-variant-numeric: tabular-nums;
+}
+.rr-rows__meta strong {
+  color: var(--rr-text-strong);
+  font-weight: 500;
+}
+.rr-rows__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rr-sp-2);
+}
+.rr-rows__title {
+  margin: 0;
+  font-family: var(--rr-font-structure);
+  font-weight: 600;
+  font-size: 1.15rem;
+  line-height: 1.2;
+  color: var(--rr-text-strong);
+}
+.rr-rows__note {
+  margin: 0;
+  color: var(--rr-text);
+}
+.rr-rows__sub {
+  margin: 0;
+  color: var(--rr-muted);
+  font-size: 0.95rem;
+}
+
