@@ -19,8 +19,9 @@ async function dashboard() {
   if (d.role === 'reviewer' && $('desk')) $('desk').hidden = false;
   const me = d.me || { profile: false, files: 0 }, stage = d.role === 'reviewer' || (me.profile && me.files) ? 'open' : (me.profile || me.files ? 'started' : 'new');
   try { sessionStorage.setItem('berdia-stage', stage); } catch {} document.body.dataset.stage = stage;
-  if ($('cta')) $('cta').hidden = stage === 'new';
-  const fr = $('firstrun'); if (fr) { if (stage === 'open') fr.hidden = true; else { const st = (k, t, c) => { const n = fr.querySelector('[data-k="' + k + '"]'); n.textContent = t; n.className = 'chip ' + c; };
+  // The next-step button always shows; a new member needs it most.
+  if ($('cta')) $('cta').hidden = false;
+  const fr = $('firstrun'); if (fr) { if (stage === 'open') fr.hidden = true; else { fr.hidden = false; const st = (k, t, c) => { const n = fr.querySelector('[data-k="' + k + '"]'); n.textContent = t; n.className = 'chip ' + c; };
     if (stage === 'started') { st('s1', 'Done', 'settled'); st('s2', 'Open', 'attention'); } } }
   if (d.me) { const m = $('me'); m.hidden = false; set(m, 'profile', d.me.profile ? 'Done' : 'Not yet'); set(m, 'files', String(d.me.files)); set(m, 'lastAt', when(d.me.lastAt));
     set(m, 'next', d.me.profile ? 'Your intake is in. Add more documents any time in Tasks.' : 'Next: complete your profile in Tasks.'); }

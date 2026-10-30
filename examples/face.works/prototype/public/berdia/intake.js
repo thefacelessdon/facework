@@ -46,5 +46,7 @@ $('refresh').addEventListener('click', loadRecords); $('close-detail').addEventL
 window.addEventListener('pagehide', () => { $('profile-form').reset(); $('details').replaceChildren(); });
 // Invitation link: face.works/berdia/k/<code> (survives email link wrappers) or the older #<code>.
 // The code leaves the address bar before anything else runs; a link sign-in lands on Home.
-const linkCode = () => (location.pathname.match(/^\/berdia\/k\/([a-f0-9]{64})\/?$/) || [])[1] || location.hash.slice(1);
+// Case-insensitive; any /berdia/k/<something> counts as a link attempt, so a mangled link
+// still gets a plain message instead of a blank sign-in screen.
+const linkCode = () => { const m = location.pathname.match(/^\/berdia\/k\/([^/]+)\/?$/); return ((m ? m[1] : '') || location.hash.slice(1)).toLowerCase(); };
 (async () => { const token = linkCode(); if (token) history.replaceState(null, '', '/berdia/intake.html'); try { if (token) { await api('login', { token }); location.replace('/berdia/portal/'); return; } await enter(); } catch (e) { lock(); if (token) notice(/invalid|expired/i.test(e.message) ? 'That link has expired or was replaced. Ask Stedmon or Hop for a new one.' : 'We couldn’t sign you in with that link. Tap it again, or ask Stedmon or Hop for a new one.', true); } })();
