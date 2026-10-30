@@ -20,7 +20,7 @@ async function enter() {
 }
 async function busy(form, fn) { const b = form.querySelector('button[type=submit]'); b.disabled = true; try { await fn(); } catch (e) { notice(e.message, true); } finally { b.disabled = false; } }
 // Accepts the code, or the whole invitation link pasted in; spaces and case don't matter.
-$('login-form').addEventListener('submit', e => { e.preventDefault(); busy(e.currentTarget, async () => { const code = ($('invite').value.replace(/\s+/g, '').toLowerCase().match(/[a-f0-9]{64}/) || [''])[0]; if (!code) throw new Error('That doesn’t look like your invitation code. Paste the whole link from your email, or ask Stedmon or Hop for a new one.'); await api('login', { token: code }); $('invite').value = ''; location.replace('/berdia/portal/'); }); });
+$('login-form').addEventListener('submit', e => { e.preventDefault(); busy(e.currentTarget, async () => { const code = ($('invite').value.replace(/\s+/g, '').toLowerCase().match(/[a-f0-9]{64}/) || [''])[0]; if (!code) throw new Error('That doesn’t look like your invitation code. Paste the whole link from your email, or ask Stedmon for a new one.'); await api('login', { token: code }); $('invite').value = ''; location.replace('/berdia/portal/'); }); });
 $('logout').addEventListener('click', async () => { try { await api('logout'); lock(); $('profile-form').reset(); $('upload-form').reset(); $('file-list').replaceChildren(); notice('You’re signed out.'); } catch (e) { notice(e.message, true); } });
 document.querySelectorAll('[data-view]').forEach(b => b.addEventListener('click', () => view(b.dataset.view)));
 $('profile-form').addEventListener('submit', e => { e.preventDefault(); busy(e.currentTarget, async () => { const p = Object.fromEntries(new FormData(e.currentTarget)); p.consent = p.consent === 'on'; const r = await api('profile', p); notice('Your information was received on ' + new Date(r.at).toLocaleString() + '. Thank you.'); }); });
@@ -52,10 +52,10 @@ window.addEventListener('pagehide', () => { $('profile-form').reset(); $('detail
 // still gets a plain message instead of a blank sign-in screen.
 // Sign in with Google returns here with ?google=<reason> only when it did not sign the person in.
 const GOOGLE = { cancelled: 'Google sign-in was cancelled. Try again, or use the link in your invitation email.',
-  unknown: 'That Google account isn’t on an invitation. Choose the account Stedmon or Hop invited, or use the link in your invitation email.',
-  mismatch: 'That Google account doesn’t match the one already linked to your invitation. Ask Stedmon or Hop for help.',
+  unknown: 'That Google account isn’t on an invitation. Choose the account your invitation was sent to, or use the link in your invitation email.',
+  mismatch: 'That Google account doesn’t match the one already linked to your invitation. Ask Stedmon for help.',
   expired: 'That sign-in took too long. Try Sign in with Google again.',
   failed: 'Google sign-in didn’t work this time. Try again, or use the link in your invitation email.' };
 const googleResult = () => { const r = new URLSearchParams(location.search).get('google'); if (r !== null) history.replaceState(null, '', '/berdia/intake.html'); return r === null ? '' : (GOOGLE[r] || GOOGLE.failed); };
 const linkCode = () => { const m = location.pathname.match(/^\/berdia\/k\/([^/]+)\/?$/); return ((m ? m[1] : '') || location.hash.slice(1)).toLowerCase(); };
-(async () => { const google = googleResult(), token = linkCode(); if (token) history.replaceState(null, '', '/berdia/intake.html'); try { if (token) { await api('login', { token }); location.replace('/berdia/portal/'); return; } await enter(); } catch (e) { lock(); if (token) notice(/invalid|expired/i.test(e.message) ? 'That link has expired or was replaced. Ask Stedmon or Hop for a new one.' : 'We couldn’t sign you in with that link. Tap it again, or ask Stedmon or Hop for a new one.', true); else if (google) notice(google, true); } })();
+(async () => { const google = googleResult(), token = linkCode(); if (token) history.replaceState(null, '', '/berdia/intake.html'); try { if (token) { await api('login', { token }); location.replace('/berdia/portal/'); return; } await enter(); } catch (e) { lock(); if (token) notice(/invalid|expired/i.test(e.message) ? 'That link has expired or was replaced. Ask Stedmon for a new one.' : 'We couldn’t sign you in with that link. Tap it again, or ask Stedmon for a new one.', true); else if (google) notice(google, true); } })();
