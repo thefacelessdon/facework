@@ -13,7 +13,9 @@ async function enter() {
   const s = await api('session'); $('greeting').textContent = 'Welcome, ' + s.name;
   $('locked').hidden = true; $('signed-in').hidden = false; $('logout').hidden = false;
   if (s.role === 'reviewer') { $('inbox-title').textContent = 'Family intake inbox.'; $('inbox-description').textContent = 'Private submissions for your review. Receipt does not establish legal completion or professional approval.'; }
-  clearTimeout(sessionTimer); sessionTimer = setTimeout(() => { lock(); $('profile-form').reset(); notice('Your session ended. Open your invitation link again to continue.'); }, 30 * 60000);
+  // Google sign-in lasts longer than a link sign-in; the server says when this session ends.
+  const left = s.sessionExpiresAt ? Date.parse(s.sessionExpiresAt) - Date.now() : 30 * 60000;
+  clearTimeout(sessionTimer); sessionTimer = setTimeout(() => { lock(); $('profile-form').reset(); notice('Your session ended. Sign in again to continue.'); }, Math.max(left, 0));
   notice('You’re signed in. Send what you have; you can come back for the rest.');
 }
 async function busy(form, fn) { const b = form.querySelector('button[type=submit]'); b.disabled = true; try { await fn(); } catch (e) { notice(e.message, true); } finally { b.disabled = false; } }
@@ -48,5 +50,12 @@ window.addEventListener('pagehide', () => { $('profile-form').reset(); $('detail
 // The code leaves the address bar before anything else runs; a link sign-in lands on Home.
 // Case-insensitive; any /berdia/k/<something> counts as a link attempt, so a mangled link
 // still gets a plain message instead of a blank sign-in screen.
+// Sign in with Google returns here with ?google=<reason> only when it did not sign the person in.
+const GOOGLE = { cancelled: 'Google sign-in was cancelled. Try again, or use the link in your invitation email.',
+  unknown: 'That Google account isn’t on an invitation. Choose the account Stedmon or Hop invited, or use the link in your invitation email.',
+  mismatch: 'That Google account doesn’t match the one already linked to your invitation. Ask Stedmon or Hop for help.',
+  expired: 'That sign-in took too long. Try Sign in with Google again.',
+  failed: 'Google sign-in didn’t work this time. Try again, or use the link in your invitation email.' };
+const googleResult = () => { const r = new URLSearchParams(location.search).get('google'); if (r !== null) history.replaceState(null, '', '/berdia/intake.html'); return r === null ? '' : (GOOGLE[r] || GOOGLE.failed); };
 const linkCode = () => { const m = location.pathname.match(/^\/berdia\/k\/([^/]+)\/?$/); return ((m ? m[1] : '') || location.hash.slice(1)).toLowerCase(); };
-(async () => { const token = linkCode(); if (token) history.replaceState(null, '', '/berdia/intake.html'); try { if (token) { await api('login', { token }); location.replace('/berdia/portal/'); return; } await enter(); } catch (e) { lock(); if (token) notice(/invalid|expired/i.test(e.message) ? 'That link has expired or was replaced. Ask Stedmon or Hop for a new one.' : 'We couldn’t sign you in with that link. Tap it again, or ask Stedmon or Hop for a new one.', true); } })();
+(async () => { const google = googleResult(), token = linkCode(); if (token) history.replaceState(null, '', '/berdia/intake.html'); try { if (token) { await api('login', { token }); location.replace('/berdia/portal/'); return; } await enter(); } catch (e) { lock(); if (token) notice(/invalid|expired/i.test(e.message) ? 'That link has expired or was replaced. Ask Stedmon or Hop for a new one.' : 'We couldn’t sign you in with that link. Tap it again, or ask Stedmon or Hop for a new one.', true); else if (google) notice(google, true); } })();
