@@ -36,6 +36,11 @@
     <h2 id="next-title">Send your documents</h2>
     <p>Start in Tasks. Upload what you have; you do not need everything at once.</p>
     <p id="cta"><a class="cta" href="/berdia/intake.html">Open your tasks</a></p>
+    <div id="me" class="tally" hidden>
+      <h3 class="fig">Your part so far</h3>
+      <dl><div><dt>Profile</dt><dd data-k="profile"></dd></div><div><dt>Documents sent</dt><dd data-k="files"></dd></div><div><dt>Last activity</dt><dd data-k="lastAt"></dd></div></dl>
+      <p class="verdict" data-k="next"></p>
+    </div>
   </section>
 
   <section id="firstrun" class="reading" aria-labelledby="fr" hidden>
@@ -46,13 +51,6 @@
       <li data-step="review"><span class="n">2</span><div><p class="t">See what you sent, and read the Plan</p><p class="d">Opens once your first record is in.</p></div><span class="s"><span class="chip open" data-k="s2">Locked</span></span></li>
       <li data-step="open"><span class="n">3</span><div><p class="t">The trust opens to you</p><p class="d">Work streams, documents and reports appear once your profile and documents are in.</p></div><span class="s"><span class="chip open" data-k="s3">Locked</span></span></li>
     </ol>
-  </section>
-
-  <section id="me" class="reading" hidden aria-labelledby="mh">
-    <p class="fig">Your record</p>
-    <h2 id="mh">Your part</h2>
-    <dl class="facts"><div><dt>Profile</dt><dd data-k="profile"></dd></div><div><dt>Documents sent</dt><dd data-k="files"></dd></div><div><dt>Last activity</dt><dd data-k="lastAt"></dd></div></dl>
-    <p class="verdict" data-k="next"></p>
   </section>
 
   <section id="family" class="reading" hidden aria-labelledby="fh">
@@ -87,7 +85,7 @@
 </div>
 
 <aside class="rail" aria-label="About this record">
-  <section>
+  <section class="rail-record">
     <h2>This record</h2>
     <dl>
       <div><dt>Trust</dt><dd>Not formed yet<small>Proposed revocable grantor trust; final structure pending the CPA.</small></dd></div>
@@ -100,7 +98,7 @@
     <h2>Read</h2>
     <ul><li><a href="/berdia/plan/grandma.html">The plan in plain language</a></li><li><a href="/berdia/plan/index.html">The Family Plan, by chapter</a></li><li><a href="/berdia/portal/documents.html">Shared documents</a></li></ul>
   </section>
-  <section>
+  <section class="rail-key">
     <h2>Reading the marks</h2>
     <ul class="key"><li><span class="chip settled">Done</span></li><li><span class="chip attention">Now, or needs you</span></li><li><span class="chip open">Next, later or locked</span></li></ul>
   </section>
