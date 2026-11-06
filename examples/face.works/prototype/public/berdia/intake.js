@@ -21,7 +21,7 @@ async function enter() {
 async function busy(form, fn) { const b = form.querySelector('button[type=submit]'); b.disabled = true; try { await fn(); } catch (e) { notice(e.message, true); } finally { b.disabled = false; } }
 // Accepts the code, or the whole invitation link pasted in; spaces and case don't matter.
 $('login-form').addEventListener('submit', e => { e.preventDefault(); busy(e.currentTarget, async () => { const code = ($('invite').value.replace(/\s+/g, '').toLowerCase().match(/[a-f0-9]{64}/) || [''])[0]; if (!code) throw new Error('That doesn’t look like your invitation code. Paste the whole link from your email, or ask Stedmon for a new one.'); await api('login', { token: code }); $('invite').value = ''; location.replace('/berdia/portal/'); }); });
-$('logout').addEventListener('click', async () => { try { await api('logout'); lock(); $('profile-form').reset(); $('upload-form').reset(); $('file-list').replaceChildren(); notice('You’re signed out.'); } catch (e) { notice(e.message, true); } });
+$('logout').addEventListener('click', async () => { try { await api('logout'); lock(); $('profile-form').reset(); $('upload-form').reset(); queue = []; render(); notice('You’re signed out.'); } catch (e) { notice(e.message, true); } });
 document.querySelectorAll('[data-view]').forEach(b => b.addEventListener('click', () => view(b.dataset.view)));
 $('profile-form').addEventListener('submit', e => { e.preventDefault(); busy(e.currentTarget, async () => { const p = Object.fromEntries(new FormData(e.currentTarget)); p.consent = p.consent === 'on'; const r = await api('profile', p); notice('Your information was received on ' + new Date(r.at).toLocaleString() + '. Thank you.'); }); });
 // Phone photos of documents are often 3–5 MB. Photos over the limit are resized in the browser
@@ -41,20 +41,69 @@ async function fit(f) {
   } finally { img.close(); }
   return f;
 }
-const sizeNote = f => f.size <= LIMIT ? '' : isPhoto(f) ? ' — will be resized to fit' : ' — too large; split it into smaller PDFs';
-$('files').addEventListener('change', () => { $('file-list').replaceChildren(); for (const f of $('files').files) { const li = document.createElement('li'); li.textContent = f.name + ' · ' + (f.size / 1000000).toFixed(2) + ' MB' + sizeNote(f); $('file-list').append(li); } });
-function base64(file) { return new Promise((resolve, reject) => { const r = new FileReader(); r.onload = () => resolve(r.result.split(',')[1]); r.onerror = () => reject(new Error('Could not read ' + file.name)); r.readAsDataURL(file); }); }
-$('upload-form').addEventListener('submit', e => { e.preventDefault(); busy(e.currentTarget, async () => {
-  const files = Array.from($('files').files); if (files.length > 10) throw new Error('Choose up to 10 files at a time.');
-  if (files.some(f => f.size === 0)) throw new Error('One of the files is empty. Choose it again.');
-  let received = 0; const failures = [];
-  for (const [index, f] of files.entries()) { const row = $('file-list').children[index]; row.textContent = f.name + (f.size > LIMIT && isPhoto(f) ? ' — resizing and sending…' : ' — sending…');
-    try { const u = await fit(f); if (u.size > LIMIT) throw new Error(isPhoto(f) ? 'still too large after resizing. Try a closer photo of one page.' : 'over 2.5 MB. Split it into smaller PDFs.');
-      await api('upload', { name: u.name, category: $('category').value, bytes: await base64(u), consent: $('upload-consent').checked }); received++; row.textContent = f.name + ' — received'; }
-    catch (error) { failures.push(f.name); row.textContent = f.name + ' — not received: ' + error.message; }
+// Picked files collect in a list: on Android each pick replaces the input's selection, so the
+// input is only a way to add files, and it is cleared after every pick. Problems that can be
+// known before sending (a PDF over the limit, an empty or unreadable file) show on the row
+// right away, in plain words, instead of after a failed send.
+const MAX_FILES = 10, mb = n => (n / 1000000).toFixed(1) + ' MB';
+const STATUS = { pending: 'ready to send', sending: 'sending…', received: 'received', already: 'already received earlier, no duplicate saved', blocked: '', failed: '' };
+let queue = [];
+const tooBig = f => f.size > LIMIT && !isPhoto(f);
+function blockReason(f) {
+  if (f.size === 0) return 'Your phone couldn’t open this file. If it’s in Google Drive, download it to the phone first, or take a photo of it.';
+  if (tooBig(f)) return 'This PDF is ' + mb(f.size) + ', over the 2.5 MB limit. Text or email it to Stedmon instead, or send photos of the pages.';
+  return '';
+}
+function reasonFor(error) {
+  if (error instanceof TypeError || /network|fetch/i.test(error.message)) return 'The connection dropped. Tap Send documents again.';
+  return error.message;
+}
+function render() {
+  const list = $('file-list'); list.replaceChildren();
+  for (const item of queue) {
+    const li = document.createElement('li'), name = document.createElement('span'), state = document.createElement('small');
+    li.className = 'file-row ' + item.status; name.className = 'file-name'; name.textContent = item.file.name + ' · ' + mb(item.file.size);
+    state.className = 'file-state'; state.textContent = item.reason ? 'Not sent: ' + item.reason : STATUS[item.status] + (item.status === 'pending' && item.file.size > LIMIT ? ' (will be resized to fit)' : '');
+    li.append(name, state);
+    if (['pending', 'blocked', 'failed'].includes(item.status)) {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'quiet remove'; b.textContent = 'Remove';
+      b.setAttribute('aria-label', 'Remove ' + item.file.name); b.addEventListener('click', () => { queue = queue.filter(q => q !== item); render(); });
+      li.append(b);
+    }
+    list.append(li);
   }
-  notice(received + ' of ' + files.length + ' documents received.' + (failures.length ? ' Re-select the failed files to retry. Successful uploads are saved.' : ' Thank you. Keep your originals.'), failures.length > 0);
-  if (!failures.length) $('files').value = '';
+  const waiting = queue.filter(q => q.status === 'pending' || q.status === 'failed').length;
+  $('add-label').textContent = queue.length ? 'Add another document' : 'Choose documents';
+  $('send').textContent = waiting > 1 ? 'Send ' + waiting + ' documents' : 'Send documents';
+}
+$('files').addEventListener('change', () => {
+  // A new pick after a finished send starts a fresh list.
+  if (queue.length && queue.every(q => q.status === 'received' || q.status === 'already')) queue = [];
+  for (const file of $('files').files) {
+    if (queue.some(q => q.file.name === file.name && q.file.size === file.size && q.file.lastModified === file.lastModified)) continue;
+    if (queue.filter(q => q.status !== 'received' && q.status !== 'already').length >= MAX_FILES) { notice('You can send up to ' + MAX_FILES + ' documents at a time. Send these first, then add more.', true); break; }
+    const reason = blockReason(file); queue.push({ file, status: reason ? 'blocked' : 'pending', reason });
+  }
+  $('files').value = ''; render();
+});
+function base64(file) { return new Promise((resolve, reject) => { const r = new FileReader(); r.onload = () => resolve(r.result.split(',')[1]); r.onerror = () => reject(new Error('Your phone couldn’t open this file. If it’s in Google Drive, download it to the phone first, or take a photo of it.')); r.readAsDataURL(file); }); }
+$('upload-form').addEventListener('submit', e => { e.preventDefault(); busy(e.currentTarget, async () => {
+  const todo = queue.filter(q => q.status === 'pending' || q.status === 'failed');
+  if (!todo.length) throw new Error(queue.some(q => q.status === 'blocked') ? 'None of these can be sent here. See the note under each file.' : 'Choose at least one document first.');
+  if (!$('category').value) throw new Error('Choose what kind of record it is first.');
+  if (!$('upload-consent').checked) throw new Error('Please check the box to confirm before sending.');
+  for (const item of todo) {
+    item.status = 'sending'; item.reason = ''; render();
+    try { const u = await fit(item.file); if (u.size > LIMIT) throw new Error('This photo is still over 2.5 MB after resizing. Try a closer photo of one page.');
+      const r = await api('upload', { name: u.name, category: $('category').value, bytes: await base64(u), consent: true });
+      item.status = r.already ? 'already' : 'received'; }
+    catch (error) { item.status = 'failed'; item.reason = reasonFor(error); }
+    render();
+  }
+  const sent = todo.filter(q => q.status === 'received' || q.status === 'already'), notSent = queue.filter(q => q.status === 'failed' || q.status === 'blocked');
+  const msg = (sent.length ? sent.length + (sent.length === 1 ? ' document' : ' documents') + ' received. ' : '') +
+    (notSent.length ? 'Not sent: ' + notSent.map(q => q.file.name + ' (' + q.reason + ')').join(' ') + ' Everything marked received is saved.' : 'Thank you. Keep your originals.');
+  notice(msg, notSent.length > 0);
 }); });
 async function loadRecords() { try { const { rows } = await api('list'); $('records').replaceChildren(); if (!rows.length) { $('records').textContent = 'No submissions yet. Your receipts will appear here.'; return; }
   for (const row of rows) { const item = document.createElement('article'); item.className = 'record'; const text = document.createElement('div'), p = document.createElement('p'), small = document.createElement('small'), b = document.createElement('button'); p.textContent = row.name; small.textContent = (row.kind === 'profile' ? 'Personal information' : row.category) + ' · ' + new Date(row.at).toLocaleString(); b.className = 'quiet'; b.textContent = row.kind === 'profile' ? 'View details' : 'Download'; b.addEventListener('click', async () => { b.disabled = true; try {

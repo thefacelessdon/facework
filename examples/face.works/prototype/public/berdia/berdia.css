@@ -260,6 +260,13 @@ h2 .chip,h3 .chip{margin-left:.75rem}
 .upload-area input[type=file]::file-selector-button{min-height:48px;padding:.5rem 1rem;margin-right:1rem;background:var(--rr-paper);border:1px solid var(--rr-ink);font-family:var(--rr-font-structure);font-weight:600;font-size:1rem;cursor:pointer}
 .file-list{list-style:none;padding:0;margin:1rem 0 0}
 .file-list li{border-bottom:1px solid var(--rr-rule);padding:.75rem 0;overflow-wrap:anywhere;font-size:1.0625rem}
+.upload-area input[type=file]{color:transparent}
+.file-row{display:grid;grid-template-columns:1fr auto;gap:.25rem 1rem;align-items:center}
+.file-row .file-name{grid-column:1}
+.file-row .file-state{grid-column:1;font-size:1rem;color:var(--rr-body)}
+.file-row .remove{grid-column:2;grid-row:1 / span 2;min-height:44px;padding:.25rem .75rem;font-size:1rem}
+.file-row.blocked .file-state,.file-row.failed .file-state{color:var(--rr-exposure-text)}
+.file-row.received .file-state,.file-row.already .file-state{color:var(--rr-ink);font-weight:600}
 .records{margin-top:1.5rem;border-top:1px solid var(--rr-ink)}
 .record{display:flex;gap:1rem;align-items:center;justify-content:space-between;padding:1.125rem 0;border-bottom:1px solid var(--rr-rule)}
 .record p{margin:0;overflow-wrap:anywhere;font-family:var(--rr-font-structure);font-weight:600;color:var(--rr-ink)}
