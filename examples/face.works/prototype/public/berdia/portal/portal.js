@@ -40,7 +40,7 @@ async function documents() {
   if (!rows.length) $('groups').textContent = 'No uploads yet.';
   for (const [owner, list] of groups) { if (role === 'reviewer') $('groups').append(Object.assign(el('p', names[owner] || 'Family member'), { className: 'group-label' })); const ul = el('ul');
     for (const r of list) { const li = el('li'); const b = el('button', r.kind === 'profile' ? 'Profile' : r.name); b.className = 'link';
-      b.addEventListener('click', async () => { try { if (r.kind === 'profile') { location.href = '/berdia/intake.html'; return; } const blob = await call('/berdia/api/intake', 'download', { id: r.id }, true), u = URL.createObjectURL(blob), a = document.createElement('a'); a.href = u; a.download = r.name; a.click(); setTimeout(() => URL.revokeObjectURL(u), 1000); } catch (e) { err(e); } });
+      b.addEventListener('click', async () => { try { if (r.kind === 'profile') { location.href = '/berdia/intake.html'; return; } const { parts } = await call('/berdia/api/intake', 'download-info', { id: r.id }), bits = []; for (let part = 0; part < parts; part++) bits.push(await call('/berdia/api/intake', 'download', { id: r.id, part }, true)); const blob = new Blob(bits, { type: bits[0].type }), u = URL.createObjectURL(blob), a = document.createElement('a'); a.href = u; a.download = r.name; a.click(); setTimeout(() => URL.revokeObjectURL(u), 1000); } catch (e) { err(e); } });
       li.append(b, el('span', ' · ' + (r.category || r.kind) + ' · ' + when(r.at))); ul.append(li); }
     $('groups').append(ul); }
 }

@@ -45,13 +45,13 @@ async function fit(f) {
 // input is only a way to add files, and it is cleared after every pick. Problems that can be
 // known before sending (a PDF over the limit, an empty or unreadable file) show on the row
 // right away, in plain words, instead of after a failed send.
-const MAX_FILES = 10, mb = n => (n / 1000000).toFixed(1) + ' MB';
+const MAX_FILES = 10, PART = 1500000, MAX_TOTAL = 25000000, mb = n => (n / 1000000).toFixed(1) + ' MB';
 const STATUS = { pending: 'ready to send', sending: 'sending…', received: 'received', already: 'already received earlier, no duplicate saved', blocked: '', failed: '' };
 let queue = [];
-const tooBig = f => f.size > LIMIT && !isPhoto(f);
+const tooBig = f => f.size > MAX_TOTAL;
 function blockReason(f) {
   if (f.size === 0) return 'Your phone couldn’t open this file. If it’s in Google Drive, download it to the phone first, or take a photo of it.';
-  if (tooBig(f)) return 'This PDF is ' + mb(f.size) + ', over the 2.5 MB limit. Text or email it to Stedmon instead, or send photos of the pages.';
+  if (tooBig(f)) return 'This file is ' + mb(f.size) + ', over the 25 MB limit. Text or email it to Stedmon instead, or split it into smaller PDFs.';
   return '';
 }
 function reasonFor(error) {
@@ -63,7 +63,7 @@ function render() {
   for (const item of queue) {
     const li = document.createElement('li'), name = document.createElement('span'), state = document.createElement('small');
     li.className = 'file-row ' + item.status; name.className = 'file-name'; name.textContent = item.file.name + ' · ' + mb(item.file.size);
-    state.className = 'file-state'; state.textContent = item.reason ? 'Not sent: ' + item.reason : STATUS[item.status] + (item.status === 'pending' && item.file.size > LIMIT ? ' (will be resized to fit)' : '');
+    state.className = 'file-state'; state.textContent = item.reason ? 'Not sent: ' + item.reason : STATUS[item.status] + (item.status === 'pending' && item.file.size > LIMIT ? (isPhoto(item.file) ? ' (will be resized to fit)' : ' (large file, sent in parts)') : '');
     li.append(name, state);
     if (['pending', 'blocked', 'failed'].includes(item.status)) {
       const b = document.createElement('button'); b.type = 'button'; b.className = 'quiet remove'; b.textContent = 'Remove';
@@ -87,6 +87,16 @@ $('files').addEventListener('change', () => {
   $('files').value = ''; render();
 });
 function base64(file) { return new Promise((resolve, reject) => { const r = new FileReader(); r.onload = () => resolve(r.result.split(',')[1]); r.onerror = () => reject(new Error('Your phone couldn’t open this file. If it’s in Google Drive, download it to the phone first, or take a photo of it.')); r.readAsDataURL(file); }); }
+// Files over 2.5 MB go in 1.5 MB parts, then the server checks the whole file and files it.
+async function sendInParts(f, category, item) {
+  const total = Math.ceil(f.size / PART), uploadId = Array.from(crypto.getRandomValues(new Uint8Array(16)), x => x.toString(16).padStart(2, '0')).join('');
+  for (let index = 0; index < total; index++) {
+    $('send').textContent = 'Sending part ' + (index + 1) + ' of ' + total + '…';
+    const bytes = await base64(f.slice(index * PART, (index + 1) * PART));
+    try { await api('upload-part', { uploadId, index, total, bytes, consent: true }); } catch { await api('upload-part', { uploadId, index, total, bytes, consent: true }); }
+  }
+  return api('upload-finish', { uploadId, total, name: f.name, category, consent: true });
+}
 $('upload-form').addEventListener('submit', e => { e.preventDefault(); busy(e.currentTarget, async () => {
   const todo = queue.filter(q => q.status === 'pending' || q.status === 'failed');
   if (!todo.length) throw new Error(queue.some(q => q.status === 'blocked') ? 'None of these can be sent here. See the note under each file.' : 'Choose at least one document first.');
@@ -94,8 +104,8 @@ $('upload-form').addEventListener('submit', e => { e.preventDefault(); busy(e.cu
   if (!$('upload-consent').checked) throw new Error('Please check the box to confirm before sending.');
   for (const item of todo) {
     item.status = 'sending'; item.reason = ''; render();
-    try { const u = await fit(item.file); if (u.size > LIMIT) throw new Error('This photo is still over 2.5 MB after resizing. Try a closer photo of one page.');
-      const r = await api('upload', { name: u.name, category: $('category').value, bytes: await base64(u), consent: true });
+    try { const u = await fit(item.file), category = $('category').value;
+      const r = u.size <= LIMIT ? await api('upload', { name: u.name, category, bytes: await base64(u), consent: true }) : await sendInParts(u, category, item);
       item.status = r.already ? 'already' : 'received'; }
     catch (error) { item.status = 'failed'; item.reason = reasonFor(error); }
     render();
@@ -105,10 +115,12 @@ $('upload-form').addEventListener('submit', e => { e.preventDefault(); busy(e.cu
     (notSent.length ? 'Not sent: ' + notSent.map(q => q.file.name + ' (' + q.reason + ')').join(' ') + ' Everything marked received is saved.' : 'Thank you. Keep your originals.');
   notice(msg, notSent.length > 0);
 }); });
+// A large file downloads part by part (each response stays under the 4.5 MB cap); the parts join here.
+async function downloadFile(call, id) { const { parts } = await call('download-info', { id }), out = []; for (let part = 0; part < parts; part++) out.push(await call('download', { id, part }, true)); return new Blob(out, { type: out[0].type }); }
 async function loadRecords() { try { const { rows } = await api('list'); $('records').replaceChildren(); if (!rows.length) { $('records').textContent = 'No submissions yet. Your receipts will appear here.'; return; }
   for (const row of rows) { const item = document.createElement('article'); item.className = 'record'; const text = document.createElement('div'), p = document.createElement('p'), small = document.createElement('small'), b = document.createElement('button'); p.textContent = row.name; small.textContent = (row.kind === 'profile' ? 'Personal information' : row.category) + ' · ' + new Date(row.at).toLocaleString(); b.className = 'quiet'; b.textContent = row.kind === 'profile' ? 'View details' : 'Download'; b.addEventListener('click', async () => { b.disabled = true; try {
       if (row.kind === 'profile') { const { profile } = await api('read', { id: row.id }); showDetails(profile); }
-      else { const blob = await api('download', { id: row.id }, true), url = URL.createObjectURL(blob), a = document.createElement('a'); a.href = url; a.download = row.name; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); }
+      else { const blob = await downloadFile(api, row.id), url = URL.createObjectURL(blob), a = document.createElement('a'); a.href = url; a.download = row.name; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); }
     } catch (e) { notice(e.message, true); } finally { b.disabled = false; } }); text.append(p,small); item.append(text,b); $('records').append(item); }
 } catch (e) { notice(e.message, true); } }
 function showDetails(p) { $('details').replaceChildren(); const labels = { fullName: 'Legal name', preferredName: 'Preferred name', address: 'Mailing address', email: 'Email', phone: 'Phone', missing: 'Help finding records', notes: 'Notes' }; for (const [key,label] of Object.entries(labels)) { const dt = document.createElement('dt'), dd = document.createElement('dd'); dt.textContent = label; dd.textContent = p[key] || 'Not supplied'; $('details').append(dt,dd); } $('record-detail').hidden = false; $('close-detail').focus(); }
