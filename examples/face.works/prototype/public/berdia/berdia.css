@@ -34,6 +34,7 @@ body.rr{margin:0;min-height:100svh;display:flex;flex-direction:column;background
 .bm-sub{font-family:var(--rr-font-reading);font-style:italic;font-size:1.0625rem;color:var(--rr-body);padding-left:1.5rem;border-left:1px solid var(--rr-rule);line-height:1.2}
 .rr .bm-meta{margin:0 0 0 auto;display:flex;align-items:center;gap:1rem;font-family:var(--rr-font-record);font-size:.875rem;letter-spacing:.06em;text-transform:uppercase;color:var(--rr-meta)}
 .bm-meta button{text-transform:none;letter-spacing:0}
+.bm-signout{font:inherit;color:inherit;background:none;border:0;padding:.5rem 0;min-height:44px;text-decoration:underline;text-underline-offset:.2em;cursor:pointer}
 .bm-nav{max-width:78rem;margin:0 auto;padding:0 clamp(1rem,4vw,2.5rem);display:flex;gap:0 2.25rem;flex-wrap:wrap}
 .bm-nav a{display:inline-flex;align-items:center;min-height:3.5rem;font-family:var(--rr-font-structure);font-weight:600;font-size:1.0625rem;color:var(--rr-body)!important;
   text-decoration:none!important;border-bottom:4px solid transparent;margin-bottom:-1px;padding-top:4px}
