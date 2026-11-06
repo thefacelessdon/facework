@@ -110,6 +110,7 @@ $('upload-form').addEventListener('submit', e => { e.preventDefault(); busy(e.cu
     catch (error) { item.status = 'failed'; item.reason = reasonFor(error); }
     render();
   }
+  if (todo.some(q => q.status === 'received')) api('upload-done').catch(() => {}); // one alert to the trustee per batch
   const sent = todo.filter(q => q.status === 'received' || q.status === 'already'), notSent = queue.filter(q => q.status === 'failed' || q.status === 'blocked');
   const msg = (sent.length ? sent.length + (sent.length === 1 ? ' document' : ' documents') + ' received. ' : '') +
     (notSent.length ? 'Not sent: ' + notSent.map(q => q.file.name + ' (' + q.reason + ')').join(' ') + ' Everything marked received is saved.' : 'Thank you. Keep your originals.');
