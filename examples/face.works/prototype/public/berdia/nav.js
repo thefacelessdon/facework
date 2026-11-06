@@ -24,7 +24,7 @@
   if (st && !document.body.dataset.stage) document.body.dataset.stage = st;
 })();
 
-// Sign-in state in the masthead (right-hand slot): "Signed in as <first name>" or a Sign in link.
+// Sign-in state in the masthead (right-hand slot): "Signed in as <first name>" + Sign out, or a Sign in link.
 // Tasks handles its own sign-in, so it is skipped there. Failure leaves the slot as it was.
 (() => {
   const slot = document.querySelector('.bm-meta');
@@ -33,9 +33,14 @@
     .then((r) => (r.ok ? r.json() : null))
     .then((s) => {
       const el = document.createElement('a');
-      if (s && s.name) { el.href = '/berdia/portal/'; el.textContent = 'Signed in as ' + s.name.split(' ')[0]; }
-      else { el.href = '/berdia/intake.html'; el.textContent = 'Sign in'; }
-      slot.replaceChildren(el);
+      if (!(s && s.name)) { el.href = '/berdia/intake.html'; el.textContent = 'Sign in'; slot.replaceChildren(el); return; }
+      el.href = '/berdia/portal/'; el.textContent = 'Signed in as ' + s.name.split(' ')[0];
+      // Sign out from any page, not only Tasks. The server clears the session cookie; then back to the front door.
+      const out = document.createElement('button'); out.type = 'button'; out.className = 'bm-signout'; out.textContent = 'Sign out';
+      out.addEventListener('click', () => { out.disabled = true;
+        fetch('/berdia/api/intake', { method: 'POST', credentials: 'same-origin', cache: 'no-store', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'logout' }) })
+          .finally(() => { try { sessionStorage.clear(); } catch {} location.replace('/berdia/intake.html'); }); });
+      slot.replaceChildren(el, out);
     })
     .catch(() => {});
 })();
