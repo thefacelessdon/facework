@@ -11,6 +11,23 @@ async function call(path, action, data = {}, blob = false) {
 const err = (e) => { if (e.silent) return; const x = $('err'); if (x) { x.textContent = e.message; x.hidden = false; } };
 const set = (root, k, v) => { const n = root.querySelector(`[data-k="${k}"]`); if (n) n.textContent = v; };
 
+// Access column (reviewer view). Reviewers can open every family member's uploads, so changing it asks first
+// and the server logs it. Your own row is plain text: you can't change your own access.
+const ROLE = { participant: 'Family member', reviewer: 'Reviewer' };
+function access(m, self) {
+  const td = el('td');
+  if (self) { td.textContent = ROLE[m.role] + ' (you)'; return td; }
+  const sel = el('select'); sel.setAttribute('aria-label', 'Access for ' + m.name);
+  for (const [v, t] of Object.entries(ROLE)) { const o = el('option', t); o.value = v; o.selected = v === m.role; sel.append(o); }
+  sel.addEventListener('change', async () => {
+    const to = sel.value, warn = to === 'reviewer' ? ' Reviewers can see and download every family member’s uploads.' : ' They will see only their own uploads.';
+    if (!confirm('Change ' + m.name + ' to ' + ROLE[to] + '?' + warn)) { sel.value = m.role; return; }
+    sel.disabled = true;
+    try { await call('/berdia/api/portal', 'set-role', { subject: m.subject, role: to }); m.role = to; const n = $('rolenote'); if (n) { n.textContent = m.name + ' is now a ' + ROLE[to].toLowerCase() + '.'; n.hidden = false; } }
+    catch (e) { sel.value = m.role; err(e); } finally { sel.disabled = false; }
+  });
+  td.append(sel); return td;
+}
 async function dashboard() {
   const t = $('today'); if (t) t.textContent = new Date().toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
   const d = await call('/berdia/api/portal', 'summary');
@@ -26,8 +43,10 @@ async function dashboard() {
   if (d.me) { const m = $('me'); m.hidden = false; set(m, 'profile', d.me.profile ? 'Done' : 'Not yet'); set(m, 'files', String(d.me.files)); set(m, 'lastAt', when(d.me.lastAt));
     set(m, 'next', d.me.profile ? 'Your intake is in. Add more documents any time in Tasks.' : 'Next: complete your profile in Tasks.'); }
   if (d.role === 'reviewer') { $('family').hidden = false; const tb = $('rows');
+    const mine = d.me && d.me.subject;
     for (const m of d.members) { const tr = el('tr'); const st = el('span', STATUS[m.status]); st.className = 'pill ' + m.status;
-      for (const v of [m.name, m.role, m.profile ? '✓' : '—', String(m.files)]) tr.append(el('td', v)); const td = el('td'); td.append(st); tr.append(td, el('td', when(m.lastAt))); tb.append(tr); }
+      tr.append(el('td', m.name), access(m, m.subject === mine));
+      for (const v of [m.profile ? '✓' : '—', String(m.files)]) tr.append(el('td', v)); const td = el('td'); td.append(st); tr.append(td, el('td', when(m.lastAt))); tb.append(tr); }
     const done = d.members.filter(m => m.status === 'complete').length; set($('family'), 'tally', `${done} of ${d.members.length} members complete.`); }
 }
 async function documents() {
