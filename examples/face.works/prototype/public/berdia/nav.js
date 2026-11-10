@@ -18,6 +18,16 @@
   if (m) location.replace('/berdia/plan/chapter-' + m[1] + '.html');
 })();
 
+// Finish a return-to-page trip after Google sign-in (intake.js stores it, Google lands on Home).
+(() => {
+  if (!/^\/berdia\/portal\/?$/.test(location.pathname)) return;
+  try {
+    const v = JSON.parse(sessionStorage.getItem('berdia-next') || 'null'); sessionStorage.removeItem('berdia-next');
+    const p = v && Date.now() - v.t < 900000 ? v.p : '';
+    if (typeof p === 'string' && /^\/berdia\/(plan|portal)\/[A-Za-z0-9._/-]*$/.test(p) && !p.includes('..') && !p.includes('//')) location.replace(p);
+  } catch {}
+})();
+
 // Progressive reveal (visual only): stage comes from the portal summary, cached for this tab.
 (() => {
   let st = ''; try { st = sessionStorage.getItem('berdia-stage') || ''; } catch {}

@@ -40,8 +40,14 @@ async function familyPage(path: string, cookie: string): Promise<Response | null
   }
 }
 
+// Sign-in carries ?next=<the page asked for>, so a family member who follows a link to a
+// brief lands back on that brief once signed in (intake.js checks it is a family page).
+// This also covers links clicked in email: the session cookie is SameSite=Strict, so it is
+// not sent on that first cross-site request; Tasks then finds the session and sends them on.
 const signIn = (request: NextRequest) => {
-  const res = NextResponse.redirect(new URL(BERDIA_SIGN_IN, request.url), 307);
+  const to = new URL(BERDIA_SIGN_IN, request.url);
+  to.searchParams.set("next", request.nextUrl.pathname);
+  const res = NextResponse.redirect(to, 307);
   res.headers.set("Cache-Control", "no-store, private");
   return res;
 };
