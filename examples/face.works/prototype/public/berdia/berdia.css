@@ -294,5 +294,7 @@ h2 .chip,h3 .chip{margin-left:.75rem}
 .upload-groups .group-label{font-family:var(--rr-font-structure);font-weight:700;font-size:1.125rem;color:var(--rr-ink);margin:1.5rem 0 .25rem}
 .upload-groups ul{list-style:none;margin:0;padding:0}
 .upload-groups li{display:flex;flex-wrap:wrap;align-items:center;gap:0 .5rem;min-height:3.5rem;border-bottom:1px solid var(--rr-rule);font-family:var(--rr-font-record);font-size:.9375rem;color:var(--rr-meta)}
+/* Shared with the family: reviewer's per-file toggle sits at the row's end. */
+.upload-groups .share-toggle{margin-left:auto;min-height:40px;padding:.25rem .75rem;font-size:.9375rem}
 button.link{background:none;border:0;padding:.5rem 0;min-height:48px;font-family:var(--rr-font-structure);font-weight:600;font-size:1.0625rem;color:var(--rr-verdigris-text);text-decoration:underline;text-underline-offset:.18em;cursor:pointer;text-align:left}
 .rail .cta{width:100%;justify-content:space-between;margin-top:1.5rem}
