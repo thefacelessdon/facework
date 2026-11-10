@@ -1,6 +1,6 @@
 'use strict';
 const $ = id => document.getElementById(id);
-let sessionTimer;
+let sessionTimer, role = 'participant';
 function notice(message, error = false) { $('notice').textContent = message; $('notice').className = error ? 'error' : ''; if (error) $('notice').focus(); }
 async function api(action, data = {}, binary = false) {
   const r = await fetch('/berdia/api/intake', { method: 'POST', credentials: 'same-origin', cache: 'no-store', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action, ...data }) });
@@ -10,7 +10,7 @@ async function api(action, data = {}, binary = false) {
 function lock() { $('signed-in').hidden = true; $('locked').hidden = false; $('logout').hidden = true; $('details').replaceChildren(); $('records').replaceChildren(); clearTimeout(sessionTimer); }
 function view(id) { document.querySelectorAll('.view').forEach(n => n.hidden = n.id !== id); document.querySelectorAll('[data-view]').forEach(n => n.setAttribute('aria-pressed', String(n.dataset.view === id))); if (id === 'receipts') loadRecords(); }
 async function enter() {
-  const s = await api('session'); $('greeting').textContent = 'Welcome, ' + s.name;
+  const s = await api('session'); role = s.role; $('greeting').textContent = 'Welcome, ' + s.name;
   $('locked').hidden = true; $('signed-in').hidden = false; $('logout').hidden = false;
   if (s.role === 'reviewer') { $('inbox-title').textContent = 'Family intake inbox.'; $('inbox-description').textContent = 'Private submissions for your review. Receipt does not establish legal completion or professional approval.'; }
   // Google sign-in lasts longer than a link sign-in; the server says when this session ends.
@@ -118,7 +118,7 @@ $('upload-form').addEventListener('submit', e => { e.preventDefault(); busy(e.cu
 }); });
 // A large file downloads part by part (each response stays under the 4.5 MB cap); the parts join here.
 async function downloadFile(call, id) { const { parts } = await call('download-info', { id }), out = []; for (let part = 0; part < parts; part++) out.push(await call('download', { id, part }, true)); return new Blob(out, { type: out[0].type }); }
-async function loadRecords() { try { const { rows } = await api('list'); $('records').replaceChildren(); if (!rows.length) { $('records').textContent = 'No submissions yet. Your receipts will appear here.'; return; }
+async function loadRecords() { try { const rows = (await api('list')).rows.filter(r => role === 'reviewer' || r.mine); $('records').replaceChildren(); if (!rows.length) { $('records').textContent = 'No submissions yet. Your receipts will appear here.'; return; }
   for (const row of rows) { const item = document.createElement('article'); item.className = 'record'; const text = document.createElement('div'), p = document.createElement('p'), small = document.createElement('small'), b = document.createElement('button'); p.textContent = row.name; small.textContent = (row.kind === 'profile' ? 'Personal information' : row.category) + ' · ' + new Date(row.at).toLocaleString(); b.className = 'quiet'; b.textContent = row.kind === 'profile' ? 'View details' : 'Download'; b.addEventListener('click', async () => { b.disabled = true; try {
       if (row.kind === 'profile') { const { profile } = await api('read', { id: row.id }); showDetails(profile); }
       else { const blob = await downloadFile(api, row.id), url = URL.createObjectURL(blob), a = document.createElement('a'); a.href = url; a.download = row.name; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); }

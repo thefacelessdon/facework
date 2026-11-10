@@ -30,18 +30,32 @@ async function dashboard() {
       for (const v of [m.name, m.role, m.profile ? '✓' : '—', String(m.files)]) tr.append(el('td', v)); const td = el('td'); td.append(st); tr.append(td, el('td', when(m.lastAt))); tb.append(tr); }
     const done = d.members.filter(m => m.status === 'complete').length; set($('family'), 'tally', `${done} of ${d.members.length} members complete.`); }
 }
+// Downloads a file part by part (each response stays under the 4.5 MB cap) and joins the parts here.
+async function download(r) { const { parts } = await call('/berdia/api/intake', 'download-info', { id: r.id }), bits = []; for (let part = 0; part < parts; part++) bits.push(await call('/berdia/api/intake', 'download', { id: r.id, part }, true)); const blob = new Blob(bits, { type: bits[0].type }), u = URL.createObjectURL(blob), a = document.createElement('a'); a.href = u; a.download = r.name; a.click(); setTimeout(() => URL.revokeObjectURL(u), 1000); }
+function fileButton(r) { const b = el('button', r.kind === 'profile' ? 'Profile' : r.name); b.className = 'link'; b.addEventListener('click', async () => { try { if (r.kind === 'profile') { location.href = '/berdia/intake.html'; return; } await download(r); } catch (e) { err(e); } }); return b; }
 async function documents() {
   let names = {}, role = 'participant';
   try { const s = await call('/berdia/api/portal', 'summary'); role = s.role; for (const m of s.members) names[m.subject] = m.name; } catch (e) { if (e.silent) return; }
-  const { rows } = await call('/berdia/api/intake', 'list'); const box = $('uploads'); box.hidden = false;
-  set(box, 'uphead', role === 'reviewer' ? 'Family uploads (reviewer)' : 'Your uploads');
-  set(box, 'upnote', role === 'reviewer' ? 'Visible to reviewers only. Each open/download is logged.' : 'Only you and the family reviewer (Stedmon) can see these.');
-  const groups = new Map(); for (const r of rows) { if (!groups.has(r.owner)) groups.set(r.owner, []); groups.get(r.owner).push(r); }
-  if (!rows.length) $('groups').textContent = 'No uploads yet.';
-  for (const [owner, list] of groups) { if (role === 'reviewer') $('groups').append(Object.assign(el('p', names[owner] || 'Family member'), { className: 'group-label' })); const ul = el('ul');
-    for (const r of list) { const li = el('li'); const b = el('button', r.kind === 'profile' ? 'Profile' : r.name); b.className = 'link';
-      b.addEventListener('click', async () => { try { if (r.kind === 'profile') { location.href = '/berdia/intake.html'; return; } const { parts } = await call('/berdia/api/intake', 'download-info', { id: r.id }), bits = []; for (let part = 0; part < parts; part++) bits.push(await call('/berdia/api/intake', 'download', { id: r.id, part }, true)); const blob = new Blob(bits, { type: bits[0].type }), u = URL.createObjectURL(blob), a = document.createElement('a'); a.href = u; a.download = r.name; a.click(); setTimeout(() => URL.revokeObjectURL(u), 1000); } catch (e) { err(e); } });
-      li.append(b, el('span', ' · ' + (r.category || r.kind) + ' · ' + when(r.at))); ul.append(li); }
+  const reviewer = role === 'reviewer';
+  const { rows } = await call('/berdia/api/intake', 'list');
+  // Shared with the family: files the trustee chose to show every family login. Anyone signed in sees this list.
+  const sh = $('shared'), shared = rows.filter(r => r.shared); sh.hidden = false; $('shared-list').replaceChildren();
+  set(sh, 'shnote', reviewer ? 'Every family login sees these. Use Share with family / Stop sharing under Family uploads.' : 'Shared by the trustee with every family member. Each download is logged.');
+  if (!shared.length) $('shared-list').textContent = reviewer ? 'Nothing shared yet.' : 'Nothing has been shared with the family yet.';
+  else { const ul = el('ul'); for (const r of shared) { const li = el('li'); li.append(fileButton(r), el('span', ' · ' + r.category + ' · ' + when(r.at))); ul.append(li); } $('shared-list').append(ul); }
+  // Private uploads: a participant's own records; the reviewer sees everyone's, grouped by person.
+  const own = reviewer ? rows : rows.filter(r => r.mine), box = $('uploads'); box.hidden = false; $('groups').replaceChildren();
+  set(box, 'uphead', reviewer ? 'Family uploads (reviewer)' : 'Your uploads');
+  set(box, 'upnote', reviewer ? 'Visible to reviewers only unless you share a file you uploaded. Each open/download is logged.' : 'Only you and the family reviewer (Stedmon) can see these.');
+  const groups = new Map(); for (const r of own) { if (!groups.has(r.owner)) groups.set(r.owner, []); groups.get(r.owner).push(r); }
+  if (!own.length) $('groups').textContent = 'No uploads yet.';
+  for (const [owner, list] of groups) { if (reviewer) $('groups').append(Object.assign(el('p', names[owner] || 'Family member'), { className: 'group-label' })); const ul = el('ul');
+    for (const r of list) { const li = el('li'); li.append(fileButton(r), el('span', ' · ' + (r.category || r.kind) + ' · ' + when(r.at)));
+      if (r.shareable) { const t = el('button', r.shared ? 'Stop sharing' : 'Share with family'); t.className = 'quiet share-toggle'; t.setAttribute('aria-pressed', String(r.shared)); t.setAttribute('aria-label', (r.shared ? 'Stop sharing ' : 'Share with family: ') + r.name);
+        if (r.shared) li.append(Object.assign(el('span', 'Shared'), { className: 'chip settled' }));
+        t.addEventListener('click', async () => { t.disabled = true; try { await call('/berdia/api/intake', r.shared ? 'unshare' : 'share', { id: r.id }); await documents(); } catch (e) { err(e); t.disabled = false; } });
+        li.append(t); }
+      ul.append(li); }
     $('groups').append(ul); }
 }
 async function trust() {
