@@ -37,6 +37,13 @@ describe("berdia family-only gate", () => {
     expect(f).not.toHaveBeenCalled();
   });
 
+  it("tells sign-in which family page to return to", async () => {
+    vi.stubGlobal("fetch", vi.fn());
+    const res = await proxy(req("/berdia/plan/solar-shares.html"));
+    expect(isSignIn(res)).toBe(true);
+    expect(new URL(res.headers.get("location")!).searchParams.get("next")).toBe("/berdia/plan/solar-shares.html");
+  });
+
   it("redirects when the session check rejects the cookie", async () => {
     const f = stub(401, 200);
     vi.stubGlobal("fetch", f);
