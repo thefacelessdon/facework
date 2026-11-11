@@ -17,6 +17,8 @@ const ROLE = { participant: 'Family member', reviewer: 'Reviewer' };
 function access(m, self) {
   const td = el('td');
   if (self) { td.textContent = ROLE[m.role] + ' (you)'; return td; }
+  // Stored as reviewer but not on the server's full-reviewer list: acts as a family member (WP-B2).
+  if (m.storedRole === 'reviewer' && m.role !== 'reviewer') td.title = 'Stored as reviewer, but not on the server list, so they see only their own uploads.';
   const sel = el('select'); sel.setAttribute('aria-label', 'Access for ' + m.name);
   for (const [v, t] of Object.entries(ROLE)) { const o = el('option', t); o.value = v; o.selected = v === m.role; sel.append(o); }
   sel.addEventListener('change', async () => {
@@ -49,12 +51,15 @@ async function dashboard() {
       for (const v of [m.profile ? '✓' : '—', String(m.files)]) tr.append(el('td', v)); const td = el('td'); td.append(st); tr.append(td, el('td', when(m.lastAt))); tb.append(tr); }
     const done = d.members.filter(m => m.status === 'complete').length; set($('family'), 'tally', `${done} of ${d.members.length} members complete.`); }
 }
+// Names who else can see a participant's uploads, from the server's effective reviewer list (never hard-coded).
+const whoSees = (names) => { const n = [...new Set((names || []).map(x => String(x).split(' ')[0]).filter(Boolean))];
+  return n.length ? 'Only you and ' + (n.length > 1 ? n.slice(0, -1).join(', ') + ' and ' + n[n.length - 1] : n[0]) + ' can see these. Each open is logged.' : 'Only you can see these in the portal.'; };
 async function documents() {
-  let names = {}, role = 'participant';
-  try { const s = await call('/berdia/api/portal', 'summary'); role = s.role; for (const m of s.members) names[m.subject] = m.name; } catch (e) { if (e.silent) return; }
+  let names = {}, role = 'participant', reviewers = [];
+  try { const s = await call('/berdia/api/portal', 'summary'); role = s.role; reviewers = s.reviewers || []; for (const m of s.members) names[m.subject] = m.name; } catch (e) { if (e.silent) return; }
   const { rows } = await call('/berdia/api/intake', 'list'); const box = $('uploads'); box.hidden = false;
   set(box, 'uphead', role === 'reviewer' ? 'Family uploads (reviewer)' : 'Your uploads');
-  set(box, 'upnote', role === 'reviewer' ? 'Visible to reviewers only. Each open/download is logged.' : 'Only you and the family reviewer (Stedmon) can see these.');
+  set(box, 'upnote', role === 'reviewer' ? 'Visible to reviewers only. Each open/download is logged.' : whoSees(reviewers));
   const groups = new Map(); for (const r of rows) { if (!groups.has(r.owner)) groups.set(r.owner, []); groups.get(r.owner).push(r); }
   if (!rows.length) $('groups').textContent = 'No uploads yet.';
   for (const [owner, list] of groups) { if (role === 'reviewer') $('groups').append(Object.assign(el('p', names[owner] || 'Family member'), { className: 'group-label' })); const ul = el('ul');
