@@ -50,6 +50,45 @@ async function dashboard() {
       tr.append(el('td', m.name), access(m, m.subject === mine));
       for (const v of [m.profile ? '✓' : '—', String(m.files)]) tr.append(el('td', v)); const td = el('td'); td.append(st); tr.append(td, el('td', when(m.lastAt))); tb.append(tr); }
     const done = d.members.filter(m => m.status === 'complete').length; set($('family'), 'tally', `${done} of ${d.members.length} members complete.`); }
+  if (d.role === 'reviewer' && d.desk) desk(d);
+}
+// WP-B6 trustee desk: one row per person (duties, % complete, items to check), and a detail panel to assign
+// duties and accept / return / waive items. The server re-checks reviewer access and audits every change.
+const CL = { needed: 'To send', requested: 'Requested', received: 'To check', accepted: 'Accepted', returned: 'Returned', waived: 'Waived' };
+const CL_SET = ['requested', 'accepted', 'returned', 'waived', 'needed'];
+function desk(d) {
+  const sec = $('checklists'), tb = $('clrows'), panel = $('cldetail'), note = (t) => { const n = $('clnote'); n.textContent = t; n.hidden = false; };
+  sec.hidden = false; tb.replaceChildren(); const lists = d.desk.checklists, duties = d.desk.duties;
+  const toCheck = Object.values(lists).reduce((n, c) => n + c.toReview, 0);
+  set(sec, 'cltally', toCheck ? toCheck + (toCheck === 1 ? ' item has arrived and needs checking.' : ' items have arrived and need checking.') : 'Nothing waiting to be checked.');
+  for (const m of d.members) { const c = lists[m.subject]; if (!c) continue;
+    const tr = el('tr'), name = el('button', m.name); name.className = 'link'; name.setAttribute('aria-controls', 'cldetail');
+    name.addEventListener('click', () => open(m, c)); const td = el('td'); td.append(name);
+    tr.append(td, el('td', c.duties.length ? c.duties.map(x => duties[x]).join(', ') : '—'), el('td', c.done + ' of ' + c.total + ' (' + c.pct + '%)'),
+      el('td', String(c.toReview)), el('td', String(c.items.filter(i => i.status === 'returned').length)), el('td', when(m.lastAt)));
+    tb.append(tr); }
+  async function refresh(subject) { const n = await call('/berdia/api/portal', 'summary'); Object.assign(lists, n.desk.checklists); desk(n); const m = n.members.find(x => x.subject === subject); if (m) open(m, n.desk.checklists[subject]); }
+  function open(m, c) {
+    panel.replaceChildren(); const h = el('h3', m.name); h.tabIndex = -1; panel.append(h);
+    // Duties: which registry items this person owes. Everyone owes the profile.
+    const fs = el('fieldset'); fs.append(el('legend', 'Duties (everyone also owes their profile)'));
+    for (const [k, label] of Object.entries(duties)) { if (k === 'everyone') continue; const l = el('label'), cb = el('input'); cb.type = 'checkbox'; cb.value = k; cb.checked = c.duties.includes(k); l.append(cb, ' ' + label); fs.append(l); }
+    const save = el('button', 'Save duties'); save.type = 'button';
+    save.addEventListener('click', async () => { save.disabled = true; try { await call('/berdia/api/portal', 'set-duties', { subject: m.subject, duties: [...fs.querySelectorAll('input:checked')].map(x => x.value) }); note('Duties saved for ' + m.name + '.'); await refresh(m.subject); } catch (e) { err(e); } finally { save.disabled = false; } });
+    fs.append(save); panel.append(fs);
+    const ol = el('ol'); ol.className = 'ledger ledger--plain';
+    for (const i of c.items) { const li = el('li'), div = el('div'), t = el('p', i.title); t.className = 't'; div.append(t);
+      const meta = el('p', duties[i.duty] + ' · ' + CL[i.status] + (i.at ? ' · reviewed ' + when(i.at) : '') + (i.reason ? ' · reason: ' + i.reason : '')); meta.className = 'd'; div.append(meta);
+      const sel = el('select'); sel.setAttribute('aria-label', 'Status for ' + i.title);
+      for (const v of CL_SET) { const o = el('option', CL[v]); o.value = v; o.selected = v === i.status; sel.append(o); }
+      if (!CL_SET.includes(i.status)) { const o = el('option', CL[i.status]); o.value = ''; o.selected = true; o.disabled = true; sel.prepend(o); }
+      const reason = el('input'); reason.type = 'text'; reason.maxLength = 500; reason.placeholder = 'What’s needed instead (shown to them only)'; reason.hidden = i.status !== 'returned'; reason.value = i.reason || ''; reason.setAttribute('aria-label', 'Reason for returning ' + i.title);
+      const go = el('button', 'Save'); go.type = 'button'; sel.addEventListener('change', () => { reason.hidden = sel.value !== 'returned'; });
+      go.addEventListener('click', async () => { if (!sel.value) return; go.disabled = true;
+        try { await call('/berdia/api/portal', 'review', { subject: m.subject, item: i.id, status: sel.value, reason: reason.value }); note(i.title + ': ' + CL[sel.value].toLowerCase() + ' for ' + m.name + '.'); await refresh(m.subject); } catch (e) { err(e); } finally { go.disabled = false; } });
+      const act = el('div'); act.className = 's'; act.append(sel, reason, go); li.append(div, act); ol.append(li); }
+    panel.append(ol); h.focus();
+  }
 }
 // Names who else can see a participant's uploads, from the server's effective reviewer list (never hard-coded).
 const whoSees = (names) => { const n = [...new Set((names || []).map(x => String(x).split(' ')[0]).filter(Boolean))];

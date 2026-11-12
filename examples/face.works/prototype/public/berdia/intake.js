@@ -7,7 +7,7 @@ async function api(action, data = {}, binary = false) {
   if (!r.ok) { const value = await r.json().catch(() => ({})); if (r.status === 401) lock(); throw new Error(value.error || 'Could not complete the request. Your original files are unchanged.'); }
   return binary ? r.blob() : r.json();
 }
-function lock() { $('signed-in').hidden = true; $('locked').hidden = false; $('logout').hidden = true; $('details').replaceChildren(); $('records').replaceChildren(); clearTimeout(sessionTimer); }
+function lock() { $('checklist').hidden = true; $('cl-items').replaceChildren(); checklistItems = []; $('signed-in').hidden = true; $('locked').hidden = false; $('logout').hidden = true; $('details').replaceChildren(); $('records').replaceChildren(); clearTimeout(sessionTimer); }
 function view(id) { document.querySelectorAll('.view').forEach(n => n.hidden = n.id !== id); document.querySelectorAll('[data-view]').forEach(n => n.setAttribute('aria-pressed', String(n.dataset.view === id))); if (id === 'receipts') loadRecords(); }
 async function enter() {
   const s = await api('session'); $('greeting').textContent = 'Welcome, ' + s.name;
@@ -17,7 +17,37 @@ async function enter() {
   const left = s.sessionExpiresAt ? Date.parse(s.sessionExpiresAt) - Date.now() : 30 * 60000;
   clearTimeout(sessionTimer); sessionTimer = setTimeout(() => { lock(); $('profile-form').reset(); notice('Your session ended. Sign in again to continue.'); }, Math.max(left, 0));
   notice('You’re signed in. Send what you have; you can come back for the rest.');
+  loadChecklist();
 }
+// WP-B6 "Your checklist": your own items only, from the registry and the trustee's reviews.
+const CL_LABEL = { needed: 'To send', requested: 'Requested', received: 'Received, being checked', accepted: 'Accepted', returned: 'Needs another copy', waived: 'Not needed' };
+const CL_CHIP = { needed: 'open', requested: 'attention', received: 'open', accepted: 'settled', returned: 'attention', waived: 'settled' };
+let checklistItems = [];
+async function loadChecklist() {
+  try {
+    const r = await fetch('/berdia/api/portal', { method: 'POST', credentials: 'same-origin', cache: 'no-store', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'checklist' }) });
+    if (!r.ok) return; // the checklist is a guide; Tasks still work without it
+    const { checklist, duties } = await r.json(); checklistItems = checklist.items;
+    $('cl-duty').textContent = (duties.length ? 'Asked of you as: ' + duties.join(', ') + '. ' : '') + checklist.done + ' of ' + checklist.total + ' done.';
+    const ol = $('cl-items'); ol.replaceChildren();
+    for (const i of checklist.items) {
+      const li = document.createElement('li'), div = document.createElement('div'), t = document.createElement('p'), d = document.createElement('p'), s = document.createElement('span'), chip = document.createElement('span');
+      t.className = 't'; t.textContent = i.title; d.className = 'd'; d.textContent = i.why; div.append(t, d);
+      if (i.reason) { const why = document.createElement('p'); why.className = 'd'; why.textContent = 'From the trustee: ' + i.reason; div.append(why); }
+      s.className = 's'; chip.className = 'chip ' + CL_CHIP[i.status]; chip.textContent = CL_LABEL[i.status] || i.status; s.append(chip); li.append(div, s); ol.append(li);
+    }
+    $('checklist').hidden = false; itemOptions();
+  } catch {}
+}
+// Upload form: offer only your open items that take this kind of record.
+function itemOptions() {
+  const cat = $('category').value, sel = $('item'), keep = sel.value;
+  const open = checklistItems.filter(i => i.categories.includes(cat) && !['accepted', 'waived'].includes(i.status));
+  sel.replaceChildren(Object.assign(document.createElement('option'), { value: '', textContent: 'Not sure, or none' }));
+  for (const i of open) sel.append(Object.assign(document.createElement('option'), { value: i.id, textContent: i.title, selected: i.id === keep }));
+  $('item-wrap').hidden = !open.length;
+}
+$('category').addEventListener('change', itemOptions);
 // Return to the page that sent you here: ?next=/berdia/plan/... (family pages on this site only).
 // Kept for this tab for 15 minutes so it survives the round trip through Google sign-in;
 // nav.js finishes the trip when Google lands on Home. Used once, then cleared.
@@ -95,14 +125,14 @@ $('files').addEventListener('change', () => {
 });
 function base64(file) { return new Promise((resolve, reject) => { const r = new FileReader(); r.onload = () => resolve(r.result.split(',')[1]); r.onerror = () => reject(new Error('Your phone couldn’t open this file. If it’s in Google Drive, download it to the phone first, or take a photo of it.')); r.readAsDataURL(file); }); }
 // Files over 2.5 MB go in 1.5 MB parts, then the server checks the whole file and files it.
-async function sendInParts(f, category, item) {
+async function sendInParts(f, category, item, tag = '') {
   const total = Math.ceil(f.size / PART), uploadId = Array.from(crypto.getRandomValues(new Uint8Array(16)), x => x.toString(16).padStart(2, '0')).join('');
   for (let index = 0; index < total; index++) {
     $('send').textContent = 'Sending part ' + (index + 1) + ' of ' + total + '…';
     const bytes = await base64(f.slice(index * PART, (index + 1) * PART));
     try { await api('upload-part', { uploadId, index, total, bytes, consent: true }); } catch { await api('upload-part', { uploadId, index, total, bytes, consent: true }); }
   }
-  return api('upload-finish', { uploadId, total, name: f.name, category, consent: true });
+  return api('upload-finish', { uploadId, total, name: f.name, category, item: tag || undefined, consent: true });
 }
 $('upload-form').addEventListener('submit', e => { e.preventDefault(); busy(e.currentTarget, async () => {
   const todo = queue.filter(q => q.status === 'pending' || q.status === 'failed');
@@ -111,13 +141,13 @@ $('upload-form').addEventListener('submit', e => { e.preventDefault(); busy(e.cu
   if (!$('upload-consent').checked) throw new Error('Please check the box to confirm before sending.');
   for (const item of todo) {
     item.status = 'sending'; item.reason = ''; render();
-    try { const u = await fit(item.file), category = $('category').value;
-      const r = u.size <= LIMIT ? await api('upload', { name: u.name, category, bytes: await base64(u), consent: true }) : await sendInParts(u, category, item);
+    try { const u = await fit(item.file), category = $('category').value, tag = $('item-wrap').hidden ? '' : $('item').value;
+      const r = u.size <= LIMIT ? await api('upload', { name: u.name, category, item: tag || undefined, bytes: await base64(u), consent: true }) : await sendInParts(u, category, item, tag);
       item.status = r.already ? 'already' : 'received'; }
     catch (error) { item.status = 'failed'; item.reason = reasonFor(error); }
     render();
   }
-  if (todo.some(q => q.status === 'received')) api('upload-done').catch(() => {}); // one alert to the trustee per batch
+  if (todo.some(q => q.status === 'received')) { api('upload-done').catch(() => {}); loadChecklist(); } // one alert to the trustee per batch
   const sent = todo.filter(q => q.status === 'received' || q.status === 'already'), notSent = queue.filter(q => q.status === 'failed' || q.status === 'blocked');
   const msg = (sent.length ? sent.length + (sent.length === 1 ? ' document' : ' documents') + ' received. ' : '') +
     (notSent.length ? 'Not sent: ' + notSent.map(q => q.file.name + ' (' + q.reason + ')').join(' ') + ' Everything marked received is saved.' : 'Thank you. Keep your originals.');
