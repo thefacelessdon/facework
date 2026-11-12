@@ -57,6 +57,10 @@ async function dashboard() {
 const CL = { needed: 'To send', requested: 'Requested', received: 'To check', accepted: 'Accepted', returned: 'Returned', waived: 'Waived' };
 const CL_SET = ['requested', 'accepted', 'returned', 'waived', 'needed'];
 function desk(d) {
+  const dr = $('dryrun'); if (dr && !dr.dataset.wired) { dr.dataset.wired = '1'; dr.addEventListener('click', async () => { dr.disabled = true;
+    try { const r = await call('/berdia/api/portal', 'reminders-dry-run'), n = Object.values(r.wouldEmail).reduce((a, b) => a + b, 0), o = $('dryout');
+      o.textContent = (r.enabled ? 'Reminders are on. ' : 'Reminders are off (nothing is sent). ') + 'Today: ' + n + ' would get a reminder, ' + r.wouldEscalate + ' would come to you for a call. Skipped: ' + r.skipped.paused + ' paused, ' + r.skipped.noEmail + ' without an email, ' + r.skipped.recent + ' emailed in the last week, ' + r.skipped.quiet + ' outside 9 AM–6 PM.'; o.hidden = false; }
+    catch (e) { err(e); } finally { dr.disabled = false; } }); }
   const sec = $('checklists'), tb = $('clrows'), panel = $('cldetail'), note = (t) => { const n = $('clnote'); n.textContent = t; n.hidden = false; };
   sec.hidden = false; tb.replaceChildren(); const lists = d.desk.checklists, duties = d.desk.duties;
   const toCheck = Object.values(lists).reduce((n, c) => n + c.toReview, 0);
@@ -64,7 +68,8 @@ function desk(d) {
   for (const m of d.members) { const c = lists[m.subject]; if (!c) continue;
     const tr = el('tr'), name = el('button', m.name); name.className = 'link'; name.setAttribute('aria-controls', 'cldetail');
     name.addEventListener('click', () => open(m, c)); const td = el('td'); td.append(name);
-    tr.append(td, el('td', c.duties.length ? c.duties.map(x => duties[x]).join(', ') : '—'), el('td', c.done + ' of ' + c.total + ' (' + c.pct + '%)'),
+    const paused = (d.desk.paused || []).includes(m.subject);
+    tr.append(td, el('td', (c.duties.length ? c.duties.map(x => duties[x]).join(', ') : '—') + (paused ? ' · reminders paused' : '')), el('td', c.done + ' of ' + c.total + ' (' + c.pct + '%)'),
       el('td', String(c.toReview)), el('td', String(c.items.filter(i => i.status === 'returned').length)), el('td', when(m.lastAt)));
     tb.append(tr); }
   async function refresh(subject) { const n = await call('/berdia/api/portal', 'summary'); Object.assign(lists, n.desk.checklists); desk(n); const m = n.members.find(x => x.subject === subject); if (m) open(m, n.desk.checklists[subject]); }
@@ -76,6 +81,10 @@ function desk(d) {
     const save = el('button', 'Save duties'); save.type = 'button';
     save.addEventListener('click', async () => { save.disabled = true; try { await call('/berdia/api/portal', 'set-duties', { subject: m.subject, duties: [...fs.querySelectorAll('input:checked')].map(x => x.value) }); note('Duties saved for ' + m.name + '.'); await refresh(m.subject); } catch (e) { err(e); } finally { save.disabled = false; } });
     fs.append(save); panel.append(fs);
+    // WP-B7: the trustee can pause reminders for someone (for example, a person who shouldn't get email).
+    const isPaused = (d.desk.paused || []).includes(m.subject), pl = el('label'), pb = el('input'); pb.type = 'checkbox'; pb.checked = isPaused; pl.append(pb, ' Reminder emails paused');
+    pb.addEventListener('change', async () => { pb.disabled = true; try { await call('/berdia/api/portal', 'pause-reminders', { subject: m.subject, paused: pb.checked }); note('Reminders ' + (pb.checked ? 'paused' : 'resumed') + ' for ' + m.name + '.'); await refresh(m.subject); } catch (e) { pb.checked = !pb.checked; err(e); } finally { pb.disabled = false; } });
+    panel.append(pl);
     const ol = el('ol'); ol.className = 'ledger ledger--plain';
     for (const i of c.items) { const li = el('li'), div = el('div'), t = el('p', i.title); t.className = 't'; div.append(t);
       const meta = el('p', duties[i.duty] + ' · ' + CL[i.status] + (i.at ? ' · reviewed ' + when(i.at) : '') + (i.reason ? ' · reason: ' + i.reason : '')); meta.className = 'd'; div.append(meta);
