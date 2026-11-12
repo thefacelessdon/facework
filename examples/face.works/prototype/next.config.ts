@@ -32,17 +32,23 @@ const nextConfig: NextConfig = {
     ];
   },
   // PERMANENT: Berdia on face.works.
-  // Static UI (portal, plan, intake pages) is served from public/berdia/.
-  // Only the intake/session API proxies to berdia-trust so family invitation
-  // sign-in keeps working. Guarded by src/app/berdia-mount.test.ts.
-  // DO NOT REMOVE the api rewrite.
+  // Berdia lives in the private berdia-trust repo; no Berdia file is kept in this public repo.
+  // face.works forwards every /berdia path there, so the address family members use
+  // (face.works/berdia) and their same-origin session cookie are unchanged.
+  // Family-only pages (plan, trust, ops) are gated first by src/proxy.ts.
+  // Guarded by src/app/berdia-mount.test.ts. DO NOT REMOVE the api or k rewrites:
+  // invitation sign-in and the reminder email depend on them.
   async rewrites() {
     return [
       { source: "/berdia/api/:path*", destination: "https://berdia-trust.vercel.app/berdia/api/:path*" },
       // One-tap invitation links: face.works/berdia/k/<code>. The code rides in the path, not
       // a #fragment, because Gmail/Outlook link wrappers drop fragments. intake.js reads it,
       // signs in, and replaces the URL so the code leaves the address bar.
-      { source: "/berdia/k/:code", destination: "/berdia/intake.html" },
+      { source: "/berdia/k/:code", destination: "https://berdia-trust.vercel.app/berdia/intake.html" },
+      // Bare /berdia gets its own rule: this site strips trailing slashes, berdia-trust adds
+      // one, and its redirect would send the visitor to berdia-trust.vercel.app.
+      { source: "/berdia", destination: "https://berdia-trust.vercel.app/berdia/index.html" },
+      { source: "/berdia/:path*", destination: "https://berdia-trust.vercel.app/berdia/:path*" },
     ];
   },
   async headers() {

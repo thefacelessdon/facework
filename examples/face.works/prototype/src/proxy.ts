@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-// Berdia estate and financial pages (plan, trust, ops) are family-only and are NOT in this
-// public repo: they live in the private berdia-trust project, which gates them itself.
+// Berdia estate and financial pages (plan, trust, ops) are family-only. No Berdia file is in this
+// public repo: everything lives in the private berdia-trust project (next.config.ts forwards /berdia).
 // For those paths we (1) confirm the session with berdia-trust's session check (honours
 // sign-out), then (2) fetch the page from berdia-trust with the visitor's cookie and serve
 // it only on 200. Anything else, including errors and timeouts, sends the visitor to
@@ -67,6 +67,14 @@ export async function proxy(request: NextRequest) {
   });
 }
 
+// Documents pages are listed too: berdia-trust gates them as well, but its redirect drops ?next=,
+// so a Documents link from email would strand the visitor on Tasks after sign-in.
 export const config = {
-  matcher: ["/berdia/plan/:path*", "/berdia/portal/trust.html", "/berdia/portal/ops/:path*"],
+  matcher: [
+    "/berdia/plan/:path*",
+    "/berdia/portal/trust.html",
+    "/berdia/portal/ops/:path*",
+    "/berdia/portal/documents.html",
+    "/berdia/documents.html",
+  ],
 };
