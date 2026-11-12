@@ -200,85 +200,77 @@ h2 .chip,h3 .chip{margin-left:.75rem}
 /* intake.js shows #locked until a session is confirmed. While it shows, Tasks is the
    front door: the welcome is the headline and the link instructions sit above the fold.
    No markup change: the seam is the hidden attribute the sign-in script already owns. */
-.intake:has(#locked:not([hidden])) .folio{display:none}
+.intake:has(#locked:not([hidden])) .folio,.intake:has(#locked:not([hidden])) .rail{display:none}
 .intake #locked:not([hidden]){background:none;border:0;padding:0;margin:0 0 3.5rem}
-.intake #locked h2{font-family:var(--rr-font-structure);font-weight:800;font-size:clamp(2.625rem,6.2vw,4.5rem);line-height:1.02;letter-spacing:-.025em;margin:0 0 1.5rem;max-width:13ch}
 .intake #locked>p:not(.fig):not(.note){font-size:clamp(1.3125rem,2.4vw,1.5rem);line-height:1.45;color:var(--rr-ink);max-width:28em}
 .intake #locked .note{max-width:34em}
 .intake #locked .code-fallback{margin-top:2.5rem;border-top:1px solid var(--rr-ink)}
 /* Home, signed out: one action. The next step returns once there is someone to give it to. */
-.rr:has(#signin:not([hidden])) .next{display:none}
+/* Signed out (D8): only the sign-in block. Everything else on Home waits for a session. */
+.rr:has(#signin:not([hidden])) .next:not(#signin),.rr:has(#signin:not([hidden])) .col>section:not(#signin),.rr:has(#signin:not([hidden])) .rail,.rr:has(#signin:not([hidden])) .folio .lede,.rr:has(#signin:not([hidden])) #roleline{display:none}
+.rr #signin h2,.intake #locked h2{font-family:var(--rr-font-structure);font-weight:800;font-size:clamp(2.25rem,6.2vw,3.5rem);line-height:1.05;letter-spacing:-.02em;margin:0 0 1.5rem;max-width:14ch}
+.rr #signin:not([hidden]){background:none;border:0;padding:0;margin:0 0 3rem}
+.rr #signin .google .cta,.intake #locked .google .cta{width:100%;justify-content:center;max-width:26rem}
 
 /* ---- Home, signed in --------------------------------------------------------- */
 /* The date portal.js writes is today's date, not a fact about the record. */
 .rr #today{display:none}
-/* Your part lives inside the next-step panel: one place that says what to do and how far
-   you are, instead of a separate section repeating "complete your profile in Tasks". */
-.next .tally{margin-top:2rem;padding-top:1.25rem;border-top:1px solid var(--rr-rule)}
-.next .tally dl{display:grid;grid-template-columns:repeat(3,minmax(0,auto));justify-content:start;gap:.5rem 2.5rem;margin:0}
-.next .tally dt{font-family:var(--rr-font-record);font-size:.8125rem;letter-spacing:.06em;text-transform:uppercase;color:var(--rr-meta)}
-.next .tally dd{margin:.125rem 0 0;font-family:var(--rr-font-structure);font-weight:700;font-size:1.125rem;color:var(--rr-ink)}
-.rr .next .tally .fig{margin-bottom:1rem}
-.next .tally .verdict{margin-top:1rem;padding-top:0;border-top:0;font-size:1.0625rem}
-/* Getting started folded into the next-step panel: the panel is step 1, this lists what follows */
-.next .after{margin-top:2rem;padding-top:1.25rem;border-top:1px solid var(--rr-rule)}
-.rr .next .after .fig{margin-bottom:.5rem}
-.next .after .ledger{border-top:0}
-.next .after .ledger .t{font-size:1.0625rem}
-.next .after .ledger .n{font-size:1.25rem}
-.next .after .ledger .d{font-size:1rem}
-@media(max-width:560px){.next .tally dl{grid-template-columns:1fr 1fr}.next .tally dl>div:last-child{grid-column:1/-1}}
+/* Home: the next step stays hidden until its count is filled (D9); the loading line sits in its place. */
+#next-back{color:var(--rr-exposure-text);font-family:var(--rr-font-structure);font-weight:600}
+.rr:has(#signin:not([hidden])) #home-loading{display:none}
 
 /* ---- Tasks, signed in: the task is the page --------------------------------- */
 /* The welcome pitch is for arrival; once signed in it shrinks so the form starts on screen. */
 .intake:has(#signed-in:not([hidden])) .folio{margin-bottom:2rem}
 .intake:has(#signed-in:not([hidden])) .folio h1{font-size:clamp(1.75rem,3.4vw,2.25rem);line-height:1.1;letter-spacing:-.015em;margin-bottom:.5rem;max-width:none}
-.intake:has(#signed-in:not([hidden])) .folio .lede{display:none}
+.intake:has(#signed-in:not([hidden])) .folio .lede{font-size:1.1875rem;margin:0}
 
 /* ---- Tasks ------------------------------------------------------------------ */
-.session{margin:1.5rem 0 0}
 #notice:not(:empty){border:1px solid var(--rr-ink);border-top:3px solid var(--rr-settled);background:var(--rr-surface);padding:1rem 1.25rem;margin:0 0 2rem;color:var(--rr-ink);font-size:1.0625rem}
 #notice.error{border-top-color:var(--rr-exposure);color:var(--rr-exposure-text)}
 .code-fallback{margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--rr-rule)}
 .code-fallback form{margin-top:1rem;display:grid;gap:1rem;max-width:26rem}
-.tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:1.5rem 0 3rem;border-top:1px solid var(--rr-ink);border-bottom:1px solid var(--rr-rule)}
-.tabs button{display:flex;align-items:center;gap:.75rem;min-height:4rem;padding:.75rem 1rem .75rem 0;background:transparent;border:0;border-bottom:4px solid transparent;margin-bottom:-1px;
   font-family:var(--rr-font-structure);font-weight:600;font-size:1.0625rem;color:var(--rr-body);text-align:left;cursor:pointer}
-.tabs button span{font-weight:800;font-size:1.375rem;color:var(--rr-meta)}
-.tabs button[aria-pressed=true]{color:var(--rr-ink);border-bottom-color:var(--rr-ink)}
-.tabs button[aria-pressed=true] span{color:var(--rr-ink)}
-/* The tabs already rule the top of the task; a second ink rule under them is noise. */
-.tabs~.reading{margin-top:0;border-top:0;padding-top:0}
-@media(max-width:640px){.tabs button{flex-direction:column;align-items:flex-start;gap:.125rem;font-size:.9375rem}}
 .fields{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem 1.25rem;margin:2rem 0}
 .fields .wide{grid-column:1/-1}
 @media(max-width:560px){.fields{grid-template-columns:1fr}}
 .rr label.consent{display:flex;gap:.875rem;align-items:flex-start;font-family:var(--rr-font-reading);font-weight:400;font-size:1.0625rem;color:var(--rr-body);margin:1.5rem 0;max-width:38em}
 .consent input{flex:none;width:1.5rem;height:1.5rem;margin:.15rem 0 0;accent-color:var(--rr-ink)}
 .hint{font-size:1rem;color:var(--rr-body);margin:.75rem 0 0}
-.upload-area{margin:1.5rem 0 0;padding:1.5rem;border:1px dashed var(--rr-body);background:var(--rr-surface)}
-.upload-area input[type=file]{font:inherit;font-size:1rem;min-height:48px;margin-top:.5rem;max-width:100%}
-.upload-area input[type=file]::file-selector-button{min-height:48px;padding:.5rem 1rem;margin-right:1rem;background:var(--rr-paper);border:1px solid var(--rr-ink);font-family:var(--rr-font-structure);font-weight:600;font-size:1rem;cursor:pointer}
-.file-list{list-style:none;padding:0;margin:1rem 0 0}
-.file-list li{border-bottom:1px solid var(--rr-rule);padding:.75rem 0;overflow-wrap:anywhere;font-size:1.0625rem}
-.upload-area input[type=file]{color:transparent}
-.file-row{display:grid;grid-template-columns:1fr auto;gap:.25rem 1rem;align-items:center}
-.file-row .file-name{grid-column:1}
-.file-row .file-state{grid-column:1;font-size:1rem;color:var(--rr-body)}
-.file-row .remove{grid-column:2;grid-row:1 / span 2;min-height:44px;padding:.25rem .75rem;font-size:1rem}
-.file-row.blocked .file-state,.file-row.failed .file-state{color:var(--rr-exposure-text)}
-.file-row.received .file-state,.file-row.already .file-state{color:var(--rr-ink);font-weight:600}
-.records{margin-top:1.5rem;border-top:1px solid var(--rr-ink)}
-.record{display:flex;gap:1rem;align-items:center;justify-content:space-between;padding:1.125rem 0;border-bottom:1px solid var(--rr-rule)}
-.record p{margin:0;overflow-wrap:anywhere;font-family:var(--rr-font-structure);font-weight:600;color:var(--rr-ink)}
-.record small{display:block;font-family:var(--rr-font-record);font-size:.875rem;color:var(--rr-meta);margin-top:.25rem}
-@media(max-width:560px){.record{flex-direction:column;align-items:flex-start}}
-#record-detail{margin-top:2.5rem}
-#record-detail .facts{margin-top:1rem}
-#record-detail dd{white-space:pre-wrap;overflow-wrap:anywhere}
-.steps-mini>li{min-height:0;padding:.875rem 0;grid-template-columns:2.25rem minmax(0,1fr)}
-.steps-mini .n{font-size:1.25rem}
-.steps-mini .t{font-size:1.0625rem}
+/* Tasks checklist (portal plan T1): groups of ledger rows; Send opens a panel in the row. Existing tokens only. */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.task-group{margin:0 0 var(--rr-sp-6,2.5rem)}
+.rr .task-group>.fig{margin-bottom:.5rem}
+.tasks>li.task{grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:var(--rr-sp-4,1rem) 1.5rem;min-height:0}
+.tasks .t{font-size:1.1875rem}
+.task-status{margin:.5rem 0 0;font-family:var(--rr-font-structure);font-weight:600;font-size:1rem;overflow-wrap:anywhere;max-width:36em;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.task-status.attention{color:var(--rr-attention-text)}
+.task-status.exposure{color:var(--rr-exposure-text)}
+.task-status.settled{color:var(--rr-settled-text)}
+.task-status.meta{color:var(--rr-meta)}
+.task-got{margin:.5rem 0 0;color:var(--rr-ink);font-size:1.0625rem}
+.task-status.open{display:block;-webkit-line-clamp:unset;overflow:visible}
+.rr button.task-more{min-height:44px;padding:.25rem 0;font-size:1rem}
+.task-progress{display:block;width:100%;height:.375rem;margin:.5rem 0 0;accent-color:var(--rr-ink)}
+.task-msg .task-retry{margin-top:.75rem}
+@media(max-width:640px){.task-msg .task-retry{width:100%;justify-content:center}}
+.tasks .s .cta{min-height:48px;padding:.625rem 1.25rem}
+.task-panel{grid-column:1/-1;padding:var(--rr-sp-4,1rem) 0 .25rem;border-top:1px solid var(--rr-rule)}
+.task-panel .fields{margin:1.25rem 0}
+.task-actions{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;margin:0}
+.task-msg{margin:.75rem 0 0;font-size:1.0625rem;color:var(--rr-ink);overflow-wrap:anywhere}
+.task-msg:empty{display:none}
+.task-msg.error{color:var(--rr-exposure-text)}
+.task-msg a{margin-left:.25rem}
+.task-group--done .t,.task-group--done .d{color:var(--rr-meta)}
+.task-other{margin:0 0 var(--rr-sp-6,2.5rem)}
+.task-other .task-panel{border-top:0;max-width:30rem}
+.task-other select{margin:.5rem 0 1rem;width:100%}
+.task-foot{border-top:1px solid var(--rr-ink);padding-top:1.25rem}
+.task-foot p{margin:.5rem 0 0}
+.rr .task-foot .fig{margin-bottom:0}
+.rr .task-foot label.consent{margin:.75rem 0}
+@media(max-width:640px){.tasks>li.task{grid-template-columns:minmax(0,1fr)}.tasks .s{justify-self:stretch;align-items:stretch}.tasks .s .cta,.tasks .s .quiet,.task-actions .cta,.task-actions .quiet{width:100%;justify-content:center}}
 .rail details{margin-top:2rem;border-top:1px solid var(--rr-rule);padding-top:.5rem}
 .rail details p{margin-top:.75rem}
 

@@ -4,11 +4,11 @@ const when = (s) => s ? new Date(s).toLocaleString([], { dateStyle: 'medium', ti
 const STATUS = { complete: 'Complete', 'profile-only': 'Profile done, no files', 'files-only': 'Files, no profile', 'not-started': 'Not started' };
 async function call(path, action, data = {}, blob = false) {
   const r = await fetch(path, { method: 'POST', credentials: 'same-origin', cache: 'no-store', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action, ...data }) });
-  if (r.status === 401 || r.status === 403) { const s = $('signin'); if (s) s.hidden = false; throw Object.assign(new Error('signin'), { silent: true }); }
+  if (r.status === 401 || r.status === 403) { const s = $('signin'); if (s) s.hidden = false; const l = $('home-loading'); if (l) l.hidden = true; throw Object.assign(new Error('signin'), { silent: true }); }
   if (!r.ok) { let m = 'We couldn’t load your records just now. Please try again in a minute.'; try { m = (await r.json()).error || m; } catch {} throw new Error(m); }
   return blob ? r.blob() : r.json();
 }
-const err = (e) => { if (e.silent) return; const x = $('err'); if (x) { x.textContent = e.message; x.hidden = false; } };
+const err = (e) => { if (e.silent) return; const l = $('home-loading'); if (l) l.hidden = true; const x = $('err'); if (x) { x.textContent = e.message; x.hidden = false; } };
 const set = (root, k, v) => { const n = root.querySelector(`[data-k="${k}"]`); if (n) n.textContent = v; };
 
 // Access column (reviewer view). Reviewers can open every family member's uploads, so changing it asks first
@@ -30,6 +30,20 @@ function access(m, self) {
   });
   td.append(sel); return td;
 }
+// T5 (D5, D9): Home leads with the same count as Tasks and the reminder email: items that need you
+// (requested or returned), from the checklist and tasks-core.js. The block stays hidden until it is filled.
+async function nextStep() {
+  const loading = $('home-loading'), slow = setTimeout(() => { if (loading && !loading.hidden) loading.textContent = 'Still loading. Check your signal, then refresh the page.'; }, 10000);
+  try {
+    const r = await call('/berdia/api/portal', 'checklist'), T = window.BerdiaTasks, g = T.groups(r.checklist.items), n = g.needsYou.length;
+    const who = (r.reviewer && r.reviewer.name) || 'Stedmon', back = g.needsYou.filter(i => i.status === 'returned').length;
+    $('next-title').textContent = n ? T.plural(n, '1 thing to send', '{n} things to send') : 'You’re all caught up.';
+    $('next-line').textContent = n ? 'Send what you have, when you get a chance. Each one takes a photo or a file.' : 'If anything else is needed, it will show in Tasks.';
+    const b = $('next-back'); b.hidden = !back; b.textContent = back ? who + ' sent ' + T.plural(back, '1', '{n}') + ' back.' : '';
+    $('cta-link').className = n ? 'cta' : 'quiet';
+    $('next').hidden = false;
+  } finally { clearTimeout(slow); if (loading) loading.hidden = true; }
+}
 async function dashboard() {
   const t = $('today'); if (t) t.textContent = new Date().toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
   const d = await call('/berdia/api/portal', 'summary');
@@ -38,12 +52,7 @@ async function dashboard() {
   if (d.role === 'reviewer' && $('desk')) $('desk').hidden = false;
   const me = d.me || { profile: false, files: 0 }, stage = d.role === 'reviewer' || (me.profile && me.files) ? 'open' : (me.profile || me.files ? 'started' : 'new');
   try { sessionStorage.setItem('berdia-stage', stage); } catch {} document.body.dataset.stage = stage;
-  // The next-step button always shows; a new member needs it most.
-  if ($('cta')) $('cta').hidden = false;
-  const fr = $('firstrun'); if (fr) { if (stage === 'open') fr.hidden = true; else { fr.hidden = false; const st = (k, t, c) => { const n = fr.querySelector('[data-k="' + k + '"]'); n.textContent = t; n.className = 'chip ' + c; };
-    if (stage === 'started') { st('s1', 'Done', 'settled'); st('s2', 'Open', 'attention'); } } }
-  if (d.me) { const m = $('me'); m.hidden = false; set(m, 'profile', d.me.profile ? 'Done' : 'Not yet'); set(m, 'files', String(d.me.files)); set(m, 'lastAt', when(d.me.lastAt));
-    set(m, 'next', d.me.profile ? 'Your intake is in. Add more documents any time in Tasks.' : 'Next: complete your profile in Tasks.'); }
+  await nextStep();
   if (d.role === 'reviewer') { $('family').hidden = false; const tb = $('rows');
     const mine = d.me && d.me.subject;
     for (const m of d.members) { const tr = el('tr'); const st = el('span', STATUS[m.status]); st.className = 'pill ' + m.status;
