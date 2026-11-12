@@ -278,7 +278,8 @@ const GOOGLE = { cancelled: 'Google sign-in was cancelled. Try again, or use the
 const googleResult = () => { const r = new URLSearchParams(location.search).get('google'); if (r !== null) history.replaceState(null, '', '/berdia/intake.html'); return r === null ? '' : (GOOGLE[r] || GOOGLE.failed); };
 const linkCode = () => { const m = location.pathname.match(/^\/berdia\/k\/([^/]+)\/?$/); return ((m ? m[1] : '') || location.hash.slice(1)).toLowerCase(); };
 (async () => { const google = googleResult(), token = linkCode(); if (token) history.replaceState(null, '', '/berdia/intake.html');
-  try { if (token) { await api('login', { token }); location.replace(takeNext() || '/berdia/portal/'); return; } await enter(); if (askedNext) { const n = takeNext(); if (n) location.replace(n); } }
+  // While a link signs someone in, show that instead of the sign-in button, so nobody taps Google mid-sign-in.
+  try { if (token) { $('locked').hidden = true; notice('Signing you in…'); await api('login', { token }); location.replace(takeNext() || '/berdia/portal/'); return; } await enter(); if (askedNext) { const n = takeNext(); if (n) location.replace(n); } }
   // D8 / DR-10: token errors say what happened and who to contact. Public page, so no phone number here.
   catch (e) { lock(); const help = ' Call or text Stedmon if you need a hand.';
     if (token) notice((e.code === 'link_google_only' ? 'You now sign in with Google, so this link no longer works. Use the Sign in with Google button.' : e.code === 'invite_inactive' ? 'That link has expired or was replaced. Ask Stedmon for a new one.' : 'We couldn’t sign you in with that link. Tap it again, or ask Stedmon for a new one.') + help, true);
