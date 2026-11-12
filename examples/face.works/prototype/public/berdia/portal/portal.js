@@ -58,8 +58,8 @@ const CL = { needed: 'To send', requested: 'Requested', received: 'To check', ac
 const CL_SET = ['requested', 'accepted', 'returned', 'waived', 'needed'];
 // WP-B8: last seen (any sign-in, page view or upload), flagged when quiet 14+ days.
 function seenCell(ag) { const td = el('td', ag.lastSeen ? when(ag.lastSeen) : 'Not yet'); if (ag.quiet) { const q = el('span', 'Quiet 14+ days'); q.className = 'chip attention'; td.append(' ', q); } return td; }
-const CT = (s) => new Date(s).toLocaleString('en-US', { timeZone: 'America/Chicago', dateStyle: 'medium', timeStyle: 'short' });
-function accessLog() { const sec = $('accesslog'), btn = $('alshow'); if (!sec || btn.dataset.wired) { if (sec) sec.hidden = false; return; } sec.hidden = false; btn.dataset.wired = '1';
+const CT = (s) => s ? new Date(s).toLocaleString('en-US', { timeZone: 'America/Chicago', dateStyle: 'medium', timeStyle: 'short' }) : '—';
+function accessLog() { const sec = $('accesslog'), btn = $('alshow'); if (!sec || !btn) return; if (btn.dataset.wired) { sec.hidden = false; return; } sec.hidden = false; btn.dataset.wired = '1';
   btn.addEventListener('click', async () => { btn.disabled = true; try { const { rows } = await call('/berdia/api/portal', 'access-log'), tb = $('alrows'); tb.replaceChildren();
     for (const r of rows) { const tr = el('tr'); for (const v of [CT(r.at), r.who, ROLE[r.role] || 'System', r.action, r.kind]) tr.append(el('td', v)); tb.append(tr); }
     if (!rows.length) tb.append(Object.assign(el('tr'), { textContent: 'No events yet.' })); $('alwrap').hidden = false; btn.textContent = 'Refresh access log'; }
