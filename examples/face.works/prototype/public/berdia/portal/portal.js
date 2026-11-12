@@ -125,7 +125,33 @@ async function documents() {
       li.append(b, el('span', ' · ' + (r.category || r.kind) + ' · ' + when(r.at))); ul.append(li); }
     $('groups').append(ul); }
 }
+// WP-B9 Decisions and Minutes (Trust page). Everyone reads; the trustee adds or withdraws (never deletes).
+const fmtDate = (d) => d ? new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { timeZone: 'UTC', dateStyle: 'long' }) : '—';
+// fresh: the add/withdraw just confirmed by the server, merged in because the query index can lag a write briefly.
+async function decisions(fresh) {
+  const list = $('declist'); if (!list) return;
+  let d; try { d = await call('/berdia/api/portal', 'decisions'); } catch (e) { list.replaceChildren(el('li', e.silent ? 'Sign in to see the family’s decisions.' : e.message)); return; }
+  if (fresh?.entry && !d.entries.some(x => x.id === fresh.entry.id)) d.entries = [fresh.entry, ...d.entries].sort((a, b) => b.date.localeCompare(a.date));
+  if (fresh?.withdrawn) d.entries = d.entries.map(x => x.id === fresh.withdrawn.id ? { ...x, withdrawn: true, withdrawnReason: fresh.withdrawn.reason } : x);
+  list.replaceChildren();
+  if (!d.entries.length) list.append(Object.assign(el('li'), { textContent: 'Nothing recorded yet.' }));
+  for (const x of d.entries) { const li = el('li'), div = el('div'), t = el('p', fmtDate(x.date) + ' · ' + x.meeting); t.className = 't';
+    const body = el('p', x.decided); body.className = 'd'; div.append(t, body);
+    const meta = [x.by && 'By ' + x.by, x.source && 'Recorded in ' + x.source].filter(Boolean).join(' · '); if (meta) { const m = el('p', meta); m.className = 'd'; div.append(m); }
+    if (x.withdrawn) { const w = el('p', 'Withdrawn: ' + x.withdrawnReason + ' (family members no longer see this entry)'); w.className = 'd'; div.append(w); }
+    const s = el('span'); s.className = 's'; const chip = el('span', x.withdrawn ? 'Withdrawn' : x.status === 'open' ? 'Open' : 'Decided'); chip.className = 'chip ' + (x.withdrawn ? 'open' : x.status === 'open' ? 'attention' : 'settled'); s.append(chip);
+    if (d.canEdit && !x.withdrawn) { const b = el('button', 'Withdraw'); b.type = 'button'; b.className = 'quiet';
+      b.addEventListener('click', async () => { const reason = prompt('Why is this entry being withdrawn? (shown to reviewers only)'); if (!reason) return; b.disabled = true;
+        try { await call('/berdia/api/portal', 'decision-withdraw', { id: x.id, reason }); await decisions({ withdrawn: { id: x.id, reason } }); } catch (e) { err(e); b.disabled = false; } }); s.append(' ', b); }
+    li.append(div, s); list.append(li); }
+  const f = $('decform'); if (d.canEdit && f && !f.dataset.wired) { f.hidden = false; f.dataset.wired = '1';
+    f.addEventListener('submit', async (ev) => { ev.preventDefault(); const btn = f.querySelector('button[type=submit]'); btn.disabled = true; const v = (id) => $(id).value;
+      try { const added = await call('/berdia/api/portal', 'decision-add', { date: v('dec-date'), status: v('dec-status'), meeting: v('dec-meeting'), decided: v('dec-decided'), by: v('dec-by'), source: v('dec-source') });
+        f.reset(); const x = $('err'); if (x) x.hidden = true; const n = $('decnote'); n.textContent = 'Added. Family members can now read it on this page.'; n.hidden = false; await decisions(added); }
+      catch (e) { err(e); } finally { btn.disabled = false; } }); }
+}
 async function trust() {
+  decisions();
   const out = $('extract'); out.textContent = '';
   const want = { '/berdia/plan/grandma.html': ['What You Own Today', 'What Is a Trust?', 'What Happens Next'] };
   for (const [url, heads] of Object.entries(want)) { try { const doc = new DOMParser().parseFromString(await (await fetch(url, { credentials: 'same-origin' })).text(), 'text/html');
