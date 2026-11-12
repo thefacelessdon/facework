@@ -200,14 +200,17 @@ h2 .chip,h3 .chip{margin-left:.75rem}
 /* intake.js shows #locked until a session is confirmed. While it shows, Tasks is the
    front door: the welcome is the headline and the link instructions sit above the fold.
    No markup change: the seam is the hidden attribute the sign-in script already owns. */
-.intake:has(#locked:not([hidden])) .folio{display:none}
+.intake:has(#locked:not([hidden])) .folio,.intake:has(#locked:not([hidden])) .rail{display:none}
 .intake #locked:not([hidden]){background:none;border:0;padding:0;margin:0 0 3.5rem}
-.intake #locked h2{font-family:var(--rr-font-structure);font-weight:800;font-size:clamp(2.625rem,6.2vw,4.5rem);line-height:1.02;letter-spacing:-.025em;margin:0 0 1.5rem;max-width:13ch}
 .intake #locked>p:not(.fig):not(.note){font-size:clamp(1.3125rem,2.4vw,1.5rem);line-height:1.45;color:var(--rr-ink);max-width:28em}
 .intake #locked .note{max-width:34em}
 .intake #locked .code-fallback{margin-top:2.5rem;border-top:1px solid var(--rr-ink)}
 /* Home, signed out: one action. The next step returns once there is someone to give it to. */
-.rr:has(#signin:not([hidden])) .next{display:none}
+/* Signed out (D8): only the sign-in block. Everything else on Home waits for a session. */
+.rr:has(#signin:not([hidden])) .next:not(#signin),.rr:has(#signin:not([hidden])) .col>section:not(#signin),.rr:has(#signin:not([hidden])) .rail,.rr:has(#signin:not([hidden])) .folio .lede,.rr:has(#signin:not([hidden])) #roleline{display:none}
+.rr #signin h2,.intake #locked h2{font-family:var(--rr-font-structure);font-weight:800;font-size:clamp(2.25rem,6.2vw,3.5rem);line-height:1.05;letter-spacing:-.02em;margin:0 0 1.5rem;max-width:14ch}
+.rr #signin:not([hidden]){background:none;border:0;padding:0;margin:0 0 3rem}
+.rr #signin .google .cta,.intake #locked .google .cta{width:100%;justify-content:center;max-width:26rem}
 
 /* ---- Home, signed in --------------------------------------------------------- */
 /* The date portal.js writes is today's date, not a fact about the record. */
