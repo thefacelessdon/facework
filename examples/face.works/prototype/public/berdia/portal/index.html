@@ -64,12 +64,20 @@
     <p class="fig">Trustee desk · checklists</p>
     <h2 id="ch">What each person owes</h2>
     <p class="note" data-k="cltally"></p>
-    <div class="table-wrap"><table><thead><tr><th>Member</th><th>Duties</th><th>Complete</th><th>To check</th><th>Returned</th><th>Last activity</th></tr></thead><tbody id="clrows"></tbody></table></div>
+    <div class="table-wrap"><table><thead><tr><th>Member</th><th>Duties</th><th>Complete</th><th>To check</th><th>Returned</th><th>Oldest request</th><th>Last seen</th></tr></thead><tbody id="clrows"></tbody></table></div>
     <div id="cldetail"></div>
     <p><button type="button" id="dryrun" class="quiet">Preview today’s reminders</button></p>
     <p class="note" id="dryout" role="status" hidden></p>
     <p class="note">Open a person to assign duties and mark items accepted, returned or waived. A returned reason is shown to that person only. Each change is logged.</p>
     <p class="note" id="clnote" role="status" hidden></p>
+  </section>
+
+  <section id="accesslog" class="reading" hidden aria-labelledby="alh">
+    <p class="fig">Trustee desk · access log</p>
+    <h2 id="alh">Who opened what</h2>
+    <p class="note">The latest 200 sign-ins, page views, opens, downloads and changes. It shows what kind of record, never its contents. Opening this log is logged too.</p>
+    <p><button type="button" id="alshow" class="quiet">Show access log</button></p>
+    <div class="table-wrap" id="alwrap" hidden><table><thead><tr><th>When (Central)</th><th>Who</th><th>Role</th><th>Did</th><th>What</th></tr></thead><tbody id="alrows"></tbody></table></div>
   </section>
 
   <section class="reading" aria-labelledby="ns">

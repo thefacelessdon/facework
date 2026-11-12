@@ -56,7 +56,16 @@ async function dashboard() {
 // duties and accept / return / waive items. The server re-checks reviewer access and audits every change.
 const CL = { needed: 'To send', requested: 'Requested', received: 'To check', accepted: 'Accepted', returned: 'Returned', waived: 'Waived' };
 const CL_SET = ['requested', 'accepted', 'returned', 'waived', 'needed'];
+// WP-B8: last seen (any sign-in, page view or upload), flagged when quiet 14+ days.
+function seenCell(ag) { const td = el('td', ag.lastSeen ? when(ag.lastSeen) : 'Not yet'); if (ag.quiet) { const q = el('span', 'Quiet 14+ days'); q.className = 'chip attention'; td.append(' ', q); } return td; }
+const CT = (s) => new Date(s).toLocaleString('en-US', { timeZone: 'America/Chicago', dateStyle: 'medium', timeStyle: 'short' });
+function accessLog() { const sec = $('accesslog'), btn = $('alshow'); if (!sec || btn.dataset.wired) { if (sec) sec.hidden = false; return; } sec.hidden = false; btn.dataset.wired = '1';
+  btn.addEventListener('click', async () => { btn.disabled = true; try { const { rows } = await call('/berdia/api/portal', 'access-log'), tb = $('alrows'); tb.replaceChildren();
+    for (const r of rows) { const tr = el('tr'); for (const v of [CT(r.at), r.who, ROLE[r.role] || 'System', r.action, r.kind]) tr.append(el('td', v)); tb.append(tr); }
+    if (!rows.length) tb.append(Object.assign(el('tr'), { textContent: 'No events yet.' })); $('alwrap').hidden = false; btn.textContent = 'Refresh access log'; }
+    catch (e) { err(e); } finally { btn.disabled = false; } }); }
 function desk(d) {
+  accessLog();
   const dr = $('dryrun'); if (dr && !dr.dataset.wired) { dr.dataset.wired = '1'; dr.addEventListener('click', async () => { dr.disabled = true;
     try { const r = await call('/berdia/api/portal', 'reminders-dry-run'), n = Object.values(r.wouldEmail).reduce((a, b) => a + b, 0), o = $('dryout');
       o.textContent = (r.enabled ? 'Reminders are on. ' : 'Reminders are off (nothing is sent). ') + 'Today: ' + n + ' would get a reminder, ' + r.wouldEscalate + ' would come to you for a call. Skipped: ' + r.skipped.paused + ' paused, ' + r.skipped.noEmail + ' without an email, ' + r.skipped.recent + ' emailed in the last week, ' + r.skipped.quiet + ' outside 9 AM–6 PM.'; o.hidden = false; }
@@ -68,9 +77,9 @@ function desk(d) {
   for (const m of d.members) { const c = lists[m.subject]; if (!c) continue;
     const tr = el('tr'), name = el('button', m.name); name.className = 'link'; name.setAttribute('aria-controls', 'cldetail');
     name.addEventListener('click', () => open(m, c)); const td = el('td'); td.append(name);
-    const paused = (d.desk.paused || []).includes(m.subject);
+    const paused = (d.desk.paused || []).includes(m.subject); const ag = (d.desk.aging || {})[m.subject] || {};
     tr.append(td, el('td', (c.duties.length ? c.duties.map(x => duties[x]).join(', ') : '—') + (paused ? ' · reminders paused' : '')), el('td', c.done + ' of ' + c.total + ' (' + c.pct + '%)'),
-      el('td', String(c.toReview)), el('td', String(c.items.filter(i => i.status === 'returned').length)), el('td', when(m.lastAt)));
+      el('td', String(c.toReview)), el('td', String(c.items.filter(i => i.status === 'returned').length)), el('td', ag.oldestRequestDays == null ? '—' : ag.oldestRequestDays + (ag.oldestRequestDays === 1 ? ' day' : ' days')), seenCell(ag));
     tb.append(tr); }
   async function refresh(subject) { const n = await call('/berdia/api/portal', 'summary'); Object.assign(lists, n.desk.checklists); desk(n); const m = n.members.find(x => x.subject === subject); if (m) open(m, n.desk.checklists[subject]); }
   function open(m, c) {
