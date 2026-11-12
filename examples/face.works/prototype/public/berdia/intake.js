@@ -27,7 +27,7 @@ async function loadChecklist() {
   try {
     const r = await fetch('/berdia/api/portal', { method: 'POST', credentials: 'same-origin', cache: 'no-store', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'checklist' }) });
     if (!r.ok) return; // the checklist is a guide; Tasks still work without it
-    const { checklist, duties } = await r.json(); checklistItems = checklist.items;
+    const { checklist, duties, paused } = await r.json(); checklistItems = checklist.items; $('pause').checked = !!paused;
     $('cl-duty').textContent = (duties.length ? 'Asked of you as: ' + duties.join(', ') + '. ' : '') + checklist.done + ' of ' + checklist.total + ' done.';
     const ol = $('cl-items'); ol.replaceChildren();
     for (const i of checklist.items) {
@@ -48,6 +48,12 @@ function itemOptions() {
   $('item-wrap').hidden = !open.length;
 }
 $('category').addEventListener('change', itemOptions);
+// WP-B7: pause or resume reminder emails for yourself. The server logs it; nobody else is told.
+$('pause').addEventListener('change', async () => { const box = $('pause'), want = box.checked; box.disabled = true;
+  try { const r = await fetch('/berdia/api/portal', { method: 'POST', credentials: 'same-origin', cache: 'no-store', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'pause-reminders', paused: want }) });
+    if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || 'That didn’t save. Please try again.');
+    notice(want ? 'Reminder emails are paused.' : 'Reminder emails are back on.'); }
+  catch (e) { box.checked = !want; notice(e.message, true); } finally { box.disabled = false; } });
 // Return to the page that sent you here: ?next=/berdia/plan/... (family pages on this site only).
 // Kept for this tab for 15 minutes so it survives the round trip through Google sign-in;
 // nav.js finishes the trip when Google lands on Home. Used once, then cleared.
