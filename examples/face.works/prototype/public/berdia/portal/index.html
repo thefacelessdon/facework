@@ -31,24 +31,13 @@
   <p id="signin" class="notice" hidden><span class="fig">You’re not signed in</span>Sign in with Google, or tap the link in your invitation email. <a class="cta" href="/berdia/intake.html">Sign in</a></p>
   <p id="err" class="err" hidden></p>
 
-  <section class="next" aria-labelledby="next-title">
+  <p class="fig" id="home-loading" role="status">Loading your record…</p>
+  <section class="next" id="next" aria-labelledby="next-title" hidden>
     <p class="fig">Your next step</p>
-    <h2 id="next-title">Send your documents</h2>
-    <p>Start in Tasks. Upload what you have; you do not need everything at once.</p>
-    <p id="cta"><a class="cta" href="/berdia/intake.html">Open your tasks</a></p>
-    <div id="me" class="tally" hidden>
-      <h3 class="fig">Your part so far</h3>
-      <dl><div><dt>Profile</dt><dd data-k="profile"></dd></div><div><dt>Documents sent</dt><dd data-k="files"></dd></div><div><dt>Last activity</dt><dd data-k="lastAt"></dd></div></dl>
-      <p class="verdict" data-k="next"></p>
-    </div>
-    <div id="firstrun" class="after" aria-labelledby="fr" hidden>
-      <h3 id="fr" class="fig">After this</h3>
-      <ol class="ledger">
-        <li data-step="upload" hidden><span class="n">1</span><div><p class="t">Send your documents</p></div><span class="s"><span class="chip attention" data-k="s1">Start here</span></span></li>
-        <li data-step="review"><span class="n">2</span><div><p class="t">See what you sent, and read the Plan</p><p class="d">Opens once your first record is in.</p></div><span class="s"><span class="chip open" data-k="s2">Locked</span></span></li>
-        <li data-step="open"><span class="n">3</span><div><p class="t">The trust opens to you</p><p class="d">Work streams, documents and reports appear once your profile and documents are in.</p></div><span class="s"><span class="chip open" data-k="s3">Locked</span></span></li>
-      </ol>
-    </div>
+    <h2 id="next-title">Things to send</h2>
+    <p id="next-line"></p>
+    <p id="next-back" hidden></p>
+    <p id="cta"><a id="cta-link" class="cta" href="/berdia/intake.html">Open Tasks</a></p>
   </section>
 
   <section id="family" class="reading" hidden aria-labelledby="fh">
@@ -127,5 +116,5 @@
 <!-- berdia:colophon -->
 <footer class="colophon"><div><span><b>BERDIA</b>&ensp;Family trust · Instance 01</span><span>Private family records. Please don’t forward your link.</span></div></footer>
 <!-- /berdia:colophon -->
-<script src="/berdia/portal/portal.js" defer></script>
+<script src="/berdia/tasks-core.js" defer></script><script src="/berdia/portal/portal.js" defer></script>
 </body></html>

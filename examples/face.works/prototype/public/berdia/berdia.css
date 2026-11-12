@@ -212,22 +212,9 @@ h2 .chip,h3 .chip{margin-left:.75rem}
 /* ---- Home, signed in --------------------------------------------------------- */
 /* The date portal.js writes is today's date, not a fact about the record. */
 .rr #today{display:none}
-/* Your part lives inside the next-step panel: one place that says what to do and how far
-   you are, instead of a separate section repeating "complete your profile in Tasks". */
-.next .tally{margin-top:2rem;padding-top:1.25rem;border-top:1px solid var(--rr-rule)}
-.next .tally dl{display:grid;grid-template-columns:repeat(3,minmax(0,auto));justify-content:start;gap:.5rem 2.5rem;margin:0}
-.next .tally dt{font-family:var(--rr-font-record);font-size:.8125rem;letter-spacing:.06em;text-transform:uppercase;color:var(--rr-meta)}
-.next .tally dd{margin:.125rem 0 0;font-family:var(--rr-font-structure);font-weight:700;font-size:1.125rem;color:var(--rr-ink)}
-.rr .next .tally .fig{margin-bottom:1rem}
-.next .tally .verdict{margin-top:1rem;padding-top:0;border-top:0;font-size:1.0625rem}
-/* Getting started folded into the next-step panel: the panel is step 1, this lists what follows */
-.next .after{margin-top:2rem;padding-top:1.25rem;border-top:1px solid var(--rr-rule)}
-.rr .next .after .fig{margin-bottom:.5rem}
-.next .after .ledger{border-top:0}
-.next .after .ledger .t{font-size:1.0625rem}
-.next .after .ledger .n{font-size:1.25rem}
-.next .after .ledger .d{font-size:1rem}
-@media(max-width:560px){.next .tally dl{grid-template-columns:1fr 1fr}.next .tally dl>div:last-child{grid-column:1/-1}}
+/* Home: the next step stays hidden until its count is filled (D9); the loading line sits in its place. */
+#next-back{color:var(--rr-exposure-text);font-family:var(--rr-font-structure);font-weight:600}
+.rr:has(#signin:not([hidden])) #home-loading{display:none}
 
 /* ---- Tasks, signed in: the task is the page --------------------------------- */
 /* The welcome pitch is for arrival; once signed in it shrinks so the form starts on screen. */
@@ -259,6 +246,11 @@ h2 .chip,h3 .chip{margin-left:.75rem}
 .task-status.settled{color:var(--rr-settled-text)}
 .task-status.meta{color:var(--rr-meta)}
 .task-got{margin:.5rem 0 0;color:var(--rr-ink);font-size:1.0625rem}
+.task-status.open{display:block;-webkit-line-clamp:unset;overflow:visible}
+.rr button.task-more{min-height:44px;padding:.25rem 0;font-size:1rem}
+.task-progress{display:block;width:100%;height:.375rem;margin:.5rem 0 0;accent-color:var(--rr-ink)}
+.task-msg .task-retry{margin-top:.75rem}
+@media(max-width:640px){.task-msg .task-retry{width:100%;justify-content:center}}
 .tasks .s .cta{min-height:48px;padding:.625rem 1.25rem}
 .task-panel{grid-column:1/-1;padding:var(--rr-sp-4,1rem) 0 .25rem;border-top:1px solid var(--rr-rule)}
 .task-panel .fields{margin:1.25rem 0}

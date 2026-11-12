@@ -3,6 +3,7 @@
 const $ = id => document.getElementById(id), T = window.BerdiaTasks;
 let sessionTimer, session = null, state = { items: [], reviewer: null, paused: false }, openRow = null, seq = 0;
 const sent = new Set(); // items sent on this page load: they show "Got it" and "Add another page" until the page reloads
+const retry = new Map(); // item id -> { uploads: files that didn't go, tries, sentOk, total, code } (T2, DX-4)
 function notice(message, error = false) { $('notice').textContent = message; $('notice').className = error ? 'error' : ''; if (error) $('notice').focus(); }
 const announce = (text) => { $('announce').textContent = ''; setTimeout(() => { $('announce').textContent = text; }, 50); };
 // Every API error carries a stable code (T14); the page keys on it, never on the message.
@@ -25,23 +26,34 @@ async function enter() {
   await load();
 }
 // Reads the checklist. Each request is numbered; an older answer arriving late is ignored.
+// Returns true when the list was read and drawn. After 10 s a first load says so and offers Retry (DR-6).
 async function load() {
-  const mine = ++seq;
+  const mine = ++seq, first = $('tasks').hidden;
+  const slow = first ? setTimeout(() => loadingProblem('Still loading. Check your signal.'), 10000) : null;
   try {
     const r = await portal('checklist');
-    if (mine !== seq) return;
+    if (mine !== seq) return false;
     state = { items: r.checklist.items, reviewer: r.reviewer || null, paused: !!r.paused };
-    render();
+    try { render(); } catch (err) { console.error(err); loadingProblem('Your list didn’t load. Refresh the page to try again.'); return false; }
+    return true;
   } catch (e) {
-    if (mine !== seq) return;
-    if (e.status === 401) { lock(); notice('Please sign in again.', true); return; }
-    $('loading').textContent = 'Your list didn’t load. Check your signal, then refresh the page.';
-  }
+    if (mine !== seq) return false;
+    if (e.status === 401) { lock(); notice('Please sign in again.', true); return false; }
+    if (first) loadingProblem('Your list didn’t load. Check your signal.');
+    return false;
+  } finally { clearTimeout(slow); }
+}
+function loadingProblem(text) {
+  const l = $('loading'); if (!$('tasks').hidden) return;
+  const b = Object.assign(document.createElement('button'), { type: 'button', className: 'link', textContent: 'Retry' });
+  b.addEventListener('click', () => { l.textContent = 'Loading your record…'; load(); });
+  l.replaceChildren(text + ' ', b);
 }
 const reviewerName = () => state.reviewer?.name || 'Stedmon';
 const self = () => session?.role === 'reviewer';
 
 function render() {
+  openRow = null; // rows are rebuilt; any open panel closes
   const g = T.groups(state.items), L = T.labels(reviewerName(), self());
   $('heading').textContent = T.heading(session.name, g);
   const lede = $('lede'); lede.hidden = false;
@@ -56,7 +68,10 @@ function render() {
   $('remind').checked = !state.paused;
   help();
   $('loading').hidden = true; $('tasks').hidden = false;
+  clampCheck();
 }
+// More only where the reason is actually cut off at this width.
+function clampCheck() { for (const b of document.querySelectorAll('.task-more')) { const st = $(b.getAttribute('aria-controls')); if (st && !st.classList.contains('open') && st.scrollHeight <= st.clientHeight + 1) b.remove(); } }
 // "Need a hand?" with the reviewer's phone as call and text links, signed in only (d7).
 function help() {
   const p = $('help'), tel = T.telHref(state.reviewer?.phone), sms = T.telHref(state.reviewer?.phone, 'sms'), who = reviewerName();
@@ -73,9 +88,16 @@ function row(item, actionable) {
   t.className = 't'; t.textContent = item.title;
   d.className = 'd'; d.textContent = item.why;
   const [text, tone] = T.statusLine(item, reviewerName(), self());
-  st.className = 'task-status ' + tone; st.textContent = text;
+  st.className = 'task-status ' + tone; st.textContent = text; st.id = 'status-' + item.id;
   main.append(t, d, st);
-  if (sent.has(item.id) && item.status === 'received') { const got = document.createElement('p'); got.className = 'task-got'; got.setAttribute('role', 'status'); got.textContent = 'Got it. ' + reviewerName() + ' will take a look.'; main.append(got); }
+  // Long return reasons show three lines, with More to read the rest (DR-15).
+  if (item.status === 'returned' && text.length > 60) { // kept only if it really overflows three lines (see clampCheck)
+    const more = Object.assign(document.createElement('button'), { type: 'button', className: 'link task-more', textContent: 'More' });
+    more.setAttribute('aria-expanded', 'false'); more.setAttribute('aria-controls', st.id);
+    more.addEventListener('click', () => { const open = st.classList.toggle('open'); more.setAttribute('aria-expanded', String(open)); more.textContent = open ? 'Less' : 'More'; });
+    main.append(more);
+  }
+  if (sent.has(item.id) && item.status === 'received') { const got = document.createElement('p'); got.className = 'task-got'; got.setAttribute('role', 'status'); got.textContent = T.rowText('sent', { reviewer: reviewerName() }); main.append(got); }
   li.append(main);
   if (actionable || (item.status === 'received' && item.id !== 'profile')) {
     const side = document.createElement('div'), b = document.createElement('button'), panelId = 'panel-' + item.id;
@@ -116,6 +138,7 @@ function sendPanel(li, item) {
   take.addEventListener('click', () => photo.click()); choose.addEventListener('click', () => file.click()); cancel.addEventListener('click', () => close(li));
   for (const input of [photo, file]) input.addEventListener('change', () => { const files = [...input.files]; input.value = ''; if (files.length) send(li, item, files, msg, [take, choose, cancel]); });
   actions.append(take, choose, cancel);
+  const r = retry.get(item.id); if (r) showRetry(li, item, msg, [take, choose, cancel]);
   return [actions, consent, msg, photo, file];
 }
 function profilePanel(li) {
@@ -129,25 +152,52 @@ $('profile-form').addEventListener('submit', async e => {
   catch (err) { notice(err.code === 'session_expired' ? T.sendText('session_expired') : err.message, true); } finally { b.disabled = false; }
 });
 
-// Send each chosen file as its own upload, tagged to the item, one after another (DR-3).
-async function send(li, item, files, msg, buttons) {
+// Send each chosen file as its own upload, tagged to the item, one after another (DR-3). Files that don't go
+// stay with the row; Try again sends only those (DX-4).
+async function send(li, item, files, msg, buttons, again = null) {
   li.dataset.busy = '1'; buttons.forEach(b => { b.disabled = true; });
-  let ok = 0, failed = [], code = '';
-  for (const [n, u] of T.uploads(item, files).entries()) {
+  const todo = again ? again.uploads : T.uploads(item, files), total = again ? again.total : todo.length;
+  let ok = again ? again.sentOk : 0, failed = [], code = '';
+  const bar = Object.assign(document.createElement('progress'), { className: 'task-progress' });
+  for (const [n, u] of todo.entries()) {
     const pre = T.precheck(u.file); if (pre) { failed.push(u); code = code || pre; continue; }
-    msg.className = 'task-msg'; msg.textContent = 'Sending ' + u.file.name + (files.length > 1 ? ' (' + (n + 1) + ' of ' + files.length + ')' : '') + '…';
+    msg.className = 'task-msg'; msg.textContent = T.rowText('sending', { name: u.file.name, k: n + 1 + (total - todo.length), n: total });
+    bar.removeAttribute('value'); msg.append(bar); // indeterminate under 2.5 MB; filled in part by part on the parts path (DR-7)
     announce('Sending ' + item.title + '…');
-    try { await upload(u, (part, total) => { msg.textContent = 'Sending ' + u.file.name + ' · part ' + part + ' of ' + total + '…'; }); ok++; }
-    catch (e) { failed.push(u); code = code || e.code || 'failed'; if (e.code === 'session_expired' || e.code === 'invite_inactive') break; }
+    try { await upload(u, (part, parts) => { bar.max = parts; bar.value = part - 1; }); ok++; }
+    catch (e) { failed.push(u); code = code || e.code || 'failed'; if (e.code === 'session_expired' || e.code === 'invite_inactive') { failed.push(...todo.slice(n + 1)); break; } }
   }
   delete li.dataset.busy; buttons.forEach(b => { b.disabled = false; });
-  if (ok) { sent.add(item.id); api('upload-done').catch(() => {}); }
-  if (!failed.length) { announce(item.title + ' sent. ' + reviewerName() + ' will take a look.'); openRow = null; await load(); focusNext(); return; }
-  msg.className = 'task-msg error';
-  msg.textContent = (ok ? T.plural(ok, '1 sent. ', '{n} sent. ') : '') + T.sendText(code);
-  if (code === 'session_expired' || code === 'invite_inactive') { const a = Object.assign(document.createElement('a'), { href: '/berdia/intake.html', textContent: ' Sign in' }); msg.append(a); }
+  if (ok > (again ? again.sentOk : 0)) { sent.add(item.id); api('upload-done').catch(() => {}); }
+  if (!failed.length) {
+    retry.delete(item.id); announce(item.title + ' sent. ' + reviewerName() + ' will take a look.'); openRow = null;
+    if (await load()) return focusNext();
+    msg.className = 'task-msg'; msg.textContent = T.rowText('sentStale'); return; // sent, but the list didn't refresh
+  }
+  const tries = (again ? again.tries : 0) + 1;
+  retry.set(item.id, { uploads: failed, tries, sentOk: ok, total, code });
+  showRetry(li, item, msg, buttons);
   announce(item.title + ' didn’t send. Try again.');
-  if (ok) await load();
+}
+// The failure line for a row, with Try again when trying again can help.
+function showRetry(li, item, msg, buttons) {
+  const r = retry.get(item.id), ctx = { k: r.sentOk, n: r.total, m: r.uploads.length, code: r.code, tries: r.tries, reviewer: reviewerName() };
+  msg.className = 'task-msg error';
+  msg.textContent = r.sentOk && r.total > 1 ? T.rowText('partial', ctx) : T.rowText('failed', ctx);
+  if (r.code === 'session_expired' || r.code === 'invite_inactive') { msg.append(' ', Object.assign(document.createElement('a'), { href: '/berdia/intake.html', textContent: 'Sign in' })); return; }
+  if (!T.retryable(r.code)) { retry.delete(item.id); return; } // nothing to resend: pick another file instead
+  const again = Object.assign(document.createElement('button'), { type: 'button', className: 'quiet task-retry', textContent: 'Try again' });
+  again.addEventListener('click', async () => {
+    // It may have arrived after all: re-read the list first. If nothing from this batch had gone up and the item
+    // no longer needs the person, the "failed" send actually landed. After a partial send, always resend the rest.
+    again.disabled = true; const r0 = retry.get(item.id);
+    if (await load() && r0 && r0.sentOk === 0) { const now = state.items.find(i => i.id === item.id); if (now && !now.needsYou) { retry.delete(item.id); sent.add(item.id); announce(item.title + ' is with ' + reviewerName() + '.'); return focusNext(); } }
+    const row = document.querySelector('[data-item="' + item.id + '"]') || li, panel = row.querySelector('.task-panel');
+    if (panel && panel.hidden) row.querySelector('[aria-controls]').click();
+    const m = row.querySelector('.task-msg') || msg, bs = [...row.querySelectorAll('.task-actions button')];
+    send(row, item, [], m, bs, retry.get(item.id));
+  });
+  msg.append(' ', again);
 }
 // After a send moves a row out of Needs you, focus the next Send, or the heading when nothing is left.
 function focusNext() { const next = $('list-needs').querySelector('button[aria-controls]'); if (next) next.focus(); else { $('heading').tabIndex = -1; $('heading').focus(); } }

@@ -69,6 +69,20 @@
     upload_limit: 'You’ve sent a lot of files. Call or text Stedmon to send more.',
   };
   const sendText = (code) => SEND_TEXT[code] || SEND_TEXT.failed;
+  // T2 (Q1): the one state map for a row's message line. ctx: {name, k, n, m, code, tries, reviewer}.
+  // Every message a row can show comes from here, keyed on state (and, for failures, the server's code).
+  const ROW = {
+    open: () => '',
+    sending: (c) => 'Sending ' + (c.name || 'your file') + (c.n > 1 ? ' (' + c.k + ' of ' + c.n + ')' : '') + '…',
+    failed: (c) => sendText(c.code) + (c.tries >= 2 && !/Stedmon/.test(sendText(c.code)) ? ' Or call or text ' + (c.reviewer || 'Stedmon') + '.' : ''),
+    // The row's Try again button follows these lines, so they don't say it themselves.
+    partial: (c) => c.k + ' of ' + c.n + ' sent. ' + plural(c.m, '1 didn’t send.', '{n} didn’t send.') + (c.tries >= 2 ? ' Or call or text ' + (c.reviewer || 'Stedmon') + '.' : ''),
+    sent: (c) => 'Got it. ' + (c.reviewer || 'Stedmon') + ' will take a look.',
+    sentStale: () => 'Sent. Refresh to see it.',
+  };
+  const rowText = (state, ctx = {}) => (ROW[state] || ROW.failed)(ctx);
+  // A failure the person can fix by trying again (vs. one where trying again won't help).
+  const retryable = (code) => !['file_too_large', 'file_type', 'invalid_upload', 'heic', 'empty', 'upload_limit', 'session_expired', 'invite_inactive'].includes(code);
   // Checks that need no server: a HEIC photo, an empty file, one over the limit.
   function precheck(file) {
     if (!file || file.size === 0) return 'empty';
@@ -79,6 +93,6 @@
   }
   const telHref = (phone, scheme = 'tel') => { const p = String(phone || '').replace(/[^+0-9]/g, ''); return p ? scheme + ':' + p : ''; };
 
-  const api = { groups, finished, heading, finishLines, labels, statusLine, uploads, sendText, precheck, telHref, plural, firstName };
+  const api = { groups, finished, heading, finishLines, labels, statusLine, uploads, sendText, rowText, retryable, precheck, telHref, plural, firstName };
   if (typeof module === 'object' && module.exports) module.exports = api; else root.BerdiaTasks = api;
 })(typeof window !== 'undefined' ? window : globalThis);
