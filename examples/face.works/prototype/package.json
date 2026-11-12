@@ -9,8 +9,7 @@
     "lint": "eslint",
     "test": "vitest run",
     "sync-canon": "node scripts/sync-canon.mjs",
-    "og": "node scripts/build-og.mjs",
-    "berdia-chrome": "node scripts/berdia-chrome.mjs"
+    "og": "node scripts/build-og.mjs"
   },
   "dependencies": {
     "@fontsource-variable/literata": "^5.3.0",

@@ -25,6 +25,16 @@ describe("berdia family-only gate", () => {
     );
   });
 
+  it("covers the Documents pages, so sign-in returns there", async () => {
+    expect(config.matcher).toEqual(
+      expect.arrayContaining(["/berdia/portal/documents.html", "/berdia/documents.html"]),
+    );
+    vi.stubGlobal("fetch", vi.fn());
+    const res = await proxy(req("/berdia/portal/documents.html"));
+    expect(isSignIn(res)).toBe(true);
+    expect(new URL(res.headers.get("location")!).searchParams.get("next")).toBe("/berdia/portal/documents.html");
+  });
+
   it("keeps the family pages out of this public repo", () => {
     for (const p of ["plan", "portal/trust.html", "portal/ops"])
       expect(existsSync(new URL(`../public/berdia/${p}`, import.meta.url))).toBe(false);
