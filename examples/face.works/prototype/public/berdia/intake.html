@@ -44,6 +44,13 @@
 
   <div id="signed-in" hidden>
     <p class="note">Your session lasts up to 30 minutes. Unsent fields stay only on this page.</p>
+    <section id="checklist" class="reading" hidden aria-labelledby="clt">
+      <p class="fig">Your checklist</p>
+      <h2 id="clt">What we’re asking you for.</h2>
+      <p class="hint" id="cl-duty"></p>
+      <ol id="cl-items" class="ledger ledger--plain"></ol>
+      <p class="hint">Send what you have when you get a chance. There are no deadlines unless the attorney sets one. Only you and the trustee see this list.</p>
+    </section>
     <nav class="tabs" aria-label="Your tasks"><button data-view="information" aria-pressed="true"><span>1</span>Your information</button><button data-view="documents" aria-pressed="false"><span>2</span>Send documents</button><button data-view="receipts" aria-pressed="false"><span>3</span>Received records</button></nav>
 
     <section id="information" class="reading view" aria-labelledby="t1">
@@ -69,6 +76,7 @@
       <h2 id="t2">Send what you have.</h2>
       <p>A clear scan or photo is fine. Keep your originals. Large files are fine; they are sent in parts.</p>
       <form id="upload-form"><label for="category">What kind of record is it?</label><select id="category" required><option value="">Choose a category</option><option value="estate">Estate documents / power of attorney</option><option value="land">Land / deeds / property taxes</option><option value="solar">Solar lease / payments / correspondence</option><option value="restaurant">Restaurant / tax / banking / payroll</option><option value="insurance">Life insurance</option><option value="coins">Coin inventory / appraisal</option><option value="other">Other trust records</option></select>
+        <div id="item-wrap" hidden><label for="item">Which checklist item is this for? (optional)</label><select id="item"><option value="">Not sure, or none</option></select></div>
         <div class="upload-area"><label for="files" id="add-label">Choose documents</label><p class="hint">PDF, JPG or PNG · phone photos are resized automatically · up to 25 MB each</p><input id="files" type="file" accept="application/pdf,image/jpeg,image/png" multiple aria-describedby="file-help"><p id="file-help" class="hint">Add one at a time or several at once. Each one joins the list below. Up to 10 per send.</p></div>
         <ul id="file-list" class="file-list" aria-live="polite"></ul>
         <label class="consent"><input id="upload-consent" type="checkbox" required><span>I’m authorized to share these records and understand they will be reviewed to coordinate trust preparation.</span></label>
