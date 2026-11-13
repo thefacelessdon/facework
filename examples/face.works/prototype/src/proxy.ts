@@ -67,7 +67,7 @@ export async function proxy(request: NextRequest) {
   });
 }
 
-// Documents pages are listed too: berdia-trust gates them as well, but its redirect drops ?next=,
+// Documents and Coins pages are listed too: berdia-trust gates them as well, but its redirect drops ?next=,
 // so a Documents link from email would strand the visitor on Tasks after sign-in.
 export const config = {
   matcher: [
@@ -76,5 +76,6 @@ export const config = {
     "/berdia/portal/ops/:path*",
     "/berdia/portal/documents.html",
     "/berdia/documents.html",
+    "/berdia/portal/coins.html",
   ],
 };
