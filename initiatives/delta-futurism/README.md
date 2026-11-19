@@ -25,7 +25,7 @@ Family-private notes (the leave-behind with contact details and call notes, the 
 
 ## The proposal, section by section
 
-v3 (Nov 20): cover and a one-line status (a discussion draft; one meeting and two introductions) · 01 Follow the value ($1.6B in, about $4.3B paid back over 30 years, who captures it, and a reasonable local goal; county context) · 02 Two paths, across everything the build buys · 03 How it works: one operating system, six steps · 04 Five workstreams; **B Food and Hospitality is built out** (the kitchen walk-through and the food model), and A, C, D, E carry the questions we'd answer with partners · 05 Roles: what each partner already does, what we take off their plate, what they never give up, plus a governance strip · 06 Measured by what remains, with precedent figures · 07 Keyed to the build · 08 Three asks · Who's proposing this (the Berdia family).
+v3 (Nov 20): cover and a one-line status (a discussion draft; one meeting and two introductions) · 01 Follow the value ($1.6B in, about $4.3B paid back over 30 years, who captures it, and a reasonable local goal; county context) · 02 Two paths, across everything the build buys · 03 How it works: one operating system, six steps · 04 Five workstreams; **B Food and Hospitality is built out** (the kitchen walk-through and the food model), and A, C, D, E carry the questions we'd answer with partners · 05 Roles: what each partner already does, what we take off their plate, what they never give up, plus a governance strip · 06 Measured by what remains, with precedent figures · 07 Keyed to the build · 08 Three asks · Who's proposing this (the Monson family).
 
 ## Settled decisions (don't relitigate without new evidence)
 
@@ -35,7 +35,7 @@ v3 (Nov 20): cover and a one-line status (a discussion draft; one meeting and tw
 - **Story v3 (Nov 20):** the whole Delta, Arkansas and Mississippi alternating; Pine Bluff is a thread, not the frame. Places and people are seeds for future story pages, and the lists are built to grow. Imagined images carry the tag and no apology note. Phases follow the investment (plan → build → run → renew), not one lease.
 - **Proposal v3 (Nov 20):** half-baked on purpose. One workstream (B) built out; the rest worked out with partners. Copy cut 15–20% in favour of visuals.
 - **Follow the value (Nov 20):** the 30-year value split is allowed, labelled as our illustration, built only from public filings and published benchmarks. No family's acreage, lease terms or payments, ever.
-- **Who's proposing (Nov 20):** told as the Berdia family's story, with Renita Harper's 30 years at Entergy Arkansas named (Stedmon approved names on the public page).
+- **Who's proposing (Nov 20):** told as the Monson family's story, with Reneta Harper's 30 years at Entergy Arkansas named (Stedmon approved names on the public page).
 - **Name (Nov 20, working):** the initiative is **Built to Stay**; Arkansas Cypress stays as the project's name.
 - **Imagined images carry an "Imagined" tag.** Real photos replace them slot by slot, labelled "Already here" with a real caption (Nov 18).
 - **The teacher frame uses `f3-library`**, and **the Gurley portrait** is credited to the Tulsa Historical Society (Nov 19).
@@ -55,7 +55,6 @@ v3 (Nov 20): cover and a one-line status (a discussion draft; one meeting and tw
 
 ## Open before this goes to Entergy
 
-- Confirm the family name as written on the proposal ("the Berdia family").
 - Pine Bluff's Chitlin' Circuit venues (Jack Rabbit Club, Rainbow Club) need a newspaper-archive pass before they go on the page.
 - Pull Entergy witness testimony on depreciation life and cost of debt (Docket 25-054-U) to tighten the value split.
 
