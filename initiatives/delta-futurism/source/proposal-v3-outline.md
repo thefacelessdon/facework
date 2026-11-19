@@ -49,3 +49,18 @@ Lodging is added to B explicitly. Operations and maintenance is added to A. No s
 - **Precedent carries real numbers.** For example, Meta Hyperion's $875M in contracts with 160+ Louisiana firms; Big River Steel's commitment of $200M of a roughly $1B build to Arkansas firms; the 41% local hires at a Pennsylvania solar site; Google's $25M Energy Impact Fund; Steel River's $8M in commitments.
 - **"If things go differently" is cut from the public page** and kept in the README as notes for us.
 - **Copy budget:** cut words 15–20% across the proposal (Mike's rule) and show more visually.
+
+## Pass 2 (Stedmon, Nov 20, evening): what to change
+
+- **Reframe 01.** Not "where does the value go" but "how does this investment build community capability". Keep the Entergy-filed value split as evidence inside that story.
+- **Two paths:** a better layout with motion, not two lists side by side.
+- **The operating system and the workstreams become one experience.** Show the system running across the five workstreams, borrowing from how the CACHE proposal demos the operating system, instead of recycled images.
+- **Workstream B, built out properly. The food model stays realistic and in context:**
+  - Workers are anchored to Entergy's 700–800.
+  - Meals per worker and the share of workers buying on site are realistic inputs.
+  - Peak days are bounded by the build schedule; price is bounded.
+  - The scenarios explain themselves.
+  - Sliders can't produce absurd totals (1,600 meals × 400 days was possible before).
+- **Roles:** an intuitive layout of who does what, not a grid.
+- **Measures and precedent:** no tables.
+- **The same scroll and reveal treatment as the story page.**

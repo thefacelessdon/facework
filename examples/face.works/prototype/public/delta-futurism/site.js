@@ -89,15 +89,19 @@
 
   /* ---------- The size of it (proposal): a small model. Every input is an assumption, labelled on the page ---------- */
   document.querySelectorAll('[data-model]').forEach(m=>{
+    /* Food model (pass 2): bounded to the Arkansas Cypress build. Every input is an assumption to confirm with the contractor. */
     const inp=n=>m.querySelector('[name='+n+']'), v=n=>Number(inp(n).value);
     const fmt=n=>n>=1e6?'$'+(n/1e6).toFixed(1)+'M':'$'+Math.round(n/1e3)+'K';
+    const show={workers:x=>x.toLocaleString('en-US'),eat:x=>x+'%',mpd:x=>x===1?'1 meal':x+' meals',months:x=>x+' months',rate:x=>'$'+x,share:x=>x+'%'};
     const run=()=>{
-      const meals=v('meals'), days=v('days'), rate=v('rate'), share=v('share');
-      m.querySelectorAll('output[data-for]').forEach(o=>{const k=o.dataset.for; o.textContent=k==='rate'?'$'+v(k):k==='share'?v(k)+'%':v(k).toLocaleString('en-US');});
-      const total=meals*days*rate;
+      m.querySelectorAll('output[data-for]').forEach(o=>{const k=o.dataset.for; o.textContent=show[k]?show[k](v(k)):v(k);});
+      const perDay=Math.round(v('workers')*v('eat')/100*v('mpd'));
+      const days=Math.round(v('months')*21.7);
+      const total=perDay*days*v('rate');
+      m.querySelector('[data-out=perday]').textContent=perDay.toLocaleString('en-US');
       m.querySelector('[data-out=total]').textContent=fmt(total);
-      m.querySelector('[data-out=local]').textContent=fmt(total*share/100);
-      m.querySelector('[data-out=math]').textContent=meals.toLocaleString('en-US')+' meals a day × '+days+' days × $'+rate;
+      m.querySelector('[data-out=local]').textContent=fmt(total*v('share')/100);
+      m.querySelector('[data-out=math]').textContent=perDay.toLocaleString('en-US')+' meals a day × about '+days+' working days × $'+v('rate');
     };
     const presets=[...m.querySelectorAll('[data-set]')];
     presets.forEach(b=>b.addEventListener('click',()=>{
@@ -108,6 +112,25 @@
     run();
   });
 
+  /* ---------- System demo (pass 2): pick a workstream, step through the six stages ---------- */
+  document.querySelectorAll('[data-demo]').forEach(d=>{
+    const data=JSON.parse(d.querySelector('script[type="application/json"]').textContent);
+    const wsB=[...d.querySelectorAll('[data-ws]')], stB=[...d.querySelectorAll('[data-st]')];
+    const panel=d.querySelector('.demo-panel'); let ws=data.default||'B', st=0;
+    const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    const draw=()=>{
+      const w=data.ws[ws], x=w.steps[st];
+      wsB.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.ws===ws)));
+      stB.forEach((b,i)=>{b.setAttribute('aria-selected',String(i===st)); b.tabIndex=i===st?0:-1;});
+      panel.innerHTML='<div class="demo-art"><div class="rh"><span>'+esc(w.name)+'</span><span>'+esc(data.stepNames[st])+'</span></div><p class="demo-h">'+esc(x.h)+'</p><dl>'+x.f.map(r=>'<dt>'+esc(r[0])+'</dt><dd>'+esc(r[1])+'</dd>').join('')+'</dl></div><div class="demo-side"><span class="lab">What the partnership does</span><p>'+esc(x.we)+'</p><span class="lab">Who decides</span><p>'+esc(x.who)+'</p></div>';
+      panel.classList.remove('flip'); void panel.offsetWidth; panel.classList.add('flip');
+    };
+    wsB.forEach(b=>b.addEventListener('click',()=>{ws=b.dataset.ws; draw();}));
+    stB.forEach((b,i)=>{b.addEventListener('click',()=>{st=i; draw();});
+      b.addEventListener('keydown',e=>{const n=e.key==='ArrowRight'?i+1:e.key==='ArrowLeft'?i-1:null; if(n===null) return; e.preventDefault(); st=(n+stB.length)%stB.length; draw(); stB[st].focus();});});
+    draw();
+  });
+
   develop();
 
   /* ---------- Filters: show ledger rows by state, update the headline total ---------- */
@@ -116,8 +139,22 @@
     const total=g.closest('section')&&g.closest('section').querySelector('[data-total]');
     g.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
       g.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));
-      t.querySelectorAll('tbody tr').forEach(r=>{r.hidden=!(b.dataset.f==='all'||r.dataset.s===b.dataset.f);});
+      t.querySelectorAll('[data-s]').forEach(r=>{r.hidden=!(b.dataset.f==='all'||r.dataset.s===b.dataset.f);}); t.scrollLeft=0;
       if(total&&b.dataset.t) total.textContent=b.dataset.t;
     }));
   });
+
+  /* ---------- Reveal on scroll (pass 2): blocks ease in, their children and bars in sequence ---------- */
+  if(!reduce && 'IntersectionObserver' in window){
+    const blocks='.part,.measure,.head,.sumup,.chart,.flow,.swipe-wrap,.ledger,.paths,.demo,.track,.asks,.family,.weekend,.close-c,.statement,.p-status,.next-step,.ask-contact,.model,.example,.put,figure.contact,.split > figure,.fut,.layers';
+    const groups='.facts,.capture,.caps,.phases,.steps,.stayed,.gov,.idx,.pcards,.fork,.ladder,.roles-x,.meas-c';
+    const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}}),{rootMargin:'0px 0px -10% 0px',threshold:.05});
+    document.querySelectorAll(blocks+','+groups).forEach(el=>{
+      if(el.parentElement && el.parentElement.closest('.rv,.rv-kids')) return;
+      if(el.matches(groups)){el.classList.add('rv-kids');[...el.children].forEach((c,i)=>c.style.setProperty('--i',Math.min(i,8)));}
+      else el.classList.add('rv');
+      el.querySelectorAll('.hbar,.cols > div,.dbars > div').forEach((b,i)=>b.style.setProperty('--b',i));
+      io.observe(el);
+    });
+  }
 })();
