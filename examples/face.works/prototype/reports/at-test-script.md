@@ -112,6 +112,21 @@ canvas-over-text and dynamic content.
 - **NVDA:** browse-mode `D`/`H`/`F`/`K` to list landmarks/headings/forms/links; confirm the filter live region actually speaks.
 - **Android TalkBack:** linear swipe through home + one content page + the Field; verify the menu button state.
 
+## F. Delta Futurism — `/delta-futurism/{index,proposal,sources}.html` (unlisted; not in the sitemap, so `a11y-audit.sh` can't reach it)
+
+**Automated (Nov 19, 2026, axe-core 4.11.1, WCAG 2.0/2.1/2.2 A+AA + best-practice, run in-page on `next start` at 1280 and 375): 0 violations on all three pages, all four tools tabs.** Text contrast measured by hand (axe left swipe cards and highlight-backed text as "needs review"): lowest pair is spot on paper-2 at 4.77:1; every text pair is ≥4.5:1. Re-run: copy `node_modules/axe-core/axe.min.js` into `public/delta-futurism/` temporarily, load it in the page, `axe.run()`, then delete the copy.
+
+Manual rows (still need a human on real AT):
+
+| # | Check | Pass when |
+|---|---|---|
+| F1 | Swipe rows (5 on the story, 1 on the proposal) | Tab lands on each row; SR announces "<section>: <label> (scrolls sideways), region"; ←/→ scroll it; focus ring visible |
+| F2 | Swipe arrow buttons (desktop) | Announced "Previous"/"Next"; disabled at the ends |
+| F3 | Kinds-of-work picker (story, The Work Ahead) | Each role is a toggle button with pressed state; the result text updates in a live region; the proposal link names its workstream |
+| F4 | Tools window (proposal §06) | Tablist "Working tools"; ←/→/Home/End move between tabs and switch panels; each table is a focusable "… table (scrolls sideways)" region on phones |
+| F5 | Imagined images | Alt text begins "Imagined:"; the visible "Imagined" tag is decorative text inside the image box |
+| F6 | Reduced motion | With reduce on, latent images show full colour immediately; swipe arrows jump instead of smooth-scroll |
+
 ## Recording template
 
 ```

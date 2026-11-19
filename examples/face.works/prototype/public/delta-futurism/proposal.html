@@ -81,7 +81,7 @@
     </div>
     <div class="swipe-wrap">
       <div class="swipe-bar"><span class="lab">A–E</span><span class="swipe-nav"><button type="button" data-dir="-1" aria-label="Previous">←</button><button type="button" data-dir="1" aria-label="Next">→</button></span></div>
-      <div class="swipe ws-row">
+      <div class="swipe ws-row" data-label="Five Workstreams, Starting With What the Build Needs: A–E">
         <article class="ws card" id="ws-a"><figure class="plate latent"><span class="dev"><span class="im-tag">Imagined</span><img src="img/f-work.jpg" alt="Imagined: apprentices in hard hats wiring battery racks with their instructor inside an old cotton gin" loading="lazy"></span></figure>
           <div class="top"><span class="L">A</span><h3>Energy Workforce</h3></div>
           <dl><dt>During the build</dt><dd>A construction-to-career path into solar, electrical, battery storage, equipment and logistics: introductory training, safety credentials, paid placements, then registered apprenticeships where they exist.</dd>
@@ -164,31 +164,31 @@
       <p class="lede dim">A partnership is only as good as its follow-through. These are the working tools: one shared place where every business, trainee and opportunity is tracked from first contact to the record.</p>
     </div>
     <div class="win" data-win>
-      <div class="win-bar" role="tablist">
-        <button type="button" role="tab" aria-selected="true" data-tab="t1">Vendor readiness</button>
-        <button type="button" role="tab" aria-selected="false" data-tab="t2">Open opportunities</button>
-        <button type="button" role="tab" aria-selected="false" data-tab="t3">Workforce pipeline</button>
-        <button type="button" role="tab" aria-selected="false" data-tab="t4">Outcomes</button>
+      <div class="win-bar" role="tablist" aria-label="Working tools">
+        <button type="button" role="tab" id="tab-t1" aria-controls="panel-t1" aria-selected="true" tabindex="0" data-tab="t1">Vendor readiness</button>
+        <button type="button" role="tab" id="tab-t2" aria-controls="panel-t2" aria-selected="false" tabindex="-1" data-tab="t2">Open opportunities</button>
+        <button type="button" role="tab" id="tab-t3" aria-controls="panel-t3" aria-selected="false" tabindex="-1" data-tab="t3">Workforce pipeline</button>
+        <button type="button" role="tab" id="tab-t4" aria-controls="panel-t4" aria-selected="false" tabindex="-1" data-tab="t4">Outcomes</button>
       </div>
-      <div class="win-body" data-panel="t1"><div class="scroll"><table>
+      <div class="win-body" role="tabpanel" id="panel-t1" aria-labelledby="tab-t1" data-panel="t1"><div class="scroll"><table>
         <tr><th>Business</th><th>Category</th><th>Insurance</th><th>Safety prequal</th><th>Gap</th><th>Status</th></tr>
         <tr><td>Southside Catering</td><td>Meals</td><td><span class="pill ok">Meets</span></td><td><span class="pill wait">In review</span></td><td>Food-safety cert for second cook</td><td>Bidding</td></tr>
         <tr><td>Pastoria Hauling</td><td>Hauling</td><td><span class="pill gap">Below minimum</span></td><td><span class="pill ok">Done</span></td><td>Raise auto liability limit</td><td>Closing gap</td></tr>
         <tr><td>Bayou Fence &amp; Gate</td><td>Site services</td><td><span class="pill ok">Meets</span></td><td><span class="pill ok">Done</span></td><td>None</td><td>Ready</td></tr>
       </table></div><p class="win-note">Each business’s requirements, gaps and next step, in one place.</p></div>
-      <div class="win-body" data-panel="t2" hidden><div class="scroll"><table>
+      <div class="win-body" role="tabpanel" id="panel-t2" aria-labelledby="tab-t2" data-panel="t2" hidden><div class="scroll"><table>
         <tr><th>Opportunity</th><th>Workstream</th><th>Opens</th><th>Size to confirm</th></tr>
         <tr><td>Crew meals, civil phase</td><td>B</td><td>Feb 2027</td><td>Crews by shift, meal policy</td></tr>
         <tr><td>Aggregate hauling</td><td>C</td><td>Feb 2027</td><td>Loads per week, haul distance</td></tr>
         <tr><td>Electrical helpers, battery yard</td><td>A</td><td>2027</td><td>Placements the contractor commits</td></tr>
       </table></div><p class="win-note">What the build is buying, and when, as the contractor shares it.</p></div>
-      <div class="win-body" data-panel="t3" hidden><div class="scroll"><table>
+      <div class="win-body" role="tabpanel" id="panel-t3" aria-labelledby="tab-t3" data-panel="t3" hidden><div class="scroll"><table>
         <tr><th>Stage</th><th>People</th><th>Next step</th></tr>
         <tr><td>Interested</td><td>42</td><td>Information night at UAPB</td></tr>
         <tr><td>In training</td><td>15</td><td>Safety credential, solar basics</td></tr>
         <tr><td>Placed with contractor</td><td>8</td><td>Track to month 12</td></tr>
       </table></div><p class="win-note">From first interest to a job that lasts past the build.</p></div>
-      <div class="win-body" data-panel="t4" hidden><div class="scroll"><table>
+      <div class="win-body" role="tabpanel" id="panel-t4" aria-labelledby="tab-t4" data-panel="t4" hidden><div class="scroll"><table>
         <tr><th>Measure</th><th>This quarter</th><th>Since start</th></tr>
         <tr><td>Local firms prequalified</td><td>3</td><td>7</td></tr>
         <tr><td>Contracts won by local firms</td><td>2</td><td>4</td></tr>

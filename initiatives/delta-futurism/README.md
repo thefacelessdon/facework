@@ -35,6 +35,7 @@ Family-private notes (the leave-behind with contact details and call notes, the 
 - **The teacher frame uses `f3-library`**, and **the Gurley portrait** is credited to the Tulsa Historical Society (Nov 19).
 - **Rights:** the current present-day photos are used as-is for link sharing (Nov 19). `sources.html` lists each one's status.
 - **Design grammar (from CACHE):** swipe rows, not stacks, for any set of three or more images; no captions or credits under images (they live in `sources.html`); no placeholders; a headline on two lines; a bold sum-up line per chapter; the cover is the first screen.
+- **Accessibility:** axe-core 0 violations on all three pages at 1280 and 375 (Nov 19, release 0.0.101). Manual screen-reader rows: `reports/at-test-script.md` §F.
 - **Facts:** the proposal's figures were fact-checked on Nov 19 (see `sources.html`). Wanzek is the *reported* EPC contractor (Energy-Storage.news on APSC Docket 25-054-U). TIC is not tied to Arkansas Cypress. Jefferson County is not in Google's Energy Impact Fund area on the record.
 
 ## Open before this goes to Entergy

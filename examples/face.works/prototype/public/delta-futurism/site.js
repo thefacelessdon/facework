@@ -30,6 +30,18 @@
   addEventListener('resize',develop);
 
   /* ---------- Swipe rows: arrow buttons on desktop, native swipe on phones ---------- */
+  /* Every swipe row is a named, keyboard-reachable region: Tab to it, then the arrow keys scroll it (WCAG 2.1.1). */
+  document.querySelectorAll('.swipe').forEach(row=>{
+    row.setAttribute('tabindex','0');
+    row.setAttribute('role','region');
+    row.setAttribute('aria-label',(row.dataset.label||'Images')+' (scrolls sideways)');
+  });
+  /* Wide tables scroll sideways on phones: make each one a named, focusable region too */
+  document.querySelectorAll('.scroll').forEach(box=>{
+    const panel=box.closest('[role=tabpanel]'), tab=panel&&document.getElementById(panel.getAttribute('aria-labelledby'));
+    box.setAttribute('tabindex','0'); box.setAttribute('role','region');
+    box.setAttribute('aria-label',(tab?tab.textContent.trim():'Table')+' table (scrolls sideways)');
+  });
   document.querySelectorAll('.swipe-wrap').forEach(w=>{
     const row=w.querySelector('.swipe'), prev=w.querySelector('[data-dir="-1"]'), next=w.querySelector('[data-dir="1"]');
     if(!row) return;
@@ -59,10 +71,20 @@
   /* ---------- Tools window (proposal): the tabs are the only navigation ---------- */
   document.querySelectorAll('[data-win]').forEach(win=>{
     const tabs=[...win.querySelectorAll('[data-tab]')], panels=[...win.querySelectorAll('[data-panel]')];
-    tabs.forEach(t=>t.addEventListener('click',()=>{
-      tabs.forEach(x=>x.setAttribute('aria-selected',String(x===t)));
+    const select=(t,focus)=>{
+      tabs.forEach(x=>{const on=x===t; x.setAttribute('aria-selected',String(on)); x.tabIndex=on?0:-1;});
       panels.forEach(p=>p.hidden=(p.dataset.panel!==t.dataset.tab));
-    }));
+      if(focus) t.focus();
+    };
+    tabs.forEach((t,i)=>{
+      t.addEventListener('click',()=>select(t,false));
+      /* WAI-ARIA tabs pattern: Left/Right move between tabs, Home/End jump to the ends */
+      t.addEventListener('keydown',e=>{
+        const k={ArrowRight:i+1,ArrowLeft:i-1,Home:0,End:tabs.length-1}[e.key];
+        if(k===undefined) return;
+        e.preventDefault(); select(tabs[(k+tabs.length)%tabs.length],true);
+      });
+    });
   });
 
   develop();
