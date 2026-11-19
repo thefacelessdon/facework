@@ -35,7 +35,6 @@ Family-private notes (the leave-behind with contact details and call notes, the 
 - **The teacher frame uses `f3-library`**, and **the Gurley portrait** is credited to the Tulsa Historical Society (Nov 19).
 - **Rights:** the current present-day photos are used as-is for link sharing (Nov 19). `sources.html` lists each one's status.
 - **Design grammar (from CACHE):** swipe rows, not stacks, for any set of three or more images; no captions or credits under images (they live in `sources.html`); no placeholders; a headline on two lines; a bold sum-up line per chapter; the cover is the first screen.
-- **Accessibility:** axe-core 0 violations on all three pages at 1280 and 375 (Nov 19, release 0.0.101). Manual screen-reader rows: `reports/at-test-script.md` §F.
 - **Facts:** the proposal's figures were fact-checked on Nov 19 (see `sources.html`). Wanzek is the *reported* EPC contractor (Energy-Storage.news on APSC Docket 25-054-U). TIC is not tied to Arkansas Cypress. Jefferson County is not in Google's Energy Impact Fund area on the record.
 
 ## Open before this goes to Entergy
@@ -48,7 +47,8 @@ Family-private notes (the leave-behind with contact details and call notes, the 
 
 1. Edit the files in `public/delta-futurism/` directly. Preview with the `face-works-prototype` launch entry and open `/delta-futurism`.
 2. For outside review, give Grok `grok-review-prompt.md` plus the live link. Paste Grok's numbered edit list back into a Claude Code session in this repo, and it applies the edits.
-3. Ship as a Facework release: branch, bump `VERSION`, add a `ROADMAP.md` row, open a PR, merge, then deploy face.works (`vercel deploy --prod --scope facework` from `examples/face.works/prototype`).
+3. Check accessibility: `./reports/a11y-audit.sh` audits these three pages along with the rest of the site (they're listed in its `UNLISTED_ROUTES`, because the sitemap leaves them out). Adding a page here without adding it to that list fails `npm test`. A point-in-time result: 0 axe violations at 1280 and 375 on Nov 19 (release 0.0.101). The manual screen-reader checks are `reports/at-test-script.md` §F.
+4. Ship as a Facework release: branch, bump `VERSION`, add a `ROADMAP.md` row, open a PR, merge, then deploy face.works (`vercel deploy --prod --scope facework` from `examples/face.works/prototype`).
 
 ## History
 
