@@ -434,3 +434,7 @@ footer ul{margin:0;padding-left:var(--space-md);display:grid;gap:var(--space-2xs
 .fb p{font-size:var(--t-small);color:var(--ink-dim);line-height:1.45}
 @media (max-width:700px){.fallbacks{grid-template-columns:minmax(0,1fr)}}
 .verify{font-family:var(--label);font-size:var(--t-micro);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-dim);border:1px dashed var(--ink-dim);padding:1px 5px;white-space:nowrap}
+/* a11y (Nov 19): swipe rows are focusable regions; show where focus is */
+.swipe:focus-visible{outline:2px solid var(--spot);outline-offset:4px}
+.win-bar button:focus-visible,.win-body:focus-visible{outline:2px solid var(--spot);outline-offset:-2px}
+.scroll:focus-visible{outline:2px solid var(--spot);outline-offset:2px}
