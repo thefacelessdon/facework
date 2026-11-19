@@ -30,7 +30,7 @@ Built on CACHE Pathways' seven beats (Nov 20 rebuild): cover, then "This is / Th
 
 ## Settled decisions (don't relitigate without new evidence)
 
-- **Three pages, one link** (Nov 19).
+- **Three pages, one link** (Nov 19). **Amended Nov 20:** four pages, one link. `details.html` holds the proposal's due diligence so the proposal reads as seven beats.
 - **Proposal budgets: sized, not priced.** No budget or ask in dollars until the Entergy and contractor conversations (Nov 19). **Amended Nov 20:** one dollar model is allowed, sizing what the build spends on food, with every input labelled as an assumption and two scenarios (crews buy their own lunch / the contractor feeds the crew).
 - **Two lenses (Nov 20).** The story page is about the whole Delta region, past → shift → present → future, and not only energy. The proposal zooms into the solar build. Energy appears in the story as one thread of the returning investment.
 - **Name (Nov 20, working):** the initiative is **Built to Stay**; Arkansas Cypress stays as the project's name.
