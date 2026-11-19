@@ -87,5 +87,26 @@
     });
   });
 
+  /* ---------- The size of it (proposal): a small model. Every input is an assumption, labelled on the page ---------- */
+  document.querySelectorAll('[data-model]').forEach(m=>{
+    const inp=n=>m.querySelector('[name='+n+']'), v=n=>Number(inp(n).value);
+    const fmt=n=>n>=1e6?'$'+(n/1e6).toFixed(1)+'M':'$'+Math.round(n/1e3)+'K';
+    const run=()=>{
+      const meals=v('meals'), days=v('days'), rate=v('rate'), share=v('share');
+      m.querySelectorAll('output[data-for]').forEach(o=>{const k=o.dataset.for; o.textContent=k==='rate'?'$'+v(k):k==='share'?v(k)+'%':v(k).toLocaleString('en-US');});
+      const total=meals*days*rate;
+      m.querySelector('[data-out=total]').textContent=fmt(total);
+      m.querySelector('[data-out=local]').textContent=fmt(total*share/100);
+      m.querySelector('[data-out=math]').textContent=meals.toLocaleString('en-US')+' meals a day × '+days+' days × $'+rate;
+    };
+    const presets=[...m.querySelectorAll('[data-set]')];
+    presets.forEach(b=>b.addEventListener('click',()=>{
+      const set=JSON.parse(b.dataset.set); Object.keys(set).forEach(k=>inp(k).value=set[k]);
+      presets.forEach(x=>x.setAttribute('aria-pressed',String(x===b))); run();
+    }));
+    m.querySelectorAll('input').forEach(i=>i.addEventListener('input',()=>{presets.forEach(x=>x.setAttribute('aria-pressed','false')); run();}));
+    run();
+  });
+
   develop();
 })();

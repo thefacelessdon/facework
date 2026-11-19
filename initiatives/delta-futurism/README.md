@@ -1,6 +1,6 @@
 # Delta Futurism
 
-A vision for the Arkansas Delta, and its first initiative: the **Arkansas Cypress Community Prosperity Partnership**, a proposal to Entergy Arkansas.
+A vision for the Arkansas–Mississippi Delta (the story page, a wide regional lens), and its first initiative: **Built to Stay**, a community partnership proposal to Entergy Arkansas for the Arkansas Cypress solar build (the proposal page, zoomed in on the build).
 
 **Live:** https://face.works/delta-futurism · shared by link, not listed, `noindex`.
 
@@ -11,8 +11,9 @@ Delta Futurism and HUE's CACHE Creative Pathways are two sides of one coin. Delt
 | Path | What it is |
 |---|---|
 | `examples/face.works/prototype/public/delta-futurism/` | **The site, and the only copy to edit.** Static HTML, served as-is by face.works. |
-| ↳ `index.html` | The story: The Past → The Present → The Turning Point (Arkansas Cypress) → The Future (What It Makes Possible; What Life Could Become; What Remains) → How It Works |
-| ↳ `proposal.html` | The proposal to Entergy, in eleven sections (see below) |
+| ↳ `index.html` | The story, about the whole region: I The Past (what the Delta made) → II The Shift (machines, migration, money leaving) → III The Present (people already here; the investment coming back across the Delta; Arkansas Cypress as one example) → IV The Future → V Into Practice (hands off to Built to Stay) |
+| ↳ `proposal.html` | Built to Stay: the proposal to Entergy, in seven beats (see below) |
+| ↳ `details.html` | The proposal's due diligence: how it would be run, measures, precedent, fallbacks |
 | ↳ `sources.html` | Every photo credit with its rights status, and every figure's source |
 | ↳ `site.css`, `site.js` | Shared styles and behaviour: swipe rows, the latent-to-color effect, the kinds-of-work picker, the tools window |
 | ↳ `fonts/` | Self-hosted Source Serif 4 and Libre Franklin (SIL OFL). face.works' security policy allows same-origin fonts only. |
@@ -25,12 +26,14 @@ Family-private notes (the leave-behind with contact details and call notes, the 
 
 ## The proposal, section by section
 
-Cover, then a "What this is, and isn't" box with the contact (Stedmon Harper) · 01 The opportunity (key facts) · 02 The build ends, the skills stay · 03 Five workstreams A–E (during the build, to size first, partners, measure, what it leaves) · 04 How one job runs (six steps) · 05 Who does what (partner cards) · 06 How it would be run (decisions, staffing, liability, data, reporting, fit, conflicts) · 07 What we would run (tools window, example data labelled) · 08 Four phases keyed to the build · 09 Measured by what remains · 10 Precedent · 11 If things go differently · 12 What we're asking for (one meeting, two introductions).
+Built on CACHE Pathways' seven beats (Nov 20 rebuild): cover, then "This is / This isn't" with the contact · 01 The gap, counted (project facts; Jefferson County population, income and poverty; firms already in the county) · 02 Two paths (usually vs with the partnership) · 03 One kitchen, walked through, with the record beside each step, and the food model · 04 Five workstreams A–E (detail folds away) · 05 Who's at the table, four rules, and who's proposing this · 06 The track, keyed to the build, with what remains at each stage · 07 Three asks. Governance, measures, precedent and fallbacks are on `details.html`.
 
 ## Settled decisions (don't relitigate without new evidence)
 
-- **Three pages, one link** (Nov 19).
-- **Proposal budgets: sized, not priced.** No dollar figures until the Entergy and contractor conversations (Nov 19).
+- **Three pages, one link** (Nov 19). **Amended Nov 20:** four pages, one link. `details.html` holds the proposal's due diligence so the proposal reads as seven beats.
+- **Proposal budgets: sized, not priced.** No budget or ask in dollars until the Entergy and contractor conversations (Nov 19). **Amended Nov 20:** one dollar model is allowed, sizing what the build spends on food, with every input labelled as an assumption and two scenarios (crews buy their own lunch / the contractor feeds the crew).
+- **Two lenses (Nov 20).** The story page is about the whole Delta region, past → shift → present → future, and not only energy. The proposal zooms into the solar build. Energy appears in the story as one thread of the returning investment.
+- **Name (Nov 20, working):** the initiative is **Built to Stay**; Arkansas Cypress stays as the project's name.
 - **Imagined images carry an "Imagined" tag.** Real photos replace them slot by slot, labelled "Already here" with a real caption (Nov 18).
 - **The teacher frame uses `f3-library`**, and **the Gurley portrait** is credited to the Tulsa Historical Society (Nov 19).
 - **Rights:** the current present-day photos are used as-is for link sharing (Nov 19). `sources.html` lists each one's status.
