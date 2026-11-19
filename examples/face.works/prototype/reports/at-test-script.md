@@ -112,9 +112,9 @@ canvas-over-text and dynamic content.
 - **NVDA:** browse-mode `D`/`H`/`F`/`K` to list landmarks/headings/forms/links; confirm the filter live region actually speaks.
 - **Android TalkBack:** linear swipe through home + one content page + the Field; verify the menu button state.
 
-## F. Delta Futurism — `/delta-futurism/{index,proposal,sources}.html` (unlisted; not in the sitemap, so `a11y-audit.sh` can't reach it)
+## F. Delta Futurism — `/delta-futurism/{index,proposal,sources}.html` (unlisted; not in the sitemap, so `a11y-audit.sh` lists it in `UNLISTED_ROUTES`, enforced by `src/data/unlisted-a11y.test.ts`)
 
-**Automated (Nov 19, 2026, axe-core 4.11.1, WCAG 2.0/2.1/2.2 A+AA + best-practice, run in-page on `next start` at 1280 and 375): 0 violations on all three pages, all four tools tabs.** Text contrast measured by hand (axe left swipe cards and highlight-backed text as "needs review"): lowest pair is spot on paper-2 at 4.77:1; every text pair is ≥4.5:1. Re-run: copy `node_modules/axe-core/axe.min.js` into `public/delta-futurism/` temporarily, load it in the page, `axe.run()`, then delete the copy.
+**Automated (Nov 19, 2026, axe-core 4.11.1, WCAG 2.0/2.1/2.2 A+AA + best-practice, run in-page on `next start` at 1280 and 375): 0 violations on all three pages, all four tools tabs.** Text contrast measured by hand (axe left swipe cards and highlight-backed text as "needs review"): lowest pair is spot on paper-2 at 4.77:1; every text pair is ≥4.5:1. Re-run with `./reports/a11y-audit.sh`. If the axe CLI can't drive the local Chrome version, fall back to in-page: copy `node_modules/axe-core/axe.min.js` into `public/delta-futurism/` temporarily, load it, `axe.run()`, then delete the copy.
 
 Manual rows (still need a human on real AT):
 

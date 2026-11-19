@@ -4,7 +4,8 @@
 # face.works production build.
 #
 # Runs axe-core (WCAG 2.0/2.1/2.2 A + AA + best-practice) over every route in
-# the sitemap, on a real production build, at a PINNED desktop viewport.
+# the sitemap plus the unlisted static pages in UNLISTED_ROUTES (step 4b), on a
+# real production build, at a PINNED desktop viewport.
 #
 #   ./reports/a11y-audit.sh            # build, serve, audit, tear down
 #   ./reports/a11y-audit.sh --no-build # reuse the existing .next build
@@ -74,6 +75,16 @@ URLS="$(curl -s "http://localhost:${PORT}/sitemap.xml" \
 if [[ -z "${URLS// }" ]]; then
   echo "✗ no routes parsed from /sitemap.xml"; exit 1
 fi
+
+# 4b. Unlisted static pages: shared by link, kept out of the sitemap (noindex), so step 4
+#     can't see them. Audit them anyway. Every .html under public/<dir>/ for a dir listed
+#     here must appear in UNLISTED_ROUTES; src/data/unlisted-a11y.test.ts enforces that.
+UNLISTED_ROUTES=(
+  /delta-futurism/index.html
+  /delta-futurism/proposal.html
+  /delta-futurism/sources.html
+)
+for r in "${UNLISTED_ROUTES[@]}"; do URLS="$URLS http://localhost:${PORT}${r}"; done
 echo "▸ auditing $(wc -w <<<"$URLS" | tr -d ' ') routes at ${WIDTH}×${HEIGHT}…"
 
 # 5. Run axe across every route at the pinned window (see header note on width).
