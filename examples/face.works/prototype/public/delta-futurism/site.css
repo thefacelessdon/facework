@@ -438,3 +438,21 @@ footer ul{margin:0;padding-left:var(--space-md);display:grid;gap:var(--space-2xs
 .swipe:focus-visible{outline:2px solid var(--spot);outline-offset:4px}
 .win-bar button:focus-visible,.win-body:focus-visible{outline:2px solid var(--spot);outline-offset:-2px}
 .scroll:focus-visible{outline:2px solid var(--spot);outline-offset:2px}
+
+/* ---------- Proposal: "What this is, and isn't" box (Grok review, Nov 19) ---------- */
+.isnt{border:1px solid var(--ink);border-left:6px solid var(--spot);padding:var(--space-md) var(--space-lg);margin-block:var(--space-xl);background:var(--paper);max-width:62rem}
+.isnt h2{font-family:var(--display);font-weight:600;font-size:var(--t-lede);margin:0 0 var(--space-xs)}
+.isnt p{margin:0;line-height:1.55}
+.isnt .contact{margin-top:var(--space-sm);font-family:var(--label);font-size:var(--t-cap)}
+.isnt p.contact{display:block}
+.isnt p.contact b,.isnt p.contact a{display:inline}
+.isnt .contact a{color:var(--spot)}
+/* Story: hand-off line right after the Turning Point sum-up */
+.next-step{margin-top:var(--space-md);max-width:44rem}
+.next-step a{color:var(--spot);font-weight:600;white-space:nowrap}
+
+/* ---------- Phone fixes: every tool tab visible; the nav keeps only its call to action ---------- */
+@media (max-width:600px){
+  .win-bar{flex-wrap:wrap}
+  .nav a.l:not(.init){display:none}
+}
