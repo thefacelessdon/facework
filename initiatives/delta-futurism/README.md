@@ -25,7 +25,7 @@ Family-private notes (the leave-behind with contact details and call notes, the 
 
 ## The proposal, section by section
 
-v3 (Nov 20): cover and a one-line status (a discussion draft; one meeting and two introductions) · 01 Follow the value ($1.6B in, about $3.2B paid back over its life, per Entergy's filing, who captures it, and a reasonable local goal; county context) · 02 Two paths, across everything the build buys · 03 How it works: one operating system, six steps · 04 Five workstreams; **B Food and Hospitality is built out** (the kitchen walk-through and the food model), and A, C, D, E carry the questions we'd answer with partners · 05 Roles: what each partner already does, what we take off their plate, what they never give up, plus a governance strip · 06 Measured by what remains, with precedent figures · 07 Keyed to the build · 08 Three asks · Who's proposing this (the Monson family).
+v3 (Nov 20): cover and a one-line status (a discussion draft; one meeting and two introductions) · 01 Follow the value ($1.6B in, about $3.1B paid back over its 30-year life, per Entergy's filing, who captures it, and a reasonable local goal; county context) · 02 Two paths, across everything the build buys · 03 How it works: one operating system, six steps · 04 Five workstreams; **B Food and Hospitality is built out** (the kitchen walk-through and the food model), and A, C, D, E carry the questions we'd answer with partners · 05 Roles: what each partner already does, what we take off their plate, what they never give up, plus a governance strip · 06 Measured by what remains, with precedent figures · 07 Keyed to the build · 08 Three asks · Who's proposing this (the Monson family).
 
 ## Settled decisions (don't relitigate without new evidence)
 
