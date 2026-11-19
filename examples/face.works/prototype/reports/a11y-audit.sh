@@ -82,6 +82,7 @@ fi
 UNLISTED_ROUTES=(
   /delta-futurism/index.html
   /delta-futurism/proposal.html
+  /delta-futurism/details.html
   /delta-futurism/sources.html
 )
 for r in "${UNLISTED_ROUTES[@]}"; do URLS="$URLS http://localhost:${PORT}${r}"; done
