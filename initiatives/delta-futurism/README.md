@@ -11,14 +11,13 @@ Delta Futurism and HUE's CACHE Creative Pathways are two sides of one coin. Delt
 | Path | What it is |
 |---|---|
 | `examples/face.works/prototype/public/delta-futurism/` | **The site, and the only copy to edit.** Static HTML, served as-is by face.works. |
-| ↳ `index.html` | The story, about the whole region: I The Past (what the Delta made) → II The Shift (machines, migration, money leaving) → III The Present (people already here; the investment coming back across the Delta; Arkansas Cypress as one example) → IV The Future → V Into Practice (hands off to Built to Stay) |
-| ↳ `proposal.html` | Built to Stay: the proposal to Entergy, in seven beats (see below) |
-| ↳ `details.html` | The proposal's due diligence: how it would be run, measures, precedent, fallbacks |
+| ↳ `index.html` | The story, about the whole region (v3, Nov 20): I The Past (the places, ideas that traveled, builders who stayed, Saturday night and Sunday morning) → II The Shift → III The Present (people here; the investment coming back, filterable by state; people coming back to the South but not yet the Delta; where the money goes; every kind of work; five capabilities and the phases; the culture still travels) → IV The Future (the places reimagined; new ideas leave from here; what the county keeps) → V Into Practice |
+| ↳ `proposal.html` | Built to Stay: the proposal to Entergy (see below). `details.html` was retired on Nov 20 and folded in here |
 | ↳ `sources.html` | Every photo credit with its rights status, and every figure's source |
 | ↳ `site.css`, `site.js` | Shared styles and behaviour: swipe rows, the latent-to-color effect, the kinds-of-work picker, the tools window |
 | ↳ `fonts/` | Self-hosted Source Serif 4 and Libre Franklin (SIL OFL). face.works' security policy allows same-origin fonts only. |
 | ↳ `img/` | Images. `f-*`, `f3-*` and `f4-*` are imagined (generated) images; `p-*` are present-day photos and portraits; the rest are archive photos. |
-| `initiatives/delta-futurism/source/` | Working documents: `rebuild-plan.md` (structure, rules and settled decisions), copy decks, shot list, story research, image prompts, design context |
+| `initiatives/delta-futurism/source/` | Working documents: `story-v3-outline.md` and `proposal-v3-outline.md` (the Nov 20 structure), `research-2026-11-20.md` (what the research found and what's unverified), `rebuild-plan.md` (structure, rules and settled decisions), copy decks, shot list, story research, image prompts, design context |
 | `initiatives/delta-futurism/grok-review-prompt.md` | The prompt for an outside review by Grok |
 | `examples/face.works/prototype/next.config.ts` | `/delta-futurism` redirects to `/delta-futurism/index.html`; `noindex` header on every page under it |
 
@@ -26,13 +25,17 @@ Family-private notes (the leave-behind with contact details and call notes, the 
 
 ## The proposal, section by section
 
-Built on CACHE Pathways' seven beats (Nov 20 rebuild): cover, then "This is / This isn't" with the contact · 01 The gap, counted (project facts; Jefferson County population, income and poverty; firms already in the county) · 02 Two paths (usually vs with the partnership) · 03 One kitchen, walked through, with the record beside each step, and the food model · 04 Five workstreams A–E (detail folds away) · 05 Who's at the table, four rules, and who's proposing this · 06 The track, keyed to the build, with what remains at each stage · 07 Three asks. Governance, measures, precedent and fallbacks are on `details.html`.
+v3 (Nov 20): cover and a one-line status (a discussion draft; one meeting and two introductions) · 01 Follow the value ($1.6B in, about $4.3B paid back over 30 years, who captures it, and a reasonable local goal; county context) · 02 Two paths, across everything the build buys · 03 How it works: one operating system, six steps · 04 Five workstreams; **B Food and Hospitality is built out** (the kitchen walk-through and the food model), and A, C, D, E carry the questions we'd answer with partners · 05 Roles: what each partner already does, what we take off their plate, what they never give up, plus a governance strip · 06 Measured by what remains, with precedent figures · 07 Keyed to the build · 08 Three asks · Who's proposing this (the Berdia family).
 
 ## Settled decisions (don't relitigate without new evidence)
 
-- **Three pages, one link** (Nov 19). **Amended Nov 20:** four pages, one link. `details.html` holds the proposal's due diligence so the proposal reads as seven beats.
+- **Three pages, one link** (Nov 19). Briefly four (Nov 20), then **back to three, Nov 20 v3:** `details.html` is folded into the proposal through layout, not a second page.
 - **Proposal budgets: sized, not priced.** No budget or ask in dollars until the Entergy and contractor conversations (Nov 19). **Amended Nov 20:** one dollar model is allowed, sizing what the build spends on food, with every input labelled as an assumption and two scenarios (crews buy their own lunch / the contractor feeds the crew).
 - **Two lenses (Nov 20).** The story page is about the whole Delta region, past → shift → present → future, and not only energy. The proposal zooms into the solar build. Energy appears in the story as one thread of the returning investment.
+- **Story v3 (Nov 20):** the whole Delta, Arkansas and Mississippi alternating; Pine Bluff is a thread, not the frame. Places and people are seeds for future story pages, and the lists are built to grow. Imagined images carry the tag and no apology note. Phases follow the investment (plan → build → run → renew), not one lease.
+- **Proposal v3 (Nov 20):** half-baked on purpose. One workstream (B) built out; the rest worked out with partners. Copy cut 15–20% in favour of visuals.
+- **Follow the value (Nov 20):** the 30-year value split is allowed, labelled as our illustration, built only from public filings and published benchmarks. No family's acreage, lease terms or payments, ever.
+- **Who's proposing (Nov 20):** told as the Berdia family's story, with Renita Harper's 30 years at Entergy Arkansas named (Stedmon approved names on the public page).
 - **Name (Nov 20, working):** the initiative is **Built to Stay**; Arkansas Cypress stays as the project's name.
 - **Imagined images carry an "Imagined" tag.** Real photos replace them slot by slot, labelled "Already here" with a real caption (Nov 18).
 - **The teacher frame uses `f3-library`**, and **the Gurley portrait** is credited to the Tulsa Historical Society (Nov 19).
@@ -43,7 +46,19 @@ Built on CACHE Pathways' seven beats (Nov 20 rebuild): cover, then "This is / Th
 - **Landowner-briefing dates stay off public pages** (Nov 19). Phases key to public construction milestones.
 - **Grok review, Nov 19 — not applied, on purpose:** #18 (cut "What Life Could Become") — the imagined future is the story's core; #10 rights wording beyond a neutral line (rights decision above); #27 cover aerial (no licensed Delta aerial yet); the apprentices image stays on the story page (Nov 19 decision) but left proposal workstream A; "near Sherrill" kept — the APSC order doesn't place the site in Pastoria/Wright as Grok said.
 
+## Notes kept off the page: if things go differently
+
+- The build moves faster than the pilots: start with food and suppliers (shortest lead time); workforce follows the next hiring wave and the Jefferson Power Station.
+- A caterer or supplier is already under contract: local firms bid as subcontractors to the incumbent, or prepare for the next phase and project.
+- No paid placements committed: no one is trained for a job that isn't there.
+- The schedule changes: phases key to construction milestones, not dates.
+
 ## Open before this goes to Entergy
+
+- Confirm the family name as written on the proposal ("the Berdia family").
+- Replace the home image (`f4-kitchen.jpg` is out of the page for now): prompt in `source/story-v3-outline.md`.
+- Pine Bluff's Chitlin' Circuit venues (Jack Rabbit Club, Rainbow Club) need a newspaper-archive pass before they go on the page.
+- Pull Entergy witness testimony on depreciation life and cost of debt (Docket 25-054-U) to tighten the value split.
 
 - Call Wanzek: how local suppliers prequalify.
 - Call Southeast Arkansas College (870-543-5900): solar training offered, and price.
@@ -54,7 +69,7 @@ Built on CACHE Pathways' seven beats (Nov 20 rebuild): cover, then "This is / Th
 
 1. Edit the files in `public/delta-futurism/` directly. Preview with the `face-works-prototype` launch entry and open `/delta-futurism`.
 2. For outside review, give Grok `grok-review-prompt.md` plus the live link. Paste Grok's numbered edit list back into a Claude Code session in this repo, and it applies the edits.
-3. Check accessibility: `./reports/a11y-audit.sh` audits these three pages along with the rest of the site (they're listed in its `UNLISTED_ROUTES`, because the sitemap leaves them out). Adding a page here without adding it to that list fails `npm test`. A point-in-time result: 0 axe violations at 1280 and 375 on Nov 19 (releases 0.0.101 and 0.0.103). The manual screen-reader checks are `reports/at-test-script.md` §F.
+3. Check accessibility: `./reports/a11y-audit.sh` audits these pages along with the rest of the site (they're listed in its `UNLISTED_ROUTES`, because the sitemap leaves them out). Adding a page here without adding it to that list fails `npm test`. A point-in-time result: 0 axe violations at 1280 and 375 on Nov 19 (releases 0.0.101 and 0.0.103). The manual screen-reader checks are `reports/at-test-script.md` §F.
 4. Ship as a Facework release: branch, bump `VERSION`, add a `ROADMAP.md` row, open a PR, merge, then deploy face.works (`vercel deploy --prod --scope facework` from `examples/face.works/prototype`).
 
 ## History

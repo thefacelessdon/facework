@@ -109,4 +109,15 @@
   });
 
   develop();
+
+  /* ---------- Filters: show ledger rows by state, update the headline total ---------- */
+  document.querySelectorAll('.filters[data-filter-for]').forEach(g=>{
+    const t=document.getElementById(g.dataset.filterFor); if(!t) return;
+    const total=g.closest('section')&&g.closest('section').querySelector('[data-total]');
+    g.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
+      g.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+      t.querySelectorAll('tbody tr').forEach(r=>{r.hidden=!(b.dataset.f==='all'||r.dataset.s===b.dataset.f);});
+      if(total&&b.dataset.t) total.textContent=b.dataset.t;
+    }));
+  });
 })();
