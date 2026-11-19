@@ -56,7 +56,6 @@ v3 (Nov 20): cover and a one-line status (a discussion draft; one meeting and tw
 ## Open before this goes to Entergy
 
 - Confirm the family name as written on the proposal ("the Berdia family").
-- Replace the home image (`f4-kitchen.jpg` is out of the page for now): prompt in `source/story-v3-outline.md`.
 - Pine Bluff's Chitlin' Circuit venues (Jack Rabbit Club, Rainbow Club) need a newspaper-archive pass before they go on the page.
 - Pull Entergy witness testimony on depreciation life and cost of debt (Docket 25-054-U) to tighten the value split.
 
