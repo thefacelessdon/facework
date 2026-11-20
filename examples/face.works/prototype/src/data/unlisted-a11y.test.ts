@@ -14,7 +14,7 @@ import path from "node:path";
 import { describe, it, expect } from "vitest";
 
 // Static directories under public/ that are shared by link and kept out of the sitemap.
-const UNLISTED_DIRS = ["delta-futurism", "hue-soundcloud"];
+const UNLISTED_DIRS = ["delta-futurism"];
 
 const root = process.cwd();
 const script = fs.readFileSync(path.join(root, "reports", "a11y-audit.sh"), "utf8");
