@@ -43,6 +43,16 @@
       "source": "/sources.html",
       "destination": "/sources",
       "permanent": true
+    },
+    {
+      "source": "/partner-apex.html",
+      "destination": "/built-to-stay/apex",
+      "permanent": true
+    },
+    {
+      "source": "/partner-uapb.html",
+      "destination": "/built-to-stay/uapb",
+      "permanent": true
     }
   ],
   "rewrites": [
@@ -53,6 +63,14 @@
     {
       "source": "/sources",
       "destination": "/sources.html"
+    },
+    {
+      "source": "/built-to-stay/apex",
+      "destination": "/partner-apex.html"
+    },
+    {
+      "source": "/built-to-stay/uapb",
+      "destination": "/partner-uapb.html"
     }
   ],
   "headers": [
