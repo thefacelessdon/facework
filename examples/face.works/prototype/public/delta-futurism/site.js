@@ -159,7 +159,7 @@
   }
 
   /* ---------- Tabs (pass 3): the working-with-us walkthrough ---------- */
-  document.querySelectorAll('[data-tabs]').forEach(w=>{
+  const wireTabs=w=>{
     const tabs=[...w.querySelectorAll('[role=tab]')], panels=[...w.querySelectorAll('[role=tabpanel]')];
     const uid='ww'+Math.random().toString(36).slice(2,7);
     /* pass 4: optional previous/next buttons and a "Step n of N" count ([data-steps]) */
@@ -174,5 +174,52 @@
       t.addEventListener('keydown',e=>{const n={ArrowRight:i+1,ArrowLeft:i-1,Home:0,End:tabs.length-1}[e.key]; if(n===undefined) return; e.preventDefault(); const k=(n+tabs.length)%tabs.length; show(k); tabs[k].focus();});});
     steps.forEach(b=>b.addEventListener('click',()=>show(Math.max(0,Math.min(tabs.length-1,cur+Number(b.dataset.step))))));
     show(0);
-  });
+  };
+  document.querySelectorAll('[data-tabs]').forEach(wireTabs);
+
+  /* ---------- Workstream sizing models (0.0.124): one source for the section 03 calculators ---------- */
+  const BTS_MODELS={
+    A:v=>{const build=v.peak*v.avg*29*v.wage*v.local, lt=v.perm*v.permlocal*v.permwage*30;
+      return {build, lt, peakres:Math.round(v.peak*v.local), math:`${v.peak} at peak × ${pc(v.avg)} average crew × 29 months × ${usd(v.wage)} a month × ${pc(v.local)} local. Then ${v.perm} permanent jobs × ${pc(v.permlocal)} local × ${usd(v.permwage)} × 30 years.`};},
+    B:v=>{const days=Math.round(v.months*21.7), meals=750*v.eat*days*v.rate, kitchens=meals*v.share, hotel=v.rooms*days*v.night;
+      return {build:kitchens+hotel, kitchens, hotel, math:`${Math.round(750*v.eat)} meals a day × ${days} working days × ${usd(v.rate)} = ${money(meals)} in meals; ${pc(v.share)} cooked by county kitchens. Plus ${v.rooms} rooms × ${days} nights × ${usd(v.night)}.`};},
+    C:v=>{const build=1.6e9*v.pool*v.win, yr=v.acres*v.veg+v.other, lt=yr*v.hold*30;
+      return {build, lt, yr, math:`$1.6 billion × ${pc(v.pool)} site work × ${pc(v.win)} won locally. Upkeep: ${v.acres.toLocaleString()} acres × ${usd(v.veg)} + ${money(v.other)} a year, ${pc(v.hold)} held locally, for 30 years.`};},
+    D:v=>({fam:v.fam, cost:v.fam*v.cost, math:`${v.fam} families × ${usd(v.cost)} each, paid to independent advisers.`}),
+    E:v=>{const build=v.sites*v.cost, lt=v.sites*v.avoid*30;
+      return {build, lt, math:`${v.sites} sites × ${usd(v.cost)}. Then ${v.sites} sites × ${usd(v.avoid)} outage cost avoided × 30 years.`};}
+  };
+  function money(x){return x>=1e6?'$'+(x/1e6).toFixed(1)+'M':x>=1e3?'$'+Math.round(x/1e3)+'K':'$'+Math.round(x);}
+  function usd(x){return '$'+Math.round(x).toLocaleString();}
+  function pc(x){return Math.round(x*100)+'%';}
+  const FMT={pct:x=>x+'%',mo:x=>x+' mo',usd:x=>usd(x),num:x=>Number(x).toLocaleString()};
+  const wireModel=m=>{
+    const f=BTS_MODELS[m.dataset.model2]; if(!f) return;
+    const ins=[...m.querySelectorAll('input[type=range]')], btns=[...m.querySelectorAll('[data-scn]')];
+    const run=()=>{const v={};
+      ins.forEach(i=>{const n=Number(i.value); v[i.name]=i.dataset.fmt==='pct'?n/100:n; const o=m.querySelector(`output[data-for="${i.name}"]`); if(o) o.textContent=FMT[i.dataset.fmt](n);});
+      const r=f(v);
+      m.querySelectorAll('[data-out]').forEach(o=>{const k=o.dataset.out; if(k==='math') o.textContent=r.math; else o.textContent=(k==='fam'||k==='peakres')?String(r[k]):money(r[k]);});};
+    const scn=k=>{ins.forEach(i=>{i.value=i.dataset[k];}); btns.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.scn===k))); run();};
+    ins.forEach(i=>i.addEventListener('input',()=>{btns.forEach(b=>b.setAttribute('aria-pressed','false')); run();}));
+    btns.forEach(b=>b.addEventListener('click',()=>scn(b.dataset.scn)));
+    scn('t');
+  };
+
+  /* ---------- Workstream dialog: each card opens its demo and model ---------- */
+  const dlg=document.getElementById('ws-dialog');
+  if(dlg){
+    const body=dlg.querySelector('.wsd-body'); let opener=null;
+    const open=(key,btn)=>{const t=document.getElementById('tpl-'+key); if(!t) return;
+      body.replaceChildren(t.content.cloneNode(true));
+      body.querySelectorAll('[data-tabs]').forEach(wireTabs);
+      body.querySelectorAll('[data-model2]').forEach(wireModel);
+      opener=btn; dlg.showModal(); body.scrollTop=0; dlg.querySelector('[data-close]').focus();
+      if(history.replaceState) history.replaceState(null,'','#ws-'+key.toLowerCase());};
+    document.querySelectorAll('[data-open-ws]').forEach(b=>b.addEventListener('click',()=>open(b.dataset.openWs,b)));
+    dlg.querySelector('[data-close]').addEventListener('click',()=>dlg.close());
+    dlg.addEventListener('click',e=>{if(e.target===dlg) dlg.close();});
+    dlg.addEventListener('close',()=>{if(dlg.open) return; body.replaceChildren(); if(history.replaceState) history.replaceState(null,'','#system'); if(opener) opener.focus();});
+    const h=location.hash.match(/^#ws-([a-e])$/); if(h){const b=document.querySelector(`[data-open-ws="${h[1].toUpperCase()}"]`); if(b) open(h[1].toUpperCase(),b);}
+  }
 })();
