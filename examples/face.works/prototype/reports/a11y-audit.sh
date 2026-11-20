@@ -81,6 +81,8 @@ fi
 #     here must appear in UNLISTED_ROUTES; src/data/unlisted-a11y.test.ts enforces that.
 UNLISTED_ROUTES=(
   /delta-futurism/index.html
+  /delta-futurism/partner-apex.html
+  /delta-futurism/partner-uapb.html
   /delta-futurism/proposal.html
   /delta-futurism/sources.html
 )

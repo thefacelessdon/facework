@@ -24,7 +24,7 @@ const config = JSON.parse(fs.readFileSync(path.join(deploy, "vercel.json"), "utf
 
 describe("deltafuturism.com deploy", () => {
   it("rewrites every clean URL to a page that exists", () => {
-    const want = new Map([["/built-to-stay", "/proposal.html"], ["/sources", "/sources.html"]]);
+    const want = new Map([["/built-to-stay", "/proposal.html"], ["/sources", "/sources.html"], ["/built-to-stay/apex", "/partner-apex.html"], ["/built-to-stay/uapb", "/partner-uapb.html"]]);
     for (const [src, dest] of want) {
       const r = config.rewrites.find((x) => x.source === src);
       expect(r?.destination, `${src} rewrite`).toBe(dest);
@@ -35,9 +35,18 @@ describe("deltafuturism.com deploy", () => {
   it("redirects old paths and www to the canonical clean URLs", () => {
     const plain = config.redirects.filter((r) => !r.has).map((r) => `${r.source}->${r.destination}`);
     expect(plain).toEqual(
-      expect.arrayContaining(["/index.html->/", "/proposal.html->/built-to-stay", "/sources.html->/sources"]),
+      expect.arrayContaining(["/index.html->/", "/proposal.html->/built-to-stay", "/sources.html->/sources", "/partner-apex.html->/built-to-stay/apex", "/partner-uapb.html->/built-to-stay/uapb"]),
     );
     expect(config.redirects.some((r) => r.has && r.destination.startsWith("https://deltafuturism.com/"))).toBe(true);
+  });
+
+  it("serves the shared assets to pages one level down (/built-to-stay/apex)", () => {
+    for (const a of ["site.css", "site.js"]) {
+      expect(config.rewrites.find((x) => x.source === `/built-to-stay/${a}`)?.destination).toBe(`/${a}`);
+    }
+    for (const d of ["fonts", "img", "share"]) {
+      expect(config.rewrites.find((x) => x.source === `/built-to-stay/${d}/:path*`)?.destination).toBe(`/${d}/:path*`);
+    }
   });
 
   it("keeps the site out of search engines", () => {
@@ -45,7 +54,7 @@ describe("deltafuturism.com deploy", () => {
     expect(all?.headers.find((h) => h.key === "X-Robots-Tag")?.value).toContain("noindex");
   });
 
-  for (const page of ["index.html", "proposal.html", "sources.html"]) {
+  for (const page of ["index.html", "proposal.html", "sources.html", "partner-apex.html", "partner-uapb.html"]) {
     it(`${page} has share tags and its card exists`, () => {
       const html = fs.readFileSync(path.join(site, page), "utf8");
       for (const tag of ['property="og:title"', 'property="og:description"', 'property="og:url"', 'name="twitter:card"', 'rel="canonical"']) {

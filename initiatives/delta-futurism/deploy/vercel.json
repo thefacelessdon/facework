@@ -43,6 +43,41 @@
       "source": "/sources.html",
       "destination": "/sources",
       "permanent": true
+    },
+    {
+      "source": "/partner-apex.html",
+      "destination": "/built-to-stay/apex",
+      "permanent": true
+    },
+    {
+      "source": "/partner-uapb.html",
+      "destination": "/built-to-stay/uapb",
+      "permanent": true
+    },
+    {
+      "source": "/built-to-stay/proposal.html",
+      "destination": "/built-to-stay",
+      "permanent": true
+    },
+    {
+      "source": "/built-to-stay/sources.html",
+      "destination": "/sources",
+      "permanent": true
+    },
+    {
+      "source": "/built-to-stay/index.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/built-to-stay/partner-apex.html",
+      "destination": "/built-to-stay/apex",
+      "permanent": true
+    },
+    {
+      "source": "/built-to-stay/partner-uapb.html",
+      "destination": "/built-to-stay/uapb",
+      "permanent": true
     }
   ],
   "rewrites": [
@@ -53,6 +88,34 @@
     {
       "source": "/sources",
       "destination": "/sources.html"
+    },
+    {
+      "source": "/built-to-stay/apex",
+      "destination": "/partner-apex.html"
+    },
+    {
+      "source": "/built-to-stay/uapb",
+      "destination": "/partner-uapb.html"
+    },
+    {
+      "source": "/built-to-stay/site.css",
+      "destination": "/site.css"
+    },
+    {
+      "source": "/built-to-stay/site.js",
+      "destination": "/site.js"
+    },
+    {
+      "source": "/built-to-stay/fonts/:path*",
+      "destination": "/fonts/:path*"
+    },
+    {
+      "source": "/built-to-stay/img/:path*",
+      "destination": "/img/:path*"
+    },
+    {
+      "source": "/built-to-stay/share/:path*",
+      "destination": "/share/:path*"
     }
   ],
   "headers": [
