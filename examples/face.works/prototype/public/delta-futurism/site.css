@@ -1085,3 +1085,45 @@ details.assume ul{margin:var(--space-sm) 0 0;padding-left:1.1em;display:grid;gap
 }
 /* step tabs wrap instead of side-scrolling on small screens */
 @media (max-width:900px){.wsx-panel .wk-time,.wsx-panel .wk-time.n3,.wsx-panel .wk-time.n4,.wsx-panel .wk-time.n5{grid-template-columns:repeat(auto-fill,minmax(7.5rem,1fr));overflow:visible}}
+
+/* ---------- 0.0.126 What Grows Around It: business cards, possibility cards, keep-score standard,
+   point-value calculators, staffing curve ---------- */
+.band .xcard.grow,.band .xcard.poss{background:transparent;border-color:var(--rule);color:inherit}
+.xcard.grow h4,.xcard.poss h4{font-family:var(--display);font-weight:400;font-size:var(--t-title);line-height:1.15;margin:0}
+.xcard.grow p,.xcard.poss p{margin:0;font-size:var(--t-small);line-height:1.5}
+.xcard .chip{justify-self:start;font-family:var(--label);font-size:var(--t-micro);font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border:1px solid currentColor}
+.band .chip.t-r{color:oklch(78% 0.13 38)}
+.band .chip.t-g{color:var(--ink-dim)}
+.band .chip.t-n{color:oklch(80% 0.09 230)}
+.xcard.poss .x-k{margin-top:var(--space-2xs)}
+.band .xcard.poss .x-k{color:var(--ink-dim)}
+.band .xcard.poss .x-k.ours{color:oklch(78% 0.13 38)}
+.pull{font-family:var(--display);font-weight:300;font-size:clamp(1.8rem,4.2vw,3rem);line-height:1.1;margin:var(--space-2xl) 0;max-width:22ch}
+.band .pull{color:oklch(78% 0.13 38)}
+ol.standard{list-style:none;margin:var(--space-md) 0 0;padding:0;counter-reset:st;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 var(--space-xl);border-top:1px solid var(--rule)}
+ol.standard li{counter-increment:st;display:grid;grid-template-columns:2.4rem minmax(0,1fr);row-gap:4px;padding-block:var(--space-sm);border-bottom:1px solid var(--rule)}
+ol.standard li::before{content:counter(st);grid-row:1/3;font-family:var(--display);font-weight:300;font-size:2rem;line-height:1;color:oklch(78% 0.13 38)}
+ol.standard b{font-family:var(--label);font-size:var(--t-small)}
+ol.standard span{font-size:var(--t-small);line-height:1.5;color:var(--ink-dim)}
+ol.standard span b{color:var(--paper);font-family:inherit}
+@media (max-width:700px){ol.standard{grid-template-columns:minmax(0,1fr)}}
+.band .model.all{border-top-color:var(--paper)}
+.band .model.all .m-reset{color:var(--paper);border-color:var(--paper)}
+.band .model.all .m-reset:hover{background:var(--paper);color:var(--ink)}
+.band .model.all .big{color:oklch(78% 0.13 38)}
+.m2 .parts{list-style:none;margin:var(--space-sm) 0 0;padding:0;display:grid;border-top:1px solid var(--rule)}
+.m2 .parts li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px var(--space-sm);padding-block:var(--space-xs);border-bottom:1px solid var(--rule)}
+.m2 .parts li.ph{font-family:var(--label);font-size:var(--t-micro);text-transform:uppercase;letter-spacing:.08em;color:var(--ink-dim)}
+.m2 .parts li.ph b{font-weight:700}
+.m2 .parts b{font-size:var(--t-small)}
+.m2 .parts .wv{font-family:var(--label);font-size:var(--t-small);font-weight:700;text-align:right;white-space:nowrap}
+.m2 .parts .wf{grid-column:1/-1;font-family:var(--label);font-size:var(--t-micro);color:var(--ink-dim);line-height:1.5}
+.curve{margin:var(--space-xl) 0 0;border-top:1px solid var(--rule);padding-top:var(--space-sm)}
+.curve figcaption{display:grid;gap:4px;margin-bottom:var(--space-sm)}
+.curve svg{width:100%;height:auto;display:block}
+.curve rect{fill:var(--ink-dim);opacity:.55}
+.curve rect.pk{fill:var(--spot);opacity:1}
+.curve text{font-family:var(--label);font-size:11px;fill:var(--ink-dim)}
+.band .m2 label span,.band .m2 label.lev span{color:var(--paper)}
+.band .m2 .in-h{color:var(--ink-dim)}
+.band .m2 .lev-t{color:oklch(78% 0.13 38)}

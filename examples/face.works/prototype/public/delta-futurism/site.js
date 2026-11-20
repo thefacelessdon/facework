@@ -177,102 +177,157 @@
   };
   document.querySelectorAll('[data-tabs]').forEach(wireTabs);
 
-  /* ---------- Built to Stay forecast (0.0.124): the one source for the section 03 calculators and the section 04 totals.
-     Every input is a triangle: [low, most likely, high]. Facts are the same with or without the program; levers
-     have a "base" (no program) and a "prog" (with Built to Stay) triangle. Each run draws the facts once and
-     scores both cases, so shared unknowns cancel in the difference. Seeded, so the page shows the same numbers every load. */
-  const RUNS=4000, SEED=20261120;
+  /* ---------- Built to Stay impact model (0.0.126): single point values, one source for every number on the page.
+     Each workstream has facts (one value) and levers (a value without a program and one with Built to Stay).
+     "Without" is what the county keeps anyway; "added" is with minus without. Ripple (local re-spending) applies
+     to private dollars only, never to tax. Today's dollars, not discounted. ---------- */
+  /* our staffing model: crew on site by month, July 2026 to November 2028 (replace with Wanzek's resource-loaded schedule) */
+  const CURVE=[53,115,154,175,158,189,220,304,403,515,596,665,742,771,775,757,723,648,593,505,393,319,243,189,140,89,67,56,35];
+  const PM=CURVE.reduce((a,b)=>a+b,0), PEAK=Math.max(...CURVE), COST=1601500000;
+  const IN=(n,l,fmt,min,max,step,a,b)=>({n,l,fmt,min,max,step,base:a,prog:b===undefined?a:b,lever:b!==undefined});
   const BTS={
-    A:{facts:{peak:[700,750,800],avg:[.35,.45,.55],wage:[5000,6500,8000],perm:[10,12,15],pw:[70860,86000,101120],gain:[8000,15000,25000],yrs:[5,10,20]},
-       levers:{local:{base:[.05,.11,.20],prog:[.20,.35,.55]},pl:{base:[.2,.4,.6],prog:[.5,.7,.9]},stay:{base:[.2,.35,.5],prog:[.4,.55,.7]}},
-       m:{build:(f,l)=>f.peak*f.avg*29*f.wage*l.local, lt:(f,l)=>f.perm*l.pl*f.pw*30, cap:(f,l)=>f.peak*l.local*l.stay*f.gain*f.yrs, peakres:(f,l)=>f.peak*l.local},
-       math:(f,l,b)=>`Most likely: ${num(f.peak)} at peak × ${pc(f.avg)} average crew × 29 months × ${usd(f.wage)} a month × local hire (${pc(l.local)} with the program, ${pc(b.local)} without). Then ${num(f.perm)} permanent jobs × ${pc(l.pl)} held locally (${pc(b.pl)} without) × ${usd(f.pw)} × 30 years. After the build: ${num(f.peak*l.local)} residents who worked it × ${pc(l.stay)} still in the trade (${pc(b.stay)} without) × ${usd(f.gain)} a year more than their old work × ${num(f.yrs)} years.`},
-    B:{facts:{eat:[.3,.45,.6],months:[6,7.5,9],rate:[12,14,16],rooms:[60,130,200],cat:[25e3,75e3,150e3],yrs:[5,10,15]},
-       levers:{share:{base:[0,.05,.15],prog:[.3,.5,.7]},kit:{base:[0,1,2],prog:[2,4,6]}},
-       m:{build:(f,l)=>750*f.eat*f.months*21.7*f.rate*l.share, cap:(f,l)=>l.kit*f.cat*f.yrs}, same:{hotel:f=>f.rooms*f.months*21.7*110},
-       math:(f,l,b)=>`Most likely: ${num(750*f.eat)} meals a day × ${num(f.months*21.7)} working days × ${usd(f.rate)} = ${money(750*f.eat*f.months*21.7*f.rate)} in meals, ${pc(l.share)} cooked by county kitchens with the program, ${pc(b.share)} without. After the build: ${num(l.kit)} county kitchens with a contract record (${num(b.kit)} without) × ${usd(f.cat)} a year in new catering × ${num(f.yrs)} years. Hotel nights: ${num(f.rooms)} rooms × ${num(f.months*21.7)} nights × $110.`},
-    C:{facts:{pool:[.03,.04,.05],acres:[2500,2750,3000],veg:[184,232,281],other:[150e3,375e3,600e3],follow:[50e3,150e3,400e3],yrs:[5,10,15]},
-       levers:{win:{base:[.03,.08,.15],prog:[.10,.20,.35]},hold:{base:[.10,.25,.40],prog:[.40,.60,.85]},firms:{base:[1,3,6],prog:[8,15,25]}},
-       m:{build:(f,l)=>1.6e9*f.pool*l.win, lt:(f,l)=>(f.acres*f.veg+f.other)*l.hold*30, cap:(f,l)=>l.firms*f.follow*f.yrs},
-       math:(f,l,b)=>`Most likely: $1.6 billion × ${pc(f.pool)} site work × share won by county firms (${pc(l.win)} with the program, ${pc(b.win)} without). Upkeep: ${num(f.acres)} acres × ${usd(f.veg)} + ${money(f.other)} a year, share held locally (${pc(l.hold)} with, ${pc(b.hold)} without), for 30 years. After the build: ${num(l.firms)} county firms with a contract record (${num(b.firms)} without) × ${money(f.follow)} a year in new work × ${num(f.yrs)} years.`},
-    D:{facts:{cost:[2500,5000,7500]}, levers:{fam:{base:[0,2,5],prog:[8,18,30]}},
-       m:{plans:(f,l)=>l.fam}, count:true,
-       math:(f,l,b)=>`Most likely: ${num(l.fam)} families with a written plan with the program, ${num(b.fam)} without. At about ${usd(f.cost)} a family for independent advisers, that is ${money(l.fam*f.cost)}.`},
-    E:{facts:{cost:[50e3,100e3,153e3],avoid:[7898,11500,15106]}, levers:{sites:{base:[0,0,2],prog:[2,5,10]}},
-       m:{build:(f,l)=>l.sites*f.cost, lt:(f,l)=>l.sites*f.avoid*30, sites:(f,l)=>l.sites},
-       math:(f,l,b)=>`Most likely: ${num(l.sites)} sites with the program (${num(b.sites)} without) × ${usd(f.cost)} each. Then each site avoids one outage a year at about ${usd(f.avoid)}, for 30 years.`}
+    A:{name:'Energy Workforce', inputs:[
+        IN('local','Share of build work done by county residents','pct',0,80,1,12,30),
+        IN('pl','Permanent plant jobs held by county residents','pct',0,100,5,40,70),
+        IN('stay','Residents still in the trade after the build','pct',0,100,5,35,55),
+        IN('pay','Monthly craft pay','usd',4000,9000,100,6700),
+        IN('away','Out-of-county workers who stay in the county','pct',0,100,5,50),
+        IN('perday','What each of them spends in the county a working day','usd',0,150,5,75),
+        IN('perm','Permanent plant jobs','num',5,20,1,12),
+        IN('pw','Permanent pay a year','usd',50000,120000,1000,86000),
+        IN('gain','Yearly pay gain over their old work','usd',0,30000,500,12000),
+        IN('yrs','Years that gain lasts','num',1,30,1,10)],
+      parts:v=>[
+        {l:'Wages to county residents',w:'build',x:PM*v.local*v.pay,f:`${num(PM)} worker-months × ${pc(v.local)} county residents × ${usd(v.pay)}`},
+        {l:'Spending by out-of-county crews',w:'build',x:PM*(1-v.local)*v.away*v.perday*25,f:`${num(PM*(1-v.local))} out-of-county worker-months × ${pc(v.away)} staying here × ${usd(v.perday)} × 25 days`},
+        {l:'Plant jobs held by residents',w:'after',x:v.perm*v.pl*v.pw*30,f:`${num(v.perm)} jobs × ${pc(v.pl)} held locally × ${usd(v.pw)} × 30 years`},
+        {l:'Residents still in the trade',w:'after',x:PEAK*v.local*v.stay*v.gain*v.yrs,f:`${num(PEAK*v.local)} residents at peak × ${pc(v.stay)} still in the trade × ${usd(v.gain)} more a year × ${num(v.yrs)} years`}]},
+    C:{name:'Local Suppliers', inputs:[
+        IN('win','Share of site purchases won by county firms','pct',0,60,1,10,20),
+        IN('hold','Share of upkeep held by county firms','pct',0,100,5,25,60),
+        IN('firms','County firms leaving with a contract record','num',0,40,1,3,12),
+        IN('pool','Site work and purchases as a share of the build','pct',1,10,0.5,5),
+        IN('acres','Acres kept up','num',1000,3500,50,2750),
+        IN('veg','Vegetation upkeep per acre a year','usd',100,400,1,232),
+        IN('other','Fences, roads, drainage and security a year','usd',0,1000000,25000,375000),
+        IN('follow','New work a year per firm','usd',0,800000,10000,150000),
+        IN('yrs','Years it lasts','num',1,30,1,10)],
+      parts:v=>[
+        {l:'Site purchases won by county firms',w:'build',x:COST*v.pool*v.win,f:`$1.6 billion × ${pc(v.pool)} site work and purchases × ${pc(v.win)} won locally`},
+        {l:'Upkeep held by county firms',w:'after',x:(v.acres*v.veg+v.other)*v.hold*30,f:`(${num(v.acres)} acres × ${usd(v.veg)} + ${money(v.other)}) a year × ${pc(v.hold)} held locally × 30 years`},
+        {l:'New work won by firms with a record',w:'after',x:v.firms*v.follow*v.yrs,f:`${num(v.firms)} firms × ${money(v.follow)} a year × ${num(v.yrs)} years`}]},
+    B:{name:'Crew Meals', inputs:[
+        IN('share','Share of crew meals cooked by county kitchens','pct',0,100,5,5,80),
+        IN('kit','County kitchens leaving with a catering record','num',0,10,1,0,3),
+        IN('take','Workers who buy lunch','pct',0,100,5,45),
+        IN('lunch','Lunch price','usd',8,20,1,13),
+        IN('bfast','Workers who buy breakfast','pct',0,100,5,20),
+        IN('cat','New catering a year per kitchen','usd',0,300000,5000,75000),
+        IN('yrs','Years it lasts','num',1,30,1,10)],
+      parts:v=>{const rev=PM*22*(v.take*v.lunch+v.bfast*7)+PM*15; return [
+        {l:'Meals cooked by county kitchens',w:'build',x:rev*v.share,f:`${num(PM*22*v.take)} lunches at ${usd(v.lunch)} + ${num(PM*22*v.bfast)} breakfasts at $7 + ${num(PM)} monthly safety meals at $15 = ${money(rev)}, × ${pc(v.share)} cooked in the county`},
+        {l:'Catering won after the build',w:'after',x:v.kit*v.cat*v.yrs,f:`${num(v.kit)} kitchens × ${money(v.cat)} a year × ${num(v.yrs)} years`}];}},
+    E:{name:'Community Resilience', inputs:[
+        IN('sites','Clinics, shelters or churches with solar and battery backup','num',0,20,1,0,5),
+        IN('cost','Cost per site, installed by county electricians','usd',30000,250000,5000,100000)],
+      parts:v=>[{l:'Backup power installed (grant-funded)',w:'build',x:v.sites*v.cost,f:`${num(v.sites)} sites × ${usd(v.cost)}`}]},
+    J:{name:'Jefferson Power Station', build:true, inputs:[
+        IN('local','Share of build work done by county residents','pct',0,80,1,12,30),
+        IN('win','Share of site purchases won by county firms','pct',0,60,1,10,20),
+        IN('pl','Permanent plant jobs held by county residents','pct',0,100,5,40,70),
+        IN('cost','Approved cost','usd',1e9,2e9,5e7,1.5e9),
+        IN('pool','Site work and purchases as a share of the build','pct',1,10,0.5,5),
+        IN('pay','Monthly craft pay','usd',4000,9000,100,6700),
+        IN('away','Out-of-county workers who stay in the county','pct',0,100,5,50),
+        IN('perday','What each of them spends in the county a working day','usd',0,150,5,75),
+        IN('perm','Permanent plant jobs','num',5,40,1,22),
+        IN('pw','Permanent pay a year','usd',50000,120000,1000,86000)],
+      parts:v=>[
+        {l:'Wages to county residents',w:'build',x:PM*v.local*v.pay,f:`${num(PM)} worker-months (same staffing shape as Cypress) × ${pc(v.local)} county residents × ${usd(v.pay)}`},
+        {l:'Spending by out-of-county crews',w:'build',x:PM*(1-v.local)*v.away*v.perday*25,f:`${num(PM*(1-v.local))} out-of-county worker-months × ${pc(v.away)} staying here × ${usd(v.perday)} × 25 days`},
+        {l:'Site purchases won by county firms',w:'build',x:v.cost*v.pool*v.win,f:`${money(v.cost)} × ${pc(v.pool)} × ${pc(v.win)} won locally`},
+        {l:'Plant jobs held by residents',w:'after',x:v.perm*v.pl*v.pw*30,f:`${num(v.perm)} jobs × ${pc(v.pl)} held locally × ${usd(v.pw)} × 30 years`}]},
+    D:{name:'Landowner Prosperity', inputs:[IN('fam','Families with a written plan','num',0,60,1,2,18)], count:true,
+      parts:v=>[{l:'Families with a written plan',w:'count',x:v.fam,f:`${num(v.fam)} families. We count plans, never lease income.`}]}
   };
+  const TAX={y1:9.6e6, end:.2, mills:57.35, school:47.7, state:25, offset:.98, county:9.65, sales:8.8e6};
   function money(x){const a=Math.abs(x);return a>=1e7?'$'+Math.round(x/1e6)+'M':a>=1e6?'$'+(x/1e6).toFixed(1)+'M':a>=1e3?'$'+Math.round(x/1e3)+'K':'$'+Math.round(x);}
   function usd(x){return '$'+Math.round(x).toLocaleString('en-US');}
   function pc(x){return Math.round(x*100)+'%';}
   function num(x){return Math.round(x).toLocaleString('en-US');}
-  const rng=seed=>()=>{seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};
-  const tri=(r,[a,m,b])=>{const u=r(); if(b<=a) return a; const F=(m-a)/(b-a); return u<F?a+Math.sqrt(u*(b-a)*(m-a)):b-Math.sqrt((1-u)*(b-a)*(b-m));};
-  const pctl=(xs,p)=>{const s=Float64Array.from(xs).sort(); return s[Math.min(s.length-1,Math.floor(p*s.length))];};
-  const P=xs=>({lo:pctl(xs,.1),mid:pctl(xs,.5),hi:pctl(xs,.9)});
-  const mode=o=>Object.fromEntries(Object.entries(o).map(([k,v])=>[k,(v.prog||v)[1]]));
-  const modeBase=o=>Object.fromEntries(Object.entries(o).map(([k,v])=>[k,v.base[1]]));
-  /* one run of every workstream; returns per-workstream metrics for both cases */
-  const draw=(rs,cfgs)=>{const out={}; for(const [k,c] of Object.entries(cfgs)){const r=rs[k];
-      const f={}, lb={}, lp={}; for(const [n,t] of Object.entries(c.facts)) f[n]=tri(r,t);
-      for(const [n,t] of Object.entries(c.levers)){lb[n]=tri(r,t.base); lp[n]=tri(r,t.prog);}
-      const o={}; for(const [n,fn] of Object.entries(c.m)) o[n]={base:fn(f,lb),prog:fn(f,lp)};
-      for(const [n,fn] of Object.entries(c.same||{})) o[n]={same:fn(f)};
-      out[k]=o;} return out;};
-  const forecast=(cfgs,runs=RUNS)=>{/* one random stream per workstream, so a calculator and section 04 agree */
-    const r=Object.fromEntries(Object.keys(cfgs).map(k=>[k,rng(SEED+k.charCodeAt(0))])), acc={};
-    const push=(k,v)=>(acc[k]||(acc[k]=[])).push(v);
-    for(let i=0;i<runs;i++){const d=draw(r,cfgs); let tb=0,tl=0,bb=0,bl=0,tc=0,bc=0;
-      for(const [k,o] of Object.entries(d)) for(const [n,v] of Object.entries(o)){
-        if('same' in v){push(k+'.'+n,v.same); continue;}
-        push(k+'.'+n+'.base',v.base); push(k+'.'+n+'.prog',v.prog); push(k+'.'+n+'.diff',v.prog-v.base);
-        if(n==='build'){tb+=v.prog;bb+=v.base;} if(n==='lt'){tl+=v.prog;bl+=v.base;} if(n==='cap'){tc+=v.prog;bc+=v.base;}}
-      push('all.build.prog',tb);push('all.build.base',bb);push('all.build.diff',tb-bb);
-      push('all.lt.prog',tl);push('all.lt.base',bl);push('all.lt.diff',tl-bl);
-      push('all.cap.prog',tc);push('all.cap.base',bc);push('all.cap.diff',tc-bc);
-      push('all.after.prog',tl+tc);push('all.after.base',bl+bc);push('all.after.diff',tl+tc-bl-bc);
-      push('all.total.prog',tb+tl+tc);push('all.total.base',bb+bl+bc);push('all.total.diff',tb+tl+tc-bb-bl-bc);}
-    return Object.fromEntries(Object.entries(acc).map(([k,v])=>[k,P(v)]));};
-  window.BTS_FORECAST={config:BTS,forecast,money};
-  const fmtV=(k,x)=>/plans|sites|peakres/.test(k)?num(x):money(x);
-  const rangeTxt=(k,p)=>`8 in 10 runs: ${fmtV(k,p.lo)} to ${fmtV(k,p.hi)}`;
-  /* range bars: without vs with, P10–P90 band, P50 mark */
-  const bars=(rows)=>{const max=Math.max(...rows.flatMap(r=>[r.base.hi,r.prog.hi]))*1.08||1, x=v=>(v/max*100).toFixed(2)+'%';
-    const one=(lab,p,cls)=>`<div class="rb ${cls}"><span class="rb-l">${lab}</span><span class="rb-t"><i style="left:${x(p.lo)};width:calc(${x(p.hi)} - ${x(p.lo)})"></i><b style="left:${x(p.mid)}"></b></span><span class="rb-v">${fmtV(rows.key||'',p.mid)}</span><span class="sr">most likely ${fmtV(rows.key||'',p.mid)}; 8 in 10 runs between ${fmtV(rows.key||'',p.lo)} and ${fmtV(rows.key||'',p.hi)}</span></div>`;
-    return rows.map(r=>`<div class="rb-g">${r.title?`<p class="rb-h">${r.title}</p>`:''}${one('Without a program',r.base,'b')}${one('With Built to Stay',r.prog,'p')}</div>`).join('');};
-  /* section 04: fill [data-sum] and the chart from the default forecast */
-  const S=forecast(BTS);
-  document.querySelectorAll('[data-sum]').forEach(el=>{const [k,kind]=el.dataset.sum.split('|'); const p=S[k]; if(!p) return;
-    el.textContent=kind==='r'?`${fmtV(k,p.lo)} to ${fmtV(k,p.hi)}`:fmtV(k,p.mid);});
-  document.querySelectorAll('[data-fc]').forEach(el=>{el.innerHTML=bars([
-    {title:'During the build',base:S['all.build.base'],prog:S['all.build.prog']},
-    {title:'After the build, over 30 years',base:S['all.after.base'],prog:S['all.after.prog']},
-    {title:'Both together',base:S['all.total.base'],prog:S['all.total.prog']}]);});
-  /* section 03 calculators: each slider sets the most likely value of one input */
-  const wireModel=m=>{const key=m.dataset.model2, base=BTS[key]; if(!base) return;
-    const ins=[...m.querySelectorAll('input[type=range]')];
-    const toVal=i=>Number(i.value)/(i.dataset.fmt==='pct'?100:1), toSlider=(i,v)=>{i.value=String(i.dataset.fmt==='pct'?Math.round(v*100):v);};
-    const FMT={pct:x=>x+'%',mo:x=>x+' mo',usd:x=>usd(x),num:x=>num(x)};
-    const reset=()=>ins.forEach(i=>{const n=i.name, t=base.facts[n]||base.levers[n].prog; toSlider(i,t[1]);});
-    const run=()=>{const c={facts:{},levers:{},m:base.m,same:base.same};
-      ins.forEach(i=>{const n=i.name, v=toVal(i), o=m.querySelector(`output[data-for="${n}"]`); if(o) o.textContent=FMT[i.dataset.fmt](Number(i.value));
-        const t=base.facts[n]||base.levers[n].prog, tt=[Math.min(t[0],v),v,Math.max(t[2],v)];
-        if(base.facts[n]) c.facts[n]=tt; else c.levers[n]={base:base.levers[n].base,prog:tt};});
-      for(const n in base.facts) if(!c.facts[n]) c.facts[n]=base.facts[n];
-      for(const n in base.levers) if(!c.levers[n]) c.levers[n]=base.levers[n];
-      const F=forecast({[key]:c});
-      m.querySelectorAll('[data-out]').forEach(o=>{const k=o.dataset.out;
-        if(k==='math'){o.textContent=base.math(mode(c.facts),mode(c.levers),modeBase(c.levers)); return;}
-        if(k==='bars'){const rows=[]; if(F[key+'.build.base']) rows.push({title:'During the build',key:'',base:F[key+'.build.base'],prog:F[key+'.build.prog']});
-          if(F[key+'.lt.base']) rows.push({title:'Plant commitments, 30 years',base:F[key+'.lt.base'],prog:F[key+'.lt.prog']});
-          if(F[key+'.cap.base']) rows.push({title:'Capacity after the build',base:F[key+'.cap.base'],prog:F[key+'.cap.prog']});
-          if(F[key+'.plans.base']) {const r={title:'Families with a written plan',base:F[key+'.plans.base'],prog:F[key+'.plans.prog']}; rows.push(r); rows.key='plans';}
-          o.innerHTML=bars(rows); return;}
-        const [n,kind]=k.split('|'), counts=/peakres|sites/.test(n), p=counts?F[key+'.'+n+'.prog']:(F[key+'.'+n+'.diff']||F[key+'.'+n]); if(!p) return;
-        o.textContent=kind==='r'?rangeTxt(n,p):((F[key+'.'+n+'.diff']&&!counts&&n!=='plans')?'+':'')+fmtV(n,p.mid);});};
+  const vals=(c,which,over={})=>Object.fromEntries(c.inputs.map(i=>{const raw=(over[i.n]!==undefined&&(which==='prog'||!i.lever))?over[i.n]:i[which]; return [i.n, i.fmt==='pct'?raw/100:raw];}));
+  const sum=(ps,w)=>ps.filter(p=>p.w===w).reduce((a,p)=>a+p.x,0);
+  /* one workstream: without, with, and the difference */
+  const runWS=(k,over={})=>{const c=BTS[k], b=c.parts(vals(c,'base',over)), p=c.parts(vals(c,'prog',over));
+    return {base:b, prog:p, add:{build:sum(p,'build')-sum(b,'build'), after:sum(p,'after')-sum(b,'after'), count:sum(p,'count')-sum(b,'count')},
+      tot:{bb:sum(b,'build'),ba:sum(b,'after'),pb:sum(p,'build'),pa:sum(p,'after')}};};
+  /* the whole county: plant baseline (without a program, plus taxes) and what Built to Stay adds, with ripple */
+  const runAll=(over={},ripple=.30)=>{const R=Object.fromEntries(Object.keys(BTS).map(k=>[k,runWS(k,over[k]||{})]));
+    let bb=0,ba=0,ab=0,aa=0; for(const k in R){bb+=R[k].tot.bb; ba+=R[k].tot.ba; ab+=R[k].add.build; aa+=R[k].add.after;}
+    const tax=30*(TAX.y1+TAX.y1*TAX.end)/2, rip=1+ripple;
+    const base={build:bb*rip+TAX.sales, after:ba*rip+tax}, adds={build:ab*rip, after:aa*rip};
+    const A0=R.A.base, A1=R.A.prog, C0=R.C.base, C1=R.C.prog;
+    const cents=(a,c)=>(a[0].x+a[1].x+c[0].x)*rip/COST*100;
+    return {R, base, adds, tax, rip,
+      total:base.build+base.after+adds.build+adds.after,
+      taxDistrict:tax*TAX.school/TAX.mills - tax*TAX.state/TAX.mills*TAX.offset, taxCounty:tax*TAX.county/TAX.mills,
+      cents:{base:cents(A0,C0), prog:cents(A1,C1)},
+      res:{base:PEAK*vals(BTS.A,'base').local, prog:PEAK*vals(BTS.A,'prog',over.A||{}).local},
+      jps:(R.J.add.build+R.J.add.after)*rip, jbase:(R.J.tot.bb+R.J.tot.ba)*rip};
+  };
+  window.BTS_MODEL={BTS,CURVE,PM,PEAK,TAX,runWS,runAll,money};
+  /* without / with bars, single values */
+  const bars=rows=>{const max=Math.max(...rows.flatMap(r=>[r.b,r.p]))*1.05||1, w=v=>(v/max*100).toFixed(2)+'%', f=rows.fmt||money;
+    const one=(lab,v,cls)=>`<div class="rb ${cls}"><span class="rb-l">${lab}</span><span class="rb-t"><i style="left:0;width:${w(v)}"></i></span><span class="rb-v">${f(v)}</span></div>`;
+    return rows.map(r=>`<div class="rb-g"><p class="rb-h">${r.t}</p>${one('Without a program',r.b,'b')}${one('With Built to Stay',r.p,'p')}</div>`).join('');};
+  /* staffing curve chart (crew meals panel) */
+  const curveSVG=()=>{const W=580,H=150,bw=W/CURVE.length, mx=PEAK;
+    const rects=CURVE.map((v,i)=>`<rect x="${(i*bw+1).toFixed(1)}" y="${(H-v/mx*(H-18)).toFixed(1)}" width="${(bw-2).toFixed(1)}" height="${(v/mx*(H-18)).toFixed(1)}"${v===PEAK?' class="pk"':''}></rect>`).join('');
+    return `<svg viewBox="0 0 ${W} ${H+18}" role="img" aria-label="Crew on site by month: rising from 53 in July 2026 to a peak of ${PEAK} in September 2027, then falling to 35 by November 2028.">${rects}<text x="0" y="${H+14}">Jul 2026</text><text x="${(14*bw).toFixed(0)}" y="${H+14}" text-anchor="middle">Peak ${PEAK} · Sep 2027</text><text x="${W}" y="${H+14}" text-anchor="end">Nov 2028</text></svg>`;};
+  document.querySelectorAll('[data-curve]').forEach(el=>{el.innerHTML=curveSVG();});
+  /* section 04 */
+  const fillAll=M=>{
+    const S={'total':money(M.total),'base':money(M.base.build+M.base.after),'base.build':money(M.base.build),'base.after':money(M.base.after),
+      'adds':money(M.adds.build+M.adds.after),'adds.build':money(M.adds.build),'adds.after':money(M.adds.after),
+      'tax':money(M.tax),'tax.district':money(M.taxDistrict),'tax.county':money(M.taxCounty),
+      'cents.base':M.cents.base.toFixed(1)+'¢','cents.prog':M.cents.prog.toFixed(1)+'¢','res.base':num(M.res.base),'res.prog':num(M.res.prog),
+      'jps':money(M.jps),'cy':money(M.adds.build+M.adds.after-M.jps),'res.both':num(M.res.prog*2)};
+    document.querySelectorAll('[data-sum]').forEach(el=>{if(S[el.dataset.sum]!==undefined) el.textContent=S[el.dataset.sum];});
+    document.querySelectorAll('[data-fc]').forEach(el=>{el.innerHTML=bars([
+      {t:'During the build, 2026–2028',b:M.base.build,p:M.base.build+M.adds.build},
+      {t:'The 30 years after',b:M.base.after,p:M.base.after+M.adds.after}]);});
+  };
+  fillAll(runAll());
+  const FMT={pct:x=>x+'%',mo:x=>x+' mo',usd:x=>usd(x),num:x=>num(x)};
+  const lab=(i,k)=>`<label class="${i.lever?'lev':'fx'}"><span>${i.l} <output data-for="${k}"></output></span>${i.lever?`<i class="lev-t">Without a program: ${FMT[i.fmt](i.base)}</i>`:''}<input type="range" name="${k}" min="${i.min}" max="${i.max}" step="${i.step}" data-fmt="${i.fmt}" value="${i.prog}"></label>`;
+  /* section 04 calculator: the six levers that move the county number */
+  document.querySelectorAll('[data-model-all]').forEach(m=>{
+    const L=[['A','local'],['C','win'],['C','hold'],['C','firms'],['A','stay']].map(([k,n])=>({k,n,i:BTS[k].inputs.find(x=>x.n===n)}));
+    const rip={l:'Local re-spending: each $1 kept creates this much more',fmt:'num',min:0,max:60,step:5,prog:30,lever:false,n:'ripple'};
+    m.querySelector('.in').innerHTML='<p class="in-h">What Built to Stay moves (with the program)</p>'+L.map(x=>lab(x.i,x.k+'.'+x.n)).join('')+'<p class="in-h">How far it spreads</p>'+lab({...rip,l:'Local re-spending per $1 kept (cents)'},'ripple');
+    const ins=[...m.querySelectorAll('input')];
+    const run=()=>{const over={}; let ripple=.3;
+      ins.forEach(i=>{const o=m.querySelector(`output[data-for="${i.name}"]`); if(o) o.textContent=FMT[i.dataset.fmt](Number(i.value));
+        if(i.name==='ripple') ripple=Number(i.value)/100; else {const [k,n]=i.name.split('.'); (over[k]||(over[k]={}))[n]=Number(i.value); if(i.name==='A.local'||i.name==='C.win') (over.J||(over.J={}))[n]=Number(i.value);}});
+      const M=runAll(over,ripple); fillAll(M);};
     ins.forEach(i=>i.addEventListener('input',run));
-    const rb=m.querySelector('[data-reset]'); if(rb) rb.addEventListener('click',()=>{reset();run();});
-    reset(); run();
+    const r=m.querySelector('[data-reset]'); if(r) r.addEventListener('click',()=>{ins.forEach(i=>{const [k,n]=i.name.split('.'); i.value=i.name==='ripple'?30:BTS[k].inputs.find(x=>x.n===n).prog;}); run();});
+    run();
+  });
+  /* section 03 calculators: one per workstream */
+  const wireModel=m=>{const key=m.dataset.model2, c=BTS[key]; if(!c) return;
+    const box=m.querySelector('.in');
+    box.innerHTML='<p class="in-h">What Built to Stay moves</p>'+c.inputs.filter(i=>i.lever).map(i=>lab(i,i.n)).join('')+(c.inputs.some(i=>!i.lever)?'<p class="in-h">Our assumptions</p>'+c.inputs.filter(i=>!i.lever).map(i=>lab(i,i.n)).join(''):'');
+    const ins=[...box.querySelectorAll('input')];
+    const run=()=>{const over={}; ins.forEach(i=>{over[i.name]=Number(i.value); const o=box.querySelector(`output[data-for="${i.name}"]`); if(o) o.textContent=FMT[i.dataset.fmt](Number(i.value));});
+      const r=runWS(key,over), out=m.querySelector('.out');
+      const head=c.count?`<span class="lab dim">More families with a written plan</span><div class="big">${num(r.add.count)}</div>`
+        :`<span class="lab dim">Added during the build</span><div class="big">+${money(r.add.build)}</div>`+(r.tot.pa||r.tot.ba?`<span class="lab dim">Added in the 30 years after</span><div class="big sm">+${money(r.add.after)}</div>`:'');
+      const rows=r.prog.map((p,ix)=>{const b=r.base[ix].x, f=c.count?num:money; return `<li><b>${p.l}</b><span class="wv">${f(b)} → ${f(p.x)}</span><span class="wf">${p.f}</span></li>`;}).join('');
+      out.innerHTML=head+`<ul class="parts"><li class="ph"><b>Line</b><span class="wv">Without → with</span></li>${rows}</ul><p class="note">Before local re-spending. Section 04 adds it and the plant’s taxes.</p>`;};
+    ins.forEach(i=>i.addEventListener('input',run));
+    const rb=m.querySelector('[data-reset]'); if(rb) rb.addEventListener('click',()=>{ins.forEach(i=>{i.value=c.inputs.find(x=>x.n===i.name).prog;}); run();});
+    run();
   };
 
   /* ---------- Workstream explorer (0.0.125): five tiles are tabs; the picked workstream's walkthrough and
@@ -286,6 +341,7 @@
       panel.replaceChildren(tpl.content.cloneNode(true));
       panel.querySelectorAll('[data-tabs]').forEach(wireTabs);
       panel.querySelectorAll('[data-model2]').forEach(wireModel);
+      panel.querySelectorAll('[data-curve]').forEach(el=>{el.innerHTML=curveSVG();});
       if(opts.focus) t.focus();
       if(opts.user && history.replaceState) history.replaceState(null,'','#ws-'+k.toLowerCase());
       if(opts.reveal){const top=wsx.getBoundingClientRect().top; if(top<0||top>innerHeight*.6) wsx.scrollIntoView({block:'start'});}};
