@@ -58,3 +58,20 @@ Direction: a new Delta house, not an old one retrofitted. It should show how the
 > Imagined photograph, documentary style, warm late-afternoon daylight. Interior of a newly built Arkansas Delta home: a high-ceilinged open kitchen and living room with tall windows and a deep screened porch beyond, cypress wood and brick, ceiling fans. A Black multigenerational family: a grandmother at a big wooden table shelling peas, a father cooking, a teenage girl on a laptop doing homework, a small child on the porch steps. Through the window, a garden and rooftop solar visible on a neighboring house. On the kitchen wall, clearly visible and well lit, a slim white home battery unit with a small status light, beside a wall panel showing the house running on stored power while the street outside is dark after a storm. Calm, lived-in, hopeful, not futuristic chrome. 3:2, eye level.
 
 Alt text (draft): "Imagined: a new Delta home after a storm, the family at the kitchen table, a wall battery keeping the lights on."
+
+## Pass 2 (Stedmon, Nov 20, evening): what to change
+
+**System rules**
+- **People are always cards, in a horizontal scroll:** portrait, place and year, name, a blurb. One component for travelers, builders, families and living people. No tables or index lists for people.
+- **Places and projects are cards too:** an investment card has a strong real image, the place, what it is, size and status, and a link to reporting about it. Keep the state filter. No tables on either page.
+- **Present = real photographs. Future = generated images.** Generated images carry the tag **"Reimagined"** (not "Imagined"). Future images are made for each scene, not recycled across sections.
+- **The scroll is the experience:** text reveals as you read; scale and centering introduce each new section; charts reveal in sequence so they culminate in one point instead of sitting side by side.
+
+**Story page**
+- Saturday night / Sunday morning: more imagery; the facts become cards.
+- People coming back: first show that people **are** coming back to the South, with real numbers; then that they're not yet choosing the Delta; then the question of how this investment becomes infrastructure, services, housing and quality of life that make the Delta a place people settle.
+- Where the money goes: drop "per $100". Show real dollar amounts and how they flow.
+- Every kind of work: real photos for each category, not generated images.
+- Five capabilities: image cards, like the proposal's workstreams.
+- The culture still travels: start over. Present-day culture with imagery (*Sinners*, set in the Delta, and what it set off; living artists; festivals). Drop the Norway sister city and the stray Juneteenth line unless they connect. The sum-up has to say something true.
+- The future: each reimagined place pairs visibly with its past place, using new generated images. Rewrite the narrative so "new ideas leave from here" and "what the county keeps" connect to the places and to each other.
