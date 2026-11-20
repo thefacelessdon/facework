@@ -1,6 +1,6 @@
 # Delta Futurism
 
-A vision for the Arkansas–Mississippi Delta (the story page, a wide regional lens), and its first initiative: **Built to Stay**, a community partnership proposal to Entergy Arkansas for the Arkansas Cypress solar build (the proposal page, zoomed in on the build).
+A vision for the Arkansas–Mississippi Delta (the story page, a wide regional lens), and its first initiative: **Built to Stay**, a supplier and workforce readiness proposal to Entergy Arkansas for the Arkansas Cypress solar build (the proposal page, zoomed in on the build).
 
 **Live:** https://deltafuturism.com (the home to share) · https://deltafuturism.com/built-to-stay (the initiative) · https://deltafuturism.com/sources. Also still served at face.works/delta-futurism from the same files. Not listed, `noindex`.
 
