@@ -2,7 +2,7 @@
 
 A vision for the Arkansas–Mississippi Delta (the story page, a wide regional lens), and its first initiative: **Built to Stay**, a community partnership proposal to Entergy Arkansas for the Arkansas Cypress solar build (the proposal page, zoomed in on the build).
 
-**Live:** https://face.works/delta-futurism · shared by link, not listed, `noindex`.
+**Live:** https://deltafuturism.com (the home to share) · https://deltafuturism.com/built-to-stay (the initiative) · https://deltafuturism.com/sources. Also still served at face.works/delta-futurism from the same files. Not listed, `noindex`.
 
 Delta Futurism and HUE's CACHE Creative Pathways are two sides of one coin. Delta Futurism attacks the energy and infrastructure side and is aimed at Entergy. CACHE attacks the creative and cultural side and is aimed at CACHE and Walton. They hold the same rigor and the same design grammar.
 
@@ -62,6 +62,13 @@ v3 (Nov 20): cover and a one-line status (a discussion draft; one meeting and tw
 - Call Southeast Arkansas College (870-543-5900): solar training offered, and price.
 - Ask Wanzek whether crews are fed on site or paid per diem (workstream B depends on it), and Entergy whether the Second-Tier Initiative applies to the Cypress EPC contract (workstream C).
 - Replace the imagined workstream A image with a real or imagined training shot in full PPE (gloves, glasses, hard hats, hi-vis).
+
+## The domain (since Nov 20, 2026)
+
+- **deltafuturism.com** is registered at Squarespace (Stedmon's account). Its DNS has two custom records pointing to Vercel: `A @ 76.76.21.21` and `CNAME www cname.vercel-dns.com`. Squarespace's parking preset was removed; the Domain Connect and Email Security presets stay.
+- **Vercel project `delta-futurism`** (team facework) serves it, with HTTPS from Let's Encrypt. www redirects to the bare domain.
+- **One source.** `deploy/deploy.sh` copies `public/delta-futurism` into a temp folder, adds `deploy/vercel.json` (routes `/`, `/built-to-stay`, `/sources`; redirects from the old `.html` paths; `noindex` header) and deploys to production. Run it after every change, alongside the face.works deploy.
+- **Link previews** follow the HUE pattern: one 1200×630 card per page (`public/delta-futurism/share/*.jpg`), made by `deploy/make-share-cards.sh` with headless Chrome from `deploy/share-card.html`, plus `og:` and `twitter:` tags and an icon on every page. When a card changes, bump `?v=` in the pages' `og:image` URLs so Slack and iMessage refetch it.
 
 ## How to edit
 
