@@ -146,8 +146,8 @@
 
   /* ---------- Reveal on scroll (pass 2): blocks ease in, their children and bars in sequence ---------- */
   if(!reduce && 'IntersectionObserver' in window){
-    const blocks='.part,.measure,.head,.sumup,.chart,.flow,.swipe-wrap,.ledger,.paths,.demo,.track,.asks,.family,.weekend,.close-c,.statement,.p-status,.next-step,.ask-contact,.model,.example,.put,figure.contact,.split > figure,.fut,.layers';
-    const groups='.facts,.capture,.caps,.phases,.steps,.stayed,.gov,.idx,.pcards,.fork,.ladder,.roles-x,.meas-c';
+    const blocks='.part,.measure,.head,.sumup,.chart,.flow,.swipe-wrap,.ledger,.paths,.demo,.ww,.track,.asks,.family,.weekend,.close-c,.statement,.p-status,.next-step,.ask-contact,.model,.example,.put,figure.contact,.split > figure,.fut,.layers';
+    const groups='.facts,.capture,.caps,.phases,.steps,.stayed,.gov,.idx,.pcards,.fork,.ladder,.roles-x,.meas-c,.imp';
     const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}}),{rootMargin:'0px 0px -10% 0px',threshold:.05});
     document.querySelectorAll(blocks+','+groups).forEach(el=>{
       if(el.parentElement && el.parentElement.closest('.rv,.rv-kids')) return;
@@ -157,4 +157,15 @@
       io.observe(el);
     });
   }
+
+  /* ---------- Tabs (pass 3): the working-with-us walkthrough ---------- */
+  document.querySelectorAll('[data-tabs]').forEach(w=>{
+    const tabs=[...w.querySelectorAll('[role=tab]')], panels=[...w.querySelectorAll('[role=tabpanel]')];
+    const uid='ww'+Math.random().toString(36).slice(2,7);
+    const show=i=>{tabs.forEach((t,j)=>{t.setAttribute('aria-selected',String(j===i)); t.tabIndex=j===i?0:-1;}); panels.forEach((p,j)=>{p.hidden=j!==i; if(j===i){p.classList.remove('flip'); void p.offsetWidth; p.classList.add('flip');}});};
+    tabs.forEach((t,i)=>{t.id=uid+'-t'+i; panels[i].id=uid+'-p'+i; t.setAttribute('aria-controls',panels[i].id); panels[i].setAttribute('aria-labelledby',t.id);
+      t.addEventListener('click',()=>show(i));
+      t.addEventListener('keydown',e=>{const n=e.key==='ArrowRight'?i+1:e.key==='ArrowLeft'?i-1:null; if(n===null) return; e.preventDefault(); const k=(n+tabs.length)%tabs.length; show(k); tabs[k].focus();});});
+    show(0);
+  });
 })();
