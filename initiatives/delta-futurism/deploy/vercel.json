@@ -1,0 +1,77 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.deltafuturism.com"
+        }
+      ],
+      "destination": "https://deltafuturism.com/",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.deltafuturism.com"
+        }
+      ],
+      "destination": "https://deltafuturism.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/proposal.html",
+      "destination": "/built-to-stay",
+      "permanent": true
+    },
+    {
+      "source": "/proposal",
+      "destination": "/built-to-stay",
+      "permanent": true
+    },
+    {
+      "source": "/sources.html",
+      "destination": "/sources",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/built-to-stay",
+      "destination": "/proposal.html"
+    },
+    {
+      "source": "/sources",
+      "destination": "/sources.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
+      ]
+    }
+  ]
+}
