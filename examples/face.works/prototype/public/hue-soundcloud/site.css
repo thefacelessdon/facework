@@ -52,6 +52,7 @@ main p a:hover{text-decoration-thickness:2px}
 .mute{color:rgb(var(--tone-mute))}
 .accent{color:rgb(var(--tone-accent))}
 sup a{font-family:var(--mono);font-size:.62em;text-decoration:none !important;color:rgb(var(--tone-accent));padding-inline:1px}
+sup+sup::before{content:",";font-family:var(--mono);font-size:.62em;color:rgb(var(--tone-mute))}
 
 /* HEADER (ProposalHeader anatomy): 56px, ink, sticky; HUE × partner, numbered chapters */
 .hdr{position:sticky;top:0;z-index:50;height:56px;border-bottom:1px solid rgb(243 238 230 / .16)}
