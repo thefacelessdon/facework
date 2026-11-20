@@ -159,7 +159,7 @@
   }
 
   /* ---------- Tabs (pass 3): the working-with-us walkthrough ---------- */
-  document.querySelectorAll('[data-tabs]').forEach(w=>{
+  const wireTabs=w=>{
     const tabs=[...w.querySelectorAll('[role=tab]')], panels=[...w.querySelectorAll('[role=tabpanel]')];
     const uid='ww'+Math.random().toString(36).slice(2,7);
     /* pass 4: optional previous/next buttons and a "Step n of N" count ([data-steps]) */
@@ -174,5 +174,118 @@
       t.addEventListener('keydown',e=>{const n={ArrowRight:i+1,ArrowLeft:i-1,Home:0,End:tabs.length-1}[e.key]; if(n===undefined) return; e.preventDefault(); const k=(n+tabs.length)%tabs.length; show(k); tabs[k].focus();});});
     steps.forEach(b=>b.addEventListener('click',()=>show(Math.max(0,Math.min(tabs.length-1,cur+Number(b.dataset.step))))));
     show(0);
-  });
+  };
+  document.querySelectorAll('[data-tabs]').forEach(wireTabs);
+
+  /* ---------- Built to Stay forecast (0.0.124): the one source for the section 03 calculators and the section 04 totals.
+     Every input is a triangle: [low, most likely, high]. Facts are the same with or without the program; levers
+     have a "base" (no program) and a "prog" (with Built to Stay) triangle. Each run draws the facts once and
+     scores both cases, so shared unknowns cancel in the difference. Seeded, so the page shows the same numbers every load. */
+  const RUNS=4000, SEED=20261120;
+  const BTS={
+    A:{facts:{peak:[700,750,800],avg:[.35,.45,.55],wage:[5000,6500,8000],perm:[10,12,15],pw:[70860,86000,101120]},
+       levers:{local:{base:[.05,.11,.20],prog:[.20,.35,.55]},pl:{base:[.2,.4,.6],prog:[.5,.7,.9]}},
+       m:{build:(f,l)=>f.peak*f.avg*29*f.wage*l.local, lt:(f,l)=>f.perm*l.pl*f.pw*30, peakres:(f,l)=>f.peak*l.local},
+       math:(f,l,b)=>`Most likely: ${num(f.peak)} at peak × ${pc(f.avg)} average crew × 29 months × ${usd(f.wage)} a month × local hire (${pc(l.local)} with the program, ${pc(b.local)} without). Then ${num(f.perm)} permanent jobs × ${pc(l.pl)} held locally (${pc(b.pl)} without) × ${usd(f.pw)} × 30 years.`},
+    B:{facts:{eat:[.3,.45,.6],months:[6,7.5,9],rate:[12,14,16],rooms:[60,130,200]},
+       levers:{share:{base:[0,.05,.15],prog:[.3,.5,.7]}},
+       m:{build:(f,l)=>750*f.eat*f.months*21.7*f.rate*l.share}, same:{hotel:f=>f.rooms*f.months*21.7*110},
+       math:(f,l,b)=>`Most likely: ${num(750*f.eat)} meals a day × ${num(f.months*21.7)} working days × ${usd(f.rate)} = ${money(750*f.eat*f.months*21.7*f.rate)} in meals, ${pc(l.share)} cooked by county kitchens with the program, ${pc(b.share)} without. Hotel nights: ${num(f.rooms)} rooms × ${num(f.months*21.7)} nights × $110.`},
+    C:{facts:{pool:[.03,.04,.05],acres:[2500,2750,3000],veg:[184,232,281],other:[150e3,375e3,600e3]},
+       levers:{win:{base:[.03,.08,.15],prog:[.10,.20,.35]},hold:{base:[.10,.25,.40],prog:[.40,.60,.85]}},
+       m:{build:(f,l)=>1.6e9*f.pool*l.win, lt:(f,l)=>(f.acres*f.veg+f.other)*l.hold*30},
+       math:(f,l,b)=>`Most likely: $1.6 billion × ${pc(f.pool)} site work × share won by county firms (${pc(l.win)} with the program, ${pc(b.win)} without). Upkeep: ${num(f.acres)} acres × ${usd(f.veg)} + ${money(f.other)} a year, share held locally (${pc(l.hold)} with, ${pc(b.hold)} without), for 30 years.`},
+    D:{facts:{cost:[2500,5000,7500]}, levers:{fam:{base:[0,2,5],prog:[8,18,30]}},
+       m:{plans:(f,l)=>l.fam}, count:true,
+       math:(f,l,b)=>`Most likely: ${num(l.fam)} families with a written plan with the program, ${num(b.fam)} without. At about ${usd(f.cost)} a family for independent advisers, that is ${money(l.fam*f.cost)}.`},
+    E:{facts:{cost:[50e3,100e3,153e3],avoid:[7898,11500,15106]}, levers:{sites:{base:[0,0,2],prog:[2,5,10]}},
+       m:{build:(f,l)=>l.sites*f.cost, lt:(f,l)=>l.sites*f.avoid*30, sites:(f,l)=>l.sites},
+       math:(f,l,b)=>`Most likely: ${num(l.sites)} sites with the program (${num(b.sites)} without) × ${usd(f.cost)} each. Then each site avoids one outage a year at about ${usd(f.avoid)}, for 30 years.`}
+  };
+  function money(x){const a=Math.abs(x);return a>=1e7?'$'+Math.round(x/1e6)+'M':a>=1e6?'$'+(x/1e6).toFixed(1)+'M':a>=1e3?'$'+Math.round(x/1e3)+'K':'$'+Math.round(x);}
+  function usd(x){return '$'+Math.round(x).toLocaleString('en-US');}
+  function pc(x){return Math.round(x*100)+'%';}
+  function num(x){return Math.round(x).toLocaleString('en-US');}
+  const rng=seed=>()=>{seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};
+  const tri=(r,[a,m,b])=>{const u=r(); if(b<=a) return a; const F=(m-a)/(b-a); return u<F?a+Math.sqrt(u*(b-a)*(m-a)):b-Math.sqrt((1-u)*(b-a)*(b-m));};
+  const pctl=(xs,p)=>{const s=Float64Array.from(xs).sort(); return s[Math.min(s.length-1,Math.floor(p*s.length))];};
+  const P=xs=>({lo:pctl(xs,.1),mid:pctl(xs,.5),hi:pctl(xs,.9)});
+  const mode=o=>Object.fromEntries(Object.entries(o).map(([k,v])=>[k,(v.prog||v)[1]]));
+  const modeBase=o=>Object.fromEntries(Object.entries(o).map(([k,v])=>[k,v.base[1]]));
+  /* one run of every workstream; returns per-workstream metrics for both cases */
+  const draw=(rs,cfgs)=>{const out={}; for(const [k,c] of Object.entries(cfgs)){const r=rs[k];
+      const f={}, lb={}, lp={}; for(const [n,t] of Object.entries(c.facts)) f[n]=tri(r,t);
+      for(const [n,t] of Object.entries(c.levers)){lb[n]=tri(r,t.base); lp[n]=tri(r,t.prog);}
+      const o={}; for(const [n,fn] of Object.entries(c.m)) o[n]={base:fn(f,lb),prog:fn(f,lp)};
+      for(const [n,fn] of Object.entries(c.same||{})) o[n]={same:fn(f)};
+      out[k]=o;} return out;};
+  const forecast=(cfgs,runs=RUNS)=>{/* one random stream per workstream, so a calculator and section 04 agree */
+    const r=Object.fromEntries(Object.keys(cfgs).map(k=>[k,rng(SEED+k.charCodeAt(0))])), acc={};
+    const push=(k,v)=>(acc[k]||(acc[k]=[])).push(v);
+    for(let i=0;i<runs;i++){const d=draw(r,cfgs); let tb=0,tl=0,bb=0,bl=0;
+      for(const [k,o] of Object.entries(d)) for(const [n,v] of Object.entries(o)){
+        if('same' in v){push(k+'.'+n,v.same); continue;}
+        push(k+'.'+n+'.base',v.base); push(k+'.'+n+'.prog',v.prog); push(k+'.'+n+'.diff',v.prog-v.base);
+        if(n==='build'){tb+=v.prog;bb+=v.base;} if(n==='lt'){tl+=v.prog;bl+=v.base;}}
+      push('all.build.prog',tb);push('all.build.base',bb);push('all.build.diff',tb-bb);
+      push('all.lt.prog',tl);push('all.lt.base',bl);push('all.lt.diff',tl-bl);
+      push('all.total.prog',tb+tl);push('all.total.base',bb+bl);push('all.total.diff',tb+tl-bb-bl);}
+    return Object.fromEntries(Object.entries(acc).map(([k,v])=>[k,P(v)]));};
+  window.BTS_FORECAST={config:BTS,forecast,money};
+  const fmtV=(k,x)=>/plans|sites|peakres/.test(k)?num(x):money(x);
+  const rangeTxt=(k,p)=>`8 in 10 runs: ${fmtV(k,p.lo)} to ${fmtV(k,p.hi)}`;
+  /* range bars: without vs with, P10–P90 band, P50 mark */
+  const bars=(rows)=>{const max=Math.max(...rows.flatMap(r=>[r.base.hi,r.prog.hi]))*1.08||1, x=v=>(v/max*100).toFixed(2)+'%';
+    const one=(lab,p,cls)=>`<div class="rb ${cls}"><span class="rb-l">${lab}</span><span class="rb-t"><i style="left:${x(p.lo)};width:calc(${x(p.hi)} - ${x(p.lo)})"></i><b style="left:${x(p.mid)}"></b></span><span class="rb-v">${fmtV(rows.key||'',p.mid)}</span><span class="sr">most likely ${fmtV(rows.key||'',p.mid)}; 8 in 10 runs between ${fmtV(rows.key||'',p.lo)} and ${fmtV(rows.key||'',p.hi)}</span></div>`;
+    return rows.map(r=>`<div class="rb-g">${r.title?`<p class="rb-h">${r.title}</p>`:''}${one('Without a program',r.base,'b')}${one('With Built to Stay',r.prog,'p')}</div>`).join('');};
+  /* section 04: fill [data-sum] and the chart from the default forecast */
+  const S=forecast(BTS);
+  document.querySelectorAll('[data-sum]').forEach(el=>{const [k,kind]=el.dataset.sum.split('|'); const p=S[k]; if(!p) return;
+    el.textContent=kind==='r'?`${fmtV(k,p.lo)} to ${fmtV(k,p.hi)}`:fmtV(k,p.mid);});
+  document.querySelectorAll('[data-fc]').forEach(el=>{el.innerHTML=bars([
+    {title:'During the build',base:S['all.build.base'],prog:S['all.build.prog']},
+    {title:'Over 30 years',base:S['all.lt.base'],prog:S['all.lt.prog']},
+    {title:'Both together',base:S['all.total.base'],prog:S['all.total.prog']}]);});
+  /* section 03 calculators: each slider sets the most likely value of one input */
+  const wireModel=m=>{const key=m.dataset.model2, base=BTS[key]; if(!base) return;
+    const ins=[...m.querySelectorAll('input[type=range]')];
+    const toVal=i=>Number(i.value)/(i.dataset.fmt==='pct'?100:1), toSlider=(i,v)=>{i.value=String(i.dataset.fmt==='pct'?Math.round(v*100):v);};
+    const FMT={pct:x=>x+'%',mo:x=>x+' mo',usd:x=>usd(x),num:x=>num(x)};
+    const reset=()=>ins.forEach(i=>{const n=i.name, t=base.facts[n]||base.levers[n].prog; toSlider(i,t[1]);});
+    const run=()=>{const c={facts:{},levers:{},m:base.m,same:base.same};
+      ins.forEach(i=>{const n=i.name, v=toVal(i), o=m.querySelector(`output[data-for="${n}"]`); if(o) o.textContent=FMT[i.dataset.fmt](Number(i.value));
+        const t=base.facts[n]||base.levers[n].prog, tt=[Math.min(t[0],v),v,Math.max(t[2],v)];
+        if(base.facts[n]) c.facts[n]=tt; else c.levers[n]={base:base.levers[n].base,prog:tt};});
+      for(const n in base.facts) if(!c.facts[n]) c.facts[n]=base.facts[n];
+      for(const n in base.levers) if(!c.levers[n]) c.levers[n]=base.levers[n];
+      const F=forecast({[key]:c});
+      m.querySelectorAll('[data-out]').forEach(o=>{const k=o.dataset.out;
+        if(k==='math'){o.textContent=base.math(mode(c.facts),mode(c.levers),modeBase(c.levers)); return;}
+        if(k==='bars'){const rows=[]; if(F[key+'.build.base']) rows.push({title:'During the build',key:'',base:F[key+'.build.base'],prog:F[key+'.build.prog']});
+          if(F[key+'.lt.base']) rows.push({title:'Over 30 years',base:F[key+'.lt.base'],prog:F[key+'.lt.prog']});
+          if(F[key+'.plans.base']) {const r={title:'Families with a written plan',base:F[key+'.plans.base'],prog:F[key+'.plans.prog']}; rows.push(r); rows.key='plans';}
+          o.innerHTML=bars(rows); return;}
+        const [n,kind]=k.split('|'), counts=/peakres|sites/.test(n), p=counts?F[key+'.'+n+'.prog']:(F[key+'.'+n+'.diff']||F[key+'.'+n]); if(!p) return;
+        o.textContent=kind==='r'?rangeTxt(n,p):((F[key+'.'+n+'.diff']&&!counts&&n!=='plans')?'+':'')+fmtV(n,p.mid);});};
+    ins.forEach(i=>i.addEventListener('input',run));
+    const rb=m.querySelector('[data-reset]'); if(rb) rb.addEventListener('click',()=>{reset();run();});
+    reset(); run();
+  };
+
+  /* ---------- Workstream dialog: each card opens its demo and model ---------- */
+  const dlg=document.getElementById('ws-dialog');
+  if(dlg){
+    const body=dlg.querySelector('.wsd-body'); let opener=null;
+    const open=(key,btn)=>{const t=document.getElementById('tpl-'+key); if(!t) return;
+      body.replaceChildren(t.content.cloneNode(true));
+      body.querySelectorAll('[data-tabs]').forEach(wireTabs);
+      body.querySelectorAll('[data-model2]').forEach(wireModel);
+      opener=btn; dlg.showModal(); body.scrollTop=0; dlg.querySelector('[data-close]').focus();
+      if(history.replaceState) history.replaceState(null,'','#ws-'+key.toLowerCase());};
+    document.querySelectorAll('[data-open-ws]').forEach(b=>b.addEventListener('click',()=>open(b.dataset.openWs,b)));
+    dlg.querySelector('[data-close]').addEventListener('click',()=>dlg.close());
+    dlg.addEventListener('click',e=>{if(e.target===dlg) dlg.close();});
+    dlg.addEventListener('close',()=>{if(dlg.open) return; body.replaceChildren(); if(history.replaceState) history.replaceState(null,'','#system'); if(opener) opener.focus();});
+    const h=location.hash.match(/^#ws-([a-e])$/); if(h){const b=document.querySelector(`[data-open-ws="${h[1].toUpperCase()}"]`); if(b) open(h[1].toUpperCase(),b);}
+  }
 })();
