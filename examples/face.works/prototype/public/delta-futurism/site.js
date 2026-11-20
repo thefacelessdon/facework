@@ -147,7 +147,7 @@
   /* ---------- Reveal on scroll (pass 2): blocks ease in, their children and bars in sequence ---------- */
   if(!reduce && 'IntersectionObserver' in window){
     const blocks='.part,.measure,.head,.sumup,.chart,.flow,.swipe-wrap,.ledger,.paths,.demo,.ww,.wk,.mp,.obj,.p5,.track,.asks,.family,.weekend,.close-c,.statement,.p-status,.next-step,.ask-contact,.model,.example,.put,figure.contact,.split > figure,.fut,.layers';
-    const groups='.facts,.capture,.caps,.phases,.steps,.stayed,.gov,.idx,.pcards,.fork,.ladder,.roles-x,.meas-c,.imp';
+    const groups='.facts,.capture,.caps,.phases,.steps,.stayed,.gov,.idx,.pcards,.fork,.ladder,.roles-x,.meas-c,.imp,.xgrid,.fpath';
     const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}}),{rootMargin:'0px 0px -10% 0px',threshold:.05});
     document.querySelectorAll(blocks+','+groups).forEach(el=>{
       if(el.parentElement && el.parentElement.closest('.rv,.rv-kids')) return;
@@ -168,7 +168,7 @@
     const show=i=>{cur=i; tabs.forEach((t,j)=>{t.setAttribute('aria-selected',String(j===i)); t.tabIndex=j===i?0:-1;}); panels.forEach((p,j)=>{p.hidden=j!==i; if(j===i){p.classList.remove('flip'); void p.offsetWidth; p.classList.add('flip');}});
       if(count) count.textContent='Step '+(i+1)+' of '+tabs.length;
       steps.forEach(b=>{const d=Number(b.dataset.step); b.disabled=(d<0&&i===0)||(d>0&&i===tabs.length-1);});
-      if(w.hasAttribute('data-steps')) tabs[i].scrollIntoView({block:'nearest',inline:'nearest',behavior:'auto'});};
+};
     tabs.forEach((t,i)=>{t.id=uid+'-t'+i; panels[i].id=uid+'-p'+i; t.setAttribute('aria-controls',panels[i].id); panels[i].setAttribute('aria-labelledby',t.id);
       t.addEventListener('click',()=>show(i));
       t.addEventListener('keydown',e=>{const n={ArrowRight:i+1,ArrowLeft:i-1,Home:0,End:tabs.length-1}[e.key]; if(n===undefined) return; e.preventDefault(); const k=(n+tabs.length)%tabs.length; show(k); tabs[k].focus();});});
@@ -183,18 +183,18 @@
      scores both cases, so shared unknowns cancel in the difference. Seeded, so the page shows the same numbers every load. */
   const RUNS=4000, SEED=20261120;
   const BTS={
-    A:{facts:{peak:[700,750,800],avg:[.35,.45,.55],wage:[5000,6500,8000],perm:[10,12,15],pw:[70860,86000,101120]},
-       levers:{local:{base:[.05,.11,.20],prog:[.20,.35,.55]},pl:{base:[.2,.4,.6],prog:[.5,.7,.9]}},
-       m:{build:(f,l)=>f.peak*f.avg*29*f.wage*l.local, lt:(f,l)=>f.perm*l.pl*f.pw*30, peakres:(f,l)=>f.peak*l.local},
-       math:(f,l,b)=>`Most likely: ${num(f.peak)} at peak × ${pc(f.avg)} average crew × 29 months × ${usd(f.wage)} a month × local hire (${pc(l.local)} with the program, ${pc(b.local)} without). Then ${num(f.perm)} permanent jobs × ${pc(l.pl)} held locally (${pc(b.pl)} without) × ${usd(f.pw)} × 30 years.`},
-    B:{facts:{eat:[.3,.45,.6],months:[6,7.5,9],rate:[12,14,16],rooms:[60,130,200]},
-       levers:{share:{base:[0,.05,.15],prog:[.3,.5,.7]}},
-       m:{build:(f,l)=>750*f.eat*f.months*21.7*f.rate*l.share}, same:{hotel:f=>f.rooms*f.months*21.7*110},
-       math:(f,l,b)=>`Most likely: ${num(750*f.eat)} meals a day × ${num(f.months*21.7)} working days × ${usd(f.rate)} = ${money(750*f.eat*f.months*21.7*f.rate)} in meals, ${pc(l.share)} cooked by county kitchens with the program, ${pc(b.share)} without. Hotel nights: ${num(f.rooms)} rooms × ${num(f.months*21.7)} nights × $110.`},
-    C:{facts:{pool:[.03,.04,.05],acres:[2500,2750,3000],veg:[184,232,281],other:[150e3,375e3,600e3]},
-       levers:{win:{base:[.03,.08,.15],prog:[.10,.20,.35]},hold:{base:[.10,.25,.40],prog:[.40,.60,.85]}},
-       m:{build:(f,l)=>1.6e9*f.pool*l.win, lt:(f,l)=>(f.acres*f.veg+f.other)*l.hold*30},
-       math:(f,l,b)=>`Most likely: $1.6 billion × ${pc(f.pool)} site work × share won by county firms (${pc(l.win)} with the program, ${pc(b.win)} without). Upkeep: ${num(f.acres)} acres × ${usd(f.veg)} + ${money(f.other)} a year, share held locally (${pc(l.hold)} with, ${pc(b.hold)} without), for 30 years.`},
+    A:{facts:{peak:[700,750,800],avg:[.35,.45,.55],wage:[5000,6500,8000],perm:[10,12,15],pw:[70860,86000,101120],gain:[8000,15000,25000],yrs:[5,10,20]},
+       levers:{local:{base:[.05,.11,.20],prog:[.20,.35,.55]},pl:{base:[.2,.4,.6],prog:[.5,.7,.9]},stay:{base:[.2,.35,.5],prog:[.4,.55,.7]}},
+       m:{build:(f,l)=>f.peak*f.avg*29*f.wage*l.local, lt:(f,l)=>f.perm*l.pl*f.pw*30, cap:(f,l)=>f.peak*l.local*l.stay*f.gain*f.yrs, peakres:(f,l)=>f.peak*l.local},
+       math:(f,l,b)=>`Most likely: ${num(f.peak)} at peak × ${pc(f.avg)} average crew × 29 months × ${usd(f.wage)} a month × local hire (${pc(l.local)} with the program, ${pc(b.local)} without). Then ${num(f.perm)} permanent jobs × ${pc(l.pl)} held locally (${pc(b.pl)} without) × ${usd(f.pw)} × 30 years. After the build: ${num(f.peak*l.local)} residents who worked it × ${pc(l.stay)} still in the trade (${pc(b.stay)} without) × ${usd(f.gain)} a year more than their old work × ${num(f.yrs)} years.`},
+    B:{facts:{eat:[.3,.45,.6],months:[6,7.5,9],rate:[12,14,16],rooms:[60,130,200],cat:[25e3,75e3,150e3],yrs:[5,10,15]},
+       levers:{share:{base:[0,.05,.15],prog:[.3,.5,.7]},kit:{base:[0,1,2],prog:[2,4,6]}},
+       m:{build:(f,l)=>750*f.eat*f.months*21.7*f.rate*l.share, cap:(f,l)=>l.kit*f.cat*f.yrs}, same:{hotel:f=>f.rooms*f.months*21.7*110},
+       math:(f,l,b)=>`Most likely: ${num(750*f.eat)} meals a day × ${num(f.months*21.7)} working days × ${usd(f.rate)} = ${money(750*f.eat*f.months*21.7*f.rate)} in meals, ${pc(l.share)} cooked by county kitchens with the program, ${pc(b.share)} without. After the build: ${num(l.kit)} county kitchens with a contract record (${num(b.kit)} without) × ${usd(f.cat)} a year in new catering × ${num(f.yrs)} years. Hotel nights: ${num(f.rooms)} rooms × ${num(f.months*21.7)} nights × $110.`},
+    C:{facts:{pool:[.03,.04,.05],acres:[2500,2750,3000],veg:[184,232,281],other:[150e3,375e3,600e3],follow:[50e3,150e3,400e3],yrs:[5,10,15]},
+       levers:{win:{base:[.03,.08,.15],prog:[.10,.20,.35]},hold:{base:[.10,.25,.40],prog:[.40,.60,.85]},firms:{base:[1,3,6],prog:[8,15,25]}},
+       m:{build:(f,l)=>1.6e9*f.pool*l.win, lt:(f,l)=>(f.acres*f.veg+f.other)*l.hold*30, cap:(f,l)=>l.firms*f.follow*f.yrs},
+       math:(f,l,b)=>`Most likely: $1.6 billion × ${pc(f.pool)} site work × share won by county firms (${pc(l.win)} with the program, ${pc(b.win)} without). Upkeep: ${num(f.acres)} acres × ${usd(f.veg)} + ${money(f.other)} a year, share held locally (${pc(l.hold)} with, ${pc(b.hold)} without), for 30 years. After the build: ${num(l.firms)} county firms with a contract record (${num(b.firms)} without) × ${money(f.follow)} a year in new work × ${num(f.yrs)} years.`},
     D:{facts:{cost:[2500,5000,7500]}, levers:{fam:{base:[0,2,5],prog:[8,18,30]}},
        m:{plans:(f,l)=>l.fam}, count:true,
        math:(f,l,b)=>`Most likely: ${num(l.fam)} families with a written plan with the program, ${num(b.fam)} without. At about ${usd(f.cost)} a family for independent advisers, that is ${money(l.fam*f.cost)}.`},
@@ -222,14 +222,16 @@
   const forecast=(cfgs,runs=RUNS)=>{/* one random stream per workstream, so a calculator and section 04 agree */
     const r=Object.fromEntries(Object.keys(cfgs).map(k=>[k,rng(SEED+k.charCodeAt(0))])), acc={};
     const push=(k,v)=>(acc[k]||(acc[k]=[])).push(v);
-    for(let i=0;i<runs;i++){const d=draw(r,cfgs); let tb=0,tl=0,bb=0,bl=0;
+    for(let i=0;i<runs;i++){const d=draw(r,cfgs); let tb=0,tl=0,bb=0,bl=0,tc=0,bc=0;
       for(const [k,o] of Object.entries(d)) for(const [n,v] of Object.entries(o)){
         if('same' in v){push(k+'.'+n,v.same); continue;}
         push(k+'.'+n+'.base',v.base); push(k+'.'+n+'.prog',v.prog); push(k+'.'+n+'.diff',v.prog-v.base);
-        if(n==='build'){tb+=v.prog;bb+=v.base;} if(n==='lt'){tl+=v.prog;bl+=v.base;}}
+        if(n==='build'){tb+=v.prog;bb+=v.base;} if(n==='lt'){tl+=v.prog;bl+=v.base;} if(n==='cap'){tc+=v.prog;bc+=v.base;}}
       push('all.build.prog',tb);push('all.build.base',bb);push('all.build.diff',tb-bb);
       push('all.lt.prog',tl);push('all.lt.base',bl);push('all.lt.diff',tl-bl);
-      push('all.total.prog',tb+tl);push('all.total.base',bb+bl);push('all.total.diff',tb+tl-bb-bl);}
+      push('all.cap.prog',tc);push('all.cap.base',bc);push('all.cap.diff',tc-bc);
+      push('all.after.prog',tl+tc);push('all.after.base',bl+bc);push('all.after.diff',tl+tc-bl-bc);
+      push('all.total.prog',tb+tl+tc);push('all.total.base',bb+bl+bc);push('all.total.diff',tb+tl+tc-bb-bl-bc);}
     return Object.fromEntries(Object.entries(acc).map(([k,v])=>[k,P(v)]));};
   window.BTS_FORECAST={config:BTS,forecast,money};
   const fmtV=(k,x)=>/plans|sites|peakres/.test(k)?num(x):money(x);
@@ -244,7 +246,7 @@
     el.textContent=kind==='r'?`${fmtV(k,p.lo)} to ${fmtV(k,p.hi)}`:fmtV(k,p.mid);});
   document.querySelectorAll('[data-fc]').forEach(el=>{el.innerHTML=bars([
     {title:'During the build',base:S['all.build.base'],prog:S['all.build.prog']},
-    {title:'Over 30 years',base:S['all.lt.base'],prog:S['all.lt.prog']},
+    {title:'After the build, over 30 years',base:S['all.after.base'],prog:S['all.after.prog']},
     {title:'Both together',base:S['all.total.base'],prog:S['all.total.prog']}]);});
   /* section 03 calculators: each slider sets the most likely value of one input */
   const wireModel=m=>{const key=m.dataset.model2, base=BTS[key]; if(!base) return;
@@ -262,7 +264,8 @@
       m.querySelectorAll('[data-out]').forEach(o=>{const k=o.dataset.out;
         if(k==='math'){o.textContent=base.math(mode(c.facts),mode(c.levers),modeBase(c.levers)); return;}
         if(k==='bars'){const rows=[]; if(F[key+'.build.base']) rows.push({title:'During the build',key:'',base:F[key+'.build.base'],prog:F[key+'.build.prog']});
-          if(F[key+'.lt.base']) rows.push({title:'Over 30 years',base:F[key+'.lt.base'],prog:F[key+'.lt.prog']});
+          if(F[key+'.lt.base']) rows.push({title:'Plant commitments, 30 years',base:F[key+'.lt.base'],prog:F[key+'.lt.prog']});
+          if(F[key+'.cap.base']) rows.push({title:'Capacity after the build',base:F[key+'.cap.base'],prog:F[key+'.cap.prog']});
           if(F[key+'.plans.base']) {const r={title:'Families with a written plan',base:F[key+'.plans.base'],prog:F[key+'.plans.prog']}; rows.push(r); rows.key='plans';}
           o.innerHTML=bars(rows); return;}
         const [n,kind]=k.split('|'), counts=/peakres|sites/.test(n), p=counts?F[key+'.'+n+'.prog']:(F[key+'.'+n+'.diff']||F[key+'.'+n]); if(!p) return;
@@ -272,20 +275,24 @@
     reset(); run();
   };
 
-  /* ---------- Workstream dialog: each card opens its demo and model ---------- */
-  const dlg=document.getElementById('ws-dialog');
-  if(dlg){
-    const body=dlg.querySelector('.wsd-body'); let opener=null;
-    const open=(key,btn)=>{const t=document.getElementById('tpl-'+key); if(!t) return;
-      body.replaceChildren(t.content.cloneNode(true));
-      body.querySelectorAll('[data-tabs]').forEach(wireTabs);
-      body.querySelectorAll('[data-model2]').forEach(wireModel);
-      opener=btn; dlg.showModal(); body.scrollTop=0; dlg.querySelector('[data-close]').focus();
-      if(history.replaceState) history.replaceState(null,'','#ws-'+key.toLowerCase());};
-    document.querySelectorAll('[data-open-ws]').forEach(b=>b.addEventListener('click',()=>open(b.dataset.openWs,b)));
-    dlg.querySelector('[data-close]').addEventListener('click',()=>dlg.close());
-    dlg.addEventListener('click',e=>{if(e.target===dlg) dlg.close();});
-    dlg.addEventListener('close',()=>{if(dlg.open) return; body.replaceChildren(); if(history.replaceState) history.replaceState(null,'','#system'); if(opener) opener.focus();});
-    const h=location.hash.match(/^#ws-([a-e])$/); if(h){const b=document.querySelector(`[data-open-ws="${h[1].toUpperCase()}"]`); if(b) open(h[1].toUpperCase(),b);}
+  /* ---------- Workstream explorer (0.0.125): five tiles are tabs; the picked workstream's walkthrough and
+     calculator render inline below them, in page flow. No dialog, no scroll-inside-a-box. ---------- */
+  const wsx=document.querySelector('[data-wsx]');
+  if(wsx){
+    const tabs=[...wsx.querySelectorAll('[role=tab]')], panel=wsx.querySelector('[role=tabpanel]');
+    const sel=(i,opts={})=>{const t=tabs[i], k=t.dataset.ws, tpl=document.getElementById('tpl-'+k); if(!tpl) return;
+      tabs.forEach((x,j)=>{x.setAttribute('aria-selected',String(j===i)); x.tabIndex=j===i?0:-1;});
+      panel.setAttribute('aria-labelledby',t.id);
+      panel.replaceChildren(tpl.content.cloneNode(true));
+      panel.querySelectorAll('[data-tabs]').forEach(wireTabs);
+      panel.querySelectorAll('[data-model2]').forEach(wireModel);
+      if(opts.focus) t.focus();
+      if(opts.user && history.replaceState) history.replaceState(null,'','#ws-'+k.toLowerCase());
+      if(opts.reveal){const top=wsx.getBoundingClientRect().top; if(top<0||top>innerHeight*.6) wsx.scrollIntoView({block:'start'});}};
+    tabs.forEach((t,i)=>{
+      t.addEventListener('click',()=>sel(i,{user:true}));
+      t.addEventListener('keydown',e=>{const n={ArrowRight:i+1,ArrowDown:i+1,ArrowLeft:i-1,ArrowUp:i-1,Home:0,End:tabs.length-1}[e.key]; if(n===undefined) return; e.preventDefault(); sel((n+tabs.length)%tabs.length,{focus:true,user:true});});});
+    const h=location.hash.match(/^#ws-([a-e])$/), hi=h?tabs.findIndex(t=>t.dataset.ws===h[1].toUpperCase()):-1;
+    sel(hi>=0?hi:0,{reveal:hi>=0});
   }
 })();
