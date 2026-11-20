@@ -92,7 +92,7 @@
     /* Food model (pass 2): bounded to the Arkansas Cypress build. Every input is an assumption to confirm with the contractor. */
     const inp=n=>m.querySelector('[name='+n+']'), v=n=>Number(inp(n).value);
     const fmt=n=>n>=1e6?'$'+(n/1e6).toFixed(1)+'M':'$'+Math.round(n/1e3)+'K';
-    const show={workers:x=>x.toLocaleString('en-US'),eat:x=>x+'%',mpd:x=>x===1?'1 meal':x+' meals',months:x=>x+' months',rate:x=>'$'+x,share:x=>x+'%'};
+    const show={workers:x=>x.toLocaleString('en-US'),eat:x=>x+'%',mpd:x=>x===1?'1 meal':x+' meals',months:x=>x===1?'1 month':x+' months',rate:x=>'$'+x,share:x=>x+'%'};
     const run=()=>{
       m.querySelectorAll('output[data-for]').forEach(o=>{const k=o.dataset.for; o.textContent=show[k]?show[k](v(k)):v(k);});
       const perDay=Math.round(v('workers')*v('eat')/100*v('mpd'));
@@ -146,7 +146,7 @@
 
   /* ---------- Reveal on scroll (pass 2): blocks ease in, their children and bars in sequence ---------- */
   if(!reduce && 'IntersectionObserver' in window){
-    const blocks='.part,.measure,.head,.sumup,.chart,.flow,.swipe-wrap,.ledger,.paths,.demo,.ww,.track,.asks,.family,.weekend,.close-c,.statement,.p-status,.next-step,.ask-contact,.model,.example,.put,figure.contact,.split > figure,.fut,.layers';
+    const blocks='.part,.measure,.head,.sumup,.chart,.flow,.swipe-wrap,.ledger,.paths,.demo,.ww,.wk,.mp,.obj,.p5,.track,.asks,.family,.weekend,.close-c,.statement,.p-status,.next-step,.ask-contact,.model,.example,.put,figure.contact,.split > figure,.fut,.layers';
     const groups='.facts,.capture,.caps,.phases,.steps,.stayed,.gov,.idx,.pcards,.fork,.ladder,.roles-x,.meas-c,.imp';
     const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}}),{rootMargin:'0px 0px -10% 0px',threshold:.05});
     document.querySelectorAll(blocks+','+groups).forEach(el=>{
@@ -162,10 +162,17 @@
   document.querySelectorAll('[data-tabs]').forEach(w=>{
     const tabs=[...w.querySelectorAll('[role=tab]')], panels=[...w.querySelectorAll('[role=tabpanel]')];
     const uid='ww'+Math.random().toString(36).slice(2,7);
-    const show=i=>{tabs.forEach((t,j)=>{t.setAttribute('aria-selected',String(j===i)); t.tabIndex=j===i?0:-1;}); panels.forEach((p,j)=>{p.hidden=j!==i; if(j===i){p.classList.remove('flip'); void p.offsetWidth; p.classList.add('flip');}});};
+    /* pass 4: optional previous/next buttons and a "Step n of N" count ([data-steps]) */
+    const count=w.querySelector('.wk-count'), steps=[...w.querySelectorAll('[data-step]')];
+    let cur=0;
+    const show=i=>{cur=i; tabs.forEach((t,j)=>{t.setAttribute('aria-selected',String(j===i)); t.tabIndex=j===i?0:-1;}); panels.forEach((p,j)=>{p.hidden=j!==i; if(j===i){p.classList.remove('flip'); void p.offsetWidth; p.classList.add('flip');}});
+      if(count) count.textContent='Step '+(i+1)+' of '+tabs.length;
+      steps.forEach(b=>{const d=Number(b.dataset.step); b.disabled=(d<0&&i===0)||(d>0&&i===tabs.length-1);});
+      if(w.hasAttribute('data-steps')) tabs[i].scrollIntoView({block:'nearest',inline:'nearest',behavior:'auto'});};
     tabs.forEach((t,i)=>{t.id=uid+'-t'+i; panels[i].id=uid+'-p'+i; t.setAttribute('aria-controls',panels[i].id); panels[i].setAttribute('aria-labelledby',t.id);
       t.addEventListener('click',()=>show(i));
-      t.addEventListener('keydown',e=>{const n=e.key==='ArrowRight'?i+1:e.key==='ArrowLeft'?i-1:null; if(n===null) return; e.preventDefault(); const k=(n+tabs.length)%tabs.length; show(k); tabs[k].focus();});});
+      t.addEventListener('keydown',e=>{const n={ArrowRight:i+1,ArrowLeft:i-1,Home:0,End:tabs.length-1}[e.key]; if(n===undefined) return; e.preventDefault(); const k=(n+tabs.length)%tabs.length; show(k); tabs[k].focus();});});
+    steps.forEach(b=>b.addEventListener('click',()=>show(Math.max(0,Math.min(tabs.length-1,cur+Number(b.dataset.step))))));
     show(0);
   });
 })();
