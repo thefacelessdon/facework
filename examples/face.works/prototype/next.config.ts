@@ -34,6 +34,9 @@ const nextConfig: NextConfig = {
       // this site strips trailing slashes, so /delta-futurism/ can't serve as the base.
       // Source and context: initiatives/delta-futurism/.
       { source: "/delta-futurism", destination: "/delta-futurism/index.html", permanent: false },
+      // HUE × SoundCloud, The Long Run: a static proposal in public/hue-soundcloud (index, plus internal notes).
+      // Same reason as Delta Futurism: relative links need the bare address to resolve to the file.
+      { source: "/hue-soundcloud", destination: "/hue-soundcloud/index.html", permanent: false },
     ];
   },
   // PERMANENT: Berdia on face.works.
@@ -76,6 +79,11 @@ const nextConfig: NextConfig = {
       // Delta Futurism is shared by link, not listed: keep it out of search results.
       {
         source: "/delta-futurism/:path*",
+        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+      },
+      // The HUE × SoundCloud proposal and its internal notes are shared by link only.
+      {
+        source: "/hue-soundcloud/:path*",
         headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
       },
       // Listed after the site-wide rule so its Referrer-Policy wins on invitation links.
