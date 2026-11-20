@@ -40,6 +40,15 @@ describe("deltafuturism.com deploy", () => {
     expect(config.redirects.some((r) => r.has && r.destination.startsWith("https://deltafuturism.com/"))).toBe(true);
   });
 
+  it("serves the shared assets to pages one level down (/built-to-stay/apex)", () => {
+    for (const a of ["site.css", "site.js"]) {
+      expect(config.rewrites.find((x) => x.source === `/built-to-stay/${a}`)?.destination).toBe(`/${a}`);
+    }
+    for (const d of ["fonts", "img", "share"]) {
+      expect(config.rewrites.find((x) => x.source === `/built-to-stay/${d}/:path*`)?.destination).toBe(`/${d}/:path*`);
+    }
+  });
+
   it("keeps the site out of search engines", () => {
     const all = config.headers.find((h) => h.source === "/(.*)");
     expect(all?.headers.find((h) => h.key === "X-Robots-Tag")?.value).toContain("noindex");
