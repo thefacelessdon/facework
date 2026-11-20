@@ -13,6 +13,6 @@ card(){ # slug img name tag
   sips -s format jpeg -s formatOptions 86 "$tmp/$1.png" --out "$out/$1.jpg" >/dev/null
   echo "share/$1.jpg"
 }
-card story "pb-mural-2020.jpg" "Delta%20<span>Futurism</span>" "Arkansas%20%C2%B7%20Mississippi"
+card story "pb-mural-2020.jpg" "Delta%20<span>Futurism</span>" "A%20new%20vision%20for%20life%20in%20the%20Delta"
 card built-to-stay "solar-aerial-2016.jpg" "Built%20to%20<span>Stay</span>" "A%20Delta%20Futurism%20initiative"
 card sources "steamer-capitol-1935.jpg" "Delta%20<span>Futurism</span>" "Sources%20and%20credits"
