@@ -181,74 +181,70 @@
      Each workstream has facts (one value) and levers (a value without a program and one with Built to Stay).
      "Without" is what the county keeps anyway; "added" is with minus without. Ripple (local re-spending) applies
      to private dollars only, never to tax. Today's dollars, not discounted. ---------- */
-  /* our staffing model: crew on site by month, July 2026 to November 2028 (replace with Wanzek's resource-loaded schedule) */
-  const CURVE=[53,115,154,175,158,189,220,304,403,515,596,665,742,771,775,757,723,648,593,505,393,319,243,189,140,89,67,56,35];
-  const PM=CURVE.reduce((a,b)=>a+b,0), PEAK=Math.max(...CURVE), COST=1601500000;
+  /* our staffing model: crew on site by month, July 2026 to June 2029, for both of Entergy's Jefferson County builds.
+     Arkansas Cypress (solar + battery, 29 months, peak 775) and Jefferson Power Station (gas, 36 months, peak 750).
+     Both shapes are our design; the contractors' resource-loaded schedules would replace them. */
+  const CURVES={C:[53,115,154,175,158,189,220,304,403,515,596,665,742,771,775,757,723,648,593,505,393,319,243,189,140,89,67,56,35],
+                J:[30,45,60,80,100,120,150,180,220,260,300,340,380,420,470,520,570,620,670,710,740,750,745,730,700,650,590,520,450,380,300,230,160,110,70,40]};
+  const MONTHS=36, CURVE=Array.from({length:MONTHS},(_,i)=>(CURVES.C[i]||0)+(CURVES.J[i]||0));
+  const sumA=a=>a.reduce((x,y)=>x+y,0);
+  const PMC=sumA(CURVES.C), PMJ=sumA(CURVES.J), PM=PMC+PMJ, PEAK=Math.max(...CURVE), PEAKM=CURVE.indexOf(PEAK);
+  const COSTC=1601500000, COSTJ=1.5e9, COST=COSTC+COSTJ;
   const IN=(n,l,fmt,min,max,step,a,b)=>({n,l,fmt,min,max,step,base:a,prog:b===undefined?a:b,lever:b!==undefined});
+  /* each part is tagged with the build it belongs to: C (Cypress), J (Jefferson Power Station) or B (both, split by worker-months) */
   const BTS={
     A:{name:'Energy Workforce', inputs:[
         IN('local','Share of build work done by county residents','pct',0,80,1,12,30),
         IN('pl','Permanent plant jobs held by county residents','pct',0,100,5,40,70),
-        IN('stay','Residents still in the trade after the build','pct',0,100,5,35,55),
+        IN('stay','Residents still in the trade after the builds','pct',0,100,5,35,55),
         IN('pay','Monthly craft pay','usd',4000,9000,100,6700),
         IN('away','Out-of-county workers who stay in the county','pct',0,100,5,50),
         IN('perday','What each of them spends in the county a working day','usd',0,150,5,75),
-        IN('perm','Permanent plant jobs','num',5,20,1,12),
+        IN('permC','Permanent jobs at Arkansas Cypress','num',5,20,1,12),
+        IN('permJ','Permanent jobs at Jefferson Power Station','num',5,40,1,22),
         IN('pw','Permanent pay a year','usd',50000,120000,1000,86000),
         IN('gain','Yearly pay gain over their old work','usd',0,30000,500,12000),
         IN('yrs','Years that gain lasts','num',1,30,1,10)],
       parts:v=>[
-        {l:'Wages to county residents',w:'build',x:PM*v.local*v.pay,f:`${num(PM)} worker-months × ${pc(v.local)} county residents × ${usd(v.pay)}`},
-        {l:'Spending by out-of-county crews',w:'build',x:PM*(1-v.local)*v.away*v.perday*25,f:`${num(PM*(1-v.local))} out-of-county worker-months × ${pc(v.away)} staying here × ${usd(v.perday)} × 25 days`},
-        {l:'Plant jobs held by residents',w:'after',x:v.perm*v.pl*v.pw*30,f:`${num(v.perm)} jobs × ${pc(v.pl)} held locally × ${usd(v.pw)} × 30 years`},
-        {l:'Residents still in the trade',w:'after',x:PEAK*v.local*v.stay*v.gain*v.yrs,f:`${num(PEAK*v.local)} residents at peak × ${pc(v.stay)} still in the trade × ${usd(v.gain)} more a year × ${num(v.yrs)} years`}]},
+        {b:'C',l:'Wages to county residents · Cypress',w:'build',x:PMC*v.local*v.pay,f:`${num(PMC)} worker-months × ${pc(v.local)} county residents × ${usd(v.pay)}`},
+        {b:'J',l:'Wages to county residents · Jefferson',w:'build',x:PMJ*v.local*v.pay,f:`${num(PMJ)} worker-months × ${pc(v.local)} county residents × ${usd(v.pay)}`},
+        {b:'B',l:'Spending by out-of-county crews',w:'build',x:PM*(1-v.local)*v.away*v.perday*25,f:`${num(PM*(1-v.local))} out-of-county worker-months on both builds × ${pc(v.away)} staying here × ${usd(v.perday)} × 25 days`},
+        {b:'C',l:'Plant jobs held by residents · Cypress',w:'after',x:v.permC*v.pl*v.pw*30,f:`${num(v.permC)} jobs × ${pc(v.pl)} held locally × ${usd(v.pw)} × 30 years`},
+        {b:'J',l:'Plant jobs held by residents · Jefferson',w:'after',x:v.permJ*v.pl*v.pw*30,f:`${num(v.permJ)} jobs × ${pc(v.pl)} held locally × ${usd(v.pw)} × 30 years`},
+        {b:'B',l:'Residents still in the trade',w:'after',x:PEAK*v.local*v.stay*v.gain*v.yrs,f:`${num(PEAK*v.local)} residents on the two builds at their combined peak × ${pc(v.stay)} still in the trade × ${usd(v.gain)} more a year × ${num(v.yrs)} years`}]},
     C:{name:'Local Suppliers', inputs:[
         IN('win','Share of site purchases won by county firms','pct',0,60,1,10,20),
-        IN('hold','Share of upkeep held by county firms','pct',0,100,5,25,60),
-        IN('firms','County firms leaving with a contract record','num',0,40,1,3,12),
-        IN('pool','Site work and purchases as a share of the build','pct',1,10,0.5,5),
-        IN('acres','Acres kept up','num',1000,3500,50,2750),
+        IN('hold','Share of Cypress upkeep held by county firms','pct',0,100,5,25,60),
+        IN('firms','County firms leaving with a contract record','num',0,40,1,4,15),
+        IN('pool','Site work and purchases as a share of each build','pct',1,10,0.5,5),
+        IN('acres','Cypress acres kept up','num',1000,3500,50,2750),
         IN('veg','Vegetation upkeep per acre a year','usd',100,400,1,232),
         IN('other','Fences, roads, drainage and security a year','usd',0,1000000,25000,375000),
         IN('follow','New work a year per firm','usd',0,800000,10000,150000),
         IN('yrs','Years it lasts','num',1,30,1,10)],
       parts:v=>[
-        {l:'Site purchases won by county firms',w:'build',x:COST*v.pool*v.win,f:`$1.6 billion × ${pc(v.pool)} site work and purchases × ${pc(v.win)} won locally`},
-        {l:'Upkeep held by county firms',w:'after',x:(v.acres*v.veg+v.other)*v.hold*30,f:`(${num(v.acres)} acres × ${usd(v.veg)} + ${money(v.other)}) a year × ${pc(v.hold)} held locally × 30 years`},
-        {l:'New work won by firms with a record',w:'after',x:v.firms*v.follow*v.yrs,f:`${num(v.firms)} firms × ${money(v.follow)} a year × ${num(v.yrs)} years`}]},
+        {b:'C',l:'Site purchases won · Cypress',w:'build',x:COSTC*v.pool*v.win,f:`$1.6 billion × ${pc(v.pool)} site work and purchases × ${pc(v.win)} won locally`},
+        {b:'J',l:'Site purchases won · Jefferson',w:'build',x:COSTJ*v.pool*v.win,f:`$1.5 billion × ${pc(v.pool)} site work and purchases × ${pc(v.win)} won locally`},
+        {b:'C',l:'Upkeep held by county firms · Cypress',w:'after',x:(v.acres*v.veg+v.other)*v.hold*30,f:`(${num(v.acres)} acres × ${usd(v.veg)} + ${money(v.other)}) a year × ${pc(v.hold)} held locally × 30 years`},
+        {b:'B',l:'New work won by firms with a record',w:'after',x:v.firms*v.follow*v.yrs,f:`${num(v.firms)} firms with a record from either build × ${money(v.follow)} a year × ${num(v.yrs)} years`}]},
     B:{name:'Crew Meals', inputs:[
         IN('share','Share of crew meals cooked by county kitchens','pct',0,100,5,5,80),
-        IN('kit','County kitchens leaving with a catering record','num',0,10,1,0,3),
+        IN('kit','County kitchens leaving with a catering record','num',0,10,1,0,5),
         IN('take','Workers who buy lunch','pct',0,100,5,45),
         IN('lunch','Lunch price','usd',8,20,1,13),
         IN('bfast','Workers who buy breakfast','pct',0,100,5,20),
         IN('cat','New catering a year per kitchen','usd',0,300000,5000,75000),
         IN('yrs','Years it lasts','num',1,30,1,10)],
-      parts:v=>{const rev=PM*22*(v.take*v.lunch+v.bfast*7)+PM*15; return [
-        {l:'Meals cooked by county kitchens',w:'build',x:rev*v.share,f:`${num(PM*22*v.take)} lunches at ${usd(v.lunch)} + ${num(PM*22*v.bfast)} breakfasts at $7 + ${num(PM)} monthly safety meals at $15 = ${money(rev)}, × ${pc(v.share)} cooked in the county`},
-        {l:'Catering won after the build',w:'after',x:v.kit*v.cat*v.yrs,f:`${num(v.kit)} kitchens × ${money(v.cat)} a year × ${num(v.yrs)} years`}];}},
+      parts:v=>{const per=pm=>pm*22*(v.take*v.lunch+v.bfast*7)+pm*15, rc=per(PMC), rj=per(PMJ); return [
+        {b:'C',l:'Meals cooked by county kitchens · Cypress',w:'build',x:rc*v.share,f:`${num(PMC*22*v.take)} lunches at ${usd(v.lunch)} + ${num(PMC*22*v.bfast)} breakfasts at $7 + ${num(PMC)} monthly safety meals at $15 = ${money(rc)}, × ${pc(v.share)} cooked in the county`},
+        {b:'J',l:'Meals cooked by county kitchens · Jefferson',w:'build',x:rj*v.share,f:`${num(PMJ*22*v.take)} lunches + ${num(PMJ*22*v.bfast)} breakfasts + ${num(PMJ)} safety meals = ${money(rj)}, × ${pc(v.share)} cooked in the county`},
+        {b:'B',l:'Catering won after the builds',w:'after',x:v.kit*v.cat*v.yrs,f:`${num(v.kit)} kitchens × ${money(v.cat)} a year × ${num(v.yrs)} years`}];}},
     E:{name:'Community Resilience', inputs:[
         IN('sites','Clinics, shelters or churches with solar and battery backup','num',0,20,1,0,5),
         IN('cost','Cost per site, installed by county electricians','usd',30000,250000,5000,100000)],
-      parts:v=>[{l:'Backup power installed (grant-funded)',w:'build',x:v.sites*v.cost,f:`${num(v.sites)} sites × ${usd(v.cost)}`}]},
-    J:{name:'Jefferson Power Station', build:true, inputs:[
-        IN('local','Share of build work done by county residents','pct',0,80,1,12,30),
-        IN('win','Share of site purchases won by county firms','pct',0,60,1,10,20),
-        IN('pl','Permanent plant jobs held by county residents','pct',0,100,5,40,70),
-        IN('cost','Approved cost','usd',1e9,2e9,5e7,1.5e9),
-        IN('pool','Site work and purchases as a share of the build','pct',1,10,0.5,5),
-        IN('pay','Monthly craft pay','usd',4000,9000,100,6700),
-        IN('away','Out-of-county workers who stay in the county','pct',0,100,5,50),
-        IN('perday','What each of them spends in the county a working day','usd',0,150,5,75),
-        IN('perm','Permanent plant jobs','num',5,40,1,22),
-        IN('pw','Permanent pay a year','usd',50000,120000,1000,86000)],
-      parts:v=>[
-        {l:'Wages to county residents',w:'build',x:PM*v.local*v.pay,f:`${num(PM)} worker-months (same staffing shape as Cypress) × ${pc(v.local)} county residents × ${usd(v.pay)}`},
-        {l:'Spending by out-of-county crews',w:'build',x:PM*(1-v.local)*v.away*v.perday*25,f:`${num(PM*(1-v.local))} out-of-county worker-months × ${pc(v.away)} staying here × ${usd(v.perday)} × 25 days`},
-        {l:'Site purchases won by county firms',w:'build',x:v.cost*v.pool*v.win,f:`${money(v.cost)} × ${pc(v.pool)} × ${pc(v.win)} won locally`},
-        {l:'Plant jobs held by residents',w:'after',x:v.perm*v.pl*v.pw*30,f:`${num(v.perm)} jobs × ${pc(v.pl)} held locally × ${usd(v.pw)} × 30 years`}]},
+      parts:v=>[{b:'C',l:'Backup power installed (grant-funded)',w:'build',x:v.sites*v.cost,f:`${num(v.sites)} sites × ${usd(v.cost)}`}]},
     D:{name:'Landowner Prosperity', inputs:[IN('fam','Families with a written plan','num',0,60,1,2,18)], count:true,
-      parts:v=>[{l:'Families with a written plan',w:'count',x:v.fam,f:`${num(v.fam)} families. We count plans, never lease income.`}]}
+      parts:v=>[{b:'C',l:'Families with a written plan',w:'count',x:v.fam,f:`${num(v.fam)} families. We count plans, never lease income.`}]}
   };
   const TAX={y1:9.6e6, end:.2, mills:57.35, school:47.7, state:25, offset:.98, county:9.65, sales:8.8e6};
   function money(x){const a=Math.abs(x);return a>=1e7?'$'+Math.round(x/1e6)+'M':a>=1e6?'$'+(x/1e6).toFixed(1)+'M':a>=1e3?'$'+Math.round(x/1e3)+'K':'$'+Math.round(x);}
@@ -257,33 +253,35 @@
   function num(x){return Math.round(x).toLocaleString('en-US');}
   const vals=(c,which,over={})=>Object.fromEntries(c.inputs.map(i=>{const raw=(over[i.n]!==undefined&&(which==='prog'||!i.lever))?over[i.n]:i[which]; return [i.n, i.fmt==='pct'?raw/100:raw];}));
   const sum=(ps,w)=>ps.filter(p=>p.w===w).reduce((a,p)=>a+p.x,0);
-  /* one workstream: without, with, and the difference */
+  const shareJ=PMJ/PM, inJ=p=>p.b==='J'?p.x:p.b==='B'?p.x*shareJ:0;
   const runWS=(k,over={})=>{const c=BTS[k], b=c.parts(vals(c,'base',over)), p=c.parts(vals(c,'prog',over));
-    return {base:b, prog:p, add:{build:sum(p,'build')-sum(b,'build'), after:sum(p,'after')-sum(b,'after'), count:sum(p,'count')-sum(b,'count')},
+    const dJ=p.filter(x=>x.w!=='count').reduce((a,x,ix)=>a+inJ(x)-inJ(b[ix]),0);
+    return {base:b, prog:p, add:{build:sum(p,'build')-sum(b,'build'), after:sum(p,'after')-sum(b,'after'), count:sum(p,'count')-sum(b,'count'), J:dJ},
       tot:{bb:sum(b,'build'),ba:sum(b,'after'),pb:sum(p,'build'),pa:sum(p,'after')}};};
-  /* the whole county: plant baseline (without a program, plus taxes) and what Built to Stay adds, with ripple */
   const runAll=(over={},ripple=.30)=>{const R=Object.fromEntries(Object.keys(BTS).map(k=>[k,runWS(k,over[k]||{})]));
-    let bb=0,ba=0,ab=0,aa=0; for(const k in R){bb+=R[k].tot.bb; ba+=R[k].tot.ba; ab+=R[k].add.build; aa+=R[k].add.after;}
+    let bb=0,ba=0,ab=0,aa=0,aj=0; for(const k in R){bb+=R[k].tot.bb; ba+=R[k].tot.ba; ab+=R[k].add.build; aa+=R[k].add.after; aj+=R[k].add.J;}
     const tax=30*(TAX.y1+TAX.y1*TAX.end)/2, rip=1+ripple;
     const base={build:bb*rip+TAX.sales, after:ba*rip+tax}, adds={build:ab*rip, after:aa*rip};
     const A0=R.A.base, A1=R.A.prog, C0=R.C.base, C1=R.C.prog;
-    const cents=(a,c)=>(a[0].x+a[1].x+c[0].x)*rip/COST*100;
+    const cents=(a,c)=>(a[0].x+a[1].x+a[2].x+c[0].x+c[1].x)*rip/COST*100;
     return {R, base, adds, tax, rip,
       total:base.build+base.after+adds.build+adds.after,
       taxDistrict:tax*TAX.school/TAX.mills - tax*TAX.state/TAX.mills*TAX.offset, taxCounty:tax*TAX.county/TAX.mills,
       cents:{base:cents(A0,C0), prog:cents(A1,C1)},
       res:{base:PEAK*vals(BTS.A,'base').local, prog:PEAK*vals(BTS.A,'prog',over.A||{}).local},
-      jps:(R.J.add.build+R.J.add.after)*rip, jbase:(R.J.tot.bb+R.J.tot.ba)*rip};
+      jps:aj*rip};
   };
-  window.BTS_MODEL={BTS,CURVE,PM,PEAK,TAX,runWS,runAll,money};
+  window.BTS_MODEL={BTS,CURVES,CURVE,PM,PMC,PMJ,PEAK,TAX,runWS,runAll,money};
   /* without / with bars, single values */
   const bars=rows=>{const max=Math.max(...rows.flatMap(r=>[r.b,r.p]))*1.05||1, w=v=>(v/max*100).toFixed(2)+'%', f=rows.fmt||money;
     const one=(lab,v,cls)=>`<div class="rb ${cls}"><span class="rb-l">${lab}</span><span class="rb-t"><i style="left:0;width:${w(v)}"></i></span><span class="rb-v">${f(v)}</span></div>`;
     return rows.map(r=>`<div class="rb-g"><p class="rb-h">${r.t}</p>${one('Without a program',r.b,'b')}${one('With Built to Stay',r.p,'p')}</div>`).join('');};
   /* staffing curve chart (crew meals panel) */
-  const curveSVG=()=>{const W=580,H=150,bw=W/CURVE.length, mx=PEAK;
-    const rects=CURVE.map((v,i)=>`<rect x="${(i*bw+1).toFixed(1)}" y="${(H-v/mx*(H-18)).toFixed(1)}" width="${(bw-2).toFixed(1)}" height="${(v/mx*(H-18)).toFixed(1)}"${v===PEAK?' class="pk"':''}></rect>`).join('');
-    return `<svg viewBox="0 0 ${W} ${H+18}" role="img" aria-label="Crew on site by month: rising from 53 in July 2026 to a peak of ${PEAK} in September 2027, then falling to 35 by November 2028.">${rects}<text x="0" y="${H+14}">Jul 2026</text><text x="${(14*bw).toFixed(0)}" y="${H+14}" text-anchor="middle">Peak ${PEAK} · Sep 2027</text><text x="${W}" y="${H+14}" text-anchor="end">Nov 2028</text></svg>`;};
+  const MLAB=i=>['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][(6+i)%12]+' '+(2026+Math.floor((6+i)/12));
+  const curveSVG=()=>{const W=580,H=150,bw=W/MONTHS, y=v=>v/PEAK*(H-18);
+    const rects=CURVE.map((t,i)=>{const c=CURVES.C[i]||0, j=CURVES.J[i]||0, x=(i*bw+1).toFixed(1), w=(bw-2).toFixed(1);
+      return `<rect class="cj" x="${x}" y="${(H-y(t)).toFixed(1)}" width="${w}" height="${y(j).toFixed(1)}"></rect><rect class="cc" x="${x}" y="${(H-y(c)).toFixed(1)}" width="${w}" height="${y(c).toFixed(1)}"></rect>`;}).join('');
+    return `<svg viewBox="0 0 ${W} ${H+18}" role="img" aria-label="Crew on site by month for both builds: Arkansas Cypress peaks at ${Math.max(...CURVES.C)} in September 2027, Jefferson Power Station at ${Math.max(...CURVES.J)} in April 2028, and together they reach about ${num(PEAK)} in ${MLAB(PEAKM)}.">${rects}<text x="0" y="${H+14}">Jul 2026</text><text x="${((PEAKM+.5)*bw).toFixed(0)}" y="${H+14}" text-anchor="middle">Together ${num(PEAK)} · ${MLAB(PEAKM)}</text><text x="${W}" y="${H+14}" text-anchor="end">Jun 2029</text></svg><p class="curve-key"><i class="cc"></i>Arkansas Cypress <i class="cj"></i>Jefferson Power Station</p>`;};
   document.querySelectorAll('[data-curve]').forEach(el=>{el.innerHTML=curveSVG();});
   /* section 04 */
   const fillAll=M=>{
@@ -291,7 +289,7 @@
       'adds':money(M.adds.build+M.adds.after),'adds.build':money(M.adds.build),'adds.after':money(M.adds.after),
       'tax':money(M.tax),'tax.district':money(M.taxDistrict),'tax.county':money(M.taxCounty),
       'cents.base':M.cents.base.toFixed(1)+'¢','cents.prog':M.cents.prog.toFixed(1)+'¢','res.base':num(M.res.base),'res.prog':num(M.res.prog),
-      'jps':money(M.jps),'cy':money(M.adds.build+M.adds.after-M.jps),'res.both':num(M.res.prog*2)};
+      'jps':money(M.jps),'cy':money(M.adds.build+M.adds.after-M.jps),'peak':num(PEAK),'pm':num(PM)};
     document.querySelectorAll('[data-sum]').forEach(el=>{if(S[el.dataset.sum]!==undefined) el.textContent=S[el.dataset.sum];});
     document.querySelectorAll('[data-fc]').forEach(el=>{el.innerHTML=bars([
       {t:'During the build, 2026–2028',b:M.base.build,p:M.base.build+M.adds.build},
@@ -308,7 +306,7 @@
     const ins=[...m.querySelectorAll('input')];
     const run=()=>{const over={}; let ripple=.3;
       ins.forEach(i=>{const o=m.querySelector(`output[data-for="${i.name}"]`); if(o) o.textContent=FMT[i.dataset.fmt](Number(i.value));
-        if(i.name==='ripple') ripple=Number(i.value)/100; else {const [k,n]=i.name.split('.'); (over[k]||(over[k]={}))[n]=Number(i.value); if(i.name==='A.local'||i.name==='C.win') (over.J||(over.J={}))[n]=Number(i.value);}});
+        if(i.name==='ripple') ripple=Number(i.value)/100; else {const [k,n]=i.name.split('.'); (over[k]||(over[k]={}))[n]=Number(i.value)}});
       const M=runAll(over,ripple); fillAll(M);};
     ins.forEach(i=>i.addEventListener('input',run));
     const r=m.querySelector('[data-reset]'); if(r) r.addEventListener('click',()=>{ins.forEach(i=>{const [k,n]=i.name.split('.'); i.value=i.name==='ripple'?30:BTS[k].inputs.find(x=>x.n===n).prog;}); run();});
@@ -322,9 +320,9 @@
     const run=()=>{const over={}; ins.forEach(i=>{over[i.name]=Number(i.value); const o=box.querySelector(`output[data-for="${i.name}"]`); if(o) o.textContent=FMT[i.dataset.fmt](Number(i.value));});
       const r=runWS(key,over), out=m.querySelector('.out');
       const head=c.count?`<span class="lab dim">More families with a written plan</span><div class="big">${num(r.add.count)}</div>`
-        :`<span class="lab dim">Added during the build</span><div class="big">+${money(r.add.build)}</div>`+(r.tot.pa||r.tot.ba?`<span class="lab dim">Added in the 30 years after</span><div class="big sm">+${money(r.add.after)}</div>`:'');
+        :`<span class="lab dim">Added during the builds</span><div class="big">+${money(r.add.build)}</div>`+(r.tot.pa||r.tot.ba?`<span class="lab dim">Added in the 30 years after</span><div class="big sm">+${money(r.add.after)}</div>`:'');
       const rows=r.prog.map((p,ix)=>{const b=r.base[ix].x, f=c.count?num:money; return `<li><b>${p.l}</b><span class="wv">${f(b)} → ${f(p.x)}</span><span class="wf">${p.f}</span></li>`;}).join('');
-      out.innerHTML=head+`<ul class="parts"><li class="ph"><b>Line</b><span class="wv">Without → with</span></li>${rows}</ul><p class="note">Before local re-spending. Section 04 adds it and the plant’s taxes.</p>`;};
+      out.innerHTML=head+`<ul class="parts"><li class="ph"><b>Line</b><span class="wv">Without → with</span></li>${rows}</ul><p class="note">Before local re-spending. Section 04 adds it and Cypress’s property tax.</p>`;};
     ins.forEach(i=>i.addEventListener('input',run));
     const rb=m.querySelector('[data-reset]'); if(rb) rb.addEventListener('click',()=>{ins.forEach(i=>{i.value=c.inputs.find(x=>x.n===i.name).prog;}); run();});
     run();
