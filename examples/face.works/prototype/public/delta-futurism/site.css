@@ -1127,3 +1127,9 @@ ol.standard span b{color:var(--paper);font-family:inherit}
 .band .m2 label span,.band .m2 label.lev span{color:var(--paper)}
 .band .m2 .in-h{color:var(--ink-dim)}
 .band .m2 .lev-t{color:oklch(78% 0.13 38)}
+.curve rect.cc{fill:var(--spot);opacity:.9}
+.curve rect.cj{fill:var(--ink-dim);opacity:.5}
+.curve-key{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-family:var(--label);font-size:var(--t-micro);color:var(--ink-dim);margin:var(--space-2xs) 0 0}
+.curve-key i{display:inline-block;width:14px;height:8px;margin-right:4px}
+.curve-key i.cc{background:var(--spot)}
+.curve-key i.cj{background:var(--ink-dim);opacity:.5}
