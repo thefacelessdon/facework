@@ -83,8 +83,6 @@ UNLISTED_ROUTES=(
   /delta-futurism/index.html
   /delta-futurism/proposal.html
   /delta-futurism/sources.html
-  /hue-soundcloud/index.html
-  /hue-soundcloud/notes.html
 )
 for r in "${UNLISTED_ROUTES[@]}"; do URLS="$URLS http://localhost:${PORT}${r}"; done
 echo "▸ auditing $(wc -w <<<"$URLS" | tr -d ' ') routes at ${WIDTH}×${HEIGHT}…"
