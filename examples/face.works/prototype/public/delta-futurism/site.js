@@ -181,12 +181,13 @@
      Each workstream has facts (one value) and levers (a value without a program and one with Built to Stay).
      "Without" is what the county keeps anyway; "added" is with minus without. Ripple (local re-spending) applies
      to private dollars only, never to tax. Today's dollars, not discounted. ---------- */
-  /* our staffing model: crew on site by month, July 2026 to June 2029, for both of Entergy's Jefferson County builds.
-     Arkansas Cypress (solar + battery, 29 months, peak 775) and Jefferson Power Station (gas, 36 months, peak 750).
+  /* our staffing model: crew on site by month, July 2026 to June 2030, for both of Entergy's Jefferson County builds.
+     Arkansas Cypress (solar + battery, 29 months, peak 775) and Jefferson Power Station (gas, about 48 months from a
+     June/July 2026 start, per Entergy's 'around four years'; peak 750 held until confirmed).
      Both shapes are our design; the contractors' resource-loaded schedules would replace them. */
   const CURVES={C:[53,115,154,175,158,189,220,304,403,515,596,665,742,771,775,757,723,648,593,505,393,319,243,189,140,89,67,56,35],
-                J:[30,45,60,80,100,120,150,180,220,260,300,340,380,420,470,520,570,620,670,710,740,750,745,730,700,650,590,520,450,380,300,230,160,110,70,40]};
-  const MONTHS=36, CURVE=Array.from({length:MONTHS},(_,i)=>(CURVES.C[i]||0)+(CURVES.J[i]||0));
+                J:[20,30,40,50,60,70,85,100,120,140,165,190,220,250,285,320,360,400,440,480,520,560,600,640,680,710,735,750,750,740,720,690,650,600,550,490,430,370,310,250,200,160,120,90,65,45,30,20]};
+  const MONTHS=48, CURVE=Array.from({length:MONTHS},(_,i)=>(CURVES.C[i]||0)+(CURVES.J[i]||0));
   const sumA=a=>a.reduce((x,y)=>x+y,0);
   const PMC=sumA(CURVES.C), PMJ=sumA(CURVES.J), PM=PMC+PMJ, PEAK=Math.max(...CURVE), PEAKM=CURVE.indexOf(PEAK);
   const COSTC=1601500000, COSTJ=1.5e9, COST=COSTC+COSTJ;
@@ -281,7 +282,7 @@
   const curveSVG=()=>{const W=580,H=150,bw=W/MONTHS, y=v=>v/PEAK*(H-18);
     const rects=CURVE.map((t,i)=>{const c=CURVES.C[i]||0, j=CURVES.J[i]||0, x=(i*bw+1).toFixed(1), w=(bw-2).toFixed(1);
       return `<rect class="cj" x="${x}" y="${(H-y(t)).toFixed(1)}" width="${w}" height="${y(j).toFixed(1)}"></rect><rect class="cc" x="${x}" y="${(H-y(c)).toFixed(1)}" width="${w}" height="${y(c).toFixed(1)}"></rect>`;}).join('');
-    return `<svg viewBox="0 0 ${W} ${H+18}" role="img" aria-label="Crew on site by month for both builds: Arkansas Cypress peaks at ${Math.max(...CURVES.C)} in September 2027, Jefferson Power Station at ${Math.max(...CURVES.J)} in April 2028, and together they reach about ${num(PEAK)} in ${MLAB(PEAKM)}.">${rects}<text x="0" y="${H+14}">Jul 2026</text><text x="${((PEAKM+.5)*bw).toFixed(0)}" y="${H+14}" text-anchor="middle">Together ${num(PEAK)} · ${MLAB(PEAKM)}</text><text x="${W}" y="${H+14}" text-anchor="end">Jun 2029</text></svg><p class="curve-key"><i class="cc"></i>Arkansas Cypress <i class="cj"></i>Jefferson Power Station</p>`;};
+    return `<svg viewBox="0 0 ${W} ${H+18}" role="img" aria-label="Crew on site by month for both builds: Arkansas Cypress peaks at ${Math.max(...CURVES.C)} in September 2027, Jefferson Power Station at ${Math.max(...CURVES.J)} in October 2028, and together they reach about ${num(PEAK)} in ${MLAB(PEAKM)}.">${rects}<text x="0" y="${H+14}">Jul 2026</text><text x="${((PEAKM+.5)*bw).toFixed(0)}" y="${H+14}" text-anchor="middle">Together ${num(PEAK)} · ${MLAB(PEAKM)}</text><text x="${W}" y="${H+14}" text-anchor="end">${MLAB(MONTHS-1)}</text></svg><p class="curve-key"><i class="cc"></i>Arkansas Cypress <i class="cj"></i>Jefferson Power Station</p>`;};
   document.querySelectorAll('[data-curve]').forEach(el=>{el.innerHTML=curveSVG();});
   /* section 04 */
   const fillAll=M=>{
