@@ -29,27 +29,11 @@
   addEventListener('scroll',()=>{if(!raf) raf=requestAnimationFrame(develop);},{passive:true});
   addEventListener('resize',develop);
 
-  /* ---------- Swipe rows: arrow buttons on desktop, native swipe on phones ---------- */
-  /* Every swipe row is a named, keyboard-reachable region: Tab to it, then the arrow keys scroll it (WCAG 2.1.1). */
-  document.querySelectorAll('.swipe').forEach(row=>{
-    row.setAttribute('tabindex','0');
-    row.setAttribute('role','region');
-    row.setAttribute('aria-label',(row.dataset.label||'Images')+' (scrolls sideways)');
-  });
   /* Wide tables scroll sideways on phones: make each one a named, focusable region too */
   document.querySelectorAll('.scroll').forEach(box=>{
     const panel=box.closest('[role=tabpanel]'), tab=panel&&document.getElementById(panel.getAttribute('aria-labelledby'));
     box.setAttribute('tabindex','0'); box.setAttribute('role','region');
     box.setAttribute('aria-label',(tab?tab.textContent.trim():'Table')+' table (scrolls sideways)');
-  });
-  document.querySelectorAll('.swipe-wrap').forEach(w=>{
-    const row=w.querySelector('.swipe'), prev=w.querySelector('[data-dir="-1"]'), next=w.querySelector('[data-dir="1"]');
-    if(!row) return;
-    const step=()=>{const c=row.firstElementChild; return c?c.getBoundingClientRect().width+parseFloat(getComputedStyle(row).columnGap||0):row.clientWidth;};
-    const sync=()=>{ if(prev) prev.disabled=row.scrollLeft<4; if(next) next.disabled=row.scrollLeft+row.clientWidth>=row.scrollWidth-4; };
-    [prev,next].forEach(b=>b&&b.addEventListener('click',()=>row.scrollBy({left:step()*Number(b.dataset.dir),behavior:reduce?'auto':'smooth'})));
-    row.addEventListener('scroll',()=>{sync(); if(!raf) raf=requestAnimationFrame(develop);},{passive:true});
-    addEventListener('resize',sync); sync();
   });
 
   /* ---------- Kinds of work picker (story page, The Turning Point) ---------- */
@@ -146,7 +130,7 @@
 
   /* ---------- Reveal on scroll (pass 2): blocks ease in, their children and bars in sequence ---------- */
   if(!reduce && 'IntersectionObserver' in window){
-    const blocks='.part,.measure,.head,.sumup,.chart,.flow,.swipe-wrap,.ledger,.paths,.demo,.ww,.wk,.mp,.obj,.p5,.track,.asks,.family,.weekend,.close-c,.statement,.p-status,.next-step,.ask-contact,.model,.example,.put,figure.contact,.split > figure,.fut,.layers';
+    const blocks='.part,.measure,.head,.sumup,.chart,.flow,.xgrid-wrap,.ledger,.paths,.demo,.ww,.wk,.mp,.obj,.p5,.track,.asks,.family,.weekend,.close-c,.statement,.p-status,.next-step,.ask-contact,.model,.example,.put,figure.contact,.split > figure,.fut,.layers';
     const groups='.facts,.capture,.caps,.phases,.steps,.stayed,.gov,.idx,.pcards,.fork,.ladder,.roles-x,.meas-c,.imp,.xgrid,.fpath';
     const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}}),{rootMargin:'0px 0px -10% 0px',threshold:.05});
     document.querySelectorAll(blocks+','+groups).forEach(el=>{
