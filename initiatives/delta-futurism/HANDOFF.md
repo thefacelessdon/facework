@@ -12,7 +12,7 @@ Pick-up note for the next session. This repo is public: family-private items (le
 
 Hero → **01** Entergy has committed to local first ($3.1B across two plants; 700–800 at each peak; $174M non-property taxes; $9.6M Cypress yr-1 property tax) → **02** From the Vendor Fair to a Contract (vertical five-step path) → **03** Five workstreams: an inline explorer (tiles are tabs; walkthrough + "Size it yourself" calculator render in page flow; deep links `#ws-a`…`#ws-e`) → **04** What Grows Around It (headline numbers, without/with chart, business cluster, section calculator, "the lights are the least of it", Delta keep-score standard, method in a closed `<details>`) → **05** Roles → **06** Measured every month → **07** Keyed to the build → **08** Three asks → Team ("A Family on the Land. A Team That Runs Operations.").
 
-Design rules settled by the owner (don't relitigate): **no horizontal side-scroll rows, no popups/modals, no letter labels A–E, no "worked example" flags, no tables**; static `.xgrid` card grids, `.fpath` vertical path, `.wsx` inline explorer; single point numbers (no ranges on the page); page voice is "we" (no first person; Built to Stay speaks for itself, never for other landowners).
+Both pages now use static grids only (story page converted in 0.0.131). Design rules settled by the owner (don't relitigate): **no horizontal side-scroll rows, no popups/modals, no letter labels A–E, no "worked example" flags, no tables**; static `.xgrid` card grids, `.fpath` vertical path, `.wsx` inline explorer; single point numbers (no ranges on the page); page voice is "we" (no first person; Built to Stay speaks for itself, never for other landowners).
 
 ## The impact model (one source of truth)
 
@@ -41,6 +41,5 @@ Design rules settled by the owner (don't relitigate): **no horizontal side-scrol
 ## Next moves (recommended order)
 
 1. Team members (Chelsa Savage, Bjorn Simmons, Corey Ealy, Michael Watson II) confirm their names and one-line roles on the live team section.
-2. The story page (`index.html`) still uses horizontal swipe rows; the owner rejected those on the proposal. Same treatment there is a likely next pass.
-3. Section 06 "Measured every month" could point to the new keep-score standard in section 04 instead of repeating it.
-4. When the contractors' schedules surface, replace `CURVES.C` / `CURVES.J`, re-bake the static numbers, redeploy.
+2. Section 06 "Measured every month" could point to the new keep-score standard in section 04 instead of repeating it.
+3. When the contractors' schedules surface, replace `CURVES.C` / `CURVES.J`, re-bake the static numbers, redeploy.

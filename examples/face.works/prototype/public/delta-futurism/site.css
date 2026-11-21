@@ -295,23 +295,7 @@ footer ul{margin:0;padding-left:var(--space-md);display:grid;gap:var(--space-2xs
 @media (max-width:640px){.how li{grid-template-columns:minmax(0,1fr);gap:var(--space-xs)}}
 .handoff .t p i{font-family:var(--display);font-size:var(--t-lede)}
 
-/* ===== v30 rebuild (Nov 19): CACHE grammar. Swipe, don't stack; no captions; one line per card. ===== */
-/* swipe rows: any set of 3+ images. Desktop shows ~3 with the next peeking; phones swipe one card at a time */
-.swipe-wrap{display:grid;gap:var(--space-sm)}
-.swipe-bar{display:flex;justify-content:space-between;align-items:center;gap:var(--space-sm)}
-.swipe-bar .lab{color:var(--ink-dim)}
-.swipe-nav{display:flex;gap:var(--space-xs)}
-.swipe-nav button{font:inherit;font-family:var(--label);font-size:var(--t-small);font-weight:700;width:36px;height:36px;border:1px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
-.swipe-nav button:hover{background:var(--ink);color:var(--paper)}
-.swipe-nav button:disabled{opacity:.3;cursor:default;background:transparent;color:var(--ink)}
-.swipe{--peek:3.3;display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 2 * var(--space-lg)) / var(--peek));gap:var(--space-lg);overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;padding-bottom:var(--space-2xs)}
-.swipe::-webkit-scrollbar{display:none}
-.swipe > *{scroll-snap-align:start;min-width:0}
-.swipe.fit{--peek:3}
-@media (max-width:860px){
-  .swipe,.swipe.fit{grid-auto-columns:min(80%,320px);gap:var(--space-md);margin-right:calc(-1 * max(16px,env(safe-area-inset-right,0px)));padding-right:max(16px,env(safe-area-inset-right,0px));scroll-padding-left:0}
-  .swipe-nav{display:none}
-}
+/* ===== v30 rebuild (Nov 19): CACHE grammar. No captions; one line per card. (Swipe rows retired in 0.0.131: cards sit in static .xgrid grids.) ===== */
 /* card: image, label, title, one line */
 .card{margin:0;display:grid;gap:var(--space-xs);align-content:start}
 .card .im{position:relative;display:block;aspect-ratio:4/3;overflow:hidden;background:var(--ink)}
@@ -338,10 +322,6 @@ footer ul{margin:0;padding-left:var(--space-md);display:grid;gap:var(--space-2xs
 /* plates without captions */
 .plate.bare figcaption{display:none}
 .split-fig{display:grid;gap:var(--space-md)}
-/* portraits as a swipe: override the old .people grid */
-.faces.swipe{grid-template-columns:none!important;border-top:0;margin-top:0}
-.faces.swipe .person{border:0!important;padding:0!important}
-@media (min-width:861px){.faces.swipe{grid-auto-columns:minmax(0,280px)}}
 
 /* ===== Proposal page components (Nov 19). CACHE equivalents: cover, key facts, aim cards, walkthrough, partner cards, tools view, timeline, fallbacks ===== */
 .p-cover{display:grid;gap:0;padding-block:var(--space-lg) var(--space-3xl);border-bottom:3px double var(--ink)}
@@ -377,7 +357,6 @@ footer ul{margin:0;padding-left:var(--space-md);display:grid;gap:var(--space-2xs
 .ws dt{font-family:var(--label);font-size:var(--t-micro);font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-dim)}
 .ws dd{margin:0;font-size:var(--t-small);line-height:1.45}
 .ws dd.leave{color:var(--spot);font-family:var(--display);font-size:var(--t-body);font-style:italic}
-.swipe.ws-row{--peek:2.6}
 /* walkthrough */
 .walk{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:var(--space-sm);counter-reset:w}
 .walk li{counter-increment:w;border-top:1px solid var(--ink);padding-top:var(--space-sm);display:grid;gap:var(--space-xs);align-content:start}
@@ -434,8 +413,6 @@ footer ul{margin:0;padding-left:var(--space-md);display:grid;gap:var(--space-2xs
 .fb p{font-size:var(--t-small);color:var(--ink-dim);line-height:1.45}
 @media (max-width:700px){.fallbacks{grid-template-columns:minmax(0,1fr)}}
 .verify{font-family:var(--label);font-size:var(--t-micro);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-dim);border:1px dashed var(--ink-dim);padding:1px 5px;white-space:nowrap}
-/* a11y (Nov 19): swipe rows are focusable regions; show where focus is */
-.swipe:focus-visible{outline:2px solid var(--spot);outline-offset:4px}
 .win-bar button:focus-visible,.win-body:focus-visible{outline:2px solid var(--spot);outline-offset:-2px}
 .scroll:focus-visible{outline:2px solid var(--spot);outline-offset:2px}
 
@@ -766,15 +743,12 @@ footer ul{margin:0;padding-left:var(--space-md);display:grid;gap:var(--space-2xs
 .meas-c .now{margin:0;font-size:var(--t-small);background:var(--spot-soft);padding:var(--space-xs)}
 
 /* ===== Pass 2: person cards, one component for every person or family ===== */
-.pcards{--peek:4.2}
 .pcard{margin:0;display:grid;gap:var(--space-xs);align-content:start}
 .pcard .ph{display:block;aspect-ratio:4/5;overflow:hidden;background:color-mix(in oklch,var(--ink) 8%,var(--paper))}
 .pcard .ph img{width:100%;height:100%;object-fit:cover;object-position:50% 20%;display:block;filter:grayscale(1) contrast(1.05)}
 .pcard .lab{color:var(--spot)}
 .pcard h3{font-size:var(--t-title);line-height:1.15}
 .pcard p{font-size:var(--t-small);line-height:1.5;color:var(--ink-dim);margin:0}
-@media (max-width:900px){.pcards{--peek:2.4}}
-@media (max-width:560px){.pcards{--peek:1.5}}
 
 /* ===== Pass 2: then-and-next pairs, centered statements ===== */
 .card.pair figure{position:relative;margin:0}
@@ -803,7 +777,6 @@ footer ul{margin:0;padding-left:var(--space-md);display:grid;gap:var(--space-2xs
 .icard .more{font-family:var(--label);font-size:var(--t-cap);font-weight:700;letter-spacing:.06em;text-decoration-color:var(--spot);text-underline-offset:3px}
 .icard.out .lab{color:var(--spot)}
 .icard.out .im img{filter:grayscale(1)}
-.swipe > [hidden]{display:none}
 .capc .lab{font-family:var(--display);font-weight:300;font-size:var(--t-numeral);line-height:.85;color:var(--spot);letter-spacing:0;text-transform:none}
 
 /* ===== Pass 3: working-with-us walkthrough, impact model ===== */
@@ -943,9 +916,8 @@ footer ul{margin:0;padding-left:var(--space-md);display:grid;gap:var(--space-2xs
 
 .keep-h{font-family:var(--label);font-size:var(--t-cap);font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--spot-light);margin-bottom:var(--space-md)}
 
-/* ===== x-card (0.0.124): the design system's horizontal card. Bordered, aligned to the column, swipes like .swipe rows.
+/* ===== x-card (0.0.124): the design system's horizontal card. Bordered, aligned to the column; laid out in static .xgrid grids.
    Used for steps (with an image), roles, measures and precedents. One card shape, three densities. ===== */
-.swipe.xrow{--peek:3.2}
 .xcard{border:1px solid var(--ink);background:var(--paper);padding:var(--space-md);display:grid;gap:var(--space-sm);align-content:start;min-height:100%}
 .xcard.card .im{margin:calc(-1 * var(--space-md)) calc(-1 * var(--space-md)) 0;aspect-ratio:16/10}
 .x-top{display:flex;align-items:baseline;gap:var(--space-sm)}
@@ -968,12 +940,10 @@ footer ul{margin:0;padding-left:var(--space-md);display:grid;gap:var(--space-2xs
 .xcard .chip{justify-self:start;font-family:var(--label);font-size:var(--t-micro);font-weight:700;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--ink-dim);color:var(--ink-dim);padding:2px 8px}
 .x-big{font-family:var(--display);font-weight:300;font-size:var(--t-numeral);line-height:.9;color:var(--spot)}
 .xcard.prec-c p{font-size:var(--t-small);color:var(--ink-dim);line-height:1.45}
-@media (max-width:860px){.swipe.xrow{grid-auto-columns:min(82%,330px)}}
 .xcard.person{gap:var(--space-xs)}
 .xcard.person .ini{display:grid;place-items:center;width:56px;height:56px;border-radius:50%;background:var(--ink);color:var(--paper);font-family:var(--label);font-weight:700;letter-spacing:.06em;margin-bottom:var(--space-xs)}
 .xcard.person .lab{color:var(--spot)}
 .xcard.person p{font-size:var(--t-small);color:var(--ink-dim);line-height:1.45}
-.swipe.xrow.team{--peek:3.4}
 
 /* ---------- 0.0.124: workstream cards open a demo dialog; impact keep-cards; two-part sizing model ---------- */
 .wk-time.n3{grid-template-columns:repeat(3,minmax(0,1fr))}
@@ -990,7 +960,6 @@ footer ul{margin:0;padding-left:var(--space-md);display:grid;gap:var(--space-2xs
 .xcard.keep .kv b{font-family:var(--display);font-weight:300;font-size:clamp(1.6rem,3vw,2.2rem);line-height:1}
 .xcard.keep .drv{font-size:var(--t-small);opacity:.8;margin:0}
 .band .xcard.keep .x-k{color:var(--spot-light)}
-.swipe.xrow.keep-row{--peek:3.4}
 details.assume{margin-top:var(--space-xl);border:1px solid var(--rule);padding:var(--space-sm) var(--space-md)}
 details.assume summary{font-family:var(--label);font-weight:700;font-size:var(--t-small);cursor:pointer}
 details.assume ul{margin:var(--space-sm) 0 0;padding-left:1.1em;display:grid;gap:var(--space-xs);font-size:var(--t-small);line-height:1.5}
@@ -1046,8 +1015,14 @@ details.assume ul{margin:var(--space-sm) 0 0;padding-left:1.1em;display:grid;gap
 .xgrid.c4{grid-template-columns:repeat(4,minmax(0,1fr))}
 .xgrid.c5{grid-template-columns:repeat(5,minmax(0,1fr));gap:var(--space-sm)}
 .xgrid > .xcard{min-height:0}
+.xgrid > [hidden]{display:none}
+.xgrid-wrap > .xgrid-lab{margin-top:0}
+.xgrid-wrap > .xgrid-lab{color:var(--ink-dim)}
 @media (max-width:1000px){.xgrid.c4,.xgrid.c5{grid-template-columns:repeat(2,minmax(0,1fr))}.xgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:600px){.xgrid,.xgrid.c4,.xgrid.c5{grid-template-columns:minmax(0,1fr)}}
+/* story-page portraits: five across, three on tablets, two on phones (0.0.131) */
+@media (max-width:1000px){.xgrid.portraits{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:600px){.xgrid.portraits{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 
 /* team: the lead card spans the row */
