@@ -14,7 +14,8 @@ import path from "node:path";
 import { describe, it, expect } from "vitest";
 
 // Static directories under public/ that are shared by link and kept out of the sitemap.
-const UNLISTED_DIRS = ["delta-futurism"];
+// Empty since Delta Futurism moved out (0.0.132); add a directory here if another unlisted site arrives.
+const UNLISTED_DIRS: string[] = [];
 
 const root = process.cwd();
 const script = fs.readFileSync(path.join(root, "reports", "a11y-audit.sh"), "utf8");
