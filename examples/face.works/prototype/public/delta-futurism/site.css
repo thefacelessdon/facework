@@ -295,7 +295,7 @@ footer ul{margin:0;padding-left:var(--space-md);display:grid;gap:var(--space-2xs
 @media (max-width:640px){.how li{grid-template-columns:minmax(0,1fr);gap:var(--space-xs)}}
 .handoff .t p i{font-family:var(--display);font-size:var(--t-lede)}
 
-/* ===== v30 rebuild (Nov 19): CACHE grammar. Swipe, don't stack; no captions; one line per card. ===== */
+/* ===== v30 rebuild (Nov 19): CACHE grammar. No captions; one line per card. (Swipe rows retired in 0.0.131: cards sit in static .xgrid grids.) ===== */
 /* card: image, label, title, one line */
 .card{margin:0;display:grid;gap:var(--space-xs);align-content:start}
 .card .im{position:relative;display:block;aspect-ratio:4/3;overflow:hidden;background:var(--ink)}
