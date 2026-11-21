@@ -109,7 +109,7 @@ Facework/
 ├── .agents/agents/                ← 5 Berd personas — discovered on clone
 ├── visual-system/                 ← FVS/FVI/FVA/FVR/FVP identity spec (Implementation layer)
 ├── standards/                     ← deferred post-1.0 track — NOT canonical
-├── initiatives/delta-futurism/   ← Delta Futurism context; its site is public/delta-futurism in the prototype
+├── initiatives/delta-futurism/   ← pointer only: Delta Futurism moved out in 0.0.132 (live at deltafuturism.com)
 ├── examples/face.works/           ← reference output from a completed run (NOT the active project)
 │   ├── define/ runtime-ports/ harness-bundle/ design-eye/ (evaluator grounding)
 │   ├── design-infrastructure/     ← superseded §11 set (evidence; holds the playbook path)

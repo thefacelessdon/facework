@@ -29,11 +29,10 @@ const nextConfig: NextConfig = {
       { source: "/experiments", destination: "/runs", permanent: true },
       { source: "/conversations", destination: "/methodology", permanent: true },
       { source: "/library", destination: "/methodology", permanent: true },
-      // Delta Futurism: a static three-page site in public/delta-futurism (story, proposal, sources).
-      // Its pages link to each other by relative path, so the bare address goes to the file itself;
-      // this site strips trailing slashes, so /delta-futurism/ can't serve as the base.
-      // Source and context: initiatives/delta-futurism/.
-      { source: "/delta-futurism", destination: "/delta-futurism/index.html", permanent: false },
+      // Delta Futurism moved to its own domain and out of this repo (0.0.132). Old links follow it;
+      // deltafuturism.com maps the old .html paths to its clean URLs.
+      { source: "/delta-futurism", destination: "https://deltafuturism.com/", permanent: true },
+      { source: "/delta-futurism/:path*", destination: "https://deltafuturism.com/:path*", permanent: true },
     ];
   },
   // PERMANENT: Berdia on face.works.
@@ -72,11 +71,6 @@ const nextConfig: NextConfig = {
             value: "camera=(), microphone=(), geolocation=(), browsing-topics=()",
           },
         ],
-      },
-      // Delta Futurism is shared by link, not listed: keep it out of search results.
-      {
-        source: "/delta-futurism/:path*",
-        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
       },
       // Listed after the site-wide rule so its Referrer-Policy wins on invitation links.
       {

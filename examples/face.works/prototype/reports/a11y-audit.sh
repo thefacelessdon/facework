@@ -79,14 +79,9 @@ fi
 # 4b. Unlisted static pages: shared by link, kept out of the sitemap (noindex), so step 4
 #     can't see them. Audit them anyway. Every .html under public/<dir>/ for a dir listed
 #     here must appear in UNLISTED_ROUTES; src/data/unlisted-a11y.test.ts enforces that.
-UNLISTED_ROUTES=(
-  /delta-futurism/index.html
-  /delta-futurism/partner-apex.html
-  /delta-futurism/partner-uapb.html
-  /delta-futurism/proposal.html
-  /delta-futurism/sources.html
-)
-for r in "${UNLISTED_ROUTES[@]}"; do URLS="$URLS http://localhost:${PORT}${r}"; done
+#     Empty since Delta Futurism moved out (0.0.132); the guarded loop below is safe on bash 3.2 with set -u.
+UNLISTED_ROUTES=()
+for r in ${UNLISTED_ROUTES[@]+"${UNLISTED_ROUTES[@]}"}; do URLS="$URLS http://localhost:${PORT}${r}"; done
 echo "▸ auditing $(wc -w <<<"$URLS" | tr -d ' ') routes at ${WIDTH}×${HEIGHT}…"
 
 # 5. Run axe across every route at the pinned window (see header note on width).
