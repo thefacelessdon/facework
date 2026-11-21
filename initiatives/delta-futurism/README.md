@@ -1,6 +1,6 @@
 # Delta Futurism
 
-A vision for the Arkansas–Mississippi Delta (the story page, a wide regional lens), and its first initiative: **Built to Stay**, a supplier and workforce readiness proposal to Entergy Arkansas for the Arkansas Cypress solar build (the proposal page, zoomed in on the build).
+A vision for the Arkansas–Mississippi Delta (the story page, a wide regional lens), and its first initiative: **Built to Stay**, a supplier and workforce readiness proposal to Entergy Arkansas for its two Jefferson County builds, Arkansas Cypress (solar and battery) and Jefferson Power Station (gas) (the proposal page, zoomed in on the build).
 
 **Live:** https://deltafuturism.com (the home to share) · https://deltafuturism.com/built-to-stay (the initiative) · https://deltafuturism.com/sources. Also still served at face.works/delta-futurism from the same files. Not listed, `noindex`.
 
@@ -25,7 +25,7 @@ Family-private notes (the leave-behind with contact details and call notes, the 
 
 ## The proposal, section by section
 
-v3 (Nov 20): cover and a one-line status (a discussion draft; one meeting and two introductions) · 01 Follow the value ($1.6B in, about $3.1B paid back over its 30-year life, per Entergy's filing, who captures it, and a reasonable local goal; county context) · 02 Two paths, across everything the build buys · 03 How it works: one operating system, six steps · 04 Five workstreams; **B Food and Hospitality is built out** (the kitchen walk-through and the food model), and A, C, D, E carry the questions we'd answer with partners · 05 Roles: what each partner already does, what we take off their plate, what they never give up, plus a governance strip · 06 Measured by what remains, with precedent figures · 07 Keyed to the build · 08 Three asks · Who's proposing this (the Monson family).
+Current structure, impact model, open facts and next moves: **[HANDOFF.md](HANDOFF.md)** (checkpoint Nov 20 2026, v0.0.130). The earlier v3 outline is in `source/proposal-v3-outline.md` for history.
 
 ## Settled decisions (don't relitigate without new evidence)
 
